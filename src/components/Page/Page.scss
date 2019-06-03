@@ -1,0 +1,24 @@
+.Page {
+	height: 100%;
+	padding: 2px;
+
+	img {
+		width: auto;
+		height: calc(100% - 30px);
+	}
+	.PageFooter {
+		text-align: center;
+	}
+}
+
+// .LeftPage {
+// 	.Page {
+// 		text-align: right;
+// 	}
+// }
+
+// .RightPage {
+// 	.Page {
+// 		text-align: left;
+// 	}
+// }
