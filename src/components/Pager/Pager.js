@@ -25,9 +25,11 @@ function Pager(props) {
 
 	useEffect(() => {
 		window.addEventListener("resize", onResize);
+		document.addEventListener("keydown", handleKeyDown);
 
 		return () => {
 			window.removeEventListener("resize", onResize);
+			document.removeEventListener("keydown", handleKeyDown);
 		};
 	});
 
@@ -52,6 +54,22 @@ function Pager(props) {
 		}
 	}
 
+	const handleKeyDown = e => {
+		switch (e.key) {
+			case "PageDown":
+			case "ArrowDown":
+			case "ArrowLeft":
+				increment(e);
+				break;
+			case "PageUp":
+			case "ArrowUp":
+			case "ArrowRight":
+				decrement(e);
+				break;
+		}
+		return;
+	};
+
 	const renderPage = order => {
 		if (pagesCount < order + 1) {
 			return;
@@ -70,6 +88,7 @@ function Pager(props) {
 
 		return (
 			<div
+				tabIndex="0"
 				className={"PageSide" + pageClass + activeClass}
 				onClick={clickHandler}
 				style={{
