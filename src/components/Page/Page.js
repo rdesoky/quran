@@ -7,11 +7,7 @@ function Page(props) {
 	return (
 		<div className="Page">
 			<img
-				src={
-					"http://www.egylist.com/quran/getimg.pl?/quran/hpages/" +
-					imageName +
-					".jpg"
-				}
+				src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
 			/>
 			<div className="PageFooter">{props.number + 1}</div>
 		</div>
