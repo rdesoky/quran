@@ -8,6 +8,7 @@ function Page(props) {
 		<div className="Page">
 			<img
 				src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
+				alt={"Page #" + props.number + 1}
 			/>
 			<div className="PageFooter">{props.number + 1}</div>
 		</div>
