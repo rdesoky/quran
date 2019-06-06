@@ -1,5 +1,7 @@
 .Page {
 	height: 100%;
+	// width: calc(100% - 30px);
+
 	// padding: 0 20px;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
 	background: #f3e2c7; /* Old browsers */
@@ -33,6 +35,13 @@
 	.PageFooter,
 	.PageHeader {
 		text-align: center;
+		height: 30px;
+	}
+	.PageHeader {
+		background-color: silver;
+	}
+	.PageFooter {
+		background-color: silver;
 	}
 }
 
@@ -67,6 +76,6 @@
 
 .Active {
 	.PageHeader {
-		background-color: yellowgreen;
+		background-color: gray;
 	}
 }
