@@ -6,6 +6,7 @@ function Page(props) {
 
 	return (
 		<div className="Page">
+			<div className="PageHeader">{props.number + 1}</div>
 			<img
 				src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
 				alt={"Page #" + props.number + 1}

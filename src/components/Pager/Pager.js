@@ -105,7 +105,6 @@ function Pager(props) {
 
 		return (
 			<div
-				tabIndex="0"
 				className={"PageSide" + pageClass + activeClass}
 				onClick={clickHandler}
 				style={{
