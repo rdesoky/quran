@@ -5,13 +5,12 @@
 		height: 100%;
 		display: inline-block;
 		box-sizing: border-box;
-		border-top: solid 5px gray;
 
-		&.RightPage {
-			background-color: darkseagreen;
-		}
-		&.Active {
-			border-color: red;
-		}
+		// &.RightPage {
+		// 	background-color: darkseagreen;
+		// }
+		// &.Active {
+		// 	border-color: red;
+		// }
 	}
 }

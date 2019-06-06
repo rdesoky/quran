@@ -1,6 +1,6 @@
 .Page {
 	height: 100%;
-	padding: 2px 20px;
+	// padding: 0 20px;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
 	background: #f3e2c7; /* Old browsers */
 	background: -moz-linear-gradient(
@@ -22,23 +22,19 @@
 		#ffffff 100%
 	); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-	border: solid 1px grey;
+	// border: solid 1px grey;
 
 	img {
 		width: auto;
-		height: calc(100% - 30px);
+		height: calc(100% - 60px);
 		max-width: 100%;
+		margin: 0 20px;
 	}
-	.PageFooter {
+	.PageFooter,
+	.PageHeader {
 		text-align: center;
 	}
 }
-
-// .LeftPage {
-// 	.Page {
-// 		text-align: right;
-// 	}
-// }
 
 .LeftPage {
 	.Page {
@@ -66,5 +62,11 @@
 			#b2a087 99%
 		); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#b2a087',GradientType=1 ); /* IE6-9 */
+	}
+}
+
+.Active {
+	.PageHeader {
+		background-color: yellowgreen;
 	}
 }
