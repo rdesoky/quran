@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Pager from "./components/Pager/Pager";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 function App() {
 	useEffect(() => {
@@ -12,6 +13,7 @@ function App() {
 
 	return (
 		<div className="App">
+			<Sidebar />
 			<Router>
 				<Route path="/page/:page" component={Pager} />
 				<Route path="/sura/:sura/aya/:aya" component={Pager} />
