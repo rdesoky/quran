@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Page from "../Page/Page";
 import "./Pager.scss";
 
+import { withRouter } from "react-router-dom";
+
 function Pager(props) {
 	const calcPagesCount = size => {
 		return size.width > size.height * 1.3 ? 2 : 1;
@@ -11,7 +13,18 @@ function Pager(props) {
 		width: window.innerWidth,
 		height: window.innerHeight
 	});
-	const [pageNumber, setPageNumber] = useState(parseInt(props.number));
+
+	const { page, sura } = props.match.params;
+
+	let pageIndex = 0;
+
+	if (page !== undefined) {
+		pageIndex = parseInt(page) - 1;
+	}
+	if (sura !== undefined) {
+		pageIndex = 5; //find sura page
+	}
+
 	const [pagesCount, setPagesCount] = useState(calcPagesCount(wSize));
 
 	const onResize = e => {
@@ -33,26 +46,28 @@ function Pager(props) {
 		};
 	});
 
-	function decrement(e) {
-		if (pageNumber > 0) {
-			setPageNumber(pageNumber - 1);
+	const decrement = e => {
+		if (pageIndex > 0) {
+			//setPageIndex(pageIndex - 1);
+			props.history.push("/page/" + pageIndex.toString());
 		}
-	}
+	};
 
-	function increment(e) {
-		if (pageNumber < 602) {
-			setPageNumber(pageNumber + 1);
+	const increment = e => {
+		if (pageIndex < 602) {
+			//setPageIndex(pageIndex + 1);
+			props.history.push("/page/" + (pageIndex + 2).toString());
 		}
-	}
+	};
 
-	function handleWheel(e) {
+	const handleWheel = e => {
 		if (e.deltaY > 0) {
 			//scroll down
 			increment(e);
 		} else {
 			decrement(e);
 		}
-	}
+	};
 
 	const handleKeyDown = e => {
 		switch (e.key) {
@@ -66,8 +81,9 @@ function Pager(props) {
 			case "ArrowRight":
 				decrement(e);
 				break;
+			default:
+				break;
 		}
-		return;
 	};
 
 	const renderPage = order => {
@@ -76,15 +92,16 @@ function Pager(props) {
 		}
 
 		let page =
-			pagesCount == 1 ? pageNumber : pageNumber - (pageNumber % 2) + order;
+			pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
 
 		let clickHandler =
-			order == 1 ? increment : pagesCount == 2 ? decrement : increment;
+			order === 1 ? increment : pagesCount === 2 ? decrement : increment;
 
-		let pageClass = page % 2 == 0 ? " RightPage" : " LeftPage";
-		let activeClass = pageNumber == page ? " Active" : "";
+		let pageClass = page % 2 === 0 ? " RightPage" : " LeftPage";
+		let activeClass = pageIndex === page ? " Active" : "";
 
-		let textAlign = pagesCount == 1 ? "center" : order == 0 ? "left" : "right";
+		let textAlign =
+			pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 		return (
 			<div
@@ -110,4 +127,4 @@ function Pager(props) {
 	);
 }
 
-export default Pager;
+export default withRouter(Pager);
