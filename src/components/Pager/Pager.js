@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 function Pager(props) {
 	const calcPagesCount = size => {
-		return size.width > size.height * 1.3 ? 2 : 1;
+		return size.width > size.height * 1.5 ? 2 : 1;
 	};
 
 	const [wSize, updateSize] = useState({

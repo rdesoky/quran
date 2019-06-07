@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Page.scss";
+import Spinner from "../Spinner/Spinner";
 
 function Page(props) {
 	let imageName = NumToString(props.number + 1);
+	const [isLoaded, updateLoaded] = useState(false);
+
+	const showImage = e => {
+		updateLoaded(true);
+	};
+
+	//Run upon mounted, props changes
+	useEffect(() => {
+		//console.log("Page changed to " + props.number);
+		updateLoaded(false);
+	}, [props.number]);
 
 	return (
 		<div className="Page">
 			<div className="PageHeader">{props.number + 1}</div>
+			<Spinner visible={!isLoaded} />
 			<img
+				style={{ visibility: isLoaded ? "visible" : "hidden" }}
+				onLoad={showImage}
 				src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
 				alt={"Page #" + props.number + 1}
 			/>

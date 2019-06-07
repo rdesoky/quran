@@ -1,5 +1,11 @@
 .Page {
 	height: 100%;
+	position: relative;
+	.Spinner {
+		position: absolute;
+		left: calc(50% - 32px);
+		top: calc(50% - 32px);
+	}
 	// width: calc(100% - 30px);
 
 	// padding: 0 20px;
