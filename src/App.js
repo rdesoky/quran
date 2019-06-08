@@ -11,9 +11,13 @@ function App() {
 		});
 	});
 
+	const onSidebarCommand = id => {
+		console.log(`Command ${id} invoked`);
+	};
+
 	return (
 		<div className="App">
-			<Sidebar />
+			<Sidebar onCommand={onSidebarCommand} />
 			<Router>
 				<Route path="/page/:page" component={Pager} />
 				<Route path="/sura/:sura/aya/:aya" component={Pager} />
