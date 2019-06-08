@@ -1,14 +1,12 @@
 .Page {
 	height: 100%;
 	position: relative;
+	padding: 0 20px;
 	.Spinner {
 		position: absolute;
 		left: calc(50% - 32px);
 		top: calc(50% - 32px);
 	}
-	// width: calc(100% - 30px);
-
-	// padding: 0 20px;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
 	background: #f3e2c7; /* Old browsers */
 	background: -moz-linear-gradient(
@@ -34,14 +32,14 @@
 
 	img {
 		width: auto;
-		height: calc(100% - 60px);
+		height: calc(100% - 64px);
 		max-width: 100%;
-		margin: 0 20px;
 	}
 	.PageFooter,
 	.PageHeader {
 		text-align: center;
 		height: 30px;
+		border-radius: 15px;
 	}
 	.PageHeader {
 		background-color: silver;
