@@ -5,8 +5,9 @@
 	right: 0;
 	bottom: 0;
 	overflow: hidden;
-	text-align: center;
+	/* text-align: center; */
 	background-color: silver;
+	direction: rtl;
 }
 
 .App-logo {
