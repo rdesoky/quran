@@ -18,14 +18,16 @@ function Page(props) {
 
 	return (
 		<div className="Page">
-			<div className="PageHeader">{props.number + 1}</div>
+			<div className="PageHeader">Part:#, Sura:#</div>
 			<Spinner visible={!isLoaded} />
-			<img
-				style={{ visibility: isLoaded ? "visible" : "hidden" }}
-				onLoad={showImage}
-				src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
-				alt={"Page #" + props.number + 1}
-			/>
+			<div class="PageFrame">
+				<img
+					style={{ visibility: isLoaded ? "visible" : "hidden" }}
+					onLoad={showImage}
+					src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
+					alt={"Page #" + props.number + 1}
+				/>
+			</div>
 			<div className="PageFooter">{props.number + 1}</div>
 		</div>
 	);
