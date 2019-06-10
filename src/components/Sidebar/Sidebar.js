@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faSearch,
 	faPaperPlane,
-	faPlay,
+	faPlayCircle,
 	faBookmark
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -24,7 +24,7 @@ function Sidebar(props) {
 				<FontAwesomeIcon icon={faPaperPlane} />
 			</div>
 			<div onClick={e => onClick("Play")}>
-				<FontAwesomeIcon icon={faPlay} />
+				<FontAwesomeIcon icon={faPlayCircle} />
 			</div>
 			<div onClick={e => onClick("Bookmark")}>
 				<FontAwesomeIcon icon={faBookmark} />

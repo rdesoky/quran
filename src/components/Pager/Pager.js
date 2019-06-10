@@ -118,6 +118,12 @@ function Pager(props) {
 		);
 	};
 
+	const renderGutter = () => {
+		if (pagesCount > 1) {
+			return <div className="Gutter" />;
+		}
+	};
+
 	return (
 		<div className="Pager" onWheel={handleWheel}>
 			{renderPage(0)}
