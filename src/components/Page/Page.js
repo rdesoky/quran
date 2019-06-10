@@ -18,7 +18,7 @@ function Page(props) {
 
 	return (
 		<div className="Page">
-			<div className="PageHeader">Part:#, Sura:#</div>
+			<div className="PageHeader">Part -- Sura</div>
 			<Spinner visible={!isLoaded} />
 			<div class="PageFrame">
 				<img

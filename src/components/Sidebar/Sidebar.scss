@@ -1,6 +1,8 @@
 .Sidebar {
-	position: absolute;
-	right: 0;
+	// position: absolute;
+	// right: 0;
+	display: inline-block;
+	vertical-align: top;
 	box-sizing: border-box;
 	width: 50px;
 	height: 100%;
