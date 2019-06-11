@@ -20,7 +20,7 @@ function Page(props) {
 		<div className="Page">
 			<div className="PageHeader">Part -- Sura</div>
 			<Spinner visible={!isLoaded} />
-			<div class="PageFrame">
+			<div className="PageFrame">
 				<img
 					style={{ visibility: isLoaded ? "visible" : "hidden" }}
 					onLoad={showImage}
