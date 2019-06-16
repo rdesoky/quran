@@ -4,7 +4,7 @@
 	// padding: 0 20px;
 	.PageFrame {
 		position: relative;
-		height: calc(100% - 75px);
+		height: calc(100% - 50px);
 		padding: 0 20px;
 	}
 	.Spinner {
@@ -12,29 +12,6 @@
 		left: calc(50% - 32px);
 		top: calc(50% - 32px);
 	}
-	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
-	background: #f3e2c7; /* Old browsers */
-	background: -moz-linear-gradient(
-		left,
-		#f3e2c7 0%,
-		#b2a087 6%,
-		#ffffff 100%
-	); /* FF3.6-15 */
-	background: -webkit-linear-gradient(
-		left,
-		#f3e2c7 0%,
-		#b2a087 6%,
-		#ffffff 100%
-	); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(
-		to right,
-		#f3e2c7 0%,
-		#b2a087 6%,
-		#ffffff 100%
-	); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-	// border: solid 1px grey;
-
 	img {
 		width: auto;
 		height: 100%;
@@ -45,14 +22,10 @@
 	.PageHeader {
 		text-align: center;
 		height: 25px;
-		// border-radius: 15px;
+		line-height: 25px;
 	}
 
-	.PageHeader {
-		background-color: silver;
-		height: 50px;
-		line-height: 50px;
-	}
+	.PageHeader,
 	.PageFooter {
 		background-color: silver;
 	}
@@ -84,6 +57,33 @@
 			#b2a087 99%
 		); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#b2a087',GradientType=1 ); /* IE6-9 */
+	}
+}
+
+.RightPage {
+	.Page {
+		/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
+		background: #f3e2c7; /* Old browsers */
+		background: -moz-linear-gradient(
+			left,
+			#f3e2c7 0%,
+			#b2a087 6%,
+			#ffffff 100%
+		); /* FF3.6-15 */
+		background: -webkit-linear-gradient(
+			left,
+			#f3e2c7 0%,
+			#b2a087 6%,
+			#ffffff 100%
+		); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(
+			to right,
+			#f3e2c7 0%,
+			#b2a087 6%,
+			#ffffff 100%
+		); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
+		// border: solid 1px grey;
 	}
 }
 

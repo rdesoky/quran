@@ -3,9 +3,11 @@ import "./Sidebar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faSearch,
-	faPaperPlane,
+	faTh as faPaperPlane,
 	faPlayCircle,
-	faBookmark
+	faFile as faBookmark,
+	faHeart,
+	faCog
 } from "@fortawesome/free-solid-svg-icons";
 
 function Sidebar(props) {
@@ -28,6 +30,9 @@ function Sidebar(props) {
 			</div>
 			<div onClick={e => onClick("Bookmark")}>
 				<FontAwesomeIcon icon={faBookmark} />
+			</div>
+			<div onClick={e => onClick("Heart")}>
+				<FontAwesomeIcon icon={faCog} />
 			</div>
 		</div>
 	);

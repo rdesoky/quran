@@ -27,7 +27,7 @@ function App() {
 	const renderPopup = Popup => {
 		switch (Popup) {
 			case "GotoPage":
-				return <GotoPage onClose={onClosePopup} />;
+				return <GotoPage onClose={onClosePopup} open={popup === "GotoPage"} />;
 		}
 	};
 
@@ -37,10 +37,10 @@ function App() {
 				<Route path="/page/:page" component={Pager} />
 				<Route path="/sura/:sura/aya/:aya" component={Pager} />
 				<Route path="/aya/:aya" component={Pager} />
-				<Route exact path="/" render={() => <Redirect to="/page/0" />} />
+				<Route exact path="/" render={() => <Redirect to="/page/1" />} />
+				<Sidebar onCommand={onSidebarCommand} />
+				{renderPopup(popup)}
 			</Router>
-			<Sidebar onCommand={onSidebarCommand} />
-			{renderPopup(popup)}
 		</div>
 	);
 }
