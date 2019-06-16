@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 import { withRouter } from "react-router-dom";
+import Utils from "../../services/utils";
 
-const GotoPage = ({ onClose, open, history, page }) => {
+const GotoPage = ({ onClose, open, history, location }) => {
 	const [isOpen, setIsOpen] = useState(true);
-	const [pageNumber, updatePageNumber] = useState(page || "1");
+	const [pageNumber, updatePageNumber] = useState(
+		Utils.pageFromPath(location.pathname)
+	);
 
 	// const onClickClose = e => {
 	// 	setIsOpen(false);
