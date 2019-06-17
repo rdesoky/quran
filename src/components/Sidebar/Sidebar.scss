@@ -9,12 +9,15 @@
 	background-color: #555;
 	color: #ddd;
 	font-size: 25px;
-	div {
+	a {
+		color: #ddd;
+		display: block;
 		padding: 10px 0;
 		text-align: center;
 		&:hover {
 			color: white;
 			cursor: pointer;
+			background: #666;
 		}
 	}
 }

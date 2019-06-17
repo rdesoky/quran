@@ -11,29 +11,30 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Sidebar(props) {
-	const onClick = id => {
+	const onClick = (e, id) => {
 		if (props.onCommand) {
 			props.onCommand(id);
 		}
+		e.preventDefault();
 	};
 
 	return (
 		<div className="Sidebar">
-			<div onClick={e => onClick("Search")}>
+			<a href="#" onClick={e => onClick(e, "Search")}>
 				<FontAwesomeIcon icon={faSearch} />
-			</div>
-			<div onClick={e => onClick("Goto")}>
+			</a>
+			<a href="#" onClick={e => onClick(e, "Goto")}>
 				<FontAwesomeIcon icon={faPaperPlane} />
-			</div>
-			<div onClick={e => onClick("Play")}>
+			</a>
+			<a href="#" onClick={e => onClick(e, "Play")}>
 				<FontAwesomeIcon icon={faPlayCircle} />
-			</div>
-			<div onClick={e => onClick("Bookmark")}>
+			</a>
+			<a href="#" onClick={e => onClick(e, "Bookmark")}>
 				<FontAwesomeIcon icon={faBookmark} />
-			</div>
-			<div onClick={e => onClick("Heart")}>
+			</a>
+			<a href="#" onClick={e => onClick(e, "Heart")}>
 				<FontAwesomeIcon icon={faCog} />
-			</div>
+			</a>
 		</div>
 	);
 }
