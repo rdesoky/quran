@@ -8,7 +8,10 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	const [pageNumber, updatePageNumber] = useState(
 		Utils.pageFromPath(location.pathname)
 	);
-	let gotoPageForm;
+	const [partNumber, updatePartNumber] = useState(
+		Utils.partFromPath(location.pathname)
+	);
+	let gotoPageForm, gotoPartForm;
 
 	// const onClickClose = e => {
 	// 	setIsOpen(false);
@@ -32,22 +35,35 @@ const GotoPage = ({ onClose, open, history, location }) => {
 		e.preventDefault();
 	};
 
+	const gotoPart = e => {
+		const { target: form } = e;
+		let pageNumber = (parseInt(form["PartNumber"].value) - 1) * 20 + 1;
+		history.push("/page/" + pageNumber);
+		setIsOpen(false);
+		onClose();
+		e.preventDefault();
+	};
+
 	const updatePage = e => {
 		updatePageNumber(e.target.value);
+	};
+
+	const updatePart = e => {
+		updatePartNumber(e.target.value);
 	};
 
 	return (
 		<Modal open={isOpen} onClose={onClose}>
 			<div className="Title">Find</div>
-			<form
-				onSubmit={gotoPage}
-				ref={form => {
-					gotoPageForm = form;
-				}}
-			>
-				<div className="FieldRow">
+			<div className="FieldRow">
+				<form
+					onSubmit={gotoPage}
+					ref={form => {
+						gotoPageForm = form;
+					}}
+				>
 					<div className="FieldLabel">
-						<label htmlFor="PageNumber">Page Number</label>
+						<label htmlFor="PageNumber">Page</label>
 					</div>
 					<div className="FieldValue">
 						<input
@@ -60,11 +76,37 @@ const GotoPage = ({ onClose, open, history, location }) => {
 							onChange={updatePage}
 						/>
 					</div>
-				</div>
-				<div className="ActionBar">
-					<button type="submit">Go</button>
-				</div>
-			</form>
+					<div className="FieldAction">
+						<button type="submit">Go</button>
+					</div>
+				</form>
+			</div>
+			<div className="FieldRow">
+				<form
+					onSubmit={gotoPart}
+					ref={form => {
+						gotoPartForm = form;
+					}}
+				>
+					<div className="FieldLabel">
+						<label htmlFor="PartNumber">Part</label>
+					</div>
+					<div className="FieldValue">
+						<input
+							type="Number"
+							name="PartNumber"
+							min="1"
+							max="30"
+							id="PartNumber"
+							value={partNumber}
+							onChange={updatePart}
+						/>
+					</div>
+					<div className="FieldAction">
+						<button type="submit">Go</button>
+					</div>
+				</form>
+			</div>
 		</Modal>
 	);
 };
