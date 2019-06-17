@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 import { withRouter } from "react-router-dom";
 import QData from "../../services/QData";
+import { FormattedMessage } from "react-intl";
 
 const QIndex = ({ open, onClose, history }) => {
 	const getSuraNames = () => {
 		let suraNames = [];
-		for (let i = 1; i <= 104; i++) {
+		for (let i = 1; i <= 114; i++) {
 			suraNames.push("Sura " + i);
 		}
 		return suraNames;
@@ -29,7 +30,11 @@ const QIndex = ({ open, onClose, history }) => {
 									gotoSura(index);
 								}}
 							>
-								{name}
+								<FormattedMessage id={"sura_names"}>
+									{data => {
+										return index + 1 + ". " + data[index];
+									}}
+								</FormattedMessage>
 							</button>
 						</li>
 					);
