@@ -9,15 +9,9 @@
 	background-color: #333;
 	color: #ddd;
 	font-size: 25px;
-	a {
-		color: #ddd;
+	button {
+		font-size: 24px;
 		display: block;
-		padding: 10px 0;
-		text-align: center;
-		&:hover {
-			color: white;
-			cursor: pointer;
-			background: #666;
-		}
+		width: 100%;
 	}
 }

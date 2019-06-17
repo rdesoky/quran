@@ -1,3 +1,5 @@
+import QData from "./QData";
+
 const Utils = {
 	pageFromPath: path => {
 		let matchPage = path.match(/\/page\/([0-9]+)/i);
@@ -9,7 +11,8 @@ const Utils = {
 	},
 	partFromPath: path => {
 		let page = Utils.pageFromPath(path);
-		return Math.floor(page / 20) + 1;
+		let part = QData.pagePart(page);
+		return part;
 	}
 };
 

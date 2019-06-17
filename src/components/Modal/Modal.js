@@ -24,18 +24,23 @@ const Modal = ({ open, onClose, children }) => {
 	};
 
 	return (
-		<div
-			className="ModalOverlay"
-			style={{ display: isOpen ? "fixed" : "none" }}
-			onClick={onClickClose}
-		>
-			<a href="#" className="CancelButton" onClick={onClickClose}>
-				<FontAwesomeIcon icon={faTimes} />
-			</a>
-			<div className="ModalContent" onClick={cancelClose}>
+		<>
+			<div
+				className="ModalOverlay"
+				style={{ display: isOpen ? "fixed" : "none" }}
+				onClick={onClickClose}
+			/>
+			<div
+				style={{ display: isOpen ? "fixed" : "none" }}
+				className="ModalContent"
+				onClick={cancelClose}
+			>
 				{children}
 			</div>
-		</div>
+			<button className="CancelButton" onClick={onClickClose}>
+				<FontAwesomeIcon icon={faTimes} />
+			</button>
+		</>
 	);
 };
 

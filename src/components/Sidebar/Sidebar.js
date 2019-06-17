@@ -2,10 +2,10 @@ import React from "react";
 import "./Sidebar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+	faUserCircle,
 	faSearch,
-	faTh as faPaperPlane,
+	faTh,
 	faPlayCircle,
-	faFile as faBookmark,
 	faHeart,
 	faCog
 } from "@fortawesome/free-solid-svg-icons";
@@ -20,21 +20,24 @@ function Sidebar(props) {
 
 	return (
 		<div className="Sidebar">
-			<a href="#" onClick={e => onClick(e, "Search")}>
+			<button onClick={e => onClick(e, "User")}>
+				<FontAwesomeIcon icon={faUserCircle} />
+			</button>
+			<button onClick={e => onClick(e, "QIndex")}>
+				<FontAwesomeIcon icon={faTh} />
+			</button>
+			<button onClick={e => onClick(e, "Find")}>
 				<FontAwesomeIcon icon={faSearch} />
-			</a>
-			<a href="#" onClick={e => onClick(e, "Goto")}>
-				<FontAwesomeIcon icon={faPaperPlane} />
-			</a>
-			<a href="#" onClick={e => onClick(e, "Play")}>
+			</button>
+			<button onClick={e => onClick(e, "Play")}>
 				<FontAwesomeIcon icon={faPlayCircle} />
-			</a>
-			<a href="#" onClick={e => onClick(e, "Bookmark")}>
-				<FontAwesomeIcon icon={faBookmark} />
-			</a>
-			<a href="#" onClick={e => onClick(e, "Heart")}>
+			</button>
+			<button onClick={e => onClick(e, "Bookmark")}>
+				<FontAwesomeIcon icon={faHeart} />
+			</button>
+			<button onClick={e => onClick(e, "Heart")}>
 				<FontAwesomeIcon icon={faCog} />
-			</a>
+			</button>
 		</div>
 	);
 }

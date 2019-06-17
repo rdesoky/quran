@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 import { withRouter } from "react-router-dom";
 import Utils from "../../services/utils";
+import QData from "../../services/QData";
 
 const GotoPage = ({ onClose, open, history, location }) => {
 	const [isOpen, setIsOpen] = useState(true);
@@ -37,7 +38,8 @@ const GotoPage = ({ onClose, open, history, location }) => {
 
 	const gotoPart = e => {
 		const { target: form } = e;
-		let pageNumber = (parseInt(form["PartNumber"].value) - 1) * 20 + 1;
+		let part = parseInt(form["PartNumber"].value);
+		let pageNumber = QData.parts[part - 1].p;
 		history.push("/page/" + pageNumber);
 		setIsOpen(false);
 		onClose();
