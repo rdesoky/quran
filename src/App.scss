@@ -4,7 +4,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	/* overflow: hidden; */
+	overflow: hidden;
 	/* text-align: center; */
 	background-color: silver;
 	direction: rtl;
@@ -29,6 +29,18 @@
 
 .App-link {
 	color: #61dafb;
+}
+
+button {
+	border: none;
+	background-color: transparent;
+	color: #ddd;
+	padding: 10px 0;
+	text-align: center;
+	&:hover {
+		color: white;
+		background: #666;
+	}
 }
 
 @keyframes App-logo-spin {

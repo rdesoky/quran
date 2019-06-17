@@ -75,12 +75,12 @@ function Pager(props) {
 		}
 		switch (e.key) {
 			case "PageDown":
-			case "ArrowDown":
+			// case "ArrowDown":
 			case "ArrowLeft":
 				increment(e);
 				break;
 			case "PageUp":
-			case "ArrowUp":
+			// case "ArrowUp":
 			case "ArrowRight":
 				decrement(e);
 				break;
