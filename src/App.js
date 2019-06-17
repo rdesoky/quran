@@ -5,6 +5,9 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GotoPage from "./components/Sidebar/GotoPage";
 import QIndex from "./components/Sidebar/QIndex";
+import { IntlProvider, addLocaleData } from "react-intl";
+//import ar_strings from "./translations/ar.json"
+//import en_strings from "./translations/en.json"
 
 function App() {
 	const [popup, updatePopup] = useState(null);
@@ -36,17 +39,25 @@ function App() {
 		}
 	};
 
+	const locale = "ar";
+	const locale_data = require(`react-intl/locale-data/${locale}`);
+	addLocaleData(locale_data);
+
+	const locale_messages = require(`./translations/${locale}.json`);
+
 	return (
-		<div className="App">
-			<Router>
-				<Route path="/page/:page" component={Pager} />
-				<Route path="/sura/:sura/aya/:aya" component={Pager} />
-				<Route path="/aya/:aya" component={Pager} />
-				<Route exact path="/" render={() => <Redirect to="/page/1" />} />
-				<Sidebar onCommand={onSidebarCommand} />
-				{renderPopup()}
-			</Router>
-		</div>
+		<IntlProvider locale={locale} messages={locale_messages}>
+			<div className="App">
+				<Router>
+					<Route path="/page/:page" component={Pager} />
+					<Route path="/sura/:sura/aya/:aya" component={Pager} />
+					<Route path="/aya/:aya" component={Pager} />
+					<Route exact path="/" render={() => <Redirect to="/page/1" />} />
+					<Sidebar onCommand={onSidebarCommand} />
+					{renderPopup()}
+				</Router>
+			</div>
+		</IntlProvider>
 	);
 }
 
