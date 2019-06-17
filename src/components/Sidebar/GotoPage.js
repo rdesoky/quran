@@ -38,7 +38,7 @@ const GotoPage = ({ onClose, open, history, location }) => {
 
 	return (
 		<Modal open={isOpen} onClose={onClose}>
-			<div className="Title">Goto Page</div>
+			<div className="Title">Find</div>
 			<form
 				onSubmit={gotoPage}
 				ref={form => {
@@ -47,7 +47,7 @@ const GotoPage = ({ onClose, open, history, location }) => {
 			>
 				<div className="FieldRow">
 					<div className="FieldLabel">
-						<label htmlFor="PageNumber">Page Number:</label>
+						<label htmlFor="PageNumber">Page Number</label>
 					</div>
 					<div className="FieldValue">
 						<input

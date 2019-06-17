@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
 import "./Modal.scss";
 
 const Modal = ({ open, onClose, children }) => {
@@ -13,6 +16,7 @@ const Modal = ({ open, onClose, children }) => {
 		if (typeof onClose === "function") {
 			onClose();
 		}
+		e.preventDefault();
 	};
 
 	const cancelClose = e => {
@@ -25,6 +29,9 @@ const Modal = ({ open, onClose, children }) => {
 			style={{ display: isOpen ? "fixed" : "none" }}
 			onClick={onClickClose}
 		>
+			<a href="#" className="CancelButton" onClick={onClickClose}>
+				<FontAwesomeIcon icon={faTimes} />
+			</a>
 			<div className="ModalContent" onClick={cancelClose}>
 				{children}
 			</div>
