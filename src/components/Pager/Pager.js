@@ -70,6 +70,9 @@ function Pager(props) {
 	};
 
 	const handleKeyDown = e => {
+		if (e.target !== document.body) {
+			return;
+		}
 		switch (e.key) {
 			case "PageDown":
 			case "ArrowDown":

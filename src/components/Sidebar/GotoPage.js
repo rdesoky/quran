@@ -8,6 +8,7 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	const [pageNumber, updatePageNumber] = useState(
 		Utils.pageFromPath(location.pathname)
 	);
+	let gotoPageForm;
 
 	// const onClickClose = e => {
 	// 	setIsOpen(false);
@@ -17,6 +18,11 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	useEffect(() => {
 		setIsOpen(open); //update internal state to match
 	}, [open]);
+
+	useEffect(() => {
+		gotoPageForm.PageNumber.focus();
+		gotoPageForm.PageNumber.select();
+	}, []);
 
 	const gotoPage = e => {
 		const { target: form } = e;
@@ -33,7 +39,12 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	return (
 		<Modal open={isOpen} onClose={onClose}>
 			<div className="Title">Goto Page</div>
-			<form onSubmit={gotoPage}>
+			<form
+				onSubmit={gotoPage}
+				ref={form => {
+					gotoPageForm = form;
+				}}
+			>
 				<div className="FieldRow">
 					<div className="FieldLabel">
 						<label htmlFor="PageNumber">Page Number:</label>
