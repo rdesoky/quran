@@ -6,6 +6,10 @@ const Utils = {
 		}
 
 		return "1";
+	},
+	partFromPath: path => {
+		let page = Utils.pageFromPath(path);
+		return Math.floor(page / 20) + 1;
 	}
 };
 
