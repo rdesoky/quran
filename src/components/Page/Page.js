@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
+import { FormattedMessage } from "react-intl";
+import QData from "../../services/QData";
 
 function Page(props) {
 	let imageName = NumToString(props.number + 1);
@@ -16,9 +18,25 @@ function Page(props) {
 		updateLoaded(false);
 	}, [props.number]);
 
+	const suraIndex = QData.pageSura(props.number + 1);
+
 	return (
 		<div className="Page">
-			<div className="PageHeader">Part -- Sura</div>
+			<div className="PageHeader">
+				<div className="SuraTitle">
+					<FormattedMessage id="sura" />
+					:&nbsp;<span>{suraIndex + 1}</span>&nbsp;-&nbsp;
+					<FormattedMessage id="sura_names">
+						{sura_names => {
+							return sura_names[suraIndex];
+						}}
+					</FormattedMessage>
+				</div>
+				<div className="PartTitle">
+					<FormattedMessage id="part" />
+					:&nbsp;<span>{QData.pagePart(props.number + 1)}</span>
+				</div>
+			</div>
 			<Spinner visible={!isLoaded} />
 			<div className="PageFrame">
 				<img

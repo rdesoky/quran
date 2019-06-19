@@ -67,10 +67,13 @@
 
 	.FieldAction {
 		button {
-			background-color: black;
+			background-color: #666;
 			border: none;
 			color: white;
 			padding: 5px 15px;
+			&:hover {
+				background-color: black;
+			}
 		}
 	}
 
