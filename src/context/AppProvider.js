@@ -6,7 +6,8 @@ const AppState = {
 	appWidth: 800,
 	appHeight: 600,
 	pagesCount: 2,
-	showMenu: false
+	showMenu: false,
+	popup: null
 };
 
 const AppContext = React.createContext(AppState);
@@ -26,9 +27,14 @@ export default class AppProvider extends Component {
 		this.setState({ showMenu: !this.state.showMenu });
 	}
 
+	setPopup(popup) {
+		this.setState({ popup });
+	}
+
 	methods = {
 		setShowMenu: this.setShowMenu.bind(this),
-		toggleShowMenu: this.toggleShowMenu.bind(this)
+		toggleShowMenu: this.toggleShowMenu.bind(this),
+		setPopup: this.setPopup.bind(this)
 	};
 
 	onResize = e => {

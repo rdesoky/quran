@@ -9,14 +9,16 @@
 	}
 	.NavButton {
 		position: fixed;
-		top: 65%;
-		width: 30px;
-		height: 100px;
-		transform: translateY(-50%);
+		top: 25px;
+		width: 50px;
+		bottom: 25px;
+		// transform: translateY(-50%);
 		font-size: 30px;
 		opacity: 0.5;
+		text-align: left;
 		&.NavBackward {
 			right: 0;
+			text-align: right;
 		}
 	}
 }

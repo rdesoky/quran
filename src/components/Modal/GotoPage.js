@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../Modal/Modal";
+import Modal from "./Modal";
 import { withRouter } from "react-router-dom";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
