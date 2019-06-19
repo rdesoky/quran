@@ -6,6 +6,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import GotoPage from "./components/Sidebar/GotoPage";
 import QIndex from "./components/Sidebar/QIndex";
 import { IntlProvider, addLocaleData } from "react-intl";
+import AppProvider from "./context/AppProvider";
+
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
 
@@ -47,16 +49,18 @@ function App() {
 
 	return (
 		<IntlProvider locale={locale} messages={locale_messages}>
-			<div className="App">
-				<Router>
-					<Route path="/page/:page" component={Pager} />
-					<Route path="/sura/:sura/aya/:aya" component={Pager} />
-					<Route path="/aya/:aya" component={Pager} />
-					<Route exact path="/" render={() => <Redirect to="/page/1" />} />
-					<Sidebar onCommand={onSidebarCommand} />
-					{renderPopup()}
-				</Router>
-			</div>
+			<AppProvider>
+				<div className="App">
+					<Router>
+						<Route path="/page/:page" component={Pager} />
+						<Route path="/sura/:sura/aya/:aya" component={Pager} />
+						<Route path="/aya/:aya" component={Pager} />
+						<Route exact path="/" render={() => <Redirect to="/page/1" />} />
+						<Sidebar onCommand={onSidebarCommand} />
+						{renderPopup()}
+					</Router>
+				</div>
+			</AppProvider>
 		</IntlProvider>
 	);
 }

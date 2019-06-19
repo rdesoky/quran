@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { withAppContext } from "../../context/AppProvider";
 
 import "./Modal.scss";
 
-const Modal = ({ open, onClose, children }) => {
+const Modal = ({ open, onClose, children, appContext }) => {
 	const [isOpen, updateIsOpen] = useState(open);
 
 	useEffect(() => {
@@ -31,7 +32,10 @@ const Modal = ({ open, onClose, children }) => {
 				onClick={onClickClose}
 			/>
 			<div
-				style={{ display: isOpen ? "fixed" : "none" }}
+				style={{
+					display: isOpen ? "fixed" : "none",
+					left: (appContext.isNarrow ? 0 : 50).toString() + "px"
+				}}
 				className="ModalContent"
 				onClick={cancelClose}
 			>
@@ -44,4 +48,4 @@ const Modal = ({ open, onClose, children }) => {
 	);
 };
 
-export default Modal;
+export default withAppContext(Modal);

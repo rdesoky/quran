@@ -3,10 +3,12 @@ import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
 import { FormattedMessage } from "react-intl";
 import QData from "../../services/QData";
+import { withAppContext } from "../../context/AppProvider";
 
-function Page(props) {
-	let imageName = NumToString(props.number + 1);
+function Page({ number, appContext }) {
+	let imageName = NumToString(number + 1);
 	const [isLoaded, updateLoaded] = useState(false);
+	//const [isNarrow, updateIsNarrow] = useState(true);
 
 	const showImage = e => {
 		updateLoaded(true);
@@ -16,13 +18,16 @@ function Page(props) {
 	useEffect(() => {
 		//console.log("Page changed to " + props.number);
 		updateLoaded(false);
-	}, [props.number]);
+	}, [number]);
 
-	const suraIndex = QData.pageSura(props.number + 1);
+	const suraIndex = QData.pageSura(number + 1);
 
 	return (
 		<div className="Page">
-			<div className="PageHeader">
+			<div
+				className="PageHeader"
+				style={{ paddingLeft: appContext.isNarrow ? "50px" : "0" }}
+			>
 				<div className="SuraTitle">
 					<FormattedMessage id="sura" />
 					:&nbsp;<span>{suraIndex + 1}</span>&nbsp;-&nbsp;
@@ -34,19 +39,22 @@ function Page(props) {
 				</div>
 				<div className="PartTitle">
 					<FormattedMessage id="part" />
-					:&nbsp;<span>{QData.pagePart(props.number + 1)}</span>
+					:&nbsp;<span>{QData.pagePart(number + 1)}</span>
 				</div>
 			</div>
 			<Spinner visible={!isLoaded} />
-			<div className="PageFrame">
+			<div
+				className="PageFrame"
+				style={{ padding: appContext.isNarrow ? "0" : "0 20px" }}
+			>
 				<img
 					style={{ visibility: isLoaded ? "visible" : "hidden" }}
 					onLoad={showImage}
 					src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
-					alt={"Page #" + props.number + 1}
+					alt={"Page #" + number + 1}
 				/>
 			</div>
-			<div className="PageFooter">{props.number + 1}</div>
+			<div className="PageFooter">{number + 1}</div>
 		</div>
 	);
 }
@@ -59,4 +67,4 @@ function NumToString(number, padding = 3) {
 	return padded;
 }
 
-export default Page;
+export default withAppContext(Page);
