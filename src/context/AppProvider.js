@@ -5,7 +5,8 @@ const AppState = {
 	pagesCount: 1,
 	appWidth: 800,
 	appHeight: 600,
-	pagesCount: 2
+	pagesCount: 2,
+	showMenu: false
 };
 
 const AppContext = React.createContext(AppState);
@@ -16,8 +17,18 @@ export default class AppProvider extends Component {
 	setIsNarrow(isNarrow) {
 		this.setState({ isNarrow: isNarrow });
 	}
+
+	setShowMenu(showMenu) {
+		this.setState({ showMenu });
+	}
+
+	toggleShowMenu() {
+		this.setState({ showMenu: !this.state.showMenu });
+	}
+
 	methods = {
-		//setIsNarrow: this.setIsNarrow.bind(this)
+		setShowMenu: this.setShowMenu.bind(this),
+		toggleShowMenu: this.toggleShowMenu.bind(this)
 	};
 
 	onResize = e => {

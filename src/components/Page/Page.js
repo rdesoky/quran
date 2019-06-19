@@ -44,6 +44,9 @@ function Page({ number, appContext }) {
 			</div>
 			<Spinner visible={!isLoaded} />
 			<div
+				onClick={e => {
+					appContext.toggleShowMenu();
+				}}
 				className="PageFrame"
 				style={{ padding: appContext.isNarrow ? "0" : "0 20px" }}
 			>
