@@ -22,11 +22,17 @@
 	.PageHeader,
 	.PageFooter {
 		height: 25px;
-		line-height: 25px;
+		// line-height: 25px;
 		background-color: silver;
 		> div {
 			display: inline-block;
 			margin: 0 10px;
+		}
+
+		button {
+			padding: 5px 10px;
+			color: inherit;
+			height: 25px;
 		}
 	}
 	.PageHeader {

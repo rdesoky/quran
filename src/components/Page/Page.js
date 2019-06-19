@@ -20,6 +20,13 @@ function Page({ number, appContext }) {
 		updateLoaded(false);
 	}, [number]);
 
+	const showFindPopup = e => {
+		appContext.setPopup("Find");
+	};
+	const showIndexPopup = e => {
+		appContext.setPopup("QIndex");
+	};
+
 	const suraIndex = QData.pageSura(number + 1);
 
 	return (
@@ -28,7 +35,7 @@ function Page({ number, appContext }) {
 				className="PageHeader"
 				style={{ paddingLeft: appContext.isNarrow ? "50px" : "0" }}
 			>
-				<div className="SuraTitle">
+				<button className="SuraTitle" onClick={showIndexPopup}>
 					<FormattedMessage id="sura" />
 					:&nbsp;<span>{suraIndex + 1}</span>&nbsp;-&nbsp;
 					<FormattedMessage id="sura_names">
@@ -36,11 +43,11 @@ function Page({ number, appContext }) {
 							return sura_names[suraIndex];
 						}}
 					</FormattedMessage>
-				</div>
-				<div className="PartTitle">
+				</button>
+				<button className="PartTitle" onClick={showFindPopup}>
 					<FormattedMessage id="part" />
 					:&nbsp;<span>{QData.pagePart(number + 1)}</span>
-				</div>
+				</button>
 			</div>
 			<Spinner visible={!isLoaded} />
 			<div
@@ -57,7 +64,10 @@ function Page({ number, appContext }) {
 					alt={"Page #" + number + 1}
 				/>
 			</div>
-			<div className="PageFooter">{number + 1}</div>
+
+			<div className="PageFooter">
+				<button onClick={showFindPopup}>{number + 1}</button>
+			</div>
 		</div>
 	);
 }
