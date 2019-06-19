@@ -1,44 +1,43 @@
 import React, { useState, useEffect } from "react";
 import Page from "../Page/Page";
-import "./Pager.scss";
 
 import { withRouter } from "react-router-dom";
 import { withAppContext } from "../../context/AppProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import "./Pager.scss";
 
 function Pager({ match, history, appContext }) {
 	let pageIndex = 0;
 
-	// const [wSize, updateSize] = useState({
-	// 	width: window.innerWidth,
-	// 	height: window.innerHeight
-	// });
+	let { page, sura } = match.params;
 
-	//const [leftMargin, updateLeftMargin] = useState(50);
-
-	const { page, sura } = match.params;
-
-	//const [pagesCount, setPagesCount] = useState(calcPagesCount(wSize));
-
-	//ComponentDidMount
+	//ComponentDidUpdate
 	useEffect(() => {
+		page = match.params.page;
+		sura = match.params.sura;
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
-			//window.removeEventListener("resize", onResize);
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, []);
+	});
+
+	//ComponentDidMount
+	useEffect(() => {}, []);
 
 	const decrement = e => {
-		if (pageIndex > 0) {
-			//setPageIndex(pageIndex - 1);
-			history.push("/page/" + pageIndex.toString());
+		page = match.params.page;
+		let nPage = parseInt(page);
+		if (nPage > 1) {
+			history.push("/page/" + (nPage - 1).toString());
 		}
 	};
 
 	const increment = e => {
-		if (pageIndex < 602) {
-			//setPageIndex(pageIndex + 1);
-			history.push("/page/" + (pageIndex + 2).toString());
+		page = match.params.page;
+		let nPage = parseInt(page);
+		if (nPage < 604) {
+			history.push("/page/" + (nPage + 1).toString());
 		}
 	};
 
@@ -71,6 +70,13 @@ function Pager({ match, history, appContext }) {
 		}
 	};
 
+	if (page !== undefined) {
+		pageIndex = parseInt(page) - 1;
+	}
+	if (sura !== undefined) {
+		pageIndex = 0; //find sura page
+	}
+
 	const renderPage = order => {
 		if (appContext.pagesCount < order + 1) {
 			return;
@@ -97,7 +103,6 @@ function Pager({ match, history, appContext }) {
 		return (
 			<div
 				className={"PageSide" + pageClass + activeClass}
-				onClick={clickHandler}
 				style={{
 					height: appContext.appHeight + "px",
 					width: 100 / appContext.pagesCount + "%",
@@ -113,13 +118,6 @@ function Pager({ match, history, appContext }) {
 		return appContext.isNarrow ? 0 : 50;
 	};
 
-	if (page !== undefined) {
-		pageIndex = parseInt(page) - 1;
-	}
-	if (sura !== undefined) {
-		pageIndex = 0; //find sura page
-	}
-
 	return (
 		<div
 			className="Pager"
@@ -128,6 +126,16 @@ function Pager({ match, history, appContext }) {
 		>
 			{renderPage(0)}
 			{renderPage(1)}
+			<button className="NavButton NavBackward" onClick={decrement}>
+				<FontAwesomeIcon icon={faAngleRight} />
+			</button>
+			<button
+				onClick={increment}
+				className="NavButton NavForward"
+				style={{ left: (appContext.isNarrow ? 0 : 50).toString() + "px" }}
+			>
+				<FontAwesomeIcon icon={faAngleLeft} />
+			</button>
 		</div>
 	);
 }

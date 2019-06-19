@@ -1,18 +1,22 @@
 .Pager {
 	direction: rtl;
 	display: inline-block;
-	// width: calc(100% - 50px);
 	.PageSide {
 		width: 50%;
 		height: 100%;
 		display: inline-block;
 		box-sizing: border-box;
-
-		// &.RightPage {
-		// 	background-color: darkseagreen;
-		// }
-		// &.Active {
-		// 	border-color: red;
-		// }
+	}
+	.NavButton {
+		position: fixed;
+		top: 65%;
+		width: 30px;
+		height: 100px;
+		transform: translateY(-50%);
+		font-size: 30px;
+		opacity: 0.5;
+		&.NavBackward {
+			right: 0;
+		}
 	}
 }

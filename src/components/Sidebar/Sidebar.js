@@ -14,11 +14,6 @@ import {
 import { withAppContext } from "../../context/AppProvider";
 
 function Sidebar({ onCommand, appContext }) {
-	// const [wSize, updateSize] = useState({
-	// 	width: window.innerWidth,
-	// 	height: window.innerHeight
-	// });
-
 	const [showButtons, updateShowButtons] = useState(true);
 
 	const onClick = (e, id) => {
@@ -26,41 +21,17 @@ function Sidebar({ onCommand, appContext }) {
 			onCommand(id);
 		}
 		if (appContext.isNarrow) {
-			updateShowButtons(false);
+			appContext.setShowMenu(false);
 		}
 		e.preventDefault();
 	};
-
-	// const onResize = e => {
-	// 	let { innerWidth, innerHeight } = e.target;
-	// 	let newSize = { width: innerWidth, height: innerHeight };
-
-	// 	updateSize(newSize);
-	// 	calcIsNarrow(newSize);
-	// };
-
-	// //ComponentDidMounted
-	// useEffect(() => {
-	// 	window.addEventListener("resize", onResize);
-	// 	calcIsNarrow(wSize);
-	// 	return () => {
-	// 		window.removeEventListener("resize", onResize);
-	// 	};
-	// }, []);
 
 	useEffect(() => {
 		updateShowButtons(!appContext.isNarrow);
 	}, [appContext.isNarrow]);
 
-	// const calcIsNarrow = ({ width, height }) => {
-	// 	let isNarrow = width / height < 0.7;
-	// 	//updateIsNarrow(isNarrow);
-	// 	appContext.setIsNarrow(isNarrow);
-	// 	updateShowButtons(!isNarrow);
-	// };
-
 	const toggleButtons = () => {
-		updateShowButtons(!showButtons);
+		appContext.setShowMenu(!appContext.showMenu);
 	};
 
 	return (
@@ -70,12 +41,15 @@ function Sidebar({ onCommand, appContext }) {
 				style={{ display: appContext.isNarrow ? "block" : "none" }}
 			>
 				<FontAwesomeIcon
-					icon={showButtons ? faAngleDoubleUp : faAngleDoubleDown}
+					icon={appContext.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
 				/>
 			</button>
 			<div
 				className="ButtonsList"
-				style={{ display: showButtons ? "block" : "none" }}
+				style={{
+					display:
+						appContext.showMenu || !appContext.isNarrow ? "block" : "none"
+				}}
 			>
 				<button onClick={e => onClick(e, "User")}>
 					<FontAwesomeIcon icon={faUserCircle} />
