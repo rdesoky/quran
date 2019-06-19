@@ -87,12 +87,12 @@ function Pager({ match, history, appContext }) {
 				? pageIndex
 				: pageIndex - (pageIndex % 2) + order;
 
-		let clickHandler =
-			order === 1
-				? increment
-				: appContext.pagesCount === 2
-				? decrement
-				: increment;
+		// let clickHandler =
+		// 	order === 1
+		// 		? increment
+		// 		: appContext.pagesCount === 2
+		// 		? decrement
+		// 		: increment;
 
 		let pageClass = page % 2 === 0 ? " RightPage" : " LeftPage";
 		let activeClass = pageIndex === page ? " Active" : "";

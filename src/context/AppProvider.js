@@ -12,7 +12,7 @@ const AppState = {
 
 const AppContext = React.createContext(AppState);
 
-export default class AppProvider extends Component {
+class AppProvider extends Component {
 	state = AppState;
 
 	setIsNarrow(isNarrow) {
@@ -86,4 +86,5 @@ const withAppContext = Component =>
 		);
 	};
 
-export { withAppContext };
+export default AppProvider;
+export { withAppContext, AppContext };
