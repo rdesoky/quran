@@ -18,16 +18,27 @@
 		max-width: 100%;
 		// margin: 0 20px;
 	}
-	.PageFooter,
-	.PageHeader {
-		text-align: center;
-		height: 25px;
-		line-height: 25px;
-	}
 
 	.PageHeader,
 	.PageFooter {
+		height: 25px;
+		// line-height: 25px;
 		background-color: silver;
+		> div {
+			display: inline-block;
+			margin: 0 10px;
+		}
+	}
+	.PageHeader {
+		.SuraTitle {
+			float: right;
+		}
+		.PartTitle {
+			float: left;
+		}
+	}
+	.PageFooter {
+		text-align: center;
 	}
 }
 

@@ -3,6 +3,7 @@ import Modal from "../Modal/Modal";
 import { withRouter } from "react-router-dom";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
+import { FormattedMessage } from "react-intl";
 
 const GotoPage = ({ onClose, open, history, location }) => {
 	const [isOpen, setIsOpen] = useState(true);
@@ -56,7 +57,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 
 	return (
 		<Modal open={isOpen} onClose={onClose}>
-			<div className="Title">Find</div>
+			<div className="Title">
+				<FormattedMessage id="find" />
+			</div>
 			<div className="FieldRow">
 				<form
 					onSubmit={gotoPage}
@@ -65,7 +68,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 					}}
 				>
 					<div className="FieldLabel">
-						<label htmlFor="PageNumber">Page</label>
+						<label htmlFor="PageNumber">
+							<FormattedMessage id="page" />
+						</label>
 					</div>
 					<div className="FieldValue">
 						<input
@@ -79,7 +84,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 						/>
 					</div>
 					<div className="FieldAction">
-						<button type="submit">Go</button>
+						<button type="submit">
+							<FormattedMessage id="go" />
+						</button>
 					</div>
 				</form>
 			</div>
@@ -91,7 +98,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 					}}
 				>
 					<div className="FieldLabel">
-						<label htmlFor="PartNumber">Part</label>
+						<label htmlFor="PartNumber">
+							<FormattedMessage id="part" />
+						</label>
 					</div>
 					<div className="FieldValue">
 						<input
@@ -105,7 +114,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 						/>
 					</div>
 					<div className="FieldAction">
-						<button type="submit">Go</button>
+						<button type="submit">
+							<FormattedMessage id="go" />
+						</button>
 					</div>
 				</form>
 			</div>

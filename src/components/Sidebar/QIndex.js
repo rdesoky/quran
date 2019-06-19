@@ -20,7 +20,9 @@ const QIndex = ({ open, onClose, history }) => {
 
 	return (
 		<Modal open={open} onClose={onClose}>
-			<div className="Title">Sura Index</div>
+			<div className="Title">
+				<FormattedMessage id="index" />
+			</div>
 			<ul className="SpreadSheet">
 				{getSuraNames().map((name, index) => {
 					return (
