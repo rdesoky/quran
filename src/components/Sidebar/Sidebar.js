@@ -13,25 +13,21 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/AppProvider";
 
-function Sidebar({ onCommand, appContext }) {
-	const [showButtons, updateShowButtons] = useState(true);
-
+function Sidebar({ appContext }) {
 	const onClick = (e, id) => {
-		if (onCommand) {
-			onCommand(id);
-		}
+		appContext.setPopup(id);
 		if (appContext.isNarrow) {
 			appContext.setShowMenu(false);
 		}
 		e.preventDefault();
 	};
 
-	useEffect(() => {
-		updateShowButtons(!appContext.isNarrow);
-	}, [appContext.isNarrow]);
+	// useEffect(() => {
+	// 	updateShowButtons(!appContext.isNarrow);
+	// }, [appContext.isNarrow]);
 
 	const toggleButtons = () => {
-		appContext.setShowMenu(!appContext.showMenu);
+		appContext.toggleShowMenu();
 	};
 
 	return (

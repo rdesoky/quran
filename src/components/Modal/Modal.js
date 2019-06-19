@@ -6,17 +6,8 @@ import { withAppContext } from "../../context/AppProvider";
 import "./Modal.scss";
 
 const Modal = ({ open, onClose, children, appContext }) => {
-	const [isOpen, updateIsOpen] = useState(open);
-
-	useEffect(() => {
-		updateIsOpen(open);
-	}, [open]);
-
 	const onClickClose = e => {
-		updateIsOpen(false);
-		if (typeof onClose === "function") {
-			onClose();
-		}
+		appContext.setPopup(null);
 		e.preventDefault();
 	};
 
@@ -26,14 +17,9 @@ const Modal = ({ open, onClose, children, appContext }) => {
 
 	return (
 		<>
-			<div
-				className="ModalOverlay"
-				style={{ display: isOpen ? "fixed" : "none" }}
-				onClick={onClickClose}
-			/>
+			<div className="ModalOverlay" onClick={onClickClose} />
 			<div
 				style={{
-					display: isOpen ? "fixed" : "none",
 					left: (appContext.isNarrow ? 0 : 50).toString() + "px"
 				}}
 				className="ModalContent"
