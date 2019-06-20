@@ -4,7 +4,7 @@ import Pager from "./components/Pager/Pager";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
-import AppProvider from "./context/AppProvider";
+import AppProvider from "./context/App";
 import PopupView from "./components/Modal/PopupView";
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"

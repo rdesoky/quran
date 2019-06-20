@@ -11,7 +11,7 @@ import {
 	faAngleDoubleDown,
 	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
-import { withAppContext } from "../../context/AppProvider";
+import { withAppContext } from "../../context/App";
 
 function Sidebar({ appContext }) {
 	const onClick = (e, id) => {
