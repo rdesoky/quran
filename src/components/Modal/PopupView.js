@@ -1,5 +1,5 @@
 import React from "react";
-import { withAppContext } from "../../context/AppProvider";
+import { withAppContext } from "../../context/App";
 import GotoPage from "./GotoPage";
 import QIndex from "./QIndex";
 

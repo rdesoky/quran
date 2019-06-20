@@ -1,22 +1,22 @@
 .Page {
 	height: 100%;
 	position: relative;
-	// padding: 0 20px;
 	.PageFrame {
 		position: relative;
 		height: calc(100% - 50px);
 		// padding: 0 20px;
 	}
+
 	.Spinner {
 		position: absolute;
 		left: calc(50% - 32px);
 		top: calc(50% - 32px);
 	}
-	img {
+
+	img.PageImage {
 		width: auto;
 		height: 100%;
 		max-width: 100%;
-		// margin: 0 20px;
 	}
 
 	.PageHeader,
@@ -45,6 +45,17 @@
 	}
 	.PageFooter {
 		text-align: center;
+	}
+}
+
+.LeftPage {
+	.AnimatePage {
+		animation: LeftPageOpener 0.4s;
+	}
+}
+.RightPage {
+	.AnimatePage {
+		animation: RightPageOpener 0.4s;
 	}
 }
 
@@ -109,5 +120,29 @@
 	.PageFooter {
 		background-color: #333;
 		color: white;
+	}
+}
+
+@keyframes RightPageOpener {
+	from {
+		transform: scaleX(0.5);
+		transform-origin: top left;
+	}
+	to {
+		transform: scaleX(1);
+		transform-origin: top left;
+	}
+}
+
+@keyframes LeftPageOpener {
+	from {
+		// transform: translateX(100%);
+		transform: scaleX(0.5);
+		transform-origin: top right;
+	}
+	to {
+		// transform: translateX(0);
+		transform: scaleX(1);
+		transform-origin: top right;
 	}
 }

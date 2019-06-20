@@ -3,22 +3,33 @@ import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
 import { FormattedMessage } from "react-intl";
 import QData from "../../services/QData";
-import { withAppContext } from "../../context/AppProvider";
+import { withAppContext } from "../../context/App";
 
 function Page({ number, appContext }) {
 	let imageName = NumToString(number + 1);
-	const [isLoaded, updateLoaded] = useState(false);
-	//const [isNarrow, updateIsNarrow] = useState(true);
+	const [isLoaded, setIsLoaded] = useState(false);
 
-	const showImage = e => {
-		updateLoaded(true);
+	const updateLoaded = val => {
+		console.log(`updateLoaded(${val})`);
+		setIsLoaded(val);
 	};
 
-	//Run upon mounted, props changes
+	const onImageLoaded = e => {
+		console.log(
+			`**onImageLoaded(${parseInt(number) + 1}) (isLoaded=${isLoaded})`
+		);
+		setTimeout(() => {
+			updateLoaded(true); //To help animation timing
+		}, 100);
+	};
+
+	//Run after componentDidMount, componentDidUpdate, and props update
 	useEffect(() => {
-		//console.log("Page changed to " + props.number);
+		console.log(
+			`Page number changed to ${parseInt(number) + 1} (isLoaded=${isLoaded})`
+		);
 		updateLoaded(false);
-	}, [number]);
+	}, [number]); //only run when number changes
 
 	const showFindPopup = e => {
 		appContext.setPopup("Find");
@@ -59,9 +70,10 @@ function Page({ number, appContext }) {
 			>
 				<img
 					style={{ visibility: isLoaded ? "visible" : "hidden" }}
-					onLoad={showImage}
+					className={"PageImage" + (isLoaded ? " AnimatePage" : "")}
+					onLoad={onImageLoaded}
 					src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
-					alt={"Page #" + number + 1}
+					alt={"Page #" + (parseInt(number) + 1).toString()}
 				/>
 			</div>
 

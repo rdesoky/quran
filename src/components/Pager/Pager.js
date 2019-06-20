@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Page from "../Page/Page";
 
 import { withRouter } from "react-router-dom";
-import { withAppContext } from "../../context/AppProvider";
+import { withAppContext } from "../../context/App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
@@ -29,7 +29,7 @@ function Pager({ match, history, appContext }) {
 		page = match.params.page;
 		let nPage = parseInt(page);
 		if (nPage > 1) {
-			history.push("/page/" + (nPage - 1).toString());
+			history.replace("/page/" + (nPage - 1).toString());
 		}
 	};
 
@@ -37,7 +37,7 @@ function Pager({ match, history, appContext }) {
 		page = match.params.page;
 		let nPage = parseInt(page);
 		if (nPage < 604) {
-			history.push("/page/" + (nPage + 1).toString());
+			history.replace("/page/" + (nPage + 1).toString());
 		}
 	};
 

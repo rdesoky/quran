@@ -15,11 +15,6 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	);
 	let gotoPageForm, gotoPartForm;
 
-	// const onClickClose = e => {
-	// 	setIsOpen(false);
-	// 	onClose();
-	// };
-
 	useEffect(() => {
 		setIsOpen(open); //update internal state to match
 	}, [open]);
