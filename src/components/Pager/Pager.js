@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
 
-function Pager({ match, history, appContext }) {
+function Pager({ match, appContext }) {
 	let pageIndex = 0;
 
 	let { page, sura } = match.params;
@@ -23,22 +23,24 @@ function Pager({ match, history, appContext }) {
 	});
 
 	//ComponentDidMount
-	useEffect(() => {}, []);
+	//useEffect(() => {}, []);
 
 	const decrement = e => {
-		page = match.params.page;
-		let nPage = parseInt(page);
-		if (nPage > 1) {
-			history.replace("/page/" + (nPage - 1).toString());
-		}
+		// page = match.params.page;
+		// let nPage = parseInt(page);
+		// if (nPage > 1) {
+		// 	appContext.history.replace("/page/" + (nPage - 1).toString());
+		// }
+		appContext.prevPage();
 	};
 
 	const increment = e => {
-		page = match.params.page;
-		let nPage = parseInt(page);
-		if (nPage < 604) {
-			history.replace("/page/" + (nPage + 1).toString());
-		}
+		// page = match.params.page;
+		// let nPage = parseInt(page);
+		// if (nPage < 604) {
+		// 	appContext.history.replace("/page/" + (nPage + 1).toString());
+		// }
+		appContext.nextPage();
 	};
 
 	const handleWheel = e => {
@@ -82,26 +84,26 @@ function Pager({ match, history, appContext }) {
 			return;
 		}
 
-		let page =
+		let thisPage =
 			appContext.pagesCount === 1
 				? pageIndex
 				: pageIndex - (pageIndex % 2) + order;
 
-		// let clickHandler =
-		// 	order === 1
-		// 		? increment
-		// 		: appContext.pagesCount === 2
-		// 		? decrement
-		// 		: increment;
+		function selectPage() {
+			if (pageIndex !== thisPage) {
+				appContext.history.replace("/page/" + (thisPage + 1).toString());
+			}
+		}
 
-		let pageClass = page % 2 === 0 ? " RightPage" : " LeftPage";
-		let activeClass = pageIndex === page ? " Active" : "";
+		let pageClass = thisPage % 2 === 0 ? " RightPage" : " LeftPage";
+		let activeClass = pageIndex === thisPage ? " Active" : "";
 
 		let textAlign =
 			appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 		return (
 			<div
+				onClick={selectPage}
 				className={"PageSide" + pageClass + activeClass}
 				style={{
 					height: appContext.appHeight + "px",
@@ -109,7 +111,7 @@ function Pager({ match, history, appContext }) {
 					textAlign: textAlign
 				}}
 			>
-				<Page number={page} />
+				<Page number={thisPage} />
 			</div>
 		);
 	};
@@ -140,4 +142,4 @@ function Pager({ match, history, appContext }) {
 	);
 }
 
-export default withRouter(withAppContext(Pager));
+export default withAppContext(Pager);

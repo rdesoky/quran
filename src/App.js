@@ -27,18 +27,23 @@ function App() {
 
 	return (
 		<IntlProvider locale={locale} messages={locale_messages}>
-			<AppProvider>
-				<div className="App">
-					<Router>
+			<div className="App">
+				<Router>
+					<AppProvider>
 						<Route path="/page/:page" component={Pager} />
 						<Route path="/sura/:sura/aya/:aya" component={Pager} />
-						<Route path="/aya/:aya" component={Pager} />
+						<Route
+							path="/aya/:aya"
+							render={() => {
+								return <Redirect to="/page/6" />;
+							}}
+						/>
 						<Route exact path="/" render={() => <Redirect to="/page/1" />} />
 						<Sidebar />
 						<PopupView />
-					</Router>
-				</div>
-			</AppProvider>
+					</AppProvider>
+				</Router>
+			</div>
 		</IntlProvider>
 	);
 }
