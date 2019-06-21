@@ -125,7 +125,7 @@
 
 @keyframes RightPageOpener {
 	from {
-		transform: scaleX(0.5);
+		transform: scaleX(0.7);
 		transform-origin: top left;
 	}
 	to {
@@ -137,7 +137,7 @@
 @keyframes LeftPageOpener {
 	from {
 		// transform: translateX(100%);
-		transform: scaleX(0.5);
+		transform: scaleX(0.7);
 		transform-origin: top right;
 	}
 	to {

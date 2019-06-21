@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 const AppState = {
 	isNarrow: false,
@@ -31,10 +32,32 @@ class AppProvider extends Component {
 		this.setState({ popup });
 	}
 
+	nextPage() {
+		this.offsetPage(1);
+	}
+
+	prevPage() {
+		this.offsetPage(-1);
+	}
+
+	offsetPage(shift) {
+		const { location, history } = this.props;
+		let match = location.pathname.match(/page\/(.+)/);
+		let pageNumber = match ? match[1] : undefined;
+		if (pageNumber !== undefined) {
+			let nextPage = parseInt(pageNumber) + shift;
+			if (nextPage <= 604 && nextPage >= 1) {
+				history.replace("/page/" + nextPage.toString());
+			}
+		}
+	}
+
 	methods = {
 		setShowMenu: this.setShowMenu.bind(this),
 		toggleShowMenu: this.toggleShowMenu.bind(this),
-		setPopup: this.setPopup.bind(this)
+		setPopup: this.setPopup.bind(this),
+		nextPage: this.nextPage.bind(this),
+		prevPage: this.prevPage.bind(this)
 	};
 
 	onResize = e => {
@@ -67,6 +90,7 @@ class AppProvider extends Component {
 		return (
 			<AppContext.Provider
 				value={{
+					...this.props,
 					...this.state,
 					...this.methods
 				}}
@@ -86,5 +110,5 @@ const withAppContext = Component =>
 		);
 	};
 
-export default AppProvider;
+export default withRouter(AppProvider);
 export { withAppContext, AppContext };

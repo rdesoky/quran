@@ -47,9 +47,6 @@ function Sidebar({ appContext }) {
 						appContext.showMenu || !appContext.isNarrow ? "block" : "none"
 				}}
 			>
-				<button onClick={e => onClick(e, "User")}>
-					<FontAwesomeIcon icon={faUserCircle} />
-				</button>
 				<button onClick={e => onClick(e, "QIndex")}>
 					<FontAwesomeIcon icon={faTh} />
 				</button>
@@ -62,7 +59,11 @@ function Sidebar({ appContext }) {
 				<button onClick={e => onClick(e, "Bookmark")}>
 					<FontAwesomeIcon icon={faHeart} />
 				</button>
-				<button onClick={e => onClick(e, "Heart")}>
+				<hr />
+				<button onClick={e => onClick(e, "User")}>
+					<FontAwesomeIcon icon={faUserCircle} />
+				</button>
+				<button onClick={e => onClick(e, "Settings")}>
 					<FontAwesomeIcon icon={faCog} />
 				</button>
 			</div>

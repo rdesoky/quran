@@ -4,6 +4,8 @@ import Spinner from "../Spinner/Spinner";
 import { FormattedMessage } from "react-intl";
 import QData from "../../services/QData";
 import { withAppContext } from "../../context/App";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 
 function Page({ number, appContext }) {
 	let imageName = NumToString(number + 1);
@@ -54,10 +56,13 @@ function Page({ number, appContext }) {
 							return sura_names[suraIndex];
 						}}
 					</FormattedMessage>
+					&nbsp;
+					<FontAwesomeIcon icon={faSortDown} />
 				</button>
 				<button className="PartTitle" onClick={showFindPopup}>
 					<FormattedMessage id="part" />
-					:&nbsp;<span>{QData.pagePart(number + 1)}</span>
+					:&nbsp;<span>{QData.pagePart(number + 1)}</span>&nbsp;
+					<FontAwesomeIcon icon={faSortDown} />
 				</button>
 			</div>
 			<Spinner visible={!isLoaded} />
