@@ -56,12 +56,13 @@ const Page = ({ index, order, appContext }) => {
 					textAlign
 				}}
 			>
-				<VerseLayout page={index} />
 				<div className="PageImageFrame">
+					<VerseLayout page={index} />
 					<img
 						style={{
 							visibility: isLoaded ? "visible" : "hidden",
-							margin: "0" + (appContext.isNarrow ? "" : " 20px")
+							margin: "0" + (appContext.isNarrow ? "" : " 20px"),
+							width: appContext.pageWidth()
 						}}
 						className={"PageImage" + (isLoaded ? " AnimatePage" : "")}
 						onLoad={onImageLoaded}
