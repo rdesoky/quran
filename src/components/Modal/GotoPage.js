@@ -22,6 +22,9 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	useEffect(() => {
 		gotoPageForm.PageNumber.focus();
 		gotoPageForm.PageNumber.select();
+		return () => {
+			// document.body.focus();
+		};
 	}, []);
 
 	const gotoPage = e => {
