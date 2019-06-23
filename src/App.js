@@ -11,6 +11,10 @@ import PopupView from "./components/Modal/PopupView";
 
 function App() {
 	// const [popup, updatePopup] = useState(null);
+	const [locale, setLocale] = useState(localStorage.getItem("locale") || "ar");
+	const [theme, setTheme] = useState(
+		localStorage.getItem("theme") || "Default"
+	);
 
 	//Handles componentDidMount/unmount, props changes
 	useEffect(() => {
@@ -19,15 +23,15 @@ function App() {
 		});
 	});
 
-	const locale = "ar";
 	const locale_data = require(`react-intl/locale-data/${locale}`);
+
 	addLocaleData(locale_data);
 
 	const locale_messages = require(`./translations/${locale}.json`);
 
 	return (
 		<IntlProvider locale={locale} messages={locale_messages}>
-			<div className="App">
+			<div className={"App " + theme + "Theme"}>
 				<Router>
 					<AppProvider>
 						<Route path="/page/:page" component={Pager} />

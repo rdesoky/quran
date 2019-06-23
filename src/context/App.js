@@ -57,7 +57,8 @@ class AppProvider extends Component {
 		toggleShowMenu: this.toggleShowMenu.bind(this),
 		setPopup: this.setPopup.bind(this),
 		nextPage: this.nextPage.bind(this),
-		prevPage: this.prevPage.bind(this)
+		prevPage: this.prevPage.bind(this),
+		offsetPage: this.offsetPage.bind(this)
 	};
 
 	onResize = e => {

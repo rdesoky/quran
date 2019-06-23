@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
-import { FormattedMessage } from "react-intl";
-import QData from "../../services/QData";
 import { withAppContext } from "../../context/App";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSortDown } from "@fortawesome/free-solid-svg-icons";
+import VerseLayout from "./VerseLayout";
+import PageHeader from "./PageHeader";
+import PageFooter from "./PageFooter";
 
-function Page({ number, appContext }) {
-	let imageName = NumToString(number + 1);
+const Page = ({ index, order, appContext }) => {
+	let imageName = NumToString(index + 1);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const [showProgress, setShowProgress] = useState(true);
 
-	const updateLoaded = val => {
-		console.log(`updateLoaded(${val})`);
-		setIsLoaded(val);
+	const updateProgress = showProgress => {
+		setShowProgress(showProgress);
+		console.log(`updateProgress(${showProgress})`);
+	};
+
+	const updateLoaded = isLoaded => {
+		console.log(`updateLoaded(${isLoaded})`);
+		setIsLoaded(isLoaded);
+		updateProgress(!isLoaded);
 	};
 
 	const onImageLoaded = e => {
 		console.log(
-			`**onImageLoaded(${parseInt(number) + 1}) (isLoaded=${isLoaded})`
+			`**onImageLoaded(${parseInt(index) + 1}) (isLoaded=${isLoaded})`
 		);
 		setTimeout(() => {
 			updateLoaded(true); //To help animation timing
@@ -28,66 +34,46 @@ function Page({ number, appContext }) {
 	//Run after componentDidMount, componentDidUpdate, and props update
 	useEffect(() => {
 		console.log(
-			`Page number changed to ${parseInt(number) + 1} (isLoaded=${isLoaded})`
+			`Page number changed to ${parseInt(index) + 1} (isLoaded=${isLoaded})`
 		);
 		updateLoaded(false);
-	}, [number]); //only run when number changes
+	}, [index]); //only run when number changes
 
-	const showFindPopup = e => {
-		appContext.setPopup("Find");
-	};
-	const showIndexPopup = e => {
-		appContext.setPopup("QIndex");
-	};
-
-	const suraIndex = QData.pageSura(number + 1);
+	let textAlign =
+		appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 	return (
 		<div className="Page">
-			<div
-				className="PageHeader"
-				style={{ paddingLeft: appContext.isNarrow ? "50px" : "0" }}
-			>
-				<button className="SuraTitle" onClick={showIndexPopup}>
-					<FormattedMessage id="sura" />
-					:&nbsp;<span>{suraIndex + 1}</span>&nbsp;-&nbsp;
-					<FormattedMessage id="sura_names">
-						{sura_names => {
-							return sura_names[suraIndex];
-						}}
-					</FormattedMessage>
-					&nbsp;
-					<FontAwesomeIcon icon={faSortDown} />
-				</button>
-				<button className="PartTitle" onClick={showFindPopup}>
-					<FormattedMessage id="part" />
-					:&nbsp;<span>{QData.pagePart(number + 1)}</span>&nbsp;
-					<FontAwesomeIcon icon={faSortDown} />
-				</button>
-			</div>
-			<Spinner visible={!isLoaded} />
+			<PageHeader index={index} />
+			<Spinner visible={showProgress} />
 			<div
 				onClick={e => {
 					appContext.setShowMenu(false);
 				}}
 				className="PageFrame"
-				style={{ padding: appContext.isNarrow ? "0" : "0 20px" }}
+				style={{
+					// padding: appContext.isNarrow ? "0" : "0 20px",
+					textAlign
+				}}
 			>
-				<img
-					style={{ visibility: isLoaded ? "visible" : "hidden" }}
-					className={"PageImage" + (isLoaded ? " AnimatePage" : "")}
-					onLoad={onImageLoaded}
-					src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
-					alt={"Page #" + (parseInt(number) + 1).toString()}
-				/>
+				<VerseLayout page={index} />
+				<div className="PageImageFrame">
+					<img
+						style={{
+							visibility: isLoaded ? "visible" : "hidden",
+							margin: "0" + (appContext.isNarrow ? "" : " 20px")
+						}}
+						className={"PageImage" + (isLoaded ? " AnimatePage" : "")}
+						onLoad={onImageLoaded}
+						src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
+						alt={"Page #" + (parseInt(index) + 1).toString()}
+					/>
+				</div>
 			</div>
-
-			<div className="PageFooter">
-				<button onClick={showFindPopup}>{number + 1}</button>
-			</div>
+			<PageFooter index={index} />
 		</div>
 	);
-}
+};
 
 function NumToString(number, padding = 3) {
 	let padded = number.toString();

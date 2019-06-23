@@ -53,7 +53,7 @@ function Pager({ match, appContext }) {
 	};
 
 	const handleKeyDown = e => {
-		if (e.target !== document.body) {
+		if (appContext.popup !== null) {
 			return;
 		}
 		switch (e.key) {
@@ -98,8 +98,8 @@ function Pager({ match, appContext }) {
 		let pageClass = thisPage % 2 === 0 ? " RightPage" : " LeftPage";
 		let activeClass = pageIndex === thisPage ? " Active" : "";
 
-		let textAlign =
-			appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+		// let textAlign =
+		// 	appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 		return (
 			<div
@@ -107,11 +107,11 @@ function Pager({ match, appContext }) {
 				className={"PageSide" + pageClass + activeClass}
 				style={{
 					height: appContext.appHeight + "px",
-					width: 100 / appContext.pagesCount + "%",
-					textAlign: textAlign
+					width: 100 / appContext.pagesCount + "%"
+					// textAlign: textAlign
 				}}
 			>
-				<Page number={thisPage} />
+				<Page index={thisPage} order={order} />
 			</div>
 		);
 	};

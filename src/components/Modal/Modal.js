@@ -5,8 +5,11 @@ import { withAppContext } from "../../context/App";
 
 import "./Modal.scss";
 
-const Modal = ({ open, onClose, children, appContext }) => {
+const Modal = ({ onClose, children, appContext }) => {
 	const onClickClose = e => {
+		if (typeof onClose === "function") {
+			onClose(e);
+		}
 		appContext.setPopup(null);
 		e.preventDefault();
 	};
