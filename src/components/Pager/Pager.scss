@@ -6,6 +6,12 @@
 		height: 100%;
 		display: inline-block;
 		box-sizing: border-box;
+		&.RightPage {
+			direction: ltr;
+		}
+		&.LeftPage {
+			direction: rtl;
+		}
 	}
 	.NavButton {
 		position: fixed;

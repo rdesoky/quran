@@ -40,6 +40,14 @@ class AppProvider extends Component {
 		this.offsetPage(-1);
 	}
 
+	pageWidth() {
+		let width = (this.state.appHeight - 50) * 0.61;
+		if (width > this.state.appWidth) {
+			return this.state.appWidth;
+		}
+		return width;
+	}
+
 	offsetPage(shift) {
 		const { location, history } = this.props;
 		let match = location.pathname.match(/page\/(.+)/);
@@ -58,7 +66,8 @@ class AppProvider extends Component {
 		setPopup: this.setPopup.bind(this),
 		nextPage: this.nextPage.bind(this),
 		prevPage: this.prevPage.bind(this),
-		offsetPage: this.offsetPage.bind(this)
+		offsetPage: this.offsetPage.bind(this),
+		pageWidth: this.pageWidth.bind(this)
 	};
 
 	onResize = e => {

@@ -5,13 +5,32 @@ const VerseLayout = ({ page, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 
 	function renderVerses() {
-		let ret = "";
-		return versesInfo.map(verse => {
-			return <button>Aya</button>;
+		const pageHeight = appContext.appHeight - 50;
+		const lineHeight = pageHeight / 15;
+		const lineWidth = appContext.pageWidth();
+		const buttonWidth = lineWidth / 10.5;
+
+		return versesInfo.map((verse, index) => {
+			return (
+				<button
+					key={index}
+					style={{
+						position: "absolute",
+						width: buttonWidth,
+						height: lineHeight,
+						backgroundColor: "rgba(50,50,50,.2)",
+						top: (verse.eline * pageHeight) / 15,
+						left: lineWidth - (verse.epos * lineWidth) / 1000
+					}}
+				>
+					&nbsp;
+				</button>
+			);
 		});
 	}
 
 	useEffect(() => {
+		setAyaInfo([]);
 		let pageNumber = parseInt(page) + 1;
 		fetch(
 			"http://www.kobool.com/cgi-bin/quran/get_page_layout.pl?pg=" + pageNumber
@@ -26,9 +45,10 @@ const VerseLayout = ({ page, appContext }) => {
 		<div
 			className="VerseLayout"
 			style={{
-				padding: "0" + (appContext.isNarrow ? "" : " 20px")
+				direction: "ltr",
+				width: appContext.pageWidth(),
+				margin: "0" + (appContext.isNarrow ? "" : " 20px")
 			}}
-			onClick={e => alert("Clicked")}
 		>
 			{renderVerses()}
 		</div>
