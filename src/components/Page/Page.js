@@ -53,10 +53,11 @@ const Page = ({ index, order, appContext }) => {
 				className="PageFrame"
 				style={{
 					// padding: appContext.isNarrow ? "0" : "0 20px",
-					textAlign
+					textAlign,
+					visibility: isLoaded ? "visible" : "hidden"
 				}}
 			>
-				<div className="PageImageFrame">
+				<div className={"PageImageFrame" + (isLoaded ? " AnimatePage" : "")}>
 					<VerseLayout page={index} />
 					<img
 						style={{
@@ -64,7 +65,7 @@ const Page = ({ index, order, appContext }) => {
 							margin: "0" + (appContext.isNarrow ? "" : " 20px"),
 							width: appContext.pageWidth()
 						}}
-						className={"PageImage" + (isLoaded ? " AnimatePage" : "")}
+						className={"PageImage"}
 						onLoad={onImageLoaded}
 						src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
 						alt={"Page #" + (parseInt(index) + 1).toString()}

@@ -16,7 +16,7 @@ const VerseLayout = ({ page, appContext }) => {
 			//alert(JSON.stringify(e));
 			//console.log(e);
 
-			alert(JSON.stringify(verse));
+			console.log(verse);
 		};
 
 		return versesInfo.map((verse, index) => {
