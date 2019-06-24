@@ -13,6 +13,22 @@
 		}
 		.VerseLayout {
 			position: absolute;
+			height: 100%;
+			.Verse {
+				position: absolute;
+				&:hover {
+					background-color: rgba(0, 255, 0, 0.2);
+				}
+				// &.VerseHead {
+				// 	background-color: rgba(255, 0, 0, 0.2);
+				// }
+				// &.VerseBody {
+				// 	background-color: rgba(0, 255, 0, 0.2);
+				// }
+				// &.VerseTail {
+				// 	background-color: rgba(0, 0, 255, 0.2);
+				// }
+			}
 		}
 	}
 
@@ -38,6 +54,7 @@
 		height: 100%;
 		max-width: 100%;
 		// margin: 0 20px;
+		// position: absolute;
 	}
 
 	.PageHeader,
@@ -73,10 +90,16 @@
 	.AnimatePage {
 		animation: LeftPageOpener 0.4s;
 	}
+	.PageImageFrame {
+		border-left: solid 1px silver;
+	}
 }
 .RightPage {
 	.AnimatePage {
 		animation: RightPageOpener 0.4s;
+	}
+	.PageImageFrame {
+		border-right: solid 1px silver;
 	}
 }
 
