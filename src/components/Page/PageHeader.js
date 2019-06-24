@@ -25,7 +25,7 @@ const PageHeader = ({ index, appContext }) => {
 				:&nbsp;<span>{suraIndex + 1}</span>&nbsp;-&nbsp;
 				<FormattedMessage id="sura_names">
 					{sura_names => {
-						return sura_names[suraIndex];
+						return sura_names.split(",")[suraIndex];
 					}}
 				</FormattedMessage>
 				&nbsp;

@@ -34,7 +34,7 @@ const QIndex = ({ open, onClose, history }) => {
 							>
 								<FormattedMessage id={"sura_names"}>
 									{data => {
-										return index + 1 + ". " + data[index];
+										return index + 1 + ". " + data.split(",")[index];
 									}}
 								</FormattedMessage>
 							</button>
