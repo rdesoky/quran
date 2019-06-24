@@ -8,17 +8,28 @@ const VerseLayout = ({ page, appContext }) => {
 		const pageHeight = appContext.appHeight - 50;
 		const lineHeight = pageHeight / 15;
 		const lineWidth = appContext.pageWidth();
-		const buttonWidth = lineWidth / 10.5;
+		const buttonWidth = lineWidth / 10;
+
+		const onClickVerse = ({ target }) => {
+			const verseIndex = target.getAttribute("verse-index");
+			const verse = versesInfo[verseIndex];
+			//alert(JSON.stringify(e));
+			//console.log(e);
+
+			alert(JSON.stringify(verse));
+		};
 
 		return versesInfo.map((verse, index) => {
 			return (
 				<button
 					key={index}
+					verse-index={index}
+					onClick={onClickVerse}
 					style={{
 						position: "absolute",
 						width: buttonWidth,
 						height: lineHeight,
-						backgroundColor: "rgba(50,50,50,.2)",
+						backgroundColor: "rgba(50,50,50,.15)",
 						top: (verse.eline * pageHeight) / 15,
 						left: lineWidth - (verse.epos * lineWidth) / 1000
 					}}
@@ -32,9 +43,7 @@ const VerseLayout = ({ page, appContext }) => {
 	useEffect(() => {
 		setAyaInfo([]);
 		let pageNumber = parseInt(page) + 1;
-		fetch(
-			"http://www.kobool.com/cgi-bin/quran/get_page_layout.pl?pg=" + pageNumber
-		)
+		fetch(`/pg_map/pm_${pageNumber}.json`)
 			.then(response => response.json())
 			.then(({ child_list }) => {
 				setAyaInfo(child_list);
