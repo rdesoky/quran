@@ -92,6 +92,16 @@ class AppProvider extends Component {
 		}
 	};
 
+	gotoSura = index => {
+		const page = QData.sura_info[index].sp;
+		this.gotoPage(page);
+	};
+
+	gotoPart = index => {
+		const page = QData.parts[index].p;
+		this.gotoPage(page);
+	};
+
 	methods = {
 		setShowMenu: this.setShowMenu,
 		toggleShowMenu: this.toggleShowMenu,
@@ -100,6 +110,8 @@ class AppProvider extends Component {
 		prevPage: this.prevPage,
 		offsetPage: this.offsetPage,
 		gotoPage: this.gotoPage,
+		gotoSura: this.gotoSura,
+		gotoPart: this.gotoPart,
 		pageWidth: this.pageWidth,
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,
