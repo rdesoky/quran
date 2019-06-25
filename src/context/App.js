@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import QData from "../services/QData";
 
 const AppState = {
 	isNarrow: false,
@@ -10,7 +11,8 @@ const AppState = {
 	showMenu: false,
 	popup: null,
 	selectStart: -1,
-	selectEnd: -1
+	selectEnd: -1,
+	maskStart: -1
 };
 
 const AppContext = React.createContext(AppState);
@@ -22,8 +24,22 @@ class AppProvider extends Component {
 		this.setState({ selectStart });
 	};
 
+	setMaskStart = maskStart => {
+		this.setState({ maskStart });
+	};
+
 	setSelectEnd = selectEnd => {
 		this.setState({ selectEnd });
+	};
+
+	offsetMask = offset => {
+		let ms = parseInt(this.state.maskStart);
+		if (ms !== -1) {
+			let maskStart = ms + offset;
+			if (maskStart >= 0 && maskStart < QData.ayatCount()) {
+				this.setState({ maskStart });
+			}
+		}
 	};
 
 	setIsNarrow = isNarrow => {
@@ -79,7 +95,9 @@ class AppProvider extends Component {
 		offsetPage: this.offsetPage,
 		pageWidth: this.pageWidth,
 		setSelectStart: this.setSelectStart,
-		setSelectEnd: this.setSelectEnd
+		setSelectEnd: this.setSelectEnd,
+		setMaskStart: this.setMaskStart,
+		offsetMask: this.offsetMask
 	};
 
 	onResize = e => {
