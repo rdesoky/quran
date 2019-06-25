@@ -7,7 +7,7 @@ const VerseLayout = ({ page, appContext }) => {
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
 	const maskColor = "#777";
-	const maskHoverColor = "#999";
+	const maskHoverColor = "#888";
 
 	function renderVerses() {
 		const pageHeight = appContext.appHeight - 50;
@@ -184,8 +184,12 @@ const VerseLayout = ({ page, appContext }) => {
 			.then(({ child_list }) => {
 				setAyaInfo(
 					child_list.map(c => {
-						const aya_id = QData.verseID(c.sura, c.aya);
-						return { ...c, aya_id };
+						const aya_id = QData.ayaID(c.sura, c.aya);
+						let epos = c.epos;
+						if (epos > 980) {
+							epos = 1000;
+						}
+						return { ...c, epos, aya_id };
 					})
 				);
 			});
