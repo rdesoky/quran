@@ -57,13 +57,17 @@ function Pager({ match, appContext }) {
 			return;
 		}
 		switch (e.key) {
+			case "ArrowDown":
+				appContext.offsetMask(1);
+				break;
+			case "ArrowUp":
+				appContext.offsetMask(-1);
+				break;
 			case "PageDown":
-			// case "ArrowDown":
 			case "ArrowLeft":
 				increment(e);
 				break;
 			case "PageUp":
-			// case "ArrowUp":
 			case "ArrowRight":
 				decrement(e);
 				break;

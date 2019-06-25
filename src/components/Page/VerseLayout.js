@@ -6,6 +6,8 @@ const VerseLayout = ({ page, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
+	const maskColor = "#777";
+	const maskHoverColor = "#999";
 
 	function renderVerses() {
 		const pageHeight = appContext.appHeight - 50;
@@ -13,39 +15,65 @@ const VerseLayout = ({ page, appContext }) => {
 		const lineWidth = appContext.pageWidth();
 		// const buttonWidth = lineWidth / 10;
 
-		const onClickVerse = ({ target }) => {
-			const verseIndex = target.getAttribute("verse-index");
-			const verse = versesInfo[verseIndex];
-			console.log(verse);
-			//TODO: set selectStart|selectEnd|both
-		};
-
 		const onMouseEnter = ({ target }) => {
-			// const [sura, aya] = [
-			// 	target.getAttribute("sura"),
-			// 	target.getAttribute("aya")
-			// ];
-			setHoverVerse(parseInt(target.getAttribute("aya_id")));
+			setHoverVerse(parseInt(target.getAttribute("aya-id")));
 		};
 
 		const onMouseLeave = () => {
 			setHoverVerse(-1);
 		};
 
-		const onContextMenu = ({ target }) => {
-			const [sura, aya] = [
-				target.getAttribute("sura"),
-				target.getAttribute("aya")
-			];
+		const onContextMenu = e => {
+			const aya_id = parseInt(e.target.getAttribute("aya-id"));
+			appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
+			e.preventDefault();
+		};
+
+		const isHovered = aya_id => hoverVerse === aya_id;
+		const isMasked = aya_id => {
+			let { maskStart } = appContext;
+			if (maskStart !== -1 && aya_id >= maskStart) {
+				return true;
+			}
+			return false;
+		};
+
+		const onClickVerse = ({ target }) => {
+			const aya_id = target.getAttribute("aya-id");
+			//TODO: set selectStart|selectEnd|maskStart
+			if (appContext.maskStart !== -1) {
+				if (appContext.maskStart > aya_id) {
+					appContext.setMaskStart(aya_id);
+				} else {
+					appContext.offsetMask(1);
+				}
+			}
+		};
+
+		const ayaBackgroundColor = aya_id => {
+			let bg = "transparent";
+			let hovered = isHovered(aya_id);
+			if (hovered) {
+				bg = hoverColor;
+			}
+			if (isMasked(aya_id)) {
+				bg = maskColor;
+				if (hovered) {
+					bg = maskHoverColor;
+				}
+			}
+			return bg;
 		};
 
 		const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+			let backgroundColor = ayaBackgroundColor(aya_id);
 			return (
 				<div
+					onClick={onClickVerse}
 					onMouseEnter={onMouseEnter}
 					onMouseLeave={onMouseLeave}
 					onContextMenu={onContextMenu}
-					aya_id={aya_id}
+					aya-id={aya_id}
 					sura={sura}
 					aya={aya}
 					sline={sline}
@@ -58,7 +86,7 @@ const VerseLayout = ({ page, appContext }) => {
 						top: (sline * pageHeight) / 15,
 						right: (spos * lineWidth) / 1000,
 						left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0,
-						backgroundColor: hoverVerse === aya_id ? hoverColor : "transparent"
+						backgroundColor
 					}}
 				/>
 			);
@@ -66,12 +94,14 @@ const VerseLayout = ({ page, appContext }) => {
 
 		const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 			if (eline - sline > 0) {
+				let backgroundColor = ayaBackgroundColor(aya_id);
 				return (
 					<div
+						onClick={onClickVerse}
 						onMouseEnter={onMouseEnter}
 						onMouseLeave={onMouseLeave}
 						onContextMenu={onContextMenu}
-						aya_id={aya_id}
+						aya-id={aya_id}
 						sura={sura}
 						aya={aya}
 						sline={sline}
@@ -84,8 +114,7 @@ const VerseLayout = ({ page, appContext }) => {
 							top: (eline * pageHeight) / 15,
 							right: 0,
 							left: lineWidth - (epos * lineWidth) / 1000,
-							backgroundColor:
-								hoverVerse === aya_id ? hoverColor : "transparent"
+							backgroundColor
 						}}
 					/>
 				);
@@ -94,12 +123,14 @@ const VerseLayout = ({ page, appContext }) => {
 
 		const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 			if (eline - sline > 1) {
+				let backgroundColor = ayaBackgroundColor(aya_id);
 				return (
 					<div
+						onClick={onClickVerse}
 						onMouseEnter={onMouseEnter}
 						onMouseLeave={onMouseLeave}
 						onContextMenu={onContextMenu}
-						aya_id={aya_id}
+						aya-id={aya_id}
 						sura={sura}
 						aya={aya}
 						sline={sline}
@@ -112,8 +143,7 @@ const VerseLayout = ({ page, appContext }) => {
 							top: ((parseInt(sline) + 1) * pageHeight) / 15,
 							right: 0,
 							left: 0,
-							backgroundColor:
-								hoverVerse === aya_id ? hoverColor : "transparent"
+							backgroundColor
 						}}
 					/>
 				);
