@@ -38,6 +38,7 @@ class AppProvider extends Component {
 			let maskStart = ms + offset;
 			if (maskStart >= 0 && maskStart < QData.ayatCount()) {
 				this.setState({ maskStart });
+				return QData.ayaIdPage(maskStart);
 			}
 		}
 	};
@@ -75,14 +76,19 @@ class AppProvider extends Component {
 	};
 
 	offsetPage = shift => {
-		const { location, history } = this.props;
+		const { location } = this.props;
 		let match = location.pathname.match(/page\/(.+)/);
 		let pageNumber = match ? match[1] : undefined;
 		if (pageNumber !== undefined) {
 			let nextPage = parseInt(pageNumber) + shift;
-			if (nextPage <= 604 && nextPage >= 1) {
-				history.replace("/page/" + nextPage.toString());
-			}
+			this.gotoPage(nextPage);
+		}
+	};
+
+	gotoPage = page => {
+		const { history } = this.props;
+		if (page <= 604 && page >= 1) {
+			history.replace("/page/" + page.toString());
 		}
 	};
 
@@ -93,6 +99,7 @@ class AppProvider extends Component {
 		nextPage: this.nextPage,
 		prevPage: this.prevPage,
 		offsetPage: this.offsetPage,
+		gotoPage: this.gotoPage,
 		pageWidth: this.pageWidth,
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,

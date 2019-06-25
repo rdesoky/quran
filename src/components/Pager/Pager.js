@@ -26,21 +26,25 @@ function Pager({ match, appContext }) {
 	//useEffect(() => {}, []);
 
 	const decrement = e => {
-		// page = match.params.page;
-		// let nPage = parseInt(page);
-		// if (nPage > 1) {
-		// 	appContext.history.replace("/page/" + (nPage - 1).toString());
-		// }
-		appContext.prevPage();
+		if (appContext.maskStart !== -1) {
+			let pageIndex = appContext.offsetMask(-1);
+			if (pageIndex + 1 !== parseInt(match.params.page)) {
+				appContext.gotoPage(pageIndex + 1);
+			}
+		} else {
+			appContext.offsetPage(-1);
+		}
 	};
 
 	const increment = e => {
-		// page = match.params.page;
-		// let nPage = parseInt(page);
-		// if (nPage < 604) {
-		// 	appContext.history.replace("/page/" + (nPage + 1).toString());
-		// }
-		appContext.nextPage();
+		if (appContext.maskStart !== -1) {
+			let pageIndex = appContext.offsetMask(1);
+			if (pageIndex + 1 !== parseInt(match.params.page)) {
+				appContext.gotoPage(pageIndex + 1);
+			}
+		} else {
+			appContext.offsetPage(1);
+		}
 	};
 
 	const handleWheel = e => {
@@ -57,11 +61,20 @@ function Pager({ match, appContext }) {
 			return;
 		}
 		switch (e.key) {
+			case "Escape":
+				if (appContext.maskStart !== -1) {
+					appContext.setMaskStart(-1);
+				}
+				break;
 			case "ArrowDown":
-				appContext.offsetMask(1);
+				if (appContext.maskStart !== -1) {
+					increment(e);
+				}
 				break;
 			case "ArrowUp":
-				appContext.offsetMask(-1);
+				if (appContext.maskStart !== -1) {
+					decrement(e);
+				}
 				break;
 			case "PageDown":
 			case "ArrowLeft":

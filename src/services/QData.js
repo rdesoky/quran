@@ -9,7 +9,7 @@ const QData = {
 		return 30;
 	},
 
-	verseID: (sura, aya) => {
+	ayaID: (sura, aya) => {
 		if (typeof sura === "string") {
 			sura = parseInt(sura) - 1;
 		}
@@ -22,6 +22,23 @@ const QData = {
 		}
 		id += aya;
 		return id;
+	},
+
+	ayaIdInfo: aya_id => {
+		let id = 0;
+		for (var s = 0; s < QData.sura_info.length; s++) {
+			let ac = QData.sura_info[s].ac;
+			if (id + ac > aya_id) {
+				return { sura: s, aya: aya_id - id };
+			}
+			id += ac;
+		}
+		return { sura: 0, aya: 0 };
+	},
+
+	ayaIdPage: aya_id => {
+		let { sura, aya } = QData.ayaIdInfo(aya_id);
+		return QData.ayaPage(sura, aya);
 	},
 
 	ayaPage: function(sura, aya) {
