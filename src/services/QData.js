@@ -9,6 +9,21 @@ const QData = {
 		return 30;
 	},
 
+	verseID: (sura, aya) => {
+		if (typeof sura === "string") {
+			sura = parseInt(sura) - 1;
+		}
+		if (typeof aya === "string") {
+			aya = parseInt(aya) - 1;
+		}
+		let id = 0;
+		for (var s = 0; s < sura; s++) {
+			id += QData.sura_info[s].ac;
+		}
+		id += aya;
+		return id;
+	},
+
 	ayaPage: function(sura, aya) {
 		var page = QData.sura_info[sura].sp - 1;
 		while (page < QData.pagesInfo.length - 1) {
