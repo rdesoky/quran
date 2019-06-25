@@ -31,7 +31,12 @@ function Sidebar({ appContext }) {
 	};
 
 	return (
-		<div className="Sidebar">
+		<div
+			className="Sidebar"
+			style={{
+				bottom: appContext.showMenu || !appContext.isNarrow ? 0 : "auto"
+			}}
+		>
 			<button
 				onClick={toggleButtons}
 				style={{ display: appContext.isNarrow ? "block" : "none" }}
