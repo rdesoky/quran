@@ -8,7 +8,9 @@ const AppState = {
 	appHeight: 600,
 	pagesCount: 2,
 	showMenu: false,
-	popup: null
+	popup: null,
+	selectStart: -1,
+	selectEnd: -1
 };
 
 const AppContext = React.createContext(AppState);
@@ -16,39 +18,47 @@ const AppContext = React.createContext(AppState);
 class AppProvider extends Component {
 	state = AppState;
 
-	setIsNarrow(isNarrow) {
+	setSelectStart = selectStart => {
+		this.setState({ selectStart });
+	};
+
+	setSelectEnd = selectEnd => {
+		this.setState({ selectEnd });
+	};
+
+	setIsNarrow = isNarrow => {
 		this.setState({ isNarrow: isNarrow });
-	}
+	};
 
-	setShowMenu(showMenu) {
+	setShowMenu = showMenu => {
 		this.setState({ showMenu });
-	}
+	};
 
-	toggleShowMenu() {
+	toggleShowMenu = () => {
 		this.setState({ showMenu: !this.state.showMenu });
-	}
+	};
 
-	setPopup(popup) {
+	setPopup = popup => {
 		this.setState({ popup });
-	}
+	};
 
-	nextPage() {
+	nextPage = () => {
 		this.offsetPage(1);
-	}
+	};
 
-	prevPage() {
+	prevPage = () => {
 		this.offsetPage(-1);
-	}
+	};
 
-	pageWidth() {
-		let width = (this.state.appHeight - 50) * 0.61;
+	pageWidth = () => {
+		let width = (this.state.appHeight - 50) * 0.61; //aspect ratio
 		if (width > this.state.appWidth) {
 			return this.state.appWidth;
 		}
 		return width;
-	}
+	};
 
-	offsetPage(shift) {
+	offsetPage = shift => {
 		const { location, history } = this.props;
 		let match = location.pathname.match(/page\/(.+)/);
 		let pageNumber = match ? match[1] : undefined;
@@ -58,16 +68,18 @@ class AppProvider extends Component {
 				history.replace("/page/" + nextPage.toString());
 			}
 		}
-	}
+	};
 
 	methods = {
-		setShowMenu: this.setShowMenu.bind(this),
-		toggleShowMenu: this.toggleShowMenu.bind(this),
-		setPopup: this.setPopup.bind(this),
-		nextPage: this.nextPage.bind(this),
-		prevPage: this.prevPage.bind(this),
-		offsetPage: this.offsetPage.bind(this),
-		pageWidth: this.pageWidth.bind(this)
+		setShowMenu: this.setShowMenu,
+		toggleShowMenu: this.toggleShowMenu,
+		setPopup: this.setPopup,
+		nextPage: this.nextPage,
+		prevPage: this.prevPage,
+		offsetPage: this.offsetPage,
+		pageWidth: this.pageWidth,
+		setSelectStart: this.setSelectStart,
+		setSelectEnd: this.setSelectEnd
 	};
 
 	onResize = e => {
