@@ -58,9 +58,9 @@ const VerseLayout = ({ page, appContext }) => {
 			}
 			if (isMasked(aya_id)) {
 				bg = maskColor;
-				if (hovered) {
-					bg = maskHoverColor;
-				}
+				// if (hovered) {
+				// 	bg = maskHoverColor;
+				// }
 			}
 			return bg;
 		};
