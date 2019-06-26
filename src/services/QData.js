@@ -41,6 +41,12 @@ const QData = {
 		return QData.ayaPage(sura, aya);
 	},
 
+	pageAyaId: page_index => {
+		let { s: sura, a: aya } = QData.pagesInfo[page_index];
+		return QData.ayaID(sura - 1, aya - 1);
+	},
+
+	//Index based
 	ayaPage: function(sura, aya) {
 		var page = QData.sura_info[sura].sp - 1;
 		while (page < QData.pagesInfo.length - 1) {

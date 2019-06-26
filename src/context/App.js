@@ -81,14 +81,19 @@ class AppProvider extends Component {
 		let pageNumber = match ? match[1] : undefined;
 		if (pageNumber !== undefined) {
 			let nextPage = parseInt(pageNumber) + shift;
-			this.gotoPage(nextPage);
+			this.gotoPage(nextPage, true);
 		}
 	};
 
-	gotoPage = page => {
+	gotoPage = (page, replace) => {
 		const { history } = this.props;
 		if (page <= 604 && page >= 1) {
-			history.replace("/page/" + page.toString());
+			let targetPath = "/page/" + page.toString();
+			if (replace) {
+				history.replace(targetPath);
+			} else {
+				history.push(targetPath);
+			}
 		}
 	};
 
