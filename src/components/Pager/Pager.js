@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Page from "../Page/Page";
-
-import { withRouter } from "react-router-dom";
 import { withAppContext } from "../../context/App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import QData from "../../services/QData";
 import "./Pager.scss";
 
 function Pager({ match, appContext }) {
 	let pageIndex = 0;
+	const REPLACE = true;
 
 	let { page, sura } = match.params;
 
@@ -26,21 +26,47 @@ function Pager({ match, appContext }) {
 	//useEffect(() => {}, []);
 
 	const decrement = e => {
-		if (appContext.maskStart !== -1) {
-			let pageIndex = appContext.offsetMask(-1);
-			if (pageIndex + 1 !== parseInt(match.params.page)) {
-				appContext.gotoPage(pageIndex + 1, true);
+		let { maskStart } = appContext;
+		if (maskStart !== -1) {
+			//Mask is active
+			if (maskStart <= 0) {
+				return;
 			}
+			let maskNewPageNum = QData.ayaIdPage(maskStart - 1) + 1;
+			if (maskNewPageNum !== parseInt(match.params.page)) {
+				//Mask would move to a new page
+				appContext.gotoPage(maskNewPageNum, REPLACE);
+				if (appContext.pagesCount === 1 || maskNewPageNum % 2 === 0) {
+					return; //Don't move mask
+				}
+			}
+			appContext.offsetMask(-1);
 		} else {
 			appContext.offsetPage(-1);
 		}
 	};
 
 	const increment = e => {
-		if (appContext.maskStart !== -1) {
-			let pageIndex = appContext.offsetMask(1);
-			if (pageIndex + 1 !== parseInt(match.params.page)) {
-				appContext.gotoPage(pageIndex + 1, true);
+		let { maskStart } = appContext;
+		if (maskStart !== -1) {
+			//Mask is active
+			if (maskStart >= QData.ayatCount()) {
+				return;
+			}
+			let currPageNum = parseInt(match.params.page);
+			let maskPageNum = QData.ayaIdPage(maskStart) + 1;
+			if (maskPageNum !== currPageNum) {
+				appContext.gotoPage(maskPageNum, REPLACE);
+				return;
+			}
+			appContext.offsetMask(1);
+			let maskNewPageNum = QData.ayaIdPage(maskStart + 1) + 1;
+			if (maskNewPageNum !== currPageNum) {
+				//Mask would move to a new page
+				if (appContext.pagesCount === 1 || maskNewPageNum % 2 === 1) {
+					return; //Don't change page
+				}
+				appContext.gotoPage(maskNewPageNum, REPLACE);
 			}
 		} else {
 			appContext.offsetPage(1);

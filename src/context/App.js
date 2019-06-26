@@ -38,7 +38,6 @@ class AppProvider extends Component {
 			let maskStart = ms + offset;
 			if (maskStart >= 0 && maskStart < QData.ayatCount()) {
 				this.setState({ maskStart });
-				return QData.ayaIdPage(maskStart);
 			}
 		}
 	};
