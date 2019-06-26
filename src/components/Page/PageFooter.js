@@ -8,7 +8,7 @@ const PageFooter = ({ index, appContext }) => {
 
 	return (
 		<div className="PageFooter">
-			<button onClick={showFindPopup}>({index + 1})</button>
+			{/* <button onClick={showFindPopup}>({index + 1})</button> */}
 		</div>
 	);
 };

@@ -7,7 +7,7 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
 	const maskColor = "#AA9";
-	const maskHoverColor = "#888";
+	const maskHoverColor = "#999";
 
 	function renderVerses() {
 		const pageHeight = appContext.appHeight - 50;
@@ -27,6 +27,10 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 			const aya_id = parseInt(e.target.getAttribute("aya-id"));
 			appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
 			e.preventDefault();
+		};
+
+		const closeMask = e => {
+			appContext.setMaskStart(-1);
 		};
 
 		const isHovered = aya_id => hoverVerse === aya_id;
@@ -68,37 +72,65 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 			}
 			if (isMasked(aya_id)) {
 				bg = maskColor;
-				// if (hovered) {
-				// 	bg = maskHoverColor;
-				// }
+				if (hovered) {
+					bg = maskHoverColor;
+				}
 			}
 			return bg;
 		};
 
 		const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 			let backgroundColor = ayaBackgroundColor(aya_id);
+
+			const maskClose = aya_id => {
+				if (aya_id === appContext.maskStart) {
+					let right = (spos * lineWidth) / 1000 - lineHeight / 2;
+					if (right < 0) {
+						right = 0;
+					}
+					return (
+						<button
+							onClick={closeMask}
+							style={{
+								position: "absolute",
+								width: lineHeight,
+								height: lineHeight,
+								top: (sline * pageHeight) / 15,
+								right,
+								backgroundColor: "#666"
+							}}
+						>
+							X
+						</button>
+					);
+				}
+			};
+
 			return (
-				<div
-					onClick={onClickVerse}
-					onMouseEnter={onMouseEnter}
-					onMouseLeave={onMouseLeave}
-					onContextMenu={onContextMenu}
-					aya-id={aya_id}
-					sura={sura}
-					aya={aya}
-					sline={sline}
-					eline={eline}
-					spos={spos}
-					epos={epos}
-					className="Verse VerseHead"
-					style={{
-						height: lineHeight,
-						top: (sline * pageHeight) / 15,
-						right: (spos * lineWidth) / 1000,
-						left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0,
-						backgroundColor
-					}}
-				/>
+				<>
+					<div
+						onClick={onClickVerse}
+						onMouseEnter={onMouseEnter}
+						onMouseLeave={onMouseLeave}
+						onContextMenu={onContextMenu}
+						aya-id={aya_id}
+						sura={sura}
+						aya={aya}
+						sline={sline}
+						eline={eline}
+						spos={spos}
+						epos={epos}
+						className="Verse VerseHead"
+						style={{
+							height: lineHeight,
+							top: (sline * pageHeight) / 15,
+							right: (spos * lineWidth) / 1000,
+							left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0,
+							backgroundColor
+						}}
+					/>
+					{maskClose(aya_id)}
+				</>
 			);
 		};
 

@@ -25,6 +25,10 @@ const PageHeader = ({ index: pageIndex, appContext }) => {
 		appContext.gotoPart(partIndex);
 	};
 
+	const showFindPopup = e => {
+		appContext.setPopup("Find");
+	};
+
 	const suraIndex = QData.pageSura(pageIndex + 1);
 
 	return (
@@ -46,6 +50,13 @@ const PageHeader = ({ index: pageIndex, appContext }) => {
 					}}
 				</FormattedMessage>
 			</select>
+			<FormattedMessage id="pg">
+				{pg => (
+					<button onClick={showFindPopup}>
+						{pg}: {pageIndex + 1}
+					</button>
+				)}
+			</FormattedMessage>
 			<select
 				onChange={onSelectPart}
 				className="PartTitle"
