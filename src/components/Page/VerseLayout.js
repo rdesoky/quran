@@ -6,7 +6,7 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
-	const maskColor = "#777";
+	const maskColor = "#AA9";
 	const maskHoverColor = "#888";
 
 	function renderVerses() {
