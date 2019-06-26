@@ -69,12 +69,14 @@
 		}
 
 		button {
-			padding: 5px 10px;
+			padding: 0 10px;
 			color: inherit;
-			height: 25px;
+			height: 100%;
+			line-height: 100%;
 		}
 	}
 	.PageHeader {
+		text-align: center;
 		select {
 			position: absolute;
 			top: 0;
@@ -93,6 +95,7 @@
 		// }
 	}
 	.PageFooter {
+		background-color: #333;
 		text-align: center;
 	}
 }
