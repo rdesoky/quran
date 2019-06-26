@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withAppContext } from "../../context/App";
 import QData from "../../services/QData";
 
-const VerseLayout = ({ page, appContext }) => {
+const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
@@ -39,13 +39,23 @@ const VerseLayout = ({ page, appContext }) => {
 		};
 
 		const onClickVerse = ({ target }) => {
-			const aya_id = target.getAttribute("aya-id");
+			const aya_id = parseInt(target.getAttribute("aya-id"));
 			//TODO: set selectStart|selectEnd|maskStart
 			if (appContext.maskStart !== -1) {
 				if (appContext.maskStart > aya_id) {
 					appContext.setMaskStart(aya_id);
 				} else {
-					appContext.offsetMask(1);
+					let nPageIndex = parseInt(pageIndex);
+					let maskStartPage = QData.ayaIdPage(appContext.maskStart);
+					if (maskStartPage === nPageIndex) {
+						//same page
+						appContext.offsetMask(1);
+					} else {
+						let clickedPage = QData.ayaIdPage(aya_id);
+						let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
+
+						appContext.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
+					}
 				}
 			}
 		};
@@ -178,7 +188,7 @@ const VerseLayout = ({ page, appContext }) => {
 
 	useEffect(() => {
 		setAyaInfo([]);
-		let pageNumber = parseInt(page) + 1;
+		let pageNumber = parseInt(pageIndex) + 1;
 		fetch(`/pg_map/pm_${pageNumber}.json`)
 			.then(response => response.json())
 			.then(({ child_list }) => {
@@ -193,7 +203,7 @@ const VerseLayout = ({ page, appContext }) => {
 					})
 				);
 			});
-	}, [page]);
+	}, [pageIndex]);
 
 	return (
 		<div

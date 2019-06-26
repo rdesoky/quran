@@ -3,8 +3,9 @@ import Modal from "./Modal";
 import { withRouter } from "react-router-dom";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
+import { withAppContext } from "../../context/App";
 
-const QIndex = ({ open, onClose, history }) => {
+const QIndex = ({ open, onClose, appContext }) => {
 	const getSuraNames = () => {
 		let suraNames = [];
 		for (let i = 1; i <= 114; i++) {
@@ -14,7 +15,8 @@ const QIndex = ({ open, onClose, history }) => {
 	};
 
 	const gotoSura = index => {
-		history.push("/page/" + QData.sura_info[index].sp);
+		appContext.setMaskStart(-1);
+		appContext.gotoPage(QData.sura_info[index].sp);
 		onClose();
 	};
 
@@ -46,4 +48,4 @@ const QIndex = ({ open, onClose, history }) => {
 	);
 };
 
-export default withRouter(QIndex);
+export default withAppContext(QIndex);

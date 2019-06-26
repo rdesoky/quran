@@ -29,7 +29,7 @@ function Pager({ match, appContext }) {
 		if (appContext.maskStart !== -1) {
 			let pageIndex = appContext.offsetMask(-1);
 			if (pageIndex + 1 !== parseInt(match.params.page)) {
-				appContext.gotoPage(pageIndex + 1);
+				appContext.gotoPage(pageIndex + 1, true);
 			}
 		} else {
 			appContext.offsetPage(-1);
@@ -40,7 +40,7 @@ function Pager({ match, appContext }) {
 		if (appContext.maskStart !== -1) {
 			let pageIndex = appContext.offsetMask(1);
 			if (pageIndex + 1 !== parseInt(match.params.page)) {
-				appContext.gotoPage(pageIndex + 1);
+				appContext.gotoPage(pageIndex + 1, true);
 			}
 		} else {
 			appContext.offsetPage(1);
