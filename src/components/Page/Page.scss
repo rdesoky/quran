@@ -59,7 +59,7 @@
 
 	.PageHeader,
 	.PageFooter {
-		position: relative;
+		// position: relative;
 		height: 25px;
 		// line-height: 25px;
 		background-color: silver;
@@ -79,6 +79,7 @@
 	}
 	.PageHeader {
 		text-align: center;
+		position: relative;
 		select {
 			position: absolute;
 			top: 0;
@@ -97,6 +98,9 @@
 		// }
 	}
 	.PageFooter {
+		position: fixed;
+		width: 100%;
+		bottom: 0;
 		text-align: center;
 	}
 }
