@@ -12,14 +12,20 @@ import {
 	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
+import { withThemeContext } from "../../context/Theme";
 
-function Sidebar({ appContext }) {
+function Sidebar({ appContext, themeContext }) {
 	const onClick = (e, id) => {
 		appContext.setPopup(id);
-		if (appContext.isNarrow) {
-			appContext.setShowMenu(false);
-		}
+		//if (appContext.isNarrow) {
+		appContext.setShowMenu(false);
+		//}
 		e.preventDefault();
+	};
+
+	const toggleTheme = e => {
+		themeContext.toggleTheme();
+		appContext.setShowMenu(false);
 	};
 
 	// useEffect(() => {
@@ -61,7 +67,7 @@ function Sidebar({ appContext }) {
 				<button onClick={e => onClick(e, "Play")}>
 					<FontAwesomeIcon icon={faPlayCircle} />
 				</button>
-				<button onClick={e => onClick(e, "Bookmark")}>
+				<button onClick={e => toggleTheme()}>
 					<FontAwesomeIcon icon={faHeart} />
 				</button>
 				<hr />
@@ -76,4 +82,4 @@ function Sidebar({ appContext }) {
 	);
 }
 
-export default withAppContext(Sidebar);
+export default withThemeContext(withAppContext(Sidebar));

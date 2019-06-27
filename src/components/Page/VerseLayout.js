@@ -8,8 +8,8 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
-	const maskColor = "#AA9";
-	const maskHoverColor = "#999";
+	const maskColor = "#998";
+	const maskHoverColor = "#888";
 
 	function renderVerses() {
 		const pageHeight = appContext.appHeight - 50;

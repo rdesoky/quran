@@ -4,15 +4,17 @@ import Pager from "./components/Pager/Pager";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
-import AppProvider from "./context/App";
 import PopupView from "./components/Modal/PopupView";
+import { withThemeContext } from "./context/Theme";
+import AppProvider from "./context/App";
+
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
 
-function App() {
+function App({ themeContext }) {
 	// const [popup, updatePopup] = useState(null);
 	const [locale, setLocale] = useState(localStorage.getItem("locale") || "ar");
-	const [theme, setTheme] = useState(localStorage.getItem("theme") || "Dark");
+	// const [theme, setTheme] = useState(localStorage.getItem("theme") || "Dark");
 
 	//Handles componentDidMount/unmount, props changes
 	useEffect(() => {
@@ -29,7 +31,7 @@ function App() {
 
 	return (
 		<IntlProvider locale={locale} messages={locale_messages}>
-			<div className={"App " + theme + "Theme"}>
+			<div className={"App " + themeContext.theme + "Theme"}>
 				<Router>
 					<AppProvider>
 						<Route path="/page/:page" component={Pager} />
@@ -50,4 +52,4 @@ function App() {
 	);
 }
 
-export default App;
+export default withThemeContext(App);
