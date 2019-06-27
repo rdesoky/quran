@@ -67,8 +67,8 @@ const Page = ({ index, order, appContext }) => {
 					<img
 						style={{
 							visibility: isLoaded ? "visible" : "hidden",
-							margin: appContext.pageMargin()
-							// width: "100%"
+							margin: appContext.pageMargin(),
+							width: appContext.pageWidth()
 						}}
 						className={"PageImage"}
 						onLoad={onImageLoaded}
