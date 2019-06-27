@@ -67,7 +67,7 @@ function Sidebar({ appContext, themeContext }) {
 				<button onClick={e => onClick(e, "Play")}>
 					<FontAwesomeIcon icon={faPlayCircle} />
 				</button>
-				<button onClick={e => toggleTheme()}>
+				<button onClick={toggleTheme}>
 					<FontAwesomeIcon icon={faHeart} />
 				</button>
 				<hr />
