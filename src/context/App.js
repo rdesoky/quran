@@ -74,6 +74,10 @@ class AppProvider extends Component {
 		return width;
 	};
 
+	pageMargin = () => {
+		return this.state.isNarrow ? "0" : "0 20px";
+	};
+
 	offsetPage = shift => {
 		const { location } = this.props;
 		let match = location.pathname.match(/page\/(.+)/);
@@ -120,7 +124,8 @@ class AppProvider extends Component {
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,
 		setMaskStart: this.setMaskStart,
-		offsetMask: this.offsetMask
+		offsetMask: this.offsetMask,
+		pageMargin: this.pageMargin
 	};
 
 	onResize = e => {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { withAppContext } from "../../context/App";
 import QData from "../../services/QData";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
@@ -97,10 +99,10 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 								height: lineHeight,
 								top: (sline * pageHeight) / 15,
 								right,
-								backgroundColor: "#666"
+								backgroundColor: "#777"
 							}}
 						>
-							X
+							<FontAwesomeIcon icon={faTimes} />
 						</button>
 					);
 				}
@@ -243,7 +245,7 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 			style={{
 				direction: "ltr",
 				width: appContext.pageWidth(),
-				margin: "0" + (appContext.isNarrow ? "" : " 20px")
+				margin: appContext.pageMargin()
 			}}
 		>
 			{renderVerses()}

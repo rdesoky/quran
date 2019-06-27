@@ -44,7 +44,7 @@ const Page = ({ index, order, appContext }) => {
 
 	return (
 		<div className="Page">
-			<PageHeader index={index} />
+			<PageHeader index={index} order={order} />
 			<Spinner visible={showProgress} />
 			<div
 				onClick={e => {
@@ -57,22 +57,28 @@ const Page = ({ index, order, appContext }) => {
 					visibility: isLoaded ? "visible" : "hidden"
 				}}
 			>
-				<div className={"PageImageFrame" + (isLoaded ? " AnimatePage" : "")}>
-					<VerseLayout page={index} />
+				<div
+					className={"PageImageFrame" + (isLoaded ? " AnimatePage" : "")}
+					// style={{
+					// 	width: appContext.pageWidth(),
+					// 	margin: appContext.pageMargin()
+					// }}
+				>
 					<img
 						style={{
 							visibility: isLoaded ? "visible" : "hidden",
-							margin: "0" + (appContext.isNarrow ? "" : " 20px"),
-							width: appContext.pageWidth()
+							margin: appContext.pageMargin()
+							// width: "100%"
 						}}
 						className={"PageImage"}
 						onLoad={onImageLoaded}
 						src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
 						alt={"Page #" + (parseInt(index) + 1).toString()}
 					/>
+					<VerseLayout page={index} />
 				</div>
 			</div>
-			<PageFooter index={index} />
+			<PageFooter index={index} order={order} />
 		</div>
 	);
 };
