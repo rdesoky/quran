@@ -5,7 +5,7 @@
 		position: relative;
 		height: calc(100% - 50px);
 		// padding: 0 20px;
-		> div {
+		.PageImageFrame {
 			// position: absolute;
 			// width: 100%;
 			height: 100%;
@@ -13,6 +13,7 @@
 		}
 		.VerseLayout {
 			position: absolute;
+			top: 0;
 			height: 100%;
 			.Verse {
 				position: absolute;
@@ -53,7 +54,6 @@
 		// width: auto;
 		height: 100%;
 		max-width: 100%;
-		// margin: 0 20px;
 		// position: absolute;
 	}
 
@@ -63,16 +63,18 @@
 		height: 25px;
 		// line-height: 25px;
 		background-color: silver;
-		> div {
-			display: inline-block;
-			margin: 0 10px;
-		}
 
-		button {
-			padding: 0 10px;
-			color: inherit;
+		.PageHeaderContent {
+			position: relative;
+			display: inline-block;
 			height: 100%;
-			line-height: 100%;
+			text-align: center;
+			button {
+				padding: 0 10px;
+				color: inherit;
+				height: 100%;
+				line-height: 100%;
+			}
 		}
 	}
 	.PageHeader {
@@ -82,10 +84,10 @@
 			top: 0;
 			bottom: 0;
 			background-color: transparent;
-			color: white;
 			border: none;
 			option {
-				background-color: #333;
+				color: black;
+				background-color: silver;
 			}
 		}
 		.SuraTitle {
@@ -95,7 +97,6 @@
 		// }
 	}
 	.PageFooter {
-		background-color: #333;
 		text-align: center;
 	}
 }
@@ -189,6 +190,12 @@
 	.PageFooter {
 		background-color: #333;
 		color: white;
+		select {
+			color: white;
+			// option {
+			// 	background-color: #333;
+			// }
+		}
 	}
 }
 

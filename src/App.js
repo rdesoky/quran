@@ -12,9 +12,7 @@ import PopupView from "./components/Modal/PopupView";
 function App() {
 	// const [popup, updatePopup] = useState(null);
 	const [locale, setLocale] = useState(localStorage.getItem("locale") || "ar");
-	const [theme, setTheme] = useState(
-		localStorage.getItem("theme") || "Default"
-	);
+	const [theme, setTheme] = useState(localStorage.getItem("theme") || "Dark");
 
 	//Handles componentDidMount/unmount, props changes
 	useEffect(() => {
