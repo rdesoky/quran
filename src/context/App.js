@@ -20,6 +20,11 @@ const AppContext = React.createContext(AppState);
 class AppProvider extends Component {
 	state = AppState;
 
+	setTheme = theme => {
+		this.setState({ theme });
+		localStorage.setItem("theme", theme);
+	};
+
 	setSelectStart = selectStart => {
 		this.setState({ selectStart });
 	};
@@ -125,7 +130,8 @@ class AppProvider extends Component {
 		setSelectEnd: this.setSelectEnd,
 		setMaskStart: this.setMaskStart,
 		offsetMask: this.offsetMask,
-		pageMargin: this.pageMargin
+		pageMargin: this.pageMargin,
+		setTheme: this.setTheme
 	};
 
 	onResize = e => {
