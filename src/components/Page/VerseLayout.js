@@ -9,7 +9,9 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 	const [hoverVerse, setHoverVerse] = useState(-1);
 	const hoverColor = "#0000FF1A";
 	const maskColor = "#998";
-	const maskHoverColor = "#888";
+	// const maskHoverColor = "#888";
+	const selectColor = "#FFFFFF3A";
+	const maskSelectColor = "#888";
 
 	function renderVerses() {
 		const pageHeight = appContext.appHeight - 50;
@@ -32,10 +34,13 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 		};
 
 		const closeMask = e => {
-			appContext.setMaskStart(-1);
+			appContext.hideMask();
 		};
 
 		const isHovered = aya_id => hoverVerse === aya_id;
+		const isSelected = aya_id =>
+			aya_id <= appContext.selectStart && aya_id >= appContext.selectEnd;
+
 		const isMasked = aya_id => {
 			let { maskStart } = appContext;
 			if (maskStart !== -1 && aya_id >= maskStart) {
@@ -63,19 +68,25 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 						appContext.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
 					}
 				}
+			} else {
+				appContext.selectAya(aya_id);
 			}
 		};
 
 		const ayaBackgroundColor = aya_id => {
 			let bg = "transparent";
+			let selected = isSelected(aya_id);
+			if (selected) {
+				bg = selectColor;
+			}
 			let hovered = isHovered(aya_id);
 			if (hovered) {
 				bg = hoverColor;
 			}
 			if (isMasked(aya_id)) {
 				bg = maskColor;
-				if (hovered) {
-					bg = maskHoverColor;
+				if (selected) {
+					bg = maskSelectColor;
 				}
 			}
 			return bg;

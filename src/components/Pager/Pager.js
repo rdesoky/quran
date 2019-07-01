@@ -82,6 +82,15 @@ function Pager({ match, appContext }) {
 		}
 	};
 
+	const offsetSelection = offset => {
+		let selectStart = appContext.offsetSelection(offset);
+		let currPageNum = parseInt(match.params.page);
+		let selectionPageNum = QData.ayaIdPage(selectStart) + 1;
+		if (currPageNum !== selectionPageNum) {
+			appContext.gotoPage(selectionPageNum, REPLACE);
+		}
+	};
+
 	const handleKeyDown = e => {
 		if (appContext.popup !== null) {
 			return;
@@ -89,17 +98,21 @@ function Pager({ match, appContext }) {
 		switch (e.key) {
 			case "Escape":
 				if (appContext.maskStart !== -1) {
-					appContext.setMaskStart(-1);
+					appContext.hideMask();
 				}
 				break;
 			case "ArrowDown":
 				if (appContext.maskStart !== -1) {
 					increment(e);
+				} else {
+					offsetSelection(1);
 				}
 				break;
 			case "ArrowUp":
 				if (appContext.maskStart !== -1) {
 					decrement(e);
+				} else {
+					offsetSelection(-1);
 				}
 				break;
 			case "PageDown":

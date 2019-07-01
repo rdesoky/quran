@@ -9,7 +9,8 @@ import {
 	faHeart,
 	faCog,
 	faAngleDoubleDown,
-	faAngleDoubleUp
+	faAngleDoubleUp,
+	faAdjust
 } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
 import { withThemeContext } from "../../context/Theme";
@@ -68,7 +69,7 @@ function Sidebar({ appContext, themeContext }) {
 					<FontAwesomeIcon icon={faPlayCircle} />
 				</button>
 				<button onClick={toggleTheme}>
-					<FontAwesomeIcon icon={faHeart} />
+					<FontAwesomeIcon icon={faAdjust} />
 				</button>
 				<hr />
 				<button onClick={e => onClick(e, "User")}>
