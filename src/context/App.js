@@ -10,8 +10,8 @@ const AppState = {
 	pagesCount: 2,
 	showMenu: false,
 	popup: null,
-	selectStart: -1,
-	selectEnd: -1,
+	selectStart: 0,
+	selectEnd: 0,
 	maskStart: -1
 };
 
@@ -25,12 +25,30 @@ class AppProvider extends Component {
 		localStorage.setItem("theme", theme);
 	};
 
+	selectAya = ayaId => {
+		this.setState({ selectStart: ayaId, selectEnd: ayaId });
+	};
+
+	offsetSelection = offset => {
+		let selectStart = this.state.selectStart + offset;
+		if (selectStart >= 0 && selectStart < QData.ayatCount()) {
+			this.setState({ selectStart, selectEnd: selectStart });
+			return selectStart;
+		} else {
+			return this.state.selectStart;
+		}
+	};
+
 	setSelectStart = selectStart => {
 		this.setState({ selectStart });
 	};
 
 	setMaskStart = maskStart => {
-		this.setState({ maskStart });
+		this.setState({ maskStart, selectStart: maskStart, selectEnd: maskStart });
+	};
+
+	hideMask = () => {
+		this.setState({ maskStart: -1 });
 	};
 
 	setSelectEnd = selectEnd => {
@@ -42,7 +60,7 @@ class AppProvider extends Component {
 		if (ms !== -1) {
 			let maskStart = ms + offset;
 			if (maskStart >= 0 && maskStart < QData.ayatCount()) {
-				this.setState({ maskStart });
+				this.setMaskStart(maskStart);
 			}
 		}
 	};
@@ -129,9 +147,14 @@ class AppProvider extends Component {
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,
 		setMaskStart: this.setMaskStart,
+		hideMask: this.hideMask,
 		offsetMask: this.offsetMask,
 		pageMargin: this.pageMargin,
-		setTheme: this.setTheme
+		setTheme: this.setTheme,
+		setSelectStart: this.setSelectStart,
+		setSelectEnd: this.setSelectEnd,
+		offsetSelection: this.offsetSelection,
+		selectAya: this.selectAya
 	};
 
 	onResize = e => {

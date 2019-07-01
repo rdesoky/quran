@@ -12,13 +12,13 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 	// };
 
 	const onSelectSura = ({ target }) => {
-		appContext.setMaskStart(-1);
+		appContext.hideMask();
 		const suraIndex = target.value;
 		appContext.gotoSura(suraIndex);
 	};
 
 	const onSelectPart = ({ target }) => {
-		appContext.setMaskStart(-1);
+		appContext.hideMask();
 		const partIndex = target.value;
 		appContext.gotoPart(partIndex);
 	};

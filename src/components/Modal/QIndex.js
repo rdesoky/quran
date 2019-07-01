@@ -15,7 +15,7 @@ const QIndex = ({ open, onClose, appContext }) => {
 	};
 
 	const gotoSura = index => {
-		appContext.setMaskStart(-1);
+		appContext.hideMask();
 		appContext.gotoPage(QData.sura_info[index].sp);
 		onClose();
 	};
