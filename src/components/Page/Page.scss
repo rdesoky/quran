@@ -10,6 +10,15 @@
 			// width: 100%;
 			height: 100%;
 			box-sizing: border-box;
+			position: relative;
+			.MaskContainer {
+				position: absolute;
+				pointer-events: none;
+				.Mask {
+					position: absolute;
+					background-color: #998;
+				}
+			}
 		}
 		.VerseLayout {
 			position: absolute;
@@ -17,18 +26,12 @@
 			height: 100%;
 			.Verse {
 				position: absolute;
-				&:hover {
-					background-color: rgba(0, 255, 0, 0.2);
+				&.Hovered {
+					background-color: beige;
 				}
-				// &.VerseHead {
-				// 	background-color: rgba(255, 0, 0, 0.2);
-				// }
-				// &.VerseBody {
-				// 	background-color: rgba(0, 255, 0, 0.2);
-				// }
-				// &.VerseTail {
-				// 	background-color: rgba(0, 0, 255, 0.2);
-				// }
+				&.Selected {
+					background-color: white;
+				}
 			}
 		}
 	}
@@ -54,7 +57,8 @@
 		// width: auto;
 		height: 100%;
 		max-width: 100%;
-		// position: absolute;
+		position: relative;
+		pointer-events: none;
 	}
 
 	.PageHeader,
@@ -127,6 +131,18 @@
 		background: #444;
 		.PageImage {
 			filter: invert(1);
+		}
+		.PageFrame {
+			.VerseLayout {
+				.Verse {
+					&.Hovered {
+						background-color: black;
+					}
+					&.Selected {
+						background-color: darkslategrey;
+					}
+				}
+			}
 		}
 	}
 }
