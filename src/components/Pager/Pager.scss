@@ -22,14 +22,14 @@
 	}
 	.NavButton {
 		position: fixed;
-		width: 50px;
+		width: 80px;
 		bottom: 0;
 		font-size: 22px;
 		opacity: 0.5;
 		text-align: left;
 		height: 25px;
 		line-height: 25px;
-		padding: 0;
+		padding: 0 10px;
 		&.NavBackward {
 			right: 0;
 			text-align: right;
