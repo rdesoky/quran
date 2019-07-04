@@ -4,19 +4,97 @@ import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const VerseLayout = ({ page: pageIndex, appContext }) => {
+const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
-	const hoverColor = "#0000FF1A";
-	const maskColor = "#998";
-	// const maskHoverColor = "#888";
-	const selectColor = "#FFFFFF3A";
-	const maskSelectColor = "#888";
+
+	// const hoverColor = "#0000FF1A";
+	// const maskColor = "#998";
+	// const selectColor = "#aaa";
+	// const maskSelectColor = "#888";
+
+	const pageHeight = appContext.appHeight - 50;
+	const lineHeight = pageHeight / 15;
+	const lineWidth = appContext.pageWidth();
+
+	const closeMask = e => {
+		appContext.hideMask();
+	};
+
+	function renderMask() {
+		const { maskStart } = appContext;
+		if (maskStart === -1) {
+			return;
+		}
+		const maskStartPage = QData.ayaIdPage(maskStart);
+		if (maskStartPage > pageIndex) {
+			return;
+		}
+
+		const fullPageMask = () => {
+			return (
+				<div
+					className="Mask MaskBody"
+					style={{
+						top: 0,
+						bottom: 0,
+						left: 0,
+						right: 0
+					}}
+				/>
+			);
+		};
+
+		if (maskStartPage === pageIndex) {
+			let maskStartInfo = versesInfo.find(v => v.aya_id === maskStart);
+			if (maskStartInfo) {
+				const { sline, spos, eline, epos } = maskStartInfo;
+				let right = (spos * lineWidth) / 1000;
+				return (
+					<>
+						<div
+							className="Mask Head"
+							style={{
+								height: lineHeight,
+								top: (sline * pageHeight) / 15,
+								right,
+								left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
+							}}
+						/>
+						<button
+							onClick={closeMask}
+							style={{
+								pointerEvents: "visible",
+								position: "absolute",
+								width: lineHeight,
+								height: lineHeight,
+								top: (sline * pageHeight) / 15,
+								right,
+								backgroundColor: "#777"
+							}}
+						>
+							<FontAwesomeIcon icon={faTimes} />
+						</button>
+						<div
+							className="Mask MaskBody"
+							style={{
+								top: ((parseInt(sline) + 1) * pageHeight) / 15,
+								bottom: 0,
+								right: 0,
+								left: 0
+							}}
+						/>
+					</>
+				);
+			} else {
+				return fullPageMask();
+			}
+		} else {
+			return fullPageMask();
+		}
+	}
 
 	function renderVerses() {
-		const pageHeight = appContext.appHeight - 50;
-		const lineHeight = pageHeight / 15;
-		const lineWidth = appContext.pageWidth();
 		// const buttonWidth = lineWidth / 10;
 
 		const onMouseEnter = ({ target }) => {
@@ -31,10 +109,6 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 			const aya_id = parseInt(e.target.getAttribute("aya-id"));
 			appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
 			e.preventDefault();
-		};
-
-		const closeMask = e => {
-			appContext.hideMask();
 		};
 
 		const isHovered = aya_id => hoverVerse === aya_id;
@@ -73,83 +147,55 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 			}
 		};
 
-		const ayaBackgroundColor = aya_id => {
-			let bg = "transparent";
+		const ayaClass = aya_id => {
+			let className = "";
 			let selected = isSelected(aya_id);
 			if (selected) {
-				bg = selectColor;
+				className = "Selected";
 			}
 			let hovered = isHovered(aya_id);
 			if (hovered) {
-				bg = hoverColor;
+				className += " Hovered";
 			}
 			if (isMasked(aya_id)) {
-				bg = maskColor;
+				className = "Masked";
 				if (selected) {
-					bg = maskSelectColor;
+					className += " Selected";
 				}
 			}
-			return bg;
+			return className.trim();
 		};
 
 		const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
-			let backgroundColor = ayaBackgroundColor(aya_id);
-
-			const maskClose = aya_id => {
-				if (aya_id === appContext.maskStart) {
-					let right = (spos * lineWidth) / 1000 - lineHeight / 2;
-					if (right < 0) {
-						right = 0;
-					}
-					return (
-						<button
-							onClick={closeMask}
-							style={{
-								position: "absolute",
-								width: lineHeight,
-								height: lineHeight,
-								top: (sline * pageHeight) / 15,
-								right,
-								backgroundColor: "#777"
-							}}
-						>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
-					);
-				}
-			};
+			let aClass = ayaClass(aya_id);
 
 			return (
-				<>
-					<div
-						onClick={onClickVerse}
-						onMouseEnter={onMouseEnter}
-						onMouseLeave={onMouseLeave}
-						onContextMenu={onContextMenu}
-						aya-id={aya_id}
-						sura={sura}
-						aya={aya}
-						sline={sline}
-						eline={eline}
-						spos={spos}
-						epos={epos}
-						className="Verse VerseHead"
-						style={{
-							height: lineHeight,
-							top: (sline * pageHeight) / 15,
-							right: (spos * lineWidth) / 1000,
-							left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0,
-							backgroundColor
-						}}
-					/>
-					{maskClose(aya_id)}
-				</>
+				<div
+					onClick={onClickVerse}
+					onMouseEnter={onMouseEnter}
+					onMouseLeave={onMouseLeave}
+					onContextMenu={onContextMenu}
+					aya-id={aya_id}
+					sura={sura}
+					aya={aya}
+					sline={sline}
+					eline={eline}
+					spos={spos}
+					epos={epos}
+					className={["Verse VerseHead", aClass].join(" ").trim()}
+					style={{
+						height: lineHeight,
+						top: (sline * pageHeight) / 15,
+						right: (spos * lineWidth) / 1000,
+						left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
+					}}
+				/>
 			);
 		};
 
 		const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 			if (eline - sline > 0) {
-				let backgroundColor = ayaBackgroundColor(aya_id);
+				let aClass = ayaClass(aya_id);
 				return (
 					<div
 						onClick={onClickVerse}
@@ -163,13 +209,12 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 						eline={eline}
 						spos={spos}
 						epos={epos}
-						className="Verse VerseTail"
+						className={["Verse VerseTail", aClass].join(" ").trim()}
 						style={{
 							height: lineHeight,
 							top: (eline * pageHeight) / 15,
 							right: 0,
-							left: lineWidth - (epos * lineWidth) / 1000,
-							backgroundColor
+							left: lineWidth - (epos * lineWidth) / 1000
 						}}
 					/>
 				);
@@ -178,7 +223,7 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 
 		const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 			if (eline - sline > 1) {
-				let backgroundColor = ayaBackgroundColor(aya_id);
+				let aClass = ayaClass(aya_id);
 				return (
 					<div
 						onClick={onClickVerse}
@@ -192,13 +237,12 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 						eline={eline}
 						spos={spos}
 						epos={epos}
-						className="Verse VerseBody"
+						className={["Verse VerseBody", aClass].join(" ").trim()}
 						style={{
 							height: lineHeight * (eline - sline - 1),
 							top: ((parseInt(sline) + 1) * pageHeight) / 15,
 							right: 0,
-							left: 0,
-							backgroundColor
+							left: 0
 						}}
 					/>
 				);
@@ -211,26 +255,12 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 					{verseHead(verse)}
 					{verseBody(verse)}
 					{verseTail(verse)}
-					{/* <button
-						key={index}
-						verse-index={index}
-						onClick={onClickVerse}
-						style={{
-							position: "absolute",
-							width: buttonWidth,
-							height: lineHeight,
-							backgroundColor: "rgba(50,50,50,.15)",
-							top: (verse.eline * pageHeight) / 15,
-							left: lineWidth - (verse.epos * lineWidth) / 1000
-						}}
-					>
-						&nbsp;
-					</button> */}
 				</div>
 			);
 		});
 	}
 
+	//Handle pageIndex update
 	useEffect(() => {
 		setAyaInfo([]);
 		let pageNumber = parseInt(pageIndex) + 1;
@@ -251,16 +281,32 @@ const VerseLayout = ({ page: pageIndex, appContext }) => {
 	}, [pageIndex]);
 
 	return (
-		<div
-			className="VerseLayout"
-			style={{
-				direction: "ltr",
-				width: appContext.pageWidth(),
-				margin: appContext.pageMargin()
-			}}
-		>
-			{renderVerses()}
-		</div>
+		<>
+			<div
+				className="VerseLayout"
+				style={{
+					direction: "ltr",
+					width: appContext.pageWidth(),
+					height: appContext.pageHeight(),
+					margin: appContext.pageMargin()
+				}}
+			>
+				{renderVerses()}
+			</div>
+			{children}
+			<div
+				className="MaskContainer"
+				style={{
+					direction: "ltr",
+					top: 0,
+					width: appContext.pageWidth(),
+					height: appContext.pageHeight(),
+					margin: appContext.pageMargin()
+				}}
+			>
+				{renderMask()}
+			</div>
+		</>
 	);
 };
 

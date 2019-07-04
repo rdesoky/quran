@@ -57,25 +57,23 @@ const Page = ({ index, order, appContext }) => {
 					visibility: isLoaded ? "visible" : "hidden"
 				}}
 			>
-				<div
-					className={"PageImageFrame" + (isLoaded ? " AnimatePage" : "")}
-					// style={{
-					// 	width: appContext.pageWidth(),
-					// 	margin: appContext.pageMargin()
-					// }}
-				>
-					<img
-						style={{
-							visibility: isLoaded ? "visible" : "hidden",
-							margin: appContext.pageMargin(),
-							width: appContext.pageWidth()
-						}}
-						className={"PageImage"}
-						onLoad={onImageLoaded}
-						src={"http://www.egylist.com/qpages_800/page" + imageName + ".png"}
-						alt={"Page #" + (parseInt(index) + 1).toString()}
-					/>
-					<VerseLayout page={index} />
+				<div className={"PageImageFrame" + (isLoaded ? " AnimatePage" : "")}>
+					<VerseLayout page={index}>
+						<img
+							style={{
+								visibility: isLoaded ? "visible" : "hidden",
+								margin: appContext.pageMargin(),
+								width: appContext.pageWidth(),
+								height: appContext.pageHeight()
+							}}
+							className={"PageImage"}
+							onLoad={onImageLoaded}
+							src={
+								"http://www.egylist.com/qpages_800/page" + imageName + ".png"
+							}
+							alt={"Page #" + (parseInt(index) + 1).toString()}
+						/>
+					</VerseLayout>
 				</div>
 			</div>
 			<PageFooter index={index} order={order} />

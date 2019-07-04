@@ -90,11 +90,15 @@ class AppProvider extends Component {
 	};
 
 	pageWidth = () => {
-		let width = (this.state.appHeight - 50) * 0.61; //aspect ratio
+		let width = this.pageHeight() * 0.61; //aspect ratio
 		if (width > this.state.appWidth) {
 			return this.state.appWidth;
 		}
 		return width;
+	};
+
+	pageHeight = () => {
+		return this.state.appHeight - 50;
 	};
 
 	pageMargin = () => {
@@ -144,6 +148,7 @@ class AppProvider extends Component {
 		gotoSura: this.gotoSura,
 		gotoPart: this.gotoPart,
 		pageWidth: this.pageWidth,
+		pageHeight: this.pageHeight,
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,
 		setMaskStart: this.setMaskStart,
