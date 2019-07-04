@@ -50,6 +50,10 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 			if (maskStartInfo) {
 				const { sline, spos, eline, epos } = maskStartInfo;
 				let right = (spos * lineWidth) / 1000;
+				let closeBtnRight = right - lineHeight / 2;
+				if (closeBtnRight < 0) {
+					closeBtnRight = 0;
+				}
 				return (
 					<>
 						<div
@@ -58,7 +62,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 								height: lineHeight,
 								top: (sline * pageHeight) / 15,
 								right,
-								left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
+								left: 0
 							}}
 						/>
 						<button
@@ -69,7 +73,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 								width: lineHeight,
 								height: lineHeight,
 								top: (sline * pageHeight) / 15,
-								right,
+								right: closeBtnRight,
 								backgroundColor: "#777"
 							}}
 						>
