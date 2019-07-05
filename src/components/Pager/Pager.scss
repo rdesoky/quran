@@ -20,19 +20,29 @@
 			}
 		}
 	}
-	.NavButton {
+	.FooterNavbar {
 		position: fixed;
-		width: 80px;
+		right: 0;
 		bottom: 0;
-		font-size: 22px;
-		opacity: 0.5;
-		text-align: left;
 		height: 25px;
 		line-height: 25px;
-		padding: 0 10px;
-		&.NavBackward {
-			right: 0;
-			text-align: right;
+
+		.NavButton {
+			width: 50px;
+			font-size: 22px;
+			opacity: 0.5;
+			text-align: center;
+			padding: 0 10px;
+			&.NavBackward,
+			&.NavPgUp {
+				float: right;
+				// text-align: right;
+			}
+			&.NavForward,
+			&.NavPgDown {
+				float: left;
+				// text-align: left;
+			}
 		}
 	}
 }

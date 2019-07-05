@@ -28,6 +28,7 @@ class AppProvider extends Component {
 	selectAya = ayaId => {
 		if (ayaId >= 0 && ayaId < QData.ayatCount()) {
 			this.setState({ selectStart: ayaId, selectEnd: ayaId });
+			return ayaId;
 		}
 	};
 
@@ -44,8 +45,10 @@ class AppProvider extends Component {
 	};
 
 	offsetSelection = offset => {
-		this.selectAya(this.state.selectStart + offset);
-		return this.state.selectStart;
+		let newSelectionId = this.selectAya(this.state.selectStart + offset);
+		return newSelectionId !== undefined
+			? newSelectionId
+			: this.state.selectStart;
 	};
 
 	setSelectStart = selectStart => {

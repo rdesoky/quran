@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import Page from "../Page/Page";
 import { withAppContext } from "../../context/App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+	faAngleRight,
+	faAngleLeft,
+	faAngleDown,
+	faAngleUp
+} from "@fortawesome/free-solid-svg-icons";
 import QData from "../../services/QData";
 import "./Pager.scss";
 
@@ -25,6 +30,9 @@ function Pager({ match, appContext }) {
 	//ComponentDidMount
 	//useEffect(() => {}, []);
 
+	const pageUp = e => appContext.offsetPage(-1);
+	const pageDown = e => appContext.offsetPage(1);
+
 	const decrement = e => {
 		let { maskStart } = appContext;
 		if (maskStart !== -1) {
@@ -42,7 +50,7 @@ function Pager({ match, appContext }) {
 			}
 			appContext.offsetMask(-1);
 		} else {
-			appContext.offsetPage(-1);
+			offsetSelection(e, -1);
 		}
 	};
 
@@ -69,16 +77,16 @@ function Pager({ match, appContext }) {
 				appContext.gotoPage(maskNewPageNum, REPLACE);
 			}
 		} else {
-			appContext.offsetPage(1);
+			offsetSelection(e, 1);
 		}
 	};
 
 	const handleWheel = e => {
 		if (e.deltaY > 0) {
 			//scroll down
-			increment(e);
+			pageDown(e);
 		} else {
-			decrement(e);
+			pageUp(e);
 		}
 	};
 
@@ -124,11 +132,11 @@ function Pager({ match, appContext }) {
 				break;
 			case "PageDown":
 			case "ArrowLeft":
-				increment(e);
+				pageDown(e);
 				break;
 			case "PageUp":
 			case "ArrowRight":
-				decrement(e);
+				pageUp(e);
 				break;
 			default:
 				break;
@@ -191,16 +199,23 @@ function Pager({ match, appContext }) {
 		>
 			{renderPage(0)}
 			{renderPage(1)}
-			<button className="NavButton NavBackward" onClick={decrement}>
-				<FontAwesomeIcon icon={faAngleRight} />
-			</button>
-			<button
-				onClick={increment}
-				className="NavButton NavForward"
+			<div
+				className="FooterNavbar"
 				style={{ left: (appContext.isNarrow ? 0 : 50).toString() + "px" }}
 			>
-				<FontAwesomeIcon icon={faAngleLeft} />
-			</button>
+				<button className="NavButton NavPgUp" onClick={pageUp}>
+					<FontAwesomeIcon icon={faAngleRight} />
+				</button>
+				<button className="NavButton NavBackward" onClick={decrement}>
+					<FontAwesomeIcon icon={faAngleUp} />
+				</button>
+				<button onClick={pageDown} className="NavButton NavForward">
+					<FontAwesomeIcon icon={faAngleLeft} />
+				</button>
+				<button className="NavButton NavPgDown" onClick={increment}>
+					<FontAwesomeIcon icon={faAngleDown} />
+				</button>
+			</div>
 		</div>
 	);
 }
