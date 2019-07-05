@@ -21,6 +21,174 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 		appContext.hideMask();
 	};
 
+	const onMouseEnter = ({ target }) => {
+		setHoverVerse(parseInt(target.getAttribute("aya-id")));
+	};
+
+	const onMouseLeave = () => {
+		setHoverVerse(-1);
+	};
+
+	const onContextMenu = e => {
+		const aya_id = parseInt(e.target.getAttribute("aya-id"));
+		appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
+		e.preventDefault();
+	};
+
+	const isHovered = aya_id => hoverVerse === aya_id;
+	const isSelected = aya_id => {
+		const start = Math.min(appContext.selectStart, appContext.selectEnd);
+		const end = Math.max(appContext.selectStart, appContext.selectEnd);
+		return aya_id >= start && aya_id <= end;
+	};
+	const isMasked = aya_id => {
+		let { maskStart } = appContext;
+		if (maskStart !== -1 && aya_id >= maskStart) {
+			return true;
+		}
+		return false;
+	};
+
+	const onClickVerse = ({ shiftKey, ctrlKey, altKey, target }) => {
+		const aya_id = parseInt(target.getAttribute("aya-id"));
+		//TODO: set selectStart|selectEnd|maskStart
+		if (appContext.maskStart !== -1) {
+			if (appContext.maskStart > aya_id) {
+				appContext.setMaskStart(aya_id);
+			} else {
+				let nPageIndex = parseInt(pageIndex);
+				let maskStartPage = QData.ayaIdPage(appContext.maskStart);
+				if (maskStartPage === nPageIndex) {
+					//same page
+					appContext.offsetMask(1);
+				} else {
+					let clickedPage = QData.ayaIdPage(aya_id);
+					let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
+
+					appContext.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
+				}
+			}
+		} else {
+			if (shiftKey || ctrlKey) {
+				appContext.extendSelection(aya_id);
+			} else {
+				appContext.selectAya(aya_id);
+			}
+		}
+	};
+
+	const ayaClass = aya_id => {
+		let className = "";
+		let selected = isSelected(aya_id);
+		if (selected) {
+			className = "Selected";
+		}
+		let hovered = isHovered(aya_id);
+		if (hovered) {
+			className += " Hovered";
+		}
+		if (isMasked(aya_id)) {
+			className = "Masked";
+			if (selected) {
+				className += " Selected";
+			}
+		}
+		return className.trim();
+	};
+
+	const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+		let aClass = ayaClass(aya_id);
+
+		return (
+			<div
+				onClick={onClickVerse}
+				onMouseEnter={onMouseEnter}
+				onMouseLeave={onMouseLeave}
+				onContextMenu={onContextMenu}
+				aya-id={aya_id}
+				sura={sura}
+				aya={aya}
+				sline={sline}
+				eline={eline}
+				spos={spos}
+				epos={epos}
+				className={["Verse VerseHead", aClass].join(" ").trim()}
+				style={{
+					height: lineHeight,
+					top: (sline * pageHeight) / 15,
+					right: (spos * lineWidth) / 1000,
+					left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
+				}}
+			/>
+		);
+	};
+
+	const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+		if (eline - sline > 0) {
+			let aClass = ayaClass(aya_id);
+			return (
+				<div
+					onClick={onClickVerse}
+					onMouseEnter={onMouseEnter}
+					onMouseLeave={onMouseLeave}
+					onContextMenu={onContextMenu}
+					aya-id={aya_id}
+					sura={sura}
+					aya={aya}
+					sline={sline}
+					eline={eline}
+					spos={spos}
+					epos={epos}
+					className={["Verse VerseTail", aClass].join(" ").trim()}
+					style={{
+						height: lineHeight,
+						top: (eline * pageHeight) / 15,
+						right: 0,
+						left: lineWidth - (epos * lineWidth) / 1000
+					}}
+				/>
+			);
+		}
+	};
+
+	const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+		if (eline - sline > 1) {
+			let aClass = ayaClass(aya_id);
+			return (
+				<div
+					onClick={onClickVerse}
+					onMouseEnter={onMouseEnter}
+					onMouseLeave={onMouseLeave}
+					onContextMenu={onContextMenu}
+					aya-id={aya_id}
+					sura={sura}
+					aya={aya}
+					sline={sline}
+					eline={eline}
+					spos={spos}
+					epos={epos}
+					className={["Verse VerseBody", aClass].join(" ").trim()}
+					style={{
+						height: lineHeight * (eline - sline - 1),
+						top: ((parseInt(sline) + 1) * pageHeight) / 15,
+						right: 0,
+						left: 0
+					}}
+				/>
+			);
+		}
+	};
+
+	const verseStructure = verse => {
+		return (
+			<>
+				{verseHead(verse)}
+				{verseBody(verse)}
+				{verseTail(verse)}
+			</>
+		);
+	};
+
 	function renderMask() {
 		const { maskStart } = appContext;
 		if (maskStart === -1) {
@@ -65,6 +233,16 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 								left: 0
 							}}
 						/>
+						<div
+							className="Mask MaskBody"
+							style={{
+								top: ((parseInt(sline) + 1) * pageHeight) / 15,
+								bottom: 0,
+								right: 0,
+								left: 0
+							}}
+						/>
+						{verseStructure(maskStartInfo)}
 						<button
 							onClick={closeMask}
 							style={{
@@ -79,15 +257,6 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 						>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
-						<div
-							className="Mask MaskBody"
-							style={{
-								top: ((parseInt(sline) + 1) * pageHeight) / 15,
-								bottom: 0,
-								right: 0,
-								left: 0
-							}}
-						/>
 					</>
 				);
 			} else {
@@ -99,168 +268,8 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	}
 
 	function renderVerses() {
-		// const buttonWidth = lineWidth / 10;
-
-		const onMouseEnter = ({ target }) => {
-			setHoverVerse(parseInt(target.getAttribute("aya-id")));
-		};
-
-		const onMouseLeave = () => {
-			setHoverVerse(-1);
-		};
-
-		const onContextMenu = e => {
-			const aya_id = parseInt(e.target.getAttribute("aya-id"));
-			appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
-			e.preventDefault();
-		};
-
-		const isHovered = aya_id => hoverVerse === aya_id;
-		const isSelected = aya_id =>
-			aya_id <= appContext.selectStart && aya_id >= appContext.selectEnd;
-
-		const isMasked = aya_id => {
-			let { maskStart } = appContext;
-			if (maskStart !== -1 && aya_id >= maskStart) {
-				return true;
-			}
-			return false;
-		};
-
-		const onClickVerse = ({ target }) => {
-			const aya_id = parseInt(target.getAttribute("aya-id"));
-			//TODO: set selectStart|selectEnd|maskStart
-			if (appContext.maskStart !== -1) {
-				if (appContext.maskStart > aya_id) {
-					appContext.setMaskStart(aya_id);
-				} else {
-					let nPageIndex = parseInt(pageIndex);
-					let maskStartPage = QData.ayaIdPage(appContext.maskStart);
-					if (maskStartPage === nPageIndex) {
-						//same page
-						appContext.offsetMask(1);
-					} else {
-						let clickedPage = QData.ayaIdPage(aya_id);
-						let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
-
-						appContext.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
-					}
-				}
-			} else {
-				appContext.selectAya(aya_id);
-			}
-		};
-
-		const ayaClass = aya_id => {
-			let className = "";
-			let selected = isSelected(aya_id);
-			if (selected) {
-				className = "Selected";
-			}
-			let hovered = isHovered(aya_id);
-			if (hovered) {
-				className += " Hovered";
-			}
-			if (isMasked(aya_id)) {
-				className = "Masked";
-				if (selected) {
-					className += " Selected";
-				}
-			}
-			return className.trim();
-		};
-
-		const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
-			let aClass = ayaClass(aya_id);
-
-			return (
-				<div
-					onClick={onClickVerse}
-					onMouseEnter={onMouseEnter}
-					onMouseLeave={onMouseLeave}
-					onContextMenu={onContextMenu}
-					aya-id={aya_id}
-					sura={sura}
-					aya={aya}
-					sline={sline}
-					eline={eline}
-					spos={spos}
-					epos={epos}
-					className={["Verse VerseHead", aClass].join(" ").trim()}
-					style={{
-						height: lineHeight,
-						top: (sline * pageHeight) / 15,
-						right: (spos * lineWidth) / 1000,
-						left: sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
-					}}
-				/>
-			);
-		};
-
-		const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
-			if (eline - sline > 0) {
-				let aClass = ayaClass(aya_id);
-				return (
-					<div
-						onClick={onClickVerse}
-						onMouseEnter={onMouseEnter}
-						onMouseLeave={onMouseLeave}
-						onContextMenu={onContextMenu}
-						aya-id={aya_id}
-						sura={sura}
-						aya={aya}
-						sline={sline}
-						eline={eline}
-						spos={spos}
-						epos={epos}
-						className={["Verse VerseTail", aClass].join(" ").trim()}
-						style={{
-							height: lineHeight,
-							top: (eline * pageHeight) / 15,
-							right: 0,
-							left: lineWidth - (epos * lineWidth) / 1000
-						}}
-					/>
-				);
-			}
-		};
-
-		const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
-			if (eline - sline > 1) {
-				let aClass = ayaClass(aya_id);
-				return (
-					<div
-						onClick={onClickVerse}
-						onMouseEnter={onMouseEnter}
-						onMouseLeave={onMouseLeave}
-						onContextMenu={onContextMenu}
-						aya-id={aya_id}
-						sura={sura}
-						aya={aya}
-						sline={sline}
-						eline={eline}
-						spos={spos}
-						epos={epos}
-						className={["Verse VerseBody", aClass].join(" ").trim()}
-						style={{
-							height: lineHeight * (eline - sline - 1),
-							top: ((parseInt(sline) + 1) * pageHeight) / 15,
-							right: 0,
-							left: 0
-						}}
-					/>
-				);
-			}
-		};
-
 		return versesInfo.map((verse, index) => {
-			return (
-				<div key={index}>
-					{verseHead(verse)}
-					{verseBody(verse)}
-					{verseTail(verse)}
-				</div>
-			);
+			return <div key={index}>{verseStructure(verse)}</div>;
 		});
 	}
 

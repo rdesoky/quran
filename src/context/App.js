@@ -26,17 +26,26 @@ class AppProvider extends Component {
 	};
 
 	selectAya = ayaId => {
-		this.setState({ selectStart: ayaId, selectEnd: ayaId });
+		if (ayaId >= 0 && ayaId < QData.ayatCount()) {
+			this.setState({ selectStart: ayaId, selectEnd: ayaId });
+		}
+	};
+
+	extendSelection = ayaId => {
+		if (ayaId < 0 || ayaId >= QData.ayatCount()) {
+			return this.state.selectStart;
+		}
+		if (ayaId === this.state.selectEnd) {
+			this.selectAya(ayaId);
+		} else {
+			this.setState({ selectStart: ayaId });
+		}
+		return this.state.selectStart;
 	};
 
 	offsetSelection = offset => {
-		let selectStart = this.state.selectStart + offset;
-		if (selectStart >= 0 && selectStart < QData.ayatCount()) {
-			this.setState({ selectStart, selectEnd: selectStart });
-			return selectStart;
-		} else {
-			return this.state.selectStart;
-		}
+		this.selectAya(this.state.selectStart + offset);
+		return this.state.selectStart;
 	};
 
 	setSelectStart = selectStart => {
@@ -159,7 +168,8 @@ class AppProvider extends Component {
 		setSelectStart: this.setSelectStart,
 		setSelectEnd: this.setSelectEnd,
 		offsetSelection: this.offsetSelection,
-		selectAya: this.selectAya
+		selectAya: this.selectAya,
+		extendSelection: this.extendSelection
 	};
 
 	onResize = e => {
