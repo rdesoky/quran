@@ -35,7 +35,7 @@ class AppProvider extends Component {
 		if (ayaId < 0 || ayaId >= QData.ayatCount()) {
 			return this.state.selectStart;
 		}
-		if (ayaId === this.state.selectEnd) {
+		if (ayaId === this.state.selectStart) {
 			this.selectAya(ayaId);
 		} else {
 			this.setState({ selectStart: ayaId });

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
-import { withRouter } from "react-router-dom";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";

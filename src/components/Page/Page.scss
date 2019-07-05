@@ -31,7 +31,10 @@
 			.Verse {
 				position: absolute;
 				&.Hovered {
-					background-color: #0000ff1a;
+					// background-color: #0000ff1a;
+					border-width: 0 4px;
+					border-color: rgba(0, 0, 0, 0.2);
+					border-style: solid;
 				}
 				&.Selected {
 					background-color: white;
@@ -69,9 +72,13 @@
 	.PageFooter {
 		// position: relative;
 		height: 25px;
+		color: white;
+		background-color: #333;
 		// line-height: 25px;
-		background-color: silver;
-
+		// background-color: silver;
+		select {
+			color: white;
+		}
 		.PageHeaderContent {
 			position: relative;
 			display: inline-block;
@@ -80,8 +87,9 @@
 			button {
 				padding: 0 10px;
 				color: inherit;
-				height: 100%;
-				line-height: 100%;
+				// height: 100%;
+				line-height: 24px;
+				border-radius: 12px;
 			}
 		}
 	}
@@ -140,7 +148,8 @@
 			.VerseLayout {
 				.Verse {
 					&.Hovered {
-						background-color: darkslategrey;
+						// background-color: darkslategrey;
+						border-color: rgba(255, 255, 255, 0.2);
 					}
 					&.Selected {
 						background-color: black;
@@ -212,13 +221,18 @@
 .Active {
 	.PageHeader,
 	.PageFooter {
-		background-color: #333;
-		color: white;
+		// background-color: #333;
+		// color: white;
 		select {
 			color: white;
 			// option {
 			// 	background-color: #333;
 			// }
+		}
+		button {
+			vertical-align: top;
+			background-color: silver;
+			color: black !important;
 		}
 	}
 }

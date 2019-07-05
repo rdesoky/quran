@@ -41,7 +41,7 @@ function Sidebar({ appContext, themeContext }) {
 		<div
 			className="Sidebar"
 			style={{
-				bottom: appContext.showMenu || !appContext.isNarrow ? 0 : "auto"
+				bottom: appContext.showMenu || !appContext.isNarrow ? 25 : "auto"
 			}}
 		>
 			<button
@@ -59,7 +59,7 @@ function Sidebar({ appContext, themeContext }) {
 						appContext.showMenu || !appContext.isNarrow ? "block" : "none"
 				}}
 			>
-				<button onClick={e => onClick(e, "QIndex")}>
+				<button onClick={e => onClick(e, "Commands")}>
 					<FontAwesomeIcon icon={faTh} />
 				</button>
 				<button onClick={e => onClick(e, "Find")}>
