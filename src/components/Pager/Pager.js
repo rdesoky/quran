@@ -82,10 +82,17 @@ function Pager({ match, appContext }) {
 		}
 	};
 
-	const offsetSelection = offset => {
-		let selectStart = appContext.offsetSelection(offset);
+	const offsetSelection = ({ shiftKey }, offset) => {
+		let selectedAyaId;
+		if (shiftKey) {
+			selectedAyaId = appContext.extendSelection(
+				appContext.selectStart + offset
+			);
+		} else {
+			selectedAyaId = appContext.offsetSelection(offset);
+		}
 		let currPageNum = parseInt(match.params.page);
-		let selectionPageNum = QData.ayaIdPage(selectStart) + 1;
+		let selectionPageNum = QData.ayaIdPage(selectedAyaId) + 1;
 		if (currPageNum !== selectionPageNum) {
 			appContext.gotoPage(selectionPageNum, REPLACE);
 		}
@@ -105,14 +112,14 @@ function Pager({ match, appContext }) {
 				if (appContext.maskStart !== -1) {
 					increment(e);
 				} else {
-					offsetSelection(1);
+					offsetSelection(e, 1);
 				}
 				break;
 			case "ArrowUp":
 				if (appContext.maskStart !== -1) {
 					decrement(e);
 				} else {
-					offsetSelection(-1);
+					offsetSelection(e, -1);
 				}
 				break;
 			case "PageDown":
