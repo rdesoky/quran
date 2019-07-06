@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faUserCircle,
 	faSearch,
-	faTh,
+	faList,
 	faPlayCircle,
 	faHeart,
 	faCog,
@@ -16,7 +16,7 @@ import {
 
 const Commands = ({ open, appContext, themeContext }) => {
 	const commandIcons = {
-		QIndex: faTh,
+		QIndex: faList,
 		Find: faSearch,
 		Play: faPlayCircle,
 		Settings: faCog,
@@ -25,13 +25,13 @@ const Commands = ({ open, appContext, themeContext }) => {
 		Favorites: faHeart
 	};
 	const list = [
+		"QIndex",
 		"Find",
 		"Play",
-		"QIndex",
 		"Favorites",
+		"Theme",
 		"Profile",
-		"Settings",
-		"Theme"
+		"Settings"
 	];
 
 	const runCommand = command => {
