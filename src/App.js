@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./App.scss";
-import Pager from "./components/Pager/Pager";
+import Pager, { PageRedirect } from "./components/Pager/Pager";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
 import { withThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
+import QData from "./services/QData";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -34,15 +35,25 @@ function App({ themeContext }) {
 			<div className={"App " + themeContext.theme + "Theme"}>
 				<Router>
 					<AppProvider>
-						<Route path="/page/:page" component={Pager} />
-						<Route path="/sura/:sura/aya/:aya" component={Pager} />
 						<Route
-							path="/aya/:aya"
+							path={process.env.PUBLIC_URL + "/page/:page"}
+							component={Pager}
+						/>
+						<Route
+							path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
+							component={Pager}
+						/>
+						<Route
+							path={process.env.PUBLIC_URL + "/aya/:aya"}
+							component={PageRedirect}
+						/>
+						<Route
+							exact
+							path={process.env.PUBLIC_URL + "/"}
 							render={() => {
-								return <Redirect to="/page/6" />;
+								return <Redirect to={process.env.PUBLIC_URL + "/page/1"} />;
 							}}
 						/>
-						<Route exact path="/" render={() => <Redirect to="/page/1" />} />
 						<Sidebar />
 						<PopupView />
 					</AppProvider>
