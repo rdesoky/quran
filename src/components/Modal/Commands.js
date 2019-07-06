@@ -55,6 +55,8 @@ const Commands = ({ open, appContext, themeContext }) => {
 				{list.map(command => (
 					<button onClick={e => runCommand(command)}>
 						<FontAwesomeIcon icon={commandIcons[command]} />
+						<br />
+						<span className="CommandLabel">{command}</span>
 					</button>
 				))}
 			</div>
