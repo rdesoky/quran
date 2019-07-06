@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "https://rdesoky.github.io/muslim-web/static/css/main.1c95a8b6.chunk.css",
-    "main.js": "https://rdesoky.github.io/muslim-web/static/js/main.afb900ce.chunk.js",
-    "main.js.map": "https://rdesoky.github.io/muslim-web/static/js/main.afb900ce.chunk.js.map",
-    "runtime~main.js": "https://rdesoky.github.io/muslim-web/static/js/runtime~main.1fe0c6fa.js",
-    "runtime~main.js.map": "https://rdesoky.github.io/muslim-web/static/js/runtime~main.1fe0c6fa.js.map",
-    "static/js/2.14986a83.chunk.js": "https://rdesoky.github.io/muslim-web/static/js/2.14986a83.chunk.js",
-    "static/js/2.14986a83.chunk.js.map": "https://rdesoky.github.io/muslim-web/static/js/2.14986a83.chunk.js.map",
-    "index.html": "https://rdesoky.github.io/muslim-web/index.html",
-    "precache-manifest.e6e6f094a86858b3829d52e606049cba.js": "https://rdesoky.github.io/muslim-web/precache-manifest.e6e6f094a86858b3829d52e606049cba.js",
-    "service-worker.js": "https://rdesoky.github.io/muslim-web/service-worker.js",
-    "static/css/main.1c95a8b6.chunk.css.map": "https://rdesoky.github.io/muslim-web/static/css/main.1c95a8b6.chunk.css.map"
+    "main.css": "/muslim-web/static/css/main.1c95a8b6.chunk.css",
+    "main.js": "/muslim-web/static/js/main.f57cec9a.chunk.js",
+    "main.js.map": "/muslim-web/static/js/main.f57cec9a.chunk.js.map",
+    "runtime~main.js": "/muslim-web/static/js/runtime~main.e735c96e.js",
+    "runtime~main.js.map": "/muslim-web/static/js/runtime~main.e735c96e.js.map",
+    "static/js/2.a827e4af.chunk.js": "/muslim-web/static/js/2.a827e4af.chunk.js",
+    "static/js/2.a827e4af.chunk.js.map": "/muslim-web/static/js/2.a827e4af.chunk.js.map",
+    "index.html": "/muslim-web/index.html",
+    "precache-manifest.aed22866374416423f68edf02ec76d2d.js": "/muslim-web/precache-manifest.aed22866374416423f68edf02ec76d2d.js",
+    "service-worker.js": "/muslim-web/service-worker.js",
+    "static/css/main.1c95a8b6.chunk.css.map": "/muslim-web/static/css/main.1c95a8b6.chunk.css.map"
   }
 }
