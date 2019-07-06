@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import Page from "../Page/Page";
 import { withAppContext } from "../../context/App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,16 +12,35 @@ import {
 import QData from "../../services/QData";
 import "./Pager.scss";
 
+function fnPageRedirect({ match, appContext }) {
+	let { aya } = match.params;
+	let pageNum = 1;
+
+	if (aya !== undefined) {
+		setTimeout(() => {
+			appContext.selectAya(parseInt(aya));
+		}, 10);
+		pageNum = QData.ayaIdPage(aya) + 1;
+	}
+	return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
+}
+
 function Pager({ match, appContext }) {
 	let pageIndex = 0;
 	const REPLACE = true;
 
-	let { page, sura } = match.params;
+	let { page } = match.params;
 
 	//ComponentDidUpdate
 	useEffect(() => {
 		page = match.params.page;
-		sura = match.params.sura;
+		//sura = match.params.sura;
+		// aya = match.params.aya;
+
+		// if (aya !== undefined) {
+		// 	appContext.selectAya(aya);
+		// }
+
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
@@ -146,9 +166,9 @@ function Pager({ match, appContext }) {
 	if (page !== undefined) {
 		pageIndex = parseInt(page) - 1;
 	}
-	if (sura !== undefined) {
-		pageIndex = 0; //find sura page
-	}
+	// if (sura !== undefined) {
+	// 	pageIndex = 0; //find sura page
+	// }
 
 	const renderPage = order => {
 		if (appContext.pagesCount < order + 1) {
@@ -162,7 +182,7 @@ function Pager({ match, appContext }) {
 
 		function selectPage() {
 			if (pageIndex !== thisPage) {
-				appContext.history.replace("/page/" + (thisPage + 1).toString());
+				appContext.gotoPage(thisPage + 1);
 			}
 		}
 
@@ -221,3 +241,4 @@ function Pager({ match, appContext }) {
 }
 
 export default withAppContext(Pager);
+export let PageRedirect = withAppContext(fnPageRedirect);

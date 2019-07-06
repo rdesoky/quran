@@ -130,7 +130,7 @@ class AppProvider extends Component {
 	gotoPage = (page, replace) => {
 		const { history } = this.props;
 		if (page <= 604 && page >= 1) {
-			let targetPath = "/page/" + page.toString();
+			let targetPath = `${process.env.PUBLIC_URL}/page/` + page.toString();
 			if (replace) {
 				history.replace(targetPath);
 			} else {

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
-import { withRouter } from "react-router-dom";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
+import { withAppContext } from "./../../context/App";
 
-const GotoPage = ({ onClose, open, history, location }) => {
+const GotoPage = ({ onClose, open, appContext }) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const [pageNumber, updatePageNumber] = useState(
-		Utils.pageFromPath(location.pathname)
+		Utils.pageFromPath(appContext.location.pathname)
 	);
 	const [partNumber, updatePartNumber] = useState(
-		Utils.partFromPath(location.pathname)
+		Utils.partFromPath(appContext.location.pathname)
 	);
 	let gotoPageForm, gotoPartForm;
 
@@ -29,7 +29,8 @@ const GotoPage = ({ onClose, open, history, location }) => {
 
 	const gotoPage = e => {
 		const { target: form } = e;
-		history.push("/page/" + form["PageNumber"].value);
+		//history.push("/page/" + form["PageNumber"].value);
+		appContext.gotoPage(form["PageNumber"].value);
 		setIsOpen(false);
 		onClose();
 		e.preventDefault();
@@ -39,7 +40,8 @@ const GotoPage = ({ onClose, open, history, location }) => {
 		const { target: form } = e;
 		let part = parseInt(form["PartNumber"].value);
 		let pageNumber = QData.parts[part - 1].p;
-		history.push("/page/" + pageNumber);
+		//history.push("/page/" + pageNumber);
+		appContext.gotoPage(pageNumber);
 		setIsOpen(false);
 		onClose();
 		e.preventDefault();
@@ -122,4 +124,4 @@ const GotoPage = ({ onClose, open, history, location }) => {
 	);
 };
 
-export default withRouter(GotoPage);
+export default withAppContext(GotoPage);

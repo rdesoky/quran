@@ -277,7 +277,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	useEffect(() => {
 		setAyaInfo([]);
 		let pageNumber = parseInt(pageIndex) + 1;
-		fetch(`/pg_map/pm_${pageNumber}.json`)
+		fetch(`${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`)
 			.then(response => response.json())
 			.then(({ child_list }) => {
 				setAyaInfo(
