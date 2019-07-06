@@ -1,30 +1,65 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { withAppContext } from "../../context/App";
+import { withThemeContext } from "../../context/Theme";
 import { FormattedMessage } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+	faUserCircle,
+	faSearch,
+	faTh,
+	faPlayCircle,
+	faHeart,
+	faCog,
+	faAdjust
+} from "@fortawesome/free-solid-svg-icons";
 
-const Commands = ({ open }) => {
-	const list = [{ icon: faSearch, command: "Search" }];
+const Commands = ({ open, appContext, themeContext }) => {
+	const commandIcons = {
+		QIndex: faTh,
+		Find: faSearch,
+		Play: faPlayCircle,
+		Settings: faCog,
+		Profile: faUserCircle,
+		Theme: faAdjust,
+		Favorites: faHeart
+	};
+	const list = [
+		"Find",
+		"Play",
+		"QIndex",
+		"Favorites",
+		"Profile",
+		"Settings",
+		"Theme"
+	];
 
-	const runCommand = ({ target }) => {
-		let command = target.getAttibute("command-id");
-		alert(command);
+	const runCommand = command => {
+		switch (command) {
+			case "Theme":
+				themeContext.toggleTheme();
+				break;
+			default:
+				appContext.setPopup(command);
+				return;
+		}
+		appContext.setPopup(null);
 	};
 
 	return (
 		<Modal open={open}>
 			<div className="Title">
-				<FormattedMessage id="index" />
+				<FormattedMessage id="commands" />
 			</div>
-			{list.map(item => (
-				<button command-id={item.command} onClick={runCommand}>
-					<FontAwesomeIcon icon={item.icon} />
-				</button>
-			))}
+			<div className="CommandsList">
+				{list.map(command => (
+					<button onClick={e => runCommand(command)}>
+						<FontAwesomeIcon icon={commandIcons[command]} />
+					</button>
+				))}
+			</div>
 		</Modal>
 	);
 };
 
-export default withAppContext(Commands);
+export default withThemeContext(withAppContext(Commands));

@@ -22,12 +22,14 @@
 	}
 	.FooterNavbar {
 		position: fixed;
+		pointer-events: none;
 		right: 0;
 		bottom: 0;
 		height: 25px;
 		line-height: 25px;
 
 		.NavButton {
+			pointer-events: fill;
 			width: 50px;
 			font-size: 22px;
 			opacity: 0.5;
