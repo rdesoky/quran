@@ -36,7 +36,7 @@ button {
 	border-width: 0;
 	background-color: transparent;
 	color: #ddd;
-	// padding: 10px 0;
+	pointer-events: all;
 	text-align: center;
 	&:hover {
 		color: white;

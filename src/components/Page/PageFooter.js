@@ -3,8 +3,8 @@ import { withAppContext } from "../../context/App";
 import { FormattedMessage } from "react-intl";
 
 const PageFooter = ({ index: pageIndex, appContext, order }) => {
-	const showFindPopup = e => {
-		appContext.setPopup("Find");
+	const showGotoPopup = e => {
+		appContext.setPopup("Goto");
 	};
 
 	let textAlign =
@@ -21,7 +21,7 @@ const PageFooter = ({ index: pageIndex, appContext, order }) => {
 			>
 				<FormattedMessage id="pg">
 					{pg => (
-						<button onClick={showFindPopup}>
+						<button onClick={showGotoPopup}>
 							{pg}: {pageIndex + 1}
 						</button>
 					)}

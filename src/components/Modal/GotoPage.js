@@ -29,8 +29,10 @@ const GotoPage = ({ onClose, open, appContext }) => {
 
 	const gotoPage = e => {
 		const { target: form } = e;
-		//history.push("/page/" + form["PageNumber"].value);
-		appContext.gotoPage(form["PageNumber"].value);
+		const pageNum = form["PageNumber"].value;
+		appContext.gotoPage(pageNum);
+		let ayaId = QData.pageAyaId(pageNum - 1);
+		appContext.selectAya(ayaId);
 		setIsOpen(false);
 		onClose();
 		e.preventDefault();
@@ -39,9 +41,10 @@ const GotoPage = ({ onClose, open, appContext }) => {
 	const gotoPart = e => {
 		const { target: form } = e;
 		let part = parseInt(form["PartNumber"].value);
-		let pageNumber = QData.parts[part - 1].p;
-		//history.push("/page/" + pageNumber);
-		appContext.gotoPage(pageNumber);
+		// const partInfo = QData.parts[part - 1];
+		appContext.gotoPart(part - 1);
+		// const ayaId = QData.ayaID(partInfo.s, partInfo.a);
+		// appContext.selectAya(ayaId);
 		setIsOpen(false);
 		onClose();
 		e.preventDefault();
@@ -58,7 +61,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 	return (
 		<Modal open={isOpen} onClose={onClose}>
 			<div className="Title">
-				<FormattedMessage id="find" />
+				<FormattedMessage id="goto" />
 			</div>
 			<div className="FieldRow">
 				<form

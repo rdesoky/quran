@@ -14,10 +14,10 @@ function PopupView({ appContext }) {
 		switch (popup) {
 			case "Commands":
 				return <Commands onClose={onClosePopup} open={popup === "Commands"} />;
-			case "Find":
-				return <GotoPage onClose={onClosePopup} open={popup === "Find"} />;
-			case "QIndex":
-				return <QIndex onClose={onClosePopup} open={popup === "QIndex"} />;
+			case "Goto":
+				return <GotoPage onClose={onClosePopup} open={popup === "Goto"} />;
+			case "Index":
+				return <QIndex onClose={onClosePopup} open={popup === "Index"} />;
 			default:
 				return null;
 		}
