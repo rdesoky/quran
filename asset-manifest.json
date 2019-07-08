@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/muslim-web/static/css/main.63c42553.chunk.css",
-    "main.js": "/muslim-web/static/js/main.c1d48dee.chunk.js",
-    "main.js.map": "/muslim-web/static/js/main.c1d48dee.chunk.js.map",
+    "main.js": "/muslim-web/static/js/main.ea6e32ae.chunk.js",
+    "main.js.map": "/muslim-web/static/js/main.ea6e32ae.chunk.js.map",
     "runtime~main.js": "/muslim-web/static/js/runtime~main.e735c96e.js",
     "runtime~main.js.map": "/muslim-web/static/js/runtime~main.e735c96e.js.map",
-    "static/js/2.278337a4.chunk.js": "/muslim-web/static/js/2.278337a4.chunk.js",
-    "static/js/2.278337a4.chunk.js.map": "/muslim-web/static/js/2.278337a4.chunk.js.map",
+    "static/js/2.289f1639.chunk.js": "/muslim-web/static/js/2.289f1639.chunk.js",
+    "static/js/2.289f1639.chunk.js.map": "/muslim-web/static/js/2.289f1639.chunk.js.map",
     "index.html": "/muslim-web/index.html",
-    "precache-manifest.4388b90f1a4db2344eda899973ba8c06.js": "/muslim-web/precache-manifest.4388b90f1a4db2344eda899973ba8c06.js",
+    "precache-manifest.132d1b2d250296c73db451f1990e6b9b.js": "/muslim-web/precache-manifest.132d1b2d250296c73db451f1990e6b9b.js",
     "service-worker.js": "/muslim-web/service-worker.js",
     "static/css/main.63c42553.chunk.css.map": "/muslim-web/static/css/main.63c42553.chunk.css.map"
   }
