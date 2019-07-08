@@ -13,7 +13,7 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 
 	const onSelectSura = ({ target }) => {
 		appContext.hideMask();
-		const suraIndex = target.value;
+		const suraIndex = parseInt(target.value);
 		appContext.gotoSura(suraIndex);
 	};
 

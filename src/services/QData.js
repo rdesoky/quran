@@ -9,7 +9,10 @@ const QData = {
 		return 30;
 	},
 
-	//If string params, it is one based
+	/**
+	 * Zero based with numeric params
+	 * If string params, it is one based
+	 */
 	ayaID: (sura, aya) => {
 		if (typeof sura === "string") {
 			sura = parseInt(sura) - 1;

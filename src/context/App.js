@@ -142,6 +142,8 @@ class AppProvider extends Component {
 	gotoSura = index => {
 		const page = QData.sura_info[index].sp;
 		this.gotoPage(page);
+		const ayaId = QData.ayaID(parseInt(index), 0);
+		this.selectAya(ayaId);
 	};
 
 	gotoPart = index => {
