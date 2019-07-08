@@ -127,10 +127,10 @@ class AppProvider extends Component {
 		}
 	};
 
-	gotoPage = (page, replace) => {
+	gotoPage = (pageNum, replace) => {
 		const { history } = this.props;
-		if (page <= 604 && page >= 1) {
-			let targetPath = `${process.env.PUBLIC_URL}/page/` + page.toString();
+		if (pageNum <= 604 && pageNum >= 1) {
+			let targetPath = `${process.env.PUBLIC_URL}/page/` + pageNum.toString();
 			if (replace) {
 				history.replace(targetPath);
 			} else {
@@ -145,8 +145,11 @@ class AppProvider extends Component {
 	};
 
 	gotoPart = index => {
-		const page = QData.parts[index].p;
+		const partInfo = QData.parts[index];
+		const page = partInfo.p;
 		this.gotoPage(page);
+		const ayaId = QData.ayaID(partInfo.s - 1, partInfo.a - 1);
+		this.selectAya(ayaId);
 	};
 
 	methods = {

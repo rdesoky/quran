@@ -5,6 +5,7 @@ import { withThemeContext } from "../../context/Theme";
 import { FormattedMessage } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+	faLocationArrow,
 	faUserCircle,
 	faSearch,
 	faList,
@@ -16,8 +17,9 @@ import {
 
 const Commands = ({ open, appContext, themeContext }) => {
 	const commandIcons = {
-		QIndex: faList,
-		Find: faSearch,
+		Index: faList,
+		Goto: faLocationArrow,
+		Search: faSearch,
 		Play: faPlayCircle,
 		Settings: faCog,
 		Profile: faUserCircle,
@@ -25,8 +27,9 @@ const Commands = ({ open, appContext, themeContext }) => {
 		Favorites: faHeart
 	};
 	const list = [
-		"QIndex",
-		"Find",
+		"Index",
+		"Search",
+		"Goto",
 		"Play",
 		"Favorites",
 		"Theme",
@@ -56,7 +59,9 @@ const Commands = ({ open, appContext, themeContext }) => {
 					<button onClick={e => runCommand(command)}>
 						<FontAwesomeIcon icon={commandIcons[command]} />
 						<br />
-						<span className="CommandLabel">{command}</span>
+						<span className="CommandLabel">
+							<FormattedMessage id={command.toLowerCase()} />
+						</span>
 					</button>
 				))}
 			</div>

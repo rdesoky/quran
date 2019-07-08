@@ -223,17 +223,17 @@ function Pager({ match, appContext }) {
 				className="FooterNavbar"
 				style={{ left: (appContext.isNarrow ? 0 : 50).toString() + "px" }}
 			>
-				<button className="NavButton NavBackward" onClick={decrement}>
-					<FontAwesomeIcon icon={faAngleUp} />
-				</button>
 				<button className="NavButton NavPgUp" onClick={pageUp}>
 					<FontAwesomeIcon icon={faAngleRight} />
 				</button>
-				<button className="NavButton NavPgDown" onClick={increment}>
+				<button className="NavButton NavPgDown" onClick={pageDown}>
+					<FontAwesomeIcon icon={faAngleLeft} />
+				</button>
+				<button onClick={increment} className="NavButton NavForward">
 					<FontAwesomeIcon icon={faAngleDown} />
 				</button>
-				<button onClick={pageDown} className="NavButton NavForward">
-					<FontAwesomeIcon icon={faAngleLeft} />
+				<button className="NavButton NavBackward" onClick={decrement}>
+					<FontAwesomeIcon icon={faAngleUp} />
 				</button>
 			</div>
 		</div>
