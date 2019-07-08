@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e0e912390797f67ce1f93f1135694b1f",
+    "revision": "f2b9843120f93473ae3b1bbcc786e028",
     "url": "/muslim-web/index.html"
   },
   {
-    "revision": "5cda8e2e15e7a5b6c2a6",
+    "revision": "fea74c12a28ec3571188",
     "url": "/muslim-web/static/css/main.63c42553.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/muslim-web/static/js/2.5a555ec1.chunk.js"
   },
   {
-    "revision": "5cda8e2e15e7a5b6c2a6",
-    "url": "/muslim-web/static/js/main.3530fd6b.chunk.js"
+    "revision": "fea74c12a28ec3571188",
+    "url": "/muslim-web/static/js/main.9347ed44.chunk.js"
   },
   {
     "revision": "72546e99d15111639626",
