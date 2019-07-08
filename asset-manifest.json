@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/muslim-web/static/css/main.63c42553.chunk.css",
-    "main.js": "/muslim-web/static/js/main.503c99fc.chunk.js",
-    "main.js.map": "/muslim-web/static/js/main.503c99fc.chunk.js.map",
+    "main.js": "/muslim-web/static/js/main.3530fd6b.chunk.js",
+    "main.js.map": "/muslim-web/static/js/main.3530fd6b.chunk.js.map",
     "runtime~main.js": "/muslim-web/static/js/runtime~main.e735c96e.js",
     "runtime~main.js.map": "/muslim-web/static/js/runtime~main.e735c96e.js.map",
     "static/js/2.5a555ec1.chunk.js": "/muslim-web/static/js/2.5a555ec1.chunk.js",
     "static/js/2.5a555ec1.chunk.js.map": "/muslim-web/static/js/2.5a555ec1.chunk.js.map",
     "index.html": "/muslim-web/index.html",
-    "precache-manifest.cb4ec3eb359cd6961e81bc0ea3c17897.js": "/muslim-web/precache-manifest.cb4ec3eb359cd6961e81bc0ea3c17897.js",
+    "precache-manifest.082c4f4dbc28ccd76a52db8bdd6597c1.js": "/muslim-web/precache-manifest.082c4f4dbc28ccd76a52db8bdd6597c1.js",
     "service-worker.js": "/muslim-web/service-worker.js",
     "static/css/main.63c42553.chunk.css.map": "/muslim-web/static/css/main.63c42553.chunk.css.map"
   }
