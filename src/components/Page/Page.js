@@ -13,19 +13,19 @@ const Page = ({ index, order, appContext }) => {
 
 	const updateProgress = showProgress => {
 		setShowProgress(showProgress);
-		console.log(`updateProgress(${showProgress})`);
+		// console.log(`updateProgress(${showProgress})`);
 	};
 
 	const updateLoaded = isLoaded => {
-		console.log(`updateLoaded(${isLoaded})`);
+		// console.log(`updateLoaded(${isLoaded})`);
 		setIsLoaded(isLoaded);
 		updateProgress(!isLoaded);
 	};
 
 	const onImageLoaded = e => {
-		console.log(
-			`**onImageLoaded(${parseInt(index) + 1}) (isLoaded=${isLoaded})`
-		);
+		// console.log(
+		// 	`**onImageLoaded(${parseInt(index) + 1}) (isLoaded=${isLoaded})`
+		// );
 		setTimeout(() => {
 			updateLoaded(true); //To help animation timing
 		}, 100);
@@ -33,9 +33,9 @@ const Page = ({ index, order, appContext }) => {
 
 	//Run after componentDidMount, componentDidUpdate, and props update
 	useEffect(() => {
-		console.log(
-			`Page number changed to ${parseInt(index) + 1} (isLoaded=${isLoaded})`
-		);
+		// console.log(
+		// 	`Page number changed to ${parseInt(index) + 1} (isLoaded=${isLoaded})`
+		// );
 		updateLoaded(false);
 	}, [index]); //only run when number changes
 
