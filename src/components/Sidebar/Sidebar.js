@@ -3,30 +3,32 @@ import "./Sidebar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faUserCircle,
-	faSearch,
 	faTh,
-	faPlayCircle,
-	faHeart,
 	faCog,
 	faAngleDoubleDown,
-	faAngleDoubleUp,
-	faAdjust
+	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
 import { withThemeContext } from "../../context/Theme";
+import { CommandIcons } from "./../Modal/Commands";
 
 function Sidebar({ appContext, themeContext }) {
 	const onClick = (e, id) => {
-		appContext.setPopup(id);
-		//if (appContext.isNarrow) {
+		switch (id) {
+			case "Theme":
+				toggleTheme();
+				break;
+			default:
+				appContext.setPopup(id);
+		}
 		appContext.setShowMenu(false);
-		//}
 		e.preventDefault();
 	};
 
 	const toggleTheme = e => {
 		themeContext.toggleTheme();
 		appContext.setShowMenu(false);
+		appContext.pushRecentCommand("Theme");
 	};
 
 	// useEffect(() => {
@@ -62,22 +64,14 @@ function Sidebar({ appContext, themeContext }) {
 				<button onClick={e => onClick(e, "Commands")}>
 					<FontAwesomeIcon icon={faTh} />
 				</button>
-				<button onClick={e => onClick(e, "Find")}>
-					<FontAwesomeIcon icon={faSearch} />
-				</button>
-				<button onClick={e => onClick(e, "Play")}>
-					<FontAwesomeIcon icon={faPlayCircle} />
-				</button>
-				<button onClick={toggleTheme}>
-					<FontAwesomeIcon icon={faAdjust} />
-				</button>
 				<hr />
-				<button onClick={e => onClick(e, "User")}>
-					<FontAwesomeIcon icon={faUserCircle} />
-				</button>
-				<button onClick={e => onClick(e, "Settings")}>
-					<FontAwesomeIcon icon={faCog} />
-				</button>
+				{appContext.recentCommands.map(command => {
+					return (
+						<button onClick={e => onClick(e, command)}>
+							<FontAwesomeIcon icon={CommandIcons[command]} />
+						</button>
+					);
+				})}
 			</div>
 		</div>
 	);

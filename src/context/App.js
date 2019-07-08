@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import QData from "../services/QData";
 
+let rc = localStorage.getItem("recentCommands");
+
 const AppState = {
 	isNarrow: false,
 	pagesCount: 1,
@@ -12,7 +14,8 @@ const AppState = {
 	popup: null,
 	selectStart: 0,
 	selectEnd: 0,
-	maskStart: -1
+	maskStart: -1,
+	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"]
 };
 
 const AppContext = React.createContext(AppState);
@@ -30,6 +33,16 @@ class AppProvider extends Component {
 			this.setState({ selectStart: ayaId, selectEnd: ayaId });
 			return ayaId;
 		}
+	};
+
+	pushRecentCommand = command => {
+		let recentCommands = [
+			command,
+			...this.state.recentCommands.filter(c => c !== command)
+		];
+		recentCommands.length = 5;
+		this.setState({ recentCommands });
+		localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
 	};
 
 	extendSelection = ayaId => {
@@ -91,6 +104,9 @@ class AppProvider extends Component {
 
 	setPopup = popup => {
 		this.setState({ popup });
+		if (popup !== null && popup !== "Commands") {
+			this.pushRecentCommand(popup);
+		}
 	};
 
 	nextPage = () => {
@@ -177,7 +193,8 @@ class AppProvider extends Component {
 		setSelectEnd: this.setSelectEnd,
 		offsetSelection: this.offsetSelection,
 		selectAya: this.selectAya,
-		extendSelection: this.extendSelection
+		extendSelection: this.extendSelection,
+		pushRecentCommand: this.pushRecentCommand
 	};
 
 	onResize = e => {
