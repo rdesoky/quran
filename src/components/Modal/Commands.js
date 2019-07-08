@@ -5,6 +5,7 @@ import { withThemeContext } from "../../context/Theme";
 import { FormattedMessage } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+	faTh,
 	faLocationArrow,
 	faUserCircle,
 	faSearch,
@@ -15,17 +16,19 @@ import {
 	faAdjust
 } from "@fortawesome/free-solid-svg-icons";
 
+export const CommandIcons = {
+	Index: faList,
+	Goto: faLocationArrow,
+	Search: faSearch,
+	Play: faPlayCircle,
+	Settings: faCog,
+	Profile: faUserCircle,
+	Theme: faAdjust,
+	Favorites: faHeart,
+	Commands: faTh
+};
+
 const Commands = ({ open, appContext, themeContext }) => {
-	const commandIcons = {
-		Index: faList,
-		Goto: faLocationArrow,
-		Search: faSearch,
-		Play: faPlayCircle,
-		Settings: faCog,
-		Profile: faUserCircle,
-		Theme: faAdjust,
-		Favorites: faHeart
-	};
 	const list = [
 		"Index",
 		"Search",
@@ -41,6 +44,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 		switch (command) {
 			case "Theme":
 				themeContext.toggleTheme();
+				appContext.pushRecentCommand(command);
 				break;
 			default:
 				appContext.setPopup(command);
@@ -57,7 +61,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 			<div className="CommandsList">
 				{list.map(command => (
 					<button onClick={e => runCommand(command)}>
-						<FontAwesomeIcon icon={commandIcons[command]} />
+						<FontAwesomeIcon icon={CommandIcons[command]} />
 						<br />
 						<span className="CommandLabel">
 							<FormattedMessage id={command.toLowerCase()} />
