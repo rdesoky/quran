@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./App.scss";
 import Pager, { PageRedirect } from "./components/Pager/Pager";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Route,
+	Redirect,
+	Switch
+} from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
 import { withThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
-import QData from "./services/QData";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -35,25 +39,37 @@ function App({ themeContext }) {
 			<div className={"App " + themeContext.theme + "Theme"}>
 				<Router>
 					<AppProvider>
-						<Route
-							path={process.env.PUBLIC_URL + "/page/:page"}
-							component={Pager}
-						/>
-						<Route
-							path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
-							component={Pager}
-						/>
-						<Route
-							path={process.env.PUBLIC_URL + "/aya/:aya"}
-							component={PageRedirect}
-						/>
-						<Route
-							exact
-							path={process.env.PUBLIC_URL + "/"}
-							render={() => {
-								return <Redirect to={process.env.PUBLIC_URL + "/page/1"} />;
-							}}
-						/>
+						<Switch>
+							<Route
+								path={process.env.PUBLIC_URL + "/page/:page"}
+								// path="/page/:page"
+								component={Pager}
+							/>
+							<Route
+								path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
+								// path="/sura/:sura/aya/:aya"
+								component={Pager}
+							/>
+							<Route
+								path={process.env.PUBLIC_URL + "/aya/:aya"}
+								// path="/aya/:aya"
+								component={PageRedirect}
+							/>
+							<Route
+								render={() => {
+									const defUrl = process.env.PUBLIC_URL + "/page/1";
+									console.log(
+										`PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+									);
+									return (
+										<Redirect
+											to={defUrl}
+											// to={defUrl}
+										/>
+									);
+								}}
+							/>
+						</Switch>
 						<Sidebar />
 						<PopupView />
 					</AppProvider>
