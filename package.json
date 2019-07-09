@@ -1,6 +1,6 @@
 {
-	"name": "muslim-web",
-	"homepage": "https://rdesoky.github.io/muslim-web",
+	"name": "quran",
+	"homepage": "https://rdesoky.github.io/quran",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
@@ -17,7 +17,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"build": "react-scripts build & cp build/index.html build/404.html",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"predeploy": "yarn run build",
