@@ -40,16 +40,27 @@ const QData = {
 		return { sura: 0, aya: 0 };
 	},
 
+	/**
+	 * Returns page index by aya ID
+	 */
 	ayaIdPage: aya_id => {
 		let { sura, aya } = QData.ayaIdInfo(aya_id);
 		return QData.ayaPage(sura, aya);
 	},
 
+	/**
+	 * Retuns aya ID by page index
+	 */
 	pageAyaId: page_index => {
 		let { s: sura, a: aya } = QData.pagesInfo[page_index];
 		return QData.ayaID(sura - 1, aya - 1);
 	},
 
+	/**
+	 * Returns page Index by suraIndex and ayaIndex
+	 * @param {number} sura
+	 * @param {number} aya
+	 */
 	//Index based
 	ayaPage: function(sura, aya) {
 		var page = QData.sura_info[sura].sp - 1;

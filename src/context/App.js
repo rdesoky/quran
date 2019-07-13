@@ -143,6 +143,9 @@ class AppProvider extends Component {
 		}
 	};
 
+	/**
+	 * Change app state to page number
+	 */
 	gotoPage = (pageNum, replace) => {
 		const { history } = this.props;
 		if (pageNum <= 604 && pageNum >= 1) {
@@ -170,6 +173,12 @@ class AppProvider extends Component {
 		this.selectAya(ayaId);
 	};
 
+	gotoAya = ayaId => {
+		this.selectAya(ayaId);
+		const pageIndex = QData.ayaIdPage(ayaId);
+		this.gotoPage(pageIndex + 1);
+	};
+
 	methods = {
 		setShowMenu: this.setShowMenu,
 		toggleShowMenu: this.toggleShowMenu,
@@ -177,6 +186,7 @@ class AppProvider extends Component {
 		nextPage: this.nextPage,
 		prevPage: this.prevPage,
 		offsetPage: this.offsetPage,
+		gotoAya: this.gotoAya,
 		gotoPage: this.gotoPage,
 		gotoSura: this.gotoSura,
 		gotoPart: this.gotoPart,
