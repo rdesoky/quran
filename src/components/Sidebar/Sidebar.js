@@ -67,7 +67,11 @@ function Sidebar({ appContext, themeContext }) {
 				<hr />
 				{appContext.recentCommands.map(command => {
 					return (
-						<button key={command} onClick={e => onClick(e, command)}>
+						<button
+							key={command}
+							onClick={e => onClick(e, command)}
+							title={command}
+						>
 							<FontAwesomeIcon icon={CommandIcons[command]} />
 						</button>
 					);

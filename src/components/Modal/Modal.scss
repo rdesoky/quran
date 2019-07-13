@@ -94,4 +94,17 @@
 			}
 		}
 	}
+	.SearchInput {
+		background-color: transparent;
+		color: white;
+		font-size: 25px;
+		border: none;
+		width: 100%;
+	}
+	.link {
+		cursor: pointer;
+		&:hover {
+			color: yellow;
+		}
+	}
 }

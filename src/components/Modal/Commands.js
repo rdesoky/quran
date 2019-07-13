@@ -13,7 +13,8 @@ import {
 	faPlayCircle,
 	faHeart,
 	faCog,
-	faAdjust
+	faAdjust,
+	faQuestion
 } from "@fortawesome/free-solid-svg-icons";
 
 export const CommandIcons = {
@@ -25,7 +26,8 @@ export const CommandIcons = {
 	Profile: faUserCircle,
 	Theme: faAdjust,
 	Favorites: faHeart,
-	Commands: faTh
+	Commands: faTh,
+	Help: faQuestion
 };
 
 const Commands = ({ open, appContext, themeContext }) => {
@@ -37,7 +39,8 @@ const Commands = ({ open, appContext, themeContext }) => {
 		"Favorites",
 		"Theme",
 		"Profile",
-		"Settings"
+		"Settings",
+		"Help"
 	];
 
 	const runCommand = command => {
