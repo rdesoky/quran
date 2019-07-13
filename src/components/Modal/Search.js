@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
-import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext, AppContext } from "./../../context/App";
-import { Link } from "react-router-dom";
+import { withAppContext } from "./../../context/App";
 
 let verseList = [];
 let normalizedList = [];
@@ -13,6 +11,9 @@ const Search = ({ onClose, appContext }) => {
 	const input = useRef(null);
 	const [searchTerm, setSearchTerm] = useState(
 		localStorage.getItem("LastSearch") || ""
+	);
+	const [searchHistory, setSearchHistory] = useState(
+		JSON.parse(localStorage.getItem("SearchHistory") || "[]")
 	);
 	const [results, setResults] = useState([]);
 
@@ -40,10 +41,18 @@ const Search = ({ onClose, appContext }) => {
 		};
 	}, []);
 
+	const addToSearchHistory = () => {
+		let history = [searchTerm, ...searchHistory.filter(s => s !== searchTerm)];
+		history = history.slice(0, 10); //keep last 10 items
+		localStorage.setItem("SearchHistory", JSON.stringify(history));
+		setSearchHistory(history);
+	};
+
 	const gotoAya = e => {
 		const aya = e.target.getAttribute("aya");
 		onClose();
 		appContext.gotoAya(parseInt(aya));
+		addToSearchHistory();
 		e.preventDefault();
 	};
 
@@ -81,13 +90,19 @@ const Search = ({ onClose, appContext }) => {
 		doSearch(searchTerm);
 	};
 
+	const onHistoryButtonClick = e => {
+		const searchTerm = e.target.textContent;
+		setSearchTerm(searchTerm);
+		doSearch(searchTerm);
+	};
+
 	const doSearch = searchTerm => {
 		let sResults = [];
 		if (searchTerm.length > 2) {
 			localStorage.setItem("LastSearch", searchTerm);
 			sResults = normalizedList.reduce((results, text, aya) => {
 				if (text.includes(searchTerm)) {
-					results.push({ aya, text });
+					results.push({ aya, text: verseList[aya] });
 				}
 				return results;
 			}, []);
@@ -109,6 +124,11 @@ const Search = ({ onClose, appContext }) => {
 					value={searchTerm}
 					onChange={onChangeSearchInput}
 				/>
+			</div>
+			<div>
+				{searchHistory.map(s => {
+					return <button onClick={onHistoryButtonClick}>{s}</button>;
+				})}
 			</div>
 			<FormattedMessage className="SuraTitle" id="results_for">
 				{resultsFor => {
