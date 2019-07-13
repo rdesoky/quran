@@ -177,6 +177,7 @@ class AppProvider extends Component {
 		this.selectAya(ayaId);
 		const pageIndex = QData.ayaIdPage(ayaId);
 		this.gotoPage(pageIndex + 1);
+		this.hideMask();
 	};
 
 	methods = {
