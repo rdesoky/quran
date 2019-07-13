@@ -104,7 +104,18 @@
 	.link {
 		cursor: pointer;
 		&:hover {
-			color: yellow;
+			color: #ffffaa;
 		}
+		* {
+			pointer-events: none;
+		}
+	}
+
+	.ResultInfo {
+		color: #aaffff;
+		display: inline-block;
+		min-width: 100px;
+		text-align: left;
+		padding: 0 5px;
 	}
 }

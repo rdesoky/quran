@@ -11,7 +11,9 @@ let normalizedList = [];
 
 const Search = ({ onClose, appContext }) => {
 	const input = useRef(null);
-	const [searchTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState(
+		localStorage.getItem("LastSearch") || ""
+	);
 	const [results, setResults] = useState([]);
 
 	useEffect(() => {
@@ -26,9 +28,12 @@ const Search = ({ onClose, appContext }) => {
 						xmlDoc.getElementsByTagName("a"),
 						i => i.textContent
 					);
-					normalizedList = verseList.map(t => t.replace(/\p{M}/gu, ""));
+					normalizedList = verseList.map(t =>
+						t.replace(new RegExp("\\p{M}", "gu"), "")
+					);
 				});
 		}
+		doSearch(searchTerm);
 		return () => {
 			//unmount
 			// document.body.focus();
@@ -43,21 +48,51 @@ const Search = ({ onClose, appContext }) => {
 	};
 
 	const renderResults = () => {
-		if (searchTerm.length >= 3) {
-			return (
-				<ol>
-					{normalizedList.map((verse, i) => {
-						if (verse.includes(searchTerm)) {
-							return (
-								<li class="link" onClick={gotoAya} aya={i}>
-									{verseList[i]}
-								</li>
-							);
-						}
-					})}
-				</ol>
-			);
+		if (!results.length) {
+			return;
 		}
+		let page = results.slice(0, 20);
+		return (
+			<ol>
+				{page.map(({ aya, text }) => {
+					const ayaInfo = QData.ayaIdInfo(aya);
+					return (
+						<FormattedMessage id="sura_names">
+							{sura_names => (
+								<li tabIndex="0" class="link" onClick={gotoAya} aya={aya}>
+									<span className="ResultInfo">
+										{sura_names.split(",")[ayaInfo.sura] +
+											`(${ayaInfo.aya + 1}):
+										`}
+									</span>
+									<span class="ResultText">{text}</span>
+								</li>
+							)}
+						</FormattedMessage>
+					);
+				})}
+			</ol>
+		);
+	};
+
+	const onChangeSearchInput = e => {
+		const searchTerm = e.target.value;
+		setSearchTerm(searchTerm);
+		doSearch(searchTerm);
+	};
+
+	const doSearch = searchTerm => {
+		let sResults = [];
+		if (searchTerm.length > 2) {
+			localStorage.setItem("LastSearch", searchTerm);
+			sResults = normalizedList.reduce((results, text, aya) => {
+				if (text.includes(searchTerm)) {
+					results.push({ aya, text });
+				}
+				return results;
+			}, []);
+		}
+		setResults(sResults);
 	};
 
 	return (
@@ -72,18 +107,13 @@ const Search = ({ onClose, appContext }) => {
 					ref={input}
 					type="text"
 					value={searchTerm}
-					onChange={e => setSearchTerm(e.target.value)}
+					onChange={onChangeSearchInput}
 				/>
 			</div>
 			<FormattedMessage className="SuraTitle" id="results_for">
 				{resultsFor => {
 					if (searchTerm.length) {
-						return (
-							<>
-								<hr />
-								{resultsFor + " " + searchTerm}
-							</>
-						);
+						return <>{results.length + " " + resultsFor + " " + searchTerm}</>;
 					}
 					return null;
 				}}
