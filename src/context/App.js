@@ -23,6 +23,9 @@ const AppContext = React.createContext(AppState);
 class AppProvider extends Component {
 	state = AppState;
 
+	_verseList = [];
+	_normVerseList = [];
+
 	setTheme = theme => {
 		this.setState({ theme });
 		localStorage.setItem("theme", theme);
@@ -33,6 +36,14 @@ class AppProvider extends Component {
 			this.setState({ selectStart: ayaId, selectEnd: ayaId });
 			return ayaId;
 		}
+	};
+
+	verseList = () => {
+		return this._verseList;
+	};
+
+	normVerseList = () => {
+		return this._normVerseList;
 	};
 
 	pushRecentCommand = command => {
@@ -205,7 +216,9 @@ class AppProvider extends Component {
 		offsetSelection: this.offsetSelection,
 		selectAya: this.selectAya,
 		extendSelection: this.extendSelection,
-		pushRecentCommand: this.pushRecentCommand
+		pushRecentCommand: this.pushRecentCommand,
+		verseList: this.verseList,
+		normVerseList: this.normVerseList
 	};
 
 	onResize = e => {
@@ -232,6 +245,32 @@ class AppProvider extends Component {
 			width: window.innerWidth,
 			height: window.innerHeight
 		});
+
+		fetch(`${process.env.PUBLIC_URL}/quran.xml`)
+			.then(results => results.text())
+			.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
+			.then(xmlDoc => {
+				this._verseList = Array.prototype.map.call(
+					xmlDoc.getElementsByTagName("a"),
+					i => i.textContent
+				);
+				// normalizedList = verseList.map(t =>
+				// 	t.replace(new RegExp("\\p{M}", "gu"), "")
+				// );
+			});
+
+		fetch(`${process.env.PUBLIC_URL}/normalized_quran.xml`)
+			.then(results => results.text())
+			.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
+			.then(xmlDoc => {
+				this._normVerseList = Array.prototype.map.call(
+					xmlDoc.getElementsByTagName("a"),
+					i => i.textContent
+				);
+				// normalizedList = verseList.map(t =>
+				// 	t.replace(new RegExp("\\p{M}", "gu"), "")
+				// );
+			});
 	}
 
 	render() {

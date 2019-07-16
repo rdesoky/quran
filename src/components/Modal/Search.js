@@ -19,21 +19,20 @@ const Search = ({ onClose, appContext }) => {
 
 	useEffect(() => {
 		input.current.focus();
-		if (verseList.length === 0) {
-			fetch(`${process.env.PUBLIC_URL}/quran.xml`)
-				.then(results => results.text())
-				.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
-				.then(xmlDoc => {
-					//verseList = [].slice.call(xmlDoc.getElementsByTagName("a"));
-					verseList = Array.prototype.map.call(
-						xmlDoc.getElementsByTagName("a"),
-						i => i.textContent
-					);
-					normalizedList = verseList.map(t =>
-						t.replace(new RegExp("\\p{M}", "gu"), "")
-					);
-				});
-		}
+		// if (verseList.length === 0) {
+		// 	fetch(`${process.env.PUBLIC_URL}/quran.xml`)
+		// 		.then(results => results.text())
+		// 		.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
+		// 		.then(xmlDoc => {
+		// 			verseList = Array.prototype.map.call(
+		// 				xmlDoc.getElementsByTagName("a"),
+		// 				i => i.textContent
+		// 			);
+		// 			normalizedList = verseList.map(t =>
+		// 				t.replace(new RegExp("\\p{M}", "gu"), "")
+		// 			);
+		// 		});
+		// }
 		doSearch(searchTerm);
 		return () => {
 			//unmount
@@ -98,10 +97,12 @@ const Search = ({ onClose, appContext }) => {
 
 	const doSearch = searchTerm => {
 		let sResults = [];
-		if (searchTerm.length > 2) {
+		let normSearchTerm = QData.normalizeText(searchTerm);
+		const verseList = appContext.verseList();
+		if (verseList.length > 0 && normSearchTerm.length > 2) {
 			localStorage.setItem("LastSearch", searchTerm);
-			sResults = normalizedList.reduce((results, text, aya) => {
-				if (text.includes(searchTerm)) {
+			sResults = appContext.normVerseList().reduce((results, text, aya) => {
+				if (text.includes(normSearchTerm)) {
 					results.push({ aya, text: verseList[aya] });
 				}
 				return results;
