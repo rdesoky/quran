@@ -80,6 +80,15 @@ class AppProvider extends Component {
 	};
 
 	setMaskStart = maskStart => {
+		if (maskStart === undefined) {
+			let { selectStart, selectEnd } = this.state;
+			if (this.state.maskStart !== -1) {
+				this.hideMask();
+				return;
+			}
+
+			maskStart = selectStart < selectEnd ? selectStart : selectEnd;
+		}
 		this.setState({ maskStart, selectStart: maskStart, selectEnd: maskStart });
 	};
 

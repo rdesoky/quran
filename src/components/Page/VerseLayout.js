@@ -29,9 +29,12 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 		setHoverVerse(-1);
 	};
 
+	//TODO: extend selection instead of masking
 	const onContextMenu = e => {
-		const aya_id = parseInt(e.target.getAttribute("aya-id"));
-		appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
+		// const aya_id = parseInt(e.target.getAttribute("aya-id"));
+		// appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
+
+		onClickVerse({ target: e.target, shiftKey: true });
 		e.preventDefault();
 	};
 

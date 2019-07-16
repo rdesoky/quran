@@ -17,6 +17,11 @@ function Sidebar({ appContext, themeContext }) {
 		switch (id) {
 			case "Theme":
 				toggleTheme();
+				appContext.setPopup(null);
+				break;
+			case "Mask":
+				appContext.setMaskStart();
+				appContext.setPopup(null);
 				break;
 			default:
 				appContext.setPopup(id);
