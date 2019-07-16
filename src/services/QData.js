@@ -9,6 +9,18 @@ const QData = {
 		return 30;
 	},
 
+	normalizeText: function(t) {
+		let ret = t
+			.replace(new RegExp("\\p{M}", "gu"), "")
+			.replace(/[أإآ]/g, "ا")
+			.replace(/[ؤ]/g, "و")
+			.replace(/[ة]/g, "ه")
+			.replace(/  /g, " ")
+			.replace(/[ئي]/g, "ى");
+
+		return ret;
+	},
+
 	/**
 	 * Zero based with numeric params
 	 * If string params, it is one based
