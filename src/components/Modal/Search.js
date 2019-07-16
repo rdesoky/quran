@@ -16,23 +16,10 @@ const Search = ({ onClose, appContext }) => {
 		JSON.parse(localStorage.getItem("SearchHistory") || "[]")
 	);
 	const [results, setResults] = useState([]);
+	const [pages, setPages] = useState(1);
 
 	useEffect(() => {
 		input.current.focus();
-		// if (verseList.length === 0) {
-		// 	fetch(`${process.env.PUBLIC_URL}/quran.xml`)
-		// 		.then(results => results.text())
-		// 		.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
-		// 		.then(xmlDoc => {
-		// 			verseList = Array.prototype.map.call(
-		// 				xmlDoc.getElementsByTagName("a"),
-		// 				i => i.textContent
-		// 			);
-		// 			normalizedList = verseList.map(t =>
-		// 				t.replace(new RegExp("\\p{M}", "gu"), "")
-		// 			);
-		// 		});
-		// }
 		doSearch(searchTerm);
 		return () => {
 			//unmount

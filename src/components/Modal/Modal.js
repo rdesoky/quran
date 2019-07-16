@@ -20,7 +20,13 @@ const Modal = ({ onClose, children, appContext }) => {
 
 	return (
 		<>
-			<div className="ModalOverlay" onClick={onClickClose} />
+			<div
+				className="ModalOverlay"
+				style={{
+					left: (appContext.isNarrow ? 0 : 50).toString() + "px"
+				}}
+				onClick={onClickClose}
+			/>
 			<div
 				style={{
 					left: (appContext.isNarrow ? 0 : 50).toString() + "px"

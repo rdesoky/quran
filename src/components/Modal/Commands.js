@@ -14,7 +14,8 @@ import {
 	faHeart,
 	faCog,
 	faAdjust,
-	faQuestion
+	faQuestion,
+	faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 
 export const CommandIcons = {
@@ -27,13 +28,15 @@ export const CommandIcons = {
 	Theme: faAdjust,
 	Favorites: faHeart,
 	Commands: faTh,
-	Help: faQuestion
+	Help: faQuestion,
+	Mask: faEyeSlash
 };
 
 const Commands = ({ open, appContext, themeContext }) => {
 	const list = [
 		"Index",
 		"Search",
+		"Mask",
 		"Goto",
 		"Play",
 		"Favorites",
@@ -47,6 +50,10 @@ const Commands = ({ open, appContext, themeContext }) => {
 		switch (command) {
 			case "Theme":
 				themeContext.toggleTheme();
+				appContext.pushRecentCommand(command);
+				break;
+			case "Mask":
+				appContext.setMaskStart();
 				appContext.pushRecentCommand(command);
 				break;
 			default:

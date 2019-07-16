@@ -103,8 +103,10 @@
 	}
 	.link {
 		cursor: pointer;
+		padding: 5px;
 		&:hover {
 			color: #ffffaa;
+			background-color: #666;
 		}
 		* {
 			pointer-events: none;
