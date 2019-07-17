@@ -47,11 +47,14 @@ class AppProvider extends Component {
 	};
 
 	pushRecentCommand = command => {
+		if (command === "Commands") {
+			return;
+		}
 		let recentCommands = [
 			command,
 			...this.state.recentCommands.filter(c => c !== command)
 		];
-		recentCommands.length = 5;
+		recentCommands.length = 7;
 		this.setState({ recentCommands });
 		localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
 	};

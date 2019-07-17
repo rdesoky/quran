@@ -15,7 +15,9 @@ import {
 	faCog,
 	faAdjust,
 	faQuestion,
-	faEyeSlash
+	faEyeSlash,
+	faCopy,
+	faShareAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 export const CommandIcons = {
@@ -29,7 +31,9 @@ export const CommandIcons = {
 	Favorites: faHeart,
 	Commands: faTh,
 	Help: faQuestion,
-	Mask: faEyeSlash
+	Mask: faEyeSlash,
+	Copy: faCopy,
+	Share: faShareAlt
 };
 
 const Commands = ({ open, appContext, themeContext }) => {
@@ -39,6 +43,8 @@ const Commands = ({ open, appContext, themeContext }) => {
 		"Mask",
 		"Goto",
 		"Play",
+		"Copy",
+		"Share",
 		"Favorites",
 		"Theme",
 		"Profile",
@@ -50,16 +56,20 @@ const Commands = ({ open, appContext, themeContext }) => {
 		switch (command) {
 			case "Theme":
 				themeContext.toggleTheme();
-				appContext.pushRecentCommand(command);
 				break;
 			case "Mask":
 				appContext.setMaskStart();
-				appContext.pushRecentCommand(command);
+				break;
+			case "Copy":
+				//Clipboard.writeText("Hello");
+				break;
+			case "Share":
 				break;
 			default:
 				appContext.setPopup(command);
 				return;
 		}
+		appContext.pushRecentCommand(command);
 		appContext.setPopup(null);
 	};
 

@@ -23,17 +23,23 @@ function Sidebar({ appContext, themeContext }) {
 				appContext.setMaskStart();
 				appContext.setPopup(null);
 				break;
+			case "Copy":
+				appContext.setPopup(null);
+				break;
+			case "Share":
+				break;
 			default:
 				appContext.setPopup(id);
 		}
 		appContext.setShowMenu(false);
+		appContext.pushRecentCommand(id);
 		e.preventDefault();
 	};
 
 	const toggleTheme = e => {
 		themeContext.toggleTheme();
-		appContext.setShowMenu(false);
-		appContext.pushRecentCommand("Theme");
+		// appContext.setShowMenu(false);
+		// appContext.pushRecentCommand("Theme");
 	};
 
 	// useEffect(() => {
