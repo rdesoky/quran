@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faUserCircle,
 	faTh,
-	faCog,
 	faAngleDoubleDown,
 	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
@@ -73,7 +71,7 @@ function Sidebar({ appContext, themeContext }) {
 				}}
 			>
 				<button onClick={e => onClick(e, "Commands")}>
-					<FontAwesomeIcon icon={faTh} />
+					<FontAwesomeIcon icon={CommandIcons["Commands"]} />
 				</button>
 				<hr />
 				{appContext.recentCommands.map(command => {

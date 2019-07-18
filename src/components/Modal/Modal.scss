@@ -6,6 +6,7 @@
 	height: 100%;
 	overflow: auto;
 }
+
 .CancelButton {
 	position: fixed;
 	top: 0px;
@@ -94,12 +95,37 @@
 			}
 		}
 	}
-	.SearchInput {
-		background-color: transparent;
-		color: white;
-		font-size: 25px;
-		border: none;
-		width: 100%;
+	#SearchForm {
+		> * {
+			display: inline-block;
+			height: 40px;
+			vertical-align: top;
+		}
+		.SearchInput {
+			background-color: transparent;
+			color: white;
+			border: none;
+			width: calc(100% - 60px);
+			font-size: 25px;
+			border: solid 1px silver;
+			box-sizing: border-box;
+		}
+		button[type="submit"] {
+			width: 60px;
+			font-size: 25px;
+			border: solid 1px silver;
+		}
+	}
+	#SearchHistory {
+		padding: 10px 0;
+		white-space: nowrap;
+		overflow: auto;
+		button {
+			font-size: 15px;
+			padding: 3px 5px;
+			border: solid 1px silver;
+			margin: 0 3px;
+		}
 	}
 	.link {
 		cursor: pointer;
@@ -119,5 +145,20 @@
 		min-width: 100px;
 		text-align: left;
 		padding: 0 5px;
+	}
+
+	.ResultsList {
+		margin-top: 20px;
+		overflow: auto;
+		.MoreResults {
+			background-color: #999;
+			padding: 10px;
+			color: black;
+			cursor: pointer;
+			text-align: center;
+			&:hover {
+				background-color: #ddd;
+			}
+		}
 	}
 }

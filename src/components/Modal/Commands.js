@@ -21,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export const CommandIcons = {
+	Commands: faTh,
 	Index: faList,
 	Goto: faLocationArrow,
 	Search: faSearch,
