@@ -31,6 +31,10 @@ function Pager({ match, appContext }) {
 
 	let { page } = match.params;
 
+	// if (page !== undefined) {
+	// 	appContext.setActivePage(parseInt(page) - 1);
+	// }
+
 	//ComponentDidUpdate
 	useEffect(() => {
 		page = match.params.page;
@@ -40,9 +44,6 @@ function Pager({ match, appContext }) {
 		// if (aya !== undefined) {
 		// 	appContext.selectAya(aya);
 		// }
-		if (page !== undefined) {
-			appContext.setActivePage(parseInt(page) - 1);
-		}
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
