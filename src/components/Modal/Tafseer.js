@@ -10,7 +10,7 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 
 	const handleKeyDown = e => {
 		let ayaId;
-		switch (e.key) {
+		switch (e.code) {
 			case "ArrowDown":
 			case "ArrowLeft":
 				ayaId = appContext.offsetSelection(1);
@@ -19,7 +19,8 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 			case "ArrowRight":
 				ayaId = appContext.offsetSelection(-1);
 				break;
-				defatult: return;
+			default:
+				return;
 		}
 		appContext.gotoAya(ayaId);
 	};

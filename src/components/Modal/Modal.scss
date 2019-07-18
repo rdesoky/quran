@@ -8,7 +8,7 @@
 }
 
 .CancelButton {
-	position: fixed;
+	position: absolute;
 	top: 0px;
 	right: 0px;
 	color: white;
@@ -21,6 +21,7 @@
 
 .ModalContent {
 	position: absolute;
+	// transition: left right 0.3s;
 	// left: 0;
 	top: 0;
 	right: 0;
