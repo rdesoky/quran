@@ -136,7 +136,16 @@ function Pager({ match, appContext }) {
 			}
 			return;
 		}
-		switch (e.key) {
+		switch (e.code) {
+			case "KeyF":
+				appContext.setPopup("Search");
+				break;
+			case "KeyT":
+				appContext.setPopup("Tafseer");
+				break;
+			case "KeyM":
+				appContext.setMaskStart();
+				break;
 			case "Enter":
 				appContext.setPopup("Tafseer");
 				break;
@@ -168,8 +177,9 @@ function Pager({ match, appContext }) {
 				pageUp(e);
 				break;
 			default:
-				break;
+				return;
 		}
+		e.preventDefault();
 	};
 
 	if (page !== undefined) {

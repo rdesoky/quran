@@ -38,10 +38,10 @@ const Modal = ({ onClose, children, appContext }) => {
 					onClick={cancelClose}
 				>
 					{children}
+					<button className="CancelButton" onClick={onClickClose}>
+						<FontAwesomeIcon icon={faTimes} />
+					</button>
 				</div>
-				<button className="CancelButton" onClick={onClickClose}>
-					<FontAwesomeIcon icon={faTimes} />
-				</button>
 			</div>
 		</>
 	);
