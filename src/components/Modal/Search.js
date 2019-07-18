@@ -38,7 +38,9 @@ const Search = ({ onClose, appContext }) => {
 
 	const gotoAya = e => {
 		const aya = e.target.getAttribute("aya");
-		onClose();
+		if (appContext.pagesCount == 1) {
+			onClose();
+		}
 		appContext.gotoAya(parseInt(aya));
 		addToSearchHistory();
 		e.preventDefault();
