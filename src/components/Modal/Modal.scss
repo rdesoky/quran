@@ -151,14 +151,18 @@
 		margin-top: 20px;
 		overflow: auto;
 		.MoreResults {
+			width: 100%;
 			background-color: #999;
 			padding: 10px;
 			color: black;
 			cursor: pointer;
-			text-align: center;
 			&:hover {
 				background-color: #ddd;
 			}
 		}
+	}
+
+	.TafseerText {
+		color: yellow;
 	}
 }

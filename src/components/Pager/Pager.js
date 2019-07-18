@@ -128,9 +128,15 @@ function Pager({ match, appContext }) {
 
 	const handleKeyDown = e => {
 		if (appContext.popup !== null) {
+			if (e.key === "Escape") {
+				appContext.setPopup(null);
+			}
 			return;
 		}
 		switch (e.key) {
+			case "Enter":
+				appContext.setPopup("Tafseer");
+				break;
 			case "Escape":
 				if (appContext.maskStart !== -1) {
 					appContext.hideMask();
