@@ -8,6 +8,7 @@ import Play from "./Play";
 import Hifz from "./Hifz";
 import Help from "./Help";
 import Settings from "./Settings";
+import Tafseer from "./Tafseer";
 
 function PopupView({ appContext }) {
 	const onClosePopup = () => {
@@ -22,7 +23,8 @@ function PopupView({ appContext }) {
 		Play,
 		Hifz,
 		Help,
-		Settings
+		Settings,
+		Tafseer
 	};
 
 	const renderPopup = () => {

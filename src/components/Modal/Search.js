@@ -47,11 +47,17 @@ const Search = ({ onClose, appContext }) => {
 	const renderMore = () => {
 		if (results.length > pages * 20) {
 			return (
-				<div className="MoreResults" onClick={e => setPages(pages + 1)}>
+				<button className="MoreResults" onClick={e => setPages(pages + 1)}>
 					<FormattedMessage id="more" />
 					...
-				</div>
+				</button>
 			);
+		}
+	};
+
+	const onResultKeyDown = e => {
+		if (e.key === "Enter") {
+			gotoAya(e);
 		}
 	};
 
@@ -73,7 +79,13 @@ const Search = ({ onClose, appContext }) => {
 					return (
 						<FormattedMessage id="sura_names">
 							{sura_names => (
-								<li tabIndex="0" class="link" onClick={gotoAya} aya={aya}>
+								<li
+									tabIndex="0"
+									class="link"
+									onKeyDown={onResultKeyDown}
+									onClick={gotoAya}
+									aya={aya}
+								>
 									<span className="ResultInfo">
 										{sura_names.split(",")[ayaInfo.sura] +
 											`(${ayaInfo.aya + 1}):
