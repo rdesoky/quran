@@ -18,6 +18,8 @@ const Search = ({ onClose, appContext }) => {
 	const [results, setResults] = useState([]);
 	const [pages, setPages] = useState(1);
 
+	let searchForm, resultsDiv;
+
 	useEffect(() => {
 		input.current.focus();
 		doSearch(searchTerm);
@@ -42,13 +44,30 @@ const Search = ({ onClose, appContext }) => {
 		e.preventDefault();
 	};
 
+	const renderMore = () => {
+		if (results.length > pages * 20) {
+			return (
+				<div className="MoreResults" onClick={e => setPages(pages + 1)}>
+					<FormattedMessage id="more" />
+					...
+				</div>
+			);
+		}
+	};
+
 	const renderResults = () => {
 		if (!results.length) {
 			return;
 		}
-		let page = results.slice(0, 20);
+		let page = results.slice(0, pages * 20);
 		return (
-			<ol>
+			<ol
+				className="ResultsList"
+				style={{ maxHeight: appContext.pageHeight() - 170 }}
+				ref={ref => {
+					resultsDiv = ref;
+				}}
+			>
 				{page.map(({ aya, text }) => {
 					const ayaInfo = QData.ayaIdInfo(aya);
 					return (
@@ -66,6 +85,7 @@ const Search = ({ onClose, appContext }) => {
 						</FormattedMessage>
 					);
 				})}
+				{renderMore()}
 			</ol>
 		);
 	};
@@ -98,12 +118,27 @@ const Search = ({ onClose, appContext }) => {
 		setResults(sResults);
 	};
 
+	const onSubmitSearch = e => {
+		let firstResult = resultsDiv.querySelector("li");
+		if (firstResult) {
+			firstResult.focus();
+		}
+		addToSearchHistory();
+		e.preventDefault();
+	};
+
 	return (
 		<Modal onClose={onClose}>
 			<div className="Title">
 				<FormattedMessage id="search" />
 			</div>
-			<div>
+			<form
+				id="SearchForm"
+				onSubmit={onSubmitSearch}
+				ref={form => {
+					searchForm = form;
+				}}
+			>
 				<input
 					placeholder="Search for sura name or aya text"
 					className="SearchInput"
@@ -112,8 +147,11 @@ const Search = ({ onClose, appContext }) => {
 					value={searchTerm}
 					onChange={onChangeSearchInput}
 				/>
-			</div>
-			<div>
+				<button type="submit">
+					<FormattedMessage id="search" />
+				</button>
+			</form>
+			<div id="SearchHistory">
 				{searchHistory.map(s => {
 					return <button onClick={onHistoryButtonClick}>{s}</button>;
 				})}
