@@ -18,27 +18,31 @@ const Modal = ({ onClose, children, appContext }) => {
 		e.stopPropagation();
 	};
 
+	let activeSide = appContext.getActiveSide();
+
 	return (
 		<>
 			<div
 				className="ModalOverlay"
 				style={{
-					left: (appContext.isNarrow ? 0 : 50).toString() + "px"
+					left: appContext.isNarrow ? 0 : 50
 				}}
 				onClick={onClickClose}
-			/>
-			<div
-				style={{
-					left: (appContext.isNarrow ? 0 : 50).toString() + "px"
-				}}
-				className="ModalContent"
-				onClick={cancelClose}
 			>
-				{children}
+				<div
+					style={{
+						left: activeSide === 0 ? 0 : "50%",
+						right: activeSide === 0 && appContext.pagesCount === 2 ? "50%" : 0
+					}}
+					className="ModalContent"
+					onClick={cancelClose}
+				>
+					{children}
+				</div>
+				<button className="CancelButton" onClick={onClickClose}>
+					<FontAwesomeIcon icon={faTimes} />
+				</button>
 			</div>
-			<button className="CancelButton" onClick={onClickClose}>
-				<FontAwesomeIcon icon={faTimes} />
-			</button>
 		</>
 	);
 };
