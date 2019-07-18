@@ -15,8 +15,8 @@ const AppState = {
 	selectStart: 0,
 	selectEnd: 0,
 	maskStart: -1,
-	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
-	activePage: 0
+	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"]
+	//activePage: 0
 };
 
 const AppContext = React.createContext(AppState);
@@ -157,10 +157,20 @@ class AppProvider extends Component {
 		return this.state.isNarrow ? "0" : "0 20px";
 	};
 
-	offsetPage = shift => {
+	getCurrentPageNumber = () => {
 		const { location } = this.props;
 		let match = location.pathname.match(/page\/(.+)/);
 		let pageNumber = match ? match[1] : undefined;
+		return pageNumber;
+	};
+
+	getCurrentPageIndex = () => {
+		let pageNumber = this.getCurrentPageNumber();
+		return pageNumber !== undefined ? parseInt(pageNumber) - 1 : 0;
+	};
+
+	offsetPage = shift => {
+		let pageNumber = this.getCurrentPageNumber();
 		if (pageNumber !== undefined) {
 			let nextPage = parseInt(pageNumber) + shift;
 			this.gotoPage(nextPage, true);
@@ -207,12 +217,13 @@ class AppProvider extends Component {
 		this.hideMask();
 	};
 
-	setActivePage = activePage => {
-		this.setState({ activePage });
-	};
+	// setActivePage = activePage => {
+	// 	this.setState({ activePage });
+	// };
 
 	getActiveSide = () => {
-		let side = this.state.pagesCount === 1 ? 0 : this.state.activePage % 2;
+		let activePage = this.getCurrentPageIndex();
+		let side = this.state.pagesCount === 1 ? 0 : activePage % 2;
 		return side;
 	};
 
@@ -244,7 +255,7 @@ class AppProvider extends Component {
 		pushRecentCommand: this.pushRecentCommand,
 		verseList: this.verseList,
 		normVerseList: this.normVerseList,
-		setActivePage: this.setActivePage,
+		// setActivePage: this.setActivePage,
 		getActiveSide: this.getActiveSide
 	};
 
