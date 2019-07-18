@@ -15,7 +15,8 @@ const AppState = {
 	selectStart: 0,
 	selectEnd: 0,
 	maskStart: -1,
-	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"]
+	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
+	activePage: 0
 };
 
 const AppContext = React.createContext(AppState);
@@ -181,6 +182,9 @@ class AppProvider extends Component {
 		}
 	};
 
+	/**
+	 * Navigate to sura Index
+	 */
 	gotoSura = index => {
 		const page = QData.sura_info[index].sp;
 		this.gotoPage(page);
@@ -201,6 +205,15 @@ class AppProvider extends Component {
 		const pageIndex = QData.ayaIdPage(ayaId);
 		this.gotoPage(pageIndex + 1);
 		this.hideMask();
+	};
+
+	setActivePage = activePage => {
+		this.setState({ activePage });
+	};
+
+	getActiveSide = () => {
+		let side = this.state.pagesCount === 1 ? 0 : this.state.activePage % 2;
+		return side;
 	};
 
 	methods = {
@@ -230,7 +243,9 @@ class AppProvider extends Component {
 		extendSelection: this.extendSelection,
 		pushRecentCommand: this.pushRecentCommand,
 		verseList: this.verseList,
-		normVerseList: this.normVerseList
+		normVerseList: this.normVerseList,
+		setActivePage: this.setActivePage,
+		getActiveSide: this.getActiveSide
 	};
 
 	onResize = e => {
@@ -300,7 +315,7 @@ class AppProvider extends Component {
 	}
 }
 
-const withAppContext = Component =>
+let withAppContext = Component =>
 	function AppContextWrapper(props) {
 		return (
 			<AppContext.Consumer>

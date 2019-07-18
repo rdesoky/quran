@@ -40,7 +40,9 @@ function Pager({ match, appContext }) {
 		// if (aya !== undefined) {
 		// 	appContext.selectAya(aya);
 		// }
-
+		if (page !== undefined) {
+			appContext.setActivePage(parseInt(page) - 1);
+		}
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
