@@ -35,7 +35,12 @@
 	// text-align: center;
 	.Title {
 		text-align: center;
-		margin: 5px 0 20px;
+		margin: 5px 20px 20px;
+		button {
+			font-size: 25px;
+			min-width: 35px;
+			margin: 0 10px;
+		}
 	}
 	.FieldRow {
 		div {
@@ -118,7 +123,7 @@
 		}
 	}
 	#SearchHistory {
-		padding: 10px 0;
+		padding: 5px 0;
 		white-space: nowrap;
 		overflow: auto;
 		button {
@@ -149,7 +154,8 @@
 	}
 
 	.ResultsList {
-		margin-top: 20px;
+		// margin-top: 20px;
+		margin-bottom: -6px;
 		overflow: auto;
 		.MoreResults {
 			width: 100%;
@@ -163,7 +169,7 @@
 		}
 	}
 
-	.TafseerText {
+	.TafseerVerse {
 		color: yellow;
 	}
 }

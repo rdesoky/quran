@@ -4,26 +4,32 @@ import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const Tafseer = ({ onClose, isOpen, appContext }) => {
 	const [tafseer, setTafseer] = useState([]);
 
 	const handleKeyDown = e => {
-		let ayaId;
 		switch (e.code) {
 			case "ArrowDown":
 			case "ArrowLeft":
-				ayaId = appContext.offsetSelection(1);
+				offsetSelection(1);
 				break;
 			case "ArrowUp":
 			case "ArrowRight":
-				ayaId = appContext.offsetSelection(-1);
+				offsetSelection(-1);
 				break;
 			default:
 				return;
 		}
+	};
+
+	const offsetSelection = offset => {
+		const ayaId = appContext.offsetSelection(offset);
 		appContext.gotoAya(ayaId);
 	};
+
 	useEffect(() => {
 		//document.querySelector(".CancelButton").focus();
 		fetch(`${process.env.PUBLIC_URL}/ar.muyassar.txt`)
@@ -50,10 +56,27 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 		return "Loading...";
 	};
 
+	const ayaInfo = QData.ayaIdInfo(appContext.selectStart);
 	return (
 		<Modal open={isOpen} onClose={onClose}>
-			<div className="Title">{renderVerse()}</div>
-			<div className="TafseerText">{renderTafseer()}</div>
+			<div className="Title">
+				<button onClick={e => offsetSelection(-1)}>
+					<FontAwesomeIcon icon={faAngleRight} />
+				</button>
+				<FormattedMessage id="sura_names">
+					{sura_names => (
+						<span>
+							{sura_names.split(",")[ayaInfo.sura] + ` - ${ayaInfo.aya + 1}`}
+						</span>
+					)}
+				</FormattedMessage>
+				<button onClick={e => offsetSelection(1)}>
+					<FontAwesomeIcon icon={faAngleLeft} />
+				</button>
+			</div>
+			<p className="TafseerVerse">{renderVerse()}</p>
+
+			<p className="TafseerText">{renderTafseer()}</p>
 		</Modal>
 	);
 };

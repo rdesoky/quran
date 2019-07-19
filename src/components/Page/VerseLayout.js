@@ -52,7 +52,8 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 		return false;
 	};
 
-	const onClickVerse = ({ shiftKey, ctrlKey, altKey, target }) => {
+	const onClickVerse = e => {
+		const { shiftKey, ctrlKey, altKey, target } = e;
 		const aya_id = parseInt(target.getAttribute("aya-id"));
 		//TODO: set selectStart|selectEnd|maskStart
 		if (appContext.maskStart !== -1) {
@@ -75,7 +76,12 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 			if (shiftKey || ctrlKey) {
 				appContext.extendSelection(aya_id);
 			} else {
-				appContext.selectAya(aya_id);
+				if (appContext.selectStart === aya_id) {
+					appContext.toggleShowMenu();
+					e.stopPropagation();
+				} else {
+					appContext.selectAya(aya_id);
+				}
 			}
 		}
 	};

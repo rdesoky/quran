@@ -33,6 +33,10 @@ class AppProvider extends Component {
 	};
 
 	selectAya = ayaId => {
+		if (ayaId === undefined) {
+			ayaId = this.state.selectStart;
+			this.hideMask();
+		}
 		if (ayaId >= 0 && ayaId < QData.ayatCount()) {
 			this.setState({ selectStart: ayaId, selectEnd: ayaId });
 			return ayaId;
