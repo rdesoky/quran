@@ -26,6 +26,8 @@ function Sidebar({ appContext, themeContext }) {
 				break;
 			case "Share":
 				break;
+			case "Tafseer":
+				appContext.selectAya();
 			default:
 				appContext.setPopup(id);
 		}

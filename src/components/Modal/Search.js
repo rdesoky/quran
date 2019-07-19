@@ -71,7 +71,7 @@ const Search = ({ onClose, appContext }) => {
 		return (
 			<ol
 				className="ResultsList"
-				style={{ maxHeight: appContext.pageHeight() - 170 }}
+				style={{ maxHeight: appContext.pageHeight() - 150 }}
 				ref={ref => {
 					resultsDiv = ref;
 				}}

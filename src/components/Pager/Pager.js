@@ -141,12 +141,14 @@ function Pager({ match, appContext }) {
 				appContext.setPopup("Search");
 				break;
 			case "KeyT":
+				appContext.selectAya();
 				appContext.setPopup("Tafseer");
 				break;
 			case "KeyM":
 				appContext.setMaskStart();
 				break;
 			case "Enter":
+				appContext.selectAya();
 				appContext.setPopup("Tafseer");
 				break;
 			case "Escape":
