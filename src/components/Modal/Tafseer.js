@@ -74,9 +74,13 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 					<FontAwesomeIcon icon={faAngleLeft} />
 				</button>
 			</div>
-			<p className="TafseerVerse">{renderVerse()}</p>
-
-			<p className="TafseerText">{renderTafseer()}</p>
+			<div>
+				<p className="TafseerVerse">{renderVerse()}</p>
+			</div>
+			<div className="TafseerSelector">Select Tafseer</div>
+			<div>
+				<p className="TafseerText">{renderTafseer()}</p>
+			</div>
 		</Modal>
 	);
 };

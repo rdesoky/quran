@@ -148,23 +148,35 @@ function Pager({ match, appContext }) {
 				}
 				break;
 			case "KeyI":
-				appContext.setPopup("Index");
+				if (!isTextInput) {
+					appContext.setPopup("Index");
+				}
 				break;
 			case "KeyG":
-				appContext.setPopup("Goto");
+				if (!isTextInput) {
+					appContext.setPopup("Goto");
+				}
 				break;
 			case "KeyC":
-				appContext.setPopup("Commands");
+				if (!isTextInput) {
+					appContext.setPopup("Commands");
+				}
 				break;
 			case "KeyF":
-				appContext.setPopup("Search");
+				if (!isTextInput) {
+					appContext.setPopup("Search");
+				}
 				break;
 			case "KeyT":
-				appContext.selectAya();
-				appContext.setPopup("Tafseer");
+				if (!isTextInput) {
+					appContext.selectAya();
+					appContext.setPopup("Tafseer");
+				}
 				break;
 			case "KeyM":
-				appContext.setMaskStart();
+				if (!isTextInput) {
+					appContext.setMaskStart();
+				}
 				break;
 			case "ArrowDown":
 				if (!isTextInput) {

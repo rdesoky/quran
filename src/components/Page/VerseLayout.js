@@ -76,7 +76,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 			if (shiftKey || ctrlKey) {
 				appContext.extendSelection(aya_id);
 			} else {
-				if (appContext.selectStart === aya_id) {
+				if (appContext.selectStart === aya_id && appContext.popup === null) {
 					appContext.toggleShowMenu();
 					e.stopPropagation();
 				} else {
