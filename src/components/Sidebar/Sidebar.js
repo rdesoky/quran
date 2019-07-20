@@ -54,7 +54,13 @@ function Sidebar({ appContext, themeContext }) {
 		<div
 			className="Sidebar"
 			style={{
-				bottom: appContext.showMenu || !appContext.isNarrow ? 25 : "auto"
+				// bottom: appContext.showMenu || !appContext.isNarrow ? 0 : "auto"
+				bottom:
+					appContext.showMenu || !appContext.isNarrow
+						? appContext.isNarrow
+							? 25
+							: 0
+						: "auto"
 			}}
 		>
 			<button

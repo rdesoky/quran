@@ -31,7 +31,7 @@
 	background-color: rgba(0, 0, 0, 0.8);
 	color: white;
 	// margin-left: 50px;
-	max-height: 100%;
+	max-height: calc(100% - 25px);
 	box-sizing: border-box;
 	overflow: auto;
 	// text-align: center;
