@@ -59,11 +59,11 @@ const Search = ({ onClose, appContext }) => {
 		}
 	};
 
-	const onResultKeyDown = e => {
-		if (e.key === "Enter") {
-			gotoAya(e);
-		}
-	};
+	// const onResultKeyDown = e => {
+	// 	if (e.key === "Enter") {
+	// 		gotoAya(e);
+	// 	}
+	// };
 
 	const renderResults = () => {
 		if (!results.length) {
@@ -73,7 +73,7 @@ const Search = ({ onClose, appContext }) => {
 		return (
 			<ol
 				className="ResultsList"
-				style={{ maxHeight: appContext.pageHeight() - 170 }}
+				style={{ maxHeight: appContext.pageHeight() - 175 }}
 				ref={ref => {
 					resultsDiv = ref;
 				}}
@@ -87,7 +87,7 @@ const Search = ({ onClose, appContext }) => {
 									<button onClick={gotoAya} aya={aya}>
 										<span className="ResultInfo">
 											{sura_names.split(",")[ayaInfo.sura] +
-												`(${ayaInfo.aya + 1}):`}
+												` (${ayaInfo.aya + 1})`}
 										</span>
 										<span className="ResultText link">{text}</span>
 									</button>
@@ -167,14 +167,18 @@ const Search = ({ onClose, appContext }) => {
 					return <button onClick={onHistoryButtonClick}>{s}</button>;
 				})}
 			</div>
-			<FormattedMessage className="SuraTitle" id="results_for">
-				{resultsFor => {
-					if (searchTerm.length) {
-						return <>{results.length + " " + resultsFor + " " + searchTerm}</>;
-					}
-					return null;
-				}}
-			</FormattedMessage>
+			<div className="ResultsInfo">
+				<FormattedMessage className="SuraTitle" id="results_for">
+					{resultsFor => {
+						if (searchTerm.length) {
+							return (
+								<>{results.length + " " + resultsFor + " " + searchTerm}</>
+							);
+						}
+						return null;
+					}}
+				</FormattedMessage>
+			</div>
 			{renderResults()}
 		</Modal>
 	);
