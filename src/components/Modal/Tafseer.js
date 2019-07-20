@@ -65,7 +65,7 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 				</button>
 				<FormattedMessage id="sura_names">
 					{sura_names => (
-						<span>
+						<span className="FlexTitle">
 							{sura_names.split(",")[ayaInfo.sura] + ` - ${ayaInfo.aya + 1}`}
 						</span>
 					)}
