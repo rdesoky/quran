@@ -19,12 +19,26 @@ const QIndex = ({ open, onClose, appContext }) => {
 		onClose();
 	};
 
+	let tableRoot;
+
+	useEffect(() => {
+		const firstButton = tableRoot.querySelector("button");
+		if (firstButton) {
+			firstButton.focus();
+		}
+	});
+
 	return (
 		<Modal open={open} onClose={onClose}>
 			<div className="Title">
 				<FormattedMessage id="index" />
 			</div>
-			<ul className="SpreadSheet">
+			<ul
+				className="SpreadSheet"
+				ref={ref => {
+					tableRoot = ref;
+				}}
+			>
 				{getSuraNames().map((name, index) => {
 					return (
 						<li key={index}>

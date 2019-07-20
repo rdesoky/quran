@@ -21,7 +21,9 @@ const Search = ({ onClose, appContext }) => {
 	let searchForm, resultsDiv;
 
 	useEffect(() => {
-		input.current.focus();
+		let textInput = input.current;
+		textInput.focus();
+		textInput.select();
 		doSearch(searchTerm);
 		return () => {
 			//unmount
@@ -71,7 +73,7 @@ const Search = ({ onClose, appContext }) => {
 		return (
 			<ol
 				className="ResultsList"
-				style={{ maxHeight: appContext.pageHeight() - 150 }}
+				style={{ maxHeight: appContext.pageHeight() - 170 }}
 				ref={ref => {
 					resultsDiv = ref;
 				}}
@@ -81,19 +83,14 @@ const Search = ({ onClose, appContext }) => {
 					return (
 						<FormattedMessage id="sura_names">
 							{sura_names => (
-								<li
-									tabIndex="0"
-									class="link"
-									onKeyDown={onResultKeyDown}
-									onClick={gotoAya}
-									aya={aya}
-								>
-									<span className="ResultInfo">
-										{sura_names.split(",")[ayaInfo.sura] +
-											`(${ayaInfo.aya + 1}):
-										`}
-									</span>
-									<span class="ResultText">{text}</span>
+								<li className="ResultItem">
+									<button onClick={gotoAya} aya={aya}>
+										<span className="ResultInfo">
+											{sura_names.split(",")[ayaInfo.sura] +
+												`(${ayaInfo.aya + 1}):`}
+										</span>
+										<span className="ResultText link">{text}</span>
+									</button>
 								</li>
 							)}
 						</FormattedMessage>
@@ -133,7 +130,7 @@ const Search = ({ onClose, appContext }) => {
 	};
 
 	const onSubmitSearch = e => {
-		let firstResult = resultsDiv.querySelector("li");
+		let firstResult = resultsDiv.querySelector("button");
 		if (firstResult) {
 			firstResult.focus();
 		}
@@ -154,7 +151,7 @@ const Search = ({ onClose, appContext }) => {
 				}}
 			>
 				<input
-					placeholder="Search for sura name or aya text"
+					placeholder="Search suras' name or content"
 					className="SearchInput"
 					ref={input}
 					type="text"

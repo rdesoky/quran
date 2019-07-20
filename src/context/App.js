@@ -124,10 +124,13 @@ class AppProvider extends Component {
 
 	setShowMenu = showMenu => {
 		this.setState({ showMenu });
+		if (showMenu) {
+			this.setState({ popup: null });
+		}
 	};
 
 	toggleShowMenu = () => {
-		this.setState({ showMenu: !this.state.showMenu });
+		this.setShowMenu(!this.state.showMenu);
 	};
 
 	setPopup = popup => {
