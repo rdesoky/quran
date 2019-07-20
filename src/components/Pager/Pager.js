@@ -130,13 +130,32 @@ function Pager({ match, appContext }) {
 	};
 
 	const handleKeyDown = e => {
-		if (appContext.popup !== null) {
-			if (e.key === "Escape") {
-				appContext.setPopup(null);
-			}
-			return;
-		}
+		const { tagName, type } = document.activeElement;
+		const isInput = ["INPUT", "BUTTON"].includes(tagName);
+		const isTextInput = isInput && ["text", "number"].includes(type);
 		switch (e.code) {
+			case "Enter":
+				if (!isTextInput && appContext.popup === null) {
+					appContext.selectAya();
+					appContext.setPopup("Tafseer");
+				}
+				break;
+			case "Escape":
+				if (appContext.popup !== null) {
+					appContext.setPopup(null);
+				} else if (appContext.maskStart !== -1) {
+					appContext.hideMask();
+				}
+				break;
+			case "KeyI":
+				appContext.setPopup("Index");
+				break;
+			case "KeyG":
+				appContext.setPopup("Goto");
+				break;
+			case "KeyC":
+				appContext.setPopup("Commands");
+				break;
 			case "KeyF":
 				appContext.setPopup("Search");
 				break;
@@ -147,41 +166,42 @@ function Pager({ match, appContext }) {
 			case "KeyM":
 				appContext.setMaskStart();
 				break;
-			case "Enter":
-				appContext.selectAya();
-				appContext.setPopup("Tafseer");
-				break;
-			case "Escape":
-				if (appContext.maskStart !== -1) {
-					appContext.hideMask();
-				}
-				break;
 			case "ArrowDown":
-				if (appContext.maskStart !== -1) {
-					increment(e);
-				} else {
-					offsetSelection(e, 1);
+				if (!isTextInput) {
+					if (appContext.maskStart !== -1) {
+						increment(e);
+					} else {
+						offsetSelection(e, 1);
+					}
 				}
 				break;
 			case "ArrowUp":
-				if (appContext.maskStart !== -1) {
-					decrement(e);
-				} else {
-					offsetSelection(e, -1);
+				if (!isTextInput) {
+					if (appContext.maskStart !== -1) {
+						decrement(e);
+					} else {
+						offsetSelection(e, -1);
+					}
 				}
 				break;
 			case "PageDown":
 			case "ArrowLeft":
-				pageDown(e);
+				if (!isTextInput) {
+					pageDown(e);
+				}
 				break;
 			case "PageUp":
 			case "ArrowRight":
-				pageUp(e);
+				if (!isTextInput) {
+					pageUp(e);
+				}
 				break;
 			default:
 				return;
 		}
-		e.preventDefault();
+		if (!isInput) {
+			e.preventDefault();
+		}
 	};
 
 	if (page !== undefined) {

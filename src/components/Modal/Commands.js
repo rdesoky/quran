@@ -20,7 +20,9 @@ import {
 	faShareAlt,
 	faBook,
 	faQuran,
-	faAtlas
+	faAtlas,
+	faRunning,
+	faCommentDots
 } from "@fortawesome/free-solid-svg-icons";
 
 export const CommandIcons = {
@@ -38,7 +40,8 @@ export const CommandIcons = {
 	Mask: faEyeSlash,
 	Copy: faCopy,
 	Share: faShareAlt,
-	Tafseer: faAtlas
+	Tafseer: faQuran,
+	Exercise: faRunning
 };
 
 const Commands = ({ open, appContext, themeContext }) => {
@@ -54,6 +57,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 		"Favorites",
 		"Theme",
 		"Profile",
+		"Exercise",
 		"Settings",
 		"Help"
 	];

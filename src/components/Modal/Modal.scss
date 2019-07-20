@@ -5,6 +5,7 @@
 	right: 0;
 	height: 100%;
 	overflow: auto;
+	pointer-events: none;
 }
 
 .CancelButton {
@@ -20,6 +21,7 @@
 }
 
 .ModalContent {
+	pointer-events: all;
 	position: absolute;
 	// transition: left right 0.3s;
 	// left: 0;
@@ -36,10 +38,15 @@
 	.Title {
 		text-align: center;
 		margin: 5px 20px 20px;
+		position: relative;
 		button {
 			font-size: 25px;
 			min-width: 35px;
 			margin: 0 10px;
+		}
+		.FlexTitle {
+			display: inline-block;
+			min-width: calc(100% - 115px);
 		}
 	}
 	.FieldRow {
