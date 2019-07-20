@@ -131,7 +131,7 @@ class AppProvider extends Component {
 	};
 
 	setPopup = popup => {
-		this.setState({ popup });
+		this.setState({ popup, showMenu: null });
 		if (popup !== null && popup !== "Commands") {
 			this.pushRecentCommand(popup);
 		}

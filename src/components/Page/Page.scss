@@ -73,7 +73,8 @@
 		// position: relative;
 		height: 25px;
 		color: white;
-		background-color: #333;
+		// background-color: #333;
+		background-color: rgba(0, 0, 0, 0.6);
 		// line-height: 25px;
 		// background-color: silver;
 		select {
@@ -162,7 +163,7 @@
 
 .DefaultTheme {
 	.LeftPage {
-		.Page {
+		.PageFrame {
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
 			background: #ffffff; /* Old browsers */
 			background: -moz-linear-gradient(
@@ -191,7 +192,7 @@
 	}
 
 	.RightPage {
-		.Page {
+		.PageFrame {
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
 			background: #f3e2c7; /* Old browsers */
 			background: -moz-linear-gradient(
