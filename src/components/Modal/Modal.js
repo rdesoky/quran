@@ -25,7 +25,8 @@ const Modal = ({ onClose, children, appContext }) => {
 			<div
 				className="ModalOverlay"
 				style={{
-					left: appContext.isNarrow ? 0 : 50
+					left: appContext.isNarrow ? 0 : 50,
+					pointerEvents: appContext.pagesCount > 1 ? "none" : "fill"
 				}}
 				onClick={onClickClose}
 			>
