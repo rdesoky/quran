@@ -30,7 +30,7 @@
 	background-color: rgba(0, 0, 0, 0.8);
 	color: white;
 	// margin-left: 50px;
-	max-height: calc(100% - 25px);
+	max-height: 100%;
 	box-sizing: border-box;
 	overflow: auto;
 	// text-align: center;
@@ -132,6 +132,7 @@
 		padding: 5px 0;
 		white-space: nowrap;
 		overflow: auto;
+		background-color: #444;
 		button {
 			font-size: 15px;
 			padding: 3px 5px;
@@ -153,15 +154,23 @@
 
 	.ResultInfo {
 		color: #aaffff;
+		background-color: #444;
 		display: inline-block;
 		min-width: 100px;
 		text-align: left;
 		padding: 0 5px;
 	}
 
+	.ResultsInfo {
+		color: yellow;
+		height: 35px;
+		line-height: 30px;
+	}
+
 	.ResultsList {
 		// margin-top: 20px;
-		margin-bottom: -6px;
+		margin: 0;
+		padding-inline-start: 30px;
 		overflow: auto;
 		.MoreResults {
 			width: 100%;
