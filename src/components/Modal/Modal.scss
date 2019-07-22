@@ -19,6 +19,19 @@
 	}
 }
 
+.trans-start {
+	.ModalContent {
+		opacity: 0;
+		top: -20px;
+	}
+}
+.trans-end {
+	.ModalContent {
+		transition: opacity 0.5s, top 0.5s, left 0.2s, right 0.2s;
+		opacity: 1;
+	}
+}
+
 .ModalContent {
 	pointer-events: all;
 	position: absolute;
