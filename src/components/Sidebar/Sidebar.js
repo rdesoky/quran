@@ -9,6 +9,7 @@ import {
 import { withAppContext } from "../../context/App";
 import { withThemeContext } from "../../context/Theme";
 import { CommandIcons } from "./../Modal/Commands";
+import Utils from "../../services/utils";
 
 function Sidebar({ appContext, themeContext }) {
 	const onClick = (e, id) => {
@@ -26,6 +27,9 @@ function Sidebar({ appContext, themeContext }) {
 				break;
 			case "Share":
 				break;
+			case "Fullscreen":
+				Utils.requestFullScreen();
+				return;
 			case "Tafseer":
 				appContext.selectAya();
 			default:
@@ -54,7 +58,6 @@ function Sidebar({ appContext, themeContext }) {
 		<div
 			className="Sidebar"
 			style={{
-				// bottom: appContext.showMenu || !appContext.isNarrow ? 0 : "auto"
 				bottom:
 					appContext.showMenu || !appContext.isNarrow
 						? appContext.isNarrow
@@ -65,7 +68,8 @@ function Sidebar({ appContext, themeContext }) {
 		>
 			<button
 				onClick={toggleButtons}
-				style={{ display: appContext.isNarrow ? "block" : "none" }}
+				//style={{ display: appContext.isNarrow ? "block" : "none" }}
+				style={{ visibility: appContext.isNarrow ? "visible" : "hidden" }}
 			>
 				<FontAwesomeIcon
 					icon={appContext.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
@@ -81,18 +85,22 @@ function Sidebar({ appContext, themeContext }) {
 				<button onClick={e => onClick(e, "Commands")}>
 					<FontAwesomeIcon icon={CommandIcons["Commands"]} />
 				</button>
-				<hr />
-				{appContext.recentCommands.map(command => {
-					return (
-						<button
-							key={command}
-							onClick={e => onClick(e, command)}
-							title={command}
-						>
-							<FontAwesomeIcon icon={CommandIcons[command]} />
-						</button>
-					);
-				})}
+				<div id="RecentCommands">
+					{appContext.recentCommands.map(command => {
+						return (
+							<button
+								key={command}
+								onClick={e => onClick(e, command)}
+								title={command}
+							>
+								<FontAwesomeIcon icon={CommandIcons[command]} />
+							</button>
+						);
+					})}
+				</div>
+				<button onClick={e => onClick(e, "Fullscreen")}>
+					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
+				</button>
 			</div>
 		</div>
 	);

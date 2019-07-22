@@ -9,6 +9,7 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const TafseerList = [
 	{ id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
+	{ id: "jalalayn", name: "الجلالين", dir: "rtl", file: "ar.jalalayn.txt" },
 	{ id: "yusufali", name: "English", dir: "ltr", file: "en.yusufali.txt" }
 ];
 

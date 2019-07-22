@@ -22,8 +22,9 @@ import {
 	faQuran,
 	faAtlas,
 	faRunning,
-	faCommentDots
+	faExpand
 } from "@fortawesome/free-solid-svg-icons";
+import Utils from "../../services/utils";
 
 export const CommandIcons = {
 	Commands: faTh,
@@ -41,7 +42,8 @@ export const CommandIcons = {
 	Copy: faCopy,
 	Share: faShareAlt,
 	Tafseer: faQuran,
-	Exercise: faRunning
+	Exercise: faRunning,
+	Fullscreen: faExpand
 };
 
 const Commands = ({ open, appContext, themeContext }) => {
@@ -74,6 +76,9 @@ const Commands = ({ open, appContext, themeContext }) => {
 				//Clipboard.writeText("Hello");
 				break;
 			case "Share":
+				break;
+			case "Fullscreen":
+				Utils.requestFullScreen();
 				break;
 			default:
 				appContext.setPopup(command);

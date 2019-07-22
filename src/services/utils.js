@@ -13,6 +13,15 @@ const Utils = {
 		let page = Utils.pageFromPath(path);
 		let part = QData.pagePart(page);
 		return part;
+	},
+	requestFullScreen: () => {
+		if (typeof document.body.requestFullscreen === "function") {
+			if (document.fullscreenElement) {
+				document.exitFullscreen();
+			} else {
+				document.body.requestFullscreen();
+			}
+		}
 	}
 };
 
