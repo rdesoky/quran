@@ -66,9 +66,9 @@ const Search = ({ onClose, appContext }) => {
 	// };
 
 	const renderResults = () => {
-		if (!results.length) {
-			return;
-		}
+		// if (!results.length) {
+		// 	return;
+		// }
 		let page = results.slice(0, pages * 20);
 		return (
 			<ol
@@ -133,8 +133,8 @@ const Search = ({ onClose, appContext }) => {
 		let firstResult = resultsDiv.querySelector("button");
 		if (firstResult) {
 			firstResult.focus();
+			addToSearchHistory();
 		}
-		addToSearchHistory();
 		e.preventDefault();
 	};
 
