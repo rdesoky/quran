@@ -85,6 +85,9 @@ function Sidebar({ appContext, themeContext }) {
 				<button onClick={e => onClick(e, "Commands")}>
 					<FontAwesomeIcon icon={CommandIcons["Commands"]} />
 				</button>
+				<button onClick={e => onClick(e, "Fullscreen")}>
+					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
+				</button>
 				<div id="RecentCommands">
 					{appContext.recentCommands.map(command => {
 						return (
@@ -98,9 +101,6 @@ function Sidebar({ appContext, themeContext }) {
 						);
 					})}
 				</div>
-				<button onClick={e => onClick(e, "Fullscreen")}>
-					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
-				</button>
 			</div>
 		</div>
 	);

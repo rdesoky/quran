@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
-
+import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
 const Modal = ({ onClose, children, appContext }) => {
@@ -21,7 +21,7 @@ const Modal = ({ onClose, children, appContext }) => {
 	let activeSide = appContext.getActiveSide();
 
 	return (
-		<>
+		<Transition>
 			<div
 				className="ModalOverlay"
 				style={{
@@ -44,7 +44,7 @@ const Modal = ({ onClose, children, appContext }) => {
 					</button>
 				</div>
 			</div>
-		</>
+		</Transition>
 	);
 };
 
