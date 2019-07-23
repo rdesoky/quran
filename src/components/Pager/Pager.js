@@ -134,12 +134,12 @@ function Pager({ match, appContext }) {
 		const isInput = ["INPUT", "BUTTON"].includes(tagName);
 		const isTextInput = isInput && ["text", "number"].includes(type);
 		switch (e.code) {
-			case "Enter":
-				if (!isTextInput && appContext.popup === null) {
-					appContext.selectAya();
-					appContext.setPopup("Tafseer");
-				}
-				break;
+			// case "Enter":
+			// 	if (!isTextInput && appContext.popup === null) {
+			// 		appContext.selectAya();
+			// 		appContext.setPopup("Tafseer");
+			// 	}
+			// 	break;
 			case "Escape":
 				if (appContext.popup !== null) {
 					appContext.setPopup(null);
@@ -211,7 +211,7 @@ function Pager({ match, appContext }) {
 			default:
 				return;
 		}
-		if (!isInput) {
+		if (!isTextInput) {
 			e.preventDefault();
 		}
 	};

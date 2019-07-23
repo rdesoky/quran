@@ -95,6 +95,7 @@ function Sidebar({ appContext, themeContext }) {
 								key={command}
 								onClick={e => onClick(e, command)}
 								title={command}
+								command={command}
 							>
 								<FontAwesomeIcon icon={CommandIcons[command]} />
 							</button>

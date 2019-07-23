@@ -41,14 +41,22 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 
 	useEffect(() => {
 		let fileName = TafseerList.find(i => i.id === tafseer).file;
-		fetch(`${process.env.PUBLIC_URL}/${fileName}`)
+		let controller = new AbortController();
+		let url = `${process.env.PUBLIC_URL}/${fileName}`;
+		fetch(url, { signal: controller.signal })
 			.then(r => r.text())
 			.then(txt => {
 				setTafseerData(txt.split("\n"));
+			})
+			.catch(e => {
+				const { name, message } = e;
+				console.info(`${name}: ${message}\n${url}`);
 			});
+
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
+			controller.abort();
 		};
 	}, [tafseer]);
 

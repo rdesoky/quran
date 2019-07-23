@@ -78,10 +78,10 @@ const Search = ({ onClose, appContext }) => {
 					resultsDiv = ref;
 				}}
 			>
-				{page.map(({ aya, text }) => {
+				{page.map(({ aya, text }, i) => {
 					const ayaInfo = QData.ayaIdInfo(aya);
 					return (
-						<FormattedMessage id="sura_names">
+						<FormattedMessage id="sura_names" key={i}>
 							{sura_names => (
 								<li className="ResultItem">
 									<button onClick={gotoAya} aya={aya}>
@@ -163,8 +163,12 @@ const Search = ({ onClose, appContext }) => {
 				</button>
 			</form>
 			<div id="SearchHistory">
-				{searchHistory.map(s => {
-					return <button onClick={onHistoryButtonClick}>{s}</button>;
+				{searchHistory.map((s, i) => {
+					return (
+						<button key={i} onClick={onHistoryButtonClick}>
+							{s}
+						</button>
+					);
 				})}
 			</div>
 			<div className="ResultsInfo">

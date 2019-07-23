@@ -25,7 +25,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 		return () => {
 			// document.body.focus();
 		};
-	});
+	}, []);
 
 	const gotoPage = e => {
 		const { target: form } = e;
