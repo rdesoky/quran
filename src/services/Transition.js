@@ -13,7 +13,7 @@ const Transition = props => {
 			const className = getInitialClass();
 			updateStyle(className + "-end");
 		}, 1);
-	}, []);
+	});
 
 	return <div className={className}>{props.children}</div>;
 };

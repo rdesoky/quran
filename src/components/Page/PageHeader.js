@@ -31,6 +31,8 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 	let textAlign =
 		appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
+	let partIndex = QData.pagePart(pageIndex + 1) - 1;
+
 	return (
 		<div className="PageHeader" style={{ textAlign }}>
 			<div
@@ -40,16 +42,12 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 				}}
 				className="PageHeaderContent"
 			>
-				<select className="SuraTitle" onChange={onSelectSura}>
+				<select className="SuraTitle" onChange={onSelectSura} value={suraIndex}>
 					<FormattedMessage className="SuraTitle" id="sura_names">
 						{sura_names => {
 							return sura_names.split(",").map((name, index) => {
 								return (
-									<option
-										value={index}
-										selected={index === suraIndex}
-										key={index}
-									>
+									<option value={index} key={index}>
 										{(index + 1).toString()}: {name}
 									</option>
 								);
@@ -60,19 +58,15 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 				<select
 					onChange={onSelectPart}
 					className="PartTitle"
+					value={partIndex}
 					style={{ left: appContext.isNarrow ? "50px" : "0" }}
 				>
 					<FormattedMessage id="part">
 						{partLabel => {
-							let partIndex = QData.pagePart(pageIndex + 1) - 1;
 							let parts = new Array(30).fill("");
 							return parts.map((item, index) => {
 								return (
-									<option
-										key={index}
-										value={index}
-										selected={partIndex === index}
-									>
+									<option key={index} value={index}>
 										{partLabel}: {(index + 1).toString()}
 									</option>
 								);

@@ -36,7 +36,6 @@ export const CommandIcons = {
 	Profile: faUserCircle,
 	Theme: faAdjust,
 	Favorites: faHeart,
-	Commands: faTh,
 	Help: faQuestion,
 	Mask: faEyeSlash,
 	Copy: faCopy,
