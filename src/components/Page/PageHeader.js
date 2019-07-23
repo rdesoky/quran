@@ -2,6 +2,7 @@ import React from "react";
 import { withAppContext } from "../../context/App";
 import { FormattedMessage } from "react-intl";
 import QData from "../../services/QData";
+import Utils from "../../services/utils";
 
 const PageHeader = ({ index: pageIndex, appContext, order }) => {
 	// const showIndexPopup = e => {
@@ -15,12 +16,14 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 		appContext.hideMask();
 		const suraIndex = parseInt(target.value);
 		appContext.gotoSura(suraIndex);
+		Utils.selectTopCommand();
 	};
 
 	const onSelectPart = ({ target }) => {
 		appContext.hideMask();
 		const partIndex = target.value;
 		appContext.gotoPart(partIndex);
+		Utils.selectTopCommand();
 	};
 
 	const showFindPopup = e => {

@@ -22,6 +22,14 @@ const Utils = {
 				document.body.requestFullscreen();
 			}
 		}
+	},
+	selectTopCommand: () => {
+		setTimeout(() => {
+			const topRecentBtn = document.querySelector("#RecentCommands button");
+			if (topRecentBtn) {
+				topRecentBtn.focus();
+			}
+		}, 500);
 	}
 };
 
