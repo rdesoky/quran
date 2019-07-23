@@ -4,6 +4,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
+import Utils from "../../services/utils";
 
 const Modal = ({ onClose, children, appContext }) => {
 	const onClickClose = e => {
@@ -28,12 +29,7 @@ const Modal = ({ onClose, children, appContext }) => {
 			commandBtn.focus();
 		}
 		return () => {
-			setTimeout(() => {
-				const topRecentBtn = document.querySelector("#RecentCommands button");
-				if (topRecentBtn) {
-					topRecentBtn.focus();
-				}
-			}, 500);
+			Utils.selectTopCommand();
 		};
 	}, []);
 
