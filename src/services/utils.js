@@ -29,7 +29,7 @@ const Utils = {
 			if (topRecentBtn) {
 				topRecentBtn.focus();
 			}
-		}, 500);
+		}, 50);
 	}
 };
 

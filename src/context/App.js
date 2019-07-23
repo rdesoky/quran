@@ -260,7 +260,8 @@ class AppProvider extends Component {
 		verseList: this.verseList,
 		normVerseList: this.normVerseList,
 		// setActivePage: this.setActivePage,
-		getActiveSide: this.getActiveSide
+		getActiveSide: this.getActiveSide,
+		getCurrentPageIndex: this.getCurrentPageIndex
 	};
 
 	onResize = e => {
@@ -282,6 +283,8 @@ class AppProvider extends Component {
 	}
 
 	componentDidMount() {
+		const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
+		this.selectAya(ayaId);
 		window.addEventListener("resize", this.onResize);
 		this.updateAppSizes({
 			width: window.innerWidth,
