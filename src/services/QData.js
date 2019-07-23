@@ -131,6 +131,9 @@ const QData = {
 		return infoL.sura > infoR.sura ? 1 : -1;
 	},
 
+	/**
+	 * Returns sura index for a specific page number
+	 */
 	pageSura: function(nPage, bStart) {
 		for (var i = 0; i < 114; i++) {
 			if (QData.sura_info[i].ep >= nPage) {

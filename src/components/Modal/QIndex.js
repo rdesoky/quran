@@ -13,8 +13,9 @@ const QIndex = ({ open, onClose, appContext }) => {
 		return suraNames;
 	};
 
-	const gotoSura = index => {
+	const gotoSura = ({ target }) => {
 		appContext.hideMask();
+		let index = parseInt(target.getAttribute("sura"));
 		appContext.gotoSura(index);
 		onClose();
 	};
@@ -22,12 +23,15 @@ const QIndex = ({ open, onClose, appContext }) => {
 	let tableRoot;
 
 	useEffect(() => {
-		const firstButton = tableRoot.querySelector("button");
-		if (firstButton) {
-			firstButton.focus();
+		let pageIndex = appContext.getCurrentPageIndex();
+		let sura = QData.pageSura(pageIndex + 1);
+		const currSuraBtn = tableRoot.querySelector(`button[sura='${sura}']`);
+		if (currSuraBtn) {
+			currSuraBtn.focus();
 		}
-	});
+	}, []);
 
+	const { appWidth, pagesCount } = appContext;
 	return (
 		<Modal open={open} onClose={onClose}>
 			<div className="Title">
@@ -35,6 +39,9 @@ const QIndex = ({ open, onClose, appContext }) => {
 			</div>
 			<ul
 				className="SpreadSheet"
+				style={{
+					columnCount: Math.floor(appWidth / pagesCount / 120)
+				}}
 				ref={ref => {
 					tableRoot = ref;
 				}}
@@ -42,11 +49,7 @@ const QIndex = ({ open, onClose, appContext }) => {
 				{getSuraNames().map((name, index) => {
 					return (
 						<li key={index}>
-							<button
-								onClick={e => {
-									gotoSura(index);
-								}}
-							>
+							<button sura={index} onClick={gotoSura}>
 								<FormattedMessage id={"sura_names"}>
 									{data => {
 										return index + 1 + ". " + data.split(",")[index];
