@@ -20,6 +20,23 @@ const Modal = ({ onClose, children, appContext }) => {
 
 	let activeSide = appContext.getActiveSide();
 
+	useEffect(() => {
+		const commandBtn = document.querySelector(
+			`#RecentCommands button[command=${appContext.popup}]`
+		);
+		if (commandBtn) {
+			commandBtn.focus();
+		}
+		return () => {
+			setTimeout(() => {
+				const topRecentBtn = document.querySelector("#RecentCommands button");
+				if (topRecentBtn) {
+					topRecentBtn.focus();
+				}
+			}, 500);
+		};
+	}, []);
+
 	return (
 		<Transition>
 			<div
