@@ -13,7 +13,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 	const [partNumber, updatePartNumber] = useState(
 		Utils.partFromPath(appContext.location.pathname)
 	);
-	let gotoPageForm, gotoPartForm;
+	let gotoPageForm;
 
 	useEffect(() => {
 		setIsOpen(open); //update internal state to match
@@ -25,7 +25,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 		return () => {
 			// document.body.focus();
 		};
-	}, []);
+	});
 
 	const gotoPage = e => {
 		const { target: form } = e;
@@ -94,12 +94,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 				</form>
 			</div>
 			<div className="FieldRow">
-				<form
-					onSubmit={gotoPart}
-					ref={form => {
-						gotoPartForm = form;
-					}}
-				>
+				<form onSubmit={gotoPart}>
 					<div className="FieldLabel">
 						<label htmlFor="PartNumber">
 							<FormattedMessage id="part" />

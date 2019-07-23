@@ -6,7 +6,6 @@ let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
 	isNarrow: false,
-	pagesCount: 1,
 	appWidth: 800,
 	appHeight: 600,
 	pagesCount: 2,
@@ -254,8 +253,6 @@ class AppProvider extends Component {
 		offsetMask: this.offsetMask,
 		pageMargin: this.pageMargin,
 		setTheme: this.setTheme,
-		setSelectStart: this.setSelectStart,
-		setSelectEnd: this.setSelectEnd,
 		offsetSelection: this.offsetSelection,
 		selectAya: this.selectAya,
 		extendSelection: this.extendSelection,

@@ -8,11 +8,6 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 
-	// const hoverColor = "#0000FF1A";
-	// const maskColor = "#998";
-	// const selectColor = "#aaa";
-	// const maskSelectColor = "#888";
-
 	const pageHeight = appContext.appHeight - 50;
 	const lineHeight = pageHeight / 15;
 	const lineWidth = appContext.pageWidth();
@@ -286,7 +281,11 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	useEffect(() => {
 		setAyaInfo([]);
 		let pageNumber = parseInt(pageIndex) + 1;
-		fetch(`${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`)
+		let controller = new AbortController();
+		let url = `${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`;
+		fetch(url, {
+			signal: controller.signal
+		})
 			.then(response => response.json())
 			.then(({ child_list }) => {
 				setAyaInfo(
@@ -299,7 +298,15 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 						return { ...c, epos, aya_id };
 					})
 				);
+			})
+			.catch(e => {
+				const { name, message } = e;
+				console.info(`${name}: ${message}\n${url}`);
 			});
+		return () => {
+			//Cleanup function
+			controller.abort();
+		};
 	}, [pageIndex]);
 
 	return (

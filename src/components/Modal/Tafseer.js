@@ -74,10 +74,10 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 
 	const renderSelector = () => {
 		return (
-			<select onChange={onSelectTafseer}>
+			<select onChange={onSelectTafseer} value={tafseer}>
 				{TafseerList.map(taf => {
 					return (
-						<option value={taf.id} selected={taf.id === tafseer}>
+						<option key={taf.id} value={taf.id}>
 							{taf.name}
 						</option>
 					);

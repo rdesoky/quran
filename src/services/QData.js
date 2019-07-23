@@ -15,7 +15,7 @@ const QData = {
 			.replace(/[أإآ]/g, "ا")
 			.replace(/[ؤ]/g, "و")
 			.replace(/[ة]/g, "ه")
-			.replace(/  /g, " ")
+			.replace(/ {2}/g, " ")
 			.replace(/[ئي]/g, "ى");
 
 		return ret;
