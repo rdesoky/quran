@@ -32,25 +32,34 @@ const Utils = {
 		}, 50);
 	},
 	hilightSearch: (query, text, ntext) => {
-		let words = text.trim().split(" ");
-		let nwords = ntext.split(" ");
-		let qwords = query.split(" ");
-		let hwords = [];
+		let words = text.trim().split(" "); //phrase words
+		let nwords = ntext.split(" "); //normalized phrase words
+		let qwords = query.split(" "); //normalized query words
+		let hwords = []; //highlighted words indices
 
-		nwords.forEach((word, index, arr) => {
+		for (let n = 0; n <= nwords.length - qwords.length; n++) {
+			let found = true;
+
+			for (let q = 0; q < qwords.length; q++) {
+				if (nwords[n + q].match(qwords[q])) {
+					continue;
+				}
+				found = false;
+			}
+
+			if (!found) {
+				continue;
+			}
+
+			//all qwords matched
 			for (let i = 0; i < qwords.length; i++) {
-				if (!arr[index + i].match(qwords[i])) {
-					return; //no match
+				if (!hwords.includes(n + i)) {
+					hwords.push(n + i);
 				}
 			}
-			//both words matched
-			//TODO: skip multiple words
-			for (let i = 0; i < qwords.length; i++) {
-				if (!hwords.includes(index + i)) {
-					hwords.push(index + i);
-				}
-			}
-		});
+			//skip multiple words
+			n += qwords.length - 1;
+		}
 
 		let ret = words.reduce((result, word, index) => {
 			if (hwords.includes(index)) {
