@@ -30,6 +30,9 @@ const Utils = {
 				topRecentBtn.focus();
 			}
 		}, 50);
+	},
+	hilightSearch: (text, query) => {
+		return text;
 	}
 };
 

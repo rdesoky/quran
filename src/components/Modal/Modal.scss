@@ -29,6 +29,11 @@
 	.ModalContent {
 		transition: opacity 0.5s, top 0.5s, left 0.2s, right 0.2s;
 		opacity: 1;
+		top: 0;
+		&.HiddenPopup {
+			top: -100%;
+			opacity: 0;
+		}
 	}
 }
 
@@ -37,7 +42,7 @@
 	position: absolute;
 	// transition: left right 0.3s;
 	// left: 0;
-	top: 0;
+	// top: 0;
 	right: 0;
 	padding: 0 25px 25px 25px;
 	background-color: rgba(0, 0, 0, 0.8);

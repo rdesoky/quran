@@ -3,6 +3,7 @@ import Modal from "./Modal";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "./../../context/App";
+import Utils from "./../../services/utils";
 
 let verseList = [];
 let normalizedList = [];
@@ -41,7 +42,7 @@ const Search = ({ onClose, appContext }) => {
 	const gotoAya = e => {
 		const aya = e.target.getAttribute("aya");
 		if (appContext.pagesCount == 1) {
-			onClose();
+			appContext.closePopup();
 		}
 		appContext.gotoAya(parseInt(aya));
 		addToSearchHistory();
@@ -89,7 +90,9 @@ const Search = ({ onClose, appContext }) => {
 											{sura_names.split(",")[ayaInfo.sura] +
 												` (${ayaInfo.aya + 1})`}
 										</span>
-										<span className="ResultText link">{text}</span>
+										<span className="ResultText link">
+											{Utils.hilightSearch(text)}
+										</span>
 									</button>
 								</li>
 							)}

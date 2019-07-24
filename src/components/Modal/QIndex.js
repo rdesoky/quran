@@ -4,7 +4,7 @@ import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";
 
-const QIndex = ({ open, onClose, appContext }) => {
+const QIndex = ({ open, appContext }) => {
 	const getSuraNames = () => {
 		let suraNames = [];
 		for (let i = 1; i <= 114; i++) {
@@ -17,7 +17,7 @@ const QIndex = ({ open, onClose, appContext }) => {
 		appContext.hideMask();
 		let index = parseInt(target.getAttribute("sura"));
 		appContext.gotoSura(index);
-		onClose();
+		appContext.closePopup();
 	};
 
 	let tableRoot;
@@ -33,7 +33,7 @@ const QIndex = ({ open, onClose, appContext }) => {
 
 	const { appWidth, pagesCount } = appContext;
 	return (
-		<Modal open={open} onClose={onClose}>
+		<Modal>
 			<div className="Title">
 				<FormattedMessage id="index" />
 			</div>

@@ -11,7 +11,8 @@ const Modal = ({ onClose, children, appContext }) => {
 		if (typeof onClose === "function") {
 			onClose(e);
 		}
-		appContext.setPopup(null);
+		//appContext.setPopup(null);
+		appContext.closePopup();
 		e.preventDefault();
 	};
 
@@ -39,7 +40,10 @@ const Modal = ({ onClose, children, appContext }) => {
 				className="ModalOverlay"
 				style={{
 					left: appContext.isNarrow ? 0 : 50,
-					pointerEvents: appContext.pagesCount > 1 ? "none" : "fill"
+					pointerEvents:
+						appContext.pagesCount > 1 || appContext.showPopup === false
+							? "none"
+							: "fill"
 				}}
 				onClick={onClickClose}
 			>
@@ -48,7 +52,10 @@ const Modal = ({ onClose, children, appContext }) => {
 						left: activeSide === 0 ? 0 : "50%",
 						right: activeSide === 0 && appContext.pagesCount === 2 ? "50%" : 0
 					}}
-					className="ModalContent"
+					className={
+						"ModalContent" +
+						(appContext.showPopup === false ? " HiddenPopup" : "")
+					}
 					onClick={cancelClose}
 				>
 					{children}
