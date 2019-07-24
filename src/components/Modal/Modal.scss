@@ -31,7 +31,7 @@
 		opacity: 1;
 		top: 0;
 		&.HiddenPopup {
-			top: -100%;
+			top: -20px;
 			opacity: 0;
 		}
 	}
@@ -208,6 +208,9 @@
 				text-align: right;
 				font-size: 16px;
 				line-height: 25px;
+				.hiword {
+					color: yellow;
+				}
 			}
 		}
 	}
