@@ -146,7 +146,7 @@ class AppProvider extends Component {
 		setTimeout(() => {
 			this.setState({ popup: null });
 			Utils.selectTopCommand();
-		}, 250);
+		}, 500);
 	};
 
 	nextPage = () => {

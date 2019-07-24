@@ -5,9 +5,6 @@ import { FormattedMessage } from "react-intl";
 import { withAppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
 
-let verseList = [];
-let normalizedList = [];
-
 const Search = ({ onClose, appContext }) => {
 	const input = useRef(null);
 	const [searchTerm, setSearchTerm] = useState(
@@ -19,7 +16,7 @@ const Search = ({ onClose, appContext }) => {
 	const [results, setResults] = useState([]);
 	const [pages, setPages] = useState(1);
 
-	let searchForm, resultsDiv;
+	let resultsDiv;
 
 	useEffect(() => {
 		let textInput = input.current;
@@ -66,6 +63,7 @@ const Search = ({ onClose, appContext }) => {
 	// 	}
 	// };
 
+	const nSearchTerm = Utils.normalizeText(searchTerm);
 	const renderResults = () => {
 		// if (!results.length) {
 		// 	return;
@@ -79,7 +77,7 @@ const Search = ({ onClose, appContext }) => {
 					resultsDiv = ref;
 				}}
 			>
-				{page.map(({ aya, text }, i) => {
+				{page.map(({ aya, text, ntext }, i) => {
 					const ayaInfo = QData.ayaIdInfo(aya);
 					return (
 						<FormattedMessage id="sura_names" key={i}>
@@ -90,10 +88,17 @@ const Search = ({ onClose, appContext }) => {
 											{sura_names.split(",")[ayaInfo.sura] +
 												` (${ayaInfo.aya + 1})`}
 										</span>
-										<span className="ResultText link">
-											{Utils.hilightSearch(text)}
-										</span>
+										<span
+											className="ResultText link"
+											dangerouslySetInnerHTML={Utils.hilightSearch(
+												nSearchTerm,
+												text,
+												ntext
+											)}
+										/>
 									</button>
+									{/* <div>{text}</div>
+									<div>{ntext}</div> */}
 								</li>
 							)}
 						</FormattedMessage>
@@ -118,13 +123,13 @@ const Search = ({ onClose, appContext }) => {
 
 	const doSearch = searchTerm => {
 		let sResults = [];
-		let normSearchTerm = QData.normalizeText(searchTerm);
+		let normSearchTerm = Utils.normalizeText(searchTerm);
 		const verseList = appContext.verseList();
 		if (verseList.length > 0 && normSearchTerm.length > 2) {
 			localStorage.setItem("LastSearch", searchTerm);
-			sResults = appContext.normVerseList().reduce((results, text, aya) => {
-				if (text.includes(normSearchTerm)) {
-					results.push({ aya, text: verseList[aya] });
+			sResults = appContext.normVerseList().reduce((results, ntext, aya) => {
+				if (ntext.includes(normSearchTerm)) {
+					results.push({ aya, text: verseList[aya], ntext: ntext });
 				}
 				return results;
 			}, []);
@@ -149,9 +154,9 @@ const Search = ({ onClose, appContext }) => {
 			<form
 				id="SearchForm"
 				onSubmit={onSubmitSearch}
-				ref={form => {
-					searchForm = form;
-				}}
+				// ref={form => {
+				// 	searchForm = form;
+				// }}
 			>
 				<input
 					placeholder="Search suras' name or content"
