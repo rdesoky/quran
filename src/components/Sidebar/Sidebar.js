@@ -16,14 +16,14 @@ function Sidebar({ appContext, themeContext }) {
 		switch (id) {
 			case "Theme":
 				toggleTheme();
-				appContext.setPopup(null);
+				// appContext.setPopup(null);
 				break;
 			case "Mask":
 				appContext.setMaskStart();
-				appContext.setPopup(null);
+				appContext.closePopup();
 				break;
 			case "Copy":
-				appContext.setPopup(null);
+				appContext.closePopup();
 				break;
 			case "Share":
 				break;

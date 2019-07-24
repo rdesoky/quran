@@ -84,7 +84,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 				return;
 		}
 		appContext.pushRecentCommand(command);
-		appContext.setPopup(null);
+		appContext.closePopup();
 	};
 
 	return (

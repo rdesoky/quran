@@ -11,9 +11,9 @@ import Settings from "./Settings";
 import Tafseer from "./Tafseer";
 
 function PopupView({ appContext }) {
-	const onClosePopup = () => {
-		appContext.setPopup(null);
-	};
+	// const onClosePopup = () => {
+	// 	appContext.setPopup(null);
+	// };
 
 	const componentMap = {
 		Commands,
@@ -33,7 +33,7 @@ function PopupView({ appContext }) {
 		if (Component === undefined) {
 			return null;
 		}
-		return <Component onClose={onClosePopup} />;
+		return <Component />;
 	};
 
 	return renderPopup();

@@ -142,7 +142,7 @@ function Pager({ match, appContext }) {
 			// 	break;
 			case "Escape":
 				if (appContext.popup !== null) {
-					appContext.setPopup(null);
+					appContext.closePopup();
 				} else if (appContext.maskStart !== -1) {
 					appContext.hideMask();
 				}

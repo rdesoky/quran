@@ -5,7 +5,7 @@ import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "./../../context/App";
 
-const GotoPage = ({ onClose, open, appContext }) => {
+const GotoPage = ({ open, appContext }) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const [pageNumber, updatePageNumber] = useState(
 		Utils.pageFromPath(appContext.location.pathname)
@@ -33,8 +33,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 		appContext.gotoPage(pageNum);
 		let ayaId = QData.pageAyaId(pageNum - 1);
 		appContext.selectAya(ayaId);
-		setIsOpen(false);
-		onClose();
+		appContext.closePopup();
 		e.preventDefault();
 	};
 
@@ -43,10 +42,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 		let part = parseInt(form["PartNumber"].value);
 		// const partInfo = QData.parts[part - 1];
 		appContext.gotoPart(part - 1);
-		// const ayaId = QData.ayaID(partInfo.s, partInfo.a);
-		// appContext.selectAya(ayaId);
-		setIsOpen(false);
-		onClose();
+		appContext.closePopup();
 		e.preventDefault();
 	};
 
@@ -59,7 +55,7 @@ const GotoPage = ({ onClose, open, appContext }) => {
 	};
 
 	return (
-		<Modal open={isOpen} onClose={onClose}>
+		<Modal>
 			<div className="Title">
 				<FormattedMessage id="goto" />
 			</div>

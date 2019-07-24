@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import QData from "../services/QData";
+import Utils from "./../services/utils";
 
 let rc = localStorage.getItem("recentCommands");
 
@@ -11,6 +12,7 @@ const AppState = {
 	pagesCount: 2,
 	showMenu: false,
 	popup: null,
+	showPopup: false,
 	selectStart: 0,
 	selectEnd: 0,
 	maskStart: -1,
@@ -124,7 +126,7 @@ class AppProvider extends Component {
 	setShowMenu = showMenu => {
 		this.setState({ showMenu });
 		if (showMenu) {
-			this.setState({ popup: null });
+			this.setState({ showPopup: false });
 		}
 	};
 
@@ -133,10 +135,18 @@ class AppProvider extends Component {
 	};
 
 	setPopup = popup => {
-		this.setState({ popup, showMenu: null });
+		this.setState({ popup, showMenu: null, showPopup: true });
 		if (popup !== null && popup !== "Commands") {
 			this.pushRecentCommand(popup);
 		}
+	};
+
+	closePopup = () => {
+		this.setState({ showPopup: false });
+		setTimeout(() => {
+			this.setState({ popup: null });
+			Utils.selectTopCommand();
+		}, 250);
 	};
 
 	nextPage = () => {
@@ -259,7 +269,7 @@ class AppProvider extends Component {
 		pushRecentCommand: this.pushRecentCommand,
 		verseList: this.verseList,
 		normVerseList: this.normVerseList,
-		// setActivePage: this.setActivePage,
+		closePopup: this.closePopup,
 		getActiveSide: this.getActiveSide,
 		getCurrentPageIndex: this.getCurrentPageIndex
 	};
