@@ -243,6 +243,21 @@ class AppProvider extends Component {
 		return side;
 	};
 
+	getSelectedText = () => {
+		let { selectStart, selectEnd } = this.state;
+		if (selectStart > selectEnd) {
+			[selectStart, selectEnd] = [selectEnd, selectStart];
+		}
+		const verses = this.verseList()
+			.slice(selectStart, selectEnd + 1)
+			.map((t, i) => {
+				const { sura, aya } = QData.ayaIdInfo(selectStart + i);
+				return `${t} (${sura + 1}:${aya + 1})`;
+			});
+
+		return verses.join(" ");
+	};
+
 	methods = {
 		setShowMenu: this.setShowMenu,
 		toggleShowMenu: this.toggleShowMenu,
@@ -271,7 +286,8 @@ class AppProvider extends Component {
 		normVerseList: this.normVerseList,
 		closePopup: this.closePopup,
 		getActiveSide: this.getActiveSide,
-		getCurrentPageIndex: this.getCurrentPageIndex
+		getCurrentPageIndex: this.getCurrentPageIndex,
+		getSelectedText: this.getSelectedText
 	};
 
 	onResize = e => {
