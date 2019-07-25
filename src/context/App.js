@@ -317,31 +317,19 @@ class AppProvider extends Component {
 			height: window.innerHeight
 		});
 
-		fetch(`${process.env.PUBLIC_URL}/quran.xml`)
+		fetch(`${process.env.PUBLIC_URL}/quran.txt`)
 			.then(results => results.text())
-			.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
-			.then(xmlDoc => {
-				this._verseList = Array.prototype.map.call(
-					xmlDoc.getElementsByTagName("a"),
-					i => i.textContent
-				);
-				// normalizedList = verseList.map(t =>
-				// 	t.replace(new RegExp("\\p{M}", "gu"), "")
-				// );
-			});
+			.then(text => {
+				this._verseList = text.split("\n");
+			})
+			.catch(e => {});
 
-		fetch(`${process.env.PUBLIC_URL}/normalized_quran.xml`)
+		fetch(`${process.env.PUBLIC_URL}/normalized_quran.txt`)
 			.then(results => results.text())
-			.then(text => new window.DOMParser().parseFromString(text, "text/xml"))
-			.then(xmlDoc => {
-				this._normVerseList = Array.prototype.map.call(
-					xmlDoc.getElementsByTagName("a"),
-					i => i.textContent
-				);
-				// normalizedList = verseList.map(t =>
-				// 	t.replace(new RegExp("\\p{M}", "gu"), "")
-				// );
-			});
+			.then(text => {
+				this._normVerseList = text.split("\n");
+			})
+			.catch(e => {});
 	}
 
 	render() {
