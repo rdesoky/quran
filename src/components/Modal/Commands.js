@@ -94,7 +94,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 			</div>
 			<div className="CommandsList">
 				{list.map(command => (
-					<button onClick={e => runCommand(command)}>
+					<button key={command} onClick={e => runCommand(command)}>
 						<FontAwesomeIcon icon={CommandIcons[command]} />
 						<br />
 						<span className="CommandLabel">
