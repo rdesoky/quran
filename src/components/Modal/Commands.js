@@ -72,7 +72,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 				appContext.setMaskStart();
 				break;
 			case "Copy":
-				//Clipboard.writeText("Hello");
+				Utils.copy2Clipboard(appContext.getSelectedText());
 				break;
 			case "Share":
 				break;

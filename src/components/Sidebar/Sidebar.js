@@ -10,6 +10,7 @@ import { withAppContext } from "../../context/App";
 import { withThemeContext } from "../../context/Theme";
 import { CommandIcons } from "./../Modal/Commands";
 import Utils from "../../services/utils";
+import QData from "../../services/QData";
 
 function Sidebar({ appContext, themeContext }) {
 	const onClick = (e, id) => {
@@ -23,7 +24,7 @@ function Sidebar({ appContext, themeContext }) {
 				appContext.closePopup();
 				break;
 			case "Copy":
-				appContext.closePopup();
+				Utils.copy2Clipboard(appContext.getSelectedText());
 				break;
 			case "Share":
 				break;

@@ -161,6 +161,7 @@ const Search = ({ onClose, appContext }) => {
 				<input
 					placeholder="Search suras' name or content"
 					className="SearchInput"
+					inputmode="search"
 					ref={input}
 					type="text"
 					value={searchTerm}

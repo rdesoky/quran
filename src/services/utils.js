@@ -69,7 +69,7 @@ const Utils = {
 		}, "");
 		return { __html: ret };
 	},
-	normalizeText: function(t) {
+	normalizeText: t => {
 		let ret = t
 			.replace(/ {2}/g, " ")
 			.replace(new RegExp("\\p{M}", "gu"), "")
@@ -79,6 +79,16 @@ const Utils = {
 			.replace(/[ئي]/g, "ى");
 
 		return ret;
+	},
+	copy2Clipboard: t => {
+		navigator.clipboard.writeText(t).then(
+			p => {
+				console.log(`${t} is successfully copied to clipboard`);
+			},
+			e => {
+				console.log(e.message);
+			}
+		);
 	}
 };
 
