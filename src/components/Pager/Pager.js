@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import QData from "../../services/QData";
 import "./Pager.scss";
+import Utils from "../../services/utils";
 
 function fnPageRedirect({ match, appContext }) {
 	let { aya } = match.params;
@@ -140,6 +141,10 @@ function Pager({ match, appContext }) {
 			// 		appContext.setPopup("Tafseer");
 			// 	}
 			// 	break;
+			case "Insert":
+				Utils.copy2Clipboard(appContext.getSelectedText());
+				appContext.pushRecentCommand("Copy");
+				break;
 			case "Escape":
 				if (appContext.popup !== null) {
 					appContext.closePopup();
