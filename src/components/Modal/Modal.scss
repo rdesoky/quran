@@ -83,6 +83,11 @@
 		text-align: right;
 		input {
 			width: 100%;
+			color: white;
+			border: none;
+			font-size: 25px;
+			background-color: #ffffff30;
+			vertical-align: middle;
 		}
 	}
 	.FieldAction {
@@ -102,6 +107,9 @@
 			border: none;
 			color: white;
 			padding: 5px 15px;
+			font-size: 17px;
+			vertical-align: middle;
+
 			&:hover {
 				background-color: black;
 			}

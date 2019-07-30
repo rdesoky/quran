@@ -12,6 +12,7 @@ import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
 import { withThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
+import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -70,6 +71,7 @@ function App({ themeContext }) {
 								}}
 							/>
 						</Switch>
+						<AudioPlayer />
 						<Sidebar />
 						<PopupView />
 					</AppProvider>

@@ -20,8 +20,10 @@ const Search = ({ onClose, appContext }) => {
 
 	useEffect(() => {
 		let textInput = input.current;
-		textInput.focus();
-		textInput.select();
+		setTimeout(function() {
+			textInput.focus();
+			textInput.select();
+		}, 100);
 		doSearch(searchTerm);
 		return () => {
 			//unmount

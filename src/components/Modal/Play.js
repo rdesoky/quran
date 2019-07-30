@@ -11,6 +11,7 @@ const Play = (onClose, isOpen) => {
 			<div className="Title">
 				<FormattedMessage id="play" />
 			</div>
+			<button>Play</button>
 		</Modal>
 	);
 };
