@@ -17,8 +17,8 @@ const AppState = {
 	selectEnd: 0,
 	maskStart: -1,
 	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
-	playerVisible: false
-	//activePage: 0
+	playerVisible: false,
+	playingAya: 0
 };
 
 const AppContext = React.createContext(AppState);
@@ -263,6 +263,17 @@ class AppProvider extends Component {
 		this.setState({ playerVisible: show !== false });
 	};
 
+	setPlayingAya = playingAya => {
+		this.setState({ playingAya });
+	};
+
+	offsetPlayingAya = offset => {
+		//TODO: validate aya
+		const ayaId = this.playingAya + offset;
+		this.setState({ playingAya: ayaId });
+		return ayaId;
+	};
+
 	methods = {
 		showPlayer: this.showPlayer,
 		setShowMenu: this.setShowMenu,
@@ -293,7 +304,9 @@ class AppProvider extends Component {
 		closePopup: this.closePopup,
 		getActiveSide: this.getActiveSide,
 		getCurrentPageIndex: this.getCurrentPageIndex,
-		getSelectedText: this.getSelectedText
+		getSelectedText: this.getSelectedText,
+		setPlayingAya: this.setPlayingAya,
+		offsetPlayingAya: this.offsetPlayingAya
 	};
 
 	onResize = e => {

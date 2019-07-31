@@ -61,9 +61,9 @@ function App({ themeContext }) {
 								}}
 							/>
 						</Switch>
-						<AudioPlayer />
 						<Sidebar />
 						<PopupView />
+						<AudioPlayer />
 					</AppProvider>
 				</Router>
 			</div>

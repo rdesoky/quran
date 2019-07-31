@@ -6,13 +6,11 @@ import Transition from "./../../services/Transition";
 import "./Modal.scss";
 import Utils from "../../services/utils";
 
-const Modal = ({ onClose, children, appContext, show, name }) => {
+const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
 	const onClickClose = e => {
 		if (typeof onClose === "function") {
 			onClose(e);
 		}
-		//appContext.setPopup(null);
-		appContext.closePopup();
 		e.preventDefault();
 	};
 
@@ -42,7 +40,9 @@ const Modal = ({ onClose, children, appContext, show, name }) => {
 				style={{
 					left: appContext.isNarrow ? 0 : 50,
 					pointerEvents:
-						appContext.pagesCount > 1 || show === false ? "none" : "fill"
+						modeless === true || appContext.pagesCount > 1 || show === false
+							? "none"
+							: "fill"
 				}}
 				onClick={onClickClose}
 			>

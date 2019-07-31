@@ -151,6 +151,8 @@ function Pager({ match, appContext }) {
 			case "Escape":
 				if (appContext.popup !== null) {
 					appContext.closePopup();
+				} else if (appContext.playerVisible) {
+					appContext.showPlayer(false);
 				} else if (appContext.maskStart !== -1) {
 					appContext.hideMask();
 				}

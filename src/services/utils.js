@@ -1,6 +1,13 @@
 import QData from "./QData";
 
 const Utils = {
+	num2string: (num, length) => {
+		let ret = num.toString();
+		let zeros = length - ret.length;
+		let padding = zeros > 0 ? new Array(zeros + 1).join("0") : "";
+		return padding + ret;
+	},
+
 	pageFromPath: path => {
 		let matchPage = path.match(/\/page\/([0-9]+)/i);
 		if (matchPage) {
