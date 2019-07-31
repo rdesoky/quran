@@ -46,8 +46,10 @@ class AudioPlayer extends Component {
 		if (this.playingAya === appContext.selectStart) {
 			const ayaId = appContext.offsetSelection(1);
 			appContext.gotoAya(ayaId);
+			this.play();
+		} else {
+			this.stop();
 		}
-		this.play();
 	};
 
 	onVolumeChange = ({ target: player }) => {
@@ -97,39 +99,37 @@ class AudioPlayer extends Component {
 				name="AudioPlayer"
 				modeless={true}
 			>
+				<img
+					id="ReciterIcon"
+					src={process.env.PUBLIC_URL + "/images/baset.jpg"}
+				/>
 				<div className="Title">
-					{[PlayerState.paused].includes(audioState) ? (
-						<button onClick={this.resume}>|&lt;</button>
-					) : (
-						""
-					)}
-					{[PlayerState.stopped].includes(audioState) ? (
-						<button onClick={this.play}>&lt;</button>
-					) : (
-						""
-					)}
-					{[PlayerState.playing, PlayerState.buffering].includes(audioState) ? (
-						<button onClick={this.pause}>||</button>
-					) : (
-						""
-					)}
-					{PlayerState.stopped !== audioState ? (
-						<button onClick={this.stop}>X</button>
-					) : (
-						""
-					)}
+					<div id="PlayerControl">
+						{[PlayerState.paused].includes(audioState) ? (
+							<button onClick={this.resume}>|&lt;</button>
+						) : (
+							""
+						)}
+						{[PlayerState.stopped].includes(audioState) ? (
+							<button onClick={this.play}>&lt;</button>
+						) : (
+							""
+						)}
+						{[PlayerState.playing, PlayerState.buffering].includes(
+							audioState
+						) ? (
+							<button onClick={this.pause}>||</button>
+						) : (
+							""
+						)}
+						{PlayerState.stopped !== audioState ? (
+							<button onClick={this.stop}>X</button>
+						) : (
+							""
+						)}
+					</div>
+					<div id="PlayerStatus">{this.renderState()}</div>
 				</div>
-				<div>
-					{/* <audio
-						controls
-						id="AudioPlayer"
-						ref={ref => {
-							this.player = ref;
-						}}
-						src={this.audioSource()}
-					/> */}
-				</div>
-				<div>{this.renderState()}</div>
 			</Modal>
 		);
 	}

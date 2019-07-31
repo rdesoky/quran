@@ -1,8 +1,17 @@
 #AudioPlayerPopup {
+	#ReciterIcon {
+		float: left;
+		width: auto;
+		height: 70px;
+	}
 	.ModalContent {
 		top: auto;
 		// bottom: 0;
 		background-color: #443322dd;
+		padding: 0 50px 0 0;
+		.Title {
+			margin: 5px;
+		}
 	}
 }
 .trans-start {
