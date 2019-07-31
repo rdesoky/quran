@@ -79,6 +79,9 @@ const Commands = ({ open, appContext, themeContext }) => {
 			case "Fullscreen":
 				Utils.requestFullScreen();
 				break;
+			case "Play":
+				appContext.showPlayer();
+				return;
 			default:
 				appContext.setPopup(command);
 				return;
@@ -88,7 +91,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 	};
 
 	return (
-		<Modal open={open}>
+		<>
 			<div className="Title">
 				<FormattedMessage id="commands" />
 			</div>
@@ -103,7 +106,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 					</button>
 				))}
 			</div>
-		</Modal>
+		</>
 	);
 };
 

@@ -141,6 +141,9 @@ function Pager({ match, appContext }) {
 			// 		appContext.setPopup("Tafseer");
 			// 	}
 			// 	break;
+			case "KeyP":
+				appContext.showPlayer(appContext.playerVisible === false);
+				break;
 			case "Insert":
 				Utils.copy2Clipboard(appContext.getSelectedText());
 				appContext.pushRecentCommand("Copy");

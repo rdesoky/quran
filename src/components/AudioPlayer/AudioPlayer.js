@@ -7,9 +7,18 @@ import {
 	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
 import { withAppContext } from "../../context/App";
+import Modal from "../Modal/Modal";
 
-function AudioPlayer(props) {
-	return <div id="xaudio-player">Audio Player</div>;
+function AudioPlayer({ appContext }) {
+	const onClose = () => {
+		appContext.showPlayer(false);
+	};
+
+	return (
+		<Modal onClose={onClose} show={appContext.playerVisible} name="AudioPlayer">
+			<div className="Title">Audio Player</div>
+		</Modal>
+	);
 }
 
 export default withAppContext(AudioPlayer);

@@ -9,12 +9,9 @@ import Hifz from "./Hifz";
 import Help from "./Help";
 import Settings from "./Settings";
 import Tafseer from "./Tafseer";
+import Modal from "./Modal";
 
 function PopupView({ appContext }) {
-	// const onClosePopup = () => {
-	// 	appContext.setPopup(null);
-	// };
-
 	const componentMap = {
 		Commands,
 		Goto: GotoPage,
@@ -27,16 +24,22 @@ function PopupView({ appContext }) {
 		Tafseer
 	};
 
-	const renderPopup = () => {
-		let { popup } = appContext;
-		let Component = componentMap[popup];
-		if (Component === undefined) {
-			return null;
-		}
-		return <Component />;
+	const onClose = () => {
+		appContext.closePopup();
 	};
 
-	return renderPopup();
+	const { popup, showPopup } = appContext;
+	const Component = componentMap[popup];
+
+	if (Component !== undefined) {
+		return (
+			<Modal onClose={onClose} show={showPopup} name={popup}>
+				<Component />
+			</Modal>
+		);
+	}
+
+	return null;
 }
 
 export default withAppContext(PopupView);

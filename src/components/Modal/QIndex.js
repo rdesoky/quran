@@ -33,7 +33,7 @@ const QIndex = ({ open, appContext }) => {
 
 	const { appWidth, pagesCount } = appContext;
 	return (
-		<Modal>
+		<>
 			<div className="Title">
 				<FormattedMessage id="index" />
 			</div>
@@ -60,7 +60,7 @@ const QIndex = ({ open, appContext }) => {
 					);
 				})}
 			</ul>
-		</Modal>
+		</>
 	);
 };
 

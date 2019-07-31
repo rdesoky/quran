@@ -7,11 +7,9 @@ import { withAppContext } from "../../context/App";
 
 const Settings = (onClose, isOpen) => {
 	return (
-		<Modal open={isOpen} onClose={onClose}>
-			<div className="Title">
-				<FormattedMessage id="settings" />
-			</div>
-		</Modal>
+		<div className="Title">
+			<FormattedMessage id="settings" />
+		</div>
 	);
 };
 

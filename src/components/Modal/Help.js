@@ -5,13 +5,13 @@ import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";
 
-const Help = (onClose, isOpen) => {
+const Help = () => {
 	return (
-		<Modal open={isOpen} onClose={onClose}>
+		<>
 			<div className="Title">
 				<FormattedMessage id="help" />
 			</div>
-		</Modal>
+		</>
 	);
 };
 
