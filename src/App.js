@@ -18,9 +18,7 @@ import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
 //import en_strings from "./translations/en.json"
 
 function App({ themeContext }) {
-	// const [popup, updatePopup] = useState(null);
 	const [locale, setLocale] = useState(localStorage.getItem("locale") || "ar");
-	// const [theme, setTheme] = useState(localStorage.getItem("theme") || "Dark");
 
 	//Handles componentDidMount/unmount, props changes
 	useEffect(() => {
@@ -43,17 +41,14 @@ function App({ themeContext }) {
 						<Switch>
 							<Route
 								path={process.env.PUBLIC_URL + "/page/:page"}
-								// path="/page/:page"
 								component={Pager}
 							/>
 							<Route
 								path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
-								// path="/sura/:sura/aya/:aya"
 								component={Pager}
 							/>
 							<Route
 								path={process.env.PUBLIC_URL + "/aya/:aya"}
-								// path="/aya/:aya"
 								component={PageRedirect}
 							/>
 							<Route
@@ -62,12 +57,7 @@ function App({ themeContext }) {
 									console.log(
 										`PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
 									);
-									return (
-										<Redirect
-											to={defUrl}
-											// to={defUrl}
-										/>
-									);
+									return <Redirect to={defUrl} />;
 								}}
 							/>
 						</Switch>

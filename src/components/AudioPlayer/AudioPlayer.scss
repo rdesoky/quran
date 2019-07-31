@@ -1,8 +1,6 @@
-#audio-player {
-	position: absolute;
-	background-color: #00000044;
-	top: 25px;
-	right: 0;
-	width: 200px;
-	height: 50px;
+#AudioPlayerPopup {
+	.ModalContent {
+		top: auto;
+		bottom: 0;
+	}
 }

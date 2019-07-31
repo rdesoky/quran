@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl";
 import { withAppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
 
-const Search = ({ onClose, appContext }) => {
+const Search = ({ appContext }) => {
 	const input = useRef(null);
 	const [searchTerm, setSearchTerm] = useState(
 		localStorage.getItem("LastSearch") || ""
@@ -149,7 +149,7 @@ const Search = ({ onClose, appContext }) => {
 	};
 
 	return (
-		<Modal onClose={onClose}>
+		<>
 			<div className="Title">
 				<FormattedMessage id="search" />
 			</div>
@@ -195,7 +195,7 @@ const Search = ({ onClose, appContext }) => {
 				</FormattedMessage>
 			</div>
 			{renderResults()}
-		</Modal>
+		</>
 	);
 };
 

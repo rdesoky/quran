@@ -30,6 +30,9 @@ function Sidebar({ appContext, themeContext }) {
 			case "Fullscreen":
 				Utils.requestFullScreen();
 				return;
+			case "Play":
+				appContext.showPlayer();
+				return;
 			case "Tafseer":
 				appContext.selectAya();
 			default:

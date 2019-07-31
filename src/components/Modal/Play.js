@@ -5,14 +5,16 @@ import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";
 
-const Play = (onClose, isOpen) => {
+const Play = () => {
 	return (
-		<Modal open={isOpen} onClose={onClose}>
+		<>
 			<div className="Title">
 				<FormattedMessage id="play" />
 			</div>
-			<button>Play</button>
-		</Modal>
+			<div>
+				<button>Play</button>
+			</div>
+		</>
 	);
 };
 

@@ -101,7 +101,7 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 	const ayaInfo = QData.ayaIdInfo(appContext.selectStart);
 
 	return (
-		<Modal open={isOpen} onClose={onClose}>
+		<>
 			<div className="Title">
 				<button onClick={e => offsetSelection(-1)}>
 					<FontAwesomeIcon icon={faAngleRight} />
@@ -128,7 +128,7 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 					{renderTafseer()}
 				</p>
 			</div>
-		</Modal>
+		</>
 	);
 };
 

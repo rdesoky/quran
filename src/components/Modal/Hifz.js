@@ -5,13 +5,14 @@ import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { withAppContext } from "../../context/App";
 
-const Hifz = (onClose, isOpen) => {
+const Hifz = () => {
 	return (
-		<Modal open={isOpen} onClose={onClose}>
+		<>
 			<div className="Title">
 				<FormattedMessage id="favorites" />
 			</div>
-		</Modal>
+			<div>Favorites are shown here.</div>
+		</>
 	);
 };
 

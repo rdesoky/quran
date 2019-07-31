@@ -16,7 +16,8 @@ const AppState = {
 	selectStart: 0,
 	selectEnd: 0,
 	maskStart: -1,
-	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"]
+	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
+	playerVisible: false
 	//activePage: 0
 };
 
@@ -258,7 +259,12 @@ class AppProvider extends Component {
 		return verses.join(" ");
 	};
 
+	showPlayer = show => {
+		this.setState({ playerVisible: show !== false });
+	};
+
 	methods = {
+		showPlayer: this.showPlayer,
 		setShowMenu: this.setShowMenu,
 		toggleShowMenu: this.toggleShowMenu,
 		setPopup: this.setPopup,

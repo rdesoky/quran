@@ -6,7 +6,7 @@ import Transition from "./../../services/Transition";
 import "./Modal.scss";
 import Utils from "../../services/utils";
 
-const Modal = ({ onClose, children, appContext }) => {
+const Modal = ({ onClose, children, appContext, show, name }) => {
 	const onClickClose = e => {
 		if (typeof onClose === "function") {
 			onClose(e);
@@ -16,7 +16,7 @@ const Modal = ({ onClose, children, appContext }) => {
 		e.preventDefault();
 	};
 
-	const cancelClose = e => {
+	const preventClose = e => {
 		e.stopPropagation();
 	};
 
@@ -37,13 +37,12 @@ const Modal = ({ onClose, children, appContext }) => {
 	return (
 		<Transition>
 			<div
+				id={`${name}Popup`}
 				className="ModalOverlay"
 				style={{
 					left: appContext.isNarrow ? 0 : 50,
 					pointerEvents:
-						appContext.pagesCount > 1 || appContext.showPopup === false
-							? "none"
-							: "fill"
+						appContext.pagesCount > 1 || show === false ? "none" : "fill"
 				}}
 				onClick={onClickClose}
 			>
@@ -52,11 +51,8 @@ const Modal = ({ onClose, children, appContext }) => {
 						left: activeSide === 0 ? 0 : "50%",
 						right: activeSide === 0 && appContext.pagesCount === 2 ? "50%" : 0
 					}}
-					className={
-						"ModalContent" +
-						(appContext.showPopup === false ? " HiddenPopup" : "")
-					}
-					onClick={cancelClose}
+					className={"ModalContent" + (show === false ? " HiddenPopup" : "")}
+					onClick={preventClose}
 				>
 					{children}
 					<button className="CancelButton" onClick={onClickClose}>
