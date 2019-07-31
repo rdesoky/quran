@@ -4,7 +4,7 @@
 	top: 0;
 	right: 0;
 	bottom: 25px;
-	overflow: auto;
+	overflow: hidden;
 }
 
 .CancelButton {
@@ -27,7 +27,7 @@
 }
 .trans-end {
 	.ModalContent {
-		transition: opacity 0.5s, top 0.5s, left 0.2s, right 0.2s;
+		transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
 		opacity: 1;
 		top: 0;
 		&.HiddenPopup {

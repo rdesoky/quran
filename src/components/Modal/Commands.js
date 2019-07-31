@@ -81,7 +81,7 @@ const Commands = ({ open, appContext, themeContext }) => {
 				break;
 			case "Play":
 				appContext.showPlayer();
-				return;
+				break;
 			default:
 				appContext.setPopup(command);
 				return;

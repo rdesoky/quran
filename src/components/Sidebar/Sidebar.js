@@ -32,7 +32,7 @@ function Sidebar({ appContext, themeContext }) {
 				return;
 			case "Play":
 				appContext.showPlayer();
-				return;
+				break;
 			case "Tafseer":
 				appContext.selectAya();
 			default:

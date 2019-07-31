@@ -28,6 +28,9 @@ const QData = {
 		return id;
 	},
 
+	/**
+	 * Returns sura and aya indices given AyaId
+	 */
 	ayaIdInfo: aya_id => {
 		let id = 0;
 		for (var s = 0; s < QData.sura_info.length; s++) {

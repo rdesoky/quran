@@ -1,6 +1,26 @@
 #AudioPlayerPopup {
 	.ModalContent {
 		top: auto;
-		bottom: 0;
+		// bottom: 0;
+		background-color: #443322dd;
+	}
+}
+.trans-start {
+	#AudioPlayerPopup {
+		.ModalContent {
+			bottom: -20px;
+		}
+	}
+}
+
+.trans-end {
+	#AudioPlayerPopup {
+		.ModalContent {
+			bottom: 0;
+			&.HiddenPopup {
+				top: auto;
+				bottom: -20px;
+			}
+		}
 	}
 }
