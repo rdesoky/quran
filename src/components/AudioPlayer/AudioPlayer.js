@@ -19,22 +19,22 @@ const PlayerState = {
 	buffering: 3,
 	error: 4
 };
-
 class AudioPlayer extends Component {
 	state = { audioState: PlayerState.stopped };
 	player;
-	playingAya;
+	// playingAya;
 
 	constructor(props) {
 		super(props);
 		this.player = document.createElement("audio");
 	}
 
-	audioSource() {
+	audioSource(ayaId) {
 		const { appContext } = this.props;
 
-		// const { sura, aya } = QData.ayaIdInfo(appContext.playingAya);
-		const { sura, aya } = QData.ayaIdInfo(appContext.selectStart);
+		const { sura, aya } = QData.ayaIdInfo(
+			ayaId !== undefined ? ayaId : appContext.playingAya
+		);
 		const fileName =
 			Utils.num2string(sura + 1, 3) + Utils.num2string(aya + 1, 3);
 		return `http://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/${fileName}.mp3`;
@@ -43,12 +43,17 @@ class AudioPlayer extends Component {
 	onEnded = ({ target: player }) => {
 		const { appContext } = this.props;
 		//const ayaId = appContext.offsetPlayingAya(1);
-		if (this.playingAya === appContext.selectStart) {
-			const ayaId = appContext.offsetSelection(1);
-			appContext.gotoAya(ayaId);
+		// if (this.playingAya === appContext.selectStart) {
+		// 	const ayaId = appContext.offsetSelection(1);
+		// 	appContext.gotoAya(ayaId);
+		// 	this.play();
+		// } else {
+		// 	this.stop();
+		// }
+		if (this.state.audioState !== PlayerState.stopped) {
+			const ayaId = appContext.offsetPlayingAya(1);
 			this.play();
-		} else {
-			this.stop();
+			appContext.gotoAya(ayaId);
 		}
 	};
 
@@ -81,7 +86,7 @@ class AudioPlayer extends Component {
 		player.addEventListener("pause", this.onPaused);
 	}
 
-	componentDidUnmount() {
+	componentWillUnmount() {
 		const player = this.player;
 		player.removeEventListener("ended", this.onEnded);
 		player.removeEventListener("volumechange", this.onVolumeChange);
@@ -135,7 +140,10 @@ class AudioPlayer extends Component {
 	}
 
 	renderState = () => {
-		let { sura, aya } = QData.ayaIdInfo(this.playingAya);
+		const { appContext } = this.props;
+		const { selectStart, playingAya } = appContext;
+		let ayaId = playingAya === -1 ? selectStart : playingAya;
+		let { sura, aya } = QData.ayaIdInfo(ayaId);
 		let audioState = "unknown";
 		switch (this.state.audioState) {
 			case PlayerState.stopped:
@@ -175,9 +183,13 @@ class AudioPlayer extends Component {
 	};
 	play = event => {
 		const { appContext } = this.props;
-		this.player.src = this.audioSource();
+		const playingAya =
+			appContext.playingAya == -1
+				? appContext.setPlayingAya(appContext.selectStart)
+				: appContext.playingAya;
+
+		this.player.src = this.audioSource(playingAya);
 		this.player.play();
-		this.playingAya = appContext.selectStart;
 	};
 	resume = event => {
 		this.player.play();
@@ -185,6 +197,7 @@ class AudioPlayer extends Component {
 	stop = event => {
 		this.player.pause();
 		this.setState({ audioState: PlayerState.stopped });
+		this.props.appContext.setPlayingAya(-1);
 	};
 
 	pause = event => {
