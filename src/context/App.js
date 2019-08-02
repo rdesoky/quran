@@ -227,11 +227,13 @@ class AppProvider extends Component {
 		this.selectAya(ayaId);
 	};
 
-	gotoAya = ayaId => {
-		this.selectAya(ayaId);
+	gotoAya = (ayaId, sel = true) => {
+		if (sel) {
+			this.selectAya(ayaId);
+			this.hideMask();
+		}
 		const pageIndex = QData.ayaIdPage(ayaId);
 		this.gotoPage(pageIndex + 1);
-		this.hideMask();
 	};
 
 	// setActivePage = activePage => {

@@ -98,7 +98,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 			}
 		}
 		if (aya_id === appContext.playingAya) {
-			className = " Playing";
+			className += " Playing";
 		}
 		return className.trim();
 	};
@@ -163,7 +163,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 			let aClass = ayaClass(aya_id);
 			let lines = [];
 
-			for (let i = parseInt(eline) - 1; i > parseInt(sline); i--) {
+			for (let i = parseInt(sline) + 1; i < parseInt(eline); i++) {
 				lines.push(i);
 			}
 
@@ -198,9 +198,9 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	const verseStructure = verse => {
 		return (
 			<>
-				{verseTail(verse)}
-				{verseBody(verse)}
 				{verseHead(verse)}
+				{verseBody(verse)}
+				{verseTail(verse)}
 			</>
 		);
 	};
