@@ -29,6 +29,7 @@
 			top: 0;
 			height: 100%;
 			.Verse {
+				box-sizing: border-box;
 				position: absolute;
 				&.Hovered {
 					border-bottom: solid 2px silver;

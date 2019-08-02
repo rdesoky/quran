@@ -53,7 +53,7 @@ class AudioPlayer extends Component {
 		if (this.state.audioState !== PlayerState.stopped) {
 			const ayaId = appContext.offsetPlayingAya(1);
 			this.play();
-			appContext.gotoAya(ayaId);
+			appContext.gotoAya(ayaId, false);
 		}
 	};
 
@@ -76,6 +76,27 @@ class AudioPlayer extends Component {
 		}
 	};
 
+	handleKeyDown = e => {
+		switch (e.code) {
+			case "Space": {
+				switch (this.state.audioState) {
+					case PlayerState.paused:
+						this.resume(e);
+						break;
+					case PlayerState.stopped:
+						this.play(e);
+						break;
+					case PlayerState.playing:
+						this.pause(e);
+						break;
+					default:
+						break;
+				}
+				this.gotoPlayingAya(e);
+			}
+		}
+	};
+
 	componentDidMount() {
 		this.playingAya = this.props.appContext.selectStart;
 		const player = this.player;
@@ -84,16 +105,92 @@ class AudioPlayer extends Component {
 		player.addEventListener("playing", this.onPlaying);
 		player.addEventListener("waiting", this.onWaiting);
 		player.addEventListener("pause", this.onPaused);
+		document.addEventListener("keydown", this.handleKeyDown);
 	}
 
 	componentWillUnmount() {
 		const player = this.player;
+		document.removeEventListener("keydown", this.handleKeyDown);
 		player.removeEventListener("ended", this.onEnded);
 		player.removeEventListener("volumechange", this.onVolumeChange);
 		player.removeEventListener("playing", this.onPlaying);
 		player.removeEventListener("waiting", this.onWaiting);
 		player.removeEventListener("pause", this.onPaused);
 	}
+
+	play = event => {
+		const { appContext } = this.props;
+		const playingAya =
+			appContext.playingAya == -1
+				? appContext.setPlayingAya(appContext.selectStart)
+				: appContext.playingAya;
+
+		this.player.src = this.audioSource(playingAya);
+		this.player.play();
+	};
+	resume = event => {
+		this.player.play();
+	};
+	stop = event => {
+		this.player.pause();
+		this.setState({ audioState: PlayerState.stopped });
+		this.props.appContext.setPlayingAya(-1);
+	};
+
+	pause = event => {
+		this.player.pause();
+	};
+	renderState = () => {
+		const { appContext } = this.props;
+		const { selectStart, playingAya } = appContext;
+		let ayaId = playingAya === -1 ? selectStart : playingAya;
+		let { sura, aya } = QData.ayaIdInfo(ayaId);
+		let audioState = "unknown";
+		switch (this.state.audioState) {
+			case PlayerState.stopped:
+				audioState = "stopped";
+				break;
+			case PlayerState.buffering:
+				audioState = "buffering";
+				break;
+			case PlayerState.playing:
+				audioState = "playing";
+				break;
+			case PlayerState.paused:
+				audioState = "paused";
+				break;
+			case PlayerState.error:
+				audioState = "error";
+				break;
+			default:
+				break;
+		}
+		return (
+			<button onClick={this.gotoPlayingAya}>
+				<FormattedMessage id={audioState} />
+				:&nbsp;
+				<FormattedMessage id="sura_names">
+					{sura_names => {
+						return sura_names.split(",")[sura] + "-" + (aya + 1);
+					}}
+				</FormattedMessage>
+			</button>
+		);
+	};
+
+	gotoPlayingAya = event => {
+		const { appContext } = this.props;
+		const { playingAya, selectStart } = appContext;
+		const ayaId = playingAya !== -1 ? playingAya : selectStart;
+		this.props.appContext.gotoAya(ayaId, false);
+		this.props.appContext.showPlayer();
+	};
+
+	onClose = () => {
+		const { appContext } = this.props;
+		appContext.showPlayer(false);
+	};
+
 	render() {
 		const { appContext } = this.props;
 		const audioState = this.state.audioState;
@@ -138,71 +235,6 @@ class AudioPlayer extends Component {
 			</Modal>
 		);
 	}
-
-	renderState = () => {
-		const { appContext } = this.props;
-		const { selectStart, playingAya } = appContext;
-		let ayaId = playingAya === -1 ? selectStart : playingAya;
-		let { sura, aya } = QData.ayaIdInfo(ayaId);
-		let audioState = "unknown";
-		switch (this.state.audioState) {
-			case PlayerState.stopped:
-				audioState = "stopped";
-				break;
-			case PlayerState.buffering:
-				audioState = "buffering";
-				break;
-			case PlayerState.playing:
-				audioState = "playing";
-				break;
-			case PlayerState.paused:
-				audioState = "paused";
-				break;
-			case PlayerState.error:
-				audioState = "error";
-				break;
-			default:
-				break;
-		}
-		return (
-			<>
-				<FormattedMessage id={audioState} />
-				:&nbsp;
-				<FormattedMessage id="sura_names">
-					{sura_names => {
-						return sura_names.split(",")[sura] + "-" + (aya + 1);
-					}}
-				</FormattedMessage>
-			</>
-		);
-	};
-
-	onClose = () => {
-		const { appContext } = this.props;
-		appContext.showPlayer(false);
-	};
-	play = event => {
-		const { appContext } = this.props;
-		const playingAya =
-			appContext.playingAya == -1
-				? appContext.setPlayingAya(appContext.selectStart)
-				: appContext.playingAya;
-
-		this.player.src = this.audioSource(playingAya);
-		this.player.play();
-	};
-	resume = event => {
-		this.player.play();
-	};
-	stop = event => {
-		this.player.pause();
-		this.setState({ audioState: PlayerState.stopped });
-		this.props.appContext.setPlayingAya(-1);
-	};
-
-	pause = event => {
-		this.player.pause();
-	};
 }
 
 export default withAppContext(AudioPlayer);
