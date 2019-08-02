@@ -97,6 +97,9 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 				className += " Selected";
 			}
 		}
+		if (aya_id === appContext.playingAya) {
+			className = " Playing";
+		}
 		return className.trim();
 	};
 
@@ -158,37 +161,46 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
 		if (eline - sline > 1) {
 			let aClass = ayaClass(aya_id);
-			return (
-				<div
-					onClick={onClickVerse}
-					onMouseEnter={onMouseEnter}
-					onMouseLeave={onMouseLeave}
-					onContextMenu={onContextMenu}
-					aya-id={aya_id}
-					sura={sura}
-					aya={aya}
-					sline={sline}
-					eline={eline}
-					spos={spos}
-					epos={epos}
-					className={["Verse VerseBody", aClass].join(" ").trim()}
-					style={{
-						height: lineHeight * (eline - sline - 1),
-						top: ((parseInt(sline) + 1) * pageHeight) / 15,
-						right: 0,
-						left: 0
-					}}
-				/>
-			);
+			let lines = [];
+
+			for (let i = parseInt(eline) - 1; i > parseInt(sline); i--) {
+				lines.push(i);
+			}
+
+			return lines.map(line => {
+				return (
+					<div
+						key={line}
+						onClick={onClickVerse}
+						onMouseEnter={onMouseEnter}
+						onMouseLeave={onMouseLeave}
+						onContextMenu={onContextMenu}
+						aya-id={aya_id}
+						sura={sura}
+						aya={aya}
+						sline={sline}
+						eline={eline}
+						spos={spos}
+						epos={epos}
+						className={["Verse VerseBody", aClass].join(" ").trim()}
+						style={{
+							height: lineHeight,
+							top: (line * pageHeight) / 15,
+							right: 0,
+							left: 0
+						}}
+					/>
+				);
+			});
 		}
 	};
 
 	const verseStructure = verse => {
 		return (
 			<>
-				{verseHead(verse)}
-				{verseBody(verse)}
 				{verseTail(verse)}
+				{verseBody(verse)}
+				{verseHead(verse)}
 			</>
 		);
 	};

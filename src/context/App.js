@@ -18,7 +18,7 @@ const AppState = {
 	maskStart: -1,
 	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
 	playerVisible: false,
-	playingAya: 0
+	playingAya: -1
 };
 
 const AppContext = React.createContext(AppState);
@@ -265,13 +265,14 @@ class AppProvider extends Component {
 
 	setPlayingAya = playingAya => {
 		this.setState({ playingAya });
+		return playingAya;
 	};
 
 	offsetPlayingAya = offset => {
 		//TODO: validate aya
-		const ayaId = this.playingAya + offset;
-		this.setState({ playingAya: ayaId });
-		return ayaId;
+		const playingAya = this.state.playingAya + offset;
+		this.setState({ playingAya });
+		return playingAya;
 	};
 
 	methods = {

@@ -31,13 +31,17 @@
 			.Verse {
 				position: absolute;
 				&.Hovered {
-					background-color: #ffffff28;
+					border-bottom: solid 2px silver;
+					//background-color: #ffffff28;
 					// border-width: 0 4px;
 					// border-color: rgba(0, 0, 0, 0.2);
 					// border-style: solid;
 				}
 				&.Selected {
 					background-color: white;
+				}
+				&.Playing {
+					border-bottom: solid 2px green;
 				}
 			}
 		}
