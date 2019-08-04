@@ -1,21 +1,21 @@
 import React from "react";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import { FormattedMessage } from "react-intl";
 
-const PageFooter = ({ index: pageIndex, appContext, order }) => {
+const PageFooter = ({ index: pageIndex, app, order }) => {
 	const showGotoPopup = e => {
-		appContext.setPopup("Goto");
+		app.setPopup("Goto");
 	};
 
 	let textAlign =
-		appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+		app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 	return (
 		<div className="PageFooter" style={{ textAlign }}>
 			<div
 				style={{
-					width: appContext.pageWidth(),
-					margin: appContext.pageMargin()
+					width: app.pageWidth(),
+					margin: app.pageMargin()
 				}}
 				className="PageHeaderContent"
 			>
@@ -31,4 +31,4 @@ const PageFooter = ({ index: pageIndex, appContext, order }) => {
 	);
 };
 
-export default withAppContext(PageFooter);
+export default AppConsumer(PageFooter);

@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,7 +13,7 @@ const TafseerList = [
 	{ id: "yusufali", name: "English", dir: "ltr", file: "en.yusufali.txt" }
 ];
 
-const Tafseer = ({ onClose, isOpen, appContext }) => {
+const Tafseer = ({ app }) => {
 	const [tafseer, setTafseer] = useState(
 		localStorage.getItem("tafseer") || "muyassar"
 	);
@@ -35,8 +35,8 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 	};
 
 	const offsetSelection = offset => {
-		const ayaId = appContext.offsetSelection(offset);
-		appContext.gotoAya(ayaId);
+		const ayaId = app.offsetSelection(offset);
+		app.gotoAya(ayaId);
 	};
 
 	useEffect(() => {
@@ -61,14 +61,14 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 	}, [tafseer]);
 
 	const renderVerse = () => {
-		const verseList = appContext.verseList();
-		if (verseList.length > appContext.selectStart) {
-			return verseList[appContext.selectStart];
+		const verseList = app.verseList();
+		if (verseList.length > app.selectStart) {
+			return verseList[app.selectStart];
 		}
 	};
 	const renderTafseer = () => {
-		if (tafseerData.length > appContext.selectStart) {
-			return tafseerData[appContext.selectStart];
+		if (tafseerData.length > app.selectStart) {
+			return tafseerData[app.selectStart];
 		}
 		return "Loading...";
 	};
@@ -98,7 +98,7 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 		return TafseerList.find(i => i.id === tafseer).dir;
 	};
 
-	const ayaInfo = QData.ayaIdInfo(appContext.selectStart);
+	const ayaInfo = QData.ayaIdInfo(app.selectStart);
 
 	return (
 		<>
@@ -132,4 +132,4 @@ const Tafseer = ({ onClose, isOpen, appContext }) => {
 	);
 };
 
-export default withAppContext(Tafseer);
+export default AppConsumer(Tafseer);

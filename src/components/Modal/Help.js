@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 
 const Help = () => {
 	return (
@@ -15,4 +15,4 @@ const Help = () => {
 	);
 };
 
-export default withAppContext(Help);
+export default AppConsumer(Help);

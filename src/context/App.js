@@ -16,9 +16,7 @@ const AppState = {
 	selectStart: 0,
 	selectEnd: 0,
 	maskStart: -1,
-	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"],
-	playerVisible: false,
-	playingAya: -1
+	recentCommands: rc ? JSON.parse(rc) : ["Search", "Index", "Play"]
 };
 
 const AppContext = React.createContext(AppState);
@@ -261,24 +259,7 @@ class AppProvider extends Component {
 		return verses.join(" ");
 	};
 
-	showPlayer = show => {
-		this.setState({ playerVisible: show !== false });
-	};
-
-	setPlayingAya = playingAya => {
-		this.setState({ playingAya });
-		return playingAya;
-	};
-
-	offsetPlayingAya = offset => {
-		//TODO: validate aya
-		const playingAya = this.state.playingAya + offset;
-		this.setState({ playingAya });
-		return playingAya;
-	};
-
 	methods = {
-		showPlayer: this.showPlayer,
 		setShowMenu: this.setShowMenu,
 		toggleShowMenu: this.toggleShowMenu,
 		setPopup: this.setPopup,
@@ -307,9 +288,7 @@ class AppProvider extends Component {
 		closePopup: this.closePopup,
 		getActiveSide: this.getActiveSide,
 		getCurrentPageIndex: this.getCurrentPageIndex,
-		getSelectedText: this.getSelectedText,
-		setPlayingAya: this.setPlayingAya,
-		offsetPlayingAya: this.offsetPlayingAya
+		getSelectedText: this.getSelectedText
 	};
 
 	onResize = e => {
@@ -369,14 +348,15 @@ class AppProvider extends Component {
 	}
 }
 
-let withAppContext = Component =>
-	function AppContextWrapper(props) {
+//Create the context consumer generator function
+const AppConsumer = Component =>
+	function AppConsumerGen(props) {
 		return (
 			<AppContext.Consumer>
-				{state => <Component {...props} appContext={state} />}
+				{state => <Component {...props} app={state} />}
 			</AppContext.Consumer>
 		);
 	};
 
 export default withRouter(AppProvider);
-export { withAppContext, AppContext };
+export { AppConsumer };

@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 
 const Settings = (onClose, isOpen) => {
 	return (
@@ -13,4 +13,4 @@ const Settings = (onClose, isOpen) => {
 	);
 };
 
-export default withAppContext(Settings);
+export default AppConsumer(Settings);

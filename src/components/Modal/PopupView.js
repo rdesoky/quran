@@ -1,5 +1,5 @@
 import React from "react";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import GotoPage from "./GotoPage";
 import QIndex from "./QIndex";
 import Commands from "./Commands";
@@ -11,7 +11,7 @@ import Settings from "./Settings";
 import Tafseer from "./Tafseer";
 import Modal from "./Modal";
 
-function PopupView({ appContext }) {
+function PopupView({ app }) {
 	const componentMap = {
 		Commands,
 		Goto: GotoPage,
@@ -25,10 +25,10 @@ function PopupView({ appContext }) {
 	};
 
 	const onClose = () => {
-		appContext.closePopup();
+		app.closePopup();
 	};
 
-	const { popup, showPopup } = appContext;
+	const { popup, showPopup } = app;
 	const Component = componentMap[popup];
 
 	if (Component !== undefined) {
@@ -42,4 +42,4 @@ function PopupView({ appContext }) {
 	return null;
 }
 
-export default withAppContext(PopupView);
+export default AppConsumer(PopupView);

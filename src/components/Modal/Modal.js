@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
 import Utils from "../../services/utils";
 
-const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
+const Modal = ({ onClose, children, app, show, name, modeless }) => {
 	const onClickClose = e => {
 		if (typeof onClose === "function") {
 			onClose(e);
@@ -18,11 +18,11 @@ const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
 		e.stopPropagation();
 	};
 
-	let activeSide = appContext.getActiveSide();
+	let activeSide = app.getActiveSide();
 
 	useEffect(() => {
 		const commandBtn = document.querySelector(
-			`#RecentCommands button[command=${appContext.popup}]`
+			`#RecentCommands button[command=${app.popup}]`
 		);
 		if (commandBtn) {
 			commandBtn.focus();
@@ -38,9 +38,9 @@ const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
 				id={`${name}Popup`}
 				className="ModalOverlay"
 				style={{
-					left: appContext.isNarrow ? 0 : 50,
+					left: app.isNarrow ? 0 : 50,
 					pointerEvents:
-						modeless === true || appContext.pagesCount > 1 || show === false
+						modeless === true || app.pagesCount > 1 || show === false
 							? "none"
 							: "fill"
 				}}
@@ -49,7 +49,7 @@ const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
 				<div
 					style={{
 						left: activeSide === 0 ? 0 : "50%",
-						right: activeSide === 0 && appContext.pagesCount === 2 ? "50%" : 0
+						right: activeSide === 0 && app.pagesCount === 2 ? "50%" : 0
 					}}
 					className={"ModalContent" + (show === false ? " HiddenPopup" : "")}
 					onClick={preventClose}
@@ -64,4 +64,4 @@ const Modal = ({ onClose, children, appContext, show, name, modeless }) => {
 	);
 };
 
-export default withAppContext(Modal);
+export default AppConsumer(Modal);

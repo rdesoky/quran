@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "./../../context/App";
+import { AppConsumer } from "./../../context/App";
 
-const GotoPage = ({ open, appContext }) => {
+const GotoPage = ({ open, app }) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const [pageNumber, updatePageNumber] = useState(
-		Utils.pageFromPath(appContext.location.pathname)
+		Utils.pageFromPath(app.location.pathname)
 	);
 	const [partNumber, updatePartNumber] = useState(
-		Utils.partFromPath(appContext.location.pathname)
+		Utils.partFromPath(app.location.pathname)
 	);
 	let gotoPageForm;
 
@@ -29,10 +29,10 @@ const GotoPage = ({ open, appContext }) => {
 	const gotoPage = e => {
 		const { target: form } = e;
 		const pageNum = form["PageNumber"].value;
-		appContext.gotoPage(pageNum);
+		app.gotoPage(pageNum);
 		let ayaId = QData.pageAyaId(pageNum - 1);
-		appContext.selectAya(ayaId);
-		appContext.closePopup();
+		app.selectAya(ayaId);
+		app.closePopup();
 		e.preventDefault();
 	};
 
@@ -40,8 +40,8 @@ const GotoPage = ({ open, appContext }) => {
 		const { target: form } = e;
 		let part = parseInt(form["PartNumber"].value);
 		// const partInfo = QData.parts[part - 1];
-		appContext.gotoPart(part - 1);
-		appContext.closePopup();
+		app.gotoPart(part - 1);
+		app.closePopup();
 		e.preventDefault();
 	};
 
@@ -117,4 +117,4 @@ const GotoPage = ({ open, appContext }) => {
 	);
 };
 
-export default withAppContext(GotoPage);
+export default AppConsumer(GotoPage);

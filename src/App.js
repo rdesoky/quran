@@ -12,6 +12,7 @@ import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
 import { withThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
+import PlayerProvider from "./context/Player";
 import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
 
 //import ar_strings from "./translations/ar.json"
@@ -38,32 +39,34 @@ function App({ themeContext }) {
 			<div className={"App " + themeContext.theme + "Theme"}>
 				<Router>
 					<AppProvider>
-						<Switch>
-							<Route
-								path={process.env.PUBLIC_URL + "/page/:page"}
-								component={Pager}
-							/>
-							<Route
-								path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
-								component={Pager}
-							/>
-							<Route
-								path={process.env.PUBLIC_URL + "/aya/:aya"}
-								component={PageRedirect}
-							/>
-							<Route
-								render={() => {
-									const defUrl = process.env.PUBLIC_URL + "/page/1";
-									console.log(
-										`PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-									);
-									return <Redirect to={defUrl} />;
-								}}
-							/>
-						</Switch>
-						<Sidebar />
-						<PopupView />
-						<AudioPlayer />
+						<PlayerProvider>
+							<Switch>
+								<Route
+									path={process.env.PUBLIC_URL + "/page/:page"}
+									component={Pager}
+								/>
+								<Route
+									path={process.env.PUBLIC_URL + "/sura/:sura/aya/:aya"}
+									component={Pager}
+								/>
+								<Route
+									path={process.env.PUBLIC_URL + "/aya/:aya"}
+									component={PageRedirect}
+								/>
+								<Route
+									render={() => {
+										const defUrl = process.env.PUBLIC_URL + "/page/1";
+										console.log(
+											`PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+										);
+										return <Redirect to={defUrl} />;
+									}}
+								/>
+							</Switch>
+							<Sidebar />
+							<PopupView />
+							<AudioPlayer />
+						</PlayerProvider>
 					</AppProvider>
 				</Router>
 			</div>
