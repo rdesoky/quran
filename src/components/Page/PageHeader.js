@@ -1,38 +1,38 @@
 import React from "react";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import { FormattedMessage } from "react-intl";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
 
-const PageHeader = ({ index: pageIndex, appContext, order }) => {
+const PageHeader = ({ index: pageIndex, app, order }) => {
 	// const showIndexPopup = e => {
-	// 	appContext.setPopup("QIndex");
+	// 	app.setPopup("QIndex");
 	// };
 	// const showFindPopup = e => {
-	// 	appContext.setPopup("Find");
+	// 	app.setPopup("Find");
 	// };
 
 	const onSelectSura = ({ target }) => {
-		appContext.hideMask();
+		app.hideMask();
 		const suraIndex = parseInt(target.value);
-		appContext.gotoSura(suraIndex);
+		app.gotoSura(suraIndex);
 		Utils.selectTopCommand();
 	};
 
 	const onSelectPart = ({ target }) => {
-		appContext.hideMask();
+		app.hideMask();
 		const partIndex = target.value;
-		appContext.gotoPart(partIndex);
+		app.gotoPart(partIndex);
 		Utils.selectTopCommand();
 	};
 
 	const showFindPopup = e => {
-		appContext.setPopup("Find");
+		app.setPopup("Find");
 	};
 
 	const suraIndex = QData.pageSura(pageIndex + 1);
 	let textAlign =
-		appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+		app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 	let partIndex = QData.pagePart(pageIndex + 1) - 1;
 
@@ -40,8 +40,8 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 		<div className="PageHeader" style={{ textAlign }}>
 			<div
 				style={{
-					width: appContext.pageWidth(),
-					margin: appContext.pageMargin()
+					width: app.pageWidth(),
+					margin: app.pageMargin()
 				}}
 				className="PageHeaderContent"
 			>
@@ -62,7 +62,7 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 					onChange={onSelectPart}
 					className="PartTitle"
 					value={partIndex}
-					style={{ left: appContext.isNarrow ? "50px" : "0" }}
+					style={{ left: app.isNarrow ? "50px" : "0" }}
 				>
 					<FormattedMessage id="part">
 						{partLabel => {
@@ -82,4 +82,4 @@ const PageHeader = ({ index: pageIndex, appContext, order }) => {
 	);
 };
 
-export default withAppContext(PageHeader);
+export default AppConsumer(PageHeader);

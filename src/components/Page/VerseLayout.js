@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
+import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const VerseLayout = ({ page: pageIndex, appContext, children }) => {
+const VerseLayout = ({ page: pageIndex, app, player, children }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 
-	const pageHeight = appContext.appHeight - 50;
+	const pageHeight = app.appHeight - 50;
 	const lineHeight = pageHeight / 15;
-	const lineWidth = appContext.pageWidth();
+	const lineWidth = app.pageWidth();
 
 	const closeMask = e => {
-		appContext.hideMask();
+		app.hideMask();
 	};
 
 	const onMouseEnter = ({ target }) => {
@@ -27,7 +28,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	//TODO: extend selection instead of masking
 	const onContextMenu = e => {
 		// const aya_id = parseInt(e.target.getAttribute("aya-id"));
-		// appContext.setMaskStart(appContext.maskStart === -1 ? aya_id : -1);
+		// app.setMaskStart(app.maskStart === -1 ? aya_id : -1);
 
 		onClickVerse({ target: e.target, shiftKey: true });
 		e.preventDefault();
@@ -35,12 +36,12 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 
 	const isHovered = aya_id => hoverVerse === aya_id;
 	const isSelected = aya_id => {
-		const start = Math.min(appContext.selectStart, appContext.selectEnd);
-		const end = Math.max(appContext.selectStart, appContext.selectEnd);
+		const start = Math.min(app.selectStart, app.selectEnd);
+		const end = Math.max(app.selectStart, app.selectEnd);
 		return aya_id >= start && aya_id <= end;
 	};
 	const isMasked = aya_id => {
-		let { maskStart } = appContext;
+		let { maskStart } = app;
 		if (maskStart !== -1 && aya_id >= maskStart) {
 			return true;
 		}
@@ -51,31 +52,31 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 		const { shiftKey, ctrlKey, altKey, target } = e;
 		const aya_id = parseInt(target.getAttribute("aya-id"));
 		//TODO: set selectStart|selectEnd|maskStart
-		if (appContext.maskStart !== -1) {
-			if (appContext.maskStart > aya_id) {
-				appContext.setMaskStart(aya_id);
+		if (app.maskStart !== -1) {
+			if (app.maskStart > aya_id) {
+				app.setMaskStart(aya_id);
 			} else {
 				let nPageIndex = parseInt(pageIndex);
-				let maskStartPage = QData.ayaIdPage(appContext.maskStart);
+				let maskStartPage = QData.ayaIdPage(app.maskStart);
 				if (maskStartPage === nPageIndex) {
 					//same page
-					appContext.offsetMask(1);
+					app.offsetMask(1);
 				} else {
 					let clickedPage = QData.ayaIdPage(aya_id);
 					let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
 
-					appContext.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
+					app.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
 				}
 			}
 		} else {
 			if (shiftKey || ctrlKey) {
-				appContext.extendSelection(aya_id);
+				app.extendSelection(aya_id);
 			} else {
-				if (appContext.selectStart === aya_id && appContext.popup === null) {
-					appContext.toggleShowMenu();
+				if (app.selectStart === aya_id && app.popup === null) {
+					app.toggleShowMenu();
 					e.stopPropagation();
 				} else {
-					appContext.selectAya(aya_id);
+					app.selectAya(aya_id);
 				}
 			}
 		}
@@ -97,7 +98,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 				className += " Selected";
 			}
 		}
-		if (aya_id === appContext.playingAya) {
+		if (aya_id === player.playingAya) {
 			className += " Playing";
 		}
 		return className.trim();
@@ -206,7 +207,7 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	};
 
 	function renderMask() {
-		const { maskStart } = appContext;
+		const { maskStart } = app;
 		if (maskStart === -1) {
 			return;
 		}
@@ -327,9 +328,9 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 				className="VerseLayout"
 				style={{
 					direction: "ltr",
-					width: appContext.pageWidth(),
-					height: appContext.pageHeight(),
-					margin: appContext.pageMargin()
+					width: app.pageWidth(),
+					height: app.pageHeight(),
+					margin: app.pageMargin()
 				}}
 			>
 				{renderVerses()}
@@ -340,9 +341,9 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 				style={{
 					direction: "ltr",
 					top: 0,
-					width: appContext.pageWidth(),
-					height: appContext.pageHeight(),
-					margin: appContext.pageMargin()
+					width: app.pageWidth(),
+					height: app.pageHeight(),
+					margin: app.pageMargin()
 				}}
 			>
 				{renderMask()}
@@ -351,4 +352,4 @@ const VerseLayout = ({ page: pageIndex, appContext, children }) => {
 	);
 };
 
-export default withAppContext(VerseLayout);
+export default AppConsumer(PlayerConsumer(VerseLayout));

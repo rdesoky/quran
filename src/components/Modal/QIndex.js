@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 
-const QIndex = ({ open, appContext }) => {
+const QIndex = ({ app }) => {
 	const getSuraNames = () => {
 		let suraNames = [];
 		for (let i = 1; i <= 114; i++) {
@@ -14,16 +14,16 @@ const QIndex = ({ open, appContext }) => {
 	};
 
 	const gotoSura = ({ target }) => {
-		appContext.hideMask();
+		app.hideMask();
 		let index = parseInt(target.getAttribute("sura"));
-		appContext.gotoSura(index);
-		appContext.closePopup();
+		app.gotoSura(index);
+		app.closePopup();
 	};
 
 	let tableRoot;
 
 	useEffect(() => {
-		let pageIndex = appContext.getCurrentPageIndex();
+		let pageIndex = app.getCurrentPageIndex();
 		let sura = QData.pageSura(pageIndex + 1);
 		const currSuraBtn = tableRoot.querySelector(`button[sura='${sura}']`);
 		if (currSuraBtn) {
@@ -31,7 +31,7 @@ const QIndex = ({ open, appContext }) => {
 		}
 	}, []);
 
-	const { appWidth, pagesCount } = appContext;
+	const { appWidth, pagesCount } = app;
 	return (
 		<>
 			<div className="Title">
@@ -64,4 +64,4 @@ const QIndex = ({ open, appContext }) => {
 	);
 };
 
-export default withAppContext(QIndex);
+export default AppConsumer(QIndex);

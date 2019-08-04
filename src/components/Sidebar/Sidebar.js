@@ -6,24 +6,25 @@ import {
 	faAngleDoubleDown,
 	faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
+import { PlayerConsumer, AudioState } from "../../context/Player";
 import { withThemeContext } from "../../context/Theme";
 import { CommandIcons } from "./../Modal/Commands";
 import Utils from "../../services/utils";
 
-function Sidebar({ appContext, themeContext }) {
+function Sidebar({ app, player, themeContext }) {
 	const onClick = (e, id) => {
 		switch (id) {
 			case "Theme":
 				toggleTheme();
-				// appContext.setPopup(null);
+				// app.setPopup(null);
 				break;
 			case "Mask":
-				appContext.setMaskStart();
-				appContext.closePopup();
+				app.setMaskStart();
+				app.closePopup();
 				break;
 			case "Copy":
-				Utils.copy2Clipboard(appContext.getSelectedText());
+				Utils.copy2Clipboard(app.getSelectedText());
 				break;
 			case "Share":
 				break;
@@ -31,58 +32,62 @@ function Sidebar({ appContext, themeContext }) {
 				Utils.requestFullScreen();
 				return;
 			case "Play":
-				appContext.showPlayer();
+				if (player.visible) {
+					if (player.audioState === AudioState.playing) {
+						player.pause();
+					} else if (player.audioState === AudioState.paused) {
+						player.resume();
+					} else {
+						player.play();
+					}
+				} else {
+					player.show();
+				}
 				break;
 			case "Tafseer":
-				appContext.selectAya();
+				app.selectAya();
 			default:
-				appContext.setPopup(id);
+				app.setPopup(id);
 		}
-		appContext.setShowMenu(false);
-		appContext.pushRecentCommand(id);
+		app.setShowMenu(false);
+		app.pushRecentCommand(id);
 		e.preventDefault();
 	};
 
 	const toggleTheme = e => {
 		themeContext.toggleTheme();
-		// appContext.setShowMenu(false);
-		// appContext.pushRecentCommand("Theme");
+		// app.setShowMenu(false);
+		// app.pushRecentCommand("Theme");
 	};
 
 	// useEffect(() => {
-	// 	updateShowButtons(!appContext.isNarrow);
-	// }, [appContext.isNarrow]);
+	// 	updateShowButtons(!app.isNarrow);
+	// }, [app.isNarrow]);
 
 	const toggleButtons = () => {
-		appContext.toggleShowMenu();
+		app.toggleShowMenu();
 	};
 
 	return (
 		<div
 			className="Sidebar"
 			style={{
-				bottom:
-					appContext.showMenu || !appContext.isNarrow
-						? appContext.isNarrow
-							? 25
-							: 0
-						: "auto"
+				bottom: app.showMenu || !app.isNarrow ? (app.isNarrow ? 25 : 0) : "auto"
 			}}
 		>
 			<button
 				onClick={toggleButtons}
-				//style={{ display: appContext.isNarrow ? "block" : "none" }}
-				style={{ visibility: appContext.isNarrow ? "visible" : "hidden" }}
+				//style={{ display: app.isNarrow ? "block" : "none" }}
+				style={{ visibility: app.isNarrow ? "visible" : "hidden" }}
 			>
 				<FontAwesomeIcon
-					icon={appContext.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
+					icon={app.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
 				/>
 			</button>
 			<div
 				className="ButtonsList"
 				style={{
-					display:
-						appContext.showMenu || !appContext.isNarrow ? "block" : "none"
+					display: app.showMenu || !app.isNarrow ? "block" : "none"
 				}}
 			>
 				<button onClick={e => onClick(e, "Commands")}>
@@ -92,7 +97,7 @@ function Sidebar({ appContext, themeContext }) {
 					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
 				</button>
 				<div id="RecentCommands">
-					{appContext.recentCommands.map(command => {
+					{app.recentCommands.map(command => {
 						return (
 							<button
 								key={command}
@@ -110,4 +115,4 @@ function Sidebar({ appContext, themeContext }) {
 	);
 }
 
-export default withThemeContext(withAppContext(Sidebar));
+export default withThemeContext(AppConsumer(PlayerConsumer(Sidebar)));

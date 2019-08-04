@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "./../../context/App";
+import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
 
-const Search = ({ appContext }) => {
+const Search = ({ app }) => {
 	const input = useRef(null);
 	const [searchTerm, setSearchTerm] = useState(
 		localStorage.getItem("LastSearch") || ""
@@ -40,10 +40,10 @@ const Search = ({ appContext }) => {
 
 	const gotoAya = e => {
 		const aya = e.target.getAttribute("aya");
-		if (appContext.pagesCount == 1) {
-			appContext.closePopup();
+		if (app.pagesCount == 1) {
+			app.closePopup();
 		}
-		appContext.gotoAya(parseInt(aya));
+		app.gotoAya(parseInt(aya));
 		addToSearchHistory();
 		e.preventDefault();
 	};
@@ -75,8 +75,7 @@ const Search = ({ appContext }) => {
 			<ol
 				className="ResultsList"
 				style={{
-					maxHeight:
-						appContext.pageHeight() - 175 - (appContext.playerVisible ? 60 : 0)
+					maxHeight: app.pageHeight() - 175 - (app.playerVisible ? 60 : 0)
 				}}
 				ref={ref => {
 					resultsDiv = ref;
@@ -129,10 +128,10 @@ const Search = ({ appContext }) => {
 	const doSearch = searchTerm => {
 		let sResults = [];
 		let normSearchTerm = Utils.normalizeText(searchTerm);
-		const verseList = appContext.verseList();
+		const verseList = app.verseList();
 		if (verseList.length > 0 && normSearchTerm.length > 2) {
 			localStorage.setItem("LastSearch", searchTerm);
-			sResults = appContext.normVerseList().reduce((results, ntext, aya) => {
+			sResults = app.normVerseList().reduce((results, ntext, aya) => {
 				if (ntext.includes(normSearchTerm)) {
 					results.push({ aya, text: verseList[aya], ntext: ntext });
 				}
@@ -166,7 +165,7 @@ const Search = ({ appContext }) => {
 				<input
 					placeholder="Search suras' name or content"
 					className="SearchInput"
-					inputmode="search"
+					inputMode="search"
 					ref={input}
 					type="text"
 					value={searchTerm}
@@ -202,4 +201,4 @@ const Search = ({ appContext }) => {
 	);
 };
 
-export default withAppContext(Search);
+export default AppConsumer(Search);

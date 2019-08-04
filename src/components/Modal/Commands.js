@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
+import { PlayerConsumer } from "../../context/Player";
 import { withThemeContext } from "../../context/Theme";
 import { FormattedMessage } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,7 +46,7 @@ export const CommandIcons = {
 	Fullscreen: faExpand
 };
 
-const Commands = ({ open, appContext, themeContext }) => {
+const Commands = ({ app, themeContext, player }) => {
 	const list = [
 		"Index",
 		"Search",
@@ -69,10 +70,10 @@ const Commands = ({ open, appContext, themeContext }) => {
 				themeContext.toggleTheme();
 				break;
 			case "Mask":
-				appContext.setMaskStart();
+				app.setMaskStart();
 				break;
 			case "Copy":
-				Utils.copy2Clipboard(appContext.getSelectedText());
+				Utils.copy2Clipboard(app.getSelectedText());
 				break;
 			case "Share":
 				break;
@@ -80,14 +81,14 @@ const Commands = ({ open, appContext, themeContext }) => {
 				Utils.requestFullScreen();
 				break;
 			case "Play":
-				appContext.showPlayer();
+				player.show();
 				break;
 			default:
-				appContext.setPopup(command);
+				app.setPopup(command);
 				return;
 		}
-		appContext.pushRecentCommand(command);
-		appContext.closePopup();
+		app.pushRecentCommand(command);
+		app.closePopup();
 	};
 
 	return (
@@ -110,4 +111,4 @@ const Commands = ({ open, appContext, themeContext }) => {
 	);
 };
 
-export default withThemeContext(withAppContext(Commands));
+export default withThemeContext(AppConsumer(PlayerConsumer(Commands)));

@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 
 const Hifz = () => {
 	return (
@@ -16,4 +16,4 @@ const Hifz = () => {
 	);
 };
 
-export default withAppContext(Hifz);
+export default AppConsumer(Hifz);

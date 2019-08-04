@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
-import { withAppContext } from "../../context/App";
+import { AppConsumer } from "../../context/App";
 import VerseLayout from "./VerseLayout";
 import PageHeader from "./PageHeader";
 import PageFooter from "./PageFooter";
 
-const Page = ({ index, order, appContext }) => {
+const Page = ({ index, order, app }) => {
 	let imageName = NumToString(index + 1);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [showProgress, setShowProgress] = useState(true);
@@ -40,7 +40,7 @@ const Page = ({ index, order, appContext }) => {
 	}, [index]); //only run when number changes
 
 	let textAlign =
-		appContext.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+		app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 	return (
 		<div className="Page">
@@ -48,11 +48,11 @@ const Page = ({ index, order, appContext }) => {
 			<Spinner visible={showProgress} />
 			<div
 				onClick={e => {
-					appContext.setShowMenu(false);
+					app.setShowMenu(false);
 				}}
 				className="PageFrame"
 				style={{
-					// padding: appContext.isNarrow ? "0" : "0 20px",
+					// padding: app.isNarrow ? "0" : "0 20px",
 					textAlign,
 					visibility: isLoaded ? "visible" : "hidden"
 				}}
@@ -62,9 +62,9 @@ const Page = ({ index, order, appContext }) => {
 						<img
 							style={{
 								visibility: isLoaded ? "visible" : "hidden",
-								margin: appContext.pageMargin(),
-								width: appContext.pageWidth(),
-								height: appContext.pageHeight()
+								margin: app.pageMargin(),
+								width: app.pageWidth(),
+								height: app.pageHeight()
 							}}
 							className={"PageImage"}
 							onLoad={onImageLoaded}
@@ -89,4 +89,4 @@ function NumToString(number, padding = 3) {
 	return padded;
 }
 
-export default withAppContext(Page);
+export default AppConsumer(Page);
