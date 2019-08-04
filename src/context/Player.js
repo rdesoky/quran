@@ -69,9 +69,11 @@ class PlayerProvider extends Component {
 
 		this.audio.src = this.audioSource(playingAya);
 		this.audio.play();
+		this.show();
 	};
 	resume = () => {
 		this.audio.play();
+		this.show();
 	};
 	stop = event => {
 		this.audio.pause();
@@ -81,6 +83,7 @@ class PlayerProvider extends Component {
 
 	pause = () => {
 		this.audio.pause();
+		this.show();
 	};
 
 	methods = {

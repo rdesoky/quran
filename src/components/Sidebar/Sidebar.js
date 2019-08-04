@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faTh,
 	faAngleDoubleDown,
-	faAngleDoubleUp
+	faAngleDoubleUp,
+	faPlayCircle,
+	faPauseCircle,
+	faStopCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
@@ -68,6 +71,47 @@ function Sidebar({ app, player, themeContext }) {
 		app.toggleShowMenu();
 	};
 
+	const renderPlayer = () => {
+		let btn = null,
+			stopBtn = null;
+
+		if (player.audioState !== AudioState.stopped) {
+			stopBtn = (
+				<button onClick={e => player.stop()}>
+					<FontAwesomeIcon icon={faStopCircle} />
+				</button>
+			);
+		}
+
+		switch (player.audioState) {
+			case AudioState.paused:
+				btn = (
+					<button onClick={e => player.resume()} className="blinking">
+						<FontAwesomeIcon icon={faPauseCircle} />
+					</button>
+				);
+				break;
+			case AudioState.playing:
+				btn = (
+					<button onClick={e => player.pause()}>
+						<FontAwesomeIcon icon={faPauseCircle} />
+					</button>
+				);
+				break;
+			default:
+				btn = (
+					<button onClick={e => player.play()}>
+						<FontAwesomeIcon icon={faPlayCircle} />
+					</button>
+				);
+		}
+		return (
+			<>
+				{btn} {stopBtn}
+			</>
+		);
+	};
+
 	return (
 		<div
 			className="Sidebar"
@@ -93,9 +137,10 @@ function Sidebar({ app, player, themeContext }) {
 				<button onClick={e => onClick(e, "Commands")}>
 					<FontAwesomeIcon icon={CommandIcons["Commands"]} />
 				</button>
-				<button onClick={e => onClick(e, "Fullscreen")}>
+				{/* <button onClick={e => onClick(e, "Fullscreen")}>
 					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
-				</button>
+				</button> */}
+				{renderPlayer()}
 				<div id="RecentCommands">
 					{app.recentCommands.map(command => {
 						return (

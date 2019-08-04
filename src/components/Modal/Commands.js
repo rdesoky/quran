@@ -49,6 +49,7 @@ export const CommandIcons = {
 const Commands = ({ app, themeContext, player }) => {
 	const list = [
 		"Index",
+		"Fullscreen",
 		"Search",
 		"Mask",
 		"Goto",
