@@ -1,50 +1,51 @@
 .Pager {
-	direction: rtl;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	.PageSide {
-		width: 50%;
-		height: 100%;
-		display: inline-block;
-		box-sizing: border-box;
-		&.RightPage {
-			.PageFrame {
-				direction: ltr;
-			}
-		}
-		&.LeftPage {
-			.PageFrame {
-				direction: rtl;
-			}
-		}
-	}
-	.FooterNavbar {
-		position: fixed;
-		pointer-events: none;
-		right: 0;
-		bottom: 0;
-		height: 25px;
-		line-height: 25px;
+  direction: rtl;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: width 0.5s;
+  .PageSide {
+    width: 50%;
+    height: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    &.RightPage {
+      .PageFrame {
+        direction: ltr;
+      }
+    }
+    &.LeftPage {
+      .PageFrame {
+        direction: rtl;
+      }
+    }
+  }
+  .FooterNavbar {
+    position: fixed;
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    height: 25px;
+    line-height: 25px;
 
-		.NavButton {
-			pointer-events: fill;
-			width: 50px;
-			font-size: 22px;
-			opacity: 0.5;
-			text-align: center;
-			padding: 0 10px;
-			&.NavPgDown,
-			&.NavPgUp {
-				float: right;
-				// text-align: right;
-			}
-			&.NavForward,
-			&.NavBackward {
-				float: left;
-				// text-align: left;
-			}
-		}
-	}
+    .NavButton {
+      pointer-events: fill;
+      width: 50px;
+      font-size: 22px;
+      opacity: 0.5;
+      text-align: center;
+      padding: 0 10px;
+      &.NavPgDown,
+      &.NavPgUp {
+        float: right;
+        // text-align: right;
+      }
+      &.NavForward,
+      &.NavBackward {
+        float: left;
+        // text-align: left;
+      }
+    }
+  }
 }

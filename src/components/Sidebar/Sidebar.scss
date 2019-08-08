@@ -1,40 +1,40 @@
 .Sidebar {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	overflow: auto;
-	// display: inline-block;
-	vertical-align: top;
-	box-sizing: border-box;
-	width: 50px;
-	// height: 100%;
-	background-color: rgba(0, 0, 0, 0.6);
-	color: #ddd;
-	font-size: 25px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  // display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  width: 50px;
+  // height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #ddd;
+  font-size: 25px;
 
-	button {
-		display: block;
-		width: 100%;
-		height: 25px;
-		padding: 0;
-		&:focus {
-			color: #aaffff;
-		}
-	}
+  button {
+    display: block;
+    width: 100%;
+    height: 25px;
+    padding: 0;
+    &:focus {
+      color: #aaffff;
+    }
+  }
 
-	.ButtonsList {
-		height: calc(100% - 25px);
-		button {
-			font-size: 24px;
-			height: 50px;
-		}
-		#RecentCommands {
-			border-color: silver;
-			border-width: 1px 0 0 0;
-			border-style: solid;
-			height: calc(100% - 155px);
-			overflow: hidden;
-		}
-	}
+  .ButtonsList {
+    height: calc(100% - 25px);
+    button {
+      font-size: 24px;
+      height: 50px;
+    }
+    #RecentCommands {
+      border-color: silver;
+      border-width: 1px 0 0 0;
+      border-style: solid;
+      height: calc(100% - 155px);
+      overflow: hidden;
+    }
+  }
 }

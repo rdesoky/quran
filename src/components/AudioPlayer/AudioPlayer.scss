@@ -1,38 +1,46 @@
 #AudioPlayerPopup {
-	#ReciterIcon {
-		float: left;
-		width: auto;
-		height: 50px;
-	}
-	.ModalContent {
-		top: auto;
-		// bottom: 0;
-		background-color: #443322dd;
-		padding: 0 50px 0 0;
-		.Title {
-			margin: 5px;
-		}
-		#PlayerControl {
-			float: right;
-		}
-	}
+  #ReciterIcon {
+    float: left;
+    width: auto;
+    height: 50px;
+  }
+  .ModalContent {
+    top: auto;
+    // bottom: 0;
+    background-color: #443322dd;
+    padding: 0 50px 0 0;
+    .Title {
+      margin: 5px;
+    }
+    #PlayerControl {
+      float: right;
+    }
+    #PlayerStatus {
+      button {
+        font-size: 15px;
+        line-height: 40px;
+        padding: 0 10px;
+        box-sizing: content-box;
+      }
+    }
+  }
 }
 .trans-start {
-	#AudioPlayerPopup {
-		.ModalContent {
-			bottom: -20px;
-		}
-	}
+  #AudioPlayerPopup {
+    .ModalContent {
+      bottom: -20px;
+    }
+  }
 }
 
 .trans-end {
-	#AudioPlayerPopup {
-		.ModalContent {
-			bottom: 0;
-			&.HiddenPopup {
-				top: auto;
-				bottom: -20px;
-			}
-		}
-	}
+  #AudioPlayerPopup {
+    .ModalContent {
+      bottom: 0;
+      &.HiddenPopup {
+        top: auto;
+        bottom: -20px;
+      }
+    }
+  }
 }
