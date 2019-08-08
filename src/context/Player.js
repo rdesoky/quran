@@ -83,7 +83,6 @@ class PlayerProvider extends Component {
 
   pause = () => {
     this.audio.pause();
-    this.show();
   };
 
   methods = {

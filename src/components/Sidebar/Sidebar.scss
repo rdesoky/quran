@@ -23,17 +23,25 @@
     }
   }
 
+  .side-btn-img {
+    width: 50px;
+    height: 50px;
+  }
+
   .ButtonsList {
     height: calc(100% - 25px);
     button {
       font-size: 24px;
       height: 50px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #RecentCommands {
       border-color: silver;
       border-width: 1px 0 0 0;
       border-style: solid;
-      height: calc(100% - 155px);
+      height: calc(100% - 205px);
       overflow: hidden;
     }
   }
