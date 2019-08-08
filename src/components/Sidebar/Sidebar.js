@@ -80,24 +80,16 @@ function Sidebar({ app, player, themeContext }) {
   };
 
   const play = e => {
-    if (showPlayer()) {
-      player.play();
-    }
+    player.play();
   };
   const stop = e => {
-    if (showPlayer()) {
-      player.stop();
-    }
+    player.stop();
   };
   const resume = e => {
-    if (showPlayer()) {
-      player.resume();
-    }
+    player.resume();
   };
   const pause = e => {
-    if (showPlayer()) {
-      player.pause();
-    }
+    player.pause();
   };
 
   const renderPlayer = () => {
@@ -137,6 +129,13 @@ function Sidebar({ app, player, themeContext }) {
     return (
       <>
         {btn} {stopBtn}
+        <button
+          onClick={showPlayer}
+          style={{
+            backgroundImage:
+              "url(" + process.env.PUBLIC_URL + "/images/baset.jpg)"
+          }}
+        />
       </>
     );
   };
