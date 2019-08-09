@@ -31,7 +31,8 @@ class PlayerProvider extends Component {
   state = PlayerContextState;
 
   show = show => {
-    this.setState({ visible: show !== false });
+    //this.setState({ visible: show !== false });
+    this.props.app.setPopup("AudioPlayer");
   };
 
   setPlayingAya = playingAya => {

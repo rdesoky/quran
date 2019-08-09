@@ -55,7 +55,7 @@ class AppProvider extends Component {
   };
 
   pushRecentCommand = command => {
-    if (["Commands", "Play"].includes(command)) {
+    if (["Commands", "Play", "AudioPlayer"].includes(command)) {
       return;
     }
     let recentCommands = [

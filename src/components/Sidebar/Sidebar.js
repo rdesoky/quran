@@ -35,22 +35,22 @@ function Sidebar({ app, player, themeContext }) {
         Utils.requestFullScreen();
         return;
       case "Play":
-        if (player.visible) {
-          if (player.audioState === AudioState.playing) {
-            player.pause();
-          } else if (player.audioState === AudioState.paused) {
-            player.resume();
-          } else {
-            player.play();
-          }
+        if (player.audioState === AudioState.playing) {
+          player.pause();
+        } else if (player.audioState === AudioState.paused) {
+          player.resume();
         } else {
-          player.show();
+          player.play();
         }
         break;
       case "Tafseer":
         app.selectAya();
       default:
-        app.setPopup(id);
+        if (app.popup == id) {
+          app.closePopup();
+        } else {
+          app.setPopup(id);
+        }
     }
     app.setShowMenu(false);
     app.pushRecentCommand(id);

@@ -54,8 +54,8 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                 ? app.appHeight * 1.25
                 : activeSide === 0 && app.pagesCount === 2
                 ? "50%"
-                : 0,
-            zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
+                : 0
+            //,zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
           }}
           className={"ModalContent" + (show === false ? " HiddenPopup" : "")}
           onClick={preventClose}
