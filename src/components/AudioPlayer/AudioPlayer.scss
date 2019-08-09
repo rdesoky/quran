@@ -5,9 +5,9 @@
     height: 50px;
   }
   .ModalContent {
-    top: auto;
+    // top: auto;
     // bottom: 0;
-    background-color: #443322dd;
+    // background-color: #443322dd;
     padding: 0 50px 0 0;
     .Title {
       margin: 5px;
@@ -25,22 +25,22 @@
     }
   }
 }
-.trans-start {
-  #AudioPlayerPopup {
-    .ModalContent {
-      bottom: -20px;
-    }
-  }
-}
+// .trans-start {
+//   #AudioPlayerPopup {
+//     .ModalContent {
+//       // bottom: -20px;
+//     }
+//   }
+// }
 
-.trans-end {
-  #AudioPlayerPopup {
-    .ModalContent {
-      bottom: 0;
-      &.HiddenPopup {
-        top: auto;
-        bottom: -20px;
-      }
-    }
-  }
-}
+// .trans-end {
+//   #AudioPlayerPopup {
+//     .ModalContent {
+//       bottom: 0;
+//       &.HiddenPopup {
+//         top: auto;
+//         bottom: -20px;
+//       }
+//     }
+//   }
+// }

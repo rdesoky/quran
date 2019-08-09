@@ -112,8 +112,9 @@ class AudioPlayer extends Component {
   };
 
   onClose = () => {
-    const { player } = this.props;
-    player.show(false);
+    // const { player } = this.props;
+    // player.show(false);
+    this.props.app.closePopup();
   };
 
   render() {
@@ -122,7 +123,7 @@ class AudioPlayer extends Component {
     return (
       <Modal
         onClose={this.onClose}
-        show={player.visible}
+        // show={player.visible}
         name="AudioPlayer"
         modeless={true}
       >
