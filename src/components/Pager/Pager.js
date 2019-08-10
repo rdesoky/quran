@@ -273,8 +273,13 @@ function Pager({ match, app, player }) {
   };
 
   const calcWidth = () => {
-    if (app.isWide && app.popup) {
-      return app.appHeight * 1.25;
+    if (app.popup) {
+      if (app.isWide) {
+        return app.appHeight * 1.25;
+      }
+      if (app.isCompact) {
+        return app.appHeight * 0.65;
+      }
     }
     return app.appWidth - leftMargin();
   };
