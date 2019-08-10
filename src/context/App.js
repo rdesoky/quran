@@ -8,6 +8,7 @@ let rc = localStorage.getItem("recentCommands");
 const AppState = {
   isNarrow: false,
   isWide: false,
+  isCompact: false,
   appWidth: 800,
   appHeight: 600,
   pagesCount: 2,
@@ -302,11 +303,11 @@ class AppProvider extends Component {
 
   updateAppSizes({ width, height }) {
     this.setState({ appWidth: width, appHeight: height });
-    let count = this.calcPagesCount({ width, height });
-    this.setState({ pagesCount: count });
+    let pagesCount = this.calcPagesCount({ width, height });
     let isNarrow = width / height < 0.7;
     let isWide = width / height > 1.8;
-    this.setState({ isNarrow, isWide });
+    let isCompact = !isWide && pagesCount == 1 && width / height > 1.2;
+    this.setState({ pagesCount, isNarrow, isWide, isCompact });
   }
 
   calcPagesCount({ width, height }) {

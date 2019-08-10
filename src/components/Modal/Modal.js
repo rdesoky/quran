@@ -32,6 +32,21 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
     };
   }, []);
 
+  const calcRight = () => {
+    if (app.popup) {
+      if (app.isWide) {
+        return app.appHeight * 1.25;
+      }
+      if (app.isCompact) {
+        return app.appHeight * 0.65;
+      }
+    }
+    if (activeSide === 0 && app.pagesCount === 2) {
+      return "50%";
+    }
+    return 0;
+  };
+
   return (
     <Transition>
       <div
@@ -40,7 +55,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
         style={{
           left: app.isNarrow ? 0 : 50,
           pointerEvents:
-            modeless === true || app.pagesCount > 1 || show === false
+            modeless === true || app.isWide || app.isCompact || show === false
               ? "none"
               : "fill"
         }}
@@ -49,12 +64,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
         <div
           style={{
             left: app.isWide && app.popup ? 0 : activeSide === 0 ? 0 : "50%",
-            right:
-              app.isWide && app.popup
-                ? app.appHeight * 1.25
-                : activeSide === 0 && app.pagesCount === 2
-                ? "50%"
-                : 0
+            right: calcRight()
             //,zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
           }}
           className={"ModalContent" + (show === false ? " HiddenPopup" : "")}
