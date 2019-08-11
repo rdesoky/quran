@@ -23,13 +23,6 @@ function GetAudioURL(reciterID, suraNum, ayaNum) {
 	return url;
 }
 
-function ReciterName(id) {
-	if (RecitersInfo[id] === undefined) {
-		return "?? " + _S.reciters[id];
-	}
-	return _S.reciters[id] + (RecitersInfo[id].ayaAudio != undefined ? "*" : "");
-}
-
 const RecitersInfo = {
 	baset: {
 		on: true,
@@ -52,11 +45,6 @@ const RecitersInfo = {
 			},
 			islamway_mp3: {
 				rkey: "74",
-				actv: "(1114)",
-				rw: 1
-			},
-			egylist_real: {
-				rkey: "baset",
 				actv: "(1114)",
 				rw: 1
 			}
@@ -91,13 +79,6 @@ const RecitersInfo = {
 			server: "everyayah",
 			rkey: "Ibrahim_Akhdar_32kbps"
 		},
-		audio: {
-			egylist_real: {
-				rkey: "ibr_kd",
-				actv: "(1114)",
-				rw: 1
-			}
-		},
 		url: "http://egylist.com/quran/ibr_kd/s%1%.rm",
 		actv: "(1114)",
 		rw: 1
@@ -119,15 +100,11 @@ const RecitersInfo = {
 			rkey: "ahmed_ibn_3ali_al-3ajamy",
 			actv: "(1114)"
 		},
-		//url:"http://egylist.com/quran/agmy/%2%.rm",
+
 		ayaAudio: {
 			server: "everyayah",
 			rkey: "Ahmed_ibn_Ali_al-Ajamy_128kbps_ketaballah.net"
 		},
-		//ayaAudio:{
-		//	server: "everyayah",
-		//	rkey: "Ahmed_ibn_Ali_al-Ajamy_64kbps_QuranExplorer.Com"
-		//},
 
 		url: "http://egylist.com/quran/agmy/%2%.rm",
 		actv: "(1114)",
@@ -520,6 +497,18 @@ const RecitersInfo = {
 	// }
 };
 
+const ListReciters = filter=>{
+	let list = [];
+	for(let k in RecitersInfo){
+		if(RecitersInfo.hasOwnProperty(k)){
+			const info = RecitersInfo[k];
+			if(info.on){
+
+			}
+		}
+	}
+}
+
 const AudioServers = {
 	everyayah: {
 		cross_domains: true,
@@ -558,34 +547,13 @@ const AudioServers = {
 	},
 
 	islamway_mp3: {
-		ext_domains: false,
+		cross_domains: false,
 		mtype: 1,
 		provider: "islamway",
 		website: "http://www.islamway.com",
 		link: "http://download.quran.islamway.com/quran3/{rkey}/{sura3}.mp3"
-	},
-
-	islamway_real: {
-		mtype: 2,
-		provider: "islamway",
-		website: "http://www.islamway.com",
-		link: "http://quran.islamway.com/quran3/{rkey}/{sura3}.rm"
-	},
-
-	islamway_real_old: {
-		mtype: 2,
-		provider: "islamway",
-		website: "http://www.islamway.com",
-		link: "http://quran.islamway.com/{rkey}/{sura3}.rm"
-	},
-
-	egylist_real: {
-		mtype: 2,
-		provider: "islamway",
-		website: "http://www.islamway.com",
-		link: "http://egylist.com/quran/{rkey}/s{sura1}.rm"
 	}
 };
 
-export default { GetAudioURL, ReciterName, RecitersInfo, AudioServers };
-export { GetAudioURL, ReciterName, RecitersInfo, AudioServers };
+export default { GetAudioURL, RecitersInfo, AudioServers };
+export { GetAudioURL, RecitersInfo, AudioServers };

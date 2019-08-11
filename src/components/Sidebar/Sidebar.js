@@ -72,6 +72,9 @@ function Sidebar({ app, player, themeContext }) {
   };
 
   const showPlayer = () => {
+    if (player.playingAya !== -1) {
+      app.gotoAya(player.playingAya, { sel: true, replace: false });
+    }
     if (!player.visible) {
       player.show();
       return false;
