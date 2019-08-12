@@ -51,7 +51,8 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
     };
 
     const isBlockMouse = () => {
-        return modeless === true || isWide || isCompact || show === false;
+        // return modeless === true || isWide || isCompact || show === false;
+        return pagesCount === 1 && !isCompact;
     };
 
     return (
@@ -77,10 +78,14 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                     onClick={preventClose}
                 >
                     {children}
-                    <button className="CancelButton" onClick={onClickClose}>
-                        <FontAwesomeIcon icon={faTimes} />
-                    </button>
                 </div>
+                <button
+                    className="CancelButton"
+                    onClick={onClickClose}
+                    style={{ right: calcRight() }}
+                >
+                    <FontAwesomeIcon icon={faTimes} />
+                </button>
             </div>
         </Transition>
     );

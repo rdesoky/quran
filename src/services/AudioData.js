@@ -1,3 +1,7 @@
+import Utils from "./utils";
+
+const NumToString = Utils.num2string;
+
 function GetAudioURL(reciterID, suraNum, ayaNum) {
 	var url;
 	if (ayaNum != undefined) {
@@ -397,7 +401,7 @@ const RecitersInfo = {
 		actv: "(1114)",
 		rw: 1
 	},
-	Mu_sma: {
+	mu_sma: {
 		on: true,
 		suraAudio: {
 			server: "egylist",
@@ -503,10 +507,11 @@ const ListReciters = filter=>{
 		if(RecitersInfo.hasOwnProperty(k)){
 			const info = RecitersInfo[k];
 			if(info.on){
-
+				list.push(k);
 			}
 		}
 	}
+	return list;
 }
 
 const AudioServers = {
@@ -555,5 +560,5 @@ const AudioServers = {
 	}
 };
 
-export default { GetAudioURL, RecitersInfo, AudioServers };
-export { GetAudioURL, RecitersInfo, AudioServers };
+export default { GetAudioURL, RecitersInfo, AudioServers, ListReciters };
+export { GetAudioURL, RecitersInfo, AudioServers, ListReciters };

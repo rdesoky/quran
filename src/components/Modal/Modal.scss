@@ -43,21 +43,18 @@
 .ModalContent {
     pointer-events: all;
     position: absolute;
-    // transition: left right 0.3s;
-    // left: 0;
-    // top: 0;
     right: 0;
     padding: 0 15px 15px 15px;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    // margin-left: 50px;
-    max-height: 100%;
     box-sizing: border-box;
-    overflow: auto;
-    // text-align: center;
+    max-height: 100%;
+    // display: flex;
+    // flex-flow: column;
     .Title {
         text-align: center;
-        margin: 5px 20px 20px;
+        margin: 10px 20px;
+        min-height: 25px;
         position: relative;
         button {
             font-size: 25px;
@@ -68,6 +65,10 @@
             display: inline-block;
             min-width: calc(100% - 115px);
         }
+    }
+    .PopupBody {
+        // flex-grow: 1;
+        overflow: auto;
     }
     .FieldRow {
         div {
@@ -137,24 +138,29 @@
         }
     }
     #SearchForm {
+        // display: flex;
+        margin: 0 15px 5px 0; //RTL
         > * {
             display: inline-block;
             height: 40px;
             vertical-align: top;
         }
         .SearchInput {
+            // flex-grow: 1;
             background-color: transparent;
             color: white;
             border: none;
-            width: calc(100% - 60px);
             font-size: 25px;
             border: solid 1px silver;
             box-sizing: border-box;
+            width: calc(100% - 80px);
+            margin: 0 10px;
         }
         button[type="submit"] {
             width: 60px;
             font-size: 25px;
             border: solid 1px silver;
+            margin: 0;
         }
     }
     #SearchHistory {
@@ -162,6 +168,7 @@
         white-space: nowrap;
         overflow: auto;
         background-color: #444;
+        height: 26px;
         button {
             font-size: 15px;
             padding: 3px 5px;
@@ -200,7 +207,7 @@
         // margin-top: 20px;
         margin: 0;
         padding-inline-start: 30px;
-        overflow: auto;
+        // overflow: auto;
         .MoreResults {
             width: 100%;
             background-color: #999;
@@ -232,5 +239,11 @@
     }
     .TafseerVerse {
         color: yellow;
+    }
+}
+
+#SearchPopup {
+    .Title {
+        flex-basis: 180px;
     }
 }

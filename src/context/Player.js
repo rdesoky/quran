@@ -70,19 +70,23 @@ class PlayerProvider extends Component {
 
         this.audio.src = this.audioSource(playingAya);
         this.audio.play();
+        document.title = "Reciting...";
         //this.show();
     };
     resume = () => {
         this.audio.play();
+        document.title = "Reciting...";
         // this.show();
     };
     stop = event => {
         this.audio.pause();
         this.setAudioState(AudioState.stopped);
         this.setPlayingAya(-1);
+        document.title = "";
     };
 
     pause = () => {
+        document.title = "Paused";
         this.audio.pause();
     };
 
