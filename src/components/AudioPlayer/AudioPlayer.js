@@ -13,6 +13,7 @@ import QData from "./../../services/QData";
 import Utils from "./../../services/utils";
 import { FormattedMessage } from "react-intl";
 import ReciterName from "./ReciterName";
+import { ListReciters } from "./../../services/AudioData";
 
 class AudioPlayer extends Component {
     audio;
@@ -130,13 +131,28 @@ class AudioPlayer extends Component {
                 name="AudioPlayer"
                 modeless={true}
             >
-                <img
-                    id="ReciterIcon"
-                    src={process.env.PUBLIC_URL + "/images/baset.jpg"}
-                />
-                <ReciterName id="baset" />
                 <div className="Title">
                     <div id="PlayerStatus">{this.renderState()}</div>
+                </div>
+                <div className="PopupBody">
+                    <div>
+                        {ListReciters().map(reciter => {
+                            return (
+                                <div key={reciter}>
+                                    <img
+                                        class="ReciterIcon"
+                                        src={
+                                            process.env.PUBLIC_URL +
+                                            "/images/" +
+                                            reciter +
+                                            ".jpg"
+                                        }
+                                    />
+                                    <ReciterName id={reciter} />
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </Modal>
         );
