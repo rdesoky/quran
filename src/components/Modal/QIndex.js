@@ -3,8 +3,9 @@ import Modal from "./Modal";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { AppConsumer } from "../../context/App";
+import { PlayerConsumer, AudioState } from "../../context/Player";
 
-const QIndex = ({ app }) => {
+const QIndex = ({ app, player }) => {
     const getSuraNames = () => {
         let suraNames = [];
         for (let i = 1; i <= 114; i++) {
@@ -19,6 +20,9 @@ const QIndex = ({ app }) => {
         app.gotoSura(index);
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
+        }
+        if (player.audioState !== AudioState.stopped) {
+            player.stop();
         }
     };
 
@@ -87,4 +91,4 @@ const QIndex = ({ app }) => {
     );
 };
 
-export default AppConsumer(QIndex);
+export default AppConsumer(PlayerConsumer(QIndex));

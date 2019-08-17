@@ -133,7 +133,12 @@ function Sidebar({ app, player, themeContext }) {
             <>
                 <button
                     onClick={showPlayer}
-                    className="ReciterSideButton"
+                    className={
+                        "ReciterSideButton" +
+                        (player.audioState === AudioState.playing
+                            ? " blinking"
+                            : "")
+                    }
                     style={{
                         backgroundImage:
                             "url(" +
