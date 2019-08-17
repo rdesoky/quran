@@ -138,7 +138,7 @@ class AudioPlayer extends Component {
                     className="PopupBody"
                     style={{ maxHeight: app.appHeight - 95 }}
                 >
-                    <div>
+                    <div class="RecitersList">
                         {ListReciters("ayaAudio").map(reciter => {
                             return (
                                 <div

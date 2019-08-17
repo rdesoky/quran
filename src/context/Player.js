@@ -21,7 +21,7 @@ const PlayerContextState = {
     rangeStart: -1,
     rangeEnd: -1,
     rangeType: 0,
-    reciter: "baset" //TODO: read from localStorage
+    reciter: localStorage.getItem("reciter") || "baset"
 };
 
 //Create the PlayerContext hash object {Provider, Consumer}
@@ -94,6 +94,7 @@ class PlayerProvider extends Component {
     };
 
     changeReciter = reciter => {
+        localStorage.setItem("reciter", reciter);
         this.setState({ reciter });
     };
 
