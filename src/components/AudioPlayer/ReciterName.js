@@ -9,11 +9,7 @@ const ReciterName = ({ id, player }) => {
         player.changeReciter(reciter_id);
     };
 
-    return (
-        <button onClick={changeReciter}>
-            <FormattedMessage id={"r." + reciter_id} />
-        </button>
-    );
+    return <FormattedMessage id={"r." + reciter_id} />;
 };
 
 export default PlayerConsumer(ReciterName);

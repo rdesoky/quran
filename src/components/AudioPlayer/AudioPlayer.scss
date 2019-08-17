@@ -1,4 +1,21 @@
 #AudioPlayerPopup {
+    .ReciterButton {
+        display: inline-block;
+        width: 100px;
+        min-height: 100px;
+        text-align: center;
+        padding: 5px;
+        &:hover {
+            background-color: #444;
+        }
+        &.Selected {
+            background-color: #333;
+            cursor: default;
+        }
+        vertical-align: top;
+        cursor: pointer;
+        font-size: 12px;
+    }
     .ReciterIcon {
         // float: right;
         width: auto;
@@ -8,13 +25,13 @@
         // top: auto;
         // bottom: 0;
         // background-color: #443322dd;
-        padding: 0 50px 0 0;
-        .Title {
-            margin: 5px;
-        }
-        #PlayerControl {
-            float: right;
-        }
+        // padding: 0 50px 0 0;
+        // .Title {
+        //     margin: 5px;
+        // }
+        // #PlayerControl {
+        //     float: right;
+        // }
         #PlayerStatus {
             button {
                 font-size: 15px;

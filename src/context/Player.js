@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { AppConsumer } from "./App";
 import QData from "./../services/QData";
 import Utils from "./../services/utils";
+import { GetAudioURL } from "./../services/AudioData";
 
 const AudioState = {
     stopped: 0,
@@ -56,9 +57,11 @@ class PlayerProvider extends Component {
         const { sura, aya } = QData.ayaIdInfo(
             ayaId !== undefined ? ayaId : this.state.playingAya
         );
-        const fileName =
-            Utils.num2string(sura + 1, 3) + Utils.num2string(aya + 1, 3);
-        return `http://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/${fileName}.mp3`;
+        return GetAudioURL(this.state.reciter, sura + 1, aya + 1);
+        // const fileName =
+        //     Utils.num2string(sura + 1, 3) + Utils.num2string(aya + 1, 3);
+
+        // return `http://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/${fileName}.mp3`;
     };
 
     play = () => {
