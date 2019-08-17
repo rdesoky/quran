@@ -121,24 +121,37 @@ class AudioPlayer extends Component {
         this.props.app.closePopup();
     };
 
+    selectReciter = ({ currentTarget }) => {
+        const reciter = currentTarget.getAttribute("reciter");
+        this.props.player.changeReciter(reciter);
+    };
+
     render() {
-        const { player } = this.props;
-        const audioState = this.props.player.audioState;
+        const { app, player } = this.props;
+        //const audioState = player.audioState;
         return (
-            <Modal
-                onClose={this.onClose}
-                // show={player.visible}
-                name="AudioPlayer"
-                modeless={true}
-            >
+            <>
                 <div className="Title">
                     <div id="PlayerStatus">{this.renderState()}</div>
                 </div>
-                <div className="PopupBody">
+                <div
+                    className="PopupBody"
+                    style={{ maxHeight: app.appHeight - 95 }}
+                >
                     <div>
-                        {ListReciters().map(reciter => {
+                        {ListReciters("ayaAudio").map(reciter => {
                             return (
-                                <div key={reciter}>
+                                <div
+                                    reciter={reciter}
+                                    key={reciter}
+                                    className={
+                                        "ReciterButton" +
+                                        (player.reciter === reciter
+                                            ? " Selected"
+                                            : "")
+                                    }
+                                    onClick={this.selectReciter}
+                                >
                                     <img
                                         class="ReciterIcon"
                                         src={
@@ -148,13 +161,15 @@ class AudioPlayer extends Component {
                                             ".jpg"
                                         }
                                     />
-                                    <ReciterName id={reciter} />
+                                    <div>
+                                        <ReciterName id={reciter} />
+                                    </div>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-            </Modal>
+            </>
         );
     }
 }

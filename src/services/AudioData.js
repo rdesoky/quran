@@ -2,6 +2,12 @@ import Utils from "./utils";
 
 const NumToString = Utils.num2string;
 
+/**
+ * 
+ * @param {string} reciterID 
+ * @param {number} suraNum 
+ * @param {number} ayaNum 
+ */
 function GetAudioURL(reciterID, suraNum, ayaNum) {
 	var url;
 	if (ayaNum != undefined) {
@@ -408,10 +414,10 @@ const RecitersInfo = {
 			rkey: "mostafa_ismaeel",
 			actv: "(1114)"
 		},
-		//ayaAudio:{
-		//	server: "everyayah",
-		//	rkey: "Mustafa_Ismail_48kbps"
-		//},
+		ayaAudio:{
+			server: "everyayah",
+			rkey: "Mustafa_Ismail_48kbps"
+		},
 		url: "http://egylist.com/quran/Mu_sma/s%1%.rm",
 		actv: "(1114)",
 		rw: 1
@@ -501,12 +507,12 @@ const RecitersInfo = {
 	// }
 };
 
-const ListReciters = filter=>{
+const ListReciters = feature=>{
 	let list = [];
 	for(let k in RecitersInfo){
 		if(RecitersInfo.hasOwnProperty(k)){
 			const info = RecitersInfo[k];
-			if(info.on){
+			if(info[feature]!==undefined){
 				list.push(k);
 			}
 		}
