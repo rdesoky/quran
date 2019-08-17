@@ -75,11 +75,11 @@ function Sidebar({ app, player, themeContext }) {
         if (player.playingAya !== -1) {
             app.gotoAya(player.playingAya, { sel: true, replace: false });
         }
-        if (!player.visible) {
+        if (app.popup === "AudioPlayer") {
+            app.closePopup();
+        } else {
             player.show();
-            return false;
         }
-        return true;
     };
 
     const play = e => {
@@ -131,9 +131,9 @@ function Sidebar({ app, player, themeContext }) {
         }
         return (
             <>
-                {btn} {stopBtn}
                 <button
                     onClick={showPlayer}
+                    className="ReciterSideButton"
                     style={{
                         backgroundImage:
                             "url(" +
@@ -143,6 +143,7 @@ function Sidebar({ app, player, themeContext }) {
                             ".jpg)"
                     }}
                 />
+                {btn} {stopBtn}
             </>
         );
     };
