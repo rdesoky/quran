@@ -96,6 +96,19 @@ class PlayerProvider extends Component {
     changeReciter = reciter => {
         localStorage.setItem("reciter", reciter);
         this.setState({ reciter });
+        const { state, audio, playingAya } = this;
+        switch (state.audioState) {
+            case AudioState.paused:
+                this.stop();
+                break;
+            case AudioState.playing:
+                setTimeout(() => {
+                    this.play();
+                }, 1);
+                break;
+            default:
+                break;
+        }
     };
 
     methods = {
@@ -130,7 +143,7 @@ class PlayerProvider extends Component {
         audio.removeEventListener("pause", this.onPaused);
     }
 
-    onEnded = ({ target: audio }) => {
+    onEnded = () => {
         const { app } = this.props;
         if (this.state.audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);
@@ -141,7 +154,7 @@ class PlayerProvider extends Component {
         }
     };
 
-    onVolumeChange = ({ target: audio }) => {
+    onVolumeChange = () => {
         // this.setVolume(audio.volume);
         // this.setMuted(audio.muted);
     };
