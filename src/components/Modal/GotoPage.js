@@ -3,8 +3,9 @@ import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { AppConsumer } from "./../../context/App";
+import { PlayerConsumer, AudioState } from "../../context/Player";
 
-const GotoPage = ({ open, app }) => {
+const GotoPage = ({ open, app, player }) => {
     const [isOpen, setIsOpen] = useState(true);
     const [pageNumber, updatePageNumber] = useState(
         Utils.pageFromPath(app.location.pathname)
@@ -35,6 +36,9 @@ const GotoPage = ({ open, app }) => {
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
         }
+        if (player.audioState !== AudioState.stopped) {
+            player.stop();
+        }
         e.preventDefault();
     };
 
@@ -45,6 +49,9 @@ const GotoPage = ({ open, app }) => {
         app.gotoPart(part - 1);
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
+        }
+        if (player.audioState !== AudioState.stopped) {
+            player.stop();
         }
         e.preventDefault();
     };
@@ -121,4 +128,4 @@ const GotoPage = ({ open, app }) => {
     );
 };
 
-export default AppConsumer(GotoPage);
+export default AppConsumer(PlayerConsumer(GotoPage));
