@@ -112,7 +112,7 @@ class AudioPlayer extends Component {
         const { playingAya } = player;
         const ayaId = playingAya !== -1 ? playingAya : selectStart;
         app.gotoAya(ayaId, { sel: true });
-        player.show();
+        // player.show();
     };
 
     onClose = () => {
