@@ -142,16 +142,22 @@ class AppProvider extends Component {
     };
 
     setPopup = popup => {
-        this.setState({ popup, showMenu: null, showPopup: true });
+        if (this.state.popup) {
+            this.closePopup(popup);
+        } else {
+            this.setState({ popup, showMenu: null, showPopup: true });
+        }
         if (popup !== null && popup !== "Commands") {
-            this.pushRecentCommand(popup);
+            setTimeout(() => {
+                this.pushRecentCommand(popup);
+            }, 1000);
         }
     };
 
-    closePopup = () => {
+    closePopup = (newPopup = null) => {
         this.setState({ showPopup: false });
         setTimeout(() => {
-            this.setState({ popup: null });
+            this.setState({ popup: newPopup, showPopup: newPopup !== null });
             Utils.selectTopCommand();
         }, 500);
     };
