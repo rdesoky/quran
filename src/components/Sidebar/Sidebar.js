@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faTh,
+    faFileDownload,
     faAngleDoubleDown,
     faAngleDoubleUp,
     faPlayCircle,
@@ -119,6 +119,13 @@ function Sidebar({ app, player, themeContext }) {
                 btn = (
                     <button onClick={pause}>
                         <FontAwesomeIcon icon={faPauseCircle} />
+                    </button>
+                );
+                break;
+            case AudioState.buffering:
+                btn = (
+                    <button onClick={stop} className="blinking">
+                        <FontAwesomeIcon icon={faFileDownload} />
                     </button>
                 );
                 break;
