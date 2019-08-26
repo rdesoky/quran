@@ -64,7 +64,7 @@ class AppProvider extends Component {
             ...this.state.recentCommands.filter(c => c !== command)
         ];
         recentCommands.length = 7;
-        this.setState({ recentCommands });
+        setTimeout(() => this.setState({ recentCommands }), 1000);
         localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
     };
 
