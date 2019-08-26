@@ -21,6 +21,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
     let activeSide = app.getActiveSide();
 
     useEffect(() => {
+        //select the launching command from in the side bar
         const commandBtn = document.querySelector(
             `#RecentCommands button[command=${app.popup}]`
         );
@@ -28,6 +29,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
             commandBtn.focus();
         }
         return () => {
+            //Upon exit, select the most recent command to avoid hidden focus
             Utils.selectTopCommand();
         };
     }, []);

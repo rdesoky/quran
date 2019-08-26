@@ -31,14 +31,12 @@ const Utils = {
         }
     },
     selectTopCommand: () => {
-        setTimeout(() => {
-            const topRecentBtn = document.querySelector(
-                "#RecentCommands button"
-            );
-            if (topRecentBtn) {
-                topRecentBtn.focus();
-            }
-        }, 50);
+        // setTimeout(() => {
+        const topRecentBtn = document.querySelector("#RecentCommands button");
+        if (topRecentBtn) {
+            topRecentBtn.focus();
+        }
+        // }, 50);
     },
     hilightSearch: (query, text, ntext) => {
         let words = text.trim().split(" "); //phrase words
