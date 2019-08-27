@@ -330,6 +330,57 @@ const RecitersInfo = {
             server: "everyayah",
             rkey: "warsh/warsh_ibrahim_aldosary_128kbps"
         }
+    },
+    swaisy: {
+        //Ali Hajjaj Alsuesy
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Ali_Hajjaj_AlSuesy_128kbps"
+        }
+    },
+    juhaynee: {
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Abdullaah_3awwaad_Al-Juhaynee_128kbps"
+        }
+    },
+    alqatami: {
+        //nasser Alqatami
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Nasser_Alqatami_128kbps"
+        }
+    },
+    qahtanee: {
+        //khaled qahtaneed
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Khaalid_Abdullaah_al-Qahtaanee_192kbps"
+        }
+    },
+    shatree: {
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Abu_Bakr_Ash-Shaatree_128kbps"
+        }
+    },
+    shuraim: {
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Saood_ash-Shuraym_128kbps"
+        }
+    },
+    sudaiss: {
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Abdurrahmaan_As-Sudais_192kbps"
+        }
+    },
+    salamah: {
+        ayaAudio: {
+            server: "everyayah",
+            rkey: "Yaser_Salamah_128kbps"
+        }
     }
 
     // abuzaid: {
