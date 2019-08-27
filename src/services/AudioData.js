@@ -612,7 +612,17 @@ const RecitersInfo = {
     // }
 };
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 const ListReciters = feature => {
+    const saved_list = JSON.parse(
+        localStorage.getItem("reciters_" + feature) || "[]"
+    );
     let list = [];
     for (let k in RecitersInfo) {
         if (RecitersInfo.hasOwnProperty(k)) {
@@ -622,7 +632,12 @@ const ListReciters = feature => {
             }
         }
     }
-    return list;
+    if (list.length != saved_list.length) {
+        shuffleArray(list);
+        localStorage.setItem("reciters_" + feature, JSON.stringify(list));
+        return list;
+    }
+    return saved_list;
 };
 
 const AudioServers = {
