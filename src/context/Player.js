@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AppConsumer } from "./App";
 import QData from "./../services/QData";
 import Utils from "./../services/utils";
-import { GetAudioURL } from "./../services/AudioData";
+import { GetAudioURL, ListReciters } from "./../services/AudioData";
 
 const AudioState = {
     stopped: 0,
@@ -109,6 +109,16 @@ class PlayerProvider extends Component {
             default:
                 break;
         }
+
+        let updated_reciters = ListReciters("ayaAudio").filter(
+            r => r !== reciter
+        );
+
+        updated_reciters.splice(0, 0, reciter);
+        localStorage.setItem(
+            "reciters_ayaAudio",
+            JSON.stringify(updated_reciters)
+        );
     };
 
     methods = {
