@@ -16,7 +16,7 @@ const PlayerContextState = {
     visible: false,
     audioState: AudioState.stopped,
     playingAya: -1,
-    followPlayer: true,
+    followPlayer: JSON.parse(localStorage.getItem("followPlayer") || "true"),
     repeat: 0,
     rangeStart: -1,
     rangeEnd: -1,
@@ -123,6 +123,7 @@ class PlayerProvider extends Component {
 
     setFollowPlayer = followPlayer => {
         this.setState({ followPlayer });
+        localStorage.setItem("followPlayer", JSON.stringify(followPlayer));
     };
 
     methods = {
