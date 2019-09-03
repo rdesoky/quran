@@ -1,250 +1,250 @@
 .ModalOverlay {
-	position: fixed;
-	// left: 0;
-	top: 0;
-	right: 0;
-	bottom: 25px;
-	overflow: hidden;
-	// border: solid 1px red;
+    position: fixed;
+    // left: 0;
+    top: 0;
+    right: 0;
+    bottom: 25px;
+    overflow: hidden;
+    // border: solid 1px red;
 }
 
 .CancelButton {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	width: 50px;
-	height: 50px;
-	color: white;
-	font-size: 18px;
-	// padding: 10px 15px;
-	&:hover {
-		background-color: #666;
-	}
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 50px;
+    height: 50px;
+    color: white;
+    font-size: 18px;
+    // padding: 10px 15px;
+    &:hover {
+        background-color: #666;
+    }
 }
 
 .trans-start {
-	.ModalContent {
-		opacity: 0;
-		top: -20px;
-	}
+    .ModalContent {
+        opacity: 0;
+        top: -20px;
+    }
 }
 .trans-end {
-	.ModalContent {
-		transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
-		opacity: 1;
-		top: 0;
-		&.HiddenPopup {
-			top: -20px;
-			opacity: 0;
-		}
-	}
+    .ModalContent {
+        transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
+        opacity: 1;
+        top: 0;
+        &.HiddenPopup {
+            top: -20px;
+            opacity: 0;
+        }
+    }
 }
 
 .ModalContent {
-	pointer-events: all;
-	position: absolute;
-	right: 0;
-	padding: 0 15px 15px 15px;
-	background-color: rgba(0, 0, 0, 0.8);
-	color: white;
-	box-sizing: border-box;
-	max-height: 100%;
-	// display: flex;
-	// flex-flow: column;
-	.Title {
-		text-align: center;
-		margin: 10px 20px;
-		min-height: 25px;
-		position: relative;
-		button {
-			font-size: 25px;
-			min-width: 35px;
-			margin: 0 10px;
-		}
-		.FlexTitle {
-			display: inline-block;
-			min-width: calc(100% - 115px);
-		}
-	}
-	.PopupBody {
-		// flex-grow: 1;
-		overflow: auto;
-	}
-	.FieldRow {
-		div {
-			display: inline-block;
-		}
-		margin: 10px 0;
-	}
-	.FieldLabel {
-		width: 38%;
-		text-align: left;
-		padding: 0 10px;
-		box-sizing: border-box;
-	}
-	.FieldValue {
-		width: 23%;
-		text-align: right;
-		input {
-			width: 100%;
-			color: white;
-			border: none;
-			font-size: 25px;
-			background-color: #ffffff30;
-			vertical-align: middle;
-		}
-	}
-	.FieldAction {
-		width: 23%;
-		padding: 0 10px;
-		box-sizing: border-box;
-	}
+    pointer-events: all;
+    position: absolute;
+    right: 0;
+    padding: 0 15px 15px 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    box-sizing: border-box;
+    max-height: 100%;
+    // display: flex;
+    // flex-flow: column;
+    .Title {
+        text-align: center;
+        margin: 10px 20px;
+        min-height: 25px;
+        position: relative;
+        button {
+            font-size: 25px;
+            min-width: 35px;
+            margin: 0 10px;
+        }
+        .FlexTitle {
+            display: inline-block;
+            min-width: calc(100% - 115px);
+        }
+    }
+    .PopupBody {
+        // flex-grow: 1;
+        overflow: auto;
+    }
+    .FieldRow {
+        div {
+            display: inline-block;
+        }
+        margin: 10px 0;
+    }
+    .FieldLabel {
+        width: 38%;
+        text-align: left;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    .FieldValue {
+        width: 23%;
+        text-align: right;
+        input {
+            width: 100%;
+            color: white;
+            border: none;
+            font-size: 25px;
+            background-color: #ffffff30;
+            vertical-align: middle;
+        }
+    }
+    .FieldAction {
+        width: 23%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
 
-	.ActionBar {
-		margin: 20px 0 0 0;
-		text-align: center;
-	}
+    .ActionBar {
+        margin: 20px 0 0 0;
+        text-align: center;
+    }
 
-	.FieldAction {
-		button {
-			background-color: #666;
-			border: none;
-			color: white;
-			padding: 5px 15px;
-			font-size: 17px;
-			vertical-align: middle;
+    .FieldAction {
+        button {
+            background-color: #666;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            font-size: 17px;
+            vertical-align: middle;
 
-			&:hover {
-				background-color: black;
-			}
-		}
-	}
+            &:hover {
+                background-color: black;
+            }
+        }
+    }
 
-	.CancelButton {
-		font-size: 24px;
-	}
+    .CancelButton {
+        font-size: 24px;
+    }
 
-	.CommandsList {
-		text-align: center;
-		direction: ltr;
-		// padding: 0 25px;
-		button {
-			width: 80px;
-			height: 80px;
-			font-size: 25px;
-			.CommandLabel {
-				font-size: 12px;
-			}
-		}
-	}
-	#SearchForm {
-		// display: flex;
-		margin: 0 15px 5px 0; //RTL
-		> * {
-			display: inline-block;
-			height: 40px;
-			vertical-align: top;
-		}
-		.SearchInput {
-			// flex-grow: 1;
-			background-color: transparent;
-			color: white;
-			border: none;
-			font-size: 25px;
-			border: solid 1px silver;
-			box-sizing: border-box;
-			width: calc(100% - 80px);
-			margin: 0 10px;
-		}
-		button[type="submit"] {
-			width: 60px;
-			font-size: 25px;
-			border: solid 1px silver;
-			margin: 0;
-		}
-	}
-	#SearchHistory {
-		padding: 5px 0;
-		white-space: nowrap;
-		overflow-y: hidden;
-		overflow-x: auto;
-		background-color: #444;
-		height: 44px;
-		button {
-			font-size: 15px;
-			padding: 3px 5px;
-			border: solid 1px silver;
-			margin: 0 3px;
-		}
-	}
-	.link {
-		cursor: pointer;
-		padding: 5px;
-		&:hover {
-			color: #ffffaa;
-			background-color: #666;
-		}
-		* {
-			pointer-events: none;
-		}
-	}
+    .CommandsList {
+        text-align: center;
+        direction: ltr;
+        // padding: 0 25px;
+        button {
+            width: 80px;
+            height: 80px;
+            font-size: 25px;
+            .CommandLabel {
+                font-size: 12px;
+            }
+        }
+    }
+    #SearchForm {
+        // display: flex;
+        margin: 0 15px 5px 0; //RTL
+        > * {
+            display: inline-block;
+            height: 40px;
+            vertical-align: top;
+        }
+        .SearchInput {
+            // flex-grow: 1;
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 25px;
+            border: solid 1px silver;
+            box-sizing: border-box;
+            width: calc(100% - 80px);
+            margin: 0 10px;
+        }
+        button[type="submit"] {
+            width: 60px;
+            font-size: 25px;
+            border: solid 1px silver;
+            margin: 0;
+        }
+    }
+    #SearchHistory {
+        padding: 5px 0;
+        white-space: nowrap;
+        overflow-y: hidden;
+        overflow-x: auto;
+        // background-color: #444;
+        height: 44px;
+        button {
+            font-size: 15px;
+            padding: 3px 5px;
+            border: solid 1px silver;
+            margin: 0 3px;
+        }
+    }
+    .link {
+        cursor: pointer;
+        padding: 5px;
+        &:hover {
+            color: #ffffaa;
+            background-color: #666;
+        }
+        * {
+            pointer-events: none;
+        }
+    }
 
-	.ResultInfo {
-		color: #aaffff;
-		background-color: #444;
-		display: inline-block;
-		min-width: 100px;
-		text-align: left;
-		padding: 0 5px;
-	}
+    .ResultInfo {
+        color: #aaffff;
+        background-color: #444;
+        display: inline-block;
+        min-width: 100px;
+        text-align: left;
+        padding: 0 5px;
+    }
 
-	.ResultsInfo {
-		color: yellow;
-		height: 35px;
-		line-height: 30px;
-	}
+    .ResultsInfo {
+        color: yellow;
+        height: 35px;
+        line-height: 30px;
+    }
 
-	.ResultsList {
-		// margin-top: 20px;
-		margin: 0;
-		padding-inline-start: 30px;
-		// overflow: auto;
-		.MoreResults {
-			width: 100%;
-			background-color: #999;
-			padding: 10px;
-			color: black;
-			cursor: pointer;
-			&:hover {
-				background-color: #ddd;
-			}
-		}
-		.ResultItem {
-			button {
-				span {
-					pointer-events: none;
-				}
-				text-align: right;
-				font-size: 16px;
-				line-height: 25px;
-				.hiword {
-					color: yellow;
-				}
-			}
-		}
-	}
+    .ResultsList {
+        // margin-top: 20px;
+        margin: 0;
+        padding-inline-start: 30px;
+        // overflow: auto;
+        .MoreResults {
+            width: 100%;
+            background-color: #999;
+            padding: 10px;
+            color: black;
+            cursor: pointer;
+            &:hover {
+                background-color: #ddd;
+            }
+        }
+        .ResultItem {
+            button {
+                span {
+                    pointer-events: none;
+                }
+                text-align: right;
+                font-size: 16px;
+                line-height: 25px;
+                .hiword {
+                    color: yellow;
+                }
+            }
+        }
+    }
 
-	a {
-		color: white;
-		text-decoration: none;
-	}
-	.TafseerVerse {
-		color: yellow;
-	}
+    a {
+        color: white;
+        text-decoration: none;
+    }
+    .TafseerVerse {
+        color: yellow;
+    }
 }
 
 #SearchPopup {
-	.Title {
-		flex-basis: 180px;
-	}
+    .Title {
+        flex-basis: 180px;
+    }
 }
