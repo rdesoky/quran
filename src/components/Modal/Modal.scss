@@ -70,6 +70,15 @@
         // flex-grow: 1;
         overflow: auto;
     }
+    .OptionRow {
+        padding: 5px 0;
+        margin: 5px 0 10px;
+        span {
+            display: inline-block;
+            margin: 0 5px;
+            vertical-align: top;
+        }
+    }
     .FieldRow {
         div {
             display: inline-block;

@@ -121,6 +121,10 @@ class PlayerProvider extends Component {
         );
     };
 
+    setFollowPlayer = followPlayer => {
+        this.setState({ followPlayer });
+    };
+
     methods = {
         show: this.show,
         setAudioState: this.setAudioState,
@@ -130,7 +134,8 @@ class PlayerProvider extends Component {
         pause: this.pause,
         resume: this.resume,
         stop: this.stop,
-        changeReciter: this.changeReciter
+        changeReciter: this.changeReciter,
+        setFollowPlayer: this.setFollowPlayer
     };
 
     componentDidMount() {
