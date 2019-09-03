@@ -298,7 +298,25 @@ class AppProvider extends Component {
         return this.state.isNarrow ? 0 : 50;
     };
 
+    popupWidth = () => {
+        const {
+            isWide,
+            appWidth,
+            appHeight,
+            pagesCount,
+            isCompact
+        } = this.state;
+        if (isWide) {
+            return appWidth - appHeight * 1.25;
+        }
+        if (isCompact) {
+            return appWidth - appHeight * 0.65;
+        }
+        return appWidth / pagesCount;
+    };
+
     methods = {
+        popupWidth: this.popupWidth,
         setShowMenu: this.setShowMenu,
         toggleShowMenu: this.toggleShowMenu,
         setPopup: this.setPopup,
