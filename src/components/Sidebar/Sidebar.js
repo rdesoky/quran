@@ -88,6 +88,10 @@ function Sidebar({ app, player, themeContext }) {
     const stop = e => {
         player.stop();
     };
+    const retry = e => {
+        player.stop();
+        player.play();
+    };
     const resume = e => {
         player.resume();
     };
@@ -124,7 +128,7 @@ function Sidebar({ app, player, themeContext }) {
                 break;
             case AudioState.buffering:
                 btn = (
-                    <button onClick={stop} className="blinking">
+                    <button onClick={retry} className="blinking">
                         <FontAwesomeIcon icon={faFileDownload} />
                     </button>
                 );
