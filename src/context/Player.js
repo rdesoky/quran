@@ -21,7 +21,7 @@ const PlayerContextState = {
     rangeStart: -1,
     rangeEnd: -1,
     rangeType: 0,
-    reciter: localStorage.getItem("reciter") || "baset"
+    reciter: localStorage.getItem("reciter") || ListReciters()[0]
 };
 
 //Create the PlayerContext hash object {Provider, Consumer}

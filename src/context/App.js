@@ -20,7 +20,7 @@ const AppState = {
     maskStart: -1,
     recentCommands: rc
         ? JSON.parse(rc)
-        : ["Search", "Index", "Tafseer", "Copy", "Mask", "Goto"]
+        : ["Search", "Index", "Tafseer", "Copy", "Mask", "Goto", "Theme", "Exercise", "Favorites"]
 };
 
 const AppContext = React.createContext(AppState);
@@ -383,14 +383,14 @@ class AppProvider extends Component {
             .then(text => {
                 this._verseList = text.split("\n");
             })
-            .catch(e => {});
+            .catch(e => { });
 
         fetch(`${process.env.PUBLIC_URL}/normalized_quran.txt`)
             .then(results => results.text())
             .then(text => {
                 this._normVerseList = text.split("\n");
             })
-            .catch(e => {});
+            .catch(e => { });
     }
 
     render() {

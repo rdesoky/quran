@@ -619,23 +619,24 @@ function shuffleArray(array) {
     }
 }
 
-const ListReciters = feature => {
+const ListReciters = (feature = "ayaAudio") => {
     const saved_list = JSON.parse(
         localStorage.getItem("reciters_" + feature) || "[]"
     );
-    let list = [];
+    let availableReciters = [];
     for (let k in RecitersInfo) {
         if (RecitersInfo.hasOwnProperty(k)) {
             const info = RecitersInfo[k];
             if (info[feature] !== undefined) {
-                list.push(k);
+                availableReciters.push(k);
             }
         }
     }
-    if (list.length != saved_list.length) {
-        shuffleArray(list);
-        localStorage.setItem("reciters_" + feature, JSON.stringify(list));
-        return list;
+    //If saved_list does not match the available reciters
+    if (availableReciters.length != saved_list.length) {
+        shuffleArray(availableReciters);
+        localStorage.setItem("reciters_" + feature, JSON.stringify(availableReciters));
+        return availableReciters;
     }
     return saved_list;
 };
