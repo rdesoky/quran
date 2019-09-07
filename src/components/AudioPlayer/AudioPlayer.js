@@ -15,7 +15,6 @@ import { FormattedMessage } from "react-intl";
 import ReciterName from "./ReciterName";
 import { ListReciters } from "./../../services/AudioData";
 import Switch from "react-switch";
-// import { getConsoleOutput } from "@jest/console";
 
 class AudioPlayer extends Component {
     audio;
@@ -25,17 +24,6 @@ class AudioPlayer extends Component {
         super(props);
         this.audio = document.createElement("audio");
     }
-
-    // audioSource(ayaId) {
-    //     const { player } = this.props;
-
-    //     const { sura, aya } = QData.ayaIdInfo(
-    //         ayaId !== undefined ? ayaId : player.playingAya
-    //     );
-    //     const fileName =
-    //         Utils.num2string(sura + 1, 3) + Utils.num2string(aya + 1, 3);
-    //     return `http://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/${fileName}.mp3`;
-    // }
 
     handleKeyDown = e => {
         switch (e.code) {
@@ -66,6 +54,11 @@ class AudioPlayer extends Component {
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyDown);
     }
+
+    onChangeRepeat = ({ currentTarget }) => {
+        const repeat = currentTarget.value;
+        this.props.player.setRepeat(parseInt(repeat));
+    };
 
     renderState = () => {
         const { app, player } = this.props;
@@ -114,7 +107,6 @@ class AudioPlayer extends Component {
         const { playingAya } = player;
         const ayaId = playingAya !== -1 ? playingAya : selectStart;
         app.gotoAya(ayaId, { sel: true });
-        // player.show();
     };
 
     onClose = () => {
@@ -134,7 +126,6 @@ class AudioPlayer extends Component {
 
     render() {
         const { app, player } = this.props;
-        //const audioState = player.audioState;
         return (
             <>
                 <div className="Title">
@@ -157,7 +148,39 @@ class AudioPlayer extends Component {
                             />
                         </label>
                     </div>
-                    <div class="RecitersList">
+                    <div className="OptionRow">
+                        <label>
+                            No <input type="radio"
+                                name="repeat"
+                                value={0}
+                                onChange={this.onChangeRepeat}
+                                checked={player.repeat === 0} />
+                        </label>
+                        <label>
+                            Verse <input
+                                type="radio"
+                                name="repeat"
+                                value={1}
+                                onChange={this.onChangeRepeat}
+                                checked={player.repeat === 1} />
+                        </label>
+                        <label>
+                            Page <input
+                                type="radio"
+                                name="repeat"
+                                value={2}
+                                onChange={this.onChangeRepeat}
+                                checked={player.repeat === 2} />
+                        </label>
+                        <label>
+                            Sura <input type="radio"
+                                name="repeat"
+                                value={3}
+                                onChange={this.onChangeRepeat}
+                                checked={player.repeat === 3} />
+                        </label>
+                    </div>
+                    <div className="RecitersList">
                         {ListReciters("ayaAudio").map(reciter => {
                             return (
                                 <div
@@ -172,7 +195,7 @@ class AudioPlayer extends Component {
                                     onClick={this.selectReciter}
                                 >
                                     <img
-                                        class="ReciterIcon"
+                                        className="ReciterIcon"
                                         src={
                                             process.env.PUBLIC_URL +
                                             "/images/" +

@@ -126,6 +126,10 @@ class PlayerProvider extends Component {
         localStorage.setItem("followPlayer", JSON.stringify(followPlayer));
     };
 
+    setRepeat = repeat => {
+        this.setState({ repeat });
+    }
+
     methods = {
         show: this.show,
         setAudioState: this.setAudioState,
@@ -136,7 +140,8 @@ class PlayerProvider extends Component {
         resume: this.resume,
         stop: this.stop,
         changeReciter: this.changeReciter,
-        setFollowPlayer: this.setFollowPlayer
+        setFollowPlayer: this.setFollowPlayer,
+        setRepeat: this.setRepeat
     };
 
     componentDidMount() {
