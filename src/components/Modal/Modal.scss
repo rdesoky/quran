@@ -73,10 +73,14 @@
     .OptionRow {
         padding: 5px 0;
         margin: 5px 0 10px;
-        span {
+        text-align: center;
+        span, label {
             display: inline-block;
-            margin: 0 5px;
+            margin: 0 12px;
             vertical-align: top;
+        }
+        input[type=radio]{
+            vertical-align: text-top;
         }
     }
     .FieldRow {
