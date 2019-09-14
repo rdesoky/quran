@@ -52,6 +52,30 @@ const QData = {
     },
 
     /**
+     * Returns part index for a given verse
+     *
+     * @param {int} aya_id absolute verse index
+     */
+    ayaIdPart: aya_id => {
+        const ayaInfo = QData.ayaIdInfo(aya_id);
+        for (let p = 0; p < QData.parts.length; p++) {
+            const partInfo = QData.parts[p];
+            if (
+                partInfo.s - 1 <= ayaInfo.sura &&
+                partInfo.a - 1 <= ayaInfo.aya
+            ) {
+                return p;
+            }
+        }
+        return QData.parts.length - 1;
+    },
+
+    partAyaId: part_index => {
+        const partInfo = QData.parts[part_index];
+        return QData.ayaID(partInfo.s - 1, partInfo.a - 1);
+    },
+
+    /**
      * Retuns aya ID by page index
      */
     pageAyaId: page_index => {

@@ -47,9 +47,48 @@ class PlayerProvider extends Component {
     };
 
     offsetPlayingAya = offset => {
-        //TODO: validate aya
-        const playingAya = this.state.playingAya + offset;
-        this.setState({ playingAya });
+        let playingAya = this.state.playingAya;
+        if (playingAya + offset >= QData.ayatCount()) {
+            return;
+        }
+
+        switch (this.state.repeat) {
+            case 1: //aya
+                return playingAya;
+            case 2: //page
+                const currPage = QData.ayaIdPage(playingAya);
+                const nextPage = QData.ayaIdPage(playingAya + offset);
+                if (nextPage != currPage) {
+                    playingAya = QData.pageAyaId(currPage);
+                } else {
+                    playingAya += offset;
+                }
+                break;
+            case 3: //sura
+                const currSura = QData.ayaIdInfo(playingAya).sura;
+                const nextSura = QData.ayaIdInfo(playingAya + offset).sura;
+                if (currSura != nextSura) {
+                    playingAya = QData.ayaID(currSura, 0);
+                } else {
+                    playingAya += offset;
+                }
+                break;
+            case 4: //part
+                const currPart = QData.ayaIdPart(playingAya).sura;
+                const nextPart = QData.ayaIdPart(playingAya + offset).sura;
+                if (currPart != nextPart) {
+                    playingAya = QData.partAyaId(currPart);
+                } else {
+                    playingAya += offset;
+                }
+                break;
+            default:
+                playingAya += offset;
+        }
+
+        if (playingAya < QData.ayatCount()) {
+            this.setState({ playingAya });
+        }
         return playingAya;
     };
 
@@ -128,7 +167,7 @@ class PlayerProvider extends Component {
 
     setRepeat = repeat => {
         this.setState({ repeat });
-    }
+    };
 
     methods = {
         show: this.show,

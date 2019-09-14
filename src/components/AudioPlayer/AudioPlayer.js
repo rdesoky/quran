@@ -150,34 +150,39 @@ class AudioPlayer extends Component {
                     </div>
                     <div className="OptionRow">
                         <label>
-                            No <input type="radio"
-                                name="repeat"
-                                value={0}
+                            <span>
+                                <FormattedMessage id="repeat" />
+                            </span>
+                            <select
                                 onChange={this.onChangeRepeat}
-                                checked={player.repeat === 0} />
-                        </label>
-                        <label>
-                            Verse <input
-                                type="radio"
-                                name="repeat"
-                                value={1}
-                                onChange={this.onChangeRepeat}
-                                checked={player.repeat === 1} />
-                        </label>
-                        <label>
-                            Page <input
-                                type="radio"
-                                name="repeat"
-                                value={2}
-                                onChange={this.onChangeRepeat}
-                                checked={player.repeat === 2} />
-                        </label>
-                        <label>
-                            Sura <input type="radio"
-                                name="repeat"
-                                value={3}
-                                onChange={this.onChangeRepeat}
-                                checked={player.repeat === 3} />
+                                value={player.repeat}
+                            >
+                                <FormattedMessage id="no_repeat">
+                                    {label => (
+                                        <option value={0}>{label}</option>
+                                    )}
+                                </FormattedMessage>
+                                <FormattedMessage id="verse">
+                                    {label => (
+                                        <option value={1}>{label}</option>
+                                    )}
+                                </FormattedMessage>
+                                <FormattedMessage id="page">
+                                    {label => (
+                                        <option value={2}>{label}</option>
+                                    )}
+                                </FormattedMessage>
+                                <FormattedMessage id="sura">
+                                    {label => (
+                                        <option value={3}>{label}</option>
+                                    )}
+                                </FormattedMessage>
+                                <FormattedMessage id="part">
+                                    {label => (
+                                        <option value={4}>{label}</option>
+                                    )}
+                                </FormattedMessage>
+                            </select>
                         </label>
                     </div>
                     <div className="RecitersList">
