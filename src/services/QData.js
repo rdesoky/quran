@@ -57,14 +57,15 @@ const QData = {
      * @param {int} aya_id absolute verse index
      */
     ayaIdPart: aya_id => {
-        const ayaInfo = QData.ayaIdInfo(aya_id);
+        const { sura: sIndex, aya: aIndex } = QData.ayaIdInfo(aya_id);
         for (let p = 0; p < QData.parts.length; p++) {
-            const partInfo = QData.parts[p];
+            const { s, a } = QData.parts[p];
+            const [partSuraIndex, partAyaIndex] = [s - 1, a - 1];
             if (
-                partInfo.s - 1 <= ayaInfo.sura &&
-                partInfo.a - 1 <= ayaInfo.aya
+                partSuraIndex > sIndex ||
+                (partSuraIndex == sIndex && partAyaIndex > aIndex)
             ) {
-                return p;
+                return p - 1; //passed
             }
         }
         return QData.parts.length - 1;
