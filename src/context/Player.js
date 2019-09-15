@@ -17,7 +17,7 @@ const PlayerContextState = {
     audioState: AudioState.stopped,
     playingAya: -1,
     followPlayer: JSON.parse(localStorage.getItem("followPlayer") || "true"),
-    repeat: 0,
+    repeat: parseInt(localStorage.getItem("repeat") || "0"),
     rangeStart: -1,
     rangeEnd: -1,
     rangeType: 0,
@@ -74,8 +74,8 @@ class PlayerProvider extends Component {
                 }
                 break;
             case 4: //part
-                const currPart = QData.ayaIdPart(playingAya).sura;
-                const nextPart = QData.ayaIdPart(playingAya + offset).sura;
+                const currPart = QData.ayaIdPart(playingAya);
+                const nextPart = QData.ayaIdPart(playingAya + offset);
                 if (currPart != nextPart) {
                     playingAya = QData.partAyaId(currPart);
                 } else {
@@ -167,6 +167,7 @@ class PlayerProvider extends Component {
 
     setRepeat = repeat => {
         this.setState({ repeat });
+        localStorage.setItem("repeat", repeat.stringify());
     };
 
     methods = {
