@@ -12,6 +12,10 @@ const QData = {
     /**
      * Zero based with numeric params
      * If string params, it is one based
+     *
+     * @param {number} sura
+     * @param {number} aya
+     * @returns {number} absolute aya index
      */
     ayaID: (sura, aya) => {
         if (typeof sura === "string") {
@@ -21,9 +25,13 @@ const QData = {
             aya = parseInt(aya) - 1;
         }
         let id = 0;
+
+        //Add up verses count of previous suras
         for (var s = 0; s < sura; s++) {
             id += QData.sura_info[s].ac;
         }
+
+        //Add current sura aya index
         id += aya;
         return id;
     },
@@ -54,7 +62,7 @@ const QData = {
     /**
      * Returns part index for a given verse
      *
-     * @param {int} aya_id absolute verse index
+     * @param {number} aya_id absolute verse index
      */
     ayaIdPart: aya_id => {
         const { sura: sIndex, aya: aIndex } = QData.ayaIdInfo(aya_id);
@@ -71,13 +79,20 @@ const QData = {
         return QData.parts.length - 1;
     },
 
+    /**
+     * Returns given part first verse absolute ID
+     *
+     * @param {number} part_index zero based part index
+     */
     partAyaId: part_index => {
-        const partInfo = QData.parts[part_index];
-        return QData.ayaID(partInfo.s - 1, partInfo.a - 1);
+        const { s: suraNum, a: ayaNum } = QData.parts[part_index];
+        return QData.ayaID(suraNum - 1, ayaNum - 1);
     },
 
     /**
      * Retuns aya ID by page index
+     *
+     * @param {number} page_index
      */
     pageAyaId: page_index => {
         let { s: sura, a: aya } = QData.pagesInfo[page_index];

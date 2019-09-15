@@ -72,7 +72,7 @@ function Sidebar({ app, player, themeContext }) {
     };
 
     const showPlayer = () => {
-        if (player.playingAya !== -1) {
+        if (player.playingAya !== -1 && player.repeat !== 1) {
             app.gotoAya(player.playingAya, { sel: true, replace: false });
         }
         if (app.popup === "AudioPlayer") {

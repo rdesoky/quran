@@ -53,8 +53,16 @@ class PlayerProvider extends Component {
         }
 
         switch (this.state.repeat) {
-            case 1: //aya
-                return playingAya;
+            case 1: //selection
+                playingAya += offset;
+                const selectedRange = this.props.app.selectedRange();
+                if (
+                    playingAya > selectedRange.end ||
+                    playingAya < selectedRange.start
+                ) {
+                    playingAya = selectedRange.start;
+                }
+                break;
             case 2: //page
                 const currPage = QData.ayaIdPage(playingAya);
                 const nextPage = QData.ayaIdPage(playingAya + offset);
@@ -107,7 +115,7 @@ class PlayerProvider extends Component {
         const { app } = this.props;
         const playingAya =
             this.state.playingAya == -1
-                ? this.setPlayingAya(app.selectStart)
+                ? this.setPlayingAya(app.selectedRange().start)
                 : this.state.playingAya;
 
         this.audio.src = this.audioSource(playingAya);
@@ -167,7 +175,7 @@ class PlayerProvider extends Component {
 
     setRepeat = repeat => {
         this.setState({ repeat });
-        localStorage.setItem("repeat", repeat.stringify());
+        localStorage.setItem("repeat", repeat.toString());
     };
 
     methods = {
@@ -206,10 +214,11 @@ class PlayerProvider extends Component {
 
     onEnded = () => {
         const { app } = this.props;
-        if (this.state.audioState !== AudioState.stopped) {
+        const { followPlayer, repeat, audioState } = this.state;
+        if (audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);
             this.play();
-            if (this.state.followPlayer) {
+            if (followPlayer && repeat !== 1) {
                 app.gotoAya(ayaId, { sel: true });
             }
         }

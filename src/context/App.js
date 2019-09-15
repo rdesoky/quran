@@ -20,7 +20,17 @@ const AppState = {
     maskStart: -1,
     recentCommands: rc
         ? JSON.parse(rc)
-        : ["Search", "Index", "Tafseer", "Copy", "Mask", "Goto", "Theme", "Exercise", "Favorites"]
+        : [
+              "Search",
+              "Index",
+              "Tafseer",
+              "Copy",
+              "Mask",
+              "Goto",
+              "Theme",
+              "Exercise",
+              "Favorites"
+          ]
 };
 
 const AppContext = React.createContext(AppState);
@@ -315,7 +325,16 @@ class AppProvider extends Component {
         return appWidth / pagesCount;
     };
 
+    selectedRange = () => {
+        const { selectStart, selectEnd } = this.state;
+        return {
+            start: Math.min(selectStart, selectEnd),
+            end: Math.max(selectStart, selectEnd)
+        };
+    };
+
     methods = {
+        selectedRange: this.selectedRange,
         popupWidth: this.popupWidth,
         setShowMenu: this.setShowMenu,
         toggleShowMenu: this.toggleShowMenu,
@@ -383,14 +402,14 @@ class AppProvider extends Component {
             .then(text => {
                 this._verseList = text.split("\n");
             })
-            .catch(e => { });
+            .catch(e => {});
 
         fetch(`${process.env.PUBLIC_URL}/normalized_quran.txt`)
             .then(results => results.text())
             .then(text => {
                 this._normVerseList = text.split("\n");
             })
-            .catch(e => { });
+            .catch(e => {});
     }
 
     render() {
