@@ -138,19 +138,6 @@ class AudioPlayer extends Component {
                     <div className="OptionRow">
                         <label>
                             <span>
-                                <FormattedMessage id="followPlayer" />
-                            </span>
-                            <Switch
-                                height={22}
-                                width={42}
-                                onChange={this.updateFollowPlayer}
-                                checked={player.followPlayer}
-                            />
-                        </label>
-                    </div>
-                    <div className="OptionRow">
-                        <label>
-                            <span>
                                 <FormattedMessage id="repeat" />
                             </span>
                             <select
@@ -162,7 +149,7 @@ class AudioPlayer extends Component {
                                         <option value={0}>{label}</option>
                                     )}
                                 </FormattedMessage>
-                                <FormattedMessage id="verse">
+                                <FormattedMessage id="selection">
                                     {label => (
                                         <option value={1}>{label}</option>
                                     )}
@@ -183,6 +170,20 @@ class AudioPlayer extends Component {
                                     )}
                                 </FormattedMessage>
                             </select>
+                        </label>
+                    </div>
+                    <div className="OptionRow">
+                        <label>
+                            <span>
+                                <FormattedMessage id="followPlayer" />
+                            </span>
+                            <Switch
+                                height={22}
+                                width={42}
+                                onChange={this.updateFollowPlayer}
+                                checked={player.followPlayer}
+                                disabled={player.repeat == 1}
+                            />
                         </label>
                     </div>
                     <div className="RecitersList">
