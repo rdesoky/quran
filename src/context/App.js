@@ -6,12 +6,14 @@ import Utils from "./../services/utils";
 let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
-    isNarrow: false,
-    isWide: false,
-    isCompact: false,
+    isNarrow: false, //hidden sidebar and streched single page width
+    isCompact: false, //single page with extra margin for popup
+    isWide: false, //two pages with extra margin for popup
+    isScrollable: false, // too wide
+    pagesCount: 2,
     appWidth: 800,
     appHeight: 600,
-    pagesCount: 2,
+    displayMode: 0, //0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
     showMenu: false,
     popup: null,
     showPopup: false,
@@ -136,9 +138,9 @@ class AppProvider extends Component {
         }
     };
 
-    setIsNarrow = isNarrow => {
-        this.setState({ isNarrow: isNarrow });
-    };
+    // setIsNarrow = isNarrow => {
+    //     this.setState({ isNarrow: isNarrow });
+    // };
 
     setShowMenu = showMenu => {
         this.setState({ showMenu });
@@ -291,9 +293,13 @@ class AppProvider extends Component {
             appWidth,
             appHeight,
             isCompact,
-            isNarrow
+            isNarrow,
+            isScrollable
         } = this.state;
         if (popup) {
+            if (isScrollable) {
+                return appWidth - appWidth / 3;
+            }
             if (isWide) {
                 return appHeight * 1.25;
             }
@@ -314,14 +320,24 @@ class AppProvider extends Component {
             appWidth,
             appHeight,
             pagesCount,
-            isCompact
+            isCompact,
+            isScrollable
         } = this.state;
+
+        if (isScrollable) {
+            return appWidth / 3;
+        }
+
         if (isWide) {
+            //popup fills up the margin of two pages view
             return appWidth - appHeight * 1.25;
         }
         if (isCompact) {
+            //popup fills up the margin of one page view
             return appWidth - appHeight * 0.65;
         }
+
+        //popup shown on top of pages
         return appWidth / pagesCount;
     };
 
@@ -381,7 +397,14 @@ class AppProvider extends Component {
         let isNarrow = width / height < 0.7;
         let isWide = width / height > 1.8;
         let isCompact = !isWide && pagesCount == 1 && width / height > 1.2;
-        this.setState({ pagesCount, isNarrow, isWide, isCompact });
+        let isScrollable = width / height > 2.7;
+        this.setState({
+            pagesCount,
+            isNarrow,
+            isWide,
+            isCompact,
+            isScrollable
+        });
     }
 
     calcPagesCount({ width, height }) {
