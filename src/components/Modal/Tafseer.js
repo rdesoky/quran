@@ -10,7 +10,24 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
     { id: "jalalayn", name: "الجلالين", dir: "rtl", file: "ar.jalalayn.txt" },
-    { id: "yusufali", name: "English", dir: "ltr", file: "en.yusufali.txt" }
+    { id: "yusufali", name: "English", dir: "ltr", file: "en.yusufali.txt" },
+    { id: "farooq", name: "हिंदू", dir: "ltr", file: "hi.farooq.txt" },
+    {
+        id: "indonesian",
+        name: "bahasa Indonesia",
+        dir: "ltr",
+        file: "id.indonesian.txt"
+    },
+    { id: "bornez", name: "española", dir: "ltr", file: "es.bornez.txt" },
+    {
+        id: "hamidullah",
+        name: "française",
+        dir: "ltr",
+        file: "fr.hamidullah.txt"
+    },
+    { id: "piccardo", name: "italiana", dir: "ltr", file: "it.piccardo.txt" },
+    { id: "japanese", name: "日本人", dir: "ltr", file: "ja.japanese.txt" },
+    { id: "muntahab", name: "русский", dir: "ltr", file: "ru.muntahab.txt" }
 ];
 
 const Tafseer = ({ app }) => {
