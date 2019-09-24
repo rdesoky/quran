@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal";
-import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage } from "react-intl";
 import { AppConsumer } from "../../context/App";
+import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -30,7 +29,7 @@ const TafseerList = [
     { id: "muntahab", name: "русский", dir: "ltr", file: "ru.muntahab.txt" }
 ];
 
-const Tafseer = ({ app }) => {
+const Tafseer = ({ app, player }) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
     );
@@ -77,15 +76,28 @@ const Tafseer = ({ app }) => {
         };
     }, [tafseer]);
 
+    const playingAya = () => {
+        const { selectStart, selectEnd } = app;
+        const { playingAya } = player;
+        let aya = selectStart;
+        if (selectEnd != selectStart && playingAya !== -1) {
+            aya = playingAya;
+        }
+        return aya;
+    };
+
     const renderVerse = () => {
+        const aya = playingAya();
         const verseList = app.verseList();
-        if (verseList.length > app.selectStart) {
-            return verseList[app.selectStart];
+        if (verseList.length > aya) {
+            return verseList[aya];
         }
     };
     const renderTafseer = () => {
-        if (tafseerData.length > app.selectStart) {
-            return tafseerData[app.selectStart];
+        const aya = playingAya();
+        if (tafseerData.length > aya) {
+            //validate aya exists whithin tafseer array
+            return tafseerData[aya];
         }
         return "Loading...";
     };
@@ -157,4 +169,4 @@ const Tafseer = ({ app }) => {
     );
 };
 
-export default AppConsumer(Tafseer);
+export default AppConsumer(PlayerConsumer(Tafseer));

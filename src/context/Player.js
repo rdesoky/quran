@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AppConsumer } from "./App";
 import QData from "./../services/QData";
-import Utils from "./../services/utils";
+// import Utils from "./../services/utils";
 import { GetAudioURL, ListReciters } from "./../services/AudioData";
 
 const AudioState = {
@@ -214,12 +214,13 @@ class PlayerProvider extends Component {
 
     onEnded = () => {
         const { app } = this.props;
+        const { selectStart, selectEnd } = app;
         const { followPlayer, repeat, audioState } = this.state;
         if (audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);
             this.play();
             if (followPlayer && repeat !== 1) {
-                app.gotoAya(ayaId, { sel: true });
+                app.gotoAya(ayaId, { sel: selectStart === selectEnd });
             }
         }
     };
