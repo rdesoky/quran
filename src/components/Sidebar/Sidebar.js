@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
-import { withThemeContext } from "../../context/Theme";
+import { ThemeConsumer } from "../../context/Theme";
 import { CommandIcons } from "./../Modal/Commands";
 import Utils from "../../services/utils";
 
@@ -44,7 +44,7 @@ function Sidebar({ app, player, themeContext }) {
                 }
                 break;
             case "Tafseer":
-                app.selectAya();
+            //app.selectAya();
             default:
                 if (app.popup == id) {
                     app.closePopup();
@@ -221,4 +221,4 @@ function Sidebar({ app, player, themeContext }) {
     );
 }
 
-export default withThemeContext(AppConsumer(PlayerConsumer(Sidebar)));
+export default ThemeConsumer(AppConsumer(PlayerConsumer(Sidebar)));
