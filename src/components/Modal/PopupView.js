@@ -12,6 +12,7 @@ import Tafseer from "./Tafseer";
 import Bookmarks from "./Bookmarks";
 import AudioPlayer from "./../../components/AudioPlayer/AudioPlayer";
 import Modal from "./Modal";
+import User from "./User";
 
 function PopupView({ app }) {
     const componentMap = {
@@ -25,7 +26,8 @@ function PopupView({ app }) {
         Settings,
         Tafseer,
         AudioPlayer,
-        Favorites: Bookmarks
+        Favorites: Bookmarks,
+        Profile: User
     };
 
     const onClose = () => {
