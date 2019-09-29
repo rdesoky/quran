@@ -9,7 +9,7 @@ import Hifz from "./Hifz";
 import Help from "./Help";
 import Settings from "./Settings";
 import Tafseer from "./Tafseer";
-import Bookmarks from "./Bookmarks";
+import Favorites from "./Favorites";
 import AudioPlayer from "./../../components/AudioPlayer/AudioPlayer";
 import Modal from "./Modal";
 import User from "./User";
@@ -26,7 +26,7 @@ function PopupView({ app }) {
         Settings,
         Tafseer,
         AudioPlayer,
-        Favorites: Bookmarks,
+        Favorites,
         Profile: User
     };
 
