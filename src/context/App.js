@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import QData from "../services/QData";
 import Utils from "./../services/utils";
+import firebase from "firebase";
 
 let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
+    user: null,
     isNarrow: false, //hidden sidebar and streched single page width
     isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
@@ -411,7 +413,17 @@ class AppProvider extends Component {
         return width > height * 1.35 ? 2 : 1;
     }
 
+    componentWillUnmount() {
+        this.unregisterAuthObserver();
+    }
+
     componentDidMount() {
+        this.unregisterAuthObserver = firebase
+            .auth()
+            .onAuthStateChanged(user => {
+                this.setState({ user });
+            });
+
         const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
         this.selectAya(ayaId);
         window.addEventListener("resize", this.onResize);
