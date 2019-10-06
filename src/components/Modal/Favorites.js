@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import firebase from "firebase";
-import { AppConsumer } from "../../context/App";
-import QData from "../../services/QData";
+import { AppConsumer } from "./../../context/App";
+import QData from "./../../services/QData";
 
 const Favorites = ({ app }) => {
     const [hifzRanges, setHifzRanges] = useState([]);
@@ -44,12 +44,24 @@ const Favorites = ({ app }) => {
         };
     }, []); //Passing [] is equivellant to componentDidMount, componentDidUnmount
 
-    const gotoPage = ({ target }) => {
+    const gotoSuraPage = ({ target }) => {
+        const sura = parseInt(target.getAttribute("sura"));
         const startPage = parseInt(target.getAttribute("startPage"));
         const endPage = parseInt(target.getAttribute("endPage"));
+        const suraStartPage = QData.sura_info[sura].sp - 1;
+        const suraEndPage = QData.sura_info[sura].ep - 1;
+        const suraStartAya = QData.ayaID(sura, 0);
         app.gotoPage(startPage + 1);
-        app.setSelectStart(QData.pageAyaId(startPage));
-        app.setSelectEnd(QData.pageAyaId(endPage + 1) - 1);
+        if (suraStartPage === startPage) {
+            app.setSelectStart(suraStartAya);
+        } else {
+            app.setSelectStart(QData.pageAyaId(startPage));
+        }
+        if (suraEndPage === endPage) {
+            app.setSelectEnd(suraStartAya + QData.sura_info[sura].ac - 1);
+        } else {
+            app.setSelectEnd(QData.pageAyaId(endPage + 1) - 1);
+        }
     };
 
     const renderHifzRanges = () => {
@@ -61,25 +73,32 @@ const Favorites = ({ app }) => {
             >
                 {hifzRanges.map(range => (
                     <button
+                        sura={range.sura}
                         startPage={range.startPage}
                         endPage={range.endPage}
-                        onClick={gotoPage}
+                        onClick={gotoSuraPage}
                         style={{
                             width: "100%",
                             textAlign: "inherit",
                             padding: 10
                         }}
                     >
-                        <FormattedMessage id="page">
-                            {str =>
-                                str +
-                                ": " +
-                                (range.startPage + 1) +
-                                (range.pages > 1
-                                    ? "-" + (range.endPage + 1)
-                                    : "")
-                            }
-                        </FormattedMessage>
+                        <String id="sura_names">
+                            {sura_names => (
+                                <String id="page">
+                                    {page =>
+                                        sura_names.split(",")[range.sura] +
+                                        ": " +
+                                        page +
+                                        ": " +
+                                        (range.startPage + 1) +
+                                        (range.pages > 1
+                                            ? "-" + (range.endPage + 1)
+                                            : "")
+                                    }
+                                </String>
+                            )}
+                        </String>
                     </button>
                 ))}
             </div>
@@ -99,7 +118,7 @@ const Favorites = ({ app }) => {
     return (
         <>
             <div className="Title">
-                <FormattedMessage id="favorites" />
+                <String id="favorites" />
             </div>
             {user ? renderHifzRanges() : renderLogin()}
         </>
