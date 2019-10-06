@@ -85,16 +85,17 @@ const Favorites = ({ app }) => {
                     >
                         <String id="sura_names">
                             {sura_names => (
-                                <String id="page">
-                                    {page =>
+                                <String id="pg">
+                                    {pg =>
                                         sura_names.split(",")[range.sura] +
-                                        ": " +
-                                        page +
-                                        ": " +
+                                        " (" +
+                                        pg +
+                                        " " +
                                         (range.startPage + 1) +
                                         (range.pages > 1
                                             ? "-" + (range.endPage + 1)
-                                            : "")
+                                            : "") +
+                                        ")"
                                     }
                                 </String>
                             )}
@@ -120,7 +121,12 @@ const Favorites = ({ app }) => {
             <div className="Title">
                 <String id="favorites" />
             </div>
-            {user ? renderHifzRanges() : renderLogin()}
+            <div
+                className="PopupBody"
+                style={{ maxHeight: app.appHeight - 85 }}
+            >
+                {user ? renderHifzRanges() : renderLogin()}
+            </div>
         </>
     );
 };
