@@ -8,6 +8,8 @@ let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
     user: null,
+    hifzRanges: [],
+    bookmarks: [],
     isNarrow: false, //hidden sidebar and streched single page width
     isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
@@ -415,6 +417,28 @@ class AppProvider extends Component {
 
     componentWillUnmount() {
         this.unregisterAuthObserver();
+        this.onBookmarkUpdate();
+    }
+
+    onBookmarkUpdate = ()=>{};
+    onHifzUpdate = ()=>{};
+
+    readFireData(){
+        this.onBookmarkUpdate = firebase
+			.database()
+			.ref()
+			.child(`data/${this.state.user.uid}/aya_marks`).on("value", snapshot=>{
+                if(snapshot==null){
+                    return;
+                }
+                const snapshot_val = snapshot.val();
+                const bookmarks = !snapshot_val ? []:
+                Object.keys(snapshot_val)
+                .sort((k1,k2)=>snapshot_val[k1]<snapshot_val[k2]?-1:1)
+                .map(k=>({aya:k,ts:snapshot_val[k]}));
+                this.setState({bookmarks}); 
+            });
+
     }
 
     componentDidMount() {
@@ -422,6 +446,13 @@ class AppProvider extends Component {
             .auth()
             .onAuthStateChanged(user => {
                 this.setState({ user });
+                if(user==null){
+                    //sign in anonymously
+                    firebase.auth().signInAnonymously();
+                }else{
+                    this.readFireData();
+                    console.log(`Logged in userId ${JSON.stringify(user)}`)
+                }
             });
 
         const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
