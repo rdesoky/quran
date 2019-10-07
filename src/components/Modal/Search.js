@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
 import QData from "../../services/QData";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
 
@@ -68,7 +68,7 @@ const Search = ({ app }) => {
                     className="MoreResults"
                     onClick={e => setPages(pages + 1)}
                 >
-                    <FormattedMessage id="more" />
+                    <String id="more" />
                     ...
                 </button>
             );
@@ -93,7 +93,7 @@ const Search = ({ app }) => {
                     columnCount: Math.floor((app.popupWidth() - 50) / 120) //-50px margin
                 }}
             >
-                <FormattedMessage id="sura_names">
+                <String id="sura_names">
                     {data => {
                         const nSuraNames = Utils.normalizeText(data).split(",");
                         return data
@@ -123,7 +123,7 @@ const Search = ({ app }) => {
                                 );
                             });
                     }}
-                </FormattedMessage>
+                </String>
             </ul>
         );
     };
@@ -146,34 +146,36 @@ const Search = ({ app }) => {
                     resultsDiv = ref;
                 }}
             >
-                {page.map(({ aya, text, ntext }, i) => {
-                    const ayaInfo = QData.ayaIdInfo(aya);
-                    return (
-                        <FormattedMessage id="sura_names" key={i}>
-                            {sura_names => (
-                                <li className="ResultItem">
-                                    <button onClick={gotoAya} aya={aya}>
-                                        <span className="ResultInfo">
-                                            {sura_names.split(",")[
-                                                ayaInfo.sura
-                                            ] + ` (${ayaInfo.aya + 1})`}
-                                        </span>
-                                        <span
-                                            className="ResultText link"
-                                            dangerouslySetInnerHTML={Utils.hilightSearch(
-                                                nSearchTerm,
-                                                text,
-                                                ntext
-                                            )}
-                                        />
-                                    </button>
-                                    {/* <div>{text}</div>
+                {page.map(
+                    ({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
+                        const ayaInfo = QData.ayaIdInfo(aya);
+                        return (
+                            <String id="sura_names" key={i}>
+                                {sura_names => (
+                                    <li className="ResultItem">
+                                        <button onClick={gotoAya} aya={aya}>
+                                            <span className="ResultInfo">
+                                                {sura_names.split(",")[
+                                                    ayaInfo.sura
+                                                ] + ` (${ayaInfo.aya + 1})`}
+                                            </span>
+                                            <span
+                                                className="ResultText link"
+                                                dangerouslySetInnerHTML={Utils.hilightSearch(
+                                                    nSearchTerm,
+                                                    ayaText,
+                                                    normalizedAyaText
+                                                )}
+                                            />
+                                        </button>
+                                        {/* <div>{text}</div>
 									<div>{ntext}</div> */}
-                                </li>
-                            )}
-                        </FormattedMessage>
-                    );
-                })}
+                                    </li>
+                                )}
+                            </String>
+                        );
+                    }
+                )}
                 {renderMore()}
             </ol>
         );
@@ -243,7 +245,7 @@ const Search = ({ app }) => {
                         onChange={onChangeSearchInput}
                     />
                     <button type="submit">
-                        <FormattedMessage id="search" />
+                        <String id="search" />
                     </button>
                 </form>
                 <div id="SearchHistory">
@@ -259,7 +261,7 @@ const Search = ({ app }) => {
                     className="ResultsInfo"
                     style={{ height: resultsInfoHeight }}
                 >
-                    <FormattedMessage className="SuraTitle" id="results_for">
+                    <String className="SuraTitle" id="results_for">
                         {resultsFor => {
                             if (searchTerm.length) {
                                 return (
@@ -274,7 +276,7 @@ const Search = ({ app }) => {
                             }
                             return null;
                         }}
-                    </FormattedMessage>
+                    </String>
                 </div>
             </div>
             <div
