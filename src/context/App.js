@@ -420,25 +420,67 @@ class AppProvider extends Component {
         this.onBookmarkUpdate();
     }
 
-    onBookmarkUpdate = ()=>{};
-    onHifzUpdate = ()=>{};
+    dbRef = null;
+    hifzRef = null;
+    bookmarksRef = null;
+    onBookmarkUpdate = null;
+    onHifzUpdate = null;
 
-    readFireData(){
-        this.onBookmarkUpdate = firebase
-			.database()
-			.ref()
-			.child(`data/${this.state.user.uid}/aya_marks`).on("value", snapshot=>{
-                if(snapshot==null){
-                    return;
-                }
-                const snapshot_val = snapshot.val();
-                const bookmarks = !snapshot_val ? []:
-                Object.keys(snapshot_val)
-                .sort((k1,k2)=>snapshot_val[k1]<snapshot_val[k2]?-1:1)
-                .map(k=>({aya:k,ts:snapshot_val[k]}));
-                this.setState({bookmarks}); 
-            });
+    readFireData() {
+        //unregister previous listener if exists
+        if (this.bookmarksRef && this.onBookmarkUpdate) {
+            this.bookmarksRef.off("value", this.onBookmarkUpdate);
+        }
+        if (this.hifzRef && this.onHifzUpdate) {
+            this.hifzRef.off("value", this.onHifzUpdate);
+        }
 
+        //Create new references
+        this.hifzRef = this.dbRef.child(`data/${this.state.user.uid}/hifz`);
+        this.bookmarksRef = this.dbRef.child(
+            `data/${this.state.user.uid}/aya_marks`
+        );
+
+        //create new "value" listeners
+        this.onBookmarkUpdate = this.bookmarksRef.on("value", snapshot => {
+            if (snapshot == null) {
+                return;
+            }
+            const snapshot_val = snapshot.val();
+            const bookmarks = !snapshot_val
+                ? []
+                : Object.keys(snapshot_val)
+                      .sort((k1, k2) =>
+                          snapshot_val[k1] < snapshot_val[k2] ? -1 : 1
+                      )
+                      .map(k => ({ aya: k, ts: snapshot_val[k] }));
+            this.setState({ bookmarks });
+        });
+
+        this.onHifzUpdate = this.hifzRef.on("value", snapshot => {
+            const snapshot_val = snapshot.val();
+            const hifzRanges = snapshot_val
+                ? Object.keys(snapshot_val)
+                      .sort((k1, k2) =>
+                          snapshot_val[k1].ts < snapshot_val[k2].ts ? -1 : 1
+                      )
+                      .map(k => {
+                          const sura = parseInt(k.substr(3, 3));
+                          const startPage = parseInt(k.substr(0, 3));
+                          const hifzInfo = snapshot_val[k];
+                          const pages = hifzInfo.pages;
+                          const endPage = startPage + pages - 1;
+                          return {
+                              sura,
+                              startPage,
+                              pages,
+                              endPage,
+                              date: hifzInfo.ts
+                          };
+                      })
+                : [];
+            this.setState({ hifzRanges });
+        });
     }
 
     componentDidMount() {
@@ -446,14 +488,16 @@ class AppProvider extends Component {
             .auth()
             .onAuthStateChanged(user => {
                 this.setState({ user });
-                if(user==null){
+                if (user == null) {
                     //sign in anonymously
                     firebase.auth().signInAnonymously();
-                }else{
+                } else {
                     this.readFireData();
-                    console.log(`Logged in userId ${JSON.stringify(user)}`)
+                    console.log(`Logged in userId ${JSON.stringify(user)}`);
                 }
             });
+
+        this.dbRef = firebase.database().ref();
 
         const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
         this.selectAya(ayaId);
