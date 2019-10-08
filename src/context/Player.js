@@ -214,13 +214,13 @@ class PlayerProvider extends Component {
 
     onEnded = () => {
         const { app } = this.props;
-        const { selectStart, selectEnd } = app;
-        const { followPlayer, repeat, audioState } = this.state;
+        // const { selectStart, selectEnd } = app;
+        const { followPlayer, audioState } = this.state;
         if (audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);
             this.play();
-            if (followPlayer && repeat !== 1) {
-                app.gotoAya(ayaId, { sel: selectStart === selectEnd });
+            if (followPlayer) {
+                app.gotoAya(ayaId, { sel: false });
             }
         }
     };

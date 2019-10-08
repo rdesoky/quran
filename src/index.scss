@@ -33,6 +33,9 @@ code {
             &:hover {
                 background-color: #666;
             }
+            &.active {
+                background-color: #333;
+            }
         }
     }
 }

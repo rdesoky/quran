@@ -182,7 +182,7 @@ class AudioPlayer extends Component {
                                 width={42}
                                 onChange={this.updateFollowPlayer}
                                 checked={player.followPlayer}
-                                disabled={player.repeat == 1}
+                                // disabled={player.repeat == 1}
                             />
                         </label>
                     </div>

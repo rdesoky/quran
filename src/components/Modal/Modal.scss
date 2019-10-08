@@ -60,6 +60,9 @@
             font-size: 25px;
             min-width: 35px;
             margin: 0 10px;
+            &.active {
+                border-bottom: solid 2px white;
+            }
         }
         .FlexTitle {
             display: inline-block;
