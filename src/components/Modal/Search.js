@@ -88,6 +88,7 @@ const Search = ({ app }) => {
         }
         return (
             <ul
+                id="MatchedSuraNames"
                 className="SpreadSheet"
                 style={{
                     columnCount: Math.floor((app.popupWidth() - 50) / 120) //-50px margin

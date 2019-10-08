@@ -3,6 +3,11 @@ import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import {
+    faTimes as faDelete,
+    faBookmark
+} from "@fortawesome/free-solid-svg-icons";
 
 const QIndex = ({ app, player }) => {
     const [activeTab, setActiveTab] = useState(
@@ -38,6 +43,11 @@ const QIndex = ({ app, player }) => {
     const gotoAya = ({ target }) => {
         const aya = parseInt(target.getAttribute("aya"));
         app.gotoAya(aya, { sel: true });
+    };
+
+    const removeBookmark = ({ target }) => {
+        const verse = parseInt(target.getAttribute("verse"));
+        app.removeBookmark(verse);
     };
 
     const gotoSuraPage = ({ target }) => {
@@ -133,11 +143,7 @@ const QIndex = ({ app, player }) => {
         const versesText = app.verseList();
 
         return (
-            <div
-                style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 240) //-50px margin
-                }}
-            >
+            <div>
                 {hifzRanges.map(range => (
                     <button
                         key={"" + range.sura + range.startPage}
@@ -199,52 +205,59 @@ const QIndex = ({ app, player }) => {
         const versesText = app.verseList();
 
         return (
-            <div
-                style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 240) //-50px margin
-                }}
-            >
+            <ul className="FlowingList">
                 <String id="sura_names">
                     {sura_names => (
                         <String id="verse">
                             {verse =>
                                 bookmarks.map(bookmark => (
-                                    <button
-                                        aya={bookmark.aya}
+                                    <li
+                                        className="BookmarkRow"
                                         key={bookmark.aya}
-                                        onClick={gotoAya}
-                                        style={{
-                                            width: "100%",
-                                            textAlign: "inherit",
-                                            padding: 10
-                                        }}
                                     >
-                                        {sura_names.split(",")[
-                                            QData.ayaIdInfo(bookmark.aya).sura
-                                        ] +
-                                            " (" +
-                                            verse +
-                                            " " +
-                                            (QData.ayaIdInfo(bookmark.aya).aya +
-                                                1) +
-                                            ")"}
-                                        <div
-                                            style={{
-                                                whiteSpace: "nowrap",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                pointerEvents: "none"
-                                            }}
+                                        <button
+                                            aya={bookmark.aya}
+                                            onClick={gotoAya}
                                         >
-                                            {versesText[bookmark.aya]}
+                                            <Icon icon={faBookmark} />
+                                            &nbsp;
+                                            {sura_names.split(",")[
+                                                QData.ayaIdInfo(bookmark.aya)
+                                                    .sura
+                                            ] +
+                                                " (" +
+                                                verse +
+                                                " " +
+                                                (QData.ayaIdInfo(bookmark.aya)
+                                                    .aya +
+                                                    1) +
+                                                ")"}
+                                            <div
+                                                style={{
+                                                    whiteSpace: "nowrap",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    pointerEvents: "none"
+                                                }}
+                                            >
+                                                {versesText[bookmark.aya]}
+                                            </div>
+                                        </button>
+                                        <div>
+                                            <button
+                                                verse={bookmark.aya}
+                                                onClick={removeBookmark}
+                                            >
+                                                <Icon icon={faDelete} />
+                                            </button>
                                         </div>
-                                    </button>
+                                    </li>
                                 ))
                             }
                         </String>
                     )}
                 </String>
-            </div>
+            </ul>
         );
     };
     return (

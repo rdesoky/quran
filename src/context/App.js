@@ -365,6 +365,17 @@ class AppProvider extends Component {
         });
     };
 
+    removeBookmark = verse => {
+        if (!this.bookmarksRef) {
+            return;
+        }
+        this.bookmarksRef.once("value", snapshot => {
+            const bookmarks = snapshot.val() || {};
+            delete bookmarks[verse];
+            this.bookmarksRef.set(bookmarks);
+        });
+    };
+
     methods = {
         selectedRange: this.selectedRange,
         popupWidth: this.popupWidth,
@@ -399,7 +410,8 @@ class AppProvider extends Component {
         getSelectedText: this.getSelectedText,
         pagerWidth: this.pagerWidth,
         sideBarWidth: this.sideBarWidth,
-        addBookmark: this.addBookmark
+        addBookmark: this.addBookmark,
+        removeBookmark: this.removeBookmark
     };
 
     onResize = e => {
