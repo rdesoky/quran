@@ -123,7 +123,11 @@ const QIndex = ({ app, player }) => {
 
     const renderHifzRanges = () => {
         if (!hifzRanges.length) {
-            return <div>Nothing recorded</div>;
+            return (
+                <div>
+                    <String id="no_hifz" />
+                </div>
+            );
         }
 
         const versesText = app.verseList();
@@ -186,7 +190,11 @@ const QIndex = ({ app, player }) => {
 
     const renderBookmarks = () => {
         if (!bookmarks.length) {
-            return <div>Nothing recorded</div>;
+            return (
+                <div>
+                    <String id="no_bookmarks" />
+                </div>
+            );
         }
         const versesText = app.verseList();
 

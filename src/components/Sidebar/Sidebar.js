@@ -43,6 +43,9 @@ function Sidebar({ app, player, themeContext }) {
                     player.play();
                 }
                 break;
+            case "Bookmarks":
+                app.addBookmark();
+                return;
             case "Tafseer":
             //app.selectAya();
             default:
