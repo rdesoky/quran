@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppConsumer } from "../../context/App";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import Login from "./../Login";
 import firebase from "firebase";
 
@@ -10,7 +10,7 @@ const User = ({ app }) => {
     return (
         <>
             <div className="Title">
-                <FormattedMessage id="profile" />
+                <String id="profile" />
             </div>
             {user && user.isAnonymous === false ? (
                 <>
@@ -25,7 +25,7 @@ const User = ({ app }) => {
                     <hr />
                     <div className="FieldAction">
                         <button onClick={e => firebase.auth().signOut()}>
-                            Logout
+                            <String id="sign_out" />
                         </button>
                     </div>
                 </>

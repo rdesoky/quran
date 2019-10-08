@@ -1,272 +1,272 @@
 .Page {
-  height: 100%;
-  position: relative;
-  .PageFrame {
+    height: 100%;
     position: relative;
-    height: calc(100% - 50px);
-    // padding: 0 20px;
+    .PageFrame {
+        position: relative;
+        height: calc(100% - 50px);
+        // padding: 0 20px;
+        .PageImageFrame {
+            // position: absolute;
+            // width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            position: relative;
+            .MaskContainer {
+                position: absolute;
+                pointer-events: none;
+                .Verse {
+                    position: absolute;
+                    background-color: #888;
+                }
+                .Mask {
+                    position: absolute;
+                    background-color: #999998fa;
+                }
+            }
+        }
+        .VerseLayout {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            .Verse {
+                box-sizing: border-box;
+                position: absolute;
+                &.Hovered {
+                    border-bottom: solid 2px silver;
+                    //background-color: #ffffff28;
+                    // border-width: 0 4px;
+                    // border-color: rgba(0, 0, 0, 0.2);
+                    // border-style: solid;
+                }
+                &.Selected {
+                    background-color: #ffffff8f;
+                }
+                &.Playing {
+                    border-bottom: solid 2px green;
+                }
+            }
+        }
+    }
+
     .PageImageFrame {
-      // position: absolute;
-      // width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      position: relative;
-      .MaskContainer {
+        position: relative;
+        display: inline-block;
+        height: 100%;
+        // width: 100%;
+        // border-style: solid;
+        // border-width: 0 1px;
+        // border-color: silver;
+        // padding: 0 10px;
+    }
+
+    .Spinner {
         position: absolute;
+        left: calc(50% - 32px);
+        top: calc(50% - 32px);
+    }
+
+    img.PageImage {
+        // width: auto;
+        height: 100%;
+        max-width: 100%;
+        position: relative;
         pointer-events: none;
-        .Verse {
-          position: absolute;
-          background-color: #888;
-        }
-        .Mask {
-          position: absolute;
-          background-color: #999998fa;
-        }
-      }
     }
-    .VerseLayout {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      .Verse {
-        box-sizing: border-box;
+
+    .PageHeader,
+    .PageFooter {
+        // position: relative;
+        height: 25px;
+        color: white;
+        // background-color: #333;
+        background-color: rgba(0, 0, 0, 0.6);
+        // line-height: 25px;
+        // background-color: silver;
+        select {
+            color: white;
+        }
+        .PageHeaderContent {
+            position: relative;
+            display: inline-block;
+            height: 100%;
+            text-align: center;
+            button {
+                padding: 0 10px;
+                color: inherit;
+                // height: 100%;
+                line-height: 24px;
+                border-radius: 12px;
+            }
+        }
+    }
+    .PageHeader {
+        text-align: center;
+        position: relative;
+        select {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background-color: transparent;
+            border: none;
+            option {
+                color: black;
+                background-color: silver;
+            }
+        }
+        .SuraTitle {
+            right: 0;
+        }
+        // .PartTitle {
+        // 	float: left;
+        // }
+    }
+    .PageFooter {
         position: absolute;
-        &.Hovered {
-          border-bottom: solid 2px silver;
-          //background-color: #ffffff28;
-          // border-width: 0 4px;
-          // border-color: rgba(0, 0, 0, 0.2);
-          // border-style: solid;
-        }
-        &.Selected {
-          background-color: white;
-        }
-        &.Playing {
-          border-bottom: solid 2px green;
-        }
-      }
+        width: 100%;
+        bottom: 0;
+        text-align: center;
     }
-  }
-
-  .PageImageFrame {
-    position: relative;
-    display: inline-block;
-    height: 100%;
-    // width: 100%;
-    // border-style: solid;
-    // border-width: 0 1px;
-    // border-color: silver;
-    // padding: 0 10px;
-  }
-
-  .Spinner {
-    position: absolute;
-    left: calc(50% - 32px);
-    top: calc(50% - 32px);
-  }
-
-  img.PageImage {
-    // width: auto;
-    height: 100%;
-    max-width: 100%;
-    position: relative;
-    pointer-events: none;
-  }
-
-  .PageHeader,
-  .PageFooter {
-    // position: relative;
-    height: 25px;
-    color: white;
-    // background-color: #333;
-    background-color: rgba(0, 0, 0, 0.6);
-    // line-height: 25px;
-    // background-color: silver;
-    select {
-      color: white;
-    }
-    .PageHeaderContent {
-      position: relative;
-      display: inline-block;
-      height: 100%;
-      text-align: center;
-      button {
-        padding: 0 10px;
-        color: inherit;
-        // height: 100%;
-        line-height: 24px;
-        border-radius: 12px;
-      }
-    }
-  }
-  .PageHeader {
-    text-align: center;
-    position: relative;
-    select {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      background-color: transparent;
-      border: none;
-      option {
-        color: black;
-        background-color: silver;
-      }
-    }
-    .SuraTitle {
-      right: 0;
-    }
-    // .PartTitle {
-    // 	float: left;
-    // }
-  }
-  .PageFooter {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    text-align: center;
-  }
 }
 
 .LeftPage {
-  .AnimatePage {
-    animation: LeftPageOpener 0.4s;
-  }
-  .PageImageFrame {
-    border-left: solid 1px silver;
-  }
+    .AnimatePage {
+        animation: LeftPageOpener 0.4s;
+    }
+    .PageImageFrame {
+        border-left: solid 1px silver;
+    }
 }
 .RightPage {
-  .AnimatePage {
-    animation: RightPageOpener 0.4s;
-  }
-  .PageImageFrame {
-    border-right: solid 1px silver;
-  }
+    .AnimatePage {
+        animation: RightPageOpener 0.4s;
+    }
+    .PageImageFrame {
+        border-right: solid 1px silver;
+    }
 }
 
 .DarkTheme {
-  &.App {
-    background-color: black;
-  }
-  .Page {
-    background: #444;
-    .PageImage {
-      filter: invert(1);
+    &.App {
+        background-color: black;
     }
-    .PageFrame {
-      .VerseLayout {
-        .Verse {
-          &.Hovered {
-            // background-color: darkslategrey;
-            border-color: rgba(255, 255, 255, 0.2);
-          }
-          &.Selected {
-            background-color: black;
-          }
+    .Page {
+        background: #444;
+        .PageImage {
+            filter: invert(1);
         }
-      }
+        .PageFrame {
+            .VerseLayout {
+                .Verse {
+                    &.Hovered {
+                        // background-color: darkslategrey;
+                        border-color: rgba(255, 255, 255, 0.2);
+                    }
+                    &.Selected {
+                        background-color: black;
+                    }
+                }
+            }
+        }
     }
-  }
 }
 
 .DefaultTheme {
-  .LeftPage {
-    .Page {
-      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
-      background: #ffffff; /* Old browsers */
-      background: -moz-linear-gradient(
-        left,
-        #ffffff 0%,
-        #f3e2c7 49%,
-        #f3e2c7 78%,
-        #b2a087 99%
-      ); /* FF3.6-15 */
-      background: -webkit-linear-gradient(
-        left,
-        #ffffff 0%,
-        #f3e2c7 49%,
-        #f3e2c7 78%,
-        #b2a087 99%
-      ); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(
-        to right,
-        #ffffff 0%,
-        #f3e2c7 49%,
-        #f3e2c7 78%,
-        #b2a087 99%
-      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#b2a087',GradientType=1 ); /* IE6-9 */
+    .LeftPage {
+        .Page {
+            /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
+            background: #ffffff; /* Old browsers */
+            background: -moz-linear-gradient(
+                left,
+                #ffffff 0%,
+                #f3e2c7 49%,
+                #f3e2c7 78%,
+                #b2a087 99%
+            ); /* FF3.6-15 */
+            background: -webkit-linear-gradient(
+                left,
+                #ffffff 0%,
+                #f3e2c7 49%,
+                #f3e2c7 78%,
+                #b2a087 99%
+            ); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(
+                to right,
+                #ffffff 0%,
+                #f3e2c7 49%,
+                #f3e2c7 78%,
+                #b2a087 99%
+            ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#b2a087',GradientType=1 ); /* IE6-9 */
+        }
     }
-  }
 
-  .RightPage {
-    .Page {
-      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
-      background: #f3e2c7; /* Old browsers */
-      background: -moz-linear-gradient(
-        left,
-        #f3e2c7 0%,
-        #b2a087 6%,
-        #ffffff 100%
-      ); /* FF3.6-15 */
-      background: -webkit-linear-gradient(
-        left,
-        #f3e2c7 0%,
-        #b2a087 6%,
-        #ffffff 100%
-      ); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(
-        to right,
-        #f3e2c7 0%,
-        #b2a087 6%,
-        #ffffff 100%
-      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-      // border: solid 1px grey;
+    .RightPage {
+        .Page {
+            /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
+            background: #f3e2c7; /* Old browsers */
+            background: -moz-linear-gradient(
+                left,
+                #f3e2c7 0%,
+                #b2a087 6%,
+                #ffffff 100%
+            ); /* FF3.6-15 */
+            background: -webkit-linear-gradient(
+                left,
+                #f3e2c7 0%,
+                #b2a087 6%,
+                #ffffff 100%
+            ); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(
+                to right,
+                #f3e2c7 0%,
+                #b2a087 6%,
+                #ffffff 100%
+            ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
+            // border: solid 1px grey;
+        }
     }
-  }
 }
 
 .Active {
-  .PageHeader,
-  .PageFooter {
-    // background-color: #333;
-    // color: white;
-    select {
-      color: white;
-      // option {
-      // 	background-color: #333;
-      // }
+    .PageHeader,
+    .PageFooter {
+        // background-color: #333;
+        // color: white;
+        select {
+            color: white;
+            // option {
+            // 	background-color: #333;
+            // }
+        }
+        button {
+            vertical-align: top;
+            background-color: silver;
+            color: black !important;
+        }
     }
-    button {
-      vertical-align: top;
-      background-color: silver;
-      color: black !important;
-    }
-  }
 }
 
 @keyframes RightPageOpener {
-  from {
-    transform: scaleX(0.85);
-    transform-origin: top left;
-  }
-  to {
-    transform: scaleX(1);
-    transform-origin: top left;
-  }
+    from {
+        transform: scaleX(0.85);
+        transform-origin: top left;
+    }
+    to {
+        transform: scaleX(1);
+        transform-origin: top left;
+    }
 }
 
 @keyframes LeftPageOpener {
-  from {
-    // transform: translateX(100%);
-    transform: scaleX(0.85);
-    transform-origin: top right;
-  }
-  to {
-    // transform: translateX(0);
-    transform: scaleX(1);
-    transform-origin: top right;
-  }
+    from {
+        // transform: translateX(100%);
+        transform: scaleX(0.85);
+        transform-origin: top right;
+    }
+    to {
+        // transform: translateX(0);
+        transform: scaleX(1);
+        transform-origin: top right;
+    }
 }
