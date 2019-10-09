@@ -23,9 +23,10 @@ code {
     li {
         list-style: none;
         display: inline-block;
-        width: 100px;
+        width: 100%;
         text-overflow: ellipsis;
         white-space: nowrap;
+        position: relative;
         button {
             width: 100%;
             padding: 8px;
@@ -36,6 +37,17 @@ code {
             }
             &.active {
                 background-color: #333;
+            }
+        }
+        .actions {
+            position: absolute;
+            right: 0;
+            [dir="rtl"] & {
+                left: 0;
+                right: auto;
+            }
+            button {
+                width: 30px;
             }
         }
     }
@@ -77,14 +89,16 @@ code {
 
 li.BookmarkRow {
     > button {
-        width: calc(100% - 40px);
+        width: calc(100% - 80px);
         display: inline-block;
         padding: 10px;
     }
     > div {
-        width: 40px;
+        width: 80px;
         display: inline-block;
+        vertical-align: text-top;
         button {
+            width: 40px;
             text-align: center;
             * {
                 pointer-events: none;

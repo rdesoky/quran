@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faFileDownload,
     faAngleDoubleDown,
@@ -20,7 +20,6 @@ function Sidebar({ app, player, themeContext }) {
         switch (id) {
             case "Theme":
                 toggleTheme();
-                // app.setPopup(null);
                 break;
             case "Mask":
                 app.setMaskStart();
@@ -45,7 +44,7 @@ function Sidebar({ app, player, themeContext }) {
                 break;
             case "Bookmarks":
                 app.addBookmark();
-                return;
+                break;
             case "Tafseer":
             //app.selectAya();
             default:
@@ -76,7 +75,7 @@ function Sidebar({ app, player, themeContext }) {
 
     const showPlayer = () => {
         if (player.playingAya !== -1 && player.repeat !== 1) {
-            app.gotoAya(player.playingAya, { sel: true, replace: false });
+            app.gotoAya(player.playingAya, { sel: false, replace: false });
         }
         if (app.popup === "AudioPlayer") {
             app.closePopup();
@@ -109,7 +108,7 @@ function Sidebar({ app, player, themeContext }) {
         if (player.audioState !== AudioState.stopped) {
             stopBtn = (
                 <button onClick={stop}>
-                    <FontAwesomeIcon icon={faStopCircle} />
+                    <Icon icon={faStopCircle} />
                 </button>
             );
         }
@@ -118,28 +117,28 @@ function Sidebar({ app, player, themeContext }) {
             case AudioState.paused:
                 btn = (
                     <button onClick={resume} className="blinking">
-                        <FontAwesomeIcon icon={faPauseCircle} />
+                        <Icon icon={faPauseCircle} />
                     </button>
                 );
                 break;
             case AudioState.playing:
                 btn = (
                     <button onClick={pause}>
-                        <FontAwesomeIcon icon={faPauseCircle} />
+                        <Icon icon={faPauseCircle} />
                     </button>
                 );
                 break;
             case AudioState.buffering:
                 btn = (
                     <button onClick={retry} className="blinking">
-                        <FontAwesomeIcon icon={faFileDownload} />
+                        <Icon icon={faFileDownload} />
                     </button>
                 );
                 break;
             default:
                 btn = (
                     <button onClick={play}>
-                        <FontAwesomeIcon icon={faPlayCircle} />
+                        <Icon icon={faPlayCircle} />
                     </button>
                 );
         }
@@ -184,7 +183,7 @@ function Sidebar({ app, player, themeContext }) {
                 //style={{ display: app.isNarrow ? "block" : "none" }}
                 style={{ visibility: app.isNarrow ? "visible" : "hidden" }}
             >
-                <FontAwesomeIcon
+                <Icon
                     icon={app.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
                 />
             </button>
@@ -195,7 +194,7 @@ function Sidebar({ app, player, themeContext }) {
                 }}
             >
                 <button onClick={e => onClick(e, "Commands")}>
-                    <FontAwesomeIcon icon={CommandIcons["Commands"]} />
+                    <Icon icon={CommandIcons["Commands"]} />
                 </button>
                 {/* <button onClick={e => onClick(e, "Fullscreen")}>
 					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
@@ -212,9 +211,7 @@ function Sidebar({ app, player, themeContext }) {
                                     title={command}
                                     command={command}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={CommandIcons[command]}
-                                    />
+                                    <Icon icon={CommandIcons[command]} />
                                 </button>
                             );
                         })}

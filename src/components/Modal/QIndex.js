@@ -6,7 +6,9 @@ import { PlayerConsumer, AudioState } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faTimes as faDelete,
-    faBookmark
+    faBookmark,
+    faPlayCircle,
+    faHeart
 } from "@fortawesome/free-solid-svg-icons";
 
 const QIndex = ({ app, player }) => {
@@ -35,9 +37,9 @@ const QIndex = ({ app, player }) => {
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
         }
-        if (player.audioState !== AudioState.stopped) {
-            player.stop();
-        }
+        // if (player.audioState !== AudioState.stopped) {
+        //     player.stop();
+        // }
     };
 
     const gotoAya = ({ target }) => {
@@ -48,6 +50,16 @@ const QIndex = ({ app, player }) => {
     const removeBookmark = ({ target }) => {
         const verse = parseInt(target.getAttribute("verse"));
         app.removeBookmark(verse);
+    };
+
+    const playVerse = ({ target }) => {
+        const attr = target.getAttribute("verse") || app.selectStart;
+        const verse = parseInt(attr);
+        player.stop();
+        app.gotoAya(verse, { sel: true });
+        setTimeout(() => {
+            player.play();
+        }, 500);
     };
 
     const gotoSuraPage = ({ target }) => {
@@ -91,13 +103,14 @@ const QIndex = ({ app, player }) => {
     }, []);
 
     const renderIndex = () => {
-        let pageIndex = app.getCurrentPageIndex();
-        let currentSura = QData.pageSura(pageIndex + 1);
+        const { selectStart } = app;
+        // const pageIndex = app.getCurrentPageIndex();
+        const currentSura = QData.ayaIdInfo(selectStart).sura;
         return (
             <ul
                 className="SpreadSheet"
                 style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 120) //-50px margin
+                    columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
                 }}
                 ref={ref => {
                     tableRoot = ref;
@@ -106,6 +119,18 @@ const QIndex = ({ app, player }) => {
                 {getSuraNames().map((name, suraIndex) => {
                     return (
                         <li key={suraIndex}>
+                            {suraIndex == currentSura ? (
+                                <div className="actions">
+                                    <button onClick={playVerse}>
+                                        <Icon icon={faPlayCircle} />
+                                    </button>
+                                    <button>
+                                        <Icon icon={faHeart} />
+                                    </button>
+                                </div>
+                            ) : (
+                                ""
+                            )}
                             <button
                                 sura={suraIndex}
                                 onClick={gotoSura}
@@ -250,6 +275,12 @@ const QIndex = ({ app, player }) => {
                                             >
                                                 <Icon icon={faDelete} />
                                             </button>
+                                            <button
+                                                verse={bookmark.aya}
+                                                onClick={playVerse}
+                                            >
+                                                <Icon icon={faPlayCircle} />
+                                            </button>
                                         </div>
                                     </li>
                                 ))
@@ -269,14 +300,14 @@ const QIndex = ({ app, player }) => {
                 >
                     <String id="index" />
                 </button>
-                {" | "}
+                {"|"}
                 <button
                     onClick={e => selectTab("hifz")}
                     className={activeTab == "hifz" ? "active" : ""}
                 >
                     <String id="favorites" />
                 </button>
-                {" | "}
+                {"|"}
                 <button
                     onClick={e => selectTab("bookmarks")}
                     className={activeTab == "bookmarks" ? "active" : ""}
