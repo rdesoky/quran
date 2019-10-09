@@ -265,10 +265,6 @@ class AppProvider extends Component {
         this.gotoPage(pageIndex + 1, opt.replace);
     };
 
-    // setActivePage = activePage => {
-    // 	this.setState({ activePage });
-    // };
-
     getActiveSide = () => {
         let activePage = this.getCurrentPageIndex();
         let side = this.state.pagesCount === 1 ? 0 : activePage % 2;
@@ -300,6 +296,7 @@ class AppProvider extends Component {
             isNarrow,
             isScrollable
         } = this.state;
+
         if (popup) {
             if (isScrollable) {
                 return appWidth - appWidth / 3;
@@ -311,6 +308,7 @@ class AppProvider extends Component {
                 return appHeight * 0.65;
             }
         }
+
         return appWidth - (isNarrow ? 0 : 50);
     };
 
@@ -357,23 +355,15 @@ class AppProvider extends Component {
         if (!this.bookmarksRef) {
             return;
         }
-        const page = this.selectedRange().start;
-        this.bookmarksRef.once("value", snapshot => {
-            const bookmarks = snapshot.val() || {};
-            bookmarks[page] = -new Date().getTime();
-            this.bookmarksRef.set(bookmarks);
-        });
+        const verse = this.selectedRange().start;
+        this.bookmarksRef.child(verse).set(-new Date().getTime());
     };
 
     removeBookmark = verse => {
         if (!this.bookmarksRef) {
             return;
         }
-        this.bookmarksRef.once("value", snapshot => {
-            const bookmarks = snapshot.val() || {};
-            delete bookmarks[verse];
-            this.bookmarksRef.set(bookmarks);
-        });
+        this.bookmarksRef.child(verse).set(null);
     };
 
     methods = {
@@ -415,18 +405,18 @@ class AppProvider extends Component {
     };
 
     onResize = e => {
-        let { innerWidth, innerHeight } = e.target;
-        let newSize = { width: innerWidth, height: innerHeight };
+        const { innerWidth, innerHeight } = e.target;
+        const newSize = { width: innerWidth, height: innerHeight };
         this.updateAppSizes(newSize);
     };
 
     updateAppSizes({ width, height }) {
         this.setState({ appWidth: width, appHeight: height });
-        let pagesCount = this.calcPagesCount({ width, height });
-        let isNarrow = width / height < 0.7;
-        let isWide = width / height > 1.8;
-        let isCompact = !isWide && pagesCount == 1 && width / height > 1.2;
-        let isScrollable = width / height > 2.7;
+        const pagesCount = this.calcPagesCount({ width, height });
+        const isNarrow = width / height < 0.7;
+        const isWide = width / height > 1.8;
+        const isCompact = !isWide && pagesCount == 1 && width / height > 1.2;
+        const isScrollable = width / height > 2.7;
         this.setState({
             pagesCount,
             isNarrow,
