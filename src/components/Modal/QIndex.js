@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QData from "../../services/QData";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as String, injectIntl } from "react-intl";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
@@ -8,10 +8,12 @@ import {
     faTimes as faDelete,
     faBookmark,
     faPlayCircle,
-    faHeart
+    faHeart,
+    faList
 } from "@fortawesome/free-solid-svg-icons";
 
-const QIndex = ({ app, player }) => {
+const QIndex = ({ app, player, intl }) => {
+    const { formatMessage } = intl;
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
     );
@@ -138,16 +140,7 @@ const QIndex = ({ app, player }) => {
                                     suraIndex == currentSura ? "active" : ""
                                 }
                             >
-                                <String id={"sura_names"}>
-                                    {data => {
-                                        return (
-                                            suraIndex +
-                                            1 +
-                                            ". " +
-                                            data.split(",")[suraIndex]
-                                        );
-                                    }}
-                                </String>
+                                {suraIndex + 1 + ". " + sura_names[suraIndex]}
                             </button>
                         </li>
                     );
@@ -182,23 +175,17 @@ const QIndex = ({ app, player }) => {
                             padding: 10
                         }}
                     >
-                        <String id="sura_names">
-                            {sura_names => (
-                                <String id="pg">
-                                    {pg =>
-                                        sura_names.split(",")[range.sura] +
-                                        " (" +
-                                        pg +
-                                        " " +
-                                        (range.startPage + 1) +
-                                        (range.pages > 1
-                                            ? "-" + (range.endPage + 1)
-                                            : "") +
-                                        ")"
-                                    }
-                                </String>
-                            )}
-                        </String>
+                        <String
+                            id="range_desc"
+                            values={{
+                                sura: sura_names[range.sura],
+                                start_page: range.startPage + 1,
+                                end_page:
+                                    range.pages > 1
+                                        ? "-" + (range.endPage + 1)
+                                        : ""
+                            }}
+                        />
                         <div
                             style={{
                                 whiteSpace: "nowrap",
@@ -219,6 +206,9 @@ const QIndex = ({ app, player }) => {
         );
     };
 
+    const versesText = app.verseList();
+    const sura_names = formatMessage({ id: "sura_names" }).split(",");
+
     const renderBookmarks = () => {
         if (!bookmarks.length) {
             return (
@@ -227,67 +217,47 @@ const QIndex = ({ app, player }) => {
                 </div>
             );
         }
-        const versesText = app.verseList();
-
         return (
             <ul className="FlowingList">
-                <String id="sura_names">
-                    {sura_names => (
-                        <String id="verse">
-                            {verse =>
-                                bookmarks.map(bookmark => (
-                                    <li
-                                        className="BookmarkRow"
-                                        key={bookmark.aya}
-                                    >
-                                        <button
-                                            aya={bookmark.aya}
-                                            onClick={gotoAya}
-                                        >
-                                            <Icon icon={faBookmark} />
-                                            &nbsp;
-                                            {sura_names.split(",")[
-                                                QData.ayaIdInfo(bookmark.aya)
-                                                    .sura
-                                            ] +
-                                                " (" +
-                                                verse +
-                                                " " +
-                                                (QData.ayaIdInfo(bookmark.aya)
-                                                    .aya +
-                                                    1) +
-                                                ")"}
-                                            <div
-                                                style={{
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    pointerEvents: "none"
-                                                }}
-                                            >
-                                                {versesText[bookmark.aya]}
-                                            </div>
-                                        </button>
-                                        <div>
-                                            <button
-                                                verse={bookmark.aya}
-                                                onClick={removeBookmark}
-                                            >
-                                                <Icon icon={faDelete} />
-                                            </button>
-                                            <button
-                                                verse={bookmark.aya}
-                                                onClick={playVerse}
-                                            >
-                                                <Icon icon={faPlayCircle} />
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))
-                            }
-                        </String>
-                    )}
-                </String>
+                {bookmarks.map(bookmark => (
+                    <li className="BookmarkRow" key={bookmark.aya}>
+                        <div className="actions">
+                            <button
+                                verse={bookmark.aya}
+                                onClick={removeBookmark}
+                            >
+                                <Icon icon={faDelete} />
+                            </button>
+                            <button verse={bookmark.aya} onClick={playVerse}>
+                                <Icon icon={faPlayCircle} />
+                            </button>
+                        </div>
+                        <button aya={bookmark.aya} onClick={gotoAya}>
+                            <Icon icon={faBookmark} />
+                            &nbsp;
+                            <String
+                                id="bookmark_desc"
+                                values={{
+                                    sura:
+                                        sura_names[
+                                            QData.ayaIdInfo(bookmark.aya).sura
+                                        ],
+                                    verse: QData.ayaIdInfo(bookmark.aya).aya + 1
+                                }}
+                            />
+                            <div
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    pointerEvents: "none"
+                                }}
+                            >
+                                {versesText[bookmark.aya]}
+                            </div>
+                        </button>
+                    </li>
+                ))}
             </ul>
         );
     };
@@ -298,21 +268,19 @@ const QIndex = ({ app, player }) => {
                     onClick={e => selectTab("index")}
                     className={activeTab == "index" ? "active" : ""}
                 >
-                    <String id="index" />
+                    <Icon icon={faList} />
                 </button>
-                {"|"}
                 <button
                     onClick={e => selectTab("hifz")}
                     className={activeTab == "hifz" ? "active" : ""}
                 >
-                    <String id="favorites" />
+                    <Icon icon={faHeart} />
                 </button>
-                {"|"}
                 <button
                     onClick={e => selectTab("bookmarks")}
                     className={activeTab == "bookmarks" ? "active" : ""}
                 >
-                    <String id="bookmarks" />
+                    <Icon icon={faBookmark} />
                 </button>
             </div>
             <div
@@ -329,4 +297,4 @@ const QIndex = ({ app, player }) => {
     );
 };
 
-export default AppConsumer(PlayerConsumer(QIndex));
+export default AppConsumer(PlayerConsumer(injectIntl(QIndex)));
