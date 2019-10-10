@@ -11,7 +11,7 @@ import { PlayerConsumer, AudioState } from "../../context/Player";
 import Modal from "../Modal/Modal";
 import QData from "./../../services/QData";
 import Utils from "./../../services/utils";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import ReciterName from "./ReciterName";
 import { ListReciters } from "./../../services/AudioData";
 import Switch from "react-switch";
@@ -88,15 +88,15 @@ class AudioPlayer extends Component {
         }
         return (
             <button onClick={this.gotoPlayingAya}>
-                <FormattedMessage id={stateId} />
+                <String id={stateId} />
                 :&nbsp;
-                <FormattedMessage id="sura_names">
+                <String id="sura_names">
                     {sura_names => {
                         return (
                             sura_names.split(",")[sura] + " (" + (aya + 1) + ")"
                         );
                     }}
-                </FormattedMessage>
+                </String>
             </button>
         );
     };
@@ -138,44 +138,44 @@ class AudioPlayer extends Component {
                     <div className="OptionRow">
                         <label>
                             <span>
-                                <FormattedMessage id="repeat" />
+                                <String id="repeat" />
                             </span>
                             <select
                                 onChange={this.onChangeRepeat}
                                 value={player.repeat}
                             >
-                                <FormattedMessage id="no_repeat">
+                                <String id="no_repeat">
                                     {label => (
                                         <option value={0}>{label}</option>
                                     )}
-                                </FormattedMessage>
-                                <FormattedMessage id="selection">
+                                </String>
+                                <String id="selection">
                                     {label => (
                                         <option value={1}>{label}</option>
                                     )}
-                                </FormattedMessage>
-                                <FormattedMessage id="page">
+                                </String>
+                                <String id="page">
                                     {label => (
                                         <option value={2}>{label}</option>
                                     )}
-                                </FormattedMessage>
-                                <FormattedMessage id="sura">
+                                </String>
+                                <String id="sura">
                                     {label => (
                                         <option value={3}>{label}</option>
                                     )}
-                                </FormattedMessage>
-                                <FormattedMessage id="part">
+                                </String>
+                                <String id="part">
                                     {label => (
                                         <option value={4}>{label}</option>
                                     )}
-                                </FormattedMessage>
+                                </String>
                             </select>
                         </label>
                     </div>
                     <div className="OptionRow">
                         <label>
                             <span>
-                                <FormattedMessage id="followPlayer" />
+                                <String id="followPlayer" />
                             </span>
                             <Switch
                                 height={22}

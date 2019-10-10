@@ -95,9 +95,11 @@ const Search = ({ app }) => {
                 }}
             >
                 <String id="sura_names">
-                    {data => {
-                        const nSuraNames = Utils.normalizeText(data).split(",");
-                        return data
+                    {sura_names => {
+                        const nSuraNames = Utils.normalizeText(
+                            sura_names
+                        ).split(",");
+                        return sura_names
                             .split(",")
                             .map((suraName, index) => {
                                 return { name: suraName, index: index };

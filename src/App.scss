@@ -43,6 +43,10 @@ button {
         color: white;
         background: #666;
     }
+
+    * {
+        pointer-events: none;
+    }
 }
 
 @keyframes App-logo-spin {

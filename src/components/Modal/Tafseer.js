@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import QData from "../../services/QData";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const TafseerList = [
@@ -80,7 +80,7 @@ const Tafseer = ({ app, player }) => {
         const { selectStart, selectEnd } = app;
         const { playingAya } = player;
         let aya = selectStart;
-        if (selectEnd != selectStart && playingAya !== -1) {
+        if (playingAya !== -1) {
             aya = playingAya;
         }
         return aya;
@@ -133,18 +133,18 @@ const Tafseer = ({ app, player }) => {
         <>
             <div className="Title">
                 <button onClick={e => offsetSelection(-1)}>
-                    <FontAwesomeIcon icon={faAngleRight} />
+                    <Icon icon={faAngleRight} />
                 </button>
-                <FormattedMessage id="sura_names">
+                <String id="sura_names">
                     {sura_names => (
                         <span className="FlexTitle">
                             {sura_names.split(",")[ayaInfo.sura] +
                                 ` - ${ayaInfo.aya + 1}`}
                         </span>
                     )}
-                </FormattedMessage>
+                </String>
                 <button onClick={e => offsetSelection(1)}>
-                    <FontAwesomeIcon icon={faAngleLeft} />
+                    <Icon icon={faAngleLeft} />
                 </button>
             </div>
             <div

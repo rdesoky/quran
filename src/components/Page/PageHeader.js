@@ -1,6 +1,6 @@
 import React from "react";
 import { AppConsumer } from "../../context/App";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
 import { PlayerConsumer, AudioState } from "../../context/Player";
@@ -57,7 +57,7 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
                     onChange={onSelectSura}
                     value={suraIndex}
                 >
-                    <FormattedMessage className="SuraTitle" id="sura_names">
+                    <String className="SuraTitle" id="sura_names">
                         {sura_names => {
                             return sura_names.split(",").map((name, index) => {
                                 return (
@@ -67,7 +67,7 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
                                 );
                             });
                         }}
-                    </FormattedMessage>
+                    </String>
                 </select>
                 <select
                     onChange={onSelectPart}
@@ -75,7 +75,7 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
                     value={partIndex}
                     style={{ left: app.isNarrow ? "50px" : "0" }}
                 >
-                    <FormattedMessage id="part">
+                    <String id="part">
                         {partLabel => {
                             let parts = new Array(30).fill("");
                             return parts.map((item, index) => {
@@ -86,7 +86,7 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
                                 );
                             });
                         }}
-                    </FormattedMessage>
+                    </String>
                 </select>
             </div>
         </div>
