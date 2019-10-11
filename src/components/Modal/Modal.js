@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import Transition from "./../../services/Transition";
@@ -80,14 +80,21 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                     onClick={preventClose}
                 >
                     {children}
+                    <button
+                        className="CancelButton"
+                        onClick={onClickClose}
+                        // style={{ right: calcRight() }}
+                    >
+                        <Icon icon={faTimes} />
+                    </button>
                 </div>
-                <button
+                {/* <button
                     className="CancelButton"
                     onClick={onClickClose}
                     style={{ right: calcRight() }}
                 >
-                    <FontAwesomeIcon icon={faTimes} />
-                </button>
+                    <Icon icon={faTimes} />
+                </button> */}
             </div>
         </Transition>
     );

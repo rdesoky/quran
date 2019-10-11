@@ -11,7 +11,7 @@
 .CancelButton {
     position: absolute;
     top: 0px;
-    right: 0px;
+    left: 0px;
     width: 50px;
     height: 50px;
     color: white;
@@ -55,11 +55,11 @@
         display: flex;
         align-items: center;
         text-align: center;
-        padding: 0 0 0 60px;
-        [dir="rtl"] & {
-            padding: 0 60px 0 0;
-        }
-        margin: 0 -15px 10px -15px;
+        padding: 0 10px 0 50px;
+        // [dir="rtl"] & {
+        //     padding: 0 60px 0 0;
+        // }
+        margin: 0 -15px 15px -15px;
         border-bottom: solid 1px #444;
         min-height: 50px;
         position: relative;
