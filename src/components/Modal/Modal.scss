@@ -55,7 +55,7 @@
         display: flex;
         align-items: center;
         text-align: center;
-        padding: 0 10px 0 50px;
+        padding: 0 15px 0 50px;
         // [dir="rtl"] & {
         //     padding: 0 60px 0 0;
         // }
@@ -166,7 +166,7 @@
     #SearchForm {
         // display: flex;
         // margin: 0 15px 5px 0; //RTL
-        margin: auto;
+        // margin: auto;
         > * {
             display: inline-block;
             height: 40px;
@@ -181,7 +181,7 @@
             border: solid 1px silver;
             box-sizing: border-box;
             width: calc(100% - 80px);
-            margin: 0 10px;
+            // margin: 0 10px;
         }
         button[type="submit"] {
             width: 60px;
@@ -274,7 +274,9 @@
     .Title {
         flex-basis: 180px;
         > div {
-            width: calc(100% - 20px);
+            //width: calc(100% - 20px);
+            width: 100%;
+            text-align: right;
         }
     }
 }
