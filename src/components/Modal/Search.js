@@ -230,57 +230,56 @@ const Search = ({ app }) => {
 
     return (
         <>
-            <div className="Title" style={{ height: formHeight }}>
-                <form
-                    id="SearchForm"
-                    onSubmit={onSubmitSearch}
-                    // ref={form => {
-                    // 	searchForm = form;
-                    // }}
-                >
-                    <input
-                        placeholder="Search suras' name or content"
-                        className="SearchInput"
-                        inputMode="search"
-                        ref={input}
-                        type="text"
-                        value={searchTerm}
-                        onChange={onChangeSearchInput}
-                    />
-                    <button type="submit">
-                        <String id="search" />
-                    </button>
-                </form>
-                <div id="SearchHistory">
-                    {searchHistory.map((s, i) => {
-                        return (
-                            <button key={i} onClick={onHistoryButtonClick}>
-                                {s}
-                            </button>
-                        );
-                    })}
+            <div className="Title">
+                <div>
+                    <form
+                        id="SearchForm"
+                        onSubmit={onSubmitSearch}
+                        // ref={form => {
+                        // 	searchForm = form;
+                        // }}
+                    >
+                        <input
+                            placeholder="Search suras' name or content"
+                            className="SearchInput"
+                            inputMode="search"
+                            ref={input}
+                            type="text"
+                            value={searchTerm}
+                            onChange={onChangeSearchInput}
+                        />
+                        <button type="submit">
+                            <String id="search" />
+                        </button>
+                    </form>
                 </div>
-                <div
-                    className="ResultsInfo"
-                    style={{ height: resultsInfoHeight }}
-                >
-                    <String className="SuraTitle" id="results_for">
-                        {resultsFor => {
-                            if (searchTerm.length) {
-                                return (
-                                    <>
-                                        {results.length +
-                                            " " +
-                                            resultsFor +
-                                            " " +
-                                            searchTerm}
-                                    </>
-                                );
-                            }
-                            return null;
-                        }}
-                    </String>
-                </div>
+            </div>
+            <div id="SearchHistory">
+                {searchHistory.map((s, i) => {
+                    return (
+                        <button key={i} onClick={onHistoryButtonClick}>
+                            {s}
+                        </button>
+                    );
+                })}
+            </div>
+            <div className="ResultsInfo" style={{ height: resultsInfoHeight }}>
+                <String className="SuraTitle" id="results_for">
+                    {resultsFor => {
+                        if (searchTerm.length) {
+                            return (
+                                <>
+                                    {results.length +
+                                        " " +
+                                        resultsFor +
+                                        " " +
+                                        searchTerm}
+                                </>
+                            );
+                        }
+                        return null;
+                    }}
+                </String>
             </div>
             <div
                 className="PopupBody"

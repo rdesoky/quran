@@ -264,24 +264,26 @@ const QIndex = ({ app, player, intl }) => {
     return (
         <>
             <div className="Title">
-                <button
-                    onClick={e => selectTab("index")}
-                    className={activeTab == "index" ? "active" : ""}
-                >
-                    <Icon icon={faList} />
-                </button>
-                <button
-                    onClick={e => selectTab("hifz")}
-                    className={activeTab == "hifz" ? "active" : ""}
-                >
-                    <Icon icon={faHeart} />
-                </button>
-                <button
-                    onClick={e => selectTab("bookmarks")}
-                    className={activeTab == "bookmarks" ? "active" : ""}
-                >
-                    <Icon icon={faBookmark} />
-                </button>
+                <div>
+                    <button
+                        onClick={e => selectTab("index")}
+                        className={activeTab == "index" ? "active" : ""}
+                    >
+                        <Icon icon={faList} />
+                    </button>
+                    <button
+                        onClick={e => selectTab("hifz")}
+                        className={activeTab == "hifz" ? "active" : ""}
+                    >
+                        <Icon icon={faHeart} />
+                    </button>
+                    <button
+                        onClick={e => selectTab("bookmarks")}
+                        className={activeTab == "bookmarks" ? "active" : ""}
+                    >
+                        <Icon icon={faBookmark} />
+                    </button>
+                </div>
             </div>
             <div
                 className="PopupBody"

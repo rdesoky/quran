@@ -127,9 +127,11 @@ const Favorites = ({ app }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                {user == null || user.isAnonymous ? renderLogin() : ""}
-
-                {user && !showLogin ? renderHifzRanges() : ""}
+                <div className="buttonsBar">
+                    <button>
+                        <String id="add_hifz" />
+                    </button>
+                </div>
             </div>
         </>
     );

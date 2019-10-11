@@ -12,70 +12,18 @@ const Bookmarks = ({ app }) => {
         app.gotoAya(aya, { sel: true });
     };
 
-    const renderBookmarks = () => {
-        if (!bookmarks.length) {
-            return <div>Nothing recorded</div>;
+    const renderVerse = () => {
+        const { selectStart, selectEnd } = app;
+        const verseList = app.verseList();
+        if (verseList.length > selectStart) {
+            return verseList[selectStart];
         }
-        const versesText = app.verseList();
-
-        return (
-            <div
-                style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 240) //-50px margin
-                }}
-            >
-                <String id="sura_names">
-                    {sura_names => (
-                        <String id="verse">
-                            {verse =>
-                                bookmarks.map(bookmark => (
-                                    <button
-                                        aya={bookmark.aya}
-                                        key={bookmark.aya}
-                                        onClick={gotoAya}
-                                        style={{
-                                            width: "100%",
-                                            textAlign: "inherit",
-                                            padding: 10
-                                        }}
-                                    >
-                                        {sura_names.split(",")[
-                                            QData.ayaIdInfo(bookmark.aya).sura
-                                        ] +
-                                            " (" +
-                                            verse +
-                                            " " +
-                                            (QData.ayaIdInfo(bookmark.aya).aya +
-                                                1) +
-                                            ")"}
-                                        <div
-                                            style={{
-                                                whiteSpace: "nowrap",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                pointerEvents: "none"
-                                            }}
-                                        >
-                                            {versesText[bookmark.aya]}
-                                        </div>
-                                    </button>
-                                ))
-                            }
-                        </String>
-                    )}
-                </String>
-            </div>
-        );
     };
 
-    const renderLogin = () => {
-        return (
-            <div>
-                <button onClick={e => app.setPopup("Profile")}>
-                    Please Login
-                </button>
-            </div>
-        );
+    const toggleBookmark = e => {
+        app.addBookmark();
+        app.setPopup("Index");
+        localStorage.setItem("activeTab", "bookmarks");
     };
 
     return (
@@ -87,8 +35,12 @@ const Bookmarks = ({ app }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                {user == null || user.isAnonymous ? renderLogin() : ""}
-                {user ? renderBookmarks() : ""}
+                {renderVerse()}
+                <div className="buttonsBar">
+                    <button onClick={toggleBookmark}>
+                        <String id="bookmark" />
+                    </button>
+                </div>
             </div>
         </>
     );

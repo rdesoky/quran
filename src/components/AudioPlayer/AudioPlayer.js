@@ -137,9 +137,7 @@ class AudioPlayer extends Component {
                 >
                     <div className="OptionRow">
                         <label>
-                            <span>
-                                <String id="repeat" />
-                            </span>
+                            <String id="repeat" />
                             <select
                                 onChange={this.onChangeRepeat}
                                 value={player.repeat}
