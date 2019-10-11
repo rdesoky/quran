@@ -49,6 +49,20 @@ button {
     }
 }
 
+.buttonsBar {
+    margin-top: 15px;
+    text-align: center;
+    button {
+        font-size: 15px;
+        background: #444;
+        padding: 10px;
+        &:hover {
+            color: white;
+            background: #666;
+        }
+    }
+}
+
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);

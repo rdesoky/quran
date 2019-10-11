@@ -42,9 +42,9 @@ function Sidebar({ app, player, themeContext }) {
                     player.play();
                 }
                 break;
-            case "Bookmarks":
-                app.addBookmark();
-                break;
+            // case "Bookmarks":
+            //     app.addBookmark();
+            //     break;
             case "Tafseer":
             //app.selectAya();
             default:
@@ -92,7 +92,9 @@ function Sidebar({ app, player, themeContext }) {
     };
     const retry = e => {
         player.stop();
-        player.play();
+        setTimeout(() => {
+            player.play();
+        }, 500);
     };
     const resume = e => {
         player.resume();
