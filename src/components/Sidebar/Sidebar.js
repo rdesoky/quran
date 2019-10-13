@@ -145,7 +145,7 @@ function Sidebar({ app, player, themeContext }) {
                 );
         }
         return (
-            <>
+            <div id="SidebarAudioPlayer">
                 <button
                     onClick={showPlayer}
                     className={
@@ -164,8 +164,17 @@ function Sidebar({ app, player, themeContext }) {
                     }}
                 />
                 {btn} {stopBtn}
-            </>
+            </div>
         );
+    };
+
+    const getIcon = commandId => {
+        switch (commandId) {
+            case "Mask":
+                return CommandIcons[app.maskStart === -1 ? "Mask" : "MaskOn"];
+            default:
+                return CommandIcons[commandId];
+        }
     };
 
     return (
@@ -182,8 +191,7 @@ function Sidebar({ app, player, themeContext }) {
         >
             <button
                 onClick={toggleButtons}
-                //style={{ display: app.isNarrow ? "block" : "none" }}
-                style={{ visibility: app.isNarrow ? "visible" : "hidden" }}
+                style={{ display: app.isNarrow ? "block" : "none" }}
             >
                 <Icon
                     icon={app.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
@@ -192,17 +200,19 @@ function Sidebar({ app, player, themeContext }) {
             <div
                 className="ButtonsList"
                 style={{
-                    display: app.showMenu || !app.isNarrow ? "block" : "none"
+                    display: app.showMenu || !app.isNarrow ? "flex" : "none"
                 }}
             >
-                <button onClick={e => onClick(e, "Commands")}>
-                    <Icon icon={CommandIcons["Commands"]} />
-                </button>
+                <div>
+                    <button onClick={e => onClick(e, "Commands")}>
+                        <Icon icon={getIcon("Commands")} />
+                    </button>
+                </div>
                 {/* <button onClick={e => onClick(e, "Fullscreen")}>
 					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
 				</button> */}
                 {renderPlayer()}
-                <div id="RecentCommands">
+                <div id="RecentCommands" className="SidebarSection">
                     {app.recentCommands
                         .filter(c => c != null)
                         .map(command => {
@@ -213,10 +223,18 @@ function Sidebar({ app, player, themeContext }) {
                                     title={command}
                                     command={command}
                                 >
-                                    <Icon icon={CommandIcons[command]} />
+                                    <Icon icon={getIcon(command)} />
                                 </button>
                             );
                         })}
+                </div>
+                <div id="SidebarFooter" className="SidebarSection">
+                    <button onClick={e => onClick(e, "Profile")}>
+                        <Icon icon={getIcon("Profile")} />
+                    </button>
+                    <button onClick={e => onClick(e, "Settings")}>
+                        <Icon icon={getIcon("Settings")} />
+                    </button>
                 </div>
             </div>
         </div>

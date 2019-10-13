@@ -72,14 +72,18 @@ class AppProvider extends Component {
     };
 
     pushRecentCommand = command => {
-        if (["Commands", "Play", "AudioPlayer"].includes(command)) {
+        if (
+            ["Commands", "Play", "AudioPlayer", "Settings", "Profile"].includes(
+                command
+            )
+        ) {
             return;
         }
         let recentCommands = [
             command,
             ...this.state.recentCommands.filter(c => c !== command)
         ];
-        recentCommands.length = 7;
+        recentCommands.length = 12;
         setTimeout(() => this.setState({ recentCommands }), 1000);
         localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
     };

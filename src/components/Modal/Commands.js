@@ -24,7 +24,8 @@ import {
     faAtlas,
     faRunning,
     faExpand,
-    faBookmark
+    faBookmark,
+    faEye
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 
@@ -41,6 +42,7 @@ export const CommandIcons = {
     Favorites: faHeart,
     Help: faQuestion,
     Mask: faEyeSlash,
+    MaskOn: faEye,
     Copy: faCopy,
     Share: faShareAlt,
     Tafseer: faQuran,
