@@ -284,7 +284,7 @@ const Search = ({ app }) => {
             <div
                 className="PopupBody"
                 style={{
-                    maxHeight: app.appHeight - formHeight - 25 - 15 - 20 // footer + padding + formMargins
+                    maxHeight: app.appHeight - 25 - formHeight - 25 - 20 - 20 // footer + padding + formMargins
                 }}
             >
                 {renderSuras()}

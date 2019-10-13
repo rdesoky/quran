@@ -32,21 +32,23 @@ const QIndex = ({ app, player, intl }) => {
         setActiveTab(tabId);
     };
 
+    const checkClosePopup = () => {
+        if (!app.isCompact && app.pagesCount === 1) {
+            app.closePopup();
+        }
+    };
+
     const gotoSura = ({ target }) => {
         app.hideMask();
         let index = parseInt(target.getAttribute("sura"));
         app.gotoSura(index);
-        if (!app.isCompact && app.pagesCount === 1) {
-            app.closePopup();
-        }
-        // if (player.audioState !== AudioState.stopped) {
-        //     player.stop();
-        // }
+        checkClosePopup();
     };
 
     const gotoAya = ({ target }) => {
         const aya = parseInt(target.getAttribute("aya"));
         app.gotoAya(aya, { sel: true });
+        checkClosePopup();
     };
 
     const removeBookmark = ({ target }) => {
@@ -82,6 +84,7 @@ const QIndex = ({ app, player, intl }) => {
         } else {
             app.setSelectEnd(QData.pageAyaId(endPage + 1) - 1);
         }
+        checkClosePopup();
     };
 
     const rangeStartAya = (sura, page) => {
@@ -287,7 +290,7 @@ const QIndex = ({ app, player, intl }) => {
             </div>
             <div
                 className="PopupBody"
-                style={{ maxHeight: app.appHeight - 85 }}
+                style={{ maxHeight: app.appHeight - 130 }}
             >
                 {activeTab == "index"
                     ? renderIndex()
