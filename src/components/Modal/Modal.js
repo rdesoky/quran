@@ -61,7 +61,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
         <Transition>
             <div
                 id={`${name}Popup`}
-                className="ModalOverlay"
+                className={`ModalOverlay${app.isNarrow ? " narrow" : ""}`}
                 style={{
                     left: app.isNarrow ? 0 : 50,
                     pointerEvents: isBlockMouse() ? "fill" : "none"
