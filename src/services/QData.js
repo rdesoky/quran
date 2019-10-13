@@ -207,6 +207,25 @@ const QData = {
         return ((nPageNo - startPage) * 100) / (endPage - startPage);
     },
 
+    rangeVerses: (sura, startPage, endPage) => {
+        let [rangeStartVerse, rangeEndVerse] = [0, 0];
+        const suraStartPage = QData.sura_info[sura].sp - 1;
+        const suraEndPage = QData.sura_info[sura].ep - 1;
+        const suraStartAya = QData.ayaID(sura, 0);
+        if (suraStartPage === startPage) {
+            rangeStartVerse = suraStartAya;
+        } else {
+            rangeStartVerse = QData.pageAyaId(startPage);
+        }
+        if (suraEndPage === endPage) {
+            rangeEndVerse = suraStartAya + QData.sura_info[sura].ac - 1;
+        } else {
+            rangeEndVerse = QData.pageAyaId(endPage + 1) - 1;
+        }
+
+        return [rangeStartVerse, rangeEndVerse];
+    },
+
     pages_count: 604,
 
     parts: [

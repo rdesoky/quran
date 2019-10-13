@@ -66,24 +66,26 @@ const QIndex = ({ app, player, intl }) => {
         }, 500);
     };
 
+    const playRange = ({ target }) => {
+        player.stop();
+        gotoSuraPage({ target });
+        setTimeout(() => {
+            player.play();
+        });
+    };
+
     const gotoSuraPage = ({ target }) => {
         const sura = parseInt(target.getAttribute("sura"));
         const startPage = parseInt(target.getAttribute("startpage"));
         const endPage = parseInt(target.getAttribute("endpage"));
-        const suraStartPage = QData.sura_info[sura].sp - 1;
-        const suraEndPage = QData.sura_info[sura].ep - 1;
-        const suraStartAya = QData.ayaID(sura, 0);
+        const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
+            sura,
+            startPage,
+            endPage
+        );
         app.gotoPage(startPage + 1);
-        if (suraStartPage === startPage) {
-            app.setSelectStart(suraStartAya);
-        } else {
-            app.setSelectStart(QData.pageAyaId(startPage));
-        }
-        if (suraEndPage === endPage) {
-            app.setSelectEnd(suraStartAya + QData.sura_info[sura].ac - 1);
-        } else {
-            app.setSelectEnd(QData.pageAyaId(endPage + 1) - 1);
-        }
+        app.setSelectStart(rangeStartVerse);
+        app.setSelectEnd(rangeEndVerse);
         checkClosePopup();
     };
 
@@ -164,48 +166,63 @@ const QIndex = ({ app, player, intl }) => {
         const versesText = app.verseList();
 
         return (
-            <div>
-                {hifzRanges.map(range => (
-                    <button
-                        key={"" + range.sura + range.startPage}
-                        sura={range.sura}
-                        startpage={range.startPage}
-                        endpage={range.endPage}
-                        onClick={gotoSuraPage}
-                        style={{
-                            width: "100%",
-                            textAlign: "inherit",
-                            padding: 10
-                        }}
-                    >
-                        <String
-                            id="range_desc"
-                            values={{
-                                sura: sura_names[range.sura],
-                                start_page: range.startPage + 1,
-                                end_page:
-                                    range.pages > 1
-                                        ? "-" + (range.endPage + 1)
-                                        : ""
-                            }}
-                        />
-                        <div
+            <ul id="HifzRanges" className="FlowingList">
+                {hifzRanges.map((range, index) => (
+                    <li className="HifzRangeRow" key={index}>
+                        <button
+                            key={"" + range.sura + range.startPage}
+                            sura={range.sura}
+                            startpage={range.startPage}
+                            endpage={range.endPage}
+                            onClick={gotoSuraPage}
                             style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                pointerEvents: "none"
+                                width: "100%",
+                                textAlign: "inherit",
+                                padding: 10
                             }}
                         >
-                            {
-                                versesText[
-                                    rangeStartAya(range.sura, range.startPage)
-                                ]
-                            }
+                            <String
+                                id="range_desc"
+                                values={{
+                                    sura: sura_names[range.sura],
+                                    start_page: range.startPage + 1,
+                                    end_page:
+                                        range.pages > 1
+                                            ? "-" + (range.endPage + 1)
+                                            : ""
+                                }}
+                            />
+                            <div
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    pointerEvents: "none"
+                                }}
+                            >
+                                {
+                                    versesText[
+                                        rangeStartAya(
+                                            range.sura,
+                                            range.startPage
+                                        )
+                                    ]
+                                }
+                            </div>
+                        </button>
+                        <div className="actions">
+                            <button
+                                sura={range.sura}
+                                startpage={range.startPage}
+                                endpage={range.endPage}
+                                onClick={playRange}
+                            >
+                                <Icon icon={faPlayCircle} />
+                            </button>
                         </div>
-                    </button>
+                    </li>
                 ))}
-            </div>
+            </ul>
         );
     };
 
