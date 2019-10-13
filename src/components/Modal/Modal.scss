@@ -28,17 +28,6 @@
         top: -20px;
     }
 }
-.trans-end {
-    .ModalContent {
-        transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
-        opacity: 1;
-        top: 25px;
-        &.HiddenPopup {
-            top: -20px;
-            opacity: 0;
-        }
-    }
-}
 
 .ModalContent {
     pointer-events: all;
@@ -49,8 +38,21 @@
     color: white;
     box-sizing: border-box;
     max-height: 100%;
-    // display: flex;
-    // flex-flow: column;
+
+    .trans-end & {
+        transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
+        opacity: 1;
+        top: 0;
+        &.HiddenPopup {
+            top: -20px;
+            opacity: 0;
+        }
+    }
+
+    .trans-end .narrow & {
+        top: 25px;
+    }
+
     .Title {
         display: flex;
         align-items: center;

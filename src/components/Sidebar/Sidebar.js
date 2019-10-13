@@ -179,7 +179,7 @@ function Sidebar({ app, player, themeContext }) {
 
     return (
         <div
-            className="Sidebar"
+            className={"Sidebar" + (app.isNarrow ? " narrow" : "")}
             style={{
                 bottom:
                     app.showMenu || !app.isNarrow

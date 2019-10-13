@@ -9,11 +9,15 @@ import {
     faBookmark,
     faPlayCircle,
     faHeart,
-    faList
+    faList,
+    faEllipsisH
 } from "@fortawesome/free-solid-svg-icons";
 
 const QIndex = ({ app, player, intl }) => {
     const { formatMessage } = intl;
+    const [indexActions, setIndexActions] = useState(0);
+    const [bookmarksActions, setBookmarksActiosn] = useState(0);
+    const [hifzActions, setHifzActions] = useState(0);
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
     );
@@ -98,8 +102,6 @@ const QIndex = ({ app, player, intl }) => {
         }
     };
 
-    let tableRoot;
-
     useEffect(() => {
         // let pageIndex = app.getCurrentPageIndex();
         // let sura = QData.pageSura(pageIndex + 1);
@@ -107,11 +109,13 @@ const QIndex = ({ app, player, intl }) => {
         // if (currSuraBtn) {
         //     currSuraBtn.focus();
         // }
+        const { selectStart } = app;
+        const currentSura = QData.ayaIdInfo(selectStart).sura;
+        setIndexActions(currentSura);
     }, []);
 
     const renderIndex = () => {
         const { selectStart } = app;
-        // const pageIndex = app.getCurrentPageIndex();
         const currentSura = QData.ayaIdInfo(selectStart).sura;
         return (
             <ul
@@ -119,25 +123,30 @@ const QIndex = ({ app, player, intl }) => {
                 style={{
                     columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
                 }}
-                ref={ref => {
-                    tableRoot = ref;
-                }}
             >
                 {getSuraNames().map((name, suraIndex) => {
                     return (
                         <li key={suraIndex}>
-                            {suraIndex == currentSura ? (
-                                <div className="actions">
-                                    <button onClick={playVerse}>
-                                        <Icon icon={faPlayCircle} />
+                            <div className="actions">
+                                {indexActions === suraIndex ? (
+                                    <>
+                                        <button onClick={playVerse}>
+                                            <Icon icon={faPlayCircle} />
+                                        </button>
+                                        <button>
+                                            <Icon icon={faHeart} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={e =>
+                                            setIndexActions(suraIndex)
+                                        }
+                                    >
+                                        <Icon icon={faEllipsisH} />
                                     </button>
-                                    <button>
-                                        <Icon icon={faHeart} />
-                                    </button>
-                                </div>
-                            ) : (
-                                ""
-                            )}
+                                )}
+                            </div>
                             <button
                                 sura={suraIndex}
                                 onClick={gotoSura}
@@ -307,7 +316,9 @@ const QIndex = ({ app, player, intl }) => {
             </div>
             <div
                 className="PopupBody"
-                style={{ maxHeight: app.appHeight - 130 }}
+                style={{
+                    maxHeight: app.appHeight - 105 - (app.isNarrow ? 25 : 0)
+                }}
             >
                 {activeTab == "index"
                     ? renderIndex()

@@ -17,6 +17,7 @@
     border-width: 0 1px 0 0;
     box-sizing: content-box;
     z-index: 1;
+    overflow: hidden;
 
     button {
         display: block;
@@ -41,7 +42,12 @@
     .ButtonsList {
         display: flex;
         flex-direction: column;
-        height: calc(100% - 25px);
+        height: 100%;
+
+        .narrow & {
+            height: calc(100% - 25px);
+        }
+
         button {
             font-size: 24px;
             height: 50px;
@@ -67,5 +73,11 @@
         border-color: #444;
         border-width: 1px 0 0 0;
         border-style: solid;
+    }
+}
+
+.ButtonsList {
+    .narrow & {
+        height: calc(100% - 25px);
     }
 }
