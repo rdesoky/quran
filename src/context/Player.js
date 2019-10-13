@@ -121,7 +121,9 @@ class PlayerProvider extends Component {
         this.audio.src = this.audioSource(playingAya);
         this.audio.play();
         document.title = "Reciting...";
-        //this.show();
+        if (this.state.followPlayer) {
+            app.gotoAya(playingAya, { sel: false });
+        }
     };
     resume = () => {
         this.audio.play();
@@ -131,7 +133,7 @@ class PlayerProvider extends Component {
     stop = event => {
         this.audio.pause();
         this.setAudioState(AudioState.stopped);
-        this.setPlayingAya(-1);
+        // this.setPlayingAya(-1);
         document.title = "";
     };
 
@@ -212,16 +214,24 @@ class PlayerProvider extends Component {
         audio.removeEventListener("pause", this.onPaused);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.app.selectStart !== prevProps.app.selectStart) {
+            if (
+                this.state.playingAya !== -1 &&
+                this.state.audioState === AudioState.stopped
+            ) {
+                this.setPlayingAya(-1);
+            }
+        }
+    }
+
     onEnded = () => {
         const { app } = this.props;
         // const { selectStart, selectEnd } = app;
-        const { followPlayer, audioState } = this.state;
+        const { audioState } = this.state;
         if (audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);
             this.play();
-            if (followPlayer) {
-                app.gotoAya(ayaId, { sel: false });
-            }
         }
     };
 
