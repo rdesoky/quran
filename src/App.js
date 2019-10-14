@@ -14,6 +14,7 @@ import { ThemeConsumer } from "./context/Theme";
 import AppProvider from "./context/App";
 import PlayerProvider from "./context/Player";
 import firebase from "firebase";
+import Exercise from "./components/Modal/Exercise";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -72,6 +73,10 @@ function App({ themeContext }) {
                                 <Route
                                     path={process.env.PUBLIC_URL + "/aya/:aya"}
                                     component={PageRedirect}
+                                />
+                                <Route
+                                    path={process.env.PUBLIC_URL + "/exercise"}
+                                    component={Exercise}
                                 />
                                 <Route
                                     render={() => {

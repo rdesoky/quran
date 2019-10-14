@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import QData from "./../../services/QData";
-import Login from "../Login";
 
 const Favorites = ({ app }) => {
     const { user, hifzRanges } = app;

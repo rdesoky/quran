@@ -122,6 +122,7 @@ class PlayerProvider extends Component {
         this.audio.play();
         document.title = "Reciting...";
         if (this.state.followPlayer) {
+            //TODO: check if url state inside pager
             app.gotoAya(playingAya, { sel: false });
         }
     };
@@ -130,16 +131,30 @@ class PlayerProvider extends Component {
         document.title = "Reciting...";
         // this.show();
     };
-    stop = event => {
+    stop = (resetToSelection = false) => {
         this.audio.pause();
         this.setAudioState(AudioState.stopped);
-        // this.setPlayingAya(-1);
+        if (resetToSelection) {
+            this.setPlayingAya(-1);
+        }
         document.title = "";
     };
 
     pause = () => {
         document.title = "Paused";
         this.audio.pause();
+    };
+
+    trackDuration = () => {
+        return this.audio.duration;
+    };
+
+    trackCurrentTime = () => {
+        return this.audio.currentTime;
+    };
+
+    trackRemainingTime = () => {
+        return this.audio.duration - this.audio.currentTime;
     };
 
     changeReciter = reciter => {
@@ -191,7 +206,10 @@ class PlayerProvider extends Component {
         stop: this.stop,
         changeReciter: this.changeReciter,
         setFollowPlayer: this.setFollowPlayer,
-        setRepeat: this.setRepeat
+        setRepeat: this.setRepeat,
+        trackDuration: this.trackDuration,
+        trackCurrentTime: this.trackCurrentTime,
+        trackRemainingTime: this.trackRemainingTime
     };
 
     componentDidMount() {

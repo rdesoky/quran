@@ -10,7 +10,8 @@ import {
     faPlayCircle,
     faHeart,
     faList,
-    faEllipsisH
+    faEllipsisH,
+    faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
 const QIndex = ({ app, player, intl }) => {
@@ -60,10 +61,18 @@ const QIndex = ({ app, player, intl }) => {
         app.removeBookmark(verse);
     };
 
+    const playSura = e => {
+        player.stop(true);
+        gotoSura(e);
+        setTimeout(() => {
+            player.play();
+        }, 500);
+    };
+
     const playVerse = ({ target }) => {
         const attr = target.getAttribute("verse") || app.selectStart;
         const verse = parseInt(attr);
-        player.stop();
+        player.stop(true);
         app.gotoAya(verse, { sel: true });
         setTimeout(() => {
             player.play();
@@ -71,14 +80,14 @@ const QIndex = ({ app, player, intl }) => {
     };
 
     const playRange = ({ target }) => {
-        player.stop();
-        gotoSuraPage({ target });
+        player.stop(true);
+        selectRange({ target });
         setTimeout(() => {
             player.play();
-        });
+        }, 500);
     };
 
-    const gotoSuraPage = ({ target }) => {
+    const selectRange = ({ target }) => {
         const sura = parseInt(target.getAttribute("sura"));
         const startPage = parseInt(target.getAttribute("startpage"));
         const endPage = parseInt(target.getAttribute("endpage"));
@@ -130,15 +139,21 @@ const QIndex = ({ app, player, intl }) => {
                             <div className="actions">
                                 {indexActions === suraIndex ? (
                                     <>
-                                        <button onClick={playVerse}>
-                                            <Icon icon={faPlayCircle} />
-                                        </button>
                                         <button>
                                             <Icon icon={faHeart} />
+                                        </button>
+                                        <button
+                                            sura={suraIndex}
+                                            onClick={playSura}
+                                        >
+                                            <Icon icon={faPlayCircle} />
                                         </button>
                                     </>
                                 ) : (
                                     <button
+                                        onMouseOver={e =>
+                                            setIndexActions(suraIndex)
+                                        }
                                         onClick={e =>
                                             setIndexActions(suraIndex)
                                         }
@@ -183,7 +198,7 @@ const QIndex = ({ app, player, intl }) => {
                             sura={range.sura}
                             startpage={range.startPage}
                             endpage={range.endPage}
-                            onClick={gotoSuraPage}
+                            onClick={selectRange}
                             style={{
                                 width: "100%",
                                 textAlign: "inherit",
@@ -191,7 +206,7 @@ const QIndex = ({ app, player, intl }) => {
                             }}
                         >
                             <String
-                                id="range_desc"
+                                id={"range_desc"}
                                 values={{
                                     sura: sura_names[range.sura],
                                     start_page: range.startPage + 1,
@@ -311,6 +326,9 @@ const QIndex = ({ app, player, intl }) => {
                         className={activeTab == "bookmarks" ? "active" : ""}
                     >
                         <Icon icon={faBookmark} />
+                    </button>
+                    <button onClick={e => app.setPopup("Search")}>
+                        <Icon icon={faSearch} />
                     </button>
                 </div>
             </div>

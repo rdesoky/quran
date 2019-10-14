@@ -300,3 +300,26 @@
         }
     }
 }
+
+#ExercisePage {
+    .ModalContent {
+        position: static;
+        max-width: 600px;
+        margin: auto;
+    }
+    .PopupBody {
+        // overflow-x: hidden;
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            border: none;
+            color: white;
+            background-color: #ffffff20;
+            box-sizing: border-box;
+            font-size: 25px;
+        }
+    }
+    #VerseToTest {
+        font-size: 25px;
+    }
+}
