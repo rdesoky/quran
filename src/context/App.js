@@ -8,6 +8,7 @@ let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
     user: null,
+    exersize: false,
     hifzRanges: [],
     bookmarks: [],
     isNarrow: false, //hidden sidebar and streched single page width
@@ -84,7 +85,7 @@ class AppProvider extends Component {
             ...this.state.recentCommands.filter(c => c !== command)
         ];
         recentCommands.length = 12;
-        setTimeout(() => this.setState({ recentCommands }), 1000);
+        setTimeout(() => this.setState({ recentCommands }), 1);
         localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
     };
 
@@ -370,6 +371,10 @@ class AppProvider extends Component {
         this.bookmarksRef.child(verse).set(null);
     };
 
+    setExercise = (exercise = true) => {
+        this.setState({ exercise });
+    };
+
     methods = {
         selectedRange: this.selectedRange,
         popupWidth: this.popupWidth,
@@ -405,7 +410,8 @@ class AppProvider extends Component {
         pagerWidth: this.pagerWidth,
         sideBarWidth: this.sideBarWidth,
         addBookmark: this.addBookmark,
-        removeBookmark: this.removeBookmark
+        removeBookmark: this.removeBookmark,
+        setExercise: this.setExercise
     };
 
     onResize = e => {

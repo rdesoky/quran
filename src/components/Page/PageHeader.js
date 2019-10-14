@@ -17,9 +17,9 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
         app.hideMask();
         const suraIndex = parseInt(target.value);
         app.gotoSura(suraIndex);
-        if (player.audioState !== AudioState.stopped) {
-            player.stop();
-        }
+        // if (player.audioState !== AudioState.stopped) {
+        //     player.stop();
+        // }
         Utils.selectTopCommand();
     };
 
@@ -27,9 +27,9 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
         app.hideMask();
         const partIndex = target.value;
         app.gotoPart(partIndex);
-        if (player.audioState !== AudioState.stopped) {
-            player.stop();
-        }
+        // if (player.audioState !== AudioState.stopped) {
+        //     player.stop();
+        // }
         Utils.selectTopCommand();
     };
 

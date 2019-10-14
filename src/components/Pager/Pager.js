@@ -13,6 +13,7 @@ import {
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
+import Exercise from "../Modal/Exercise";
 
 function fnPageRedirect({ match, app }) {
     let { aya } = match.params;
@@ -269,6 +270,10 @@ function Pager({ match, app, player }) {
             </div>
         );
     };
+
+    // if (app.exercise) {
+    //     return <Exercise />;
+    // }
 
     return (
         <div

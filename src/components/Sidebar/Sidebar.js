@@ -16,8 +16,13 @@ import { CommandIcons } from "./../Modal/Commands";
 import Utils from "../../services/utils";
 
 function Sidebar({ app, player, themeContext }) {
+    const { history } = app;
     const onClick = (e, id) => {
         switch (id) {
+            case "Exercise":
+                history.push(`${process.env.PUBLIC_URL}/exercise`);
+                //     //app.setExercise();
+                break;
             case "Theme":
                 toggleTheme();
                 break;
@@ -215,13 +220,16 @@ function Sidebar({ app, player, themeContext }) {
                 <div id="RecentCommands" className="SidebarSection">
                     {app.recentCommands
                         .filter(c => c != null)
-                        .map(command => {
+                        .map((command, index) => {
                             return (
                                 <button
                                     key={command}
                                     onClick={e => onClick(e, command)}
                                     title={command}
                                     command={command}
+                                    style={{
+                                        top: index * 50
+                                    }}
                                 >
                                     <Icon icon={getIcon(command)} />
                                 </button>
