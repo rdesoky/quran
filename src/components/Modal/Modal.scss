@@ -53,6 +53,16 @@
         top: 25px;
     }
 
+    textarea {
+        width: 100%;
+        min-height: 100px;
+        border: none;
+        color: white;
+        background-color: #ffffff20;
+        box-sizing: border-box;
+        font-size: 25px;
+    }
+
     .Title {
         display: flex;
         align-items: center;
@@ -76,6 +86,11 @@
         .FlexTitle {
             display: inline-block;
             min-width: calc(100% - 115px);
+        }
+        .HeaderButtons {
+            button {
+                font-size: 12px;
+            }
         }
     }
     .PopupBody {
@@ -301,24 +316,28 @@
     }
 }
 
-#ExercisePage {
-    .ModalContent {
-        position: static;
-        max-width: 600px;
-        margin: auto;
+#ExercisePopup {
+    &.ModalOverlay {
+        pointer-events: all !important;
     }
-    .PopupBody {
-        // overflow-x: hidden;
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            border: none;
-            color: white;
-            background-color: #ffffff20;
-            box-sizing: border-box;
-            font-size: 25px;
-        }
-    }
+
+    // .ModalContent {
+    //     position: static;
+    //     max-width: 600px;
+    //     margin: auto;
+    // }
+    // .PopupBody {
+    //     // overflow-x: hidden;
+    //     textarea {
+    //         width: 100%;
+    //         min-height: 100px;
+    //         border: none;
+    //         color: white;
+    //         background-color: #ffffff20;
+    //         box-sizing: border-box;
+    //         font-size: 25px;
+    //     }
+    // }
     #VerseToTest {
         font-size: 25px;
     }

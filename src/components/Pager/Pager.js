@@ -133,8 +133,9 @@ function Pager({ match, app, player }) {
 
     const handleKeyDown = e => {
         const { tagName, type } = document.activeElement;
-        const isInput = ["INPUT", "BUTTON"].includes(tagName);
-        const isTextInput = isInput && ["text", "number"].includes(type);
+        const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
+        const isTextInput =
+            isInput && ["text", "number", "textarea"].includes(type);
         switch (e.code) {
             // case "Enter":
             // 	if (!isTextInput && app.popup === null) {

@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import QData from "./../../services/QData";
 
 const Exercise = ({ app, player }) => {
+    const [currStep, setCurrStep] = useState(0);
     const [verse, setVerse] = useState(-1);
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
@@ -22,11 +23,12 @@ const Exercise = ({ app, player }) => {
         if (verse == -1) {
             verse = Math.floor(Math.random() * verseList.length);
         }
-        setAnswerMode(false);
+        setCurrStep(1);
+        // setAnswerMode(false);
         setVerse(verse);
-        // app.gotoAya(verse, { sel: true });
-        app.selectAya(verse);
         player.stop(true);
+        app.gotoAya(verse, { sel: true });
+        // app.selectAya(verse);
 
         setTimeout(() => {
             player.play();
@@ -46,14 +48,15 @@ const Exercise = ({ app, player }) => {
         setTimeout(() => {
             player.stop();
         });
+        app.setMaskStart();
         stopCounter();
-        setAnswerMode(true);
+        setCurrStep(2);
     };
 
     let textArea = null;
 
     const renderAnswerForm = () => {
-        if (answerMode) {
+        if (currStep == 2) {
             return (
                 <>
                     <textarea
@@ -61,6 +64,30 @@ const Exercise = ({ app, player }) => {
                             textArea = ref;
                         }}
                     ></textarea>
+                    <br />
+                    <button
+                        onClick={e => {
+                            app.hideMask();
+                            setCurrStep(0);
+                        }}
+                    >
+                        Check
+                    </button>
+                    <button
+                        onClick={e => {
+                            startExercise(verse);
+                        }}
+                    >
+                        Retry
+                    </button>
+                    <button onClick={onClickExercise}>New</button>
+                    <button
+                        onClick={e => {
+                            setCurrStep(0);
+                        }}
+                    >
+                        Cancel
+                    </button>
                 </>
             );
         }
@@ -77,14 +104,15 @@ const Exercise = ({ app, player }) => {
 
     useEffect(() => {
         player.stop(true);
-        setAnswerMode(false);
+        setCurrStep(0);
+        // setAnswerMode(false);
     }, []);
 
     useEffect(() => {
-        if (answerMode && textArea !== null) {
+        if (currStep === 2 && textArea !== null) {
             textArea.focus();
         }
-    }, [answerMode]);
+    }, [currStep]);
 
     useEffect(() => {
         if (
@@ -120,25 +148,61 @@ const Exercise = ({ app, player }) => {
         );
     };
 
+    const renderExerciseBar = () => {
+        if (currStep === 1) {
+            return (
+                <div className="HeaderButtons">
+                    <span id="TrackDuration">{renderCounter()}</span>
+                    <button onClick={startAnswer}>Answer</button>
+                    <button onClick={onClickExercise}>New</button>
+                    <button
+                        onClick={e => {
+                            player.stop();
+                            setCurrStep(0);
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            );
+        }
+    };
+
+    const renderInstructions = () => {
+        if (currStep == 0) {
+            return (
+                <div className="buttonsBar">
+                    <button onClick={onClickExercise}>Start</button>
+                    {verse === -1 ? (
+                        ""
+                    ) : (
+                        <button
+                            onClick={e => {
+                                startExercise(verse);
+                            }}
+                        >
+                            Retry
+                        </button>
+                    )}
+                </div>
+            );
+        }
+    };
+
     return (
-        <div id="ExercisePage">
-            <div class="ModalContent" style={{ height: app.appHeight }}>
-                <div className="Title">
-                    <String id="exercise" />
-                </div>
-                <div
-                    className="PopupBody"
-                    style={{ maxHeight: app.appHeight - 85 }}
-                >
-                    {renderVerse()}
-                    {renderAnswerForm()}
-                    <div id="TrackDuration">{renderCounter()}</div>
-                    <div className="buttonsBar">
-                        <button onClick={onClickExercise}>Start</button>
-                    </div>
-                </div>
+        <>
+            <div className="Title">
+                <String id="exercise" />
+                {renderExerciseBar()}
             </div>
-        </div>
+            <div
+                className="PopupBody"
+                style={{ maxHeight: app.appHeight - 85 }}
+            >
+                {renderInstructions()}
+                {renderAnswerForm()}
+            </div>
+        </>
     );
 };
 

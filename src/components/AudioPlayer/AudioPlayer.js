@@ -26,6 +26,13 @@ class AudioPlayer extends Component {
     }
 
     handleKeyDown = e => {
+        const { tagName, type } = document.activeElement;
+        const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
+        const isTextInput =
+            isInput && ["text", "number", "textarea"].includes(type);
+        if (isTextInput) {
+            return;
+        }
         switch (e.code) {
             case "KeyP": {
                 const { player } = this.props;

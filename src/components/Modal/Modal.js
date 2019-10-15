@@ -66,7 +66,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                     left: app.isNarrow ? 0 : 50,
                     pointerEvents: isBlockMouse() ? "fill" : "none"
                 }}
-                onClick={onClickClose}
+                // onClick={onClickClose}
             >
                 <div
                     style={{
