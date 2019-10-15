@@ -46,7 +46,7 @@ const Exercise = ({ app, player }) => {
 
     const startAnswer = () => {
         setTimeout(() => {
-            player.stop();
+            player.stop(true);
         });
         app.setMaskStart();
         stopCounter();
@@ -63,6 +63,7 @@ const Exercise = ({ app, player }) => {
                         ref={ref => {
                             textArea = ref;
                         }}
+                        placeholder="Write verse from your memory"
                     ></textarea>
                     <br />
                     <button
@@ -84,6 +85,7 @@ const Exercise = ({ app, player }) => {
                     <button
                         onClick={e => {
                             setCurrStep(0);
+                            app.hideMask();
                         }}
                     >
                         Cancel
@@ -157,7 +159,7 @@ const Exercise = ({ app, player }) => {
                     <button onClick={onClickExercise}>New</button>
                     <button
                         onClick={e => {
-                            player.stop();
+                            player.stop(true);
                             setCurrStep(0);
                         }}
                     >
