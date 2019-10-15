@@ -19,10 +19,10 @@ function Sidebar({ app, player, themeContext }) {
     const { history } = app;
     const onClick = (e, id) => {
         switch (id) {
-            case "Exercise":
-                history.push(`${process.env.PUBLIC_URL}/exercise`);
-                //     //app.setExercise();
-                break;
+            // case "Exercise":
+            //     // history.push(`${process.env.PUBLIC_URL}/exercise`);
+            //     app.setExercise();
+            //     break;
             case "Theme":
                 toggleTheme();
                 break;
