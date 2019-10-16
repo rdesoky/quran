@@ -7,7 +7,7 @@ import QData from "./../../services/QData";
 
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState("instructions");
-    const [verse, setVerse] = useState(-1);
+    const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
@@ -157,7 +157,6 @@ const Exercise = ({ app, player }) => {
         if (currStep === "memorizing") {
             return (
                 <div className="buttonsBar">
-                    <span id="TrackDuration">{renderCounter()}</span>
                     <button onClick={startAnswer}>Answer</button>
                     <button onClick={onClickExercise}>New</button>
                     <button
@@ -168,6 +167,7 @@ const Exercise = ({ app, player }) => {
                     >
                         Cancel
                     </button>
+                    <span id="TrackDuration">{renderCounter()}</span>
                 </div>
             );
         }
@@ -177,7 +177,7 @@ const Exercise = ({ app, player }) => {
         if (currStep == "instructions") {
             return (
                 <div className="buttonsBar">
-                    <button onClick={onClickExercise}>Start</button>
+                    <button onClick={onClickExercise}>New</button>
                     {verse === -1 ? (
                         ""
                     ) : (
@@ -186,7 +186,7 @@ const Exercise = ({ app, player }) => {
                                 startExercise(verse);
                             }}
                         >
-                            Retry
+                            Start
                         </button>
                     )}
                 </div>
