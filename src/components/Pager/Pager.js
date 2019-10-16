@@ -3,17 +3,10 @@ import { Redirect } from "react-router-dom";
 import Page from "../Page/Page";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faAngleRight,
-    faAngleLeft,
-    faAngleDown,
-    faAngleUp
-} from "@fortawesome/free-solid-svg-icons";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
-import Exercise from "../Modal/Exercise";
+import Footer from "./Footer";
 
 function fnPageRedirect({ match, app }) {
     let { aya } = match.params;
@@ -34,78 +27,17 @@ function Pager({ match, app, player }) {
 
     let { page } = match.params;
 
-    // if (page !== undefined) {
-    // 	app.setActivePage(parseInt(page) - 1);
-    // }
+    const pageUp = e => app.offsetPage(-1);
+    const pageDown = e => app.offsetPage(1);
 
     //ComponentDidUpdate
     useEffect(() => {
         page = match.params.page;
-        //sura = match.params.sura;
-        // aya = match.params.aya;
-
-        // if (aya !== undefined) {
-        // 	app.selectAya(aya);
-        // }
         document.addEventListener("keydown", handleKeyDown);
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
     });
-
-    //ComponentDidMount
-    //useEffect(() => {}, []);
-
-    const pageUp = e => app.offsetPage(-1);
-    const pageDown = e => app.offsetPage(1);
-
-    const decrement = e => {
-        let { maskStart } = app;
-        if (maskStart !== -1) {
-            //Mask is active
-            if (maskStart <= 0) {
-                return;
-            }
-            let maskNewPageNum = QData.ayaIdPage(maskStart - 1) + 1;
-            if (maskNewPageNum !== parseInt(match.params.page)) {
-                //Mask would move to a new page
-                app.gotoPage(maskNewPageNum, REPLACE);
-                if (app.pagesCount === 1 || maskNewPageNum % 2 === 0) {
-                    return; //Don't move mask
-                }
-            }
-            app.offsetMask(-1);
-        } else {
-            offsetSelection(e, -1);
-        }
-    };
-
-    const increment = e => {
-        let { maskStart } = app;
-        if (maskStart !== -1) {
-            //Mask is active
-            if (maskStart >= QData.ayatCount()) {
-                return;
-            }
-            let currPageNum = parseInt(match.params.page);
-            let maskPageNum = QData.ayaIdPage(maskStart) + 1;
-            if (maskPageNum !== currPageNum) {
-                app.gotoPage(maskPageNum, REPLACE);
-                return;
-            }
-            app.offsetMask(1);
-            let maskNewPageNum = QData.ayaIdPage(maskStart + 1) + 1;
-            if (maskNewPageNum !== currPageNum) {
-                //Mask would move to a new page
-                if (app.pagesCount === 1 || maskNewPageNum % 2 === 1) {
-                    return; //Don't change page
-                }
-                app.gotoPage(maskNewPageNum, REPLACE);
-            }
-        } else {
-            offsetSelection(e, 1);
-        }
-    };
 
     const handleWheel = e => {
         if (e.deltaY > 0) {
@@ -124,11 +56,6 @@ function Pager({ match, app, player }) {
             selectedAyaId = app.offsetSelection(offset);
         }
         app.gotoAya(selectedAyaId);
-        // let currPageNum = parseInt(match.params.page);
-        // let selectionPageNum = QData.ayaIdPage(selectedAyaId) + 1;
-        // if (currPageNum !== selectionPageNum) {
-        // 	app.gotoPage(selectionPageNum, REPLACE);
-        // }
     };
 
     const handleKeyDown = e => {
@@ -231,9 +158,54 @@ function Pager({ match, app, player }) {
     if (page !== undefined) {
         pageIndex = parseInt(page) - 1;
     }
-    // if (sura !== undefined) {
-    // 	pageIndex = 0; //find sura page
-    // }
+
+    const decrement = e => {
+        let { maskStart } = app;
+        if (maskStart !== -1) {
+            //Mask is active
+            if (maskStart <= 0) {
+                return;
+            }
+            let maskNewPageNum = QData.ayaIdPage(maskStart - 1) + 1;
+            if (maskNewPageNum !== parseInt(match.params.page)) {
+                //Mask would move to a new page
+                app.gotoPage(maskNewPageNum, REPLACE);
+                if (app.pagesCount === 1 || maskNewPageNum % 2 === 0) {
+                    return; //Don't move mask
+                }
+            }
+            app.offsetMask(-1);
+        } else {
+            offsetSelection(e, -1);
+        }
+    };
+
+    const increment = e => {
+        let { maskStart } = app;
+        if (maskStart !== -1) {
+            //Mask is active
+            if (maskStart >= QData.ayatCount()) {
+                return;
+            }
+            let currPageNum = parseInt(match.params.page);
+            let maskPageNum = QData.ayaIdPage(maskStart) + 1;
+            if (maskPageNum !== currPageNum) {
+                app.gotoPage(maskPageNum, REPLACE);
+                return;
+            }
+            app.offsetMask(1);
+            let maskNewPageNum = QData.ayaIdPage(maskStart + 1) + 1;
+            if (maskNewPageNum !== currPageNum) {
+                //Mask would move to a new page
+                if (app.pagesCount === 1 || maskNewPageNum % 2 === 1) {
+                    return; //Don't change page
+                }
+                app.gotoPage(maskNewPageNum, REPLACE);
+            }
+        } else {
+            offsetSelection(e, 1);
+        }
+    };
 
     const renderPage = order => {
         if (app.pagesCount < order + 1) {
@@ -264,17 +236,12 @@ function Pager({ match, app, player }) {
                 style={{
                     height: app.appHeight + "px",
                     width: 100 / app.pagesCount + "%"
-                    // textAlign: textAlign
                 }}
             >
                 <Page index={thisPage} order={order} />
             </div>
         );
     };
-
-    // if (app.exercise) {
-    //     return <Exercise />;
-    // }
 
     return (
         <div
@@ -284,23 +251,12 @@ function Pager({ match, app, player }) {
         >
             {renderPage(0)}
             {renderPage(1)}
-            <div
-                className="FooterNavbar"
-                style={{ left: app.appWidth - app.pagerWidth() }}
-            >
-                <button className="NavButton NavPgUp" onClick={pageUp}>
-                    <FontAwesomeIcon icon={faAngleRight} />
-                </button>
-                <button className="NavButton NavPgDown" onClick={pageDown}>
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                </button>
-                <button onClick={increment} className="NavButton NavForward">
-                    <FontAwesomeIcon icon={faAngleDown} />
-                </button>
-                <button className="NavButton NavBackward" onClick={decrement}>
-                    <FontAwesomeIcon icon={faAngleUp} />
-                </button>
-            </div>
+            <Footer
+                onPageUp={pageUp}
+                onPageDown={pageDown}
+                onIncrement={increment}
+                onDecrement={decrement}
+            />
         </div>
     );
 }

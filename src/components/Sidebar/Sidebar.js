@@ -150,7 +150,7 @@ function Sidebar({ app, player, themeContext }) {
                 );
         }
         return (
-            <div id="SidebarAudioPlayer">
+            <div id="SidebarAudioPlayer" class="SidebarSection">
                 <button
                     onClick={showPlayer}
                     className={
