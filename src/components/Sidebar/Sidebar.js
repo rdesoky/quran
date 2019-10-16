@@ -186,17 +186,12 @@ function Sidebar({ app, player, themeContext }) {
         <div
             className={"Sidebar" + (app.isNarrow ? " narrow" : "")}
             style={{
-                bottom:
-                    app.showMenu || !app.isNarrow
-                        ? app.isNarrow
-                            ? 25
-                            : 0
-                        : "auto"
+                bottom: app.showMenu || !app.isNarrow ? 0 : "auto"
             }}
         >
             <button
                 onClick={toggleButtons}
-                style={{ display: app.isNarrow ? "block" : "none" }}
+                style={{ display: app.isNarrow ? "block" : "none", height: 50 }}
             >
                 <Icon
                     icon={app.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
