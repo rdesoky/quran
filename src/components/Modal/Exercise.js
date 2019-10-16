@@ -6,12 +6,12 @@ import Modal from "./Modal";
 import QData from "./../../services/QData";
 
 const Exercise = ({ app, player }) => {
-    const [currStep, setCurrStep] = useState(0);
+    const [currStep, setCurrStep] = useState("instructions");
     const [verse, setVerse] = useState(-1);
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
-    const [answerMode, setAnswerMode] = useState(false);
+    const [answerText, setAnswerText] = useState("");
 
     const verseList = app.verseList();
 
@@ -23,12 +23,10 @@ const Exercise = ({ app, player }) => {
         if (verse == -1) {
             verse = Math.floor(Math.random() * verseList.length);
         }
-        setCurrStep(1);
-        // setAnswerMode(false);
+        setCurrStep("memorizing");
         setVerse(verse);
         player.stop(true);
         app.gotoAya(verse, { sel: true });
-        // app.selectAya(verse);
 
         setTimeout(() => {
             player.play();
@@ -45,18 +43,23 @@ const Exercise = ({ app, player }) => {
     };
 
     const startAnswer = () => {
+        setAnswerText("");
         setTimeout(() => {
             player.stop(true);
         });
         app.setMaskStart();
         stopCounter();
-        setCurrStep(2);
+        setCurrStep("answering");
+    };
+
+    const onUserTyping = ({ target }) => {
+        setAnswerText(target.value);
     };
 
     let textArea = null;
 
     const renderAnswerForm = () => {
-        if (currStep == 2) {
+        if (currStep == "answering") {
             return (
                 <>
                     <textarea
@@ -64,54 +67,53 @@ const Exercise = ({ app, player }) => {
                             textArea = ref;
                         }}
                         placeholder="Write verse from your memory"
+                        value={answerText}
+                        onChange={onUserTyping}
                     ></textarea>
-                    <br />
-                    <button
-                        onClick={e => {
-                            app.hideMask();
-                            setCurrStep(0);
-                        }}
-                    >
-                        Check
-                    </button>
-                    <button
-                        onClick={e => {
-                            startExercise(verse);
-                        }}
-                    >
-                        Retry
-                    </button>
-                    <button onClick={onClickExercise}>New</button>
-                    <button
-                        onClick={e => {
-                            setCurrStep(0);
-                            app.hideMask();
-                        }}
-                    >
-                        Cancel
-                    </button>
+                    <div className="buttonsBar">
+                        <button
+                            onClick={e => {
+                                app.hideMask();
+                                setCurrStep("results");
+                            }}
+                        >
+                            Check
+                        </button>
+                        <button
+                            onClick={e => {
+                                startExercise(verse);
+                            }}
+                        >
+                            Retry
+                        </button>
+                        <button onClick={onClickExercise}>New</button>
+                        <button
+                            onClick={e => {
+                                setCurrStep("instructions");
+                                app.hideMask();
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </>
             );
         }
     };
-    const renderVerse = () => {
-        if (!answerMode) {
-            return (
-                <div id="VerseToTest">
-                    {verse === -1 ? "" : verseList[verse]}
-                </div>
-            );
-        }
-    };
 
     useEffect(() => {
+        const savedRepeat = player.setRepeat(0);
+        const savedFollowPlayer = player.setFollowPlayer(true);
         player.stop(true);
-        setCurrStep(0);
-        // setAnswerMode(false);
+        setCurrStep("instructions");
+        return () => {
+            player.setRepeat(savedRepeat);
+            player.setFollowPlayer(savedFollowPlayer);
+        };
     }, []);
 
     useEffect(() => {
-        if (currStep === 2 && textArea !== null) {
+        if (currStep === "answering" && textArea !== null) {
             textArea.focus();
         }
     }, [currStep]);
@@ -151,16 +153,16 @@ const Exercise = ({ app, player }) => {
     };
 
     const renderExerciseBar = () => {
-        if (currStep === 1) {
+        if (currStep === "memorizing") {
             return (
-                <div className="HeaderButtons">
+                <div className="buttonsBar">
                     <span id="TrackDuration">{renderCounter()}</span>
                     <button onClick={startAnswer}>Answer</button>
                     <button onClick={onClickExercise}>New</button>
                     <button
                         onClick={e => {
                             player.stop(true);
-                            setCurrStep(0);
+                            setCurrStep("instructions");
                         }}
                     >
                         Cancel
@@ -171,7 +173,7 @@ const Exercise = ({ app, player }) => {
     };
 
     const renderInstructions = () => {
-        if (currStep == 0) {
+        if (currStep == "instructions") {
             return (
                 <div className="buttonsBar">
                     <button onClick={onClickExercise}>Start</button>
@@ -191,6 +193,26 @@ const Exercise = ({ app, player }) => {
         }
     };
 
+    const renderResults = () => {
+        if (currStep === "results") {
+            return (
+                <>
+                    <h2>{answerText}</h2>
+                    <div className="buttonsBar">
+                        <button
+                            onClick={e => {
+                                startExercise(verse);
+                            }}
+                        >
+                            Retry
+                        </button>
+                        <button onClick={onClickExercise}>New</button>
+                    </div>
+                </>
+            );
+        }
+    };
+
     return (
         <>
             <div className="Title">
@@ -203,6 +225,7 @@ const Exercise = ({ app, player }) => {
             >
                 {renderInstructions()}
                 {renderAnswerForm()}
+                {renderResults()}
             </div>
         </>
     );
