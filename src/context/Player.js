@@ -188,11 +188,13 @@ class PlayerProvider extends Component {
     setFollowPlayer = followPlayer => {
         this.setState({ followPlayer });
         localStorage.setItem("followPlayer", JSON.stringify(followPlayer));
+        return this.state.followPlayer;
     };
 
     setRepeat = repeat => {
         this.setState({ repeat });
         localStorage.setItem("repeat", repeat.toString());
+        return this.state.repeat;
     };
 
     methods = {

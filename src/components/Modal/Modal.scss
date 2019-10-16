@@ -33,7 +33,7 @@
     pointer-events: all;
     position: absolute;
     right: 0;
-    padding: 0 15px 15px 15px;
+    padding: 0 15px 0 15px;
     background-color: rgba(0, 0, 0, 0.85);
     color: white;
     box-sizing: border-box;
@@ -61,6 +61,7 @@
         background-color: #ffffff20;
         box-sizing: border-box;
         font-size: 25px;
+        margin-top: 15px;
     }
 
     .Title {
@@ -68,34 +69,23 @@
         align-items: center;
         text-align: center;
         padding: 0 15px 0 50px;
-        // [dir="rtl"] & {
-        //     padding: 0 60px 0 0;
-        // }
-        margin: 0 -15px 15px -15px;
+        background-color: black;
+        margin: 0 -15px 0 -15px;
         border-bottom: solid 1px #444;
         min-height: 50px;
         position: relative;
         button {
-            font-size: 25px;
-            min-width: 35px;
-            margin: 0 10px;
-            &.active {
-                border-bottom: solid 2px white;
-            }
+            margin: 0 4px;
         }
         .FlexTitle {
             display: inline-block;
             min-width: calc(100% - 115px);
         }
-        .HeaderButtons {
-            button {
-                font-size: 12px;
-            }
-        }
     }
     .PopupBody {
         // flex-grow: 1;
         overflow: auto;
+        margin: 15px 0;
     }
     .OptionRow {
         padding: 5px 0;
@@ -320,6 +310,9 @@
     &.ModalOverlay {
         pointer-events: all !important;
     }
+    .PopupBody {
+        margin: 0;
+    }
 
     // .ModalContent {
     //     position: static;
@@ -340,5 +333,15 @@
     // }
     #VerseToTest {
         font-size: 25px;
+    }
+}
+
+#TafseerPopup {
+    .Title {
+        button {
+            font-size: 25px;
+            width: 50px;
+            height: 50px;
+        }
     }
 }
