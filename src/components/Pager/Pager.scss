@@ -23,13 +23,18 @@
             }
         }
     }
-    .FooterNavbar {
-        position: fixed;
+    .HeaderNavbar {
+        position: absolute;
         pointer-events: none;
         right: 0;
-        bottom: 0;
+        left: 0;
+        top: 25px;
         height: 25px;
         line-height: 25px;
+        z-index: 1;
+        .narrow & {
+            left: 50px;
+        }
 
         .NavButton {
             pointer-events: fill;
@@ -48,6 +53,14 @@
                 float: left;
                 // text-align: left;
             }
+        }
+    }
+}
+
+.Pager {
+    &.narrow {
+        .HeaderNavbar {
+            left: 50px;
         }
     }
 }

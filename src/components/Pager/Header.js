@@ -7,14 +7,10 @@ import {
     faAngleDown,
     faAngleUp
 } from "@fortawesome/free-solid-svg-icons";
-import QData from "../../services/QData";
 
-const Footer = ({ app, onPageUp, onPageDown, onIncrement, onDecrement }) => {
+const Header = ({ app, onPageUp, onPageDown, onIncrement, onDecrement }) => {
     return (
-        <div
-            className="FooterNavbar"
-            style={{ left: app.appWidth - app.pagerWidth() }}
-        >
+        <div className="HeaderNavbar">
             <button className="NavButton NavPgUp" onClick={onPageUp}>
                 <Icon icon={faAngleRight} />
             </button>
@@ -31,4 +27,4 @@ const Footer = ({ app, onPageUp, onPageDown, onIncrement, onDecrement }) => {
     );
 };
 
-export default AppConsumer(Footer);
+export default AppConsumer(Header);

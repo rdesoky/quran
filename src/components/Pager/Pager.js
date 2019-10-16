@@ -6,7 +6,7 @@ import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
-import Footer from "./Footer";
+import Header from "./Header";
 
 function fnPageRedirect({ match, app }) {
     let { aya } = match.params;
@@ -245,18 +245,18 @@ function Pager({ match, app, player }) {
 
     return (
         <div
-            className="Pager"
+            className={"Pager" + (app.isNarrow ? " narrow" : "")}
             onWheel={handleWheel}
             style={{ width: app.pagerWidth() }}
         >
-            {renderPage(0)}
-            {renderPage(1)}
-            <Footer
+            <Header
                 onPageUp={pageUp}
                 onPageDown={pageDown}
                 onIncrement={increment}
                 onDecrement={decrement}
             />
+            {renderPage(0)}
+            {renderPage(1)}
         </div>
     );
 }

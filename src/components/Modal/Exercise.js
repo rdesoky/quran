@@ -109,6 +109,7 @@ const Exercise = ({ app, player }) => {
         return () => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);
+            player.stop(true);
         };
     }, []);
 

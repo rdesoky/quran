@@ -44,6 +44,7 @@ const Page = ({ index, order, app }) => {
 
     return (
         <div className="Page">
+            <PageFooter index={index} order={order} />
             <PageHeader index={index} order={order} />
             <Spinner visible={showProgress} />
             <div
@@ -83,7 +84,6 @@ const Page = ({ index, order, app }) => {
                     </VerseLayout>
                 </div>
             </div>
-            <PageFooter index={index} order={order} />
         </div>
     );
 };
