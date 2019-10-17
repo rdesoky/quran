@@ -1,0 +1,22 @@
+#AKeyboard {
+    .KeysRow {
+        display: flex;
+        flex-direction: row;
+        .KeyButton {
+            display: inline-block;
+            border: solid 1px silver;
+            flex-grow: 1;
+            text-align: center;
+            width: 10%;
+            margin: 1px;
+            height: 25px;
+            cursor: default;
+            &:hover {
+                background: #444;
+            }
+            &.Space {
+                flex-grow: 9;
+            }
+        }
+    }
+}

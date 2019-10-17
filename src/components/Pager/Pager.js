@@ -63,6 +63,11 @@ function Pager({ match, app, player }) {
         const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
         const isTextInput =
             isInput && ["text", "number", "textarea"].includes(type);
+
+        if (app.popup === "Exercise") {
+            return;
+        }
+
         switch (e.code) {
             // case "Enter":
             // 	if (!isTextInput && app.popup === null) {
