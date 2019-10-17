@@ -5,6 +5,7 @@ import { PlayerConsumer, AudioState } from "./../../context/Player";
 import Modal from "./Modal";
 import QData from "./../../services/QData";
 import AKeyboard from "../AKeyboard/AKeyboard";
+import Utils from "./../../services/utils";
 
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState("instructions");
@@ -13,6 +14,7 @@ const Exercise = ({ app, player }) => {
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
     const [answerText, setAnswerText] = useState("");
+    const [testResult, setTestResult] = useState(-1);
 
     const verseList = app.verseList();
 
@@ -161,6 +163,26 @@ const Exercise = ({ app, player }) => {
         setAnswerText(text);
     };
 
+    const testAnswer = e => {
+        if (!answerText.length) {
+            return;
+        }
+        const verseWords = app.normVerseList()[verse].split(" ");
+        const answerWords = Utils.normalizeText(answerText).split(" ");
+        let wrongWord = -1;
+        verseWords.forEach((word, index) => {
+            if (
+                wrongWord == -1 &&
+                (answerWords.length < index || answerWords[index] != word)
+            ) {
+                wrongWord = index;
+            }
+        });
+        setTestResult(wrongWord);
+        app.hideMask();
+        setCurrStep("results");
+    };
+
     const renderAnswerForm = () => {
         if (currStep == "answering") {
             return (
@@ -176,14 +198,7 @@ const Exercise = ({ app, player }) => {
                     ></textarea>
                     <AKeyboard onUpdateText={onUpdateText} />
                     <div className="buttonsBar">
-                        <button
-                            onClick={e => {
-                                app.hideMask();
-                                setCurrStep("results");
-                            }}
-                        >
-                            Check
-                        </button>
+                        <button onClick={testAnswer}>Check</button>
                         <button
                             onClick={e => {
                                 startExercise(verse);
@@ -210,7 +225,27 @@ const Exercise = ({ app, player }) => {
         if (currStep === "results") {
             return (
                 <>
-                    <h2>{answerText}</h2>
+                    <h2 style={{ color: testResult === -1 ? "green" : "red" }}>
+                        {answerText.split(" ").map((word, index) => (
+                            <span
+                                style={{
+                                    color:
+                                        testResult == -1 || index < testResult
+                                            ? "green"
+                                            : "red"
+                                }}
+                            >
+                                {word}{" "}
+                            </span>
+                        ))}
+                    </h2>
+                    {testResult == -1 ? (
+                        ""
+                    ) : (
+                        <div style={{ color: "green" }}>
+                            {app.verseList()[verse]}
+                        </div>
+                    )}
                     <div className="buttonsBar">
                         <button
                             onClick={e => {

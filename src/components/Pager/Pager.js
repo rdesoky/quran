@@ -27,8 +27,14 @@ function Pager({ match, app, player }) {
 
     let { page } = match.params;
 
-    const pageUp = e => app.offsetPage(-1);
-    const pageDown = e => app.offsetPage(1);
+    const pageUp = e => {
+        app.offsetPage(-1);
+        e.stopPropagation();
+    };
+    const pageDown = e => {
+        app.offsetPage(1);
+        e.stopPropagation();
+    };
 
     //ComponentDidUpdate
     useEffect(() => {

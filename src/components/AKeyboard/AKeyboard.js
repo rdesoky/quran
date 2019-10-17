@@ -119,10 +119,11 @@ const AKeyboard = ({ onUpdateText }) => {
 
     return (
         <div id="AKeyboard">
-            {keyRows.map(row => (
-                <div className="KeysRow">
-                    {row.map(key => (
+            {keyRows.map((row, index) => (
+                <div className="KeysRow" key={index}>
+                    {row.map((key, index) => (
                         <span
+                            key={index}
                             className={"KeyButton " + key}
                             onClick={e => {
                                 handleKeyDown({ code: key });

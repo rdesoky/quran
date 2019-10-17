@@ -5,6 +5,7 @@
     "part": "جزء",
     "page": "صفحة",
     "pg": "ص",
+    "pg_num": "ص:{num}",
     "range_desc": "{sura} (ص {start_page}{end_page})",
     "verse": "آية",
     "search": "بحث",
