@@ -4,6 +4,7 @@ import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "./../../context/Player";
 import Modal from "./Modal";
 import QData from "./../../services/QData";
+import AKeyboard from "../AKeyboard/AKeyboard";
 
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState("instructions");
@@ -73,7 +74,7 @@ const Exercise = ({ app, player }) => {
 
     useEffect(() => {
         if (currStep === "answering" && textArea !== null) {
-            textArea.focus();
+            // textArea.focus();
         }
     }, [currStep]);
 
@@ -156,6 +157,10 @@ const Exercise = ({ app, player }) => {
         }
     };
 
+    const onUpdateText = text => {
+        setAnswerText(text);
+    };
+
     const renderAnswerForm = () => {
         if (currStep == "answering") {
             return (
@@ -164,10 +169,12 @@ const Exercise = ({ app, player }) => {
                         ref={ref => {
                             textArea = ref;
                         }}
+                        disabled={true}
                         placeholder="Write verse from your memory"
                         value={answerText}
                         onChange={onUserTyping}
                     ></textarea>
+                    <AKeyboard onUpdateText={onUpdateText} />
                     <div className="buttonsBar">
                         <button
                             onClick={e => {
