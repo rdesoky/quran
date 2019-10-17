@@ -3,9 +3,9 @@
     // left: 0;
     top: 0;
     right: 0;
-    bottom: 25px;
+    bottom: 0;
     overflow: hidden;
-    // border: solid 1px red;
+    z-index: 1;
 }
 
 .CancelButton {
@@ -49,9 +49,9 @@
         }
     }
 
-    .trans-end .narrow & {
-        top: 25px;
-    }
+    // .trans-end .narrow & {
+    //     top: 25px;
+    // }
 
     textarea {
         width: 100%;

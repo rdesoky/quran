@@ -23,12 +23,13 @@ const Exercise = ({ app, player }) => {
         if (verse == -1) {
             verse = Math.floor(Math.random() * verseList.length);
         }
-        setCurrStep("memorizing");
         setVerse(verse);
-        player.stop(true);
+        // player.stop(true);
+        player.setPlayingAya(-1);
         app.gotoAya(verse, { sel: true });
 
         setTimeout(() => {
+            setCurrStep("memorizing");
             player.play();
         }, 100);
 
@@ -58,51 +59,8 @@ const Exercise = ({ app, player }) => {
 
     let textArea = null;
 
-    const renderAnswerForm = () => {
-        if (currStep == "answering") {
-            return (
-                <>
-                    <textarea
-                        ref={ref => {
-                            textArea = ref;
-                        }}
-                        placeholder="Write verse from your memory"
-                        value={answerText}
-                        onChange={onUserTyping}
-                    ></textarea>
-                    <div className="buttonsBar">
-                        <button
-                            onClick={e => {
-                                app.hideMask();
-                                setCurrStep("results");
-                            }}
-                        >
-                            Check
-                        </button>
-                        <button
-                            onClick={e => {
-                                startExercise(verse);
-                            }}
-                        >
-                            Retry
-                        </button>
-                        <button onClick={onClickExercise}>New</button>
-                        <button
-                            onClick={e => {
-                                setCurrStep("instructions");
-                                app.hideMask();
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </>
-            );
-        }
-    };
-
     useEffect(() => {
-        const savedRepeat = player.setRepeat(0);
+        const savedRepeat = player.setRepeat(5); //single verse
         const savedFollowPlayer = player.setFollowPlayer(true);
         player.stop(true);
         setCurrStep("instructions");
@@ -119,17 +77,21 @@ const Exercise = ({ app, player }) => {
         }
     }, [currStep]);
 
+    //monitor player to start answer upon player ends
     useEffect(() => {
         if (
-            player.playingAya !== -1 &&
-            verse !== -1 &&
-            player.playingAya !== verse
+            ["memorizing"].includes(currStep) &&
+            player.audioState === AudioState.stopped
         ) {
             startAnswer();
         }
-    }, [player.playingAya]);
+        if (
+            ["answering", "instructions", "results"].includes(currStep) &&
+            player.audioState === AudioState.playing //sto
+        ) {
+            startExercise(verse);
+        }
 
-    useEffect(() => {
         if (player.audioState == AudioState.playing) {
             setDuration(player.trackDuration());
             setRemainingTime(player.trackRemainingTime());
@@ -194,6 +156,49 @@ const Exercise = ({ app, player }) => {
         }
     };
 
+    const renderAnswerForm = () => {
+        if (currStep == "answering") {
+            return (
+                <>
+                    <textarea
+                        ref={ref => {
+                            textArea = ref;
+                        }}
+                        placeholder="Write verse from your memory"
+                        value={answerText}
+                        onChange={onUserTyping}
+                    ></textarea>
+                    <div className="buttonsBar">
+                        <button
+                            onClick={e => {
+                                app.hideMask();
+                                setCurrStep("results");
+                            }}
+                        >
+                            Check
+                        </button>
+                        <button
+                            onClick={e => {
+                                startExercise(verse);
+                            }}
+                        >
+                            Retry
+                        </button>
+                        <button onClick={onClickExercise}>New</button>
+                        <button
+                            onClick={e => {
+                                setCurrStep("instructions");
+                                app.hideMask();
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </>
+            );
+        }
+    };
+
     const renderResults = () => {
         if (currStep === "results") {
             return (
@@ -208,6 +213,13 @@ const Exercise = ({ app, player }) => {
                             Retry
                         </button>
                         <button onClick={onClickExercise}>New</button>
+                        <button
+                            onClick={e => {
+                                startExercise(verse + 1);
+                            }}
+                        >
+                            Next Verse
+                        </button>
                     </div>
                 </>
             );

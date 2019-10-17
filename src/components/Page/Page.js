@@ -4,9 +4,16 @@ import Spinner from "../Spinner/Spinner";
 import { AppConsumer } from "../../context/App";
 import VerseLayout from "./VerseLayout";
 import PageHeader from "./PageHeader";
-import PageFooter from "./PageFooter";
 
-const Page = ({ index, order, app }) => {
+const Page = ({
+    index,
+    order,
+    app,
+    onIncrement,
+    onDecrement,
+    onPageUp,
+    onPageDown
+}) => {
     let imageName = NumToString(index + 1);
     const [isLoaded, setIsLoaded] = useState(false);
     const [showProgress, setShowProgress] = useState(true);
@@ -44,8 +51,15 @@ const Page = ({ index, order, app }) => {
 
     return (
         <div className="Page">
-            <PageFooter index={index} order={order} />
-            <PageHeader index={index} order={order} />
+            {/* <PageFooter index={index} order={order} /> */}
+            <PageHeader
+                index={index}
+                order={order}
+                onIncrement={onIncrement}
+                onDecrement={onDecrement}
+                onPageUp={onPageUp}
+                onPageDown={onPageDown}
+            />
             <Spinner visible={showProgress} />
             <div
                 onClick={e => {

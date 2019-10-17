@@ -86,33 +86,45 @@
             color: white;
         }
         .PageHeaderContent {
+            [dir="rtl"] & {
+                direction: rtl;
+            }
             position: relative;
             display: inline-block;
             height: 25px;
-            margin-top: 25px;
-            text-align: center;
+            // margin-top: 25px;
+            text-align: initial;
+            // text-align: center;
             button {
                 padding: 0 10px;
                 color: inherit;
                 // height: 100%;
                 line-height: 24px;
                 border-radius: 12px;
+                background-color: #444;
+                margin: 0 2px;
+                .Active & {
+                    background-color: silver;
+                    color: black !important;
+                }
             }
         }
     }
     .PageHeader {
-        text-align: center;
+        // text-align: center;
         position: relative;
         select {
-            position: absolute;
-            top: 0;
-            bottom: 0;
+            // position: absolute;
+            // top: 0;
+            // bottom: 0;
+            height: 50px;
             background-color: transparent;
             border: none;
             option {
                 color: black;
                 background-color: silver;
             }
+            font-size: 14px;
         }
         .SuraTitle {
             right: 0;
@@ -229,24 +241,24 @@
     }
 }
 
-.Active {
-    .PageHeader,
-    .PageFooter {
-        // background-color: #333;
-        // color: white;
-        select {
-            color: white;
-            // option {
-            // 	background-color: #333;
-            // }
-        }
-        button {
-            vertical-align: top;
-            background-color: silver;
-            color: black !important;
-        }
-    }
-}
+// .Active {
+//     .PageHeader,
+//     .PageFooter {
+//         // background-color: #333;
+//         // color: white;
+//         select {
+//             color: white;
+//             // option {
+//             // 	background-color: #333;
+//             // }
+//         }
+//         button {
+//             vertical-align: top;
+//             background-color: silver;
+//             color: black !important;
+//         }
+//     }
+// }
 
 @keyframes RightPageOpener {
     from {
