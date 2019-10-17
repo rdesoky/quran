@@ -57,6 +57,7 @@ const PageHeader = ({
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     let partIndex = QData.pagePart(pageIndex + 1) - 1;
+    let selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
 
     return (
         <div className="PageHeader" style={{ textAlign }}>
@@ -85,18 +86,15 @@ const PageHeader = ({
                         }}
                     </String>
                 </select>
+                <div className="PageHeaderSection">
+                    <button className="NavButton NavPgUp" onClick={onPageUp}>
+                        <Icon icon={faAngleRight} />
+                    </button>
 
-                <button className="NavButton NavPgUp" onClick={onPageUp}>
-                    <Icon icon={faAngleRight} />
-                </button>
-
-                <String id="pg">
-                    {pg => (
-                        <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
-                            {pg}: {pageIndex + 1}
-                        </button>
-                    )}
-                </String>
+                    <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
+                        <String id="pg_num" values={{ num: pageIndex + 1 }} />
+                    </button>
+                </div>
                 <button className="NavButton NavPgDown" onClick={onPageDown}>
                     <Icon icon={faAngleLeft} />
                 </button>
@@ -117,19 +115,30 @@ const PageHeader = ({
                         }}
                     </String>
                 </select>
-                <button className="NavButton NavBackward" onClick={onDecrement}>
-                    <Icon icon={faAngleUp} />
-                </button>
-                <button
-                    onClick={e => {
-                        app.gotoAya(app.selectStart);
-                    }}
-                >
-                    {app.selectStart}
-                </button>
-                <button onClick={onIncrement} className="NavButton NavForward">
-                    <Icon icon={faAngleDown} />
-                </button>
+                <div className="PageHeaderSection">
+                    <button
+                        className="NavButton NavBackward"
+                        onClick={onDecrement}
+                    >
+                        <Icon icon={faAngleUp} />
+                    </button>
+                    <button
+                        onClick={e => {
+                            app.gotoAya(app.selectStart);
+                        }}
+                    >
+                        {selectedAyaInfo.sura +
+                            1 +
+                            ":" +
+                            (selectedAyaInfo.aya + 1)}
+                    </button>
+                    <button
+                        onClick={onIncrement}
+                        className="NavButton NavForward"
+                    >
+                        <Icon icon={faAngleDown} />
+                    </button>
+                </div>
             </div>
         </div>
     );
