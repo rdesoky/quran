@@ -90,7 +90,11 @@ class PlayerProvider extends Component {
                     playingAya += offset;
                 }
                 break;
+            case 5: //single aya
+                this.stop();
+                return playingAya;
             default:
+                //0 continouse
                 playingAya += offset;
         }
 
@@ -246,8 +250,6 @@ class PlayerProvider extends Component {
     }
 
     onEnded = () => {
-        const { app } = this.props;
-        // const { selectStart, selectEnd } = app;
         const { audioState } = this.state;
         if (audioState !== AudioState.stopped) {
             const ayaId = this.offsetPlayingAya(1);

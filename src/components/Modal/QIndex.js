@@ -335,7 +335,7 @@ const QIndex = ({ app, player, intl }) => {
             <div
                 className="PopupBody"
                 style={{
-                    maxHeight: app.appHeight - 105 - (app.isNarrow ? 25 : 0)
+                    maxHeight: app.appHeight - 80
                 }}
             >
                 {activeTab == "index"

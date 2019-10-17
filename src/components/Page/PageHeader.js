@@ -4,8 +4,23 @@ import { FormattedMessage as String } from "react-intl";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
 import { PlayerConsumer, AudioState } from "../../context/Player";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import {
+    faAngleRight,
+    faAngleLeft,
+    faAngleDown,
+    faAngleUp
+} from "@fortawesome/free-solid-svg-icons";
 
-const PageHeader = ({ index: pageIndex, app, order, player }) => {
+const PageHeader = ({
+    index: pageIndex,
+    app,
+    order,
+    onPageUp,
+    onPageDown,
+    onIncrement,
+    onDecrement
+}) => {
     // const showIndexPopup = e => {
     // 	app.setPopup("QIndex");
     // };
@@ -33,8 +48,8 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
         Utils.selectTopCommand();
     };
 
-    const showFindPopup = e => {
-        app.setPopup("Find");
+    const showGotoPopup = e => {
+        app.setPopup("Goto");
     };
 
     const suraIndex = QData.pageSura(pageIndex + 1);
@@ -47,11 +62,44 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
         <div className="PageHeader" style={{ textAlign }}>
             <div
                 style={{
-                    width: app.pageWidth(),
-                    margin: app.pageMargin()
+                    width: app.pageWidth() + 40
+                    // margin: app.pageMargin()
                 }}
                 className="PageHeaderContent"
             >
+                <select
+                    onChange={onSelectPart}
+                    className="PartTitle"
+                    value={partIndex}
+                >
+                    <String id="part">
+                        {partLabel => {
+                            let parts = new Array(30).fill("");
+                            return parts.map((item, index) => {
+                                return (
+                                    <option key={index} value={index}>
+                                        {partLabel}: {(index + 1).toString()}
+                                    </option>
+                                );
+                            });
+                        }}
+                    </String>
+                </select>
+
+                <button className="NavButton NavPgUp" onClick={onPageUp}>
+                    <Icon icon={faAngleRight} />
+                </button>
+
+                <String id="pg">
+                    {pg => (
+                        <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
+                            {pg}: {pageIndex + 1}
+                        </button>
+                    )}
+                </String>
+                <button className="NavButton NavPgDown" onClick={onPageDown}>
+                    <Icon icon={faAngleLeft} />
+                </button>
                 <select
                     className="SuraTitle"
                     onChange={onSelectSura}
@@ -69,25 +117,19 @@ const PageHeader = ({ index: pageIndex, app, order, player }) => {
                         }}
                     </String>
                 </select>
-                <select
-                    onChange={onSelectPart}
-                    className="PartTitle"
-                    value={partIndex}
-                    style={{ left: app.isNarrow ? "50px" : "0" }}
+                <button className="NavButton NavBackward" onClick={onDecrement}>
+                    <Icon icon={faAngleUp} />
+                </button>
+                <button
+                    onClick={e => {
+                        app.gotoAya(app.selectStart);
+                    }}
                 >
-                    <String id="part">
-                        {partLabel => {
-                            let parts = new Array(30).fill("");
-                            return parts.map((item, index) => {
-                                return (
-                                    <option key={index} value={index}>
-                                        {partLabel}: {(index + 1).toString()}
-                                    </option>
-                                );
-                            });
-                        }}
-                    </String>
-                </select>
+                    {app.selectStart}
+                </button>
+                <button onClick={onIncrement} className="NavButton NavForward">
+                    <Icon icon={faAngleDown} />
+                </button>
             </div>
         </div>
     );

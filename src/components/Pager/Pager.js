@@ -238,7 +238,14 @@ function Pager({ match, app, player }) {
                     width: 100 / app.pagesCount + "%"
                 }}
             >
-                <Page index={thisPage} order={order} />
+                <Page
+                    index={thisPage}
+                    order={order}
+                    onPageUp={pageUp}
+                    onPageDown={pageDown}
+                    onIncrement={increment}
+                    onDecrement={decrement}
+                />
             </div>
         );
     };
@@ -249,12 +256,12 @@ function Pager({ match, app, player }) {
             onWheel={handleWheel}
             style={{ width: app.pagerWidth() }}
         >
-            <Header
+            {/* <Header
                 onPageUp={pageUp}
                 onPageDown={pageDown}
                 onIncrement={increment}
                 onDecrement={decrement}
-            />
+            /> */}
             {renderPage(0)}
             {renderPage(1)}
         </div>
