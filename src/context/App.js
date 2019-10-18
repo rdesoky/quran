@@ -8,7 +8,7 @@ let rc = localStorage.getItem("recentCommands");
 
 const AppState = {
     user: null,
-    exersize: false,
+    modalPopup: false,
     hifzRanges: [],
     bookmarks: [],
     isNarrow: false, //hidden sidebar and streched single page width
@@ -372,8 +372,8 @@ class AppProvider extends Component {
         this.bookmarksRef.child(verse).set(null);
     };
 
-    setExercise = (exercise = true) => {
-        this.setState({ exercise });
+    setModalPopup = (modalPopup = true) => {
+        this.setState({ modalPopup });
     };
 
     methods = {
@@ -412,7 +412,7 @@ class AppProvider extends Component {
         sideBarWidth: this.sideBarWidth,
         addBookmark: this.addBookmark,
         removeBookmark: this.removeBookmark,
-        setExercise: this.setExercise
+        setModalPopup: this.setModalPopup
     };
 
     onResize = e => {

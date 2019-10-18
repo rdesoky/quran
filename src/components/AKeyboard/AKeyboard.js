@@ -47,7 +47,9 @@ const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
         //Forth
         Backquote: ["ذ"],
         Space: [" "],
-        Backspace: ["<-"]
+        Backspace: ["<-"],
+        ClearAll: ["x^"],
+        ClearWord: ["<-^"]
     };
 
     const keyRows = [
@@ -90,7 +92,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
             "KeyX",
             "KeyZ"
         ],
-        ["Backspace", "Space", "Backquote"]
+        ["Backspace", "ClearAll", "ClearWord", "Space", "Backquote"]
     ];
 
     const updateText = newText => {
@@ -99,20 +101,34 @@ const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
     };
 
     const handleKeyDown = e => {
-        const { code } = e;
+        const { code, ctrlKey } = e;
         switch (code) {
             case "Enter":
                 onEnter(text);
                 break;
             case "Backspace":
-                updateText(text.substr(0, text.length - 1));
+                if (ctrlKey) {
+                    updateText(text.replace(/\S+\s*$/, ""));
+                } else {
+                    updateText(text.substr(0, text.length - 1));
+                }
                 break;
+            case "ClearAll":
+                updateText("");
+                break;
+            case "ClearWord":
+                updateText(text.replace(/\S+\s*$/, ""));
+                break;
+            case "KeyX":
+                if (ctrlKey) {
+                    updateText("");
+                    break;
+                }
             default:
                 if (keyMap[code]) {
                     updateText(text.concat(keyMap[code][0]));
                 }
         }
-        e.stopPropagation();
     };
 
     useEffect(() => {
