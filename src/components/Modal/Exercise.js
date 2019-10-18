@@ -78,12 +78,22 @@ const Exercise = ({ app, player }) => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);
             player.stop(true);
+            app.setModalPopup(false);
         };
     }, []);
 
     useEffect(() => {
         if (defaultButton) {
             defaultButton.focus();
+        }
+        switch (currStep) {
+            case "memorizing":
+            case "answering":
+            case "results":
+                app.setModalPopup(); //block outside selection
+                break;
+            default:
+                app.setModalPopup(false); //allow selecting outside
         }
     }, [currStep]);
 
@@ -125,6 +135,16 @@ const Exercise = ({ app, player }) => {
         );
     };
 
+    const showInstructions = () => {
+        setCurrStep("instructions");
+        app.hideMask();
+    };
+
+    const answerNextVerse = () => {
+        app.gotoAya(verse + 1, { sel: true });
+        setTimeout(startAnswer, 100);
+    };
+
     const renderExerciseBar = () => {
         switch (currStep) {
             case "answering":
@@ -150,12 +170,7 @@ const Exercise = ({ app, player }) => {
                         <button onClick={onClickExercise}>
                             <String id="new_verse" />
                         </button>
-                        <button
-                            onClick={e => {
-                                setCurrStep("instructions");
-                                app.hideMask();
-                            }}
-                        >
+                        <button onClick={showInstructions}>
                             <String id="cancel" />
                         </button>
                     </div>
@@ -170,10 +185,7 @@ const Exercise = ({ app, player }) => {
                                     defaultButton = ref;
                                 }
                             }}
-                            onClick={e => {
-                                app.gotoAya(verse + 1, { sel: true });
-                                setTimeout(startAnswer, 100);
-                            }}
+                            onClick={answerNextVerse}
                         >
                             <String id="next_verse" />
                         </button>
@@ -192,6 +204,9 @@ const Exercise = ({ app, player }) => {
                         </button>
                         <button onClick={onClickExercise}>
                             <String id="new_verse" />
+                        </button>
+                        <button onClick={showInstructions}>
+                            <String id="cancel" />
                         </button>
                     </div>
                 );

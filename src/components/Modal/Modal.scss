@@ -6,6 +6,12 @@
     bottom: 0;
     overflow: hidden;
     z-index: 1;
+    pointer-events: none;
+
+    &.modal {
+        //block clicks to layers below
+        pointer-events: all !important;
+    }
 }
 
 .CancelButton {
@@ -307,9 +313,6 @@
 }
 
 #ExercisePopup {
-    &.ModalOverlay {
-        pointer-events: all !important;
-    }
     .PopupBody {
         margin: 0;
     }
