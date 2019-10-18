@@ -43,7 +43,7 @@ function Pager({ match, app, player }) {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    });
+    }, [match.params.page, app.popup, app.maskStart]);
 
     const handleWheel = e => {
         if (e.deltaY > 0) {
@@ -91,8 +91,6 @@ function Pager({ match, app, player }) {
             case "Escape":
                 if (app.popup !== null) {
                     app.closePopup();
-                } else if (app.playerVisible) {
-                    player.show(false);
                 } else if (app.maskStart !== -1) {
                     app.hideMask();
                 }

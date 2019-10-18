@@ -60,7 +60,7 @@ function Sidebar({ app, player, themeContext }) {
                 }
         }
         app.setShowMenu(false);
-        app.pushRecentCommand(id);
+        // app.pushRecentCommand(id);
         e.preventDefault();
     };
 
@@ -109,7 +109,7 @@ function Sidebar({ app, player, themeContext }) {
     };
 
     const renderPlayer = () => {
-        let btn = null,
+        let playButton = null,
             stopBtn = null;
 
         if (player.audioState !== AudioState.stopped) {
@@ -122,35 +122,38 @@ function Sidebar({ app, player, themeContext }) {
 
         switch (player.audioState) {
             case AudioState.paused:
-                btn = (
+                playButton = (
                     <button onClick={resume} className="blinking">
                         <Icon icon={faPauseCircle} />
                     </button>
                 );
                 break;
             case AudioState.playing:
-                btn = (
+                playButton = (
                     <button onClick={pause}>
                         <Icon icon={faPauseCircle} />
                     </button>
                 );
                 break;
             case AudioState.buffering:
-                btn = (
+                playButton = (
                     <button onClick={retry} className="blinking">
                         <Icon icon={faFileDownload} />
                     </button>
                 );
                 break;
             default:
-                btn = (
+                playButton = (
                     <button onClick={play}>
                         <Icon icon={faPlayCircle} />
                     </button>
                 );
         }
-        return (
-            <div id="SidebarAudioPlayer" class="SidebarSection">
+
+        const reciterButton =
+            player.audioState === AudioState.stopped ? (
+                ""
+            ) : (
                 <button
                     onClick={showPlayer}
                     className={
@@ -168,7 +171,12 @@ function Sidebar({ app, player, themeContext }) {
                             ".jpg)"
                     }}
                 />
-                {btn} {stopBtn}
+            );
+
+        return (
+            <div id="SidebarAudioPlayer" className="SidebarSection">
+                {reciterButton}
+                {playButton} {stopBtn}
             </div>
         );
     };
@@ -235,9 +243,9 @@ function Sidebar({ app, player, themeContext }) {
                     <button onClick={e => onClick(e, "Profile")}>
                         <Icon icon={getIcon("Profile")} />
                     </button>
-                    <button onClick={e => onClick(e, "Settings")}>
+                    {/* <button onClick={e => onClick(e, "Settings")}>
                         <Icon icon={getIcon("Settings")} />
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>
