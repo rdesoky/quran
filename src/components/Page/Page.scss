@@ -83,13 +83,14 @@
         .Active & {
             background-color: rgba(0, 0, 0, 0.5);
         }
+        .narrow & {
+            padding-left: 50px;
+        }
         .PageHeaderContent {
             [dir="rtl"] & {
                 direction: rtl;
             }
-            .narrow & {
-                padding-left: 50px;
-            }
+
             position: relative;
             display: inline-block;
             height: 25px;
@@ -102,8 +103,11 @@
                 // height: 100%;
                 line-height: 24px;
                 // border-radius: 12px;
-                background-color: #666;
-                margin: 0 1px;
+                background-color: #444;
+                // margin: 0 1px;
+                &:hover {
+                    background-color: #666;
+                }
             }
 
             .PageHeaderSection {

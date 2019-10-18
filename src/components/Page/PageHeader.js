@@ -61,13 +61,7 @@ const PageHeader = ({
 
     return (
         <div className="PageHeader" style={{ textAlign }}>
-            <div
-                style={{
-                    width: app.pageWidth() + 40
-                    // margin: app.pageMargin()
-                }}
-                className="PageHeaderContent"
-            >
+            <div className="PageHeaderContent">
                 <select
                     onChange={onSelectPart}
                     className="PartTitle"

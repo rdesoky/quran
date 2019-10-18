@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AKeyboard.scss";
 
-const AKeyboard = ({ onUpdateText }) => {
-    const [text, setText] = useState("");
+const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
+    const [text, setText] = useState(initText);
 
     const keyMap = {
         //first
@@ -98,16 +98,21 @@ const AKeyboard = ({ onUpdateText }) => {
         onUpdateText(newText);
     };
 
-    const handleKeyDown = ({ code }) => {
+    const handleKeyDown = e => {
+        const { code } = e;
         switch (code) {
+            case "Enter":
+                onEnter(text);
+                break;
             case "Backspace":
                 updateText(text.substr(0, text.length - 1));
                 break;
             default:
                 if (keyMap[code]) {
-                    updateText(text + keyMap[code][0]);
+                    updateText(text.concat(keyMap[code][0]));
                 }
         }
+        e.stopPropagation();
     };
 
     useEffect(() => {
@@ -115,7 +120,7 @@ const AKeyboard = ({ onUpdateText }) => {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    });
+    }, [text, onEnter]);
 
     return (
         <div id="AKeyboard">

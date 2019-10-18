@@ -163,15 +163,16 @@ class AppProvider extends Component {
     };
 
     setPopup = popup => {
+        if (popup !== null && this.state.popup === "Exercise") {
+            return;
+        }
         if (this.state.popup) {
             this.closePopup(popup);
         } else {
             this.setState({ popup, showMenu: null, showPopup: true });
         }
         if (popup !== null && popup !== "Commands") {
-            setTimeout(() => {
-                this.pushRecentCommand(popup);
-            }, 1000);
+            this.pushRecentCommand(popup);
         }
     };
 

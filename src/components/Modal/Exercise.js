@@ -8,7 +8,7 @@ import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
 
 const Exercise = ({ app, player }) => {
-    const [currStep, setCurrStep] = useState("instructions");
+    const [currStep, setCurrStep] = useState("");
     const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
@@ -22,14 +22,16 @@ const Exercise = ({ app, player }) => {
         startExercise();
     };
 
-    const startExercise = (verse = -1) => {
-        if (verse == -1) {
-            verse = Math.floor(Math.random() * verseList.length);
+    const startExercise = (new_verse = -1) => {
+        if (new_verse == -1) {
+            new_verse = Math.floor(Math.random() * verseList.length);
         }
-        setVerse(verse);
-        // player.stop(true);
+        if (new_verse != verse) {
+            setAnswerText("");
+            setVerse(new_verse);
+        }
         player.setPlayingAya(-1);
-        app.gotoAya(verse, { sel: true });
+        app.gotoAya(new_verse, { sel: true });
 
         setTimeout(() => {
             setCurrStep("memorizing");
@@ -47,7 +49,6 @@ const Exercise = ({ app, player }) => {
     };
 
     const startAnswer = () => {
-        setAnswerText("");
         setTimeout(() => {
             player.stop(true);
         });
@@ -56,11 +57,17 @@ const Exercise = ({ app, player }) => {
         setCurrStep("answering");
     };
 
-    const onUserTyping = ({ target }) => {
-        setAnswerText(target.value);
-    };
+    // const onUserTyping = ({ target }) => {
+    //     setAnswerText(target.value);
+    // };
 
-    let textArea = null;
+    let textArea = null,
+        defaultButton = null;
+
+    useEffect(() => {
+        setVerse(app.selectStart);
+        setAnswerText("");
+    }, [app.selectStart]);
 
     useEffect(() => {
         const savedRepeat = player.setRepeat(5); //single verse
@@ -75,8 +82,8 @@ const Exercise = ({ app, player }) => {
     }, []);
 
     useEffect(() => {
-        if (currStep === "answering" && textArea !== null) {
-            // textArea.focus();
+        if (defaultButton) {
+            defaultButton.focus();
         }
     }, [currStep]);
 
@@ -119,43 +126,131 @@ const Exercise = ({ app, player }) => {
     };
 
     const renderExerciseBar = () => {
-        if (currStep === "memorizing") {
-            return (
-                <div className="buttonsBar">
-                    <button onClick={startAnswer}>Answer</button>
-                    <button onClick={onClickExercise}>New</button>
-                    <button
-                        onClick={e => {
-                            player.stop(true);
-                            setCurrStep("instructions");
-                        }}
-                    >
-                        Cancel
-                    </button>
-                    <span id="TrackDuration">{renderCounter()}</span>
-                </div>
-            );
-        }
-    };
+        switch (currStep) {
+            case "answering":
+                return (
+                    <div className="buttonsBar">
+                        <span
+                            tabIndex="0"
+                            ref={ref => {
+                                defaultButton = ref;
+                            }}
+                        ></span>
 
-    const renderInstructions = () => {
-        if (currStep == "instructions") {
-            return (
-                <div className="buttonsBar">
-                    <button onClick={onClickExercise}>New</button>
-                    {verse === -1 ? (
-                        ""
-                    ) : (
+                        <button onClick={testAnswer}>
+                            <String id="check" />
+                        </button>
                         <button
                             onClick={e => {
                                 startExercise(verse);
                             }}
                         >
-                            Start
+                            <String id="retry" />
                         </button>
-                    )}
-                </div>
-            );
+                        <button onClick={onClickExercise}>
+                            <String id="new_verse" />
+                        </button>
+                        <button
+                            onClick={e => {
+                                setCurrStep("instructions");
+                                app.hideMask();
+                            }}
+                        >
+                            <String id="cancel" />
+                        </button>
+                    </div>
+                );
+            case "results":
+                return (
+                    <div className="buttonsBar">
+                        <button
+                            ref={ref => {
+                                if (testResult === -1) {
+                                    //correct answer
+                                    defaultButton = ref;
+                                }
+                            }}
+                            onClick={e => {
+                                app.gotoAya(verse + 1, { sel: true });
+                                setTimeout(startAnswer, 100);
+                            }}
+                        >
+                            <String id="next_verse" />
+                        </button>
+                        <button
+                            ref={ref => {
+                                if (testResult !== -1) {
+                                    //wrong answer
+                                    defaultButton = ref;
+                                }
+                            }}
+                            onClick={e => {
+                                startExercise(verse);
+                            }}
+                        >
+                            <String id="retry" />
+                        </button>
+                        <button onClick={onClickExercise}>
+                            <String id="new_verse" />
+                        </button>
+                    </div>
+                );
+            case "instructions":
+                return (
+                    <div className="buttonsBar">
+                        {verse === -1 ? (
+                            ""
+                        ) : (
+                            <button
+                                onClick={e => {
+                                    startExercise(verse);
+                                }}
+                                ref={ref => {
+                                    defaultButton = ref;
+                                }}
+                            >
+                                <String id="start" />
+                            </button>
+                        )}
+                        <button onClick={onClickExercise}>
+                            <String id="new_verse" />
+                        </button>
+                    </div>
+                );
+
+            case "memorizing":
+                return (
+                    <div className="buttonsBar">
+                        <button
+                            onClick={startAnswer}
+                            ref={ref => {
+                                defaultButton = ref;
+                            }}
+                        >
+                            <String id="answer" />
+                        </button>
+                        <button onClick={onClickExercise}>
+                            <String id="new_verse" />
+                        </button>
+                        <button
+                            onClick={e => {
+                                player.stop(true);
+                                setCurrStep("instructions");
+                            }}
+                        >
+                            <String id="cancel" />
+                        </button>
+                        <span id="TrackDuration">{renderCounter()}</span>
+                    </div>
+                );
+        }
+    };
+
+    const renderInstructions = () => {
+        if (currStep == "instructions") {
+            if (app.isWide || app.pagesCount > 1) {
+                return <h3>{app.verseList()[verse]}</h3>;
+            }
         }
     };
 
@@ -164,11 +259,13 @@ const Exercise = ({ app, player }) => {
     };
 
     const testAnswer = e => {
-        if (!answerText.length) {
+        if (!answerText.trim().length) {
             return;
         }
-        const verseWords = app.normVerseList()[verse].split(" ");
-        const answerWords = Utils.normalizeText(answerText).split(" ");
+        const normVerse = app.normVerseList()[verse].trim();
+        const verseWords = normVerse.split(/\s+/);
+        const normAnswerText = Utils.normalizeText(answerText).trim();
+        const answerWords = normAnswerText.split(/\s+/);
         let wrongWord = -1;
         verseWords.forEach((word, index) => {
             if (
@@ -188,34 +285,15 @@ const Exercise = ({ app, player }) => {
             return (
                 <>
                     <textarea
-                        ref={ref => {
-                            textArea = ref;
-                        }}
                         disabled={true}
                         placeholder="Write verse from your memory"
                         value={answerText}
-                        onChange={onUserTyping}
                     ></textarea>
-                    <AKeyboard onUpdateText={onUpdateText} />
-                    <div className="buttonsBar">
-                        <button onClick={testAnswer}>Check</button>
-                        <button
-                            onClick={e => {
-                                startExercise(verse);
-                            }}
-                        >
-                            Retry
-                        </button>
-                        <button onClick={onClickExercise}>New</button>
-                        <button
-                            onClick={e => {
-                                setCurrStep("instructions");
-                                app.hideMask();
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </div>
+                    <AKeyboard
+                        initText={answerText}
+                        onUpdateText={onUpdateText}
+                        onEnter={testAnswer}
+                    />
                 </>
             );
         }
@@ -223,11 +301,26 @@ const Exercise = ({ app, player }) => {
 
     const renderResults = () => {
         if (currStep === "results") {
+            const answerWords = answerText.trim().split(/\s+/);
+            const verseText = app.verseList()[verse];
+            const normVerseWords = app
+                .normVerseList()
+                [verse].trim()
+                .split(/\s+/);
+            const missingWords = normVerseWords.length - answerWords.length;
             return (
                 <>
-                    <h2 style={{ color: testResult === -1 ? "green" : "red" }}>
-                        {answerText.split(" ").map((word, index) => (
+                    {testResult !== -1 ? (
+                        ""
+                    ) : (
+                        <h4>
+                            <String id="correct_answer" />
+                        </h4>
+                    )}
+                    <h2>
+                        {answerWords.map((word, index) => (
                             <span
+                                key={index}
                                 style={{
                                     color:
                                         testResult == -1 || index < testResult
@@ -238,33 +331,36 @@ const Exercise = ({ app, player }) => {
                                 {word}{" "}
                             </span>
                         ))}
+                        {missingWords < 1
+                            ? ""
+                            : new Array(missingWords + 1)
+                                  .join("0")
+                                  .split("")
+                                  .map((x, index) => (
+                                      <span
+                                          key={index}
+                                          style={{ color: "red" }}
+                                      >
+                                          {" "}
+                                          ?{" "}
+                                      </span>
+                                  ))}
                     </h2>
                     {testResult == -1 ? (
                         ""
                     ) : (
-                        <div style={{ color: "green" }}>
-                            {app.verseList()[verse]}
-                        </div>
+                        <h3 style={{ color: "green" }}>{verseText}</h3>
                     )}
-                    <div className="buttonsBar">
-                        <button
-                            onClick={e => {
-                                startExercise(verse);
-                            }}
-                        >
-                            Retry
-                        </button>
-                        <button onClick={onClickExercise}>New</button>
-                        <button
-                            onClick={e => {
-                                startExercise(verse + 1);
-                            }}
-                        >
-                            Next Verse
-                        </button>
-                    </div>
                 </>
             );
+        }
+    };
+
+    const renderMemorizing = () => {
+        if (currStep === "memorizing") {
+            if (app.isWide || app.pagesCount > 1) {
+                return <h3>{app.verseList()[verse]}</h3>;
+            }
         }
     };
 
@@ -278,6 +374,7 @@ const Exercise = ({ app, player }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
+                {renderMemorizing()}
                 {renderInstructions()}
                 {renderAnswerForm()}
                 {renderResults()}
