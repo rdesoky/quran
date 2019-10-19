@@ -27,12 +27,9 @@ const Exercise = ({ app, player }) => {
     };
 
     const startReciting = e => {
-        setTimeout(() => {
-            setCurrStep("reciting");
-            player.play();
-        }, 100);
-
-        stopCounter();
+        setCurrStep("reciting");
+        app.setMaskStart(verse + 1, true);
+        // stopCounter();
     };
 
     const stopCounter = () => {
@@ -46,16 +43,11 @@ const Exercise = ({ app, player }) => {
         setTimeout(() => {
             player.stop(true);
         });
-        stopCounter();
+        // stopCounter();
         setCurrStep("answering");
     };
 
-    // const onUserTyping = ({ target }) => {
-    //     setAnswerText(target.value);
-    // };
-
-    let textArea = null,
-        defaultButton = null;
+    let defaultButton = null;
 
     useEffect(() => {
         setVerse(app.selectStart);
@@ -82,7 +74,12 @@ const Exercise = ({ app, player }) => {
         switch (currStep) {
             case "answering":
                 app.setMaskStart(verse);
+                app.setModalPopup(); //block outside selection
+                break;
             case "reciting":
+                player.play();
+                app.setModalPopup(); //block outside selection
+                break;
             case "results":
                 app.setModalPopup(); //block outside selection
                 break;
@@ -93,22 +90,24 @@ const Exercise = ({ app, player }) => {
 
     //monitor player to start answer upon player ends
     useEffect(() => {
-        if (
-            ["reciting"].includes(currStep) &&
-            player.audioState === AudioState.stopped
-        ) {
-            startAnswer();
+        if (player.audioState === AudioState.stopped) {
+            stopCounter();
+            if (["reciting"].includes(currStep)) {
+                startAnswer();
+            }
         }
         if (
             ["answering", "instructions", "results"].includes(currStep) &&
             player.audioState === AudioState.playing
         ) {
-            startReciting();
+            app.gotoAya(player.playingAya, { sel: true });
+            setTimeout(startReciting, 200);
         }
 
         if (player.audioState == AudioState.playing) {
             setDuration(player.trackDuration());
             setRemainingTime(player.trackRemainingTime());
+            stopCounter();
             setCounterInterval(
                 setInterval(() => {
                     setRemainingTime(player.trackRemainingTime());
@@ -139,10 +138,6 @@ const Exercise = ({ app, player }) => {
         app.setMaskStart(verse + 1);
         app.gotoAya(verse + 1);
         setTimeout(startAnswer, 1);
-    };
-
-    const startPlaying = e => {
-        startReciting(verse);
     };
 
     const renderExerciseBar = () => {
@@ -186,7 +181,7 @@ const Exercise = ({ app, player }) => {
                                 >
                                     <String id="correct" />
                                 </button>
-                                <button onClick={startPlaying}>
+                                <button onClick={startReciting}>
                                     <String id="start" />
                                 </button>
                             </>
