@@ -16,7 +16,8 @@
             line-height: 25px;
             cursor: default;
             overflow: hidden;
-            &:hover {
+            &:hover,
+            &.typed {
                 background: #444;
             }
             &.Space {

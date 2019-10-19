@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "./../../context/Player";
-import Modal from "./Modal";
-import QData from "./../../services/QData";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import QData from "./../../services/QData";
 
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState("");
@@ -14,17 +15,23 @@ const Exercise = ({ app, player }) => {
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
     const [answerText, setAnswerText] = useState("");
-    const [testResult, setTestResult] = useState(-1);
-
+    const [wrongWord, setWrongWord] = useState(-1);
+    const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
+    const normVerseList = app.normVerseList();
+
+    const isNarrowLayout = () => {
+        return !(app.isWide || app.isCompact || app.pagesCount > 1);
+    };
 
     const gotoRandomVerse = e => {
         player.stop();
         player.setPlayingAya(-1);
         const new_verse = Math.floor(Math.random() * verseList.length);
         app.gotoAya(new_verse, { sel: true });
-        setCurrStep("instructions");
-        if (currStep === "instructions" && defaultButton) {
+        app.setMaskStart(new_verse + 1, true);
+        setCurrStep("intro");
+        if (currStep === "intro" && defaultButton) {
             defaultButton.focus();
         }
     };
@@ -32,7 +39,11 @@ const Exercise = ({ app, player }) => {
     const startReciting = e => {
         setCurrStep("reciting");
         app.setMaskStart(verse + 1, true);
-        // stopCounter();
+    };
+
+    const redoReciting = e => {
+        setAnswerText("");
+        startReciting(e);
     };
 
     const stopCounter = () => {
@@ -47,7 +58,7 @@ const Exercise = ({ app, player }) => {
             player.stop(true);
         });
         // stopCounter();
-        setCurrStep("answering");
+        setCurrStep("typing");
     };
 
     let defaultButton = null;
@@ -61,12 +72,13 @@ const Exercise = ({ app, player }) => {
         const savedRepeat = player.setRepeat(5); //single verse
         const savedFollowPlayer = player.setFollowPlayer(true);
         player.stop(true);
-        setCurrStep("instructions");
+        setCurrStep("intro");
         return () => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);
             player.stop(true);
             app.setModalPopup(false);
+            app.hideMask();
         };
     }, []);
 
@@ -75,7 +87,7 @@ const Exercise = ({ app, player }) => {
             defaultButton.focus();
         }
         switch (currStep) {
-            case "answering":
+            case "typing":
                 app.setMaskStart(verse);
                 app.setModalPopup(); //block outside selection
                 break;
@@ -86,7 +98,8 @@ const Exercise = ({ app, player }) => {
             case "results":
                 app.setModalPopup(); //block outside selection
                 break;
-            case "instructions":
+            case "intro":
+                // app.setMaskStart(verse + 1, true);
                 app.hideMask();
             default:
                 app.setModalPopup(false); //allow selecting outside
@@ -102,7 +115,7 @@ const Exercise = ({ app, player }) => {
             }
         }
         if (
-            ["answering", "instructions", "results"].includes(currStep) &&
+            ["typing", "intro", "results"].includes(currStep) &&
             player.audioState === AudioState.playing
         ) {
             app.gotoAya(player.playingAya, { sel: true });
@@ -133,10 +146,8 @@ const Exercise = ({ app, player }) => {
         );
     };
 
-    const showInstructions = () => {
-        setCurrStep("instructions");
-        // app.setMaskStart(app.selectStart + 1, true);
-        // app.hideMask();
+    const showIntro = () => {
+        setCurrStep("intro");
     };
 
     const answerNextVerse = () => {
@@ -145,120 +156,60 @@ const Exercise = ({ app, player }) => {
         setTimeout(startAnswer, 1);
     };
 
-    const renderExerciseBar = () => {
+    const renderTitle = () => {
         switch (currStep) {
-            case "answering":
-                return (
-                    <div className="buttonsBar">
-                        {/* <button onClick={testAnswer}>
-                            <String id="check" />
-                        </button> */}
-                        <button onClick={startReciting}>
-                            <String id="start" />
-                        </button>
-                        <button onClick={gotoRandomVerse}>
-                            <String id="new_verse" />
-                        </button>
-                        <button onClick={showInstructions}>
-                            <String id="cancel" />
-                        </button>
-                    </div>
-                );
+            case "intro":
+                return renderIntroTitle();
+
+            case "typing":
+                return renderTypingTitle();
+
             case "results":
-                return (
-                    <div className="buttonsBar">
-                        {testResult === -1 ? (
-                            <>
-                                <button
-                                    ref={ref => {
-                                        if (testResult === -1) {
-                                            //correct answer
-                                            defaultButton = ref;
-                                        }
-                                    }}
-                                    onClick={answerNextVerse}
-                                >
-                                    <String id="next_verse" />
-                                </button>
-                                <button onClick={gotoRandomVerse}>
-                                    <String id="new_verse" />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <button
-                                    ref={ref => {
-                                        defaultButton = ref;
-                                    }}
-                                    onClick={startAnswer}
-                                >
-                                    <String id="correct" />
-                                </button>
-                                <button onClick={startReciting}>
-                                    <String id="start" />
-                                </button>
-                            </>
-                        )}
-                        <button onClick={showInstructions}>
-                            <String id="cancel" />
-                        </button>
-                    </div>
-                );
-            case "instructions":
-                return (
-                    <div className="buttonsBar">
-                        <String id="exercise" />
-                        <button
-                            onClick={startAnswer}
-                            ref={ref => {
-                                defaultButton = ref;
-                            }}
-                        >
-                            <String id="answer" />
-                        </button>
-                        <button onClick={startReciting}>
-                            <String id="start" />
-                        </button>
-                        <button onClick={gotoRandomVerse}>
-                            <String id="new_verse" />
-                        </button>
-                    </div>
-                );
+                return renderResultsTitle();
 
             case "reciting":
-                return (
-                    <div className="buttonsBar">
-                        <span id="TrackDuration">{renderCounter()}</span>
-                        <button
-                            onClick={startAnswer}
-                            ref={ref => {
-                                defaultButton = ref;
-                            }}
-                        >
-                            <String id="answer" />
-                        </button>
-                        <button onClick={gotoRandomVerse}>
-                            <String id="new_verse" />
-                        </button>
-                        <button
-                            onClick={e => {
-                                player.stop(true);
-                                setCurrStep("instructions");
-                            }}
-                        >
-                            <String id="cancel" />
-                        </button>
-                    </div>
-                );
+                return renderRecitingTitle();
         }
     };
 
-    const renderInstructions = () => {
-        if (currStep == "instructions") {
-            if (app.isWide || app.pagesCount > 1) {
-                return <h3>{app.verseList()[verse]}</h3>;
-            }
+    const renderIntro = () => {
+        if (isNarrowLayout()) {
+            return "";
         }
+        return (
+            <>
+                <div className="ContentTitle">
+                    <VerseInfo />
+                </div>
+                <h3>
+                    <VerseText />
+                </h3>
+            </>
+        );
+    };
+
+    const renderIntroTitle = () => {
+        return (
+            <>
+                <VerseInfo show={isNarrowLayout()} />
+                <div className="buttonsBar">
+                    <button
+                        onClick={startAnswer}
+                        ref={ref => {
+                            defaultButton = ref;
+                        }}
+                    >
+                        <String id="answer" />
+                    </button>
+                    <button onClick={startReciting}>
+                        <String id="start" />
+                    </button>
+                    <button onClick={gotoRandomVerse}>
+                        <String id="new_verse" />
+                    </button>
+                </div>
+            </>
+        );
     };
 
     const onUpdateText = text => {
@@ -269,144 +220,309 @@ const Exercise = ({ app, player }) => {
         if (!answerText.trim().length) {
             return;
         }
-        const normVerse = app.normVerseList()[verse].trim();
-        const verseWords = normVerse.split(/\s+/);
+        const normVerse = normVerseList[verse].trim();
         const normAnswerText = Utils.normalizeText(answerText).trim();
+        const correctWords = normVerse.split(/\s+/);
         const answerWords = normAnswerText.split(/\s+/);
-        let wrongWord = -1;
-        verseWords.forEach((word, index) => {
-            if (
-                wrongWord == -1 &&
-                (answerWords.length < index || answerWords[index] != word)
-            ) {
+
+        let wrongWord = -1,
+            index;
+
+        for (index = 0; index < correctWords.length; index++) {
+            const correctWord = correctWords[index];
+            const answerWord =
+                index < answerWords.length ? answerWords[index] : "";
+            if (answerWord != correctWord) {
                 wrongWord = index;
+                break;
             }
-        });
-        setTestResult(wrongWord);
+        }
+        if (wrongWord == -1 && answerWords.length > correctWords.length) {
+            //wrote extra words
+            wrongWord = correctWords.length;
+        }
+
+        setWrongWord(wrongWord);
+        setMissingWords(correctWords.length - answerWords.length);
         app.setMaskStart(app.selectStart + 1, true);
         setCurrStep("results");
     };
 
-    const renderAnswerForm = () => {
-        if (currStep == "answering") {
+    const renderTypingTitle = () => {
+        return (
+            <>
+                <VerseInfo />
+                <div className="buttonsBar">
+                    {/* <button onClick={testAnswer}>
+                <String id="check" />
+            </button> */}
+                    <button onClick={startReciting}>
+                        <String id="start" />
+                    </button>
+                    <button onClick={gotoRandomVerse}>
+                        <String id="new_verse" />
+                    </button>
+                    <button onClick={showIntro}>
+                        <String id="cancel" />
+                    </button>
+                </div>
+            </>
+        );
+    };
+    const renderTypingConsole = () => {
+        return (
+            <>
+                <div
+                    tabIndex="0"
+                    ref={ref => {
+                        defaultButton = ref;
+                    }}
+                    className={
+                        "TypingConsole" + (!answerText.length ? " empty" : "")
+                    }
+                >
+                    {answerText || <String id="writing_prompt" />}
+                </div>
+                <AKeyboard
+                    initText={answerText}
+                    onUpdateText={onUpdateText}
+                    onEnter={testAnswer}
+                    onCancel={showIntro}
+                />
+            </>
+        );
+    };
+
+    const redoTyping = e => {
+        setAnswerText("");
+        startAnswer(e);
+    };
+
+    const renderResultsTitle = () => {
+        return (
+            <>
+                <VerseInfo />
+                <div className="buttonsBar">
+                    {wrongWord === -1 ? (
+                        //correct answer
+                        <>
+                            <button
+                                ref={ref => {
+                                    defaultButton = ref;
+                                }}
+                                onClick={answerNextVerse}
+                            >
+                                <String id="next_verse" />
+                            </button>
+                            <button onClick={gotoRandomVerse}>
+                                <String id="new_verse" />
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                ref={ref => {
+                                    defaultButton = ref;
+                                }}
+                                onClick={startAnswer}
+                            >
+                                <String id="correct" />
+                            </button>
+                            <button onClick={startReciting}>
+                                <String id="start" />
+                            </button>
+                        </>
+                    )}
+                    <button onClick={showIntro}>
+                        <String id="cancel" />
+                    </button>
+                </div>
+            </>
+        );
+    };
+
+    const isCorrect = () => wrongWord === -1 && missingWords === 0;
+
+    const renderResults = () => {
+        const answerWords = answerText.trim().split(/\s+/);
+
+        const renderMessage = () => {
+            if (isCorrect()) {
+                return (
+                    <h4>
+                        <span className="Correct">
+                            <Icon icon={faThumbsUp} />
+                        </span>{" "}
+                        <String id="correct_answer" />
+                    </h4>
+                );
+            }
             return (
-                <>
-                    <div
-                        tabIndex="0"
+                <h4>
+                    <span className="Wrong">
+                        <Icon icon={faThumbsDown} />
+                    </span>{" "}
+                    <String id="wrong_answer" />
+                </h4>
+            );
+        };
+
+        const renderMissingWords = () => {
+            if (!missingWords) {
+                return "";
+            }
+            return new Array(missingWords + 1)
+                .join("0")
+                .split("")
+                .map((x, index) => (
+                    <span key={index} className="Wrong">
+                        {" ? "}
+                    </span>
+                ));
+        };
+
+        return (
+            <>
+                {renderMessage()}
+                <h3>
+                    {answerWords.map((word, index) => (
+                        <span
+                            key={index}
+                            className={
+                                wrongWord == -1 || index < wrongWord
+                                    ? "Correct"
+                                    : "Wrong"
+                            }
+                        >
+                            {word}{" "}
+                        </span>
+                    ))}
+                    {renderMissingWords()}
+                </h3>
+                {isCorrect() ? (
+                    <div className="buttonsBar">
+                        <button onClick={redoTyping}>
+                            <String id="retry" />
+                        </button>
+                        <button onClick={redoReciting}>
+                            <String id="start" />
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <hr />
+                        <h3 className="Correct">
+                            <VerseText />
+                        </h3>
+                    </>
+                )}
+            </>
+        );
+    };
+
+    const renderRecitingTitle = () => {
+        return (
+            <>
+                <VerseInfo show={isNarrowLayout()} />
+                <span id="TrackDuration">{renderCounter()}</span>
+                <div className="buttonsBar">
+                    <button
+                        onClick={startAnswer}
                         ref={ref => {
                             defaultButton = ref;
                         }}
-                        className={
-                            "TypingConsole" +
-                            (!answerText.length ? " empty" : "")
-                        }
                     >
-                        {answerText || <String id="writing_prompt" />}
-                    </div>
-                    <AKeyboard
-                        initText={answerText}
-                        onUpdateText={onUpdateText}
-                        onEnter={testAnswer}
-                        onCancel={showInstructions}
-                    />
-                </>
-            );
-        }
+                        <String id="answer" />
+                    </button>
+                    <button onClick={gotoRandomVerse}>
+                        <String id="new_verse" />
+                    </button>
+                    <button
+                        onClick={e => {
+                            player.stop(true);
+                            setCurrStep("intro");
+                        }}
+                    >
+                        <String id="cancel" />
+                    </button>
+                </div>
+            </>
+        );
     };
 
-    const renderResults = () => {
-        if (currStep === "results") {
-            const answerWords = answerText.trim().split(/\s+/);
-            const verseText = app.verseList()[verse].trim();
-            const normVerseWords = app
-                .normVerseList()
-                [verse].trim()
-                .split(/\s+/);
-            const missingWords = normVerseWords.length - answerWords.length;
-            return (
-                <>
-                    {testResult !== -1 ? (
-                        ""
-                    ) : (
-                        <h4>
-                            <String id="correct_answer" />
-                        </h4>
-                    )}
-                    <h2>
-                        {answerWords.map((word, index) => (
-                            <span
-                                key={index}
-                                style={{
-                                    color:
-                                        testResult == -1 || index < testResult
-                                            ? "green"
-                                            : "red"
-                                }}
-                            >
-                                {word}{" "}
-                            </span>
-                        ))}
-                        {missingWords < 1
-                            ? ""
-                            : new Array(missingWords + 1)
-                                  .join("0")
-                                  .split("")
-                                  .map((x, index) => (
-                                      <span
-                                          key={index}
-                                          style={{ color: "red" }}
-                                      >
-                                          {" "}
-                                          ?{" "}
-                                      </span>
-                                  ))}
-                    </h2>
-                    {testResult == -1 ? (
-                        <div className="buttonsBar">
-                            {/* <button onClick={answerNextVerse}>
-                                <String id="next_verse" />
-                            </button> */}
-                            <button
-                                onClick={e => {
-                                    setAnswerText("");
-                                    startAnswer(e);
-                                }}
-                            >
-                                <String id="retry" />
-                            </button>
-                        </div>
-                    ) : (
-                        <>
-                            <h3 style={{ color: "green" }}>{verseText}</h3>
-                        </>
-                    )}
-                </>
-            );
+    const renderReciting = () => {
+        if (isNarrowLayout()) {
+            return "";
         }
+        return (
+            <>
+                <div className="ContentTitle">
+                    <VerseInfo />
+                </div>
+                <h3>
+                    <VerseText />
+                </h3>
+            </>
+        );
     };
 
-    const renderMemorizing = () => {
-        if (currStep === "reciting") {
-            if (app.isWide || app.pagesCount > 1) {
-                return <h3>{app.verseList()[verse]}</h3>;
-            }
+    const renderContent = () => {
+        switch (currStep) {
+            case "intro":
+                return renderIntro();
+            case "reciting":
+                return renderReciting();
+            case "typing":
+                return renderTypingConsole();
+            case "results":
+                return renderResults();
         }
     };
 
     return (
         <>
-            <div className="Title">{renderExerciseBar()}</div>
+            <div className="Title">{renderTitle()}</div>
             <div
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                {renderMemorizing()}
-                {renderInstructions()}
-                {renderAnswerForm()}
-                {renderResults()}
+                {renderContent()}
             </div>
         </>
     );
 };
 
+const VerseInfo = AppConsumer(({ app, verse, show }) => {
+    if (verse === undefined) {
+        verse = app.selectStart;
+    }
+    if (show === false) {
+        return "";
+    }
+    const verseInfo = QData.ayaIdInfo(verse);
+
+    return (
+        <String id="sura_names">
+            {sura_names => (
+                <String
+                    id="bookmark_desc"
+                    values={{
+                        sura: sura_names.split(",")[verseInfo.sura],
+                        verse: verseInfo.aya + 1
+                    }}
+                />
+            )}
+        </String>
+    );
+});
+
+const VerseText = AppConsumer(({ verse, app }) => {
+    if (verse === undefined) {
+        verse = app.selectStart;
+    }
+    const verseList = app.verseList();
+    return <div>{verse < verseList.length ? verseList[verse] : ""}</div>;
+});
+
 export default AppConsumer(PlayerConsumer(Exercise));
+export { VerseInfo, VerseText };

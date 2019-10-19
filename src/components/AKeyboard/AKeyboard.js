@@ -3,6 +3,7 @@ import "./AKeyboard.scss";
 
 const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
     const [text, setText] = useState(initText);
+    const [typedChar, setTypedChar] = useState("");
 
     const keyMap = {
         //first
@@ -93,7 +94,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
             "KeyX",
             "KeyZ"
         ],
-        ["Enter", "Backspace", "ClearWord", "Space", "ClearAll", "Backquote"]
+        ["Enter", "Backspace", "Space", "ClearAll", "ClearWord", "Backquote"]
     ];
 
     const updateText = newText => {
@@ -103,6 +104,11 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
 
     const handleKeyDown = e => {
         const { code, ctrlKey } = e;
+        setTypedChar(code);
+        setTimeout(() => {
+            setTypedChar("");
+        }, 300);
+
         switch (code) {
             case "Escape":
                 onCancel();
@@ -112,6 +118,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
                 break;
             case "Backspace":
                 if (ctrlKey) {
+                    setTypedChar("ClearWord");
                     updateText(text.replace(/\S+\s*$/, ""));
                 } else {
                     updateText(text.substr(0, text.length - 1));
@@ -125,6 +132,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
                 break;
             case "KeyX":
                 if (ctrlKey) {
+                    setTypedChar("ClearAll");
                     updateText("");
                     break;
                 }
@@ -149,7 +157,11 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
                     {row.map((key, index) => (
                         <span
                             key={index}
-                            className={"KeyButton " + key}
+                            className={
+                                "KeyButton " +
+                                key +
+                                (typedChar === key ? " typed" : "")
+                            }
                             onClick={e => {
                                 handleKeyDown({ code: key });
                             }}
