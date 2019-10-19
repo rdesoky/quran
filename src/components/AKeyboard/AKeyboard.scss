@@ -5,6 +5,7 @@
         margin-bottom: 10px;
         .KeyButton {
             display: inline-block;
+            position: relative;
             border: solid 1px silver;
             border-radius: 5px;
             // flex-grow: 1;
@@ -12,17 +13,36 @@
             width: 10%;
             margin: 1px;
             height: 35px;
-            line-height: 30px;
+            line-height: 25px;
             cursor: default;
+            overflow: hidden;
             &:hover {
                 background: #444;
             }
             &.Space {
                 flex-grow: 9;
             }
+            &.Enter {
+                border-color: green;
+                line-height: 35px;
+                font-size: 12px;
+            }
+            &.Backspace,
+            &.ClearAll,
+            &.ClearWord {
+                border-color: orangered;
+                font-size: 12px;
+            }
             &.KeyJ,
             &.KeyF {
-                border-color: cyan;
+                border-color: goldenrod;
+            }
+            .KeyLatinChar {
+                position: absolute;
+                font-size: 10px;
+                left: 3px;
+                bottom: -4px;
+                color: #777;
             }
         }
     }

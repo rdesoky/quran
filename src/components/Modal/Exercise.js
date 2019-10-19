@@ -24,6 +24,9 @@ const Exercise = ({ app, player }) => {
         const new_verse = Math.floor(Math.random() * verseList.length);
         app.gotoAya(new_verse, { sel: true });
         setCurrStep("instructions");
+        if (currStep === "instructions" && defaultButton) {
+            defaultButton.focus();
+        }
     };
 
     const startReciting = e => {
@@ -83,6 +86,8 @@ const Exercise = ({ app, player }) => {
             case "results":
                 app.setModalPopup(); //block outside selection
                 break;
+            case "instructions":
+                app.hideMask();
             default:
                 app.setModalPopup(false); //allow selecting outside
         }
@@ -131,7 +136,7 @@ const Exercise = ({ app, player }) => {
     const showInstructions = () => {
         setCurrStep("instructions");
         // app.setMaskStart(app.selectStart + 1, true);
-        app.hideMask();
+        // app.hideMask();
     };
 
     const answerNextVerse = () => {
@@ -145,16 +150,9 @@ const Exercise = ({ app, player }) => {
             case "answering":
                 return (
                     <div className="buttonsBar">
-                        <span
-                            tabIndex="0"
-                            ref={ref => {
-                                defaultButton = ref;
-                            }}
-                        ></span>
-
-                        <button onClick={testAnswer}>
+                        {/* <button onClick={testAnswer}>
                             <String id="check" />
-                        </button>
+                        </button> */}
                         <button onClick={startReciting}>
                             <String id="start" />
                         </button>
@@ -170,7 +168,22 @@ const Exercise = ({ app, player }) => {
                 return (
                     <div className="buttonsBar">
                         {testResult === -1 ? (
-                            ""
+                            <>
+                                <button
+                                    ref={ref => {
+                                        if (testResult === -1) {
+                                            //correct answer
+                                            defaultButton = ref;
+                                        }
+                                    }}
+                                    onClick={answerNextVerse}
+                                >
+                                    <String id="next_verse" />
+                                </button>
+                                <button onClick={gotoRandomVerse}>
+                                    <String id="new_verse" />
+                                </button>
+                            </>
                         ) : (
                             <>
                                 <button
@@ -186,20 +199,6 @@ const Exercise = ({ app, player }) => {
                                 </button>
                             </>
                         )}
-                        <button
-                            ref={ref => {
-                                if (testResult === -1) {
-                                    //correct answer
-                                    defaultButton = ref;
-                                }
-                            }}
-                            onClick={answerNextVerse}
-                        >
-                            <String id="next_verse" />
-                        </button>
-                        <button onClick={gotoRandomVerse}>
-                            <String id="new_verse" />
-                        </button>
                         <button onClick={showInstructions}>
                             <String id="cancel" />
                         </button>
@@ -207,30 +206,29 @@ const Exercise = ({ app, player }) => {
                 );
             case "instructions":
                 return (
-                    <>
+                    <div className="buttonsBar">
                         <String id="exercise" />
-                        <div className="buttonsBar">
-                            <button
-                                onClick={startAnswer}
-                                ref={ref => {
-                                    defaultButton = ref;
-                                }}
-                            >
-                                <String id="answer" />
-                            </button>
-                            <button onClick={startReciting}>
-                                <String id="start" />
-                            </button>
-                            <button onClick={gotoRandomVerse}>
-                                <String id="new_verse" />
-                            </button>
-                        </div>
-                    </>
+                        <button
+                            onClick={startAnswer}
+                            ref={ref => {
+                                defaultButton = ref;
+                            }}
+                        >
+                            <String id="answer" />
+                        </button>
+                        <button onClick={startReciting}>
+                            <String id="start" />
+                        </button>
+                        <button onClick={gotoRandomVerse}>
+                            <String id="new_verse" />
+                        </button>
+                    </div>
                 );
 
             case "reciting":
                 return (
                     <div className="buttonsBar">
+                        <span id="TrackDuration">{renderCounter()}</span>
                         <button
                             onClick={startAnswer}
                             ref={ref => {
@@ -250,7 +248,6 @@ const Exercise = ({ app, player }) => {
                         >
                             <String id="cancel" />
                         </button>
-                        <span id="TrackDuration">{renderCounter()}</span>
                     </div>
                 );
         }
@@ -294,11 +291,18 @@ const Exercise = ({ app, player }) => {
         if (currStep == "answering") {
             return (
                 <>
-                    <textarea
-                        disabled={true}
-                        placeholder="Write verse from your memory"
-                        value={answerText}
-                    ></textarea>
+                    <div
+                        tabIndex="0"
+                        ref={ref => {
+                            defaultButton = ref;
+                        }}
+                        className={
+                            "TypingConsole" +
+                            (!answerText.length ? " empty" : "")
+                        }
+                    >
+                        {answerText || <String id="writing_prompt" />}
+                    </div>
                     <AKeyboard
                         initText={answerText}
                         onUpdateText={onUpdateText}
@@ -313,7 +317,7 @@ const Exercise = ({ app, player }) => {
     const renderResults = () => {
         if (currStep === "results") {
             const answerWords = answerText.trim().split(/\s+/);
-            const verseText = app.verseList()[verse];
+            const verseText = app.verseList()[verse].trim();
             const normVerseWords = app
                 .normVerseList()
                 [verse].trim()
@@ -358,9 +362,23 @@ const Exercise = ({ app, player }) => {
                                   ))}
                     </h2>
                     {testResult == -1 ? (
-                        ""
+                        <div className="buttonsBar">
+                            {/* <button onClick={answerNextVerse}>
+                                <String id="next_verse" />
+                            </button> */}
+                            <button
+                                onClick={e => {
+                                    setAnswerText("");
+                                    startAnswer(e);
+                                }}
+                            >
+                                <String id="retry" />
+                            </button>
+                        </div>
                     ) : (
-                        <h3 style={{ color: "green" }}>{verseText}</h3>
+                        <>
+                            <h3 style={{ color: "green" }}>{verseText}</h3>
+                        </>
                     )}
                 </>
             );

@@ -50,12 +50,23 @@ button {
 }
 
 .buttonsBar {
-    text-align: center;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 5px 4px;
+    flex-grow: 1;
+    min-height: 40px;
     button {
+        margin: 0 1px;
+        padding: 0;
+        .ModalContent .Title & {
+            margin: 0 1px;
+        }
+
+        flex-grow: 1;
         font-size: 15px;
         background: #444;
-        padding: 10px;
-        margin: 15px 5px;
         &:hover {
             color: white;
             background: #666;
