@@ -1,55 +1,55 @@
 import React, { useState, useEffect } from "react";
 import "./AKeyboard.scss";
 
-const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
+const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
     const [text, setText] = useState(initText);
 
     const keyMap = {
         //first
-        BracketLeft: ["ج"],
-        KeyP: ["ح"],
-        KeyO: ["خ"],
-        KeyI: ["ه"],
-        KeyU: ["ع"],
-        KeyY: ["غ"],
-        KeyT: ["ف"],
-        KeyR: ["ق"],
-        KeyE: ["ث"],
-        KeyW: ["ص"],
-        KeyQ: ["ض"],
+        BracketLeft: ["ج", "["],
+        KeyP: ["ح", "P"],
+        KeyO: ["خ", "O"],
+        KeyI: ["ه", "I"],
+        KeyU: ["ع", "U"],
+        KeyY: ["غ", "Y"],
+        KeyT: ["ف", "T"],
+        KeyR: ["ق", "R"],
+        KeyE: ["ث", "E"],
+        KeyW: ["ص", "W"],
+        KeyQ: ["ض", "Q"],
 
         //second
-        Quote: ["ط"],
-        Semicolon: ["ك"],
-        KeyL: ["م"],
-        KeyK: ["ن"],
-        KeyJ: ["ت"],
-        KeyH: ["ا"],
-        KeyG: ["ل"],
-        KeyF: ["ب"],
-        KeyD: ["ي"],
-        KeyS: ["س"],
-        KeyA: ["ش"],
+        Quote: ["ط", "'"],
+        Semicolon: ["ك", ";"],
+        KeyL: ["م", "L"],
+        KeyK: ["ن", "K"],
+        KeyJ: ["ت", "J"],
+        KeyH: ["ا", "H"],
+        KeyG: ["ل", "G"],
+        KeyF: ["ب", "F"],
+        KeyD: ["ي", "D"],
+        KeyS: ["س", "S"],
+        KeyA: ["ش", "A"],
 
         //Third
-        BracketRight: ["د"],
-        Slash: ["ظ"],
-        Period: ["ز"],
-        Comma: ["و"],
-        KeyM: ["ة"],
-        KeyN: ["ى"],
-        KeyB: ["لا"], //skip
-        KeyV: ["ر"],
-        KeyC: ["ؤ"],
-        KeyX: ["ء"],
-        KeyZ: ["ئ"], //??
+        BracketRight: ["د", "]"],
+        Slash: ["ظ", "/"],
+        Period: ["ز", "."],
+        Comma: ["و", ","],
+        KeyM: ["ة", "M"],
+        KeyN: ["ى", "N"],
+        KeyB: ["لا", "B"], //skip
+        KeyV: ["ر", "V"],
+        KeyC: ["ؤ", "C"],
+        KeyX: ["ء", "X"],
+        KeyZ: ["ئ", "Z"], //??
 
         //Forth
-        Backquote: ["ذ"],
-        Space: [" "],
-        Backspace: ["<-"],
-        ClearAll: ["x^"],
-        ClearWord: ["<-^"]
+        Backquote: ["ذ", "`"],
+        Space: [" ", "Space"],
+        Backspace: ["<", "Bksp"],
+        ClearWord: ["<<", "Ctrl+Bksp"],
+        ClearAll: ["<<<", "Ctrl+x"]
     };
 
     const keyRows = [
@@ -92,7 +92,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
             "KeyX",
             "KeyZ"
         ],
-        ["Backspace", "ClearAll", "ClearWord", "Space", "Backquote"]
+        ["Backspace", "ClearWord", "ClearAll", "Space", "Backquote"]
     ];
 
     const updateText = newText => {
@@ -103,6 +103,9 @@ const AKeyboard = ({ initText, onUpdateText, onEnter }) => {
     const handleKeyDown = e => {
         const { code, ctrlKey } = e;
         switch (code) {
+            case "Escape":
+                onCancel();
+                break;
             case "Enter":
                 onEnter(text);
                 break;

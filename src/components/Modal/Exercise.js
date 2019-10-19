@@ -18,23 +18,17 @@ const Exercise = ({ app, player }) => {
 
     const verseList = app.verseList();
 
-    const onClickExercise = e => {
-        startExercise();
+    const gotoRandomVerse = e => {
+        player.stop();
+        player.setPlayingAya(-1);
+        const new_verse = Math.floor(Math.random() * verseList.length);
+        app.gotoAya(new_verse, { sel: true });
+        setCurrStep("instructions");
     };
 
-    const startExercise = (new_verse = -1) => {
-        if (new_verse == -1) {
-            new_verse = Math.floor(Math.random() * verseList.length);
-        }
-        if (new_verse != verse) {
-            setAnswerText("");
-            setVerse(new_verse);
-        }
-        player.setPlayingAya(-1);
-        app.gotoAya(new_verse, { sel: true });
-
+    const startReciting = e => {
         setTimeout(() => {
-            setCurrStep("memorizing");
+            setCurrStep("reciting");
             player.play();
         }, 100);
 
@@ -52,7 +46,6 @@ const Exercise = ({ app, player }) => {
         setTimeout(() => {
             player.stop(true);
         });
-        app.setMaskStart();
         stopCounter();
         setCurrStep("answering");
     };
@@ -87,8 +80,9 @@ const Exercise = ({ app, player }) => {
             defaultButton.focus();
         }
         switch (currStep) {
-            case "memorizing":
             case "answering":
+                app.setMaskStart(verse);
+            case "reciting":
             case "results":
                 app.setModalPopup(); //block outside selection
                 break;
@@ -100,16 +94,16 @@ const Exercise = ({ app, player }) => {
     //monitor player to start answer upon player ends
     useEffect(() => {
         if (
-            ["memorizing"].includes(currStep) &&
+            ["reciting"].includes(currStep) &&
             player.audioState === AudioState.stopped
         ) {
             startAnswer();
         }
         if (
             ["answering", "instructions", "results"].includes(currStep) &&
-            player.audioState === AudioState.playing //sto
+            player.audioState === AudioState.playing
         ) {
-            startExercise(verse);
+            startReciting();
         }
 
         if (player.audioState == AudioState.playing) {
@@ -137,12 +131,18 @@ const Exercise = ({ app, player }) => {
 
     const showInstructions = () => {
         setCurrStep("instructions");
+        // app.setMaskStart(app.selectStart + 1, true);
         app.hideMask();
     };
 
     const answerNextVerse = () => {
-        app.gotoAya(verse + 1, { sel: true });
-        setTimeout(startAnswer, 100);
+        app.setMaskStart(verse + 1);
+        app.gotoAya(verse + 1);
+        setTimeout(startAnswer, 1);
+    };
+
+    const startPlaying = e => {
+        startReciting(verse);
     };
 
     const renderExerciseBar = () => {
@@ -160,14 +160,10 @@ const Exercise = ({ app, player }) => {
                         <button onClick={testAnswer}>
                             <String id="check" />
                         </button>
-                        <button
-                            onClick={e => {
-                                startExercise(verse);
-                            }}
-                        >
-                            <String id="retry" />
+                        <button onClick={startReciting}>
+                            <String id="start" />
                         </button>
-                        <button onClick={onClickExercise}>
+                        <button onClick={gotoRandomVerse}>
                             <String id="new_verse" />
                         </button>
                         <button onClick={showInstructions}>
@@ -178,6 +174,23 @@ const Exercise = ({ app, player }) => {
             case "results":
                 return (
                     <div className="buttonsBar">
+                        {testResult === -1 ? (
+                            ""
+                        ) : (
+                            <>
+                                <button
+                                    ref={ref => {
+                                        defaultButton = ref;
+                                    }}
+                                    onClick={startAnswer}
+                                >
+                                    <String id="correct" />
+                                </button>
+                                <button onClick={startPlaying}>
+                                    <String id="start" />
+                                </button>
+                            </>
+                        )}
                         <button
                             ref={ref => {
                                 if (testResult === -1) {
@@ -189,20 +202,7 @@ const Exercise = ({ app, player }) => {
                         >
                             <String id="next_verse" />
                         </button>
-                        <button
-                            ref={ref => {
-                                if (testResult !== -1) {
-                                    //wrong answer
-                                    defaultButton = ref;
-                                }
-                            }}
-                            onClick={e => {
-                                startExercise(verse);
-                            }}
-                        >
-                            <String id="retry" />
-                        </button>
-                        <button onClick={onClickExercise}>
+                        <button onClick={gotoRandomVerse}>
                             <String id="new_verse" />
                         </button>
                         <button onClick={showInstructions}>
@@ -212,28 +212,28 @@ const Exercise = ({ app, player }) => {
                 );
             case "instructions":
                 return (
-                    <div className="buttonsBar">
-                        {verse === -1 ? (
-                            ""
-                        ) : (
+                    <>
+                        <String id="exercise" />
+                        <div className="buttonsBar">
                             <button
-                                onClick={e => {
-                                    startExercise(verse);
-                                }}
+                                onClick={startAnswer}
                                 ref={ref => {
                                     defaultButton = ref;
                                 }}
                             >
+                                <String id="answer" />
+                            </button>
+                            <button onClick={startReciting}>
                                 <String id="start" />
                             </button>
-                        )}
-                        <button onClick={onClickExercise}>
-                            <String id="new_verse" />
-                        </button>
-                    </div>
+                            <button onClick={gotoRandomVerse}>
+                                <String id="new_verse" />
+                            </button>
+                        </div>
+                    </>
                 );
 
-            case "memorizing":
+            case "reciting":
                 return (
                     <div className="buttonsBar">
                         <button
@@ -244,7 +244,7 @@ const Exercise = ({ app, player }) => {
                         >
                             <String id="answer" />
                         </button>
-                        <button onClick={onClickExercise}>
+                        <button onClick={gotoRandomVerse}>
                             <String id="new_verse" />
                         </button>
                         <button
@@ -291,7 +291,7 @@ const Exercise = ({ app, player }) => {
             }
         });
         setTestResult(wrongWord);
-        app.hideMask();
+        app.setMaskStart(app.selectStart + 1, true);
         setCurrStep("results");
     };
 
@@ -308,6 +308,7 @@ const Exercise = ({ app, player }) => {
                         initText={answerText}
                         onUpdateText={onUpdateText}
                         onEnter={testAnswer}
+                        onCancel={showInstructions}
                     />
                 </>
             );
@@ -372,7 +373,7 @@ const Exercise = ({ app, player }) => {
     };
 
     const renderMemorizing = () => {
-        if (currStep === "memorizing") {
+        if (currStep === "reciting") {
             if (app.isWide || app.pagesCount > 1) {
                 return <h3>{app.verseList()[verse]}</h3>;
             }
@@ -381,10 +382,7 @@ const Exercise = ({ app, player }) => {
 
     return (
         <>
-            <div className="Title">
-                <String id="exercise" />
-                {renderExerciseBar()}
-            </div>
+            <div className="Title">{renderExerciseBar()}</div>
             <div
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
