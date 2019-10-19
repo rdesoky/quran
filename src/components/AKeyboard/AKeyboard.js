@@ -6,7 +6,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
 
     const keyMap = {
         //first
-        BracketLeft: ["ج", "["],
+        BracketLeft: ["ج", "]"],
         KeyP: ["ح", "P"],
         KeyO: ["خ", "O"],
         KeyI: ["ه", "I"],
@@ -32,7 +32,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
         KeyA: ["ش", "A"],
 
         //Third
-        BracketRight: ["د", "]"],
+        BracketRight: ["د", "["],
         Slash: ["ظ", "/"],
         Period: ["ز", "."],
         Comma: ["و", ","],
@@ -49,7 +49,8 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
         Space: [" ", "Space"],
         Backspace: ["<", "Bksp"],
         ClearWord: ["<<", "Ctrl+Bksp"],
-        ClearAll: ["<<<", "Ctrl+x"]
+        ClearAll: ["<<<", "Ctrl+x"],
+        Enter: ["Enter", ""]
     };
 
     const keyRows = [
@@ -92,7 +93,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
             "KeyX",
             "KeyZ"
         ],
-        ["Backspace", "ClearWord", "ClearAll", "Space", "Backquote"]
+        ["Enter", "Backspace", "ClearWord", "Space", "ClearAll", "Backquote"]
     ];
 
     const updateText = newText => {
@@ -153,7 +154,8 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
                                 handleKeyDown({ code: key });
                             }}
                         >
-                            {keyMap[key][0]}
+                            <span class="KeyMainChar">{keyMap[key][0]}</span>
+                            <span class="KeyLatinChar">{keyMap[key][1]}</span>
                         </span>
                     ))}
                 </div>
