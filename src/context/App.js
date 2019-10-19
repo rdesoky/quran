@@ -30,13 +30,14 @@ const AppState = {
         : [
               "Search",
               "Index",
-              "Tafseer",
-              "Copy",
-              "Mask",
-              "Goto",
-              "Theme",
               "Exercise",
-              "Favorites"
+              "Tafseer",
+              "Favorites",
+              "Mask",
+              "Theme",
+              "Bookmarks",
+              "Copy",
+              "Goto"
           ]
 };
 
