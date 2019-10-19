@@ -88,10 +88,13 @@ const PageHeader = ({
                     <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
                         <String id="pg_num" values={{ num: pageIndex + 1 }} />
                     </button>
+                    <button
+                        className="NavButton NavPgDown"
+                        onClick={onPageDown}
+                    >
+                        <Icon icon={faAngleLeft} />
+                    </button>
                 </div>
-                <button className="NavButton NavPgDown" onClick={onPageDown}>
-                    <Icon icon={faAngleLeft} />
-                </button>
                 <select
                     className="SuraTitle"
                     onChange={onSelectSura}

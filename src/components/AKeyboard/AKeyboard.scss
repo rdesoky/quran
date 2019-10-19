@@ -6,7 +6,8 @@
         .KeyButton {
             display: inline-block;
             border: solid 1px silver;
-            flex-grow: 1;
+            border-radius: 5px;
+            // flex-grow: 1;
             text-align: center;
             width: 10%;
             margin: 1px;
@@ -18,6 +19,10 @@
             }
             &.Space {
                 flex-grow: 9;
+            }
+            &.KeyJ,
+            &.KeyF {
+                border-color: cyan;
             }
         }
     }

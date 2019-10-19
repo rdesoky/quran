@@ -103,7 +103,6 @@
                 // height: 100%;
                 line-height: 24px;
                 // border-radius: 12px;
-                background-color: #444;
                 // margin: 0 1px;
                 &:hover {
                     background-color: #666;
@@ -113,6 +112,8 @@
             .PageHeaderSection {
                 display: inline-block;
                 white-space: nowrap;
+                background-color: #444;
+                border-radius: 5px;
             }
         }
 
