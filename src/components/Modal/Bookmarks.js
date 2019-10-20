@@ -36,7 +36,7 @@ const Bookmarks = ({ app }) => {
                 style={{ maxHeight: app.appHeight - 85 }}
             >
                 {renderVerse()}
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button onClick={toggleBookmark}>
                         <String id="bookmark" />
                     </button>

@@ -45,7 +45,7 @@ const Favorites = ({ app }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button>
                         <String id="add_hifz" />
                     </button>

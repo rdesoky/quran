@@ -5,6 +5,8 @@ import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Search = ({ app }) => {
     const input = useRef(null);
@@ -152,6 +154,7 @@ const Search = ({ app }) => {
         return (
             <ol
                 className="ResultsList"
+                onMouseDown={hideKeyboard}
                 style={
                     {
                         // maxHeight:
@@ -241,7 +244,15 @@ const Search = ({ app }) => {
     const renderKeyboard = () => {
         if (keyboard) {
             return (
-                <div className="KeyboardFrame">
+                <div
+                    className="KeyboardFrame"
+                    onTouchStart={e => {
+                        e.stopPropagation();
+                    }}
+                    onMouseDown={e => {
+                        e.stopPropagation();
+                    }}
+                >
                     <AKeyboard
                         initText={searchTerm}
                         onUpdateText={setSearchTerm}
@@ -255,7 +266,7 @@ const Search = ({ app }) => {
     };
 
     const formHeight = 130,
-        resultsInfoHeight = 35;
+        resultsInfoHeight = 20;
 
     return (
         <>
@@ -282,14 +293,15 @@ const Search = ({ app }) => {
                         "TypingConsole" + (!searchTerm.length ? " empty" : "")
                     }
                     tabIndex="0"
+                    onClick={showKeyboard}
                 >
                     {searchTerm.length
                         ? searchTerm
                         : "Search suras' name or content"}
                 </div>
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button onClick={onSubmitSearch}>
-                        <String id="search" />
+                        <FontAwesomeIcon icon={faSearch} />
                     </button>
                 </div>
             </div>
@@ -322,8 +334,10 @@ const Search = ({ app }) => {
             </div>
             <div
                 className="PopupBody"
+                onTouchStart={hideKeyboard}
+                onMouseDown={hideKeyboard}
                 style={{
-                    height: app.appHeight - formHeight - 20 - 20 // footer + padding + formMargins
+                    height: app.appHeight - formHeight - 26 // footer + padding + formMargins
                 }}
             >
                 {renderSuras()}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "./../../context/Player";
@@ -7,6 +7,37 @@ import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import QData from "./../../services/QData";
+
+// const useForceUpdate = useCallback(() => updateState({}), []);
+// const useForceUpdate = () => useState()[1];
+
+const VerseInfo = AppConsumer(({ app, verse, show }) => {
+    if (verse === undefined) {
+        verse = app.selectStart;
+    }
+    if (show === false) {
+        return "";
+    }
+    const verseInfo = QData.ayaIdInfo(verse);
+
+    return (
+        <String id="sura_names">
+            {sura_names => (
+                <>
+                    {sura_names.split(",")[verseInfo.sura]}:{verseInfo.aya + 1}
+                </>
+            )}
+        </String>
+    );
+});
+
+const VerseText = AppConsumer(({ verse, app }) => {
+    if (verse === undefined) {
+        verse = app.selectStart;
+    }
+    const verseList = app.verseList();
+    return <div>{verse < verseList.length ? verseList[verse] : ""}</div>;
+});
 
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState("");
@@ -19,6 +50,7 @@ const Exercise = ({ app, player }) => {
     const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
     const normVerseList = app.normVerseList();
+    // const forceUpdate = useForceUpdate();
 
     const isNarrowLayout = () => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
@@ -194,7 +226,7 @@ const Exercise = ({ app, player }) => {
         return (
             <>
                 <VerseInfo show={isNarrowLayout()} />
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button
                         onClick={startAnswer}
                         ref={ref => {
@@ -220,6 +252,7 @@ const Exercise = ({ app, player }) => {
         setWrongWord(-1);
         setMissingWords(0);
         testAnswer(text.replace(/\S+$/, ""));
+        // forceUpdate();
     };
 
     const onFinishedTyping = () => {
@@ -267,7 +300,7 @@ const Exercise = ({ app, player }) => {
                 {/* <div className={"iBlock " + (correct ? "Correct" : "Wrong")}>
                     <Icon icon={correct ? faThumbsUp : faThumbsDown} />
                 </div> */}
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
@@ -288,7 +321,7 @@ const Exercise = ({ app, player }) => {
                 <div
                     style={{
                         position: "relative",
-                        height: app.appHeight - 256 //keyboard and title heights
+                        height: app.appHeight - 248 //keyboard and title heights
                     }}
                 >
                     <div
@@ -327,7 +360,7 @@ const Exercise = ({ app, player }) => {
         return (
             <>
                 <VerseInfo />
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     {isCorrect() ? (
                         //correct answer
                         <>
@@ -425,13 +458,16 @@ const Exercise = ({ app, player }) => {
                     {renderMissingWords()}
                 </h3>
                 {isCorrect() ? (
-                    <div className="buttonsBar">
+                    <div className="ButtonsBar">
                         <button onClick={redoTyping}>
                             <String id="retry" />
                         </button>
                         <button onClick={redoReciting}>
                             <String id="start" />
                         </button>
+                        {/* <button onClick={answerNextVerse}>
+                            <String id="next_verse" />
+                        </button> */}
                     </div>
                 ) : (
                     <>
@@ -450,7 +486,7 @@ const Exercise = ({ app, player }) => {
             <>
                 <VerseInfo show={isNarrowLayout()} />
                 <span id="TrackDuration">{renderCounter()}</span>
-                <div className="buttonsBar">
+                <div className="ButtonsBar">
                     <button
                         onClick={startAnswer}
                         ref={ref => {
@@ -459,9 +495,9 @@ const Exercise = ({ app, player }) => {
                     >
                         <String id="answer" />
                     </button>
-                    <button onClick={gotoRandomVerse}>
+                    {/* <button onClick={gotoRandomVerse}>
                         <String id="new_verse" />
-                    </button>
+                    </button> */}
                     <button
                         onClick={e => {
                             player.stop(true);
@@ -517,34 +553,5 @@ const Exercise = ({ app, player }) => {
     );
 };
 
-const VerseInfo = AppConsumer(({ app, verse, show }) => {
-    if (verse === undefined) {
-        verse = app.selectStart;
-    }
-    if (show === false) {
-        return "";
-    }
-    const verseInfo = QData.ayaIdInfo(verse);
-
-    return (
-        <String id="sura_names">
-            {sura_names => (
-                <>
-                    {sura_names.split(",")[verseInfo.sura]} ({verseInfo.aya + 1}
-                    )
-                </>
-            )}
-        </String>
-    );
-});
-
-const VerseText = AppConsumer(({ verse, app }) => {
-    if (verse === undefined) {
-        verse = app.selectStart;
-    }
-    const verseList = app.verseList();
-    return <div>{verse < verseList.length ? verseList[verse] : ""}</div>;
-});
-
-export default AppConsumer(PlayerConsumer(Exercise));
 export { VerseInfo, VerseText };
+export default AppConsumer(PlayerConsumer(Exercise));
