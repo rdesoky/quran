@@ -25,14 +25,14 @@
             }
             &.Enter {
                 border-color: green;
-                line-height: 35px;
-                font-size: 12px;
             }
             &.Backspace,
             &.ClearAll,
             &.ClearWord {
                 border-color: orangered;
-                font-size: 12px;
+                svg {
+                    transform: scaleX(-1);
+                }
             }
             &.KeyJ,
             &.KeyF {

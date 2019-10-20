@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./AKeyboard.scss";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import {
+    faCheck,
+    faBackspace,
+    faCheckCircle,
+    faStepBackward,
+    faFastBackward
+} from "@fortawesome/free-solid-svg-icons";
 
 const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
     const [text, setText] = useState(initText);
@@ -48,10 +56,10 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
         //Forth
         Backquote: ["ذ", "`"],
         Space: [" ", "Space"],
-        Backspace: ["<", "Bksp"],
-        ClearWord: ["<<", "Ctrl+Bksp"],
-        ClearAll: ["<<<", "Ctrl+x"],
-        Enter: ["Enter", ""]
+        Backspace: [<Icon icon={faBackspace} />, "Bksp"],
+        ClearWord: [<Icon icon={faStepBackward} />, "Ctrl+Bksp"],
+        ClearAll: [<Icon icon={faFastBackward} />, "Ctrl+x"],
+        Enter: [<Icon icon={faCheckCircle} />, "Enter"]
     };
 
     const keyRows = [
@@ -94,7 +102,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
             "KeyX",
             "KeyZ"
         ],
-        ["Enter", "Backspace", "Space", "ClearAll", "ClearWord", "Backquote"]
+        ["Enter", "Backspace", "ClearWord", "Space", "ClearAll", "Backquote"]
     ];
 
     const updateText = newText => {

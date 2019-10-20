@@ -88,3 +88,12 @@ hr {
     border-width: 1px 0;
     border-color: #222 #888 #888 #222;
 }
+
+.iBlock {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.flipHorizontal {
+    transform: scaleX(-1);
+}
