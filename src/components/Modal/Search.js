@@ -4,6 +4,7 @@ import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
+import AKeyboard from "../AKeyboard/AKeyboard";
 
 const Search = ({ app }) => {
     const input = useRef(null);
@@ -15,19 +16,29 @@ const Search = ({ app }) => {
     );
     const [results, setResults] = useState([]);
     const [pages, setPages] = useState(1);
+    const [keyboard, setkeyboard] = useState(false);
 
     let resultsDiv;
+
+    const showKeyboard = e => {
+        setkeyboard(true);
+    };
+    const hideKeyboard = e => {
+        setkeyboard(false);
+    };
 
     useEffect(() => {
         let textInput = input.current;
         setTimeout(function() {
             textInput.focus();
-            textInput.select();
+            // textInput.select();
         }, 100);
         doSearch(searchTerm);
+        // textInput.addEventListener("blur", hideKeyboard);
+        textInput.addEventListener("focus", showKeyboard);
         return () => {
-            //unmount
-            // document.body.focus();
+            // textInput.removeEventListener("blur", hideKeyboard);
+            textInput.removeEventListener("focus", showKeyboard);
         };
     }, []);
 
@@ -44,6 +55,7 @@ const Search = ({ app }) => {
     //TODO: duplicate code with QIndex
     const gotoSura = ({ target }) => {
         app.hideMask();
+        setkeyboard(false);
         let index = parseInt(target.getAttribute("sura"));
         app.gotoSura(index);
         if (!app.isCompact && app.pagesCount === 1) {
@@ -56,6 +68,7 @@ const Search = ({ app }) => {
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
         }
+        setkeyboard(false);
         app.gotoAya(parseInt(aya), { sel: true });
         addToSearchHistory();
         e.preventDefault();
@@ -184,14 +197,13 @@ const Search = ({ app }) => {
         );
     };
 
-    const onChangeSearchInput = e => {
-        const searchTerm = e.target.value;
-        setSearchTerm(searchTerm);
+    useEffect(() => {
         doSearch(searchTerm);
-    };
+    }, [searchTerm]);
 
     const onHistoryButtonClick = e => {
         const searchTerm = e.target.textContent;
+        setkeyboard(false);
         setSearchTerm(searchTerm);
         doSearch(searchTerm);
     };
@@ -216,13 +228,30 @@ const Search = ({ app }) => {
         setResults(sResults);
     };
 
-    const onSubmitSearch = e => {
+    const onSubmitSearch = txt => {
         let firstResult = resultsDiv.querySelector("button");
         if (firstResult) {
             firstResult.focus();
             addToSearchHistory();
         }
-        e.preventDefault();
+        setkeyboard(false);
+        // e.preventDefault();
+    };
+
+    const renderKeyboard = () => {
+        if (keyboard) {
+            return (
+                <div className="KeyboardFrame">
+                    <AKeyboard
+                        initText={searchTerm}
+                        onUpdateText={setSearchTerm}
+                        onEnter={hideKeyboard}
+                        onCancel={hideKeyboard}
+                        onEnter={onSubmitSearch}
+                    />
+                </div>
+            );
+        }
     };
 
     const formHeight = 130,
@@ -231,14 +260,8 @@ const Search = ({ app }) => {
     return (
         <>
             <div className="Title">
-                <div>
-                    <form
-                        id="SearchForm"
-                        onSubmit={onSubmitSearch}
-                        // ref={form => {
-                        // 	searchForm = form;
-                        // }}
-                    >
+                {/* <div>
+                    <form id="SearchForm" onSubmit={onSubmitSearch}>
                         <input
                             placeholder="Search suras' name or content"
                             className="SearchInput"
@@ -252,6 +275,22 @@ const Search = ({ app }) => {
                             <String id="search" />
                         </button>
                     </form>
+                </div> */}
+                <div
+                    ref={input}
+                    className={
+                        "TypingConsole" + (!searchTerm.length ? " empty" : "")
+                    }
+                    tabIndex="0"
+                >
+                    {searchTerm.length
+                        ? searchTerm
+                        : "Search suras' name or content"}
+                </div>
+                <div className="buttonsBar">
+                    <button onClick={onSubmitSearch}>
+                        <String id="search" />
+                    </button>
                 </div>
             </div>
             <div id="SearchHistory">
@@ -284,11 +323,12 @@ const Search = ({ app }) => {
             <div
                 className="PopupBody"
                 style={{
-                    maxHeight: app.appHeight - formHeight - 20 - 20 // footer + padding + formMargins
+                    height: app.appHeight - formHeight - 20 - 20 // footer + padding + formMargins
                 }}
             >
                 {renderSuras()}
                 {renderResults()}
+                {renderKeyboard()}
             </div>
         </>
     );
