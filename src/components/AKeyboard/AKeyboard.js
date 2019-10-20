@@ -174,8 +174,12 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
                                 handleKeyDown({ code: key });
                             }}
                         >
-                            <span class="KeyMainChar">{keyMap[key][0]}</span>
-                            <span class="KeyLatinChar">{keyMap[key][1]}</span>
+                            <span className="KeyMainChar">
+                                {keyMap[key][0]}
+                            </span>
+                            <span className="KeyLatinChar">
+                                {keyMap[key][1]}
+                            </span>
                         </span>
                     ))}
                 </div>

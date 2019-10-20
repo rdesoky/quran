@@ -70,7 +70,7 @@ function Pager({ match, app, player }) {
         const isTextInput =
             isInput && ["text", "number", "textarea"].includes(type);
 
-        if (app.popup === "Exercise") {
+        if (["Search", "Exercise"].includes(app.popup)) {
             return;
         }
 
