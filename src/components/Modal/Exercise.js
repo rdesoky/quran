@@ -141,7 +141,9 @@ const Exercise = ({ app, player }) => {
 
         return (
             <span>
-                {Math.floor(remainingTime) + "/" + Math.floor(duration)}
+                {"-"}
+                {/* {Math.floor(remainingTime) + "/" + Math.floor(duration)} */
+                Math.floor(remainingTime)}
             </span>
         );
     };
@@ -214,21 +216,32 @@ const Exercise = ({ app, player }) => {
 
     const onUpdateText = text => {
         setAnswerText(text);
+        //test written words ( except the last one )
+        setWrongWord(-1);
+        setMissingWords(0);
+        testAnswer(text.replace(/\S+$/, ""));
     };
 
-    const testAnswer = e => {
-        if (!answerText.trim().length) {
-            return;
-        }
+    const onFinishedTyping = () => {
+        testAnswer(answerText);
+        app.setMaskStart(app.selectStart + 1, true);
+        setCurrStep("results");
+    };
+
+    const testAnswer = answerText => {
         const normVerse = normVerseList[verse].trim();
         const normAnswerText = Utils.normalizeText(answerText).trim();
         const correctWords = normVerse.split(/\s+/);
+        if (!answerText.trim().length) {
+            setMissingWords(correctWords.length);
+            return;
+        }
         const answerWords = normAnswerText.split(/\s+/);
 
         let wrongWord = -1,
             index;
 
-        for (index = 0; index < correctWords.length; index++) {
+        for (index = 0; index < answerWords.length; index++) {
             const correctWord = correctWords[index];
             const answerWord =
                 index < answerWords.length ? answerWords[index] : "";
@@ -244,23 +257,22 @@ const Exercise = ({ app, player }) => {
 
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
-        app.setMaskStart(app.selectStart + 1, true);
-        setCurrStep("results");
     };
 
     const renderTypingTitle = () => {
+        const correct = wrongWord === -1;
         return (
             <>
                 <VerseInfo />
+                <div className={"iBlock " + (correct ? "Correct" : "Wrong")}>
+                    <Icon icon={correct ? faThumbsUp : faThumbsDown} />
+                </div>
                 <div className="buttonsBar">
-                    {/* <button onClick={testAnswer}>
-                <String id="check" />
-            </button> */}
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
-                    <button onClick={gotoRandomVerse}>
-                        <String id="new_verse" />
+                    <button onClick={answerNextVerse}>
+                        <String id="next_verse" />
                     </button>
                     <button onClick={showIntro}>
                         <String id="cancel" />
@@ -273,20 +285,28 @@ const Exercise = ({ app, player }) => {
         return (
             <>
                 <div
-                    tabIndex="0"
-                    ref={ref => {
-                        defaultButton = ref;
+                    style={{
+                        position: "relative",
+                        height: app.appHeight - 260
                     }}
-                    className={
-                        "TypingConsole" + (!answerText.length ? " empty" : "")
-                    }
                 >
-                    {answerText || <String id="writing_prompt" />}
+                    <div
+                        tabIndex="0"
+                        ref={ref => {
+                            defaultButton = ref;
+                        }}
+                        className={
+                            "TypingConsole" +
+                            (!answerText.length ? " empty" : "")
+                        }
+                    >
+                        {answerText || <String id="writing_prompt" />}
+                    </div>
                 </div>
                 <AKeyboard
                     initText={answerText}
                     onUpdateText={onUpdateText}
-                    onEnter={testAnswer}
+                    onEnter={onFinishedTyping}
                     onCancel={showIntro}
                 />
             </>
@@ -303,7 +323,7 @@ const Exercise = ({ app, player }) => {
             <>
                 <VerseInfo />
                 <div className="buttonsBar">
-                    {wrongWord === -1 ? (
+                    {isCorrect() ? (
                         //correct answer
                         <>
                             <button
@@ -484,7 +504,7 @@ const Exercise = ({ app, player }) => {
             <div className="Title">{renderTitle()}</div>
             <div
                 className="PopupBody"
-                style={{ maxHeight: app.appHeight - 85 }}
+                style={{ maxHeight: app.appHeight - 50 }}
             >
                 {renderContent()}
             </div>
@@ -504,13 +524,10 @@ const VerseInfo = AppConsumer(({ app, verse, show }) => {
     return (
         <String id="sura_names">
             {sura_names => (
-                <String
-                    id="bookmark_desc"
-                    values={{
-                        sura: sura_names.split(",")[verseInfo.sura],
-                        verse: verseInfo.aya + 1
-                    }}
-                />
+                <>
+                    {sura_names.split(",")[verseInfo.sura]} ({verseInfo.aya + 1}
+                    )
+                </>
             )}
         </String>
     );
