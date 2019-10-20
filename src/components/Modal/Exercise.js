@@ -260,13 +260,13 @@ const Exercise = ({ app, player }) => {
     };
 
     const renderTypingTitle = () => {
-        const correct = wrongWord === -1;
+        // const correct = wrongWord === -1;
         return (
             <>
                 <VerseInfo />
-                <div className={"iBlock " + (correct ? "Correct" : "Wrong")}>
+                {/* <div className={"iBlock " + (correct ? "Correct" : "Wrong")}>
                     <Icon icon={correct ? faThumbsUp : faThumbsDown} />
-                </div>
+                </div> */}
                 <div className="buttonsBar">
                     <button onClick={startReciting}>
                         <String id="start" />
@@ -282,12 +282,13 @@ const Exercise = ({ app, player }) => {
         );
     };
     const renderTypingConsole = () => {
+        const correct = wrongWord === -1;
         return (
             <>
                 <div
                     style={{
                         position: "relative",
-                        height: app.appHeight - 260
+                        height: app.appHeight - 256 //keyboard and title heights
                     }}
                 >
                     <div
@@ -297,7 +298,11 @@ const Exercise = ({ app, player }) => {
                         }}
                         className={
                             "TypingConsole" +
-                            (!answerText.length ? " empty" : "")
+                            (!answerText.length
+                                ? " empty"
+                                : correct
+                                ? " Correct"
+                                : " Wrong")
                         }
                     >
                         {answerText || <String id="writing_prompt" />}
