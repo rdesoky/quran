@@ -36,6 +36,9 @@ function Pager({ match, app, player }) {
         e.stopPropagation();
     };
 
+    //ComponentDidMount
+    useEffect(() => {}, []);
+
     //ComponentDidUpdate
     useEffect(() => {
         page = match.params.page;

@@ -75,7 +75,8 @@
 
     .PageHeader {
         display: flex;
-        // align-items: center;
+        align-items: center;
+        justify-content: center;
         height: 50px;
         color: white;
         position: relative;
@@ -92,9 +93,9 @@
             }
 
             position: relative;
-            display: inline-block;
-            height: 25px;
-            text-align: initial;
+            // display: inline-block;
+            // height: 25px;
+            text-align: center;
             // overflow: auto;
             // white-space: nowrap;
             button {
@@ -105,15 +106,19 @@
                 // border-radius: 12px;
                 // margin: 0 1px;
                 &:hover {
-                    background-color: #666;
+                    background-color: #444;
                 }
             }
 
             .PageHeaderSection {
                 display: inline-block;
                 white-space: nowrap;
-                background-color: #444;
+                background-color: #666;
                 border-radius: 5px;
+                height: 25px;
+                > * {
+                    height: 100%;
+                }
             }
         }
 
