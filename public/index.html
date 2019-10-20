@@ -20,10 +20,23 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
         <title>Quran - muslim-web.com</title>
+        <style>
+            .SplashScreen {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background-position: center;
+                background-size: contain;
+                background-image: url(%PUBLIC_URL%/images/quran.png);
+                background-repeat: no-repeat;
+            }
+        </style>
     </head>
     <body dir="rtl">
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
+        <div id="root"><div class="SplashScreen"></div></div>
         <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

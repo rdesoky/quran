@@ -113,9 +113,9 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
     const handleKeyDown = e => {
         const { code, ctrlKey } = e;
         setTypedChar(code);
-        setTimeout(() => {
-            setTypedChar("");
-        }, 300);
+        // setTimeout(() => {
+        //     setTypedChar("");
+        // }, 300);
 
         switch (code) {
             case "Escape":
