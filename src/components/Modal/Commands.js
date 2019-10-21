@@ -148,9 +148,9 @@ const CommandButton = ThemeConsumer(
                         case "Fullscreen":
                             Utils.requestFullScreen();
                             break;
-                        case "Bookmarks":
-                            app.addBookmark();
-                            break;
+                        // case "Bookmarks":
+                        //     app.addBookmark();
+                        //     break;
                         default:
                             app.setPopup(command);
                             return;

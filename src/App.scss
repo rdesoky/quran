@@ -97,3 +97,13 @@ hr {
 .flipHorizontal {
     transform: scaleX(-1);
 }
+
+.VerseInfo {
+    display: inline-block;
+    font-size: 13px;
+    .VerseInfoList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

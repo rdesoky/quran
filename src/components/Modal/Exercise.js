@@ -33,13 +33,23 @@ const VerseInfo = AppConsumer(({ app, verse, show }) => {
     const verseInfo = QData.ayaIdInfo(verse);
 
     return (
-        <String id="sura_names">
-            {sura_names => (
-                <>
-                    {sura_names.split(",")[verseInfo.sura]}:{verseInfo.aya + 1}
-                </>
-            )}
-        </String>
+        <div className="VerseInfo">
+            <div className="VerseInfoList">
+                <div>
+                    <String id="sura_names">
+                        {sura_names => (
+                            <>{sura_names.split(",")[verseInfo.sura]}</>
+                        )}
+                    </String>
+                </div>
+                <div>
+                    <String
+                        id="verse_num"
+                        values={{ num: verseInfo.aya + 1 }}
+                    />
+                </div>
+            </div>
+        </div>
     );
 });
 
