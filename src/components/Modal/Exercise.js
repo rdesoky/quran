@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
-import { PlayerConsumer, AudioState } from "./../../context/Player";
+import {
+    PlayerConsumer,
+    AudioState,
+    AudioRepeat
+} from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
@@ -10,6 +14,14 @@ import QData from "./../../services/QData";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
+
+const Step = {
+    unknown: -1,
+    intro: 0,
+    reciting: 1,
+    typing: 2,
+    results: 3
+};
 
 const VerseInfo = AppConsumer(({ app, verse, show }) => {
     if (verse === undefined) {
@@ -40,7 +52,7 @@ const VerseText = AppConsumer(({ verse, app }) => {
 });
 
 const Exercise = ({ app, player }) => {
-    const [currStep, setCurrStep] = useState("");
+    const [currStep, setCurrStep] = useState(Step.unknown);
     const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
@@ -62,14 +74,14 @@ const Exercise = ({ app, player }) => {
         const new_verse = Math.floor(Math.random() * verseList.length);
         app.gotoAya(new_verse, { sel: true });
         app.setMaskStart(new_verse + 1, true);
-        setCurrStep("intro");
-        if (currStep === "intro" && defaultButton) {
+        setCurrStep(Step.intro);
+        if (currStep === Step.intro && defaultButton) {
             defaultButton.focus();
         }
     };
 
     const startReciting = e => {
-        setCurrStep("reciting");
+        setCurrStep(Step.reciting);
         app.setMaskStart(verse + 1, true);
     };
 
@@ -90,7 +102,7 @@ const Exercise = ({ app, player }) => {
             player.stop(true);
         });
         // stopCounter();
-        setCurrStep("typing");
+        setCurrStep(Step.typing);
     };
 
     let defaultButton = null;
@@ -101,10 +113,10 @@ const Exercise = ({ app, player }) => {
     }, [app.selectStart]);
 
     useEffect(() => {
-        const savedRepeat = player.setRepeat(5); //single verse
+        const savedRepeat = player.setRepeat(AudioRepeat.verse);
         const savedFollowPlayer = player.setFollowPlayer(true);
         player.stop(true);
-        setCurrStep("intro");
+        setCurrStep(Step.intro);
         return () => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);
@@ -119,18 +131,18 @@ const Exercise = ({ app, player }) => {
             defaultButton.focus();
         }
         switch (currStep) {
-            case "typing":
+            case Step.typing:
                 app.setMaskStart(verse);
                 app.setModalPopup(); //block outside selection
                 break;
-            case "reciting":
+            case Step.reciting:
                 player.play();
                 app.setModalPopup(); //block outside selection
                 break;
-            case "results":
+            case Step.results:
                 app.setModalPopup(); //block outside selection
                 break;
-            case "intro":
+            case Step.intro:
                 // app.setMaskStart(verse + 1, true);
                 app.hideMask();
             default:
@@ -142,12 +154,12 @@ const Exercise = ({ app, player }) => {
     useEffect(() => {
         if (player.audioState === AudioState.stopped) {
             stopCounter();
-            if (["reciting"].includes(currStep)) {
+            if ([Step.reciting].includes(currStep)) {
                 startAnswer();
             }
         }
         if (
-            ["typing", "intro", "results"].includes(currStep) &&
+            [Step.typing, Step.intro, Step.results].includes(currStep) &&
             player.audioState === AudioState.playing
         ) {
             app.gotoAya(player.playingAya, { sel: true });
@@ -181,7 +193,7 @@ const Exercise = ({ app, player }) => {
     };
 
     const showIntro = () => {
-        setCurrStep("intro");
+        setCurrStep(Step.intro);
     };
 
     const answerNextVerse = () => {
@@ -192,16 +204,16 @@ const Exercise = ({ app, player }) => {
 
     const renderTitle = () => {
         switch (currStep) {
-            case "intro":
+            case Step.intro:
                 return renderIntroTitle();
 
-            case "typing":
+            case Step.typing:
                 return renderTypingTitle();
 
-            case "results":
+            case Step.results:
                 return renderResultsTitle();
 
-            case "reciting":
+            case Step.reciting:
                 return renderRecitingTitle();
         }
     };
@@ -258,7 +270,7 @@ const Exercise = ({ app, player }) => {
     const onFinishedTyping = () => {
         testAnswer(answerText);
         app.setMaskStart(app.selectStart + 1, true);
-        setCurrStep("results");
+        setCurrStep(Step.results);
     };
 
     const testAnswer = answerText => {
@@ -305,7 +317,7 @@ const Exercise = ({ app, player }) => {
                         <String id="start" />
                     </button>
                     <button onClick={answerNextVerse}>
-                        <String id="next_verse" />
+                        <String id="type_next" />
                     </button>
                     <button onClick={showIntro}>
                         <String id="cancel" />
@@ -370,7 +382,7 @@ const Exercise = ({ app, player }) => {
                                 }}
                                 onClick={answerNextVerse}
                             >
-                                <String id="next_verse" />
+                                <String id="type_next" />
                             </button>
                             <button onClick={gotoRandomVerse}>
                                 <String id="new_verse" />
@@ -466,7 +478,7 @@ const Exercise = ({ app, player }) => {
                             <String id="start" />
                         </button>
                         {/* <button onClick={answerNextVerse}>
-                            <String id="next_verse" />
+                            <String id="type_next" />
                         </button> */}
                     </div>
                 ) : (
@@ -501,7 +513,7 @@ const Exercise = ({ app, player }) => {
                     <button
                         onClick={e => {
                             player.stop(true);
-                            setCurrStep("intro");
+                            setCurrStep(Step.intro);
                         }}
                     >
                         <String id="cancel" />
@@ -529,13 +541,13 @@ const Exercise = ({ app, player }) => {
 
     const renderContent = () => {
         switch (currStep) {
-            case "intro":
+            case Step.intro:
                 return renderIntro();
-            case "reciting":
+            case Step.reciting:
                 return renderReciting();
-            case "typing":
+            case Step.typing:
                 return renderTypingConsole();
-            case "results":
+            case Step.results:
                 return renderResults();
         }
     };

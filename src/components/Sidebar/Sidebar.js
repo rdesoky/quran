@@ -10,7 +10,7 @@ import {
     faStopCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
-import { PlayerConsumer, AudioState } from "../../context/Player";
+import { PlayerConsumer, AudioState, AudioRepeat } from "../../context/Player";
 import { ThemeConsumer } from "../../context/Theme";
 import { CommandIcons } from "./../Modal/Commands";
 import Utils from "../../services/utils";
@@ -86,10 +86,13 @@ function Sidebar({ app, player, themeContext }) {
     };
 
     const play = e => {
+        if (player.repeat === AudioRepeat.verse && app.popup !== "Exercise") {
+            player.setRepeat(AudioRepeat.noStop);
+        }
         player.play();
     };
     const stop = e => {
-        player.stop();
+        player.stop(true);
     };
     const retry = e => {
         player.stop();
