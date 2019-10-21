@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import firebase from "firebase";
 import { AppConsumer } from "../../context/App";
+import { VerseInfo } from "./Exercise";
 import QData from "../../services/QData";
 
 const Bookmarks = ({ app }) => {
@@ -35,7 +36,10 @@ const Bookmarks = ({ app }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                {renderVerse()}
+                <div>
+                    <VerseInfo verse={app.selectStart} />
+                </div>
+                <h3>{renderVerse()}</h3>
                 <div className="ButtonsBar">
                     <button onClick={toggleBookmark}>
                         <String id="bookmark" />
