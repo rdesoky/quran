@@ -216,8 +216,8 @@ const Exercise = ({ app, player }) => {
     };
 
     const reciteNextVerse = () => {
-        app.setMaskStart(verse + 1);
         app.gotoAya(verse + 1);
+        app.setMaskStart(verse + 2);
         setCurrStep(Step.reciting);
     };
 
