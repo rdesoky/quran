@@ -295,9 +295,11 @@ const Search = ({ app }) => {
                     tabIndex="0"
                     onClick={showKeyboard}
                 >
-                    {searchTerm.length
-                        ? searchTerm
-                        : "Search suras' name or content"}
+                    {searchTerm.length ? (
+                        searchTerm
+                    ) : (
+                        <String id="search_prompt" />
+                    )}
                 </div>
                 <div className="ButtonsBar">
                     <button onClick={onSubmitSearch}>
