@@ -12,6 +12,15 @@ const AudioState = {
     error: 4
 };
 
+const AudioRepeat = {
+    noStop: 0,
+    selection: 1,
+    page: 2,
+    sura: 3,
+    part: 4,
+    verse: 5
+};
+
 const PlayerContextState = {
     visible: false,
     audioState: AudioState.stopped,
@@ -53,7 +62,10 @@ class PlayerProvider extends Component {
         }
 
         switch (this.state.repeat) {
-            case 1: //selection
+            case AudioRepeat.verse: //single aya
+                this.stop();
+                return playingAya;
+            case AudioRepeat.selection: //selection
                 playingAya += offset;
                 const selectedRange = this.props.app.selectedRange();
                 if (
@@ -63,7 +75,7 @@ class PlayerProvider extends Component {
                     playingAya = selectedRange.start;
                 }
                 break;
-            case 2: //page
+            case AudioRepeat.page: //page
                 const currPage = QData.ayaIdPage(playingAya);
                 const nextPage = QData.ayaIdPage(playingAya + offset);
                 if (nextPage != currPage) {
@@ -72,7 +84,7 @@ class PlayerProvider extends Component {
                     playingAya += offset;
                 }
                 break;
-            case 3: //sura
+            case AudioRepeat.sura: //sura
                 const currSura = QData.ayaIdInfo(playingAya).sura;
                 const nextSura = QData.ayaIdInfo(playingAya + offset).sura;
                 if (currSura != nextSura) {
@@ -81,7 +93,7 @@ class PlayerProvider extends Component {
                     playingAya += offset;
                 }
                 break;
-            case 4: //part
+            case AudioRepeat.part: //part
                 const currPart = QData.ayaIdPart(playingAya);
                 const nextPart = QData.ayaIdPart(playingAya + offset);
                 if (currPart != nextPart) {
@@ -90,11 +102,8 @@ class PlayerProvider extends Component {
                     playingAya += offset;
                 }
                 break;
-            case 5: //single aya
-                this.stop();
-                return playingAya;
             default:
-                //0 continouse
+                //.noStop
                 playingAya += offset;
         }
 
@@ -303,4 +312,4 @@ const PlayerConsumer = Component =>
     };
 
 export default AppConsumer(PlayerProvider);
-export { PlayerConsumer, AudioState };
+export { PlayerConsumer, AudioState, AudioRepeat };
