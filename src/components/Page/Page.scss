@@ -80,9 +80,9 @@
         height: 50px;
         color: white;
         position: relative;
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: #333;
         .Active & {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: black;
         }
         .narrow & {
             padding-left: 50px;

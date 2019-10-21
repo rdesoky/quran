@@ -12,64 +12,9 @@ import {
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState, AudioRepeat } from "../../context/Player";
 import { ThemeConsumer } from "../../context/Theme";
-import { CommandIcons } from "./../Modal/Commands";
-import Utils from "../../services/utils";
+import { CommandButton } from "./../Modal/Commands";
 
 function Sidebar({ app, player, themeContext }) {
-    const { history } = app;
-    const onClick = (e, id) => {
-        switch (id) {
-            case "Theme":
-                toggleTheme();
-                break;
-            case "Mask":
-                app.setMaskStart();
-                app.closePopup();
-                break;
-            case "Copy":
-                Utils.copy2Clipboard(app.getSelectedText());
-                break;
-            case "Share":
-                break;
-            case "Fullscreen":
-                Utils.requestFullScreen();
-                return;
-            case "Play":
-                if (player.audioState === AudioState.playing) {
-                    player.pause();
-                } else if (player.audioState === AudioState.paused) {
-                    player.resume();
-                } else {
-                    player.play();
-                }
-                break;
-            // case "Bookmarks":
-            //     app.addBookmark();
-            //     break;
-            case "Tafseer":
-            //app.selectAya();
-            default:
-                if (app.popup == id) {
-                    app.closePopup();
-                } else {
-                    app.setPopup(id);
-                }
-        }
-        app.setShowMenu(false);
-        // app.pushRecentCommand(id);
-        e.preventDefault();
-    };
-
-    const toggleTheme = e => {
-        themeContext.toggleTheme();
-        // app.setShowMenu(false);
-        // app.pushRecentCommand("Theme");
-    };
-
-    // useEffect(() => {
-    // 	updateShowButtons(!app.isNarrow);
-    // }, [app.isNarrow]);
-
     const toggleButtons = () => {
         app.toggleShowMenu();
     };
@@ -153,23 +98,7 @@ function Sidebar({ app, player, themeContext }) {
             player.audioState === AudioState.stopped ? (
                 ""
             ) : (
-                <button
-                    onClick={showPlayer}
-                    className={
-                        "ReciterSideButton" +
-                        (player.audioState === AudioState.playing
-                            ? " blinking"
-                            : "")
-                    }
-                    style={{
-                        backgroundImage:
-                            "url(" +
-                            process.env.PUBLIC_URL +
-                            "/images/" +
-                            player.reciter +
-                            ".jpg)"
-                    }}
-                />
+                <CommandButton command="AudioPlayer" showLabel={false} />
             );
 
         return (
@@ -180,15 +109,6 @@ function Sidebar({ app, player, themeContext }) {
         );
     };
 
-    const getIcon = commandId => {
-        switch (commandId) {
-            case "Mask":
-                return CommandIcons[app.maskStart === -1 ? "Mask" : "MaskOn"];
-            default:
-                return CommandIcons[commandId];
-        }
-    };
-
     return (
         <div
             className={"Sidebar" + (app.isNarrow ? " narrow" : "")}
@@ -196,14 +116,11 @@ function Sidebar({ app, player, themeContext }) {
                 bottom: app.showMenu || !app.isNarrow ? 0 : "auto"
             }}
         >
-            <button
-                onClick={toggleButtons}
+            <CommandButton
+                command="ToggleButton"
+                showLabel={false}
                 style={{ display: app.isNarrow ? "block" : "none", height: 50 }}
-            >
-                <Icon
-                    icon={app.showMenu ? faAngleDoubleUp : faAngleDoubleDown}
-                />
-            </button>
+            />
             <div
                 className="ButtonsList"
                 style={{
@@ -211,40 +128,27 @@ function Sidebar({ app, player, themeContext }) {
                 }}
             >
                 <div>
-                    <button onClick={e => onClick(e, "Commands")}>
-                        <Icon icon={getIcon("Commands")} />
-                    </button>
+                    <CommandButton command="Commands" showLabel={false} />
                 </div>
-                {/* <button onClick={e => onClick(e, "Fullscreen")}>
-					<FontAwesomeIcon icon={CommandIcons["Fullscreen"]} />
-				</button> */}
                 {renderPlayer()}
                 <div id="RecentCommands" className="SidebarSection">
                     {app.recentCommands
                         .filter(c => c != null)
                         .map((command, index) => {
                             return (
-                                <button
-                                    key={command}
-                                    onClick={e => onClick(e, command)}
-                                    title={command}
+                                <CommandButton
                                     command={command}
+                                    key={command}
+                                    showLabel={false}
                                     style={{
                                         top: index * 50
                                     }}
-                                >
-                                    <Icon icon={getIcon(command)} />
-                                </button>
+                                />
                             );
                         })}
                 </div>
                 <div id="SidebarFooter" className="SidebarSection">
-                    <button onClick={e => onClick(e, "Profile")}>
-                        <Icon icon={getIcon("Profile")} />
-                    </button>
-                    {/* <button onClick={e => onClick(e, "Settings")}>
-                        <Icon icon={getIcon("Settings")} />
-                    </button> */}
+                    <CommandButton command="Profile" showLabel={false} />
                 </div>
             </div>
         </div>
