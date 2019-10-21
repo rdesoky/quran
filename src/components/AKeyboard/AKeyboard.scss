@@ -24,19 +24,27 @@
                 flex-grow: 9;
             }
             &.Enter {
-                border-color: green;
+                border-color: lime;
+                color: green;
             }
             &.Backspace,
             &.ClearAll,
             &.ClearWord {
-                border-color: orangered;
                 svg {
                     transform: scaleX(-1);
                 }
             }
+            &.ClearAll {
+                border-color: red;
+                color: red;
+            }
+            &.ClearWord {
+                color: orange;
+                border-color: orange;
+            }
             &.KeyJ,
             &.KeyF {
-                border-color: goldenrod;
+                border-color: cyan;
             }
             .KeyLatinChar {
                 position: absolute;

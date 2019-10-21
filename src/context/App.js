@@ -75,9 +75,14 @@ class AppProvider extends Component {
 
     pushRecentCommand = command => {
         if (
-            ["Commands", "Play", "AudioPlayer", "Settings", "Profile"].includes(
-                command
-            )
+            [
+                "Commands",
+                "Play",
+                "AudioPlayer",
+                "Settings",
+                "Profile",
+                "ToggleButton"
+            ].includes(command)
         ) {
             return;
         }

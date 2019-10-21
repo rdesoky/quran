@@ -40,9 +40,9 @@
     position: absolute;
     right: 0;
     padding: 0 15px 0 15px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.9);
     #ExercisePopup & {
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: rgba(0, 0, 0, 0.95);
     }
     color: white;
     box-sizing: border-box;
@@ -180,13 +180,26 @@
     .CommandsList {
         text-align: center;
         direction: ltr;
-        // padding: 0 25px;
+        padding: 0 0 25px;
         button {
             width: 80px;
             height: 80px;
+            position: relative;
             font-size: 25px;
+            // margin: 1px;
+            // background-color: #444;
             .CommandLabel {
                 font-size: 12px;
+            }
+            .ReciterIcon {
+                display: inline-block;
+                border-radius: 6px;
+                height: 34px;
+                width: 34px;
+                margin-bottom: -12px;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
             }
         }
     }

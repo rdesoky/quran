@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal";
 import { AppConsumer } from "../../context/App";
-import { PlayerConsumer } from "../../context/Player";
+import { PlayerConsumer, AudioState } from "../../context/Player";
 import { ThemeConsumer } from "../../context/Theme";
-import { FormattedMessage } from "react-intl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FormattedMessage as String } from "react-intl";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faTh,
     faLocationArrow,
@@ -25,7 +24,9 @@ import {
     faRunning,
     faExpand,
     faBookmark,
-    faEye
+    faEye,
+    faAngleDoubleDown,
+    faAngleDoubleUp
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 
@@ -48,77 +49,139 @@ export const CommandIcons = {
     Tafseer: faQuran,
     Exercise: faRunning,
     Fullscreen: faExpand,
-    Bookmarks: faBookmark
+    Bookmarks: faBookmark,
+    ToggleButton: faAngleDoubleDown
 };
 
-const Commands = ({ app, themeContext, player }) => {
+const getIcon = (commandId, app) => {
+    switch (commandId) {
+        case "Mask":
+            return CommandIcons[app.maskStart === -1 ? "Mask" : "MaskOn"];
+        case "ToggleButton":
+            return app.showMenu ? faAngleDoubleUp : faAngleDoubleDown;
+        default:
+            return CommandIcons[commandId];
+    }
+};
+
+const commandIcon = (command, app, player) => {
+    switch (command) {
+        case "AudioPlayer":
+            return (
+                <div
+                    className={
+                        "ReciterIcon" +
+                        (player.audioState === AudioState.playing
+                            ? " blinking"
+                            : "")
+                    }
+                    style={{
+                        backgroundImage:
+                            "url(" +
+                            process.env.PUBLIC_URL +
+                            "/images/" +
+                            player.reciter +
+                            ".jpg)"
+                    }}
+                />
+            );
+
+        default:
+            return <Icon icon={getIcon(command, app)} />;
+    }
+};
+
+const Commands = () => {
     const list = [
         "Index",
-        // "Fullscreen",
+        "AudioPlayer",
         "Search",
+        "Exercise",
+        "Tafseer",
         "Mask",
         "Goto",
+        "Theme",
         "Bookmarks",
-        "AudioPlayer",
-        "Tafseer",
         "Copy",
         "Share",
         "Favorites",
-        "Theme",
         "Profile",
-        "Exercise",
         "Settings",
         "Help"
+        // "Fullscreen",
     ];
-
-    const runCommand = command => {
-        switch (command) {
-            case "Theme":
-                themeContext.toggleTheme();
-                break;
-            case "Mask":
-                app.setMaskStart();
-                break;
-            case "Copy":
-                Utils.copy2Clipboard(app.getSelectedText());
-                break;
-            case "Share":
-                break;
-            case "Fullscreen":
-                Utils.requestFullScreen();
-                break;
-            case "Bookmarks":
-                app.addBookmark();
-                break;
-            // case "Play":
-            // 	player.show();
-            // 	break;
-            default:
-                app.setPopup(command);
-                return;
-        }
-        app.pushRecentCommand(command);
-        //app.closePopup();
-    };
 
     return (
         <>
             <div className="Title">
-                <FormattedMessage id="commands" />
+                <String id="commands" />
             </div>
             <div className="CommandsList">
                 {list.map(command => (
-                    <button key={command} onClick={e => runCommand(command)}>
-                        <FontAwesomeIcon icon={CommandIcons[command]} />
-                        <br />
-                        <span className="CommandLabel">
-                            <FormattedMessage id={command.toLowerCase()} />
-                        </span>
-                    </button>
+                    <CommandButton key={command} command={command} />
                 ))}
             </div>
         </>
     );
 };
 
-export default ThemeConsumer(AppConsumer(PlayerConsumer(Commands)));
+const CommandButton = ThemeConsumer(
+    AppConsumer(
+        PlayerConsumer(
+            ({ app, player, command, themeContext, showLabel, style }) => {
+                const runCommand = command => {
+                    switch (command) {
+                        case "ToggleButton":
+                            app.toggleShowMenu();
+                            return;
+                        case "Theme":
+                            themeContext.toggleTheme();
+                            break;
+                        case "Mask":
+                            app.setMaskStart();
+                            break;
+                        case "Copy":
+                            Utils.copy2Clipboard(app.getSelectedText());
+                            break;
+                        case "Share":
+                            break;
+                        case "Fullscreen":
+                            Utils.requestFullScreen();
+                            break;
+                        case "Bookmarks":
+                            app.addBookmark();
+                            break;
+                        default:
+                            app.setPopup(command);
+                            return;
+                    }
+                    app.pushRecentCommand(command);
+                    app.closePopup();
+                };
+
+                const renderLabel = () => {
+                    if (showLabel !== false) {
+                        return (
+                            <>
+                                <br />
+                                <span className="CommandLabel">
+                                    <String id={command.toLowerCase()} />
+                                </span>
+                            </>
+                        );
+                    }
+                };
+
+                return (
+                    <button onClick={e => runCommand(command)} style={style}>
+                        {commandIcon(command, app, player)}
+                        {renderLabel()}
+                    </button>
+                );
+            }
+        )
+    )
+);
+
+export default Commands;
+export { commandIcon, CommandButton };
