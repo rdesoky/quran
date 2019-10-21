@@ -57,7 +57,7 @@ const Exercise = ({ app, player }) => {
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
-    const [answerText, setAnswerText] = useState("");
+    const [writtenText, setAnswerText] = useState("");
     const [wrongWord, setWrongWord] = useState(-1);
     const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
@@ -112,17 +112,25 @@ const Exercise = ({ app, player }) => {
         setAnswerText("");
     }, [app.selectStart]);
 
+    const handleKeyDown = ({ code }) => {
+        if (code == "Escape") {
+            showIntro();
+        }
+    };
+
     useEffect(() => {
         const savedRepeat = player.setRepeat(AudioRepeat.verse);
         const savedFollowPlayer = player.setFollowPlayer(true);
         player.stop(true);
         setCurrStep(Step.intro);
+        document.addEventListener("keydown", handleKeyDown);
         return () => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);
             player.stop(true);
             app.setModalPopup(false);
             app.hideMask();
+            document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
@@ -192,14 +200,24 @@ const Exercise = ({ app, player }) => {
         );
     };
 
-    const showIntro = () => {
+    const showIntro = e => {
+        player.stop(true);
         setCurrStep(Step.intro);
     };
 
-    const answerNextVerse = () => {
+    const reciteNextVerse = () => {
+        app.setMaskStart(verse + 1);
+        app.gotoAya(verse + 1);
+        setCurrStep(Step.reciting);
+    };
+
+    const typeNextVerse = () => {
         app.setMaskStart(verse + 1);
         app.gotoAya(verse + 1);
         setTimeout(startAnswer, 1);
+        if (defaultButton) {
+            defaultButton.focus();
+        }
     };
 
     const renderTitle = () => {
@@ -263,12 +281,12 @@ const Exercise = ({ app, player }) => {
         //test written words ( except the last one )
         setWrongWord(-1);
         setMissingWords(0);
-        testAnswer(text.replace(/\S+$/, ""));
+        testAnswer(text);
         // forceUpdate();
     };
 
     const onFinishedTyping = () => {
-        testAnswer(answerText);
+        testAnswer(writtenText);
         app.setMaskStart(app.selectStart + 1, true);
         setCurrStep(Step.results);
     };
@@ -316,9 +334,16 @@ const Exercise = ({ app, player }) => {
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
-                    <button onClick={answerNextVerse}>
-                        <String id="type_next" />
-                    </button>
+                    {writtenText.trim().length && isCorrect() ? (
+                        <button onClick={typeNextVerse}>
+                            <span class="Correct">
+                                <Icon icon={faThumbsUp} />
+                            </span>{" "}
+                            <String id="type_next" />
+                        </button>
+                    ) : (
+                        ""
+                    )}
                     <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
@@ -327,7 +352,7 @@ const Exercise = ({ app, player }) => {
         );
     };
     const renderTypingConsole = () => {
-        const correct = wrongWord === -1;
+        const correct = isTypingCorrect();
         return (
             <>
                 <div
@@ -343,18 +368,18 @@ const Exercise = ({ app, player }) => {
                         }}
                         className={
                             "TypingConsole" +
-                            (!answerText.length
+                            (!writtenText.length
                                 ? " empty"
                                 : correct
                                 ? " Correct"
                                 : " Wrong")
                         }
                     >
-                        {answerText || <String id="writing_prompt" />}
+                        {writtenText || <String id="writing_prompt" />}
                     </div>
                 </div>
                 <AKeyboard
-                    initText={answerText}
+                    initText={writtenText}
                     onUpdateText={onUpdateText}
                     onEnter={onFinishedTyping}
                     onCancel={showIntro}
@@ -380,12 +405,12 @@ const Exercise = ({ app, player }) => {
                                 ref={ref => {
                                     defaultButton = ref;
                                 }}
-                                onClick={answerNextVerse}
+                                onClick={typeNextVerse}
                             >
                                 <String id="type_next" />
                             </button>
-                            <button onClick={gotoRandomVerse}>
-                                <String id="new_verse" />
+                            <button onClick={reciteNextVerse}>
+                                <String id="recite_next" />
                             </button>
                         </>
                     ) : (
@@ -412,9 +437,11 @@ const Exercise = ({ app, player }) => {
     };
 
     const isCorrect = () => wrongWord === -1 && missingWords === 0;
+    const isTypingCorrect = () =>
+        wrongWord === -1 || wrongWord == writtenText.split(/\s+/).length - 1;
 
     const renderResults = () => {
-        const answerWords = answerText.trim().split(/\s+/);
+        const answerWords = writtenText.trim().split(/\s+/);
 
         const renderMessage = () => {
             if (isCorrect()) {
@@ -477,9 +504,9 @@ const Exercise = ({ app, player }) => {
                         <button onClick={redoReciting}>
                             <String id="start" />
                         </button>
-                        {/* <button onClick={answerNextVerse}>
-                            <String id="type_next" />
-                        </button> */}
+                        <button onClick={gotoRandomVerse}>
+                            <String id="new_verse" />
+                        </button>
                     </div>
                 ) : (
                     <>
@@ -510,12 +537,7 @@ const Exercise = ({ app, player }) => {
                     {/* <button onClick={gotoRandomVerse}>
                         <String id="new_verse" />
                     </button> */}
-                    <button
-                        onClick={e => {
-                            player.stop(true);
-                            setCurrStep(Step.intro);
-                        }}
-                    >
+                    <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
                 </div>
