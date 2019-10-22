@@ -196,18 +196,55 @@ const Exercise = ({ app, player }) => {
         }
     }, [player.audioState]);
 
-    const renderCounter = () => {
-        if (!counterInterval) {
-            return <span>&nbsp;</span>;
+    const renderCounter = (sqSize, strokeWidth, progress, target) => {
+        if (counterInterval) {
+            // SVG centers the stroke width on the radius, subtract out so circle fits in square
+            const radius = (sqSize - strokeWidth) / 2;
+            // Enclose cicle in a circumscribing square
+            // const viewBox = `0 0 ${sqSize} ${sqSize}`;
+            // Arc length at 100% coverage is the circle circumference
+            const dashArray = radius * Math.PI * 2;
+            // Scale 100% coverage overlay with the actual percent
+            const percentage = progress / target;
+            const dashOffset = dashArray - dashArray * percentage;
+            return (
+                <svg
+                    width={sqSize}
+                    height={sqSize}
+                    viewBox={`0 0 ${sqSize} ${sqSize}`}
+                >
+                    <circle
+                        className="circle-background"
+                        cx={sqSize / 2}
+                        cy={sqSize / 2}
+                        r={radius}
+                        strokeWidth={`${strokeWidth}px`}
+                    />
+                    <circle
+                        className="circle-progress"
+                        cx={sqSize / 2}
+                        cy={sqSize / 2}
+                        r={radius}
+                        strokeWidth={`${strokeWidth}px`}
+                        // Start progress marker at 12 O'Clock
+                        transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
+                        style={{
+                            strokeDasharray: dashArray,
+                            strokeDashoffset: dashOffset
+                        }}
+                    />
+                    <text
+                        className="circle-text"
+                        x="50%"
+                        y="50%"
+                        dy=".3em"
+                        textAnchor="middle"
+                    >
+                        {`${progress}`}
+                    </text>
+                </svg>
+            );
         }
-
-        return (
-            <span>
-                {"-"}
-                {/* {Math.floor(remainingTime) + "/" + Math.floor(duration)} */
-                Math.floor(remainingTime)}
-            </span>
-        );
     };
 
     const showIntro = e => {
@@ -216,8 +253,8 @@ const Exercise = ({ app, player }) => {
     };
 
     const reciteNextVerse = () => {
-        app.gotoAya(verse + 1);
-        app.setMaskStart(verse + 2);
+        app.gotoAya(verse + 1, { sel: true });
+        app.setMaskStart(verse + 2, true);
         setCurrStep(Step.reciting);
     };
 
@@ -534,7 +571,9 @@ const Exercise = ({ app, player }) => {
         return (
             <>
                 <VerseInfo show={isNarrowLayout()} />
-                <span id="TrackDuration">{renderCounter()}</span>
+                <span id="TrackDuration">
+                    {renderCounter(32, 3, Math.floor(remainingTime), duration)}
+                </span>
                 <div className="ButtonsBar">
                     <button
                         onClick={startAnswer}

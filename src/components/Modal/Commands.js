@@ -157,6 +157,7 @@ const CommandButton = ThemeConsumer(
                     }
                     app.pushRecentCommand(command);
                     app.closePopup();
+                    app.setShowMenu(false);
                 };
 
                 const renderLabel = () => {

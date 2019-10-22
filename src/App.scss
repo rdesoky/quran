@@ -107,3 +107,25 @@ hr {
         align-items: center;
     }
 }
+
+.circle-background,
+.circle-progress {
+    fill: none;
+}
+
+.circle-background {
+    stroke: #666;
+}
+
+.circle-progress {
+    stroke: yellowgreen;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.circle-text {
+    font-size: 10px;
+    font-weight: bold;
+    fill: yellowgreen;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
