@@ -434,7 +434,7 @@ class AppProvider extends Component {
     updateAppSizes({ width, height }) {
         this.setState({ appWidth: width, appHeight: height });
         const pagesCount = this.calcPagesCount({ width, height });
-        const isNarrow = width / height < 0.7;
+        const isNarrow = width / height < 0.8;
         const isWide = width / height > 1.8;
         const isCompact = !isWide && pagesCount == 1 && width / height > 1.2;
         const isScrollable = width / height > 2.7;

@@ -35,21 +35,26 @@ function Sidebar({ app, player, themeContext }) {
             player.setRepeat(AudioRepeat.noStop);
         }
         player.play();
+        app.setShowMenu(false);
     };
     const stop = e => {
         player.stop(true);
+        app.setShowMenu(false);
     };
     const retry = e => {
         player.stop();
         setTimeout(() => {
             player.play();
         }, 500);
+        app.setShowMenu(false);
     };
     const resume = e => {
         player.resume();
+        app.setShowMenu(false);
     };
     const pause = e => {
         player.pause();
+        app.setShowMenu(false);
     };
 
     const renderPlayer = () => {

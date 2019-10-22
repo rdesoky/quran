@@ -343,10 +343,10 @@
         font-size: 25px;
     }
     .Correct {
-        color: lime;
+        color: greenyellow;
     }
     .Wrong {
-        color: rgb(255, 28, 58);
+        color: #f33;
     }
 }
 
@@ -376,4 +376,8 @@
 
 .ContentTitle {
     margin-top: 10px;
+}
+
+#TrackDuration {
+    display: flex;
 }
