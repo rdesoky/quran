@@ -19,17 +19,6 @@ function Sidebar({ app, player, themeContext }) {
         app.toggleShowMenu();
     };
 
-    const showPlayer = () => {
-        if (player.playingAya !== -1 && player.repeat !== 1) {
-            app.gotoAya(player.playingAya, { sel: false, replace: false });
-        }
-        if (app.popup === "AudioPlayer") {
-            app.closePopup();
-        } else {
-            player.show();
-        }
-    };
-
     const play = e => {
         if (player.repeat === AudioRepeat.verse && app.popup !== "Exercise") {
             player.setRepeat(AudioRepeat.noStop);
@@ -37,6 +26,7 @@ function Sidebar({ app, player, themeContext }) {
         player.play();
         app.setShowMenu(false);
     };
+
     const stop = e => {
         player.stop(true);
         app.setShowMenu(false);
@@ -46,7 +36,7 @@ function Sidebar({ app, player, themeContext }) {
         setTimeout(() => {
             player.play();
         }, 500);
-        app.setShowMenu(false);
+        // app.setShowMenu(false);
     };
     const resume = e => {
         player.resume();
@@ -54,7 +44,7 @@ function Sidebar({ app, player, themeContext }) {
     };
     const pause = e => {
         player.pause();
-        app.setShowMenu(false);
+        // app.setShowMenu(false);
     };
 
     const renderPlayer = () => {

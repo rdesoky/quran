@@ -136,7 +136,9 @@ const CommandButton = ThemeConsumer(
                             return;
                         case "Theme":
                             themeContext.toggleTheme();
-                            break;
+                            app.pushRecentCommand(command);
+                            app.setShowMenu(false);
+                            return;
                         case "Mask":
                             app.setMaskStart();
                             break;

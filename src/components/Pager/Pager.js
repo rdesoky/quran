@@ -6,7 +6,7 @@ import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
-import Header from "./Header";
+import { Swipeable, defineSwipe } from "react-touch";
 
 function fnPageRedirect({ match, app }) {
     let { aya } = match.params;
@@ -29,11 +29,11 @@ function Pager({ match, app, player }) {
 
     const pageUp = e => {
         app.offsetPage(-1);
-        e.stopPropagation();
+        // e.stopPropagation();
     };
     const pageDown = e => {
         app.offsetPage(1);
-        e.stopPropagation();
+        // e.stopPropagation();
     };
 
     //ComponentDidMount
@@ -262,21 +262,29 @@ function Pager({ match, app, player }) {
         );
     };
 
+    const swipeConfig = defineSwipe({ swipeDistance: 100 }); //default is 100
+
     return (
-        <div
-            className={"Pager" + (app.isNarrow ? " narrow" : "")}
-            onWheel={handleWheel}
-            style={{ width: app.pagerWidth() }}
+        <Swipeable
+            config={swipeConfig}
+            onSwipeLeft={pageUp}
+            onSwipeRight={pageDown}
         >
-            {/* <Header
+            <div
+                className={"Pager" + (app.isNarrow ? " narrow" : "")}
+                onWheel={handleWheel}
+                style={{ width: app.pagerWidth() }}
+            >
+                {/* <Header
                 onPageUp={pageUp}
                 onPageDown={pageDown}
                 onIncrement={increment}
                 onDecrement={decrement}
             /> */}
-            {renderPage(0)}
-            {renderPage(1)}
-        </div>
+                {renderPage(0)}
+                {renderPage(1)}
+            </div>
+        </Swipeable>
     );
 }
 
