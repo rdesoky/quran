@@ -96,8 +96,8 @@
         // flex-grow: 1;
         overflow: auto;
         margin: 15px 0;
-        .buttonsBar {
-            margin: 15px 0;
+        .ButtonsBar {
+            margin: 10px 0;
         }
     }
     .OptionRow {
@@ -186,6 +186,7 @@
             height: 80px;
             position: relative;
             font-size: 25px;
+            border-radius: 6px;
             // margin: 1px;
             // background-color: #444;
             .CommandLabel {
@@ -292,8 +293,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            // padding: 0 10px;
-            // line-height: 38px;
+            padding: 9px;
+            box-sizing: border-box;
+            line-height: 20px;
         }
         .ButtonsBar {
             flex-grow: 0 !important;

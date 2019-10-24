@@ -4,6 +4,7 @@ import Spinner from "../Spinner/Spinner";
 import { AppConsumer } from "../../context/App";
 import VerseLayout from "./VerseLayout";
 import PageHeader from "./PageHeader";
+import { Draggable, Holdable } from "react-touch";
 
 const Page = ({
     index,
@@ -78,23 +79,38 @@ const Page = ({
                     }
                 >
                     <VerseLayout page={index}>
-                        <img
-                            style={{
-                                visibility: isLoaded ? "visible" : "hidden",
-                                margin: app.pageMargin(),
-                                width: app.pageWidth(),
-                                height: app.pageHeight()
-                            }}
-                            className={"PageImage"}
-                            onLoad={onImageLoaded}
-                            src={
-                                process.env.PUBLIC_URL +
-                                "/qpages_1260/page" +
-                                imageName +
-                                ".png"
-                            }
-                            alt={"Page #" + (parseInt(index) + 1).toString()}
-                        />
+                        <Holdable>
+                            <Draggable position={{ x: 0, y: 0 }}>
+                                {({ x, y, dx, dy, holdProgress }) => (
+                                    <img
+                                        style={{
+                                            visibility: isLoaded
+                                                ? "visible"
+                                                : "hidden",
+                                            margin: app.pageMargin(),
+                                            width: app.pageWidth(),
+                                            height: app.pageHeight(),
+                                            transform: `translate3d(${dx}px, 0px, 0)`
+                                            // transform: holdProgress
+                                            //     ? `translateX:${dx}px`
+                                            //     : ""
+                                        }}
+                                        className={"PageImage"}
+                                        onLoad={onImageLoaded}
+                                        src={
+                                            process.env.PUBLIC_URL +
+                                            "/qpages_1260/page" +
+                                            imageName +
+                                            ".png"
+                                        }
+                                        alt={
+                                            "Page #" +
+                                            (parseInt(index) + 1).toString()
+                                        }
+                                    />
+                                )}
+                            </Draggable>
+                        </Holdable>
                     </VerseLayout>
                 </div>
             </div>
