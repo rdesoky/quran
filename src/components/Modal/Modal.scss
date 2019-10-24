@@ -292,8 +292,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 0 10px;
-            line-height: 38px;
+            // padding: 0 10px;
+            // line-height: 38px;
         }
         .ButtonsBar {
             flex-grow: 0 !important;
@@ -371,6 +371,13 @@
     overflow: auto;
     &.empty {
         color: #666;
+    }
+    .TypingCursor {
+        display: inline-block;
+        width: 2px;
+        background-color: #ffffff66;
+        height: 20px;
+        vertical-align: top;
     }
 }
 

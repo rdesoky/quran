@@ -136,8 +136,8 @@ const CommandButton = ThemeConsumer(
                             return;
                         case "Theme":
                             themeContext.toggleTheme();
-                            app.pushRecentCommand(command);
-                            app.setShowMenu(false);
+                            // app.pushRecentCommand(command);
+                            // app.setShowMenu(false);
                             return;
                         case "Mask":
                             app.setMaskStart();
@@ -150,15 +150,12 @@ const CommandButton = ThemeConsumer(
                         case "Fullscreen":
                             Utils.requestFullScreen();
                             break;
-                        // case "Bookmarks":
-                        //     app.addBookmark();
-                        //     break;
                         default:
                             app.setPopup(command);
                             return;
                     }
                     app.pushRecentCommand(command);
-                    app.closePopup();
+                    // app.closePopup();
                     app.setShowMenu(false);
                 };
 

@@ -141,7 +141,7 @@ class AudioPlayer extends Component {
                 <div
                     className="PopupBody"
                     style={{
-                        maxHeight: app.appHeight - 105 - (app.isNarrow ? 25 : 0)
+                        maxHeight: app.appHeight - 80
                     }}
                 >
                     <div className="OptionRow">

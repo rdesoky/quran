@@ -136,6 +136,15 @@ const QIndex = ({ app, player, intl }) => {
                 {getSuraNames().map((name, suraIndex) => {
                     return (
                         <li key={suraIndex}>
+                            <button
+                                sura={suraIndex}
+                                onClick={gotoSura}
+                                className={
+                                    suraIndex == currentSura ? "active" : ""
+                                }
+                            >
+                                {suraIndex + 1 + ". " + sura_names[suraIndex]}
+                            </button>
                             <div className="actions">
                                 {indexActions === suraIndex ? (
                                     <>
@@ -151,9 +160,9 @@ const QIndex = ({ app, player, intl }) => {
                                     </>
                                 ) : (
                                     <button
-                                        onMouseOver={e =>
-                                            setIndexActions(suraIndex)
-                                        }
+                                        // onMouseOver={e =>
+                                        //     setIndexActions(suraIndex)
+                                        // }
                                         onClick={e =>
                                             setIndexActions(suraIndex)
                                         }
@@ -162,15 +171,6 @@ const QIndex = ({ app, player, intl }) => {
                                     </button>
                                 )}
                             </div>
-                            <button
-                                sura={suraIndex}
-                                onClick={gotoSura}
-                                className={
-                                    suraIndex == currentSura ? "active" : ""
-                                }
-                            >
-                                {suraIndex + 1 + ". " + sura_names[suraIndex]}
-                            </button>
                         </li>
                     );
                 })}
