@@ -58,11 +58,12 @@ button {
     flex-grow: 1;
     min-height: 40px;
     button {
-        margin: 0 1px;
+        margin: 0 2px;
         padding: 0;
-        .ModalContent .Title & {
-            margin: 0 1px;
-        }
+        border-radius: 6px;
+        // .ModalContent .Title & {
+        //     margin: 0 1px;
+        // }
 
         flex-grow: 1;
         font-size: 15px;

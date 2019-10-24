@@ -80,21 +80,6 @@ const PageHeader = ({
                         }}
                     </String>
                 </select>
-                <div className="PageHeaderSection">
-                    <button className="NavButton NavPgUp" onClick={onPageUp}>
-                        <Icon icon={faAngleRight} />
-                    </button>
-
-                    <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
-                        <String id="pg_num" values={{ num: pageIndex + 1 }} />
-                    </button>
-                    <button
-                        className="NavButton NavPgDown"
-                        onClick={onPageDown}
-                    >
-                        <Icon icon={faAngleLeft} />
-                    </button>
-                </div>
                 <select
                     className="SuraTitle"
                     onChange={onSelectSura}
@@ -112,6 +97,21 @@ const PageHeader = ({
                         }}
                     </String>
                 </select>
+                <div className="PageHeaderSection">
+                    <button className="NavButton NavPgUp" onClick={onPageUp}>
+                        <Icon icon={faAngleRight} />
+                    </button>
+
+                    <button onClick={showGotoPopup} style={{ zIndex: 2 }}>
+                        <String id="pg_num" values={{ num: pageIndex + 1 }} />
+                    </button>
+                    <button
+                        className="NavButton NavPgDown"
+                        onClick={onPageDown}
+                    >
+                        <Icon icon={faAngleLeft} />
+                    </button>
+                </div>
                 <div className="PageHeaderSection">
                     <button
                         className="NavButton NavBackward"
