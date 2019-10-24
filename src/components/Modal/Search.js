@@ -5,7 +5,7 @@ import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Search = ({ app }) => {
@@ -265,28 +265,28 @@ const Search = ({ app }) => {
         }
     };
 
+    const renderCursor = () => {
+        return <span className="TypingCursor"></span>;
+    };
+
+    const renderTypedText = () => {
+        if (!searchTerm) {
+            return <String id="writing_prompt" />;
+        }
+        return (
+            <>
+                {searchTerm}
+                {renderCursor()}
+            </>
+        );
+    };
+
     const formHeight = 130,
         resultsInfoHeight = 20;
 
     return (
         <>
             <div className="Title">
-                {/* <div>
-                    <form id="SearchForm" onSubmit={onSubmitSearch}>
-                        <input
-                            placeholder="Search suras' name or content"
-                            className="SearchInput"
-                            inputMode="search"
-                            ref={input}
-                            type="text"
-                            value={searchTerm}
-                            onChange={onChangeSearchInput}
-                        />
-                        <button type="submit">
-                            <String id="search" />
-                        </button>
-                    </form>
-                </div> */}
                 <div
                     ref={input}
                     className={
@@ -295,15 +295,11 @@ const Search = ({ app }) => {
                     tabIndex="0"
                     onClick={showKeyboard}
                 >
-                    {searchTerm.length ? (
-                        searchTerm
-                    ) : (
-                        <String id="search_prompt" />
-                    )}
+                    {renderTypedText()}
                 </div>
                 <div className="ButtonsBar">
                     <button onClick={onSubmitSearch}>
-                        <FontAwesomeIcon icon={faSearch} />
+                        <Icon icon={faSearch} />
                     </button>
                 </div>
             </div>

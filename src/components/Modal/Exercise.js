@@ -11,6 +11,7 @@ import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import QData from "./../../services/QData";
+import { cursor } from "sisteransi";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -67,7 +68,7 @@ const Exercise = ({ app, player }) => {
     const [duration, setDuration] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(-1);
     const [counterInterval, setCounterInterval] = useState(null);
-    const [writtenText, setAnswerText] = useState("");
+    const [writtenText, setWrittenText] = useState("");
     const [wrongWord, setWrongWord] = useState(-1);
     const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
@@ -96,7 +97,7 @@ const Exercise = ({ app, player }) => {
     };
 
     const redoReciting = e => {
-        setAnswerText("");
+        setWrittenText("");
         startReciting(e);
     };
 
@@ -119,7 +120,7 @@ const Exercise = ({ app, player }) => {
 
     useEffect(() => {
         setVerse(app.selectStart);
-        setAnswerText("");
+        setWrittenText("");
     }, [app.selectStart]);
 
     const handleKeyDown = ({ code }) => {
@@ -324,11 +325,16 @@ const Exercise = ({ app, player }) => {
     };
 
     const onUpdateText = text => {
-        setAnswerText(text);
+        setWrittenText(text);
         //test written words ( except the last one )
         setWrongWord(-1);
         setMissingWords(0);
-        testAnswer(text);
+        if (testAnswer(text)) {
+            setTimeout(() => {
+                app.setMaskStart(app.selectStart + 1, true);
+                setCurrStep(Step.results);
+            }, 500);
+        }
         // forceUpdate();
     };
 
@@ -344,7 +350,7 @@ const Exercise = ({ app, player }) => {
         const correctWords = normVerse.split(/\s+/);
         if (!answerText.trim().length) {
             setMissingWords(correctWords.length);
-            return;
+            return false;
         }
         const answerWords = normAnswerText.split(/\s+/);
 
@@ -367,6 +373,7 @@ const Exercise = ({ app, player }) => {
 
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
+        return wrongWord === -1 && correctWords.length === answerWords.length;
     };
 
     const renderTypingTitle = () => {
@@ -381,7 +388,7 @@ const Exercise = ({ app, player }) => {
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
-                    {writtenText.trim().length && isCorrect() ? (
+                    {/* {writtenText.trim().length && isCorrect() ? (
                         <button onClick={typeNextVerse}>
                             <span class="Correct">
                                 <Icon icon={faThumbsUp} />
@@ -390,7 +397,7 @@ const Exercise = ({ app, player }) => {
                         </button>
                     ) : (
                         ""
-                    )}
+                    )} */}
                     <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
@@ -398,6 +405,23 @@ const Exercise = ({ app, player }) => {
             </>
         );
     };
+
+    const renderCursor = () => {
+        return <span className="TypingCursor"></span>;
+    };
+
+    const renderText = () => {
+        if (!writtenText) {
+            return <String id="writing_prompt" />;
+        }
+        return (
+            <>
+                {writtenText}
+                {renderCursor()}
+            </>
+        );
+    };
+
     const renderTypingConsole = () => {
         const correct = isTypingCorrect();
         return (
@@ -422,7 +446,7 @@ const Exercise = ({ app, player }) => {
                                 : " Wrong")
                         }
                     >
-                        {writtenText || <String id="writing_prompt" />}
+                        {renderText()}
                     </div>
                 </div>
                 <AKeyboard
@@ -436,7 +460,7 @@ const Exercise = ({ app, player }) => {
     };
 
     const redoTyping = e => {
-        setAnswerText("");
+        setWrittenText("");
         startAnswer(e);
     };
 
