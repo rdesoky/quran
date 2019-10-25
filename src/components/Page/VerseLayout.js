@@ -5,13 +5,13 @@ import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const VerseLayout = ({ page: pageIndex, app, player, children }) => {
+const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
 	const [versesInfo, setAyaInfo] = useState([]);
 	const [hoverVerse, setHoverVerse] = useState(-1);
 
 	const pageHeight = app.appHeight - 50;
 	const lineHeight = pageHeight / 15;
-	const lineWidth = app.pageWidth();
+	const lineWidth = pageWidth;
 
 	const closeMask = e => {
 		app.hideMask();
@@ -328,7 +328,7 @@ const VerseLayout = ({ page: pageIndex, app, player, children }) => {
 				className="VerseLayout"
 				style={{
 					direction: "ltr",
-					width: app.pageWidth(),
+					width: pageWidth,
 					height: app.pageHeight(),
 					margin: app.pageMargin()
 				}}
@@ -341,7 +341,7 @@ const VerseLayout = ({ page: pageIndex, app, player, children }) => {
 				style={{
 					direction: "ltr",
 					top: 0,
-					width: app.pageWidth(),
+					width: pageWidth,
 					height: app.pageHeight(),
 					margin: app.pageMargin()
 				}}
