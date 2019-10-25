@@ -6,6 +6,11 @@ const DDrop = ({ children, onDrop, maxShift }) => {
     const [Y, setY] = useState(0);
     const [dX, setDX] = useState(0);
     const [dY, setDY] = useState(0);
+
+    const onTouchStart = e => {
+        onMouseDown(e);
+        e.preventDefault();
+    };
     const onMouseDown = ({ target, clientX, clientY, pointerId }) => {
         if (pointerId) {
             target.setPointerCapture(pointerId);
@@ -37,9 +42,9 @@ const DDrop = ({ children, onDrop, maxShift }) => {
     };
     return (
         <div
-            // onTouchStart={onMouseDown}
-            // onTouchMove={onMouseMove}
-            // onTouchEnd={onMouseUp}
+            onTouchStart={onTouchStart}
+            onTouchMove={onMouseMove}
+            onTouchEnd={onMouseUp}
             onPointerDown={onMouseDown}
             onPointerMove={onMouseMove}
             onPointerUp={onMouseUp}
