@@ -4,7 +4,7 @@ import Spinner from "../Spinner/Spinner";
 import { AppConsumer } from "../../context/App";
 import VerseLayout from "./VerseLayout";
 import PageHeader from "./PageHeader";
-import { Draggable, Holdable } from "react-touch";
+import DDrop from "../DDrop";
 
 const Page = ({
     index,
@@ -13,7 +13,9 @@ const Page = ({
     onIncrement,
     onDecrement,
     onPageUp,
-    onPageDown
+    onPageDown,
+    scaleX,
+    shiftX
 }) => {
     let imageName = NumToString(index + 1);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -50,9 +52,10 @@ const Page = ({
     let textAlign =
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
+    const pageWidth = app.pageWidth();
+
     return (
         <div className="Page">
-            {/* <PageFooter index={index} order={order} /> */}
             <PageHeader
                 index={index}
                 order={order}
@@ -68,7 +71,6 @@ const Page = ({
                 }}
                 className="PageFrame"
                 style={{
-                    // padding: app.isNarrow ? "0" : "0 20px",
                     textAlign,
                     visibility: isLoaded ? "visible" : "hidden"
                 }}
@@ -77,40 +79,29 @@ const Page = ({
                     className={
                         "PageImageFrame" + (isLoaded ? " AnimatePage" : "")
                     }
+                    style={{
+                        transform: `scaleX(${scaleX ||
+                            1}) translateX(${shiftX || 0}px)`
+                    }}
                 >
-                    <VerseLayout page={index}>
-                        <Holdable>
-                            <Draggable position={{ x: 0, y: 0 }}>
-                                {({ x, y, dx, dy, holdProgress }) => (
-                                    <img
-                                        style={{
-                                            visibility: isLoaded
-                                                ? "visible"
-                                                : "hidden",
-                                            margin: app.pageMargin(),
-                                            width: app.pageWidth(),
-                                            height: app.pageHeight(),
-                                            transform: `translate3d(${dx}px, 0px, 0)`
-                                            // transform: holdProgress
-                                            //     ? `translateX:${dx}px`
-                                            //     : ""
-                                        }}
-                                        className={"PageImage"}
-                                        onLoad={onImageLoaded}
-                                        src={
-                                            process.env.PUBLIC_URL +
-                                            "/qpages_1260/page" +
-                                            imageName +
-                                            ".png"
-                                        }
-                                        alt={
-                                            "Page #" +
-                                            (parseInt(index) + 1).toString()
-                                        }
-                                    />
-                                )}
-                            </Draggable>
-                        </Holdable>
+                    <VerseLayout page={index} pageWidth={pageWidth}>
+                        <img
+                            style={{
+                                visibility: isLoaded ? "visible" : "hidden",
+                                margin: app.pageMargin(),
+                                width: pageWidth,
+                                height: app.pageHeight()
+                            }}
+                            className={"PageImage"}
+                            onLoad={onImageLoaded}
+                            src={
+                                process.env.PUBLIC_URL +
+                                "/qpages_1260/page" +
+                                imageName +
+                                ".png"
+                            }
+                            alt={"Page #" + (parseInt(index) + 1).toString()}
+                        />
                     </VerseLayout>
                 </div>
             </div>

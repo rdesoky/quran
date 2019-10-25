@@ -6,7 +6,7 @@ import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
-import { Swipeable, defineSwipe, Draggable } from "react-touch";
+import DDrop from "./../DDrop";
 
 function fnPageRedirect({ match, app }) {
     let { aya } = match.params;
@@ -219,15 +219,15 @@ function Pager({ match, app, player }) {
         }
     };
 
-    const renderPage = order => {
-        if (app.pagesCount < order + 1) {
-            return;
+    const pagesCount = app.pagesCount;
+
+    const renderPage = (order, shiftX, scaleX) => {
+        if (pagesCount < order + 1) {
+            return; //skip second page
         }
 
         let thisPage =
-            app.pagesCount === 1
-                ? pageIndex
-                : pageIndex - (pageIndex % 2) + order;
+            pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
 
         function selectPage() {
             if (pageIndex !== thisPage) {
@@ -247,7 +247,7 @@ function Pager({ match, app, player }) {
                 className={"PageSide" + pageClass + activeClass}
                 style={{
                     height: app.appHeight + "px",
-                    width: 100 / app.pagesCount + "%"
+                    width: 100 / pagesCount + "%"
                 }}
             >
                 <Page
@@ -257,28 +257,51 @@ function Pager({ match, app, player }) {
                     onPageDown={pageDown}
                     onIncrement={increment}
                     onDecrement={decrement}
+                    scaleX={scaleX}
+                    shiftX={shiftX}
                 />
             </div>
         );
     };
 
+    const pageWidth = app.pageWidth();
+
     return (
-        <Swipeable
-            config={defineSwipe({ swipeDistance: 100 })}
-            onSwipeLeft={pageUp}
-            onSwipeRight={pageDown}
+        <DDrop
+            maxShift={200}
+            onDrop={({ dX, dY }) => {
+                if (dX > 50) {
+                    pageDown();
+                }
+                if (dX < -50) {
+                    pageUp();
+                }
+            }}
         >
-            <div
-                className={"Pager" + (app.isNarrow ? " narrow" : "")}
-                onWheel={handleWheel}
-                style={{
-                    width: app.pagerWidth()
-                }}
-            >
-                {renderPage(0)}
-                {renderPage(1)}
-            </div>
-        </Swipeable>
+            {({ dX, dY }) => {
+                const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
+                const shiftX = dX; //pageWidth - pageWidth * scaleX;
+                const firstPageShiftX =
+                    pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
+                const firstPageScaleX =
+                    pagesCount === 1 ? scaleX : shiftX < 0 ? scaleX : 1;
+                const secondPageShiftX = shiftX > 0 ? shiftX : 0;
+                const secondPageScaleX = shiftX > 0 ? scaleX : 1;
+
+                return (
+                    <div
+                        className={"Pager" + (app.isNarrow ? " narrow" : "")}
+                        onWheel={handleWheel}
+                        style={{
+                            width: app.pagerWidth()
+                        }}
+                    >
+                        {renderPage(0, firstPageShiftX, firstPageScaleX)}
+                        {renderPage(1, secondPageShiftX, secondPageScaleX)}
+                    </div>
+                );
+            }}
+        </DDrop>
     );
 }
 

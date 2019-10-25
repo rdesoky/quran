@@ -24,7 +24,7 @@ const Step = {
     results: 3
 };
 
-const VerseInfo = AppConsumer(({ app, verse, show }) => {
+const VerseInfo = AppConsumer(({ app, verse, show, children }) => {
     if (verse === undefined) {
         verse = app.selectStart;
     }
@@ -49,6 +49,7 @@ const VerseInfo = AppConsumer(({ app, verse, show }) => {
                         values={{ num: verseInfo.aya + 1 }}
                     />
                 </div>
+                {typeof children === "function" ? children(verse) : children}
             </div>
         </div>
     );
