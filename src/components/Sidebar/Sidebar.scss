@@ -26,6 +26,9 @@
         &:focus {
             color: #aaffff;
         }
+        &:disabled {
+            color: #666;
+        }
     }
 
     .ReciterIcon {

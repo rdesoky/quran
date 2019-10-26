@@ -271,7 +271,7 @@ const Search = ({ app }) => {
 
     const renderTypedText = () => {
         if (!searchTerm) {
-            return <String id="writing_prompt" />;
+            return <String id="search_prompt" />;
         }
         return (
             <>

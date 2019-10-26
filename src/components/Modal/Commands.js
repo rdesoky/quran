@@ -138,7 +138,7 @@ const CommandButton = ThemeConsumer(
                             themeContext.toggleTheme();
                             // app.pushRecentCommand(command);
                             // app.setShowMenu(false);
-                            return;
+                            break;
                         case "Mask":
                             app.setMaskStart();
                             break;
@@ -172,8 +172,19 @@ const CommandButton = ThemeConsumer(
                     }
                 };
 
+                const isDisabled = command => {
+                    return (
+                        app.popup === "Exercise" &&
+                        !["Play", "Pause", "Exercise"].includes(command)
+                    );
+                };
+
                 return (
-                    <button onClick={e => runCommand(command)} style={style}>
+                    <button
+                        onClick={e => runCommand(command)}
+                        style={style}
+                        disabled={isDisabled(command)}
+                    >
                         {commandIcon(command, app, player)}
                         {renderLabel()}
                     </button>
