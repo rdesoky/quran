@@ -138,6 +138,13 @@ class PlayerProvider extends Component {
             //TODO: check if url state inside pager
             app.gotoAya(playingAya, { sel: false });
         }
+
+        if (
+            this.state.repeat === AudioRepeat.verse &&
+            app.popup !== "Exercise"
+        ) {
+            this.setRepeat(AudioRepeat.noStop);
+        }
     };
     resume = () => {
         this.audio.play();

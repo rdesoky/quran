@@ -20,9 +20,6 @@ function Sidebar({ app, player, themeContext }) {
     };
 
     const play = e => {
-        if (player.repeat === AudioRepeat.verse && app.popup !== "Exercise") {
-            player.setRepeat(AudioRepeat.noStop);
-        }
         player.play();
         app.setShowMenu(false);
     };

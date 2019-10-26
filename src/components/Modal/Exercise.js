@@ -12,6 +12,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import QData from "./../../services/QData";
 import { cursor } from "sisteransi";
+import { TafseerView } from "./Tafseer";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -294,9 +295,10 @@ const Exercise = ({ app, player }) => {
                 <div className="ContentTitle">
                     <VerseInfo />
                 </div>
-                <h3>
+                {/* <h3>
                     <VerseText />
-                </h3>
+                </h3> */}
+                <TafseerView verse={verse} />
             </>
         );
     };
