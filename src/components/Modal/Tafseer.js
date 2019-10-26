@@ -30,30 +30,57 @@ const TafseerList = [
 ];
 
 const Tafseer = ({ app, player }) => {
+    const [verse, setVerse] = useState(app.selectStart);
+
+    const offsetSelection = offset => {
+        setVerse(verse + offset);
+    };
+
+    useEffect(() => {
+        setVerse(app.selectStart);
+    }, [app.selectStart]);
+
+    useEffect(() => {
+        if (player.playingAya !== -1) {
+            setVerse(player.playingAya);
+        }
+    }, [player.playingAya]);
+
+    const ayaInfo = QData.ayaIdInfo(verse);
+
+    return (
+        <>
+            <div className="Title">
+                <button onClick={e => offsetSelection(-1)}>
+                    <Icon icon={faAngleRight} />
+                </button>
+                <button onClick={e => app.gotoAya(verse, { sel: true })}>
+                    <String id="sura_names">
+                        {sura_names =>
+                            sura_names.split(",")[ayaInfo.sura] +
+                            ` - ${ayaInfo.aya + 1}`
+                        }
+                    </String>
+                </button>
+                <button onClick={e => offsetSelection(1)}>
+                    <Icon icon={faAngleLeft} />
+                </button>
+            </div>
+            <div
+                className="PopupBody"
+                style={{ maxHeight: app.appHeight - 85 }}
+            >
+                <TafseerView verse={verse} />
+            </div>
+        </>
+    );
+};
+
+const TafseerView = AppConsumer(({ app, verse }) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
     );
     const [tafseerData, setTafseerData] = useState([]);
-
-    const handleKeyDown = e => {
-        switch (e.code) {
-            case "ArrowDown":
-            case "ArrowLeft":
-                offsetSelection(1);
-                break;
-            case "ArrowUp":
-            case "ArrowRight":
-                offsetSelection(-1);
-                break;
-            default:
-                return;
-        }
-    };
-
-    const offsetSelection = offset => {
-        const ayaId = app.offsetSelection(offset);
-        app.gotoAya(ayaId);
-    };
 
     useEffect(() => {
         let fileName = TafseerList.find(i => i.id === tafseer).file;
@@ -69,35 +96,22 @@ const Tafseer = ({ app, player }) => {
                 console.info(`${name}: ${message}\n${url}`);
             });
 
-        document.addEventListener("keydown", handleKeyDown);
         return () => {
-            document.removeEventListener("keydown", handleKeyDown);
             controller.abort();
         };
     }, [tafseer]);
 
-    const playingAya = () => {
-        const { selectStart, selectEnd } = app;
-        const { playingAya } = player;
-        let aya = selectStart;
-        if (playingAya !== -1) {
-            aya = playingAya;
-        }
-        return aya;
-    };
-
     const renderVerse = () => {
-        const aya = playingAya();
+        // const aya = playingAya();
         const verseList = app.verseList();
-        if (verseList.length > aya) {
-            return verseList[aya];
+        if (verseList.length > verse) {
+            return verseList[verse];
         }
     };
     const renderTafseer = () => {
-        const aya = playingAya();
-        if (tafseerData.length > aya) {
+        if (tafseerData.length > verse) {
             //validate aya exists whithin tafseer array
-            return tafseerData[aya];
+            return tafseerData[verse];
         }
         return "Loading...";
     };
@@ -126,47 +140,24 @@ const Tafseer = ({ app, player }) => {
     const tafDirection = () => {
         return TafseerList.find(i => i.id === tafseer).dir;
     };
-
-    const ayaInfo = QData.ayaIdInfo(app.selectStart);
-
     return (
         <>
-            <div className="Title">
-                <button onClick={e => offsetSelection(-1)}>
-                    <Icon icon={faAngleRight} />
-                </button>
-                <String id="sura_names">
-                    {sura_names => (
-                        <span className="FlexTitle">
-                            {sura_names.split(",")[ayaInfo.sura] +
-                                ` - ${ayaInfo.aya + 1}`}
-                        </span>
-                    )}
-                </String>
-                <button onClick={e => offsetSelection(1)}>
-                    <Icon icon={faAngleLeft} />
-                </button>
+            <div>
+                <p className="TafseerVerse">{renderVerse()}</p>
             </div>
-            <div
-                className="PopupBody"
-                style={{ maxHeight: app.appHeight - 85 }}
-            >
-                <div>
-                    <p className="TafseerVerse">{renderVerse()}</p>
-                </div>
-                <div>
-                    <p
-                        className="TafseerText"
-                        style={{ direction: tafDirection() }}
-                    >
-                        {renderSelector()}
-                        {" - "}
-                        {renderTafseer()}
-                    </p>
-                </div>
+            <div>
+                <p
+                    className="TafseerText"
+                    style={{ direction: tafDirection() }}
+                >
+                    {renderSelector()}
+                    {" - "}
+                    {renderTafseer()}
+                </p>
             </div>
         </>
     );
-};
+});
 
 export default AppConsumer(PlayerConsumer(Tafseer));
+export { TafseerView };
