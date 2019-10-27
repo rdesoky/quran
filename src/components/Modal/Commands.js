@@ -97,7 +97,7 @@ const commandIcon = (command, app, player) => {
     }
 };
 
-const Commands = () => {
+const Commands = ({ app }) => {
     const list = [
         "Index",
         "AudioPlayer",
@@ -120,8 +120,14 @@ const Commands = () => {
     return (
         <>
             <div className="Title">
-                <VerseInfo />
-                <PlayerButtons showReciter={false} />
+                {app.isNarrow ? (
+                    <>
+                        <VerseInfo />
+                        <PlayerButtons showReciter={false} />
+                    </>
+                ) : (
+                    <String id="commands" />
+                )}
             </div>
             <div className="CommandsList">
                 {list.map(command => (
@@ -233,5 +239,5 @@ const CommandButton = ThemeConsumer(
     )
 );
 
-export default Commands;
+export default AppConsumer(Commands);
 export { commandIcon, CommandButton };

@@ -101,8 +101,8 @@ hr {
 
 .VerseInfo {
     display: inline-block;
-    font-size: 13px;
     .VerseInfoList {
+        font-size: 13px;
         display: flex;
         flex-direction: column;
         align-items: center;

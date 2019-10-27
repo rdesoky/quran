@@ -100,7 +100,7 @@ const keyRows = [
     ["Enter", "Backspace", "ClearWord", "Space", "ClearAll", "Backquote"]
 ];
 
-const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
+const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
     const [text, setText] = useState(initText);
     const [typedChar, setTypedChar] = useState("");
 
@@ -115,7 +115,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
         // setTimeout(() => {
         //     setTypedChar("");
         // }, 300);
-        if (target.tagName.match(/input|button/i)) {
+        if (target && target.tagName.match(/input|button/i)) {
             return;
         }
 
@@ -165,7 +165,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel }) => {
     }, [initText]);
 
     return (
-        <div id="AKeyboard">
+        <div id="AKeyboard" style={style}>
             {keyRows.map((row, index) => (
                 <div className="KeysRow" key={index}>
                     {row.map((key, index) => (

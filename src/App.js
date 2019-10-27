@@ -19,8 +19,10 @@ import Exercise from "./components/Modal/Exercise";
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
 
+// Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBBYAgJDBm7AYe2bSy96E-yBsD8O-9UeHw",
+    //     apiKey: "AIzaSyBBYAgJDBm7AYe2bSy96E-yBsD8O-9UeHw",
+    apiKey: "AIzaSyB7RhZMVC_PGW3YmkN_adAvsVeOYvz0Kkg",
     authDomain: "quran-hafiz.firebaseapp.com",
     databaseURL: "https://quran-hafiz.firebaseio.com",
     projectId: "quran-hafiz",
