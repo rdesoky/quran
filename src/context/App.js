@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import QData from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
+import { injectIntl } from "react-intl";
 
 let rc = localStorage.getItem("recentCommands");
 
@@ -48,6 +49,7 @@ class AppProvider extends Component {
 
     _verseList = [];
     _normVerseList = [];
+    _suraNames = undefined;
 
     setTheme = theme => {
         this.setState({ theme });
@@ -63,6 +65,19 @@ class AppProvider extends Component {
             this.setState({ selectStart: ayaId, selectEnd: ayaId });
             return ayaId;
         }
+    };
+
+    get formatMessage() {
+        return this.props.intl.formatMessage;
+    }
+
+    suraNames = () => {
+        if (!this._suraNames) {
+            this._suraNames = this.formatMessage({ id: "sura_names" }).split(
+                ","
+            );
+        }
+        return this._suraNames;
     };
 
     verseList = () => {
@@ -387,6 +402,7 @@ class AppProvider extends Component {
     };
 
     methods = {
+        suraNames: this.suraNames,
         selectedRange: this.selectedRange,
         popupWidth: this.popupWidth,
         setShowMenu: this.setShowMenu,
@@ -583,5 +599,5 @@ const AppConsumer = Component =>
         );
     };
 
-export default withRouter(AppProvider);
+export default injectIntl(withRouter(AppProvider));
 export { AppConsumer };
