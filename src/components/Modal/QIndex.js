@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import QData from "../../services/QData";
-import { FormattedMessage as String, injectIntl } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "../../context/App";
-import { PlayerConsumer, AudioState } from "../../context/Player";
+import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faTimes as faDelete,
@@ -14,14 +14,11 @@ import {
     faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
-const QIndex = ({ app, player, intl }) => {
-    const { formatMessage } = intl;
-    const [indexActions, setIndexActions] = useState(0);
-    const [bookmarksActions, setBookmarksActiosn] = useState(0);
-    const [hifzActions, setHifzActions] = useState(0);
+const QIndex = ({ app, player }) => {
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
     );
+    const [filter, setFilter] = useState("");
     const { bookmarks, hifzRanges } = app;
 
     const getSuraNames = () => {
@@ -111,73 +108,6 @@ const QIndex = ({ app, player, intl }) => {
         }
     };
 
-    useEffect(() => {
-        // let pageIndex = app.getCurrentPageIndex();
-        // let sura = QData.pageSura(pageIndex + 1);
-        // const currSuraBtn = tableRoot.querySelector(`button[sura='${sura}']`);
-        // if (currSuraBtn) {
-        //     currSuraBtn.focus();
-        // }
-        const { selectStart } = app;
-        const currentSura = QData.ayaIdInfo(selectStart).sura;
-        setIndexActions(currentSura);
-    }, []);
-
-    const renderIndex = () => {
-        const { selectStart } = app;
-        const currentSura = QData.ayaIdInfo(selectStart).sura;
-        return (
-            <ul
-                className="SpreadSheet"
-                style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
-                }}
-            >
-                {getSuraNames().map((name, suraIndex) => {
-                    return (
-                        <li key={suraIndex}>
-                            <button
-                                sura={suraIndex}
-                                onClick={gotoSura}
-                                className={
-                                    suraIndex == currentSura ? "active" : ""
-                                }
-                            >
-                                {suraIndex + 1 + ". " + sura_names[suraIndex]}
-                            </button>
-                            <div className="actions">
-                                {indexActions === suraIndex ? (
-                                    <>
-                                        <button>
-                                            <Icon icon={faHeart} />
-                                        </button>
-                                        <button
-                                            sura={suraIndex}
-                                            onClick={playSura}
-                                        >
-                                            <Icon icon={faPlayCircle} />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <button
-                                        // onMouseOver={e =>
-                                        //     setIndexActions(suraIndex)
-                                        // }
-                                        onClick={e =>
-                                            setIndexActions(suraIndex)
-                                        }
-                                    >
-                                        <Icon icon={faEllipsisH} />
-                                    </button>
-                                )}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
-        );
-    };
-
     const renderHifzRanges = () => {
         if (!hifzRanges.length) {
             return (
@@ -251,7 +181,8 @@ const QIndex = ({ app, player, intl }) => {
     };
 
     const versesText = app.verseList();
-    const sura_names = formatMessage({ id: "sura_names" }).split(",");
+    // const sura_names = formatMessage({ id: "sura_names" }).split(",");
+    const sura_names = app.suraNames();
 
     const renderBookmarks = () => {
         if (!bookmarks.length) {
@@ -327,25 +258,112 @@ const QIndex = ({ app, player, intl }) => {
                     >
                         <Icon icon={faBookmark} />
                     </button>
-                    <button onClick={e => app.setPopup("Search")}>
-                        <Icon icon={faSearch} />
-                    </button>
                 </div>
             </div>
+            <div className={"TypingConsole" + (!filter.length ? " empty" : "")}>
+                {filter || <String id="search_prompt" />}
+            </div>
+
             <div
                 className="PopupBody"
                 style={{
-                    maxHeight: app.appHeight - 80
+                    maxHeight: app.appHeight - 135
                 }}
             >
-                {activeTab == "index"
-                    ? renderIndex()
-                    : activeTab == "hifz"
-                    ? renderHifzRanges()
-                    : renderBookmarks()}
+                {activeTab == "index" ? (
+                    <SuraList />
+                ) : activeTab == "hifz" ? (
+                    renderHifzRanges()
+                ) : (
+                    renderBookmarks()
+                )}
             </div>
         </>
     );
 };
 
-export default AppConsumer(PlayerConsumer(injectIntl(QIndex)));
+export const SuraList = AppConsumer(
+    PlayerConsumer(({ app, player, filter }) => {
+        const [indexActions, setIndexActions] = useState(0);
+
+        useEffect(() => {
+            const { selectStart } = app;
+            const currentSura = QData.ayaIdInfo(selectStart).sura;
+            setIndexActions(currentSura);
+        }, []);
+
+        const { selectStart } = app;
+        const sura_names = app.suraNames();
+        const currentSura = QData.ayaIdInfo(selectStart).sura;
+
+        const checkClosePopup = () => {
+            if (!app.isCompact && app.pagesCount === 1) {
+                app.closePopup();
+            }
+        };
+
+        const gotoSura = ({ target }) => {
+            app.hideMask();
+            let index = parseInt(target.getAttribute("sura"));
+            app.gotoSura(index);
+            checkClosePopup();
+        };
+        const playSura = e => {
+            player.stop(true);
+            gotoSura(e);
+            setTimeout(() => {
+                player.play();
+            }, 500);
+        };
+
+        return (
+            <ul
+                className="SpreadSheet"
+                style={{
+                    columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
+                }}
+            >
+                {new Array(114).fill(0).map((zero, suraIndex) => {
+                    return (
+                        <li key={suraIndex}>
+                            <button
+                                sura={suraIndex}
+                                onClick={gotoSura}
+                                className={
+                                    suraIndex == currentSura ? "active" : ""
+                                }
+                            >
+                                {suraIndex + 1 + ". " + sura_names[suraIndex]}
+                            </button>
+                            <div className="actions">
+                                {indexActions === suraIndex ? (
+                                    <>
+                                        <button>
+                                            <Icon icon={faHeart} />
+                                        </button>
+                                        <button
+                                            sura={suraIndex}
+                                            onClick={playSura}
+                                        >
+                                            <Icon icon={faPlayCircle} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={e =>
+                                            setIndexActions(suraIndex)
+                                        }
+                                    >
+                                        <Icon icon={faEllipsisH} />
+                                    </button>
+                                )}
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    })
+);
+
+export default AppConsumer(PlayerConsumer(QIndex));

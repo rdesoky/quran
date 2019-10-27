@@ -3,17 +3,26 @@ import QData from "./../services/QData";
 import { AppConsumer } from "./../context/App";
 import { FormattedMessage as String } from "react-intl";
 
-const VerseInfo = AppConsumer(({ app, verse, show, children }) => {
+const VerseInfo = AppConsumer(({ app, verse, show, children, onClick }) => {
     if (verse === undefined || verse === -1) {
         verse = app.selectStart;
     }
     if (show === false) {
         return "";
     }
+
+    const handleClick = e => {
+        if (typeof onClick === "function") {
+            onClick(verse);
+        } else {
+            app.gotoAya(verse);
+        }
+    };
+
     const verseInfo = QData.ayaIdInfo(verse);
 
     return (
-        <div className="VerseInfo">
+        <button className="VerseInfo" onClick={handleClick}>
             <div className="VerseInfoList">
                 <div>
                     <String id="sura_names">
@@ -30,7 +39,7 @@ const VerseInfo = AppConsumer(({ app, verse, show, children }) => {
                 </div>
                 {typeof children === "function" ? children(verse) : children}
             </div>
-        </div>
+        </button>
     );
 });
 
