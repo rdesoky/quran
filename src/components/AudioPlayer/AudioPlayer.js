@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./AudioPlayer.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faPauseCircle,
     faPlayCircle,
@@ -8,113 +8,112 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
-import Modal from "../Modal/Modal";
 import QData from "./../../services/QData";
-import Utils from "./../../services/utils";
 import { FormattedMessage as String } from "react-intl";
 import ReciterName from "./ReciterName";
 import { ListReciters } from "./../../services/AudioData";
 import Switch from "react-switch";
+import { CommandButton } from "./../Modal/Commands";
 
 class AudioPlayer extends Component {
-    audio;
-    // playingAya;
+    // audio;
+    // // playingAya;
 
-    constructor(props) {
-        super(props);
-        this.audio = document.createElement("audio");
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.audio = document.createElement("audio");
+    // }
 
-    handleKeyDown = e => {
-        const { tagName, type } = document.activeElement;
-        const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
-        const isTextInput =
-            isInput && ["text", "number", "textarea"].includes(type);
-        if (isTextInput) {
-            return;
-        }
-        switch (e.code) {
-            case "KeyP": {
-                const { player } = this.props;
-                switch (this.props.player.audioState) {
-                    case AudioState.paused:
-                        player.resume();
-                        break;
-                    case AudioState.stopped:
-                        player.play();
-                        break;
-                    case AudioState.playing:
-                        player.pause(e);
-                        break;
-                    default:
-                        break;
-                }
-                this.gotoPlayingAya(e);
-            }
-        }
-    };
+    // handleKeyDown = e => {
+    //     const { tagName, type } = document.activeElement;
+    //     const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
+    //     const isTextInput =
+    //         isInput && ["text", "number", "textarea"].includes(type);
+    //     if (isTextInput) {
+    //         return;
+    //     }
+    //     switch (e.code) {
+    //         case "KeyP": {
+    //             const { player } = this.props;
+    //             switch (this.props.player.audioState) {
+    //                 case AudioState.paused:
+    //                     player.resume();
+    //                     break;
+    //                 case AudioState.stopped:
+    //                     player.play();
+    //                     break;
+    //                 case AudioState.playing:
+    //                     player.pause(e);
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //             this.gotoPlayingAya(e);
+    //         }
+    //     }
+    // };
 
-    componentDidMount() {
-        document.addEventListener("keydown", this.handleKeyDown);
-    }
+    // componentDidMount() {
+    //     document.addEventListener("keydown", this.handleKeyDown);
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyDown);
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener("keydown", this.handleKeyDown);
+    // }
 
     onChangeRepeat = ({ currentTarget }) => {
         const repeat = currentTarget.value;
         this.props.player.setRepeat(parseInt(repeat));
     };
 
-    renderState = () => {
-        const { app, player } = this.props;
-        const { selectStart } = app;
-        const { playingAya, audioState } = player;
-        let ayaId = playingAya === -1 ? selectStart : playingAya;
-        let { sura, aya } = QData.ayaIdInfo(ayaId);
-        let stateId = "unknown";
-        switch (audioState) {
-            case AudioState.stopped:
-                stateId = "stopped";
-                break;
-            case AudioState.buffering:
-                stateId = "buffering";
-                break;
-            case AudioState.playing:
-                stateId = "playing";
-                break;
-            case AudioState.paused:
-                stateId = "paused";
-                break;
-            case AudioState.error:
-                stateId = "error";
-                break;
-            default:
-                break;
-        }
-        return (
-            <button onClick={this.gotoPlayingAya}>
-                <String id={stateId} />
-                :&nbsp;
-                <String id="sura_names">
-                    {sura_names => {
-                        return (
-                            sura_names.split(",")[sura] + " (" + (aya + 1) + ")"
-                        );
-                    }}
-                </String>
-            </button>
-        );
-    };
+    // renderState = () => {
+    //     const { app, player } = this.props;
+    //     const { selectStart } = app;
+    //     const { playingAya, audioState } = player;
+    //     let ayaId = playingAya === -1 ? selectStart : playingAya;
+    //     let { sura, aya } = QData.ayaIdInfo(ayaId);
+    //     let stateId = "unknown";
+    //     switch (audioState) {
+    //         case AudioState.stopped:
+    //             stateId = "stopped";
+    //             break;
+    //         case AudioState.buffering:
+    //             stateId = "buffering";
+    //             break;
+    //         case AudioState.playing:
+    //             stateId = "playing";
+    //             break;
+    //         case AudioState.paused:
+    //             stateId = "paused";
+    //             break;
+    //         case AudioState.error:
+    //             stateId = "error";
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     return (
+    //         <button onClick={this.gotoPlayingAya}>
+    //             <String id={stateId} />
+    //             :&nbsp;
+    //             <String id="sura_names">
+    //                 {sura_names => {
+    //                     return (
+    //                         sura_names.split(",")[sura] + " (" + (aya + 1) + ")"
+    //                     );
+    //                 }}
+    //             </String>
+    //         </button>
+    //     );
+    // };
 
-    gotoPlayingAya = event => {
-        const { app, player } = this.props;
-        const { selectStart } = app;
-        const { playingAya } = player;
-        const ayaId = playingAya !== -1 ? playingAya : selectStart;
-        app.gotoAya(ayaId, { sel: true });
-    };
+    // gotoPlayingAya = event => {
+    //     const { app, player } = this.props;
+    //     const { selectStart } = app;
+    //     const { playingAya } = player;
+    //     const ayaId = playingAya !== -1 ? playingAya : selectStart;
+    //     app.gotoAya(ayaId, { sel: true });
+    // };
 
     onClose = () => {
         // const { player } = this.props;
@@ -136,7 +135,8 @@ class AudioPlayer extends Component {
         return (
             <>
                 <div className="Title">
-                    <div id="PlayerStatus">{this.renderState()}</div>
+                    <PlayerButtons showReciter={false} />
+                    <PlayerStatus />
                 </div>
                 <div
                     className="PopupBody"
@@ -228,5 +228,93 @@ class AudioPlayer extends Component {
         );
     }
 }
+
+const PlayerButtons = PlayerConsumer(({ player, showReciter }) => {
+    let playButton = null,
+        stopBtn = null;
+
+    if (player.audioState !== AudioState.stopped) {
+        stopBtn = <CommandButton command="Stop" />;
+    }
+
+    switch (player.audioState) {
+        case AudioState.paused:
+            playButton = <CommandButton command="Pause" className="blinking" />;
+            break;
+        case AudioState.playing:
+            playButton = <CommandButton command="Pause" />;
+            break;
+        case AudioState.buffering:
+            playButton = (
+                <CommandButton command="Downloading" className="blinking" />
+            );
+            break;
+        default:
+            playButton = <CommandButton command="Play" />;
+    }
+
+    const reciterButton =
+        showReciter === false || player.audioState === AudioState.stopped ? (
+            ""
+        ) : (
+            <CommandButton command="AudioPlayer" />
+        );
+
+    return (
+        <>
+            {reciterButton}
+            {playButton} {stopBtn}
+        </>
+    );
+});
+
+const PlayerStatus = AppConsumer(
+    PlayerConsumer(({ app, player }) => {
+        const { selectStart } = app;
+        const { playingAya, audioState } = player;
+        let ayaId = playingAya === -1 ? selectStart : playingAya;
+        let { sura, aya } = QData.ayaIdInfo(ayaId);
+        let stateId = "unknown";
+        switch (audioState) {
+            case AudioState.stopped:
+                stateId = "stopped";
+                break;
+            case AudioState.buffering:
+                stateId = "buffering";
+                break;
+            case AudioState.playing:
+                stateId = "playing";
+                break;
+            case AudioState.paused:
+                stateId = "paused";
+                break;
+            case AudioState.error:
+                stateId = "error";
+                break;
+            default:
+                break;
+        }
+
+        const gotoPlayingAya = e => {
+            app.gotoAya(ayaId, { sel: true });
+        };
+
+        return (
+            <button onClick={gotoPlayingAya} className="AudioStatusButton">
+                <String id={stateId} />
+                :&nbsp;
+                <String id="sura_names">
+                    {sura_names => {
+                        return (
+                            sura_names.split(",")[sura] + " (" + (aya + 1) + ")"
+                        );
+                    }}
+                </String>
+            </button>
+        );
+    })
+);
+
+export { PlayerButtons, PlayerStatus };
 
 export default AppConsumer(PlayerConsumer(AudioPlayer));

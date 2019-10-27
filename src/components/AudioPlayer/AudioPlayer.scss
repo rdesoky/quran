@@ -37,14 +37,14 @@
         // #PlayerControl {
         //     float: right;
         // }
-        #PlayerStatus {
-            button {
-                font-size: 15px;
-                line-height: 40px;
-                padding: 0 10px;
-                box-sizing: content-box;
-            }
-        }
+        // #PlayerStatus {
+        //     button {
+        //         font-size: 15px;
+        //         line-height: 40px;
+        //         padding: 0 10px;
+        //         box-sizing: content-box;
+        //     }
+        // }
         .ReciterIcon {
             width: 50px;
             height: 50px;
@@ -70,4 +70,8 @@
 //       }
 //     }
 //   }
+// }
+
+// .AudioStatusButton {
+//     font-size: 15px !important;
 // }

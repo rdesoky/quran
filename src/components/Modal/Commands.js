@@ -26,9 +26,13 @@ import {
     faBookmark,
     faEye,
     faAngleDoubleDown,
-    faAngleDoubleUp
+    faAngleDoubleUp,
+    faFileDownload,
+    faStopCircle,
+    faPauseCircle
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
+import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
 
 export const CommandIcons = {
     Commands: faTh,
@@ -50,7 +54,10 @@ export const CommandIcons = {
     Exercise: faRunning,
     Fullscreen: faExpand,
     Bookmarks: faBookmark,
-    ToggleButton: faAngleDoubleDown
+    ToggleButton: faAngleDoubleDown,
+    Downloading: faFileDownload,
+    Pause: faPauseCircle,
+    Stop: faStopCircle
 };
 
 const getIcon = (commandId, app) => {
@@ -114,11 +121,16 @@ const Commands = () => {
     return (
         <>
             <div className="Title">
-                <String id="commands" />
+                <PlayerButtons showReciter={false} />
+                <PlayerStatus />
             </div>
             <div className="CommandsList">
                 {list.map(command => (
-                    <CommandButton key={command} command={command} />
+                    <CommandButton
+                        key={command}
+                        command={command}
+                        showLabel={true}
+                    />
                 ))}
             </div>
         </>
@@ -128,9 +140,36 @@ const Commands = () => {
 const CommandButton = ThemeConsumer(
     AppConsumer(
         PlayerConsumer(
-            ({ app, player, command, themeContext, showLabel, style }) => {
+            ({
+                app,
+                player,
+                command,
+                themeContext,
+                showLabel,
+                style,
+                className
+            }) => {
                 const runCommand = command => {
                     switch (command) {
+                        case "Play":
+                            player.play();
+                            break;
+                        case "Pause":
+                            if (player.audioState === AudioState.playing) {
+                                player.pause();
+                            } else {
+                                player.resume();
+                            }
+                            break;
+                        case "Stop":
+                            player.stop(true);
+                            break;
+                        case "Downloading":
+                            player.stop();
+                            setTimeout(() => {
+                                player.play();
+                            }, 500);
+                            break;
                         case "ToggleButton":
                             app.toggleShowMenu();
                             return;
@@ -160,7 +199,7 @@ const CommandButton = ThemeConsumer(
                 };
 
                 const renderLabel = () => {
-                    if (showLabel !== false) {
+                    if (showLabel === true) {
                         return (
                             <>
                                 <br />
@@ -184,6 +223,7 @@ const CommandButton = ThemeConsumer(
                         onClick={e => runCommand(command)}
                         style={style}
                         disabled={isDisabled(command)}
+                        className={"CommandButton " + className}
                     >
                         {commandIcon(command, app, player)}
                         {renderLabel()}
