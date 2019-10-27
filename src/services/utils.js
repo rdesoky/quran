@@ -103,3 +103,10 @@ const Utils = {
 };
 
 export default Utils;
+
+String.prototype.appendWord = function(word, condition) {
+    if (typeof word === "string" && word.length && condition !== false) {
+        return this + " " + word;
+    }
+    return this;
+};

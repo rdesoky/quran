@@ -545,7 +545,7 @@ class AppProvider extends Component {
                     firebase.auth().signInAnonymously();
                 } else {
                     this.readFireData();
-                    console.log(`Logged in userId ${JSON.stringify(user)}`);
+                    // console.log(`Logged in userId ${JSON.stringify(user)}`);
                 }
             });
 
