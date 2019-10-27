@@ -85,6 +85,9 @@
         min-height: 50px;
         position: relative;
         button {
+            font-size: 15px;
+            min-width: 50px;
+            height: 40px;
             margin: 0 4px;
         }
         .FlexTitle {
@@ -112,7 +115,7 @@
                 margin: 0 12px;
                 vertical-align: top;
                 min-width: 100px;
-                width: 50%;
+                width: 36%;
                 text-align: right;
                 [dir="rtl"] & {
                     text-align: left;
@@ -355,9 +358,6 @@
 #TafseerPopup {
     .Title {
         button {
-            font-size: 25px;
-            min-width: 50px;
-            height: 50px;
             &:nth-child(2) {
                 flex-grow: 1;
             }

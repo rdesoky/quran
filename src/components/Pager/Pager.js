@@ -190,6 +190,7 @@ function Pager({ match, app, player }) {
         } else {
             offsetSelection(e, -1);
         }
+        e.stopPropagation();
     };
 
     const increment = e => {
@@ -217,6 +218,7 @@ function Pager({ match, app, player }) {
         } else {
             offsetSelection(e, 1);
         }
+        e.stopPropagation();
     };
 
     const pagesCount = app.pagesCount;
