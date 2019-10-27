@@ -33,6 +33,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
+import { VerseInfo } from "../Widgets";
 
 export const CommandIcons = {
     Commands: faTh,
@@ -121,8 +122,8 @@ const Commands = () => {
     return (
         <>
             <div className="Title">
+                <VerseInfo />
                 <PlayerButtons showReciter={false} />
-                <PlayerStatus />
             </div>
             <div className="CommandsList">
                 {list.map(command => (
@@ -223,7 +224,7 @@ const CommandButton = ThemeConsumer(
                         onClick={e => runCommand(command)}
                         style={style}
                         disabled={isDisabled(command)}
-                        className={"CommandButton " + className}
+                        className={"CommandButton " + (className || "")}
                     >
                         {commandIcon(command, app, player)}
                         {renderLabel()}

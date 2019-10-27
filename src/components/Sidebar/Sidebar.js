@@ -23,10 +23,6 @@ function Sidebar({ app, player, themeContext }) {
                 bottom: app.showMenu || !app.isNarrow ? 0 : "auto"
             }}
         >
-            {/* <CommandButton
-                command="ToggleButton"
-                style={{ display: app.isNarrow ? "block" : "none", height: 50 }}
-            /> */}
             <CommandButton
                 command="Commands"
                 style={{ display: app.isNarrow ? "block" : "none", height: 50 }}
@@ -37,10 +33,16 @@ function Sidebar({ app, player, themeContext }) {
                     display: app.showMenu || !app.isNarrow ? "flex" : "none"
                 }}
             >
-                <div>
-                    <CommandButton command="Commands" showLabel={false} />
+                <CommandButton
+                    command="Commands"
+                    style={{
+                        display: app.isNarrow ? "none" : "block",
+                        height: 50
+                    }}
+                />
+                <div id="SidebarPlayer" className="SidebarSection">
+                    <PlayerButtons />
                 </div>
-                <PlayerButtons />
                 <div id="RecentCommands" className="SidebarSection">
                     {app.recentCommands
                         .filter(c => c != null)
