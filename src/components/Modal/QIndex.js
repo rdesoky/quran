@@ -239,26 +239,36 @@ const QIndex = ({ app, player }) => {
     return (
         <>
             <div className="Title">
-                <div>
-                    <button
-                        onClick={e => selectTab("index")}
-                        className={activeTab == "index" ? "active" : ""}
-                    >
-                        <Icon icon={faList} />
-                    </button>
-                    <button
-                        onClick={e => selectTab("hifz")}
-                        className={activeTab == "hifz" ? "active" : ""}
-                    >
-                        <Icon icon={faHeart} />
-                    </button>
-                    <button
-                        onClick={e => selectTab("bookmarks")}
-                        className={activeTab == "bookmarks" ? "active" : ""}
-                    >
-                        <Icon icon={faBookmark} />
-                    </button>
-                </div>
+                <button
+                    onClick={e => selectTab("index")}
+                    className={"CommandButton".appendWord(
+                        "active",
+                        activeTab == "index"
+                    )}
+                >
+                    <Icon icon={faList} />
+                </button>
+                {activeTab == "index" ? <String id="index" /> : ""}
+                <button
+                    onClick={e => selectTab("hifz")}
+                    className={"CommandButton".appendWord(
+                        "active",
+                        activeTab == "hifz"
+                    )}
+                >
+                    <Icon icon={faHeart} />
+                </button>
+                {activeTab == "hifz" ? <String id="favorites" /> : ""}
+                <button
+                    onClick={e => selectTab("bookmarks")}
+                    className={"CommandButton".appendWord(
+                        "active",
+                        activeTab == "bookmarks"
+                    )}
+                >
+                    <Icon icon={faBookmark} />
+                </button>
+                {activeTab == "bookmarks" ? <String id="bookmarks" /> : ""}
             </div>
             <div className={"TypingConsole" + (!filter.length ? " empty" : "")}>
                 {filter || <String id="search_prompt" />}

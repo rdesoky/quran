@@ -18,7 +18,7 @@ import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 function Sidebar({ app, player, themeContext }) {
     return (
         <div
-            className={"Sidebar" + (app.isNarrow ? " narrow" : "")}
+            className={"Sidebar".appendWord("narrow", app.isNarrow)}
             style={{
                 bottom: app.showMenu || !app.isNarrow ? 0 : "auto"
             }}

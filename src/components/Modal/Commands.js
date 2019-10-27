@@ -77,12 +77,10 @@ const commandIcon = (command, app, player) => {
         case "AudioPlayer":
             return (
                 <div
-                    className={
-                        "ReciterIcon" +
-                        (player.audioState === AudioState.playing
-                            ? " blinking"
-                            : "")
-                    }
+                    className={"ReciterIcon".appendWord(
+                        "blinking",
+                        player.audioState === AudioState.playing
+                    )}
                     style={{
                         backgroundImage:
                             "url(" +
@@ -224,7 +222,7 @@ const CommandButton = ThemeConsumer(
                         onClick={e => runCommand(command)}
                         style={style}
                         disabled={isDisabled(command)}
-                        className={"CommandButton " + (className || "")}
+                        className={"CommandButton".appendWord(className)}
                     >
                         {commandIcon(command, app, player)}
                         {renderLabel()}
