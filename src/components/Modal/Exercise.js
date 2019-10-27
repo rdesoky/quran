@@ -10,9 +10,9 @@ import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import QData from "./../../services/QData";
-import { cursor } from "sisteransi";
 import { TafseerView } from "./Tafseer";
+import { VerseInfo, VerseText } from "./../Widgets";
+import Switch from "react-switch";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -25,45 +25,6 @@ const Step = {
     results: 3
 };
 
-const VerseInfo = AppConsumer(({ app, verse, show, children }) => {
-    if (verse === undefined) {
-        verse = app.selectStart;
-    }
-    if (show === false) {
-        return "";
-    }
-    const verseInfo = QData.ayaIdInfo(verse);
-
-    return (
-        <div className="VerseInfo">
-            <div className="VerseInfoList">
-                <div>
-                    <String id="sura_names">
-                        {sura_names => (
-                            <>{sura_names.split(",")[verseInfo.sura]}</>
-                        )}
-                    </String>
-                </div>
-                <div>
-                    <String
-                        id="verse_num"
-                        values={{ num: verseInfo.aya + 1 }}
-                    />
-                </div>
-                {typeof children === "function" ? children(verse) : children}
-            </div>
-        </div>
-    );
-});
-
-const VerseText = AppConsumer(({ verse, app }) => {
-    if (verse === undefined) {
-        verse = app.selectStart;
-    }
-    const verseList = app.verseList();
-    return <div>{verse < verseList.length ? verseList[verse] : ""}</div>;
-});
-
 const Exercise = ({ app, player }) => {
     const [currStep, setCurrStep] = useState(Step.unknown);
     const [verse, setVerse] = useState(app.selectStart);
@@ -75,7 +36,7 @@ const Exercise = ({ app, player }) => {
     const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
     const normVerseList = app.normVerseList();
-    // const forceUpdate = useForceUpdate();
+    const [quickMode, setQuickMode] = useState(false);
 
     const isNarrowLayout = () => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
@@ -334,6 +295,10 @@ const Exercise = ({ app, player }) => {
         setMissingWords(0);
         if (testAnswer(text)) {
             setTimeout(() => {
+                if (quickMode) {
+                    typeNextVerse();
+                    return;
+                }
                 app.setMaskStart(app.selectStart + 1, true);
                 setCurrStep(Step.results);
             }, 500);
@@ -376,6 +341,9 @@ const Exercise = ({ app, player }) => {
 
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
+        if (quickMode && wrongWord === -1 && answerWords.length >= 3) {
+            return true;
+        }
         return wrongWord === -1 && correctWords.length === answerWords.length;
     };
 
@@ -384,23 +352,13 @@ const Exercise = ({ app, player }) => {
         return (
             <>
                 <VerseInfo />
-                {/* <div className={"iBlock " + (correct ? "Correct" : "Wrong")}>
-                    <Icon icon={correct ? faThumbsUp : faThumbsDown} />
-                </div> */}
                 <div className="ButtonsBar">
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
-                    {/* {writtenText.trim().length && isCorrect() ? (
-                        <button onClick={typeNextVerse}>
-                            <span class="Correct">
-                                <Icon icon={faThumbsUp} />
-                            </span>{" "}
-                            <String id="type_next" />
-                        </button>
-                    ) : (
-                        ""
-                    )} */}
+                    {/* <button onClick={typeNextVerse}>
+                        <String id="type_next" />
+                    </button> */}
                     <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
@@ -423,6 +381,11 @@ const Exercise = ({ app, player }) => {
                 {renderCursor()}
             </>
         );
+    };
+
+    const onUpdateQuickMode = ({ target }) => {
+        setQuickMode(target.checked);
+        defaultButton.focus();
     };
 
     const renderTypingConsole = () => {
@@ -450,6 +413,19 @@ const Exercise = ({ app, player }) => {
                         }
                     >
                         {renderText()}
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                onChange={onUpdateQuickMode}
+                                checked={quickMode}
+                                // disabled={player.repeat == 1}
+                            />
+                            <span>
+                                <String id="quick_mode" />
+                            </span>
+                        </label>
                     </div>
                 </div>
                 <AKeyboard
@@ -663,5 +639,4 @@ const Exercise = ({ app, player }) => {
     );
 };
 
-export { VerseInfo, VerseText };
 export default AppConsumer(PlayerConsumer(Exercise));

@@ -5,6 +5,7 @@ import { AppConsumer } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { VerseInfo } from "../Widgets";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -46,23 +47,22 @@ const Tafseer = ({ app, player }) => {
         }
     }, [player.playingAya]);
 
-    const ayaInfo = QData.ayaIdInfo(verse);
-
     return (
         <>
             <div className="Title">
-                <button onClick={e => offsetSelection(-1)}>
+                <button
+                    onClick={e => offsetSelection(-1)}
+                    className="CommandButton"
+                >
                     <Icon icon={faAngleRight} />
                 </button>
                 <button onClick={e => app.gotoAya(verse, { sel: true })}>
-                    <String id="sura_names">
-                        {sura_names =>
-                            sura_names.split(",")[ayaInfo.sura] +
-                            ` - ${ayaInfo.aya + 1}`
-                        }
-                    </String>
+                    <VerseInfo verse={verse} />
                 </button>
-                <button onClick={e => offsetSelection(1)}>
+                <button
+                    onClick={e => offsetSelection(1)}
+                    className="CommandButton"
+                >
                     <Icon icon={faAngleLeft} />
                 </button>
             </div>

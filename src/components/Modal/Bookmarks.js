@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
-import firebase from "firebase";
 import { AppConsumer } from "../../context/App";
-import { VerseInfo } from "./Exercise";
-import QData from "../../services/QData";
+import { VerseInfo } from "./../Widgets";
 
 const Bookmarks = ({ app }) => {
-    const { user, bookmarks } = app;
-
     const gotoAya = ({ target }) => {
         const aya = parseInt(target.getAttribute("aya"));
         app.gotoAya(aya, { sel: true });
