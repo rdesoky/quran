@@ -256,7 +256,6 @@ const Search = ({ app }) => {
                     <AKeyboard
                         initText={searchTerm}
                         onUpdateText={setSearchTerm}
-                        onEnter={hideKeyboard}
                         onCancel={hideKeyboard}
                         onEnter={onSubmitSearch}
                     />

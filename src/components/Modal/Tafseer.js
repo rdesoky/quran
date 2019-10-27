@@ -6,6 +6,7 @@ import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo } from "../Widgets";
+import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -56,15 +57,14 @@ const Tafseer = ({ app, player }) => {
                 >
                     <Icon icon={faAngleRight} />
                 </button>
-                <button onClick={e => app.gotoAya(verse, { sel: true })}>
-                    <VerseInfo verse={verse} />
-                </button>
+                <VerseInfo verse={verse} />
                 <button
                     onClick={e => offsetSelection(1)}
                     className="CommandButton"
                 >
                     <Icon icon={faAngleLeft} />
                 </button>
+                {app.isNarrow ? <PlayerButtons /> : ""}
             </div>
             <div
                 className="PopupBody"

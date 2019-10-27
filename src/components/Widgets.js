@@ -15,7 +15,7 @@ const VerseInfo = AppConsumer(({ app, verse, show, children, onClick }) => {
         if (typeof onClick === "function") {
             onClick(verse);
         } else {
-            app.gotoAya(verse);
+            app.gotoAya(verse, { sel: true });
         }
     };
 
