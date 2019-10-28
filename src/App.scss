@@ -135,3 +135,24 @@ hr {
     font-size: 25px !important;
     height: 50px !important;
 }
+
+.HifzRangeRow {
+    &.GoodHifz {
+        background-color: rgb(12, 44, 0);
+    }
+    &.FairHifz {
+        background-color: rgb(44, 40, 0);
+    }
+    &.WeakHifz {
+        background-color: rgb(41, 16, 0);
+    }
+    .AgeInfo {
+        text-align: right;
+        [dir="rtl"] & {
+            text-align: left;
+        }
+    }
+    .RangeInfo {
+        font-weight: bold;
+    }
+}
