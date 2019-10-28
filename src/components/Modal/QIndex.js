@@ -11,7 +11,7 @@ import {
     faHeart,
     faList,
     faEllipsisH,
-    faSearch
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
 
@@ -43,6 +43,11 @@ const QIndex = ({ app, player }) => {
 
     const updateFilter = filter => {
         setFilter(filter);
+    };
+
+    const clearFilter = e => {
+        setFilter("");
+        e.stopPropagation();
     };
 
     return (
@@ -87,7 +92,14 @@ const QIndex = ({ app, player }) => {
                 tabIndex="0"
                 onClick={showKeyboard}
             >
-                {filter || <String id="search_prompt" />}
+                {filter || <String id="find_sura" />}
+                {filter ? (
+                    <div className="ClearButton" onClick={clearFilter}>
+                        <Icon icon={faTimes} />
+                    </div>
+                ) : (
+                    ""
+                )}
             </div>
 
             <AKeyboard

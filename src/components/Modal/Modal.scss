@@ -390,6 +390,7 @@
     margin: 10px 0;
     font-size: 18px;
     overflow: auto;
+    position: relative;
     &.empty {
         color: #666;
     }
@@ -399,6 +400,19 @@
         background-color: #ffffff66;
         height: 20px;
         vertical-align: top;
+    }
+    .ClearButton {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: #999;
+        [dir="rtl"] & {
+            left: 10px;
+            right: auto;
+        }
+        &:hover {
+            color: white;
+        }
     }
 }
 

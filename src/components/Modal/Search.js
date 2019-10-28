@@ -6,7 +6,7 @@ import { AppConsumer } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const Search = ({ app }) => {
     const input = useRef(null);
@@ -268,6 +268,11 @@ const Search = ({ app }) => {
         return <span className="TypingCursor"></span>;
     };
 
+    const clearSearch = e => {
+        setSearchTerm("");
+        e.stopPropagation();
+    };
+
     const renderTypedText = () => {
         if (!searchTerm) {
             return <String id="search_prompt" />;
@@ -276,6 +281,9 @@ const Search = ({ app }) => {
             <>
                 {searchTerm}
                 {renderCursor()}
+                <div className="ClearButton" onClick={clearSearch}>
+                    <Icon icon={faTimes} />
+                </div>
             </>
         );
     };

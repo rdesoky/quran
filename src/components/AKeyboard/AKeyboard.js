@@ -5,7 +5,8 @@ import {
     faBackspace,
     faCheckCircle,
     faStepBackward,
-    faFastBackward
+    faFastBackward,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
 const keyMap = {
@@ -115,7 +116,11 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
         // setTimeout(() => {
         //     setTypedChar("");
         // }, 300);
-        if (target && target.tagName.match(/input|button/i)) {
+        if (
+            code === "Space" &&
+            target &&
+            target.tagName.match(/input|button/i)
+        ) {
             return;
         }
 
