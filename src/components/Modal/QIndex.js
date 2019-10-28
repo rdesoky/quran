@@ -14,8 +14,9 @@ import {
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
+import { HifzRanges } from "../Hifz";
 
-const QIndex = ({ app, player }) => {
+const QIndex = ({ app }) => {
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
@@ -210,128 +211,6 @@ export const SuraList = AppConsumer(
                                         <Icon icon={faEllipsisH} />
                                     </button>
                                 )}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
-        );
-    })
-);
-
-export const HifzRanges = AppConsumer(
-    PlayerConsumer(({ app, player, filter }) => {
-        const { hifzRanges } = app;
-
-        if (!hifzRanges.length) {
-            return (
-                <div>
-                    <String id="no_hifz" />
-                </div>
-            );
-        }
-
-        const sura_names = app.suraNames();
-
-        const rangeStartAya = (sura, page) => {
-            const suraStartPage = QData.sura_info[sura].sp - 1;
-            if (suraStartPage === page) {
-                return QData.ayaID(sura, 0);
-            } else {
-                return QData.pageAyaId(page);
-            }
-        };
-
-        const playRange = ({ target }) => {
-            player.stop(true);
-            selectRange({ target });
-            setTimeout(() => {
-                player.play();
-            }, 500);
-        };
-
-        const selectRange = ({ target }) => {
-            const sura = parseInt(target.getAttribute("sura"));
-            const startPage = parseInt(target.getAttribute("startpage"));
-            const endPage = parseInt(target.getAttribute("endpage"));
-            const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
-                sura,
-                startPage,
-                endPage
-            );
-            app.gotoPage(startPage + 1);
-            app.setSelectStart(rangeStartVerse);
-            app.setSelectEnd(rangeEndVerse);
-            checkClosePopup();
-        };
-
-        const checkClosePopup = () => {
-            if (!app.isCompact && app.pagesCount === 1) {
-                app.closePopup();
-            }
-        };
-
-        const versesText = app.verseList();
-
-        return (
-            <ul id="HifzRanges" className="FlowingList">
-                {hifzRanges.map((range, index) => {
-                    const suraName = sura_names[range.sura];
-                    if (filter && -1 === suraName.indexOf(filter)) {
-                        return "";
-                    }
-                    return (
-                        <li className="HifzRangeRow" key={index}>
-                            <button
-                                key={"" + range.sura + range.startPage}
-                                sura={range.sura}
-                                startpage={range.startPage}
-                                endpage={range.endPage}
-                                onClick={selectRange}
-                                style={{
-                                    width: "100%",
-                                    textAlign: "inherit",
-                                    padding: 10
-                                }}
-                            >
-                                <String
-                                    id={"range_desc"}
-                                    values={{
-                                        sura: suraName,
-                                        start_page: range.startPage + 1,
-                                        end_page:
-                                            range.pages > 1
-                                                ? "-" + (range.endPage + 1)
-                                                : ""
-                                    }}
-                                />
-                                <div
-                                    style={{
-                                        whiteSpace: "nowrap",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        pointerEvents: "none"
-                                    }}
-                                >
-                                    {
-                                        versesText[
-                                            rangeStartAya(
-                                                range.sura,
-                                                range.startPage
-                                            )
-                                        ]
-                                    }
-                                </div>
-                            </button>
-                            <div className="actions">
-                                <button
-                                    sura={range.sura}
-                                    startpage={range.startPage}
-                                    endpage={range.endPage}
-                                    onClick={playRange}
-                                >
-                                    <Icon icon={faPlayCircle} />
-                                </button>
                             </div>
                         </li>
                     );

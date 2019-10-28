@@ -36,14 +36,8 @@ class AudioPlayer extends Component {
         return (
             <>
                 <div className="Title">
-                    {app.isNarrow ? (
-                        <>
-                            <VerseInfo verse={player.playingAya} />
-                            <PlayerButtons showReciter={false} />
-                        </>
-                    ) : (
-                        ""
-                    )}
+                    <VerseInfo verse={player.playingAya} />
+                    {app.isNarrow ? <PlayerButtons showReciter={false} /> : ""}
                 </div>
                 <div
                     className="PopupBody"

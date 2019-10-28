@@ -80,6 +80,14 @@ class AppProvider extends Component {
         return this._suraNames;
     };
 
+    suraName = index => {
+        return index < 114 ? this.suraNames()[index] : "";
+    };
+
+    verseText = verse => {
+        return verse < QData.ayatCount() ? this.verseList()[verse] : "";
+    };
+
     verseList = () => {
         return this._verseList;
     };
@@ -397,11 +405,23 @@ class AppProvider extends Component {
         this.bookmarksRef.child(verse).set(null);
     };
 
+    markRevisedRange = range => {
+        const nodeRef = this.hifzRef.child(range.id);
+        nodeRef.once("value", snapshot => {
+            let curr_range = snapshot.val();
+            curr_range.ts = Date.now();
+            curr_range.revs++;
+            nodeRef.set(curr_range);
+        });
+    };
+
     setModalPopup = (modalPopup = true) => {
         this.setState({ modalPopup });
     };
 
     methods = {
+        markRevisedRange: this.markRevisedRange,
+        suraName: this.suraName,
         suraNames: this.suraNames,
         selectedRange: this.selectedRange,
         popupWidth: this.popupWidth,
@@ -429,6 +449,7 @@ class AppProvider extends Component {
         extendSelection: this.extendSelection,
         pushRecentCommand: this.pushRecentCommand,
         verseList: this.verseList,
+        verseText: this.verseText,
         normVerseList: this.normVerseList,
         closePopup: this.closePopup,
         getActiveSide: this.getActiveSide,
@@ -523,6 +544,7 @@ class AppProvider extends Component {
                           const pages = hifzInfo.pages;
                           const endPage = startPage + pages - 1;
                           return {
+                              id: k,
                               sura,
                               startPage,
                               pages,
