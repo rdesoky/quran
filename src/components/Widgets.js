@@ -48,7 +48,11 @@ const VerseText = AppConsumer(({ verse, app }) => {
         verse = app.selectStart;
     }
     const verseList = app.verseList();
-    return <div>{verse < verseList.length ? verseList[verse] : ""}</div>;
+    return (
+        <div className="VerseText">
+            {verse < verseList.length ? verseList[verse] : ""}
+        </div>
+    );
 });
 
 export { VerseInfo, VerseText };

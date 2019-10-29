@@ -158,23 +158,23 @@ const CommandButton = ThemeConsumer(
                     switch (command) {
                         case "Play":
                             player.play();
-                            break;
+                            return;
                         case "Pause":
                             if (player.audioState === AudioState.playing) {
                                 player.pause();
                             } else {
                                 player.resume();
                             }
-                            break;
+                            return;
                         case "Stop":
                             player.stop(true);
-                            break;
+                            return;
                         case "Downloading":
                             player.stop();
                             setTimeout(() => {
                                 player.play();
                             }, 500);
-                            break;
+                            return;
                         case "ToggleButton":
                             app.toggleShowMenu();
                             return;
@@ -199,7 +199,9 @@ const CommandButton = ThemeConsumer(
                             return;
                     }
                     app.pushRecentCommand(command);
-                    // app.closePopup();
+                    if (app.pagesCount == 1) {
+                        app.closePopup();
+                    }
                     app.setShowMenu(false);
                 };
 

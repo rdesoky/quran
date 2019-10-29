@@ -159,3 +159,25 @@ hr {
         font-weight: bold;
     }
 }
+
+.VerseText {
+    margin: 0;
+    line-height: 22px;
+}
+
+.VerseInfoFrame {
+    float: left;
+    margin: 0 5px;
+}
+
+.ContentFrame {
+    padding: 15px 10px;
+}
+
+.FootNote {
+    border-top: solid 1px white;
+    padding-top: 5px;
+    margin-top: 15px;
+    font-size: smaller;
+    clear: both;
+}
