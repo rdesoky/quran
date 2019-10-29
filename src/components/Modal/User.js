@@ -7,6 +7,10 @@ import firebase from "firebase";
 const User = ({ app }) => {
     const { user } = app;
 
+    const signOut = () => {
+        app.signOut();
+    };
+
     return (
         <>
             <div className="Title">
@@ -24,7 +28,7 @@ const User = ({ app }) => {
                     <div>{user.email}</div>
                     <hr />
                     <div className="FieldAction">
-                        <button onClick={e => firebase.auth().signOut()}>
+                        <button onClick={signOut}>
                             <String id="sign_out" />
                         </button>
                     </div>

@@ -53,8 +53,8 @@ export const HifzRange = AppConsumer(
             }
         };
 
-        const markRevisedRange = () => {
-            app.markRevisedRange(range);
+        const setRangeRevised = () => {
+            app.setRangeRevised(range);
         };
 
         let ageClass = "GoodHifz";
@@ -132,7 +132,7 @@ export const HifzRange = AppConsumer(
                     >
                         <Icon icon={faPlayCircle} />
                     </button>
-                    <button onClick={markRevisedRange}>
+                    <button onClick={setRangeRevised}>
                         <Icon icon={faCheck} />
                     </button>
                 </div>
