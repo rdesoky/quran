@@ -79,6 +79,8 @@ const Exercise = ({ app, player }) => {
         setCurrStep(Step.typing);
     };
 
+    let resultsDefaultButton =
+        localStorage.getItem("resultsDefaultButton") || "typeNext";
     let defaultButton = null;
 
     useEffect(() => {
@@ -217,12 +219,14 @@ const Exercise = ({ app, player }) => {
     };
 
     const reciteNextVerse = () => {
+        localStorage.setItem("resultsDefaultButton", "reciteNext");
         app.gotoAya(verse + 1, { sel: true });
         app.setMaskStart(verse + 2, true);
         setCurrStep(Step.reciting);
     };
 
     const typeNextVerse = () => {
+        localStorage.setItem("resultsDefaultButton", "typeNext");
         app.setMaskStart(verse + 1);
         app.gotoAya(verse + 1);
         setTimeout(startAnswer, 1);
@@ -454,13 +458,22 @@ const Exercise = ({ app, player }) => {
                         <>
                             <button
                                 ref={ref => {
-                                    defaultButton = ref;
+                                    if (resultsDefaultButton === "typeNext") {
+                                        defaultButton = ref;
+                                    }
                                 }}
                                 onClick={typeNextVerse}
                             >
                                 <String id="type_next" />
                             </button>
-                            <button onClick={reciteNextVerse}>
+                            <button
+                                ref={ref => {
+                                    if (resultsDefaultButton === "reciteNext") {
+                                        defaultButton = ref;
+                                    }
+                                }}
+                                onClick={reciteNextVerse}
+                            >
                                 <String id="recite_next" />
                             </button>
                         </>
