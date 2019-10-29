@@ -405,13 +405,22 @@ class AppProvider extends Component {
         this.bookmarksRef.child(verse).set(null);
     };
 
-    markRevisedRange = range => {
+    setRangeRevised = range => {
         const nodeRef = this.hifzRef.child(range.id);
         nodeRef.once("value", snapshot => {
             let curr_range = snapshot.val();
             curr_range.ts = Date.now();
             curr_range.revs++;
             nodeRef.set(curr_range);
+        });
+        const today = new Date();
+        const activityKey = `${today.getFullYear()}-${today.getMonth() +
+            1}-${today.getDate()}`;
+        const activityPagesRef = this.activityRef.child(activityKey + "/pages");
+        activityPagesRef.once("value", snapshot => {
+            let pages = snapshot.val() || 0;
+            pages += range.pages;
+            activityPagesRef.set(pages);
         });
     };
 
@@ -420,7 +429,8 @@ class AppProvider extends Component {
     };
 
     methods = {
-        markRevisedRange: this.markRevisedRange,
+        signOut: this.signOut,
+        setRangeRevised: this.setRangeRevised,
         suraName: this.suraName,
         suraNames: this.suraNames,
         selectedRange: this.selectedRange,
@@ -494,7 +504,9 @@ class AppProvider extends Component {
     }
 
     dbRef = null;
+    userRef = null;
     hifzRef = null;
+    activityRef = null;
     bookmarksRef = null;
     onBookmarkUpdate = null;
     onHifzUpdate = null;
@@ -508,11 +520,12 @@ class AppProvider extends Component {
             this.hifzRef.off("value", this.onHifzUpdate);
         }
 
+        this.userRef = this.dbRef.child(`data/${this.state.user.uid}`);
         //Create new references
-        this.hifzRef = this.dbRef.child(`data/${this.state.user.uid}/hifz`);
-        this.bookmarksRef = this.dbRef.child(
-            `data/${this.state.user.uid}/aya_marks`
-        );
+        this.hifzRef = this.userRef.child(`hifz`);
+        this.bookmarksRef = this.userRef.child(`aya_marks`);
+
+        this.activityRef = this.userRef.child(`activity`);
 
         //create new "value" listeners
         this.onBookmarkUpdate = this.bookmarksRef.on("value", snapshot => {
@@ -556,6 +569,12 @@ class AppProvider extends Component {
             this.setState({ hifzRanges });
         });
     }
+
+    signOut = () => {
+        this.hifzRanges.length = this.bookmarks.length = 0;
+        firebase.auth().signInAnonymously();
+        firebase.auth().signOut();
+    };
 
     componentDidMount() {
         this.unregisterAuthObserver = firebase

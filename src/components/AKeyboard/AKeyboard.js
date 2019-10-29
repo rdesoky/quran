@@ -119,7 +119,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
         if (
             code === "Space" &&
             target &&
-            (target.tagName.match(/input|button/i) || target.tabIndex !== -1)
+            target.tagName.match(/input|button/i)
         ) {
             return;
         }
