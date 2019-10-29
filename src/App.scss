@@ -134,6 +134,9 @@ hr {
 .CommandButton {
     font-size: 25px !important;
     height: 50px !important;
+    min-width: 50px;
+    vertical-align: top;
+    padding: 0;
 }
 
 .HifzRangeRow {

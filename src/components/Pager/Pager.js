@@ -28,11 +28,13 @@ function Pager({ match, app, player }) {
     let { page } = match.params;
 
     const pageUp = e => {
-        app.offsetPage(-app.pagesCount);
+        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        app.offsetPage(-count);
         // e.stopPropagation();
     };
     const pageDown = e => {
-        app.offsetPage(app.pagesCount);
+        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        app.offsetPage(count);
         // e.stopPropagation();
     };
 

@@ -64,12 +64,18 @@ const Tafseer = ({ app, player }) => {
                 >
                     <Icon icon={faAngleLeft} />
                 </button>
-                {app.isNarrow ? <PlayerButtons /> : ""}
             </div>
             <div
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
+                {app.isNarrow ? (
+                    <div>
+                        <PlayerButtons />
+                    </div>
+                ) : (
+                    ""
+                )}
                 <TafseerView verse={verse} />
             </div>
         </>
