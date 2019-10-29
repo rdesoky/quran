@@ -570,11 +570,15 @@ class AppProvider extends Component {
         });
     }
 
-    signOut = () => {
+    signOut() {
         this.hifzRanges.length = this.bookmarks.length = 0;
-        firebase.auth().signInAnonymously();
-        firebase.auth().signOut();
-    };
+        firebase
+            .auth()
+            .signOut()
+            .then(() => {
+                firebase.auth().signInAnonymously();
+            });
+    }
 
     componentDidMount() {
         this.unregisterAuthObserver = firebase

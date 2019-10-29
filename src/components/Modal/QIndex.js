@@ -117,6 +117,7 @@ const QIndex = ({ app }) => {
                 style={{
                     height: app.appHeight - 135
                 }}
+                onTouchStart={hideKeyboard}
                 onMouseDown={hideKeyboard}
             >
                 {activeTab == "index" ? (
