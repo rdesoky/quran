@@ -323,6 +323,7 @@
         button {
             // height: 100%;
             // min-width: 60px;
+            padding: 0 5px;
             margin: 0;
             font-size: 20px;
             color: #666;
@@ -335,9 +336,9 @@
             }
             span {
                 display: inline-block;
-                margin: 0 5px 0 10px;
+                margin: 0 0 0 5px;
                 [dir="rtl"] & {
-                    margin: 0 10px 0 5px;
+                    margin: 0 5px 0 0;
                 }
                 font-size: 16px;
             }
@@ -415,10 +416,6 @@
             color: white;
         }
     }
-}
-
-.ContentTitle {
-    margin-top: 10px;
 }
 
 #TrackDuration {

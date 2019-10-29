@@ -116,12 +116,14 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
         // setTimeout(() => {
         //     setTypedChar("");
         // }, 300);
-        if (
-            code === "Space" &&
-            target &&
-            target.tagName.match(/input|button/i)
-        ) {
-            return;
+        if (code === "Space") {
+            //Avoid entring space when user presses a button using space bar
+            if (target && target.tagName.match(/input|button/i)) {
+                return;
+            }
+            if (text.trim().length === 0) {
+                return;
+            }
         }
 
         switch (code) {

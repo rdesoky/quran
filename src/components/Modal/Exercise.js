@@ -252,15 +252,16 @@ const Exercise = ({ app, player }) => {
             return "";
         }
         return (
-            <>
-                <div className="ContentTitle">
+            <div className="ContentFrame">
+                <div className="VerseInfoFrame">
                     <VerseInfo />
                 </div>
-                {/* <h3>
-                    <VerseText />
-                </h3> */}
-                <TafseerView verse={verse} />
-            </>
+                <VerseText />
+                <div className="FootNote">
+                    <String id="exercise_intro" />
+                </div>
+                {/* <TafseerView verse={verse} /> */}
+            </div>
         );
     };
 
