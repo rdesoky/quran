@@ -71,9 +71,6 @@ function Sidebar({ app, player, themeContext }) {
                             recentDiv = ref;
                         }}
                         className="SidebarSection HiddenScroller"
-                        style={{
-                            overflowY: "auto"
-                        }}
                     >
                         <div style={{ height: app.recentCommands.length * 50 }}>
                             {app.recentCommands
