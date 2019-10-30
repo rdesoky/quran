@@ -5,10 +5,11 @@ import Utils from "./../services/utils";
 import firebase from "firebase";
 import { injectIntl } from "react-intl";
 
-let rc = localStorage.getItem("recentCommands");
+let rc = localStorage.getItem("commands");
 
 const AppState = {
     user: null,
+    expandedMenu: false,
     modalPopup: false,
     hifzRanges: [],
     bookmarks: [],
@@ -29,16 +30,21 @@ const AppState = {
     recentCommands: rc
         ? JSON.parse(rc)
         : [
-              "Search",
               "Index",
+              "AudioPlayer",
+              "Search",
               "Exercise",
               "Tafseer",
-              "Favorites",
               "Mask",
+              "Goto",
               "Theme",
               "Bookmarks",
               "Copy",
-              "Goto"
+              "Share",
+              "Favorites",
+              //   "Profile",
+              "Settings",
+              "Help"
           ]
 };
 
@@ -101,10 +107,10 @@ class AppProvider extends Component {
             [
                 "Commands",
                 "Play",
-                "AudioPlayer",
-                "Settings",
+                // "AudioPlayer",
+                // "Settings",
                 "Profile",
-                "ToggleButton",
+                // "ToggleButton",
                 "Pause",
                 "Stop"
             ].includes(command)
@@ -115,9 +121,9 @@ class AppProvider extends Component {
             command,
             ...this.state.recentCommands.filter(c => c !== command)
         ];
-        recentCommands.length = 12;
+        // recentCommands.length = 12;
         setTimeout(() => this.setState({ recentCommands }), 1);
-        localStorage.setItem("recentCommands", JSON.stringify(recentCommands));
+        localStorage.setItem("commands", JSON.stringify(recentCommands));
     };
 
     extendSelection = ayaId => {
@@ -188,9 +194,12 @@ class AppProvider extends Component {
 
     setShowMenu = showMenu => {
         this.setState({ showMenu });
-        if (showMenu) {
-            this.setState({ showPopup: false });
-        }
+        // if (showMenu) {
+        //     this.setState({ showPopup: false });
+        // }
+        // if (!showMenu) {
+        //     this.setState({ expandedMenu: false });
+        // }
     };
 
     toggleShowMenu = () => {
@@ -428,7 +437,12 @@ class AppProvider extends Component {
         this.setState({ modalPopup });
     };
 
+    setExpandedMenu = (expandedMenu = true) => {
+        this.setState({ expandedMenu });
+    };
+
     methods = {
+        setExpandedMenu: this.setExpandedMenu,
         signOut: this.signOut,
         setRangeRevised: this.setRangeRevised,
         suraName: this.suraName,
