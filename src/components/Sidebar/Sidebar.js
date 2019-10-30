@@ -23,7 +23,13 @@ function Sidebar({ app, player, themeContext }) {
     }, [app.recentCommands]);
     let recentDiv = null;
     return (
-        <>
+        <div
+            id="SidebarBlocker"
+            style={{ pointerEvents: app.expandedMenu ? "fill" : "none" }}
+            onClick={e => {
+                app.setExpandedMenu(false);
+            }}
+        >
             <CommandButton
                 command="Commands"
                 style={{
@@ -37,7 +43,7 @@ function Sidebar({ app, player, themeContext }) {
                 className={"Sidebar".appendWord("narrow", app.isNarrow)}
                 style={{
                     width: app.expandedMenu
-                        ? 200
+                        ? 220
                         : app.showMenu || !app.isNarrow
                         ? 50
                         : 0
@@ -94,7 +100,7 @@ function Sidebar({ app, player, themeContext }) {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

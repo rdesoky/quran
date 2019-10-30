@@ -245,7 +245,10 @@ const CommandButton = ThemeConsumer(
 
                 return (
                     <button
-                        onClick={e => runCommand(command)}
+                        onClick={e => {
+                            runCommand(command);
+                            e.stopPropagation();
+                        }}
                         style={style}
                         disabled={isDisabled(command)}
                         className={"CommandButton".appendWord(className)}
