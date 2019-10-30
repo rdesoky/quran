@@ -29,14 +29,15 @@ import {
     faAngleDoubleUp,
     faFileDownload,
     faStopCircle,
-    faPauseCircle
+    faPauseCircle,
+    faBars
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 
 export const CommandIcons = {
-    Commands: faTh,
+    Commands: faBars,
     Index: faList,
     Goto: faLocationArrow,
     Search: faSearch,
@@ -76,19 +77,26 @@ const commandIcon = (command, app, player) => {
     switch (command) {
         case "AudioPlayer":
             return (
-                <div
+                // <div
+                //     className={"ReciterIcon".appendWord(
+                //         "blinking",
+                //         player.audioState === AudioState.playing
+                //     )}
+                //     style={{
+                //         backgroundImage:
+                //             "url(" +
+                //             process.env.PUBLIC_URL +
+                //             "/images/" +
+                //             player.reciter +
+                //             ".jpg)"
+                //     }}
+                // />
+                <img
+                    src={`${process.env.PUBLIC_URL}/images/${player.reciter}.jpg`}
                     className={"ReciterIcon".appendWord(
                         "blinking",
                         player.audioState === AudioState.playing
                     )}
-                    style={{
-                        backgroundImage:
-                            "url(" +
-                            process.env.PUBLIC_URL +
-                            "/images/" +
-                            player.reciter +
-                            ".jpg)"
-                    }}
                 />
             );
 
@@ -155,7 +163,11 @@ const CommandButton = ThemeConsumer(
                 className
             }) => {
                 const runCommand = command => {
+                    app.setExpandedMenu(false);
                     switch (command) {
+                        case "Commands":
+                            app.setExpandedMenu(!app.expandedMenu);
+                            break;
                         case "Play":
                             player.play();
                             return;
@@ -208,12 +220,12 @@ const CommandButton = ThemeConsumer(
                 const renderLabel = () => {
                     if (showLabel === true) {
                         return (
-                            <>
-                                <br />
-                                <span className="CommandLabel">
-                                    <String id={command.toLowerCase()} />
-                                </span>
-                            </>
+                            <span className="CommandLabel">
+                                <String
+                                    className="CommandLabel"
+                                    id={command.toLowerCase()}
+                                />
+                            </span>
                         );
                     }
                 };
@@ -221,7 +233,13 @@ const CommandButton = ThemeConsumer(
                 const isDisabled = command => {
                     return (
                         app.popup === "Exercise" &&
-                        !["Play", "Pause", "Exercise"].includes(command)
+                        ![
+                            "Commands",
+                            "Play",
+                            "Pause",
+                            "Exercise",
+                            "Stop"
+                        ].includes(command)
                     );
                 };
 

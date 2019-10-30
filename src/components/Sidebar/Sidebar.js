@@ -16,53 +16,85 @@ import { CommandButton } from "./../Modal/Commands";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 
 function Sidebar({ app, player, themeContext }) {
+    useEffect(() => {
+        if (recentDiv) {
+            recentDiv.scrollTop = 0;
+        }
+    }, [app.recentCommands]);
+    let recentDiv = null;
     return (
-        <div
-            className={"Sidebar".appendWord("narrow", app.isNarrow)}
-            style={{
-                bottom: app.showMenu || !app.isNarrow ? 0 : "auto"
-            }}
-        >
+        <>
             <CommandButton
                 command="Commands"
-                style={{ display: app.isNarrow ? "block" : "none", height: 50 }}
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    height: 50
+                }}
             />
             <div
-                className="ButtonsList"
+                className={"Sidebar".appendWord("narrow", app.isNarrow)}
                 style={{
-                    display: app.showMenu || !app.isNarrow ? "flex" : "none"
+                    width: app.expandedMenu
+                        ? 200
+                        : app.showMenu || !app.isNarrow
+                        ? 50
+                        : 0
                 }}
             >
-                <CommandButton
-                    command="Commands"
+                <div
+                    className="ButtonsList"
                     style={{
-                        display: app.isNarrow ? "none" : "block",
-                        height: 50
+                        display:
+                            app.showMenu || app.expandedMenu || !app.isNarrow
+                                ? "flex"
+                                : "none",
+                        direction: "ltr"
                     }}
-                />
-                <div id="SidebarPlayer" className="SidebarSection">
-                    <PlayerButtons />
-                </div>
-                <div id="RecentCommands" className="SidebarSection">
-                    {app.recentCommands
-                        .filter(c => c != null)
-                        .map((command, index) => {
-                            return (
-                                <CommandButton
-                                    command={command}
-                                    key={command}
-                                    style={{
-                                        top: index * 50
-                                    }}
-                                />
-                            );
-                        })}
-                </div>
-                <div id="SidebarFooter" className="SidebarSection">
-                    <CommandButton command="Profile" />
+                >
+                    <div id="SidebarPlayer" className="SidebarSection">
+                        <PlayerButtons
+                            showLabels={app.expandedMenu}
+                            showReciter={false}
+                        />
+                    </div>
+                    <div
+                        id="RecentCommands"
+                        ref={ref => {
+                            recentDiv = ref;
+                        }}
+                        className="SidebarSection HiddenScroller"
+                        style={{
+                            overflowY: "auto"
+                        }}
+                    >
+                        <div style={{ height: app.recentCommands.length * 50 }}>
+                            {app.recentCommands
+                                .filter(c => c != null)
+                                .map((command, index) => {
+                                    return (
+                                        <CommandButton
+                                            command={command}
+                                            key={command}
+                                            style={{
+                                                top: index * 50
+                                            }}
+                                            showLabel={app.expandedMenu}
+                                        />
+                                    );
+                                })}
+                        </div>
+                    </div>
+                    <div id="SidebarFooter" className="SidebarSection">
+                        <CommandButton
+                            command="Profile"
+                            showLabel={app.expandedMenu}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

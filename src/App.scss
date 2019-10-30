@@ -137,6 +137,9 @@ hr {
     min-width: 50px;
     vertical-align: top;
     padding: 0;
+    img {
+        vertical-align: middle;
+    }
 }
 
 .HifzRangeRow {
@@ -180,4 +183,12 @@ hr {
     margin-top: 15px;
     font-size: smaller;
     clear: both;
+}
+
+.HiddenScroller {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        width: 0 !important;
+    }
 }

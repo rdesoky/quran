@@ -130,35 +130,49 @@ class AudioPlayer extends Component {
     }
 }
 
-const PlayerButtons = PlayerConsumer(({ player, showReciter }) => {
+const PlayerButtons = PlayerConsumer(({ player, showReciter, showLabels }) => {
     let playButton = null,
         stopBtn = null;
 
     if (player.audioState !== AudioState.stopped) {
-        stopBtn = <CommandButton command="Stop" />;
+        stopBtn = <CommandButton command="Stop" showLabel={showLabels} />;
     }
 
     switch (player.audioState) {
         case AudioState.paused:
-            playButton = <CommandButton command="Pause" className="blinking" />;
+            playButton = (
+                <CommandButton
+                    command="Pause"
+                    className="blinking"
+                    showLabel={showLabels}
+                />
+            );
             break;
         case AudioState.playing:
-            playButton = <CommandButton command="Pause" />;
+            playButton = (
+                <CommandButton command="Pause" showLabel={showLabels} />
+            );
             break;
         case AudioState.buffering:
             playButton = (
-                <CommandButton command="Downloading" className="blinking" />
+                <CommandButton
+                    command="Downloading"
+                    className="blinking"
+                    showLabel={showLabels}
+                />
             );
             break;
         default:
-            playButton = <CommandButton command="Play" />;
+            playButton = (
+                <CommandButton command="Play" showLabel={showLabels} />
+            );
     }
 
     const reciterButton =
         showReciter === false || player.audioState === AudioState.stopped ? (
             ""
         ) : (
-            <CommandButton command="AudioPlayer" />
+            <CommandButton command="AudioPlayer" showLabel={showLabels} />
         );
 
     return (

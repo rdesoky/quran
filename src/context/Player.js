@@ -145,6 +145,8 @@ class PlayerProvider extends Component {
         ) {
             this.setRepeat(AudioRepeat.noStop);
         }
+
+        app.pushRecentCommand("AudioPlayer");
     };
     resume = () => {
         this.audio.play();
