@@ -109,7 +109,7 @@ const Exercise = ({ app, player }) => {
             player.setFollowPlayer(savedFollowPlayer);
             player.stop(true);
             app.setModalPopup(false);
-            // app.hideMask();
+            app.hideMask();
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);

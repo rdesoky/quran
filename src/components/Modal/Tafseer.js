@@ -40,7 +40,11 @@ const Tafseer = ({ app, player }) => {
     };
 
     useEffect(() => {
-        setVerse(app.selectStart);
+        if (app.maskStart !== -1) {
+            setVerse(app.maskStart - 1);
+        } else {
+            setVerse(app.selectStart);
+        }
     }, [app.selectStart]);
 
     useEffect(() => {
