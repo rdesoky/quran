@@ -85,6 +85,7 @@ const Exercise = ({ app, player }) => {
 
     useEffect(() => {
         setVerse(app.selectStart);
+        app.setMaskStart(app.selectStart + 1, true);
         setWrittenText("");
     }, [app.selectStart]);
 
@@ -127,8 +128,8 @@ const Exercise = ({ app, player }) => {
                 app.setModalPopup(); //block outside selection
                 break;
             case Step.intro:
-                // app.setMaskStart(verse + 1, true);
-                app.hideMask();
+                app.setMaskStart(verse + 1, true);
+            //app.hideMask();
             default:
                 app.setModalPopup(false); //allow selecting outside
         }
@@ -221,14 +222,14 @@ const Exercise = ({ app, player }) => {
     const reciteNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         app.gotoAya(verse + 1, { sel: true });
-        app.setMaskStart(verse + 2, true);
+        // app.setMaskStart(verse + 2, true);
         setCurrStep(Step.reciting);
     };
 
     const typeNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
-        app.setMaskStart(verse + 1);
-        app.gotoAya(verse + 1);
+        // app.setMaskStart(verse + 1);
+        app.gotoAya(verse + 1, { sel: true });
         setTimeout(startAnswer, 1);
         if (defaultButton) {
             defaultButton.focus();
@@ -251,15 +252,17 @@ const Exercise = ({ app, player }) => {
         }
     };
 
+    const onMoveNext = offset => {
+        app.gotoAya(verse + offset, { sel: true, keepMask: true });
+    };
+
     const renderIntro = () => {
         if (isNarrowLayout()) {
             return "";
         }
         return (
             <div className="ContentFrame">
-                <div className="VerseInfoFrame">
-                    <VerseInfo />
-                </div>
+                <VerseInfo onMoveNext={onMoveNext} />
                 <VerseText />
                 <div className="FootNote">
                     <String id="exercise_intro" />
@@ -617,12 +620,13 @@ const Exercise = ({ app, player }) => {
         }
         return (
             <>
-                <div className="ContentTitle">
+                <div className="ContentFrame">
                     <VerseInfo />
-                </div>
-                <h3>
                     <VerseText />
-                </h3>
+                    <div className="FootNote">
+                        <String id="exercise_intro" />
+                    </div>
+                </div>
             </>
         );
     };

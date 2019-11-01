@@ -304,10 +304,12 @@ class AppProvider extends Component {
         this.selectAya(ayaId);
     };
 
-    gotoAya = (ayaId, opt = { sel: false, replace: true }) => {
+    gotoAya = (ayaId, opt = { sel: false, replace: true, keepMask: false }) => {
         if (opt.sel) {
             this.selectAya(ayaId);
-            this.hideMask();
+            if (opt.keepMask !== true) {
+                this.hideMask();
+            }
         }
         const pageIndex = QData.ayaIdPage(ayaId);
         this.gotoPage(pageIndex + 1, opt.replace);

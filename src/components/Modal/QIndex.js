@@ -11,7 +11,8 @@ import {
     faHeart,
     faList,
     faEllipsisH,
-    faTimes
+    faTimes,
+    faTh
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges } from "../Hifz";
@@ -61,7 +62,7 @@ const QIndex = ({ app }) => {
                         activeTab == "index"
                     )}
                 >
-                    <Icon icon={faList} />
+                    <Icon icon={faTh} />
                     {activeTab == "index" ? <String id="index" /> : ""}
                 </button>
                 <button

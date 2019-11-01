@@ -4,7 +4,6 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
-import Utils from "../../services/utils";
 
 const Modal = ({ onClose, children, app, show, name, modeless }) => {
     const onClickClose = e => {
@@ -20,19 +19,19 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
 
     let activeSide = app.getActiveSide();
 
-    useEffect(() => {
-        //select the launching command from in the side bar
-        const commandBtn = document.querySelector(
-            `#RecentCommands button[command=${app.popup}]`
-        );
-        if (commandBtn) {
-            commandBtn.focus();
-        }
-        return () => {
-            //Upon exit, select the most recent command to avoid hidden focus
-            Utils.selectTopCommand();
-        };
-    }, []);
+    // useEffect(() => {
+    //     // //select the launching command from in the side bar
+    //     // const commandBtn = document.querySelector(
+    //     //     `#RecentCommands button[command=${app.popup}]`
+    //     // );
+    //     // if (commandBtn) {
+    //     //     commandBtn.focus();
+    //     // }
+    //     return () => {
+    //         //Upon exit, select the most recent command to avoid hidden focus
+    //         Utils.selectTopCommand();
+    //     };
+    // }, []);
 
     const pagerWidth = app.pagerWidth();
     const sideBarWidth = app.sideBarWidth();

@@ -69,13 +69,15 @@ function Pager({ match, app, player }) {
         app.gotoAya(selectedAyaId);
     };
 
+    const inExercise = () => app.popup === "Exercise";
+
     const handleKeyDown = e => {
         const { tagName, type } = document.activeElement;
         const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
         const isTextInput =
             isInput && ["text", "number", "textarea"].includes(type);
 
-        if (app.popup) {
+        if (app.modalPopup) {
             return;
         }
 
@@ -142,7 +144,7 @@ function Pager({ match, app, player }) {
                 break;
             case "ArrowUp":
                 if (!isTextInput) {
-                    if (app.maskStart !== -1) {
+                    if (app.maskStart !== -1 && !inExercise()) {
                         decrement(e);
                     } else {
                         offsetSelection(e, -1);
@@ -174,6 +176,10 @@ function Pager({ match, app, player }) {
     }
 
     const decrement = e => {
+        if (inExercise()) {
+            offsetSelection(e, -1);
+            return;
+        }
         let { maskStart } = app;
         if (maskStart !== -1) {
             //Mask is active
@@ -196,6 +202,10 @@ function Pager({ match, app, player }) {
     };
 
     const increment = e => {
+        if (inExercise()) {
+            offsetSelection(e, 1);
+            return;
+        }
         let { maskStart } = app;
         if (maskStart !== -1) {
             //Mask is active
