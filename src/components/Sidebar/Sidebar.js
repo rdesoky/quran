@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import {
-    faFileDownload,
-    faAngleDoubleDown,
-    faAngleDoubleUp,
-    faPlayCircle,
-    faPauseCircle,
-    faStopCircle
-} from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer, AudioState, AudioRepeat } from "../../context/Player";
 import { ThemeConsumer } from "../../context/Theme";
 import { CommandButton } from "./../Modal/Commands";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import Utils from "../../services/utils";
 
 function Sidebar({ app, player, themeContext }) {
     useEffect(() => {
@@ -21,7 +13,15 @@ function Sidebar({ app, player, themeContext }) {
             recentDiv.scrollTop = 0;
         }
     }, [app.recentCommands]);
+
+    useEffect(() => {
+        if (app.popup === null) {
+            Utils.selectTopCommand();
+        }
+    }, [app.popup]);
+
     let recentDiv = null;
+
     return (
         <div
             id="SidebarBlocker"
@@ -36,7 +36,8 @@ function Sidebar({ app, player, themeContext }) {
                     position: "absolute",
                     left: 0,
                     top: 0,
-                    height: 50
+                    height: 50,
+                    backgroundColor: "#000"
                 }}
             />
             <div
@@ -52,10 +53,10 @@ function Sidebar({ app, player, themeContext }) {
                 <div
                     className="ButtonsList"
                     style={{
-                        display:
-                            app.showMenu || app.expandedMenu || !app.isNarrow
-                                ? "flex"
-                                : "none",
+                        // display:
+                        //     app.showMenu || app.expandedMenu || !app.isNarrow
+                        //         ? "flex"
+                        //         : "none",
                         direction: "ltr"
                     }}
                 >

@@ -8,6 +8,9 @@
     /* text-align: center; */
     background-color: #444;
     direction: rtl;
+    &.DarkTheme {
+        background-color: black;
+    }
 }
 
 .App-logo {
@@ -99,14 +102,31 @@ hr {
     transform: scaleX(-1);
 }
 
+// .VerseInfoFrame {
+// }
 .VerseInfo {
-    display: inline-block;
+    float: left;
+    .PopupBody & {
+        margin: 0 10px 10px 0;
+    }
+    display: flex;
+    min-width: 60px;
+    flex-direction: column;
     .VerseInfoList {
         font-size: 13px;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+    button {
+        min-height: 25px;
+    }
+}
+
+.VerseText {
+    margin: 0;
+    line-height: 22px;
+    color: yellow;
 }
 
 .circle-background,
@@ -141,18 +161,28 @@ hr {
         vertical-align: middle;
     }
     pointer-events: fill;
-    background-color: black;
+    // background-color: black;
 }
+
+$goodHifzBg: rgb(16, 61, 0);
+$weakHifzBg: rgb(73, 9, 0);
+$fairHifzBg: rgb(87, 74, 0);
 
 .HifzRangeRow {
     &.GoodHifz {
-        background-color: rgb(16, 61, 0);
+        button {
+            color: rgb(58, 216, 0);
+        }
     }
     &.FairHifz {
-        background-color: rgb(87, 74, 0);
+        button {
+            color: rgb(231, 196, 0);
+        }
     }
     &.WeakHifz {
-        background-color: rgb(73, 9, 0);
+        button {
+            color: #f33;
+        }
     }
     .AgeInfo {
         text-align: right;
@@ -163,16 +193,6 @@ hr {
     .RangeInfo {
         font-weight: bold;
     }
-}
-
-.VerseText {
-    margin: 0;
-    line-height: 22px;
-}
-
-.VerseInfoFrame {
-    float: left;
-    margin: 0 5px;
 }
 
 .ContentFrame {

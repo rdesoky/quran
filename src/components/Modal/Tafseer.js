@@ -5,7 +5,7 @@ import { AppConsumer } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { VerseInfo } from "../Widgets";
+import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 
 const TafseerList = [
@@ -35,7 +35,8 @@ const Tafseer = ({ app, player }) => {
     const [verse, setVerse] = useState(app.selectStart);
 
     const offsetSelection = offset => {
-        setVerse(verse + offset);
+        // setVerse(verse + offset);
+        app.gotoAya(verse + offset, { sel: true });
     };
 
     useEffect(() => {
@@ -51,24 +52,7 @@ const Tafseer = ({ app, player }) => {
     return (
         <>
             <div className="Title">
-                <button
-                    onClick={e => offsetSelection(-1)}
-                    className="CommandButton"
-                >
-                    <Icon icon={faAngleRight} />
-                </button>
-                <VerseInfo verse={verse} />
-                <button
-                    onClick={e => offsetSelection(1)}
-                    className="CommandButton"
-                >
-                    <Icon icon={faAngleLeft} />
-                </button>
-            </div>
-            <div
-                className="PopupBody"
-                style={{ maxHeight: app.appHeight - 85 }}
-            >
+                <String id="tafseer" />
                 {app.isNarrow ? (
                     <div>
                         <PlayerButtons />
@@ -76,13 +60,18 @@ const Tafseer = ({ app, player }) => {
                 ) : (
                     ""
                 )}
-                <TafseerView verse={verse} />
+            </div>
+            <div
+                className="PopupBody"
+                style={{ maxHeight: app.appHeight - 85 }}
+            >
+                <TafseerView verse={verse} onMoveNext={offsetSelection} />
             </div>
         </>
     );
 };
 
-const TafseerView = AppConsumer(({ app, verse }) => {
+const TafseerView = AppConsumer(({ app, verse, onMoveNext }) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
     );
@@ -147,9 +136,12 @@ const TafseerView = AppConsumer(({ app, verse }) => {
         return TafseerList.find(i => i.id === tafseer).dir;
     };
     return (
-        <>
+        <div className="TafseerView">
             <div>
-                <p className="TafseerVerse">{renderVerse()}</p>
+                <VerseInfo onMoveNext={onMoveNext} verse={verse} />
+                <div className="TafseerVerse">
+                    <VerseText verse={verse} />
+                </div>
             </div>
             <div>
                 <p
@@ -161,7 +153,7 @@ const TafseerView = AppConsumer(({ app, verse }) => {
                     {renderTafseer()}
                 </p>
             </div>
-        </>
+        </div>
     );
 });
 

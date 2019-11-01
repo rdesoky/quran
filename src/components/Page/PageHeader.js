@@ -58,6 +58,7 @@ const PageHeader = ({
 
     let partIndex = QData.pagePart(pageIndex + 1) - 1;
     let selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
+    // let isActive = app.pagesCount === 1 ? true : app.getActiveSide() === order;
 
     return (
         <div className="PageHeader" style={{ textAlign }}>
@@ -112,7 +113,12 @@ const PageHeader = ({
                         }}
                     </String>
                 </select>
-                <div className="PageHeaderSection">
+                <div
+                    className="PageHeaderSection"
+                    style={{
+                        display: app.pagesCount === 1 || order ? "" : "none"
+                    }}
+                >
                     <button
                         className="NavButton NavBackward"
                         onClick={onDecrement}
@@ -123,6 +129,7 @@ const PageHeader = ({
                         onClick={e => {
                             app.gotoAya(app.selectStart);
                         }}
+                        className="SelectionButton"
                     >
                         {selectedAyaInfo.sura +
                             1 +

@@ -41,9 +41,10 @@ export const HifzRange = AppConsumer(
                 startPage,
                 endPage
             );
-            app.gotoPage(startPage + 1);
-            app.setSelectStart(rangeStartVerse);
-            app.setSelectEnd(rangeEndVerse);
+            app.gotoAya(rangeStartVerse, { sel: true });
+            // app.gotoPage(startPage + 1);
+            // app.setSelectStart(rangeStartVerse);
+            // app.setSelectEnd(rangeEndVerse);
             checkClosePopup();
         };
 

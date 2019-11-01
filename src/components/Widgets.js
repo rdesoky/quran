@@ -2,46 +2,77 @@ import React from "react";
 import QData from "./../services/QData";
 import { AppConsumer } from "./../context/App";
 import { FormattedMessage as String } from "react-intl";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-const VerseInfo = AppConsumer(({ app, verse, show, children, onClick }) => {
-    if (verse === undefined || verse === -1) {
-        verse = app.selectStart;
-    }
-    if (show === false) {
-        return "";
-    }
-
-    const handleClick = e => {
-        if (typeof onClick === "function") {
-            onClick(verse);
-        } else {
-            app.gotoAya(verse, { sel: true });
+const VerseInfo = AppConsumer(
+    ({ app, verse, show, children, onClick, onMoveNext }) => {
+        if (verse === undefined || verse === -1) {
+            verse = app.selectStart;
         }
-    };
+        if (show === false) {
+            return "";
+        }
 
-    const verseInfo = QData.ayaIdInfo(verse);
+        const handleClick = e => {
+            if (typeof onClick === "function") {
+                onClick(verse);
+            } else {
+                app.gotoAya(verse, { sel: true });
+            }
+        };
 
-    return (
-        <button className="VerseInfo" onClick={handleClick}>
-            <div className="VerseInfoList">
-                <div>
-                    <String id="sura_names">
-                        {sura_names => (
-                            <>{sura_names.split(",")[verseInfo.sura]}</>
-                        )}
-                    </String>
-                </div>
-                <div>
-                    <String
-                        id="verse_num"
-                        values={{ num: verseInfo.aya + 1 }}
-                    />
-                </div>
-                {typeof children === "function" ? children(verse) : children}
+        const verseInfo = QData.ayaIdInfo(verse);
+
+        return (
+            <div className="VerseInfo">
+                {onMoveNext ? (
+                    <button
+                        onClick={e => {
+                            onMoveNext(-1);
+                        }}
+                    >
+                        <Icon icon={faChevronUp} />
+                    </button>
+                ) : (
+                    ""
+                )}
+                <button onClick={handleClick}>
+                    <div className="VerseInfoList">
+                        <div>
+                            <String id="sura_names">
+                                {sura_names => (
+                                    <>{sura_names.split(",")[verseInfo.sura]}</>
+                                )}
+                            </String>
+                        </div>
+                        <div>
+                            <String
+                                id="verse_num"
+                                values={{ num: verseInfo.aya + 1 }}
+                            />
+                        </div>
+
+                        {typeof children === "function"
+                            ? children(verse)
+                            : children}
+                    </div>
+                </button>
+                {onMoveNext ? (
+                    <button
+                        onClick={e => {
+                            onMoveNext(1);
+                        }}
+                    >
+                        <Icon icon={faChevronDown} />
+                    </button>
+                ) : (
+                    ""
+                )}
             </div>
-        </button>
-    );
-});
+        );
+    }
+);
 
 const VerseText = AppConsumer(({ verse, app }) => {
     if (verse === undefined) {

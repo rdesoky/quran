@@ -40,6 +40,9 @@
         }
         &:disabled {
             color: #666;
+            &:hover {
+                color: black;
+            }
         }
     }
 
@@ -53,10 +56,6 @@
         flex-direction: column;
         height: 100%;
 
-        // .narrow & {
-        //     height: calc(100% - 50px);
-        // }
-
         button {
             font-size: 24px;
             height: 50px;
@@ -67,12 +66,8 @@
             span {
                 font-size: 15px;
             }
-            // background-size: cover;
-            // background-repeat: no-repeat;
-            // background-position: center;
         }
         #RecentCommands {
-            // height: calc(100% - 205px);
             flex-grow: 1;
             overflow-x: hidden;
             overflow-y: auto;
@@ -115,4 +110,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    button:disabled & {
+        filter: grayscale(100%);
+    }
 }

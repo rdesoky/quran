@@ -38,7 +38,7 @@ import { VerseInfo } from "../Widgets";
 
 export const CommandIcons = {
     Commands: faBars,
-    Index: faList,
+    Index: faTh,
     Goto: faLocationArrow,
     Search: faSearch,
     Play: faPlayCircle,
