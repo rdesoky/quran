@@ -46,8 +46,8 @@ const Exercise = ({ app, player }) => {
         player.stop();
         player.setPlayingAya(-1);
         const new_verse = Math.floor(Math.random() * verseList.length);
-        app.gotoAya(new_verse, { sel: true });
-        app.setMaskStart(new_verse + 1, true);
+        app.gotoAya(new_verse, { sel: true, keepMask: true });
+        // app.setMaskStart(new_verse + 1, true);
         setCurrStep(Step.intro);
         if (currStep === Step.intro && defaultButton) {
             defaultButton.focus();
@@ -56,7 +56,7 @@ const Exercise = ({ app, player }) => {
 
     const startReciting = e => {
         setCurrStep(Step.reciting);
-        app.setMaskStart(verse + 1, true);
+        // app.setMaskStart(verse + 1, true);
     };
 
     const redoReciting = e => {
@@ -85,7 +85,10 @@ const Exercise = ({ app, player }) => {
 
     useEffect(() => {
         setVerse(app.selectStart);
-        app.setMaskStart(app.selectStart + 1, true);
+        app.setMaskStart(
+            app.selectStart + (currStep === Step.typing ? 0 : 1),
+            true
+        );
         setWrittenText("");
     }, [app.selectStart]);
 
@@ -106,7 +109,7 @@ const Exercise = ({ app, player }) => {
             player.setFollowPlayer(savedFollowPlayer);
             player.stop(true);
             app.setModalPopup(false);
-            app.hideMask();
+            // app.hideMask();
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
@@ -123,13 +126,14 @@ const Exercise = ({ app, player }) => {
             case Step.reciting:
                 player.play();
                 app.setModalPopup(); //block outside selection
+                app.setMaskStart(verse + 1, true);
                 break;
             case Step.results:
+                app.setMaskStart(verse + 1, true);
                 app.setModalPopup(); //block outside selection
                 break;
             case Step.intro:
                 app.setMaskStart(verse + 1, true);
-            //app.hideMask();
             default:
                 app.setModalPopup(false); //allow selecting outside
         }
@@ -221,7 +225,7 @@ const Exercise = ({ app, player }) => {
 
     const reciteNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
-        app.gotoAya(verse + 1, { sel: true });
+        app.gotoAya(verse + 1, { sel: true, keepMask: true });
         // app.setMaskStart(verse + 2, true);
         setCurrStep(Step.reciting);
     };
@@ -229,7 +233,7 @@ const Exercise = ({ app, player }) => {
     const typeNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
         // app.setMaskStart(verse + 1);
-        app.gotoAya(verse + 1, { sel: true });
+        app.gotoAya(verse + 1, { sel: true, keepMask: true });
         setTimeout(startAnswer, 1);
         if (defaultButton) {
             defaultButton.focus();

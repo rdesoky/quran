@@ -77,6 +77,8 @@ function Pager({ match, app, player }) {
         const isTextInput =
             isInput && ["text", "number", "textarea"].includes(type);
 
+        const canShowPopup = app.popup === null && isTextInput === false;
+
         if (app.modalPopup) {
             return;
         }
@@ -103,33 +105,33 @@ function Pager({ match, app, player }) {
                 }
                 break;
             case "KeyI":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.setPopup("Index");
                 }
                 break;
             case "KeyG":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.setPopup("Goto");
                 }
                 break;
             case "KeyC":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.setPopup("Commands");
                 }
                 break;
             case "KeyF":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.setPopup("Search");
                 }
                 break;
             case "KeyT":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.selectAya();
                     app.setPopup("Tafseer");
                 }
                 break;
             case "KeyM":
-                if (!isTextInput) {
+                if (!canShowPopup) {
                     app.setMaskStart();
                 }
                 break;
