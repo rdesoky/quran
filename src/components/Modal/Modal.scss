@@ -1,3 +1,8 @@
+$wrongTextColor: #f33;
+$correctTextColor: greenyellow;
+$popupBgColor: rgba(0, 0, 0, 0.9);
+$exerciseBgColor: rgba(0, 0, 0, 0.95);
+
 .ModalOverlay {
     position: fixed;
     // left: 0;
@@ -40,9 +45,9 @@
     position: absolute;
     right: 0;
     padding: 0 15px 0 15px;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: $popupBgColor;
     #ExercisePopup & {
-        background-color: rgba(0, 0, 0, 0.95);
+        background-color: $exerciseBgColor;
     }
     color: white;
     box-sizing: border-box;
@@ -58,20 +63,16 @@
         }
     }
 
-    // .trans-end .narrow & {
-    //     top: 25px;
+    // textarea {
+    //     width: 100%;
+    //     min-height: 100px;
+    //     border: none;
+    //     color: white;
+    //     background-color: #ffffff20;
+    //     box-sizing: border-box;
+    //     font-size: 18px;
+    //     margin-top: 15px;
     // }
-
-    textarea {
-        width: 100%;
-        min-height: 100px;
-        border: none;
-        color: white;
-        background-color: #ffffff20;
-        box-sizing: border-box;
-        font-size: 18px;
-        margin-top: 15px;
-    }
 
     .Title {
         display: flex;
@@ -366,10 +367,10 @@
         font-size: 25px;
     }
     .Correct {
-        color: greenyellow;
+        color: $correctTextColor;
     }
     .Wrong {
-        color: #f33;
+        color: $wrongTextColor;
     }
 }
 

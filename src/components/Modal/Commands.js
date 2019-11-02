@@ -154,6 +154,7 @@ const CommandButton = ThemeConsumer(
     AppConsumer(
         PlayerConsumer(
             ({
+                id,
                 app,
                 player,
                 command,
@@ -164,6 +165,7 @@ const CommandButton = ThemeConsumer(
             }) => {
                 const runCommand = command => {
                     app.setExpandedMenu(false);
+                    Utils.selectTopCommand();
                     switch (command) {
                         case "Commands":
                             app.setExpandedMenu(!app.expandedMenu);
@@ -245,6 +247,7 @@ const CommandButton = ThemeConsumer(
 
                 return (
                     <button
+                        id={id}
                         onClick={e => {
                             runCommand(command);
                             e.stopPropagation();

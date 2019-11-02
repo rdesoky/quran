@@ -4,7 +4,11 @@ import QData from "./../services/QData";
 import { AppConsumer } from "./../context/App";
 import { PlayerConsumer } from "./../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faPlayCircle, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+    faPlayCircle,
+    faCheck,
+    faEyeSlash
+} from "@fortawesome/free-solid-svg-icons";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
@@ -24,18 +28,26 @@ export const HifzRange = AppConsumer(
             }
         };
 
-        const playRange = ({ target }) => {
+        const playRange = e => {
             player.stop(true);
-            selectRange({ target });
+            selectRange(e);
             setTimeout(() => {
                 player.play();
             }, 500);
         };
 
+        const reviewRange = e => {
+            selectRange(e);
+            setTimeout(() => {
+                app.setMaskStart();
+                app.closePopup();
+            });
+        };
+
         const selectRange = ({ target }) => {
-            const sura = parseInt(target.getAttribute("sura"));
-            const startPage = parseInt(target.getAttribute("startpage"));
-            const endPage = parseInt(target.getAttribute("endpage"));
+            const sura = range.sura;
+            const startPage = range.startPage;
+            const endPage = range.endPage;
             const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
                 sura,
                 startPage,
@@ -44,7 +56,7 @@ export const HifzRange = AppConsumer(
             app.gotoAya(rangeStartVerse, { sel: true });
             // app.gotoPage(startPage + 1);
             // app.setSelectStart(rangeStartVerse);
-            // app.setSelectEnd(rangeEndVerse);
+            app.setSelectEnd(rangeEndVerse);
             checkClosePopup();
         };
 
@@ -69,9 +81,6 @@ export const HifzRange = AppConsumer(
         return (
             <li className={"HifzRangeRow".appendWord(ageClass)}>
                 <button
-                    sura={range.sura}
-                    startpage={range.startPage}
-                    endpage={range.endPage}
                     onClick={selectRange}
                     style={{
                         width: "100%",
@@ -125,12 +134,10 @@ export const HifzRange = AppConsumer(
                     </div>
                 </button>
                 <div className="actions">
-                    <button
-                        sura={range.sura}
-                        startpage={range.startPage}
-                        endpage={range.endPage}
-                        onClick={playRange}
-                    >
+                    <button onClick={reviewRange}>
+                        <Icon icon={faEyeSlash} />
+                    </button>
+                    <button onClick={playRange}>
                         <Icon icon={faPlayCircle} />
                     </button>
                     <button onClick={setRangeRevised}>

@@ -12,7 +12,8 @@ import {
     faList,
     faEllipsisH,
     faTimes,
-    faTh
+    faTh,
+    faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges } from "../Hifz";
@@ -156,8 +157,8 @@ export const SuraList = AppConsumer(
         const gotoSura = ({ target }) => {
             app.hideMask();
             let index = parseInt(target.getAttribute("sura"));
-            app.gotoSura(index);
             checkClosePopup();
+            return app.gotoSura(index);
         };
         const playSura = e => {
             player.stop(true);
@@ -165,6 +166,15 @@ export const SuraList = AppConsumer(
             setTimeout(() => {
                 player.play();
             }, 500);
+        };
+
+        const reviewSura = e => {
+            const verse = gotoSura(e);
+            setTimeout(() => {
+                app.setMaskStart(verse, { sel: true });
+                app.closePopup();
+            });
+            app.pushRecentCommand("Mask");
         };
 
         return (
@@ -202,6 +212,12 @@ export const SuraList = AppConsumer(
                                             onClick={playSura}
                                         >
                                             <Icon icon={faPlayCircle} />
+                                        </button>
+                                        <button
+                                            sura={suraIndex}
+                                            onClick={reviewSura}
+                                        >
+                                            <Icon icon={faEyeSlash} />
                                         </button>
                                     </>
                                 ) : (
@@ -263,6 +279,17 @@ export const BookmarksList = AppConsumer(
             }, 500);
         };
 
+        const reviewVerse = ({ target }) => {
+            const attr = target.getAttribute("verse") || app.selectStart;
+            const verse = parseInt(attr);
+            app.gotoAya(verse, { sel: true });
+            setTimeout(() => {
+                app.setMaskStart();
+                app.closePopup();
+            });
+            app.pushRecentCommand("Mask");
+        };
+
         return (
             <ul className="FlowingList">
                 {bookmarks.map(bookmark => {
@@ -287,6 +314,12 @@ export const BookmarksList = AppConsumer(
                                     onClick={playVerse}
                                 >
                                     <Icon icon={faPlayCircle} />
+                                </button>
+                                <button
+                                    verse={bookmark.aya}
+                                    onClick={reviewVerse}
+                                >
+                                    <Icon icon={faEyeSlash} />
                                 </button>
                             </div>
                             <button aya={bookmark.aya} onClick={gotoAya}>

@@ -65,7 +65,7 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
 					let clickedPage = QData.ayaIdPage(aya_id);
 					let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
 
-					app.setMaskStart(clickedPageFirstAyaId + 1); //TODO: unmask the first page aya
+					app.setMaskStart(clickedPageFirstAyaId); 
 				}
 			}
 		} else {

@@ -32,9 +32,9 @@ const Utils = {
     },
     selectTopCommand: () => {
         // setTimeout(() => {
-        const topRecentBtn = document.querySelector("#RecentCommands button");
-        if (topRecentBtn) {
-            topRecentBtn.focus();
+        const sideMenuExpander = document.querySelector("#SideMenuExpander");
+        if (sideMenuExpander) {
+            sideMenuExpander.focus();
         }
         // }, 50);
     },

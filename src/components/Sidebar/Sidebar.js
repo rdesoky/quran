@@ -31,6 +31,7 @@ function Sidebar({ app, player, themeContext }) {
             }}
         >
             <CommandButton
+                id="SideMenuExpander"
                 command="Commands"
                 style={{
                     position: "absolute",
