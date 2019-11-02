@@ -77,6 +77,8 @@ function Pager({ match, app, player }) {
         const isTextInput =
             isInput && ["text", "number", "textarea"].includes(type);
 
+        const vEditorOn = ["Search", "Index"].includes(app.popup);
+
         const canShowPopup = app.popup === null && isTextInput === false;
 
         if (app.modalPopup) {
@@ -105,33 +107,32 @@ function Pager({ match, app, player }) {
                 }
                 break;
             case "KeyI":
-                if (!canShowPopup) {
+                if (canShowPopup) {
                     app.setPopup("Index");
                 }
                 break;
             case "KeyG":
-                if (!canShowPopup) {
+                if (canShowPopup) {
                     app.setPopup("Goto");
                 }
                 break;
             case "KeyC":
-                if (!canShowPopup) {
+                if (canShowPopup) {
                     app.setPopup("Commands");
                 }
                 break;
             case "KeyF":
-                if (!canShowPopup) {
+                if (canShowPopup) {
                     app.setPopup("Search");
                 }
                 break;
             case "KeyT":
-                if (!canShowPopup) {
-                    app.selectAya();
+                if (canShowPopup) {
                     app.setPopup("Tafseer");
                 }
                 break;
             case "KeyM":
-                if (!canShowPopup) {
+                if (!vEditorOn) {
                     app.setMaskStart();
                 }
                 break;
@@ -178,10 +179,10 @@ function Pager({ match, app, player }) {
     }
 
     const decrement = e => {
-        if (inExercise()) {
-            offsetSelection(e, -1);
-            return;
-        }
+        // if (inExercise()) {
+        //     offsetSelection(e, -1);
+        //     return;
+        // }
         let { maskStart } = app;
         if (maskStart !== -1) {
             //Mask is active
@@ -204,10 +205,10 @@ function Pager({ match, app, player }) {
     };
 
     const increment = e => {
-        if (inExercise()) {
-            offsetSelection(e, 1);
-            return;
-        }
+        // if (inExercise()) {
+        //     offsetSelection(e, 1);
+        //     return;
+        // }
         let { maskStart } = app;
         if (maskStart !== -1) {
             //Mask is active

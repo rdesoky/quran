@@ -1,3 +1,16 @@
+$appBgColor: #444;
+$appBgColorDk: black;
+$appHeaderBgColor: #282c34;
+
+$goodHifzBg: #103d00;
+$goodHifzText: greenyellow;
+
+$weakHifzBg: #490900;
+$weekHifzText: #ff8c8c;
+
+$fairHifzBg: #574a00;
+$fairHifzText: #e7c400;
+
 .App {
     position: absolute;
     top: 0;
@@ -6,10 +19,10 @@
     bottom: 0;
     overflow: hidden;
     /* text-align: center; */
-    background-color: #444;
+    background-color: $appBgColor;
     direction: rtl;
     &.DarkTheme {
-        background-color: black;
+        background-color: $appBgColorDk;
     }
 }
 
@@ -20,7 +33,7 @@
 }
 
 .App-header {
-    background-color: #282c34;
+    background-color: $appHeaderBgColor;
     // background-color: rgba(0, 0, 0, 0.6);
     min-height: 100vh;
     display: flex;
@@ -43,7 +56,7 @@ button {
     pointer-events: all;
     text-align: center;
     &:hover {
-        color: white;
+        color: white !important;
         background: #666;
     }
 
@@ -164,24 +177,20 @@ hr {
     // background-color: black;
 }
 
-$goodHifzBg: rgb(16, 61, 0);
-$weakHifzBg: rgb(73, 9, 0);
-$fairHifzBg: rgb(87, 74, 0);
-
 .HifzRangeRow {
     &.GoodHifz {
         button {
-            color: rgb(58, 216, 0);
+            color: $goodHifzText;
         }
     }
     &.FairHifz {
         button {
-            color: rgb(231, 196, 0);
+            color: $fairHifzText;
         }
     }
     &.WeakHifz {
         button {
-            color: #f33;
+            color: $weekHifzText;
         }
     }
     .AgeInfo {

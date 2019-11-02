@@ -179,6 +179,10 @@ class AppProvider extends Component {
     };
 
     offsetMask = offset => {
+        if (this.state.popup === "Exercise") {
+            this.offsetSelection(offset);
+            return;
+        }
         let ms = parseInt(this.state.maskStart);
         if (ms !== -1) {
             let maskStart = ms + offset;
@@ -294,6 +298,7 @@ class AppProvider extends Component {
         this.gotoPage(page);
         const ayaId = QData.ayaID(parseInt(index), 0);
         this.selectAya(ayaId);
+        return ayaId;
     };
 
     gotoPart = index => {
