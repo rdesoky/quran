@@ -9,10 +9,9 @@ import {
     faBookmark,
     faPlayCircle,
     faHeart,
-    faList,
+    faListAlt,
     faEllipsisH,
     faTimes,
-    faTh,
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
@@ -63,7 +62,7 @@ const QIndex = ({ app }) => {
                         activeTab == "index"
                     )}
                 >
-                    <Icon icon={faTh} />
+                    <Icon icon={faListAlt} />
                     {activeTab == "index" ? <String id="index" /> : ""}
                 </button>
                 <button

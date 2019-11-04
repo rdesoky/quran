@@ -30,7 +30,8 @@ import {
     faFileDownload,
     faStopCircle,
     faPauseCircle,
-    faBars
+    faBars,
+    faListAlt
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
@@ -38,7 +39,7 @@ import { VerseInfo } from "../Widgets";
 
 export const CommandIcons = {
     Commands: faBars,
-    Index: faTh,
+    Index: faListAlt,
     Goto: faLocationArrow,
     Search: faSearch,
     Play: faPlayCircle,
