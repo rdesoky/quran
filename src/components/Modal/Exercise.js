@@ -517,21 +517,21 @@ const Exercise = ({ app, player }) => {
         const renderMessage = () => {
             if (isCorrect()) {
                 return (
-                    <h4>
+                    <div>
                         <span className="Correct">
                             <Icon icon={faThumbsUp} />
                         </span>{" "}
                         <String id="correct_answer" />
-                    </h4>
+                    </div>
                 );
             }
             return (
-                <h4>
+                <div>
                     <span className="Wrong">
                         <Icon icon={faThumbsDown} />
                     </span>{" "}
                     <String id="wrong_answer" />
-                </h4>
+                </div>
             );
         };
 
@@ -550,7 +550,7 @@ const Exercise = ({ app, player }) => {
         };
 
         return (
-            <>
+            <div className="ContentFrame">
                 {renderMessage()}
                 <h3>
                     {answerWords.map((word, index) => (
@@ -568,17 +568,20 @@ const Exercise = ({ app, player }) => {
                     {renderMissingWords()}
                 </h3>
                 {isCorrect() ? (
-                    <div className="ButtonsBar">
-                        <button onClick={redoTyping}>
-                            <String id="retry" />
-                        </button>
-                        <button onClick={redoReciting}>
-                            <String id="start" />
-                        </button>
-                        <button onClick={gotoRandomVerse}>
-                            <String id="new_verse" />
-                        </button>
-                    </div>
+                    <>
+                        <div className="ButtonsBar">
+                            <button onClick={redoTyping}>
+                                <String id="retry" />
+                            </button>
+                            <button onClick={redoReciting}>
+                                <String id="start" />
+                            </button>
+                            <button onClick={gotoRandomVerse}>
+                                <String id="new_verse" />
+                            </button>
+                        </div>
+                        <TafseerView verse={verse} showVerse={false} />
+                    </>
                 ) : (
                     <>
                         <hr />
@@ -587,7 +590,7 @@ const Exercise = ({ app, player }) => {
                         </h3>
                     </>
                 )}
-            </>
+            </div>
         );
     };
 
@@ -623,15 +626,13 @@ const Exercise = ({ app, player }) => {
             return "";
         }
         return (
-            <>
-                <div className="ContentFrame">
-                    <VerseInfo />
-                    <VerseText />
-                    <div className="FootNote">
-                        <String id="exercise_intro" />
-                    </div>
+            <div className="ContentFrame">
+                <VerseInfo />
+                <VerseText />
+                <div className="FootNote">
+                    <String id="exercise_intro" />
                 </div>
-            </>
+            </div>
         );
     };
 

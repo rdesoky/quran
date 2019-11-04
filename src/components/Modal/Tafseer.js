@@ -75,91 +75,97 @@ const Tafseer = ({ app, player }) => {
     );
 };
 
-const TafseerView = AppConsumer(({ app, verse, onMoveNext }) => {
-    const [tafseer, setTafseer] = useState(
-        localStorage.getItem("tafseer") || "muyassar"
-    );
-    const [tafseerData, setTafseerData] = useState([]);
-
-    useEffect(() => {
-        let fileName = TafseerList.find(i => i.id === tafseer).file;
-        let controller = new AbortController();
-        let url = `${process.env.PUBLIC_URL}/${fileName}`;
-        fetch(url, { signal: controller.signal })
-            .then(r => r.text())
-            .then(txt => {
-                setTafseerData(txt.split("\n"));
-            })
-            .catch(e => {
-                const { name, message } = e;
-                console.info(`${name}: ${message}\n${url}`);
-            });
-
-        return () => {
-            controller.abort();
-        };
-    }, [tafseer]);
-
-    const renderVerse = () => {
-        // const aya = playingAya();
-        const verseList = app.verseList();
-        if (verseList.length > verse) {
-            return verseList[verse];
-        }
-    };
-    const renderTafseer = () => {
-        if (tafseerData.length > verse) {
-            //validate aya exists whithin tafseer array
-            return tafseerData[verse];
-        }
-        return "Loading...";
-    };
-
-    const onSelectTafseer = e => {
-        const { target: option } = e;
-        const tafseer = option.value;
-        localStorage.setItem("tafseer", option.value);
-        setTafseer(tafseer);
-    };
-
-    const renderSelector = () => {
-        return (
-            <select onChange={onSelectTafseer} value={tafseer}>
-                {TafseerList.map(taf => {
-                    return (
-                        <option key={taf.id} value={taf.id}>
-                            {taf.name}
-                        </option>
-                    );
-                })}
-            </select>
+const TafseerView = AppConsumer(
+    ({ app, verse, onMoveNext, showVerse = true }) => {
+        const [tafseer, setTafseer] = useState(
+            localStorage.getItem("tafseer") || "muyassar"
         );
-    };
+        const [tafseerData, setTafseerData] = useState([]);
 
-    const tafDirection = () => {
-        return TafseerList.find(i => i.id === tafseer).dir;
-    };
-    return (
-        <div className="TafseerView">
-            <div>
-                <VerseInfo onMoveNext={onMoveNext} verse={verse} />
-                <div className="TafseerVerse">
-                    <VerseText verse={verse} />
+        useEffect(() => {
+            let fileName = TafseerList.find(i => i.id === tafseer).file;
+            let controller = new AbortController();
+            let url = `${process.env.PUBLIC_URL}/${fileName}`;
+            fetch(url, { signal: controller.signal })
+                .then(r => r.text())
+                .then(txt => {
+                    setTafseerData(txt.split("\n"));
+                })
+                .catch(e => {
+                    const { name, message } = e;
+                    console.info(`${name}: ${message}\n${url}`);
+                });
+
+            return () => {
+                controller.abort();
+            };
+        }, [tafseer]);
+
+        const renderVerse = () => {
+            // const aya = playingAya();
+            const verseList = app.verseList();
+            if (verseList.length > verse) {
+                return verseList[verse];
+            }
+        };
+        const renderTafseer = () => {
+            if (tafseerData.length > verse) {
+                //validate aya exists whithin tafseer array
+                return tafseerData[verse];
+            }
+            return "Loading...";
+        };
+
+        const onSelectTafseer = e => {
+            const { target: option } = e;
+            const tafseer = option.value;
+            localStorage.setItem("tafseer", option.value);
+            setTafseer(tafseer);
+        };
+
+        const renderSelector = () => {
+            return (
+                <select onChange={onSelectTafseer} value={tafseer}>
+                    {TafseerList.map(taf => {
+                        return (
+                            <option key={taf.id} value={taf.id}>
+                                {taf.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            );
+        };
+
+        const tafDirection = () => {
+            return TafseerList.find(i => i.id === tafseer).dir;
+        };
+        return (
+            <div className="TafseerView">
+                <div>
+                    {showVerse ? (
+                        <VerseInfo onMoveNext={onMoveNext} verse={verse} />
+                    ) : (
+                        ""
+                    )}
+                    <div className="TafseerVerse">
+                        <VerseText verse={verse} />
+                    </div>
+                </div>
+                <div>
+                    <p
+                        className="TafseerText"
+                        style={{ direction: tafDirection() }}
+                    >
+                        {renderSelector()}
+                        {" - "}
+                        {renderTafseer()}
+                    </p>
                 </div>
             </div>
-            <div>
-                <p
-                    className="TafseerText"
-                    style={{ direction: tafDirection() }}
-                >
-                    {renderSelector()}
-                    {" - "}
-                    {renderTafseer()}
-                </p>
-            </div>
-        </div>
-    );
-});
+        );
+    }
+);
 
 export default AppConsumer(PlayerConsumer(Tafseer));
 export { TafseerView };
