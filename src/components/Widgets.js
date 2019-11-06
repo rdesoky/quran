@@ -6,7 +6,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const VerseInfo = AppConsumer(
-    ({ app, verse, show, children, onClick, onMoveNext }) => {
+    ({ app, verse, show, children, onClick, onMoveNext, navigate = false }) => {
         if (verse === undefined || verse === -1) {
             verse = app.selectStart;
         }
@@ -23,6 +23,12 @@ const VerseInfo = AppConsumer(
         };
 
         const verseInfo = QData.ayaIdInfo(verse);
+
+        if (navigate) {
+            onMoveNext = offset => {
+                app.gotoAya(verse + offset, { sel: true });
+            };
+        }
 
         return (
             <div className="VerseInfo">
@@ -74,13 +80,14 @@ const VerseInfo = AppConsumer(
     }
 );
 
-const VerseText = AppConsumer(({ verse, app }) => {
+const VerseText = AppConsumer(({ verse, app, showInfo, navigate = true }) => {
     if (verse === undefined) {
         verse = app.selectStart;
     }
     const verseList = app.verseList();
     return (
         <div className="VerseText">
+            {showInfo ? <VerseInfo navigate={navigate} /> : ""}
             {verse < verseList.length ? verseList[verse] : ""}
         </div>
     );

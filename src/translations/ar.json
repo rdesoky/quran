@@ -23,6 +23,7 @@
     "favorites": "محفوظات",
     "bookmarks": "علامات",
     "bookmark": "ضع علامة",
+    "unbookmark": "حذف علامة",
     "bookmark_desc": "{sura} (آية {verse})",
     "theme": "تغيير الوان العرض",
     "profile": "المستخدم",

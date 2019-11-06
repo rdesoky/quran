@@ -56,7 +56,7 @@ const Exercise = ({ app, player }) => {
 
     const startReciting = e => {
         setCurrStep(Step.reciting);
-        // app.setMaskStart(verse + 1, true);
+        //app.setMaskStart(verse + 1, true);
     };
 
     const redoReciting = e => {
@@ -83,15 +83,6 @@ const Exercise = ({ app, player }) => {
         localStorage.getItem("resultsDefaultButton") || "typeNext";
     let defaultButton = null;
 
-    useEffect(() => {
-        setVerse(app.selectStart);
-        app.setMaskStart(
-            app.selectStart + (currStep === Step.typing ? 0 : 1),
-            true
-        );
-        setWrittenText("");
-    }, [app.selectStart]);
-
     const handleKeyDown = ({ code }) => {
         if (code == "Escape") {
             showIntro();
@@ -115,6 +106,19 @@ const Exercise = ({ app, player }) => {
     }, []);
 
     useEffect(() => {
+        setVerse(app.selectStart);
+        setWrittenText("");
+        if (currStep == Step.results) {
+            setCurrStep(Step.intro);
+        } else {
+            app.setMaskStart(
+                app.selectStart + (currStep === Step.typing ? 0 : 1),
+                true
+            );
+        }
+    }, [app.selectStart]);
+
+    useEffect(() => {
         if (defaultButton) {
             defaultButton.focus();
         }
@@ -122,15 +126,18 @@ const Exercise = ({ app, player }) => {
             case Step.typing:
                 app.setMaskStart(verse);
                 app.setModalPopup(); //block outside selection
+                app.setMaskStart(app.selectStart, true);
                 break;
             case Step.reciting:
-                player.play();
+                setTimeout(() => {
+                    player.play();
+                }, 100);
                 app.setModalPopup(); //block outside selection
-                app.setMaskStart(verse + 1, true);
+                app.setMaskStart(app.selectStart + 1, true);
                 break;
             case Step.results:
-                app.setMaskStart(verse + 1, true);
-                app.setModalPopup(); //block outside selection
+                app.setMaskStart(app.selectStart + 1, true);
+                app.setModalPopup(false);
                 break;
             case Step.intro:
                 app.setMaskStart(verse + 1, true);
@@ -223,21 +230,26 @@ const Exercise = ({ app, player }) => {
         setCurrStep(Step.intro);
     };
 
+    const moveToNextVerse = () => {
+        app.gotoAya(verse + 1, { sel: true, keepMask: true });
+    };
+
     const reciteNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
-        app.gotoAya(verse + 1, { sel: true, keepMask: true });
+        startReciting();
+        setTimeout(moveToNextVerse);
         // app.setMaskStart(verse + 2, true);
-        setCurrStep(Step.reciting);
     };
 
     const typeNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
         // app.setMaskStart(verse + 1);
-        app.gotoAya(verse + 1, { sel: true, keepMask: true });
-        setTimeout(startAnswer, 1);
-        if (defaultButton) {
-            defaultButton.focus();
-        }
+        setWrittenText("");
+        startAnswer();
+        setTimeout(moveToNextVerse);
+        // if (defaultButton) {
+        //     defaultButton.focus();
+        // }
     };
 
     const renderTitle = () => {
@@ -311,7 +323,7 @@ const Exercise = ({ app, player }) => {
                     typeNextVerse();
                     return;
                 }
-                app.setMaskStart(app.selectStart + 1, true);
+                // app.setMaskStart(app.selectStart + 1, true);
                 setCurrStep(Step.results);
             }, 500);
         }
@@ -320,7 +332,7 @@ const Exercise = ({ app, player }) => {
 
     const onFinishedTyping = () => {
         testAnswer(writtenText);
-        app.setMaskStart(app.selectStart + 1, true);
+        //app.setMaskStart(app.selectStart + 1, true);
         setCurrStep(Step.results);
     };
 

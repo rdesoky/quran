@@ -406,17 +406,22 @@ class AppProvider extends Component {
         };
     };
 
-    addBookmark = () => {
+    addBookmark = verse => {
         if (!this.bookmarksRef) {
             return;
         }
-        const verse = this.selectedRange().start;
+        if (verse === undefined) {
+            verse = this.selectedRange().start;
+        }
         this.bookmarksRef.child(verse).set(-new Date().getTime());
     };
 
     removeBookmark = verse => {
         if (!this.bookmarksRef) {
             return;
+        }
+        if (verse === undefined) {
+            verse = this.state.selectStart;
         }
         this.bookmarksRef.child(verse).set(null);
     };
@@ -448,7 +453,18 @@ class AppProvider extends Component {
         this.setState({ expandedMenu });
     };
 
+    isBookmarked = verse => {
+        if (verse === undefined) {
+            verse = this.selectedRange().start;
+        }
+        return (
+            undefined !==
+            this.state.bookmarks.find(bookmarkInfo => bookmarkInfo.aya == verse)
+        );
+    };
+
     methods = {
+        isBookmarked: this.isBookmarked,
         setExpandedMenu: this.setExpandedMenu,
         signOut: this.signOut,
         setRangeRevised: this.setRangeRevised,

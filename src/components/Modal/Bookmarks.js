@@ -1,46 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "../../context/App";
-import { VerseInfo } from "./../Widgets";
+import { VerseInfo, VerseText } from "./../Widgets";
+import { BookmarksList } from "./QIndex";
 
 const Bookmarks = ({ app }) => {
-    const gotoAya = ({ target }) => {
-        const aya = parseInt(target.getAttribute("aya"));
-        app.gotoAya(aya, { sel: true });
-    };
-
-    const renderVerse = () => {
-        const { selectStart, selectEnd } = app;
-        const verseList = app.verseList();
-        if (verseList.length > selectStart) {
-            return verseList[selectStart];
-        }
-    };
-
     const toggleBookmark = e => {
-        app.addBookmark();
-        app.setPopup("Index");
-        localStorage.setItem("activeTab", "bookmarks");
+        if (app.isBookmarked()) {
+            app.removeBookmark();
+        } else {
+            app.addBookmark();
+        }
     };
 
     return (
         <>
             <div className="Title">
                 <String id="bookmarks" />
+                <div className="ButtonsBar">
+                    <button onClick={toggleBookmark}>
+                        <String
+                            id={app.isBookmarked() ? "unbookmark" : "bookmark"}
+                        />
+                    </button>
+                </div>
             </div>
             <div
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                <div>
-                    <VerseInfo verse={app.selectStart} />
-                </div>
-                <h3>{renderVerse()}</h3>
-                <div className="ButtonsBar">
-                    <button onClick={toggleBookmark}>
-                        <String id="bookmark" />
-                    </button>
-                </div>
+                <VerseText showInfo={true} />
+                <hr style={{ clear: "both" }} />
+                <BookmarksList />
             </div>
         </>
     );

@@ -31,7 +31,14 @@ import {
     faStopCircle,
     faPauseCircle,
     faBars,
-    faListAlt
+    faListAlt,
+    faPencilAlt,
+    faPenFancy,
+    faPenNib,
+    faPenSquare,
+    faEdit,
+    faPencilRuler,
+    faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
@@ -40,7 +47,7 @@ import { VerseInfo } from "../Widgets";
 export const CommandIcons = {
     Commands: faBars,
     Index: faListAlt,
-    Goto: faLocationArrow,
+    Goto: faBookOpen,
     Search: faSearch,
     Play: faPlayCircle,
     AudioPlayer: faPlayCircle,
@@ -54,7 +61,7 @@ export const CommandIcons = {
     Copy: faCopy,
     Share: faShareAlt,
     Tafseer: faQuran,
-    Exercise: faRunning,
+    Exercise: faPenNib,
     Fullscreen: faExpand,
     Bookmarks: faBookmark,
     ToggleButton: faAngleDoubleDown,
@@ -69,6 +76,8 @@ const getIcon = (commandId, app) => {
             return CommandIcons[app.maskStart === -1 ? "Mask" : "MaskOn"];
         case "ToggleButton":
             return app.showMenu ? faAngleDoubleUp : faAngleDoubleDown;
+        case "Bookmarks":
+            return app.isBookmarked() ? faBookmark : faBookmark;
         default:
             return CommandIcons[commandId];
     }
@@ -195,9 +204,9 @@ const CommandButton = ThemeConsumer(
                             return;
                         case "Theme":
                             themeContext.toggleTheme();
-                            // app.pushRecentCommand(command);
-                            // app.setShowMenu(false);
-                            break;
+                            app.pushRecentCommand(command);
+                            app.setShowMenu(false);
+                            return;
                         case "Mask":
                             app.setMaskStart();
                             break;
