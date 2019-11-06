@@ -18,36 +18,49 @@ const Page = ({
     shiftX
 }) => {
     let imageName = NumToString(index + 1);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [showProgress, setShowProgress] = useState(true);
 
-    const updateProgress = showProgress => {
-        setShowProgress(showProgress);
-        // console.log(`updateProgress(${showProgress})`);
-    };
+    //using two states to support the page animation
+    const [imageLoaded, setImageLoaded] = useState(false);
+    //const [showProgress, setShowProgress] = useState(true);
 
-    const updateLoaded = isLoaded => {
-        // console.log(`updateLoaded(${isLoaded})`);
-        setIsLoaded(isLoaded);
-        updateProgress(!isLoaded);
-    };
+    // const updateProgress = showProgress => {
+    //     setShowProgress(showProgress);
+    //     // console.log(`updateProgress(${showProgress})`);
+    // };
+
+    // const updateLoaded = imageLoaded => {
+    //     // console.log(`updateLoaded(${isLoaded})`);
+    //     setImageLoaded(imageLoaded);
+    //     updateProgress(!imageLoaded);
+    // };
 
     const onImageLoaded = e => {
         // console.log(
-        // 	`**onImageLoaded(${parseInt(index) + 1}) (isLoaded=${isLoaded})`
+        //     `**onImageLoaded(${parseInt(index) +
+        //         1}) (imageLoaded=${imageLoaded})`
         // );
         setTimeout(() => {
-            updateLoaded(true); //To help animation timing
-        }, 100);
+            setImageLoaded(true);
+        }, 100); //Make sure imageLoaded is set after index update event handler
+        // setLoadedImage(index);
     };
+
+    let image;
 
     //Run after componentDidMount, componentDidUpdate, and props update
     useEffect(() => {
         // console.log(
-        // 	`Page number changed to ${parseInt(index) + 1} (isLoaded=${isLoaded})`
+        //     `Page number changed to ${imageName} (imageLoaded=${imageLoaded})`
         // );
-        updateLoaded(false);
-    }, [index]); //only run when number changes
+        setImageLoaded(false);
+    }, [index]);
+
+    // useEffect(() => {
+    //     image.addEventListener("load", onImageLoaded);
+    //     return () => {
+    //         image.removeEventListener("load", onImageLoaded);
+    //     };
+    // }, []);
 
     let textAlign =
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
@@ -64,7 +77,7 @@ const Page = ({
                 onPageUp={onPageUp}
                 onPageDown={onPageDown}
             />
-            <Spinner visible={showProgress} />
+            <Spinner visible={!imageLoaded} />
             <div
                 onClick={e => {
                     app.setShowMenu(false);
@@ -72,12 +85,12 @@ const Page = ({
                 className="PageFrame"
                 style={{
                     textAlign,
-                    visibility: isLoaded ? "visible" : "hidden"
+                    visibility: imageLoaded ? "visible" : "hidden"
                 }}
             >
                 <div
                     className={
-                        "PageImageFrame" + (isLoaded ? " AnimatePage" : "")
+                        "PageImageFrame" + (imageLoaded ? " AnimatePage" : "")
                     }
                     style={{
                         transform: `scaleX(${scaleX ||
@@ -86,8 +99,11 @@ const Page = ({
                 >
                     <VerseLayout page={index} pageWidth={pageWidth}>
                         <img
+                            ref={ref => {
+                                image = ref;
+                            }}
                             style={{
-                                visibility: isLoaded ? "visible" : "hidden",
+                                visibility: imageLoaded ? "visible" : "hidden",
                                 margin: app.pageMargin(),
                                 width: pageWidth,
                                 height: app.pageHeight()

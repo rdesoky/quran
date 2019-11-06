@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import QData from "./../../services/QData";
+import { HifzRanges } from "../Hifz";
 
 const Favorites = ({ app }) => {
     const { user, hifzRanges } = app;
@@ -50,6 +51,7 @@ const Favorites = ({ app }) => {
                         <String id="add_hifz" />
                     </button>
                 </div>
+                <HifzRanges />
             </div>
         </>
     );
