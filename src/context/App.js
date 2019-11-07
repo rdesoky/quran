@@ -406,6 +406,14 @@ class AppProvider extends Component {
         };
     };
 
+    toggleBookmark = verse => {
+        if (this.isBookmarked(verse)) {
+            this.removeBookmark(verse);
+        } else {
+            this.addBookmark(verse);
+        }
+    };
+
     addBookmark = verse => {
         if (!this.bookmarksRef) {
             return;
@@ -506,6 +514,7 @@ class AppProvider extends Component {
         sideBarWidth: this.sideBarWidth,
         addBookmark: this.addBookmark,
         removeBookmark: this.removeBookmark,
+        toggleBookmark: this.toggleBookmark,
         setModalPopup: this.setModalPopup
     };
 

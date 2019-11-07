@@ -6,11 +6,7 @@ import { BookmarksList } from "./QIndex";
 
 const Bookmarks = ({ app }) => {
     const toggleBookmark = e => {
-        if (app.isBookmarked()) {
-            app.removeBookmark();
-        } else {
-            app.addBookmark();
-        }
+        app.toggleBookmark();
     };
 
     return (
