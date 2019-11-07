@@ -48,7 +48,13 @@ function Pager({ match, app, player }) {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [match.params.page, app.popup, app.maskStart, app.modalPopup]);
+    }, [
+        match.params.page,
+        app.popup,
+        app.maskStart,
+        app.modalPopup,
+        app.selectStart
+    ]);
 
     const handleWheel = e => {
         if (e.deltaY > 0) {
