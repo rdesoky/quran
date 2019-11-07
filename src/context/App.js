@@ -135,7 +135,7 @@ class AppProvider extends Component {
         } else {
             this.setState({ selectStart: ayaId });
         }
-        return this.state.selectStart;
+        return ayaId;
     };
 
     offsetSelection = offset => {
