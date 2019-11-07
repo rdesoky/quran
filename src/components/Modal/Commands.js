@@ -5,11 +5,8 @@ import { ThemeConsumer } from "../../context/Theme";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faTh,
-    faLocationArrow,
     faUserCircle,
     faSearch,
-    faList,
     faPlayCircle,
     faHeart,
     faCog,
@@ -18,10 +15,7 @@ import {
     faEyeSlash,
     faCopy,
     faShareAlt,
-    faBook,
     faQuran,
-    faAtlas,
-    faRunning,
     faExpand,
     faBookmark,
     faEye,
@@ -32,14 +26,12 @@ import {
     faPauseCircle,
     faBars,
     faListAlt,
-    faPencilAlt,
-    faPenFancy,
     faPenNib,
-    faPenSquare,
-    faEdit,
-    faPencilRuler,
     faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
+
+import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
+
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
@@ -77,7 +69,7 @@ const getIcon = (commandId, app) => {
         case "ToggleButton":
             return app.showMenu ? faAngleDoubleUp : faAngleDoubleDown;
         case "Bookmarks":
-            return app.isBookmarked() ? faBookmark : faBookmark;
+            return app.isBookmarked() ? faBookmark : farBookmark;
         default:
             return CommandIcons[commandId];
     }
@@ -218,14 +210,19 @@ const CommandButton = ThemeConsumer(
                         case "Fullscreen":
                             Utils.requestFullScreen();
                             break;
+                        case "Bookmarks":
+                            if (app.popup === "Exercise") {
+                                app.toggleBookmark();
+                                break;
+                            }
                         default:
-                            app.setPopup(command);
+                            app.setPopup(command); //already calls pushRecentCommand()
                             return;
                     }
                     app.pushRecentCommand(command);
-                    if (app.pagesCount == 1) {
-                        app.closePopup();
-                    }
+                    // if (app.pagesCount == 1) {
+                    //     app.closePopup();
+                    // }
                     app.setShowMenu(false);
                 };
 
@@ -250,7 +247,8 @@ const CommandButton = ThemeConsumer(
                             "Play",
                             "Pause",
                             "Exercise",
-                            "Stop"
+                            "Stop",
+                            "Bookmarks"
                         ].includes(command)
                     );
                 };
