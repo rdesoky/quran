@@ -25,14 +25,28 @@ class AudioPlayer extends Component {
     selectReciter = ({ currentTarget }) => {
         const reciter = currentTarget.getAttribute("reciter");
         this.props.player.changeReciter(reciter);
+        this.popupBody.scrollTop = 0;
     };
 
     updateFollowPlayer = checked => {
         this.props.player.setFollowPlayer(checked);
     };
 
+    popupBody;
+
     render() {
         const { app, player } = this.props;
+        const recitersList = ListReciters("ayaAudio");
+        const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
+        const recitersListWidth =
+            app.popupWidth() - outerMargin - scrollBarWidth;
+        const recitersPerRow = Math.floor(recitersListWidth / buttonWidth);
+        const recitersRowsCount = Math.floor(
+            (recitersList.length - 1) / recitersPerRow + 1
+        );
+        const recitersHeight = recitersRowsCount * buttonWidth + 15;
+        const centerPadding =
+            (recitersListWidth - recitersPerRow * buttonWidth) / 2;
         return (
             <>
                 <div className="Title">
@@ -40,9 +54,12 @@ class AudioPlayer extends Component {
                     {app.isNarrow ? <PlayerButtons showReciter={false} /> : ""}
                 </div>
                 <div
+                    ref={ref => {
+                        this.popupBody = ref;
+                    }}
                     className="PopupBody"
                     style={{
-                        maxHeight: app.appHeight - 80
+                        height: app.appHeight - 80
                     }}
                 >
                     <div className="OptionRow">
@@ -94,8 +111,21 @@ class AudioPlayer extends Component {
                             />
                         </label>
                     </div>
-                    <div className="RecitersList">
-                        {ListReciters("ayaAudio").map(reciter => {
+                    <div
+                        className="RecitersList"
+                        style={{
+                            height: recitersHeight
+                        }}
+                    >
+                        {recitersList.map((reciter, index) => {
+                            const row = Math.floor(index / recitersPerRow);
+                            const top = row * 90;
+                            const col = index - row * recitersPerRow;
+                            // const left = col * buttonWidth + centerPadding;
+                            const left =
+                                recitersListWidth -
+                                (col * buttonWidth + centerPadding) -
+                                buttonWidth;
                             return (
                                 <div
                                     reciter={reciter}
@@ -107,6 +137,10 @@ class AudioPlayer extends Component {
                                             : "")
                                     }
                                     onClick={this.selectReciter}
+                                    style={{
+                                        top,
+                                        left
+                                    }}
                                 >
                                     <img
                                         className="ReciterIcon"

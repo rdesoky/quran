@@ -378,7 +378,8 @@ class AppProvider extends Component {
             appHeight,
             pagesCount,
             isCompact,
-            isScrollable
+            isScrollable,
+            isNarrow
         } = this.state;
 
         if (isScrollable) {
@@ -387,15 +388,15 @@ class AppProvider extends Component {
 
         if (isWide) {
             //popup fills up the margin of two pages view
-            return appWidth - appHeight * 1.25;
+            return appWidth - appHeight * 1.25 - 50;
         }
         if (isCompact) {
             //popup fills up the margin of one page view
-            return appWidth - appHeight * 0.65;
+            return appWidth - appHeight * 0.65 - 50;
         }
 
         //popup shown on top of pages
-        return appWidth / pagesCount;
+        return appWidth / pagesCount - (isNarrow ? 0 : 50);
     };
 
     selectedRange = () => {

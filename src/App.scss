@@ -49,6 +49,7 @@ $fairHifzText: #e7c400;
 }
 
 button {
+    transition: background-color 0.3s, top 0.5s;
     border: none;
     border-width: 0;
     background-color: transparent;
