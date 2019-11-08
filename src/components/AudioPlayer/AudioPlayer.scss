@@ -1,15 +1,17 @@
 #AudioPlayerPopup {
     .RecitersList {
-        text-align: center;
+        position: relative;
     }
     .ReciterButton {
         display: inline-block;
+        position: absolute;
         width: 80px;
         min-height: 80px;
         text-align: center;
         padding: 5px;
-        margin: 2px;
+        margin: 0;
         border-radius: 10px;
+        transition: background-color 0.3s, left 0.4s, top 0.4s;
         &:hover {
             background-color: #444;
         }

@@ -21,18 +21,6 @@ const Page = ({
 
     //using two states to support the page animation
     const [imageLoaded, setImageLoaded] = useState(false);
-    //const [showProgress, setShowProgress] = useState(true);
-
-    // const updateProgress = showProgress => {
-    //     setShowProgress(showProgress);
-    //     // console.log(`updateProgress(${showProgress})`);
-    // };
-
-    // const updateLoaded = imageLoaded => {
-    //     // console.log(`updateLoaded(${isLoaded})`);
-    //     setImageLoaded(imageLoaded);
-    //     updateProgress(!imageLoaded);
-    // };
 
     const onImageLoaded = e => {
         // console.log(
@@ -42,30 +30,21 @@ const Page = ({
         setTimeout(() => {
             setImageLoaded(true);
         }, 100); //Make sure imageLoaded is set after index update event handler
-        // setLoadedImage(index);
     };
 
     let image;
 
     //Run after componentDidMount, componentDidUpdate, and props update
     useEffect(() => {
-        // console.log(
-        //     `Page number changed to ${imageName} (imageLoaded=${imageLoaded})`
-        // );
         setImageLoaded(false);
     }, [index]);
-
-    // useEffect(() => {
-    //     image.addEventListener("load", onImageLoaded);
-    //     return () => {
-    //         image.removeEventListener("load", onImageLoaded);
-    //     };
-    // }, []);
 
     let textAlign =
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     const pageWidth = app.pageWidth();
+    const imageUrl =
+        process.env.PUBLIC_URL + "/qpages_1260/page" + imageName + ".png";
 
     return (
         <div className="Page">
@@ -110,12 +89,7 @@ const Page = ({
                             }}
                             className={"PageImage"}
                             onLoad={onImageLoaded}
-                            src={
-                                process.env.PUBLIC_URL +
-                                "/qpages_1260/page" +
-                                imageName +
-                                ".png"
-                            }
+                            src={imageUrl}
                             alt={"Page #" + (parseInt(index) + 1).toString()}
                         />
                     </VerseLayout>
