@@ -5,6 +5,7 @@ import { AppConsumer } from "../../context/App";
 import VerseLayout from "./VerseLayout";
 import PageHeader from "./PageHeader";
 import DDrop from "../DDrop";
+import Utils from "../../services/utils";
 
 const Page = ({
     index,
@@ -17,34 +18,24 @@ const Page = ({
     scaleX,
     shiftX
 }) => {
-    let imageName = NumToString(index + 1);
+    const [imageUrl, setImageUrl] = useState(null);
 
-    //using two states to support the page animation
-    const [imageLoaded, setImageLoaded] = useState(false);
-
-    const onImageLoaded = e => {
-        // console.log(
-        //     `**onImageLoaded(${parseInt(index) +
-        //         1}) (imageLoaded=${imageLoaded})`
-        // );
+    const onImageLoaded = url => {
         setTimeout(() => {
-            setImageLoaded(true);
+            setImageUrl(url);
         }, 100); //Make sure imageLoaded is set after index update event handler
     };
-
-    let image;
-
-    //Run after componentDidMount, componentDidUpdate, and props update
-    useEffect(() => {
-        setImageLoaded(false);
-    }, [index]);
 
     let textAlign =
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     const pageWidth = app.pageWidth();
-    const imageUrl =
-        process.env.PUBLIC_URL + "/qpages_1260/page" + imageName + ".png";
+
+    //Run after componentDidMount, componentDidUpdate, and props update
+    useEffect(() => {
+        setImageUrl(null);
+        Utils.downloadPageImage(index).then(onImageLoaded);
+    }, [index]);
 
     return (
         <div className="Page">
@@ -56,7 +47,7 @@ const Page = ({
                 onPageUp={onPageUp}
                 onPageDown={onPageDown}
             />
-            <Spinner visible={!imageLoaded} />
+            <Spinner visible={imageUrl === null} />
             <div
                 onClick={e => {
                     app.setShowMenu(false);
@@ -64,12 +55,12 @@ const Page = ({
                 className="PageFrame"
                 style={{
                     textAlign,
-                    visibility: imageLoaded ? "visible" : "hidden"
+                    visibility: imageUrl ? "visible" : "hidden"
                 }}
             >
                 <div
                     className={
-                        "PageImageFrame" + (imageLoaded ? " AnimatePage" : "")
+                        "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
                     }
                     style={{
                         transform: `scaleX(${scaleX ||
@@ -78,19 +69,14 @@ const Page = ({
                 >
                     <VerseLayout page={index} pageWidth={pageWidth}>
                         <img
-                            ref={ref => {
-                                image = ref;
-                            }}
                             style={{
-                                visibility: imageLoaded ? "visible" : "hidden",
+                                visibility: imageUrl ? "visible" : "hidden",
                                 margin: app.pageMargin(),
                                 width: pageWidth,
                                 height: app.pageHeight()
                             }}
-                            className={"PageImage"}
-                            onLoad={onImageLoaded}
                             src={imageUrl}
-                            alt={"Page #" + (parseInt(index) + 1).toString()}
+                            className="PageImage"
                         />
                     </VerseLayout>
                 </div>

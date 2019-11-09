@@ -54,10 +54,6 @@ function Sidebar({ app, player, themeContext }) {
                 <div
                     className="ButtonsList"
                     style={{
-                        // display:
-                        //     app.showMenu || app.expandedMenu || !app.isNarrow
-                        //         ? "flex"
-                        //         : "none",
                         direction: "ltr"
                     }}
                 >
@@ -77,18 +73,16 @@ function Sidebar({ app, player, themeContext }) {
                         <div style={{ height: app.recentCommands.length * 50 }}>
                             {app.recentCommands
                                 .filter(c => c != null)
-                                .map((command, index) => {
-                                    return (
-                                        <CommandButton
-                                            command={command}
-                                            key={command}
-                                            style={{
-                                                top: index * 50
-                                            }}
-                                            showLabel={app.expandedMenu}
-                                        />
-                                    );
-                                })}
+                                .map((command, index) => (
+                                    <CommandButton
+                                        command={command}
+                                        key={command}
+                                        style={{
+                                            top: index * 50
+                                        }}
+                                        showLabel={app.expandedMenu}
+                                    />
+                                ))}
                         </div>
                     </div>
                     <div id="SidebarFooter" className="SidebarSection">
