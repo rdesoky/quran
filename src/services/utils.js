@@ -1,11 +1,31 @@
 import QData from "./QData";
 
 const Utils = {
-    num2string: (num, length) => {
+    num2string: (num, length = 3) => {
         let ret = num.toString();
         let zeros = length - ret.length;
         let padding = zeros > 0 ? new Array(zeros + 1).join("0") : "";
         return padding + ret;
+    },
+
+    downloadImage: url => {
+        return new Promise((resolve, reject) => {
+            let img = document.createElement("img");
+            img.onload = e => {
+                resolve(url);
+            };
+            img.onerror = reject;
+            img.src = url;
+        });
+    },
+
+    downloadPageImage: pageIndex => {
+        const imageUrl =
+            process.env.PUBLIC_URL +
+            "/qpages_1260/page" +
+            Utils.num2string(pageIndex + 1, 3) +
+            ".png";
+        return Utils.downloadImage(imageUrl);
     },
 
     pageFromPath: path => {

@@ -56,6 +56,17 @@ function Pager({ match, app, player }) {
         app.selectStart
     ]);
 
+    useEffect(() => {
+        //cache next pages
+        const pageIndex = match.params.page - 1;
+        if (app.pagesCount === 1) {
+            Utils.downloadPageImage(pageIndex + 1);
+        } else {
+            Utils.downloadPageImage(pageIndex + 2);
+            Utils.downloadPageImage(pageIndex + 3);
+        }
+    }, [match.params.page]);
+
     const handleWheel = e => {
         if (e.deltaY > 0) {
             //scroll down
