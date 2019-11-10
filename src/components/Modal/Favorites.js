@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "./../../context/App";
+import { AppConsumer, AppContext } from "./../../context/App";
 import QData from "./../../services/QData";
 import { HifzRanges, HifzRange } from "../Hifz";
 
@@ -19,7 +19,11 @@ const Favorites = ({ app }) => {
             >
                 <ul className="FlowingList">
                     {suras.map(sura => (
-                        <HifzRangeOptions sura={sura} page={pageIndex} />
+                        <HifzRangeOptions
+                            sura={sura}
+                            page={pageIndex}
+                            key={pageIndex.toString() + "-" + sura.toString()}
+                        />
                     ))}
                 </ul>
                 <hr />
@@ -29,7 +33,8 @@ const Favorites = ({ app }) => {
     );
 };
 
-export const HifzRangeOptions = AppConsumer(({ app, page, sura }) => {
+export const HifzRangeOptions = ({ page, sura }) => {
+    const app = useContext(AppContext);
     const [hifzRange, setHifzRange] = useState(null);
 
     useEffect(() => {
@@ -37,11 +42,12 @@ export const HifzRangeOptions = AppConsumer(({ app, page, sura }) => {
             return r.sura === sura && page >= r.startPage && page <= r.endPage;
         });
         setHifzRange(hifzRange);
-    }, [page]);
+    }, [page, app.hifzRanges]);
 
     if (hifzRange) {
         return <HifzRange range={hifzRange} />;
     }
+
     return (
         <div>
             <String
@@ -61,6 +67,6 @@ export const HifzRangeOptions = AppConsumer(({ app, page, sura }) => {
             </div>
         </div>
     );
-});
+};
 
 export default AppConsumer(Favorites);

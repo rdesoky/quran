@@ -4,7 +4,6 @@ import "./index.scss";
 import App from "./App";
 import ThemeProvider from "./context/Theme";
 import * as serviceWorker from "./serviceWorker";
-import Utils from "./services/utils";
 
 ReactDOM.render(
     <ThemeProvider>
