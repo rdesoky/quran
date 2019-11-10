@@ -178,22 +178,34 @@ hr {
     // background-color: black;
 }
 
+.GoodHifz {
+    border-color: rgba(0, 128, 0, 0.5);
+}
+.FairHifz {
+    border-color: rgba(194, 149, 0, 0.5);
+}
+.WeakHifz {
+    border-color: rgba(177, 0, 0, 0.5);
+}
+
 .HifzRangeRow {
-    &.GoodHifz {
-        button {
-            color: $goodHifzText;
-        }
-    }
-    &.FairHifz {
-        button {
-            color: $fairHifzText;
-        }
-    }
-    &.WeakHifz {
-        button {
-            color: $weekHifzText;
-        }
-    }
+    border-style: solid;
+    border-width: 0 10px 1px;
+    // &.GoodHifz {
+    //     button {
+    //         color: $goodHifzText;
+    //     }
+    // }
+    // &.FairHifz {
+    //     button {
+    //         color: $fairHifzText;
+    //     }
+    // }
+    // &.WeakHifz {
+    //     button {
+    //         color: $weekHifzText;
+    //     }
+    // }
     .AgeInfo {
         text-align: right;
         [dir="rtl"] & {

@@ -4,6 +4,7 @@ import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Utils from "../../services/utils";
 
 const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
     const [versesInfo, setAyaInfo] = useState([]);
@@ -25,11 +26,8 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
         setHoverVerse(-1);
     };
 
-    //TODO: extend selection instead of masking
     const onContextMenu = e => {
-        // const aya_id = parseInt(e.target.getAttribute("aya-id"));
-        // app.setMaskStart(app.maskStart === -1 ? aya_id : -1);
-
+        //Extend selection
         onClickVerse({ target: e.target, shiftKey: true });
         e.preventDefault();
     };
@@ -51,7 +49,7 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
     const onClickVerse = e => {
         const { shiftKey, ctrlKey, altKey, target } = e;
         const aya_id = parseInt(target.getAttribute("aya-id"));
-        //TODO: set selectStart|selectEnd|maskStart
+        //set selectStart|selectEnd|maskStart
         if (app.maskStart !== -1) {
             if (app.maskStart > aya_id) {
                 app.setMaskStart(aya_id);
@@ -323,7 +321,17 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
         };
     }, [pageIndex]);
 
-    const renderHifzColors = () => {};
+    const renderHifzColors = () => {
+        const pageSuras = QData.pageSuras(pageIndex);
+        return pageSuras.map(sura => (
+            <HifzSegment
+                sura={sura}
+                page={pageIndex}
+                pageHeight={app.pageHeight()}
+                versesInfo={versesInfo}
+            />
+        ));
+    };
 
     return (
         <>
@@ -355,5 +363,43 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
         </>
     );
 };
+
+export const HifzSegment = AppConsumer(
+    ({ app, sura, page, pageHeight, versesInfo }) => {
+        const suraVerses = versesInfo.filter(i => i.sura - 1 === sura);
+        if (suraVerses.length === 0) {
+            return "";
+        }
+
+        const { hifzRanges } = app;
+
+        const hifzRange = hifzRanges.find(r => {
+            return r.sura === sura && page >= r.startPage && page <= r.endPage;
+        });
+
+        if (hifzRange === undefined) {
+            return "";
+        }
+
+        const dayLength = 24 * 60 * 60 * 1000;
+        const age = Math.floor((Date.now() - hifzRange.date) / dayLength);
+        const firstVerse = suraVerses[0];
+        const lastVerse = suraVerses[suraVerses.length - 1];
+        const sline = parseInt(firstVerse.sline);
+        const top = (pageHeight * sline) / 15;
+        const eline = parseInt(lastVerse.eline);
+        const bottom = (pageHeight * (eline + 1)) / 15;
+        const height = bottom - top;
+        const ageClass =
+            age < 7 ? "GoodHifz" : age < 14 ? "FairHifz" : "WeakHifz";
+
+        return (
+            <div
+                className={`HifzSegment ${ageClass}`}
+                style={{ top, height }}
+            ></div>
+        );
+    }
+);
 
 export default AppConsumer(PlayerConsumer(VerseLayout));
