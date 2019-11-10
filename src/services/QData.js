@@ -388,6 +388,20 @@ const QData = {
         { sp: 604, ep: 604, t: 0, ac: 6 }
     ],
 
+    pageSuras: pageIndex => {
+        if (pageIndex + 1 === QData.pagesInfo.length) {
+            return [111, 112, 113];
+        }
+        let firstSura = QData.pagesInfo[pageIndex].s - 1;
+        let suraList = [firstSura];
+        let nextPageInfo = QData.pagesInfo[pageIndex + 1];
+        let lastSura = nextPageInfo.s - (nextPageInfo.a === 1 ? 2 : 1);
+        for (let s = firstSura + 1; s <= lastSura; s++) {
+            suraList.push(s);
+        }
+        return suraList;
+    },
+
     pagesInfo: [
         { s: 1, a: 1 },
         { s: 2, a: 1 },
