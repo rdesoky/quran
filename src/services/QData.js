@@ -188,6 +188,10 @@ const QData = {
         //return count;
     },
 
+    suraStartPage: sura => {
+        return QData.sura_info[sura].sp - 1;
+    },
+
     suraPageCount: function getSuraPageCount(ndx) {
         var sInfo = QData.sura_info[ndx];
         return sInfo.ep - sInfo.sp + 1;
