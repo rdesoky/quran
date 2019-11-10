@@ -192,10 +192,6 @@ class AppProvider extends Component {
         }
     };
 
-    // setIsNarrow = isNarrow => {
-    //     this.setState({ isNarrow: isNarrow });
-    // };
-
     setShowMenu = showMenu => {
         this.setState({ showMenu });
         // if (showMenu) {
@@ -473,6 +469,7 @@ class AppProvider extends Component {
     };
 
     methods = {
+        formatMessage: this.formatMessage,
         isBookmarked: this.isBookmarked,
         setExpandedMenu: this.setExpandedMenu,
         signOut: this.signOut,
@@ -692,4 +689,4 @@ const AppConsumer = Component =>
     };
 
 export default injectIntl(withRouter(AppProvider));
-export { AppConsumer };
+export { AppContext, AppConsumer };

@@ -321,4 +321,4 @@ const PlayerConsumer = Component =>
     };
 
 export default AppConsumer(PlayerProvider);
-export { PlayerConsumer, AudioState, AudioRepeat };
+export { PlayerContext, PlayerConsumer, AudioState, AudioRepeat };

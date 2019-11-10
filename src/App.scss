@@ -179,18 +179,19 @@ hr {
 }
 
 .GoodHifz {
-    border-color: rgba(0, 128, 0, 0.4);
+    border-color: rgba(0, 128, 0, 0.4) !important;
 }
 .FairHifz {
-    border-color: rgba(194, 149, 0, 0.4);
+    border-color: rgba(194, 149, 0, 0.4) !important;
 }
 .WeakHifz {
-    border-color: rgba(177, 0, 0, 0.4);
+    border-color: rgba(177, 0, 0, 0.4) !important;
 }
 
 .HifzRangeRow {
     border-style: solid;
     border-width: 0 10px 1px 0;
+    border-color: rgba(0, 0, 0, 0);
     // &.GoodHifz {
     //     button {
     //         color: $goodHifzText;
