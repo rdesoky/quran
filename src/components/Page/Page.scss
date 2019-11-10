@@ -11,7 +11,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         position: absolute;
         width: 100%;
         border-style: solid;
-        border-width: 0 12px;
+        border-width: 0 20px 0 0;
         box-sizing: border-box;
     }
 }
@@ -92,15 +92,16 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 .Verse {
                     position: absolute;
                     background-color: #888;
-                    transition: top 0.15s, left 0.15s, right 0.15s;
+                    // transition: top 0.15s, left 0.15s, right 0.15s;
                 }
                 .Mask {
                     position: absolute;
                     background-color: #999998fa;
-                    transition: top 0.15s, left 0.15s, right 0.15s;
+                    // transition: top 0.15s, left 0.15s, right 0.15s;
                 }
                 button {
-                    transition: top 0.15s, left 0.15s, right 0.15s;
+                    transition: none;
+                    // transition: top 0.15s, left 0.15s, right 0.15s;
                 }
             }
         }

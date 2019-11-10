@@ -6,6 +6,7 @@
     "page": "صفحة",
     "pg": "ص",
     "pg_num": "ص:{num}",
+    "the_page": "الصفحة: {page}",
     "range_desc": "{sura}: من الصفحة {start_page} - الصفحات: {pages}",
     "sura_hifz_desc": "{sura}: كاملة - الصفحات: {pages}",
     "last_review_today": "آخر مراجعة: اليوم",

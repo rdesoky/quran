@@ -2,40 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import QData from "./../../services/QData";
-import { HifzRanges } from "../Hifz";
+import { HifzRanges, HifzRange } from "../Hifz";
 
 const Favorites = ({ app }) => {
-    const { user, hifzRanges } = app;
-    const [showLogin, setShowLogin] = useState(false);
-
-    const gotoSuraPage = ({ target }) => {
-        const sura = parseInt(target.getAttribute("sura"));
-        const startPage = parseInt(target.getAttribute("startpage"));
-        const endPage = parseInt(target.getAttribute("endpage"));
-        const suraStartPage = QData.sura_info[sura].sp - 1;
-        const suraEndPage = QData.sura_info[sura].ep - 1;
-        const suraStartAya = QData.ayaID(sura, 0);
-        app.gotoPage(startPage + 1);
-        if (suraStartPage === startPage) {
-            app.setSelectStart(suraStartAya);
-        } else {
-            app.setSelectStart(QData.pageAyaId(startPage));
-        }
-        if (suraEndPage === endPage) {
-            app.setSelectEnd(suraStartAya + QData.sura_info[sura].ac - 1);
-        } else {
-            app.setSelectEnd(QData.pageAyaId(endPage + 1) - 1);
-        }
-    };
-
-    const rangeStartAya = (sura, page) => {
-        const suraStartPage = QData.sura_info[sura].sp - 1;
-        if (suraStartPage === page) {
-            return QData.ayaID(sura, 0);
-        } else {
-            return QData.pageAyaId(page);
-        }
-    };
+    const pageIndex = app.getCurrentPageIndex();
+    const suras = QData.pageSuras(pageIndex);
 
     return (
         <>
@@ -46,15 +17,50 @@ const Favorites = ({ app }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                <div className="ButtonsBar">
-                    <button>
-                        <String id="add_hifz" />
-                    </button>
-                </div>
+                <ul className="FlowingList">
+                    {suras.map(sura => (
+                        <HifzRangeOptions sura={sura} page={pageIndex} />
+                    ))}
+                </ul>
+                <hr />
                 <HifzRanges />
             </div>
         </>
     );
 };
+
+export const HifzRangeOptions = AppConsumer(({ app, page, sura }) => {
+    const [hifzRange, setHifzRange] = useState(null);
+
+    useEffect(() => {
+        const hifzRange = app.hifzRanges.find(r => {
+            return r.sura === sura && page >= r.startPage && page <= r.endPage;
+        });
+        setHifzRange(hifzRange);
+    }, [page]);
+
+    if (hifzRange) {
+        return <HifzRange range={hifzRange} />;
+    }
+    return (
+        <div>
+            <String
+                id="sura_name"
+                values={{ sura: app.suraName(sura) }}
+            ></String>
+            {" - "}
+            <String
+                id="the_page"
+                values={{ page: page - QData.suraStartPage(sura) + 1 }}
+            ></String>
+            <div className="ButtonsBar">
+                <button>This page</button>
+                <button>From sura start</button>
+                <button>To sura end</button>
+                <button>All sura</button>
+            </div>
+        </div>
+    );
+});
 
 export default AppConsumer(Favorites);
