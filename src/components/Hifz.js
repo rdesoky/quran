@@ -53,7 +53,12 @@ const HifzRange = ({ range, filter, showActions = false }) => {
             return;
         }
         const age = Math.floor((Date.now() - range.date) / dayLength);
-        const id = age === 0 ? "last_review_today" : "last_review_since";
+        const id =
+            range.revs > 0
+                ? age === 0
+                    ? "last_revised_today"
+                    : "last_revised_since"
+                : "not_revised";
         const values = { days: age };
 
         const ageInfo = app.formatMessage({ id }, values);
@@ -118,14 +123,43 @@ const HifzRange = ({ range, filter, showActions = false }) => {
         });
     };
 
-    const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
-            app.closePopup();
-        }
-    };
+    // const checkClosePopup = () => {
+    //     if (!app.isCompact && app.pagesCount === 1) {
+    //         app.closePopup();
+    //     }
+    // };
 
     const setRangeRevised = () => {
         app.setRangeRevised(range);
+    };
+
+    const addCurrentPage = e => {
+        app.addHifzRange(range.startPage, range.sura, 1);
+    };
+    const addSura = e => {
+        app.addHifzRange(
+            suraInfo.sp - 1,
+            range.sura,
+            suraInfo.ep - suraInfo.sp + 1
+        );
+    };
+    const addFromSuraStart = e => {
+        app.addHifzRange(
+            suraInfo.sp - 1,
+            range.sura,
+            range.startPage - suraInfo.sp + 2
+        );
+    };
+    const addToSuraEnd = e => {
+        app.addHifzRange(
+            range.startPage,
+            range.sura,
+            suraInfo.ep - range.startPage
+        );
+    };
+
+    const deleteHifzRange = e => {
+        app.deleteHifzRange(range);
     };
 
     if (filter && suraName.indexOf(filter) === -1) {
@@ -180,7 +214,7 @@ const HifzRange = ({ range, filter, showActions = false }) => {
                         <button onClick={playRange}>
                             <Icon icon={faPlayCircle} />
                         </button>
-                        <button>
+                        <button onClick={deleteHifzRange}>
                             <Icon icon={faTimes} /> <String id="remove" />
                         </button>
                     </div>
@@ -189,19 +223,17 @@ const HifzRange = ({ range, filter, showActions = false }) => {
                 )
             ) : (
                 <div className="ActionsBar">
-                    <span>
-                        <String id="add" />:
-                    </span>
-                    <button>
+                    <String id="add" />
+                    <button onClick={addCurrentPage}>
                         <String id="the_page" />
                     </button>
-                    <button>
+                    <button onClick={addSura}>
                         <String id="the_sura" />
                     </button>
-                    <button>
+                    <button onClick={addFromSuraStart}>
                         <String id="from_start" />
                     </button>
-                    <button>
+                    <button onClick={addToSuraEnd}>
                         <String id="to_end" />
                     </button>
                 </div>

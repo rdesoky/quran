@@ -12,9 +12,7 @@ const Favorites = ({ app }) => {
     return (
         <>
             <div className="Title">
-                <span>
-                    <String id="favorites" />
-                </span>
+                <String id="favorites" />
                 <div className="ButtonsBar">
                     <button
                         onClick={e => selectTab("add")}

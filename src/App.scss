@@ -2,13 +2,13 @@ $appBgColor: #444;
 $appBgColorDk: black;
 $appHeaderBgColor: #282c34;
 
-$goodHifzBg: rgba(0, 128, 0, 0.2);
+$goodHifzBg: rgba(0, 128, 0, 0.15);
 $goodHifzText: greenyellow;
 
-$weakHifzBg: rgba(177, 0, 0, 0.2);
+$weakHifzBg: rgba(177, 0, 0, 0.15);
 $weekHifzText: #ff8c8c;
 
-$fairHifzBg: rgba(194, 149, 0, 0.2);
+$fairHifzBg: rgba(194, 149, 0, 0.15);
 $fairHifzText: #e7c400;
 
 .App {
@@ -95,7 +95,17 @@ button {
 .ActionsBar {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: stretch;
+    > span {
+        line-height: 30px;
+        padding: 0 3px 0 0;
+        [dir="rtl"] & {
+            padding: 0 0 0 3px;
+        }
+        &:first-child::after {
+            content: ":";
+        }
+    }
     button {
         li & {
             background-color: rgba(255, 255, 255, 0.2);

@@ -371,7 +371,7 @@ export const HifzSegment = AppConsumer(
         const bottom = (pageHeight * (eline + 1)) / 15;
         const height = bottom - top;
         const ageClass =
-            age < 7 ? "GoodHifz" : age < 14 ? "FairHifz" : "WeakHifz";
+            age <= 7 ? "GoodHifz" : age <= 14 ? "FairHifz" : "WeakHifz";
 
         return (
             <div

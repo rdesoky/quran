@@ -4,6 +4,7 @@ import QData from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
 import { injectIntl } from "react-intl";
+import ThemeProvider from "./Theme";
 
 let rc = localStorage.getItem("commands");
 
@@ -432,12 +433,12 @@ class AppProvider extends Component {
     };
 
     setRangeRevised = range => {
-        const nodeRef = this.hifzRef.child(range.id);
-        nodeRef.once("value", snapshot => {
+        const rangeNodeRef = this.hifzRef.child(range.id);
+        rangeNodeRef.once("value", snapshot => {
             let curr_range = snapshot.val();
             curr_range.ts = Date.now();
             curr_range.revs++;
-            nodeRef.set(curr_range);
+            rangeNodeRef.set(curr_range);
         });
         const today = new Date();
         const activityKey = `${today.getFullYear()}-${today.getMonth() +
@@ -448,6 +449,85 @@ class AppProvider extends Component {
             pages += range.pages;
             activityPagesRef.set(pages);
         });
+    };
+
+    addHifzRange = (startPage, sura, pages) => {
+        const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
+        const newRangeID =
+            Utils.num2string(startPage, 3) + Utils.num2string(sura);
+        let newRange = {
+            revs: 0,
+            startPage,
+            endPage: startPage + pages - 1,
+            pages: pages
+        };
+        let addNew = true;
+
+        //Calculate average rev/page
+        const mergeRangesRevs = (r1, r2) => {
+            const totalRevs = r1.revs * r1.pages + r2.revs * r2.pages;
+            const startPage = Math.min(r1.startPage, r2.startPage);
+            const endPage = Math.max(r1.endPage, r2.endPage);
+            const newTotalPages = endPage - startPage + 1;
+            return Math.floor(totalRevs / newTotalPages);
+        };
+
+        //check if merging with intersecting ranges is required
+        const suraRanges = this.state.hifzRanges
+            .filter(r => r.sura === sura)
+            .sort((r1, r2) => (r1.startPage > r2.startPage ? -1 : 1)); //reverse
+
+        //check tailed ranges first
+        suraRanges.forEach(r => {
+            if (
+                newRange.startPage <= r.startPage &&
+                newRange.endPage + 1 >= r.startPage
+            ) {
+                //intersecting with tailed range, append its pages (beyond our last page) and revs, and delete it
+                newRange.endPage = Math.max(newRange.endPage, r.endPage);
+                //Calcualte partial revs
+                newRange.revs = mergeRangesRevs(newRange, r);
+                newRange.pages = newRange.endPage - newRange.startPage + 1;
+                //delete merged range
+                this.hifzRef.child(r.id).set(null);
+            }
+
+            if (
+                newRange.startPage > r.startPage &&
+                newRange.startPage <= r.endPage + 1
+            ) {
+                //inersecting with prior range, add additional pages to it, don't add new one
+                if (newRange.endPage > r.endPage) {
+                    //Not completely inside an old range
+                    let oldRange = Object.assign({}, r);
+                    oldRange.revs = mergeRangesRevs(oldRange, newRange);
+                    oldRange.endPage = newRange.endPage;
+                    oldRange.pages = oldRange.endPage - oldRange.startPage + 1;
+
+                    //Update old range
+                    this.hifzRef.child(oldRange.id).set({
+                        pages: oldRange.pages,
+                        ts: fourteenDaysAgo,
+                        revs: oldRange.revs
+                    });
+
+                    newRange = oldRange;
+                }
+                addNew = false;
+            }
+        });
+
+        if (addNew) {
+            this.hifzRef.child(newRangeID).set({
+                pages: newRange.pages,
+                ts: fourteenDaysAgo,
+                revs: newRange.revs
+            });
+        }
+    };
+
+    deleteHifzRange = range => {
+        this.hifzRef.child(range.id).set(null);
     };
 
     setModalPopup = (modalPopup = true) => {
@@ -469,6 +549,8 @@ class AppProvider extends Component {
     };
 
     methods = {
+        deleteHifzRange: this.deleteHifzRange,
+        addHifzRange: this.addHifzRange,
         formatMessage: this.formatMessage,
         isBookmarked: this.isBookmarked,
         setExpandedMenu: this.setExpandedMenu,
@@ -606,7 +688,8 @@ class AppProvider extends Component {
                               startPage,
                               pages,
                               endPage,
-                              date: hifzInfo.ts
+                              date: hifzInfo.ts,
+                              revs: hifzInfo.revs
                           };
                       })
                 : [];
