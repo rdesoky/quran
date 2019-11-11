@@ -8,7 +8,7 @@ $goodHifzText: greenyellow;
 $weakHifzBg: rgba(177, 0, 0, 0.15);
 $weekHifzText: #ff8c8c;
 
-$fairHifzBg: rgba(209, 160, 0, 0.15);
+$fairHifzBg: rgba(189, 145, 0, 0.2);
 $fairHifzText: #ffd900;
 
 .App {
@@ -110,7 +110,7 @@ button {
         li & {
             background-color: rgba(255, 255, 255, 0.2);
             width: inherit;
-            margin: 0 2px;
+            margin: 0 2px 2px 0;
         }
         background-color: #444;
     }
@@ -224,6 +224,9 @@ hr {
     margin-bottom: 5px;
     // border-radius: 5px;
     border: solid 1px #444;
+    > button:hover {
+        background-color: transparent !important;
+    }
 
     .AgeInfo {
         float: right;
@@ -233,6 +236,13 @@ hr {
     }
     .RangeInfo {
         font-weight: bold;
+    }
+    .ActionsBar {
+        position: absolute;
+        bottom: 0;
+    }
+    .RangeText {
+        height: 25px;
     }
 }
 

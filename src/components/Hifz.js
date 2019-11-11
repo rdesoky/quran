@@ -32,13 +32,13 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
         const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
         const rangePagesCount = range.endPage - range.startPage + 1;
-        const id = range.date
+        let id = range.date
             ? rangePagesCount === suraPagesCount
                 ? "sura_hifz_desc"
                 : "range_desc"
             : "the_page_num";
 
-        const values = {
+        let values = {
             // sura: suraName,
             page: range.startPage,
             start_page: range.startPage - (suraInfo.sp - 1) + 1,
@@ -46,20 +46,18 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             pages: rangePagesCount
         };
         setRangeInfo(app.formatMessage({ id }, values));
-    }, [range.sura]);
 
-    useEffect(() => {
         if (!range.date) {
             return;
         }
         const age = Math.floor((Date.now() - range.date) / dayLength);
-        const id =
+        id =
             range.revs > 0
                 ? age === 0
                     ? "last_revised_today"
                     : "last_revised_since"
                 : "not_revised";
-        const values = { days: age };
+        values = { days: age };
 
         const ageInfo = app.formatMessage({ id }, values);
 
@@ -105,26 +103,24 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     const selectRange = e => {
-        const sura = range.sura;
-        const startPage = range.startPage;
-        const endPage = range.endPage;
         const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
-            sura,
-            startPage,
-            endPage
+            range.sura,
+            range.startPage,
+            range.endPage
         );
         app.gotoAya(rangeStartVerse, { sel: true });
-        app.gotoPage(startPage + 1);
-        app.setSelectStart(rangeStartVerse);
+        // app.setSelectStart(rangeStartVerse);
         app.setSelectEnd(rangeEndVerse);
     };
 
     const readRange = e => {
-        selectRange(e);
-        setTimeout(() => {
-            app.closePopup();
-            app.setSelectEnd(app.selectStart);
-        });
+        const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
+            range.sura,
+            range.startPage,
+            range.endPage
+        );
+        app.gotoAya(rangeStartVerse, { sel: true });
+        app.closePopup();
     };
 
     // const checkClosePopup = () => {
@@ -134,7 +130,9 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     // };
 
     const setRangeRevised = () => {
-        app.setRangeRevised(range);
+        if (window.confirm("Are you sure?")) {
+            app.setRangeRevised(range);
+        }
     };
 
     const addCurrentPage = e => {
@@ -175,7 +173,9 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     const toggleActions = e => {
         // selectRange(e);
         // setActions(!actions);
-        setActiveRange && setActiveRange(range.id);
+        setTimeout(() => {
+            setActiveRange && setActiveRange(range.id);
+        }, 100);
     };
 
     return (
@@ -201,9 +201,13 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                         pointerEvents: "none"
                     }}
                 >
-                    <VerseText
-                        verse={rangeStartAya(range.sura, range.startPage)}
-                    />
+                    {!actions ? (
+                        <VerseText
+                            verse={rangeStartAya(range.sura, range.startPage)}
+                        />
+                    ) : (
+                        ""
+                    )}
                 </div>
             </button>
             {range.date ? (

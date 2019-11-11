@@ -157,10 +157,10 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
         box-sizing: border-box;
     }
 
-    .ActionBar {
-        margin: 20px 0 0 0;
-        text-align: center;
-    }
+    // .ActionBar {
+    //     margin: 20px 0 0 0;
+    //     text-align: center;
+    // }
 
     .FieldAction {
         button {
@@ -340,6 +340,9 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             font-size: 20px;
             background-color: #222;
             border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             &.active {
                 color: white;
                 background-color: #444;
