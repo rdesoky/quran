@@ -314,9 +314,17 @@ const SuraHifzChart = ({ sura, range }) => {
                 const rangeStart = r.startPage - suraInfo.sp + 1;
                 const start = (100 * rangeStart) / suraPages;
                 const width = (100 * r.pages) / suraPages;
-                const age = Math.floor((Date.now() - r.date) / dayLength);
-                const ageClass =
-                    age <= 7 ? "GoodHifz" : age <= 14 ? "FairHifz" : "WeakHifz";
+                let age,
+                    ageClass = "NoHifz";
+                if (r.date !== undefined) {
+                    age = Math.floor((Date.now() - r.date) / dayLength);
+                    ageClass =
+                        age <= 7
+                            ? "GoodHifz"
+                            : age <= 14
+                            ? "FairHifz"
+                            : "WeakHifz";
+                }
                 return (
                     <div
                         key={r.id}
