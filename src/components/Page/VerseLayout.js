@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { AppConsumer } from "../../context/App";
+import React, { useState, useEffect, useContext } from "react";
+import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 
-const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
-    const [versesInfo, setAyaInfo] = useState([]);
+const VerseLayout = ({
+    page: pageIndex,
+    app,
+    player,
+    children,
+    pageWidth,
+    versesInfo
+}) => {
+    // const [versesInfo, setVerseInfo] = useState([]);
     const [hoverVerse, setHoverVerse] = useState(-1);
 
     const pageHeight = app.appHeight - 50;
@@ -289,53 +296,8 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
         });
     }
 
-    //Handle pageIndex update
-    useEffect(() => {
-        setAyaInfo([]);
-        let pageNumber = parseInt(pageIndex) + 1;
-        let controller = new AbortController();
-        let url = `${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`;
-        fetch(url, {
-            signal: controller.signal
-        })
-            .then(response => response.json())
-            .then(({ child_list }) => {
-                setAyaInfo(
-                    child_list.map(c => {
-                        const aya_id = QData.ayaID(c.sura, c.aya);
-                        let epos = c.epos;
-                        if (epos > 980) {
-                            epos = 1000;
-                        }
-                        return { ...c, epos, aya_id };
-                    })
-                );
-            })
-            .catch(e => {
-                const { name, message } = e;
-                console.info(`${name}: ${message}\n${url}`);
-            });
-        return () => {
-            //Cleanup function
-            controller.abort();
-        };
-    }, [pageIndex]);
-
-    const renderHifzColors = () => {
-        const pageSuras = QData.pageSuras(pageIndex);
-        return pageSuras.map(sura => (
-            <HifzSegment
-                sura={sura}
-                page={pageIndex}
-                pageHeight={app.pageHeight()}
-                versesInfo={versesInfo}
-            />
-        ));
-    };
-
     return (
         <>
-            <div className="HifzSegments">{renderHifzColors()}</div>
             <div
                 className="VerseLayout"
                 style={{
@@ -361,6 +323,24 @@ const VerseLayout = ({ page: pageIndex, app, player, children, pageWidth }) => {
                 {renderMask()}
             </div>
         </>
+    );
+};
+
+export const HifzSegments = ({ page, versesInfo }) => {
+    const app = useContext(AppContext);
+    const pageSuras = QData.pageSuras(page);
+    return (
+        <div className="HifzSegments">
+            {pageSuras.map(sura => (
+                <HifzSegment
+                    key={page.toString() + "-" + sura.toString()}
+                    sura={sura}
+                    page={page}
+                    pageHeight={app.pageHeight()}
+                    versesInfo={versesInfo}
+                />
+            ))}
+        </div>
     );
 };
 
