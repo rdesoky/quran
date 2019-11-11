@@ -157,10 +157,20 @@ export const SuraList = AppConsumer(
 
         const gotoSura = ({ target }) => {
             app.hideMask();
-            let index = parseInt(target.getAttribute("sura"));
+            const index = parseInt(target.getAttribute("sura"));
             checkClosePopup();
             return app.gotoSura(index);
         };
+        const addSuraToHifz = ({ target }) => {
+            const sura = parseInt(target.getAttribute("sura"));
+            const suraInfo = QData.sura_info[sura];
+            app.addHifzRange(
+                suraInfo.sp - 1,
+                sura,
+                suraInfo.ep - suraInfo.sp + 1
+            );
+        };
+
         const playSura = e => {
             player.stop(true);
             gotoSura(e);
@@ -205,7 +215,10 @@ export const SuraList = AppConsumer(
                             <div className="actions">
                                 {indexActions === suraIndex ? (
                                     <>
-                                        <button>
+                                        <button
+                                            sura={suraIndex}
+                                            onClick={addSuraToHifz}
+                                        >
                                             <Icon icon={faHeart} />
                                         </button>
                                         <button

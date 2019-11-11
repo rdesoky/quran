@@ -207,19 +207,23 @@ hr {
 .GoodHifz {
     // border-color: $goodHifzBg !important;
     background-color: $goodHifzBg;
+    border-color: rgb(0, 90, 0);
 }
 .FairHifz {
     // border-color: $fairHifzBg !important;
     background-color: $fairHifzBg;
+    border-color: rgb(121, 86, 0);
 }
 .WeakHifz {
     // border-color: $weakHifzBg !important;
     background-color: $weakHifzBg;
+    border-color: brown;
 }
 
 .HifzRangeRow {
     margin-bottom: 5px;
-    border-radius: 5px;
+    // border-radius: 5px;
+    border: solid 1px #444;
 
     .AgeInfo {
         float: right;

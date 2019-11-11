@@ -15,7 +15,7 @@ import { VerseText } from "./Widgets";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
-const HifzRange = ({ range, filter, showActions = false }) => {
+const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [suraName, setSuraName] = useState("");
@@ -74,6 +74,10 @@ const HifzRange = ({ range, filter, showActions = false }) => {
         setAgeClass(ageClass);
         setAgeInfo(ageInfo);
     }, [range.date]);
+
+    useEffect(() => {
+        setActions(showActions);
+    }, [showActions]);
 
     const rangeStartAya = (sura, page) => {
         const suraStartPage = suraInfo.sp - 1;
@@ -159,7 +163,9 @@ const HifzRange = ({ range, filter, showActions = false }) => {
     };
 
     const deleteHifzRange = e => {
-        app.deleteHifzRange(range);
+        if (window.confirm("Are you sure?")) {
+            app.deleteHifzRange(range);
+        }
     };
 
     if (filter && suraName.indexOf(filter) === -1) {
@@ -167,8 +173,9 @@ const HifzRange = ({ range, filter, showActions = false }) => {
     }
 
     const toggleActions = e => {
-        selectRange(e);
-        setActions(!actions);
+        // selectRange(e);
+        // setActions(!actions);
+        setActiveRange && setActiveRange(range.id);
     };
 
     return (
@@ -245,6 +252,7 @@ const HifzRange = ({ range, filter, showActions = false }) => {
 // export const HifzRanges = AppConsumer(({ app, filter }) => {
 
 const HifzRanges = ({ filter }) => {
+    const [activeRange, setActiveRange] = useState(null);
     const app = useContext(AppContext);
     // const suraNames = app.suraNames();
 
@@ -262,7 +270,13 @@ const HifzRanges = ({ filter }) => {
         <ul id="HifzRanges" className="FlowingList">
             {hifzRanges.map((range, index) => {
                 return (
-                    <HifzRange range={range} key={range.id} filter={filter} />
+                    <HifzRange
+                        range={range}
+                        key={range.id}
+                        filter={filter}
+                        showActions={activeRange === range.id}
+                        setActiveRange={setActiveRange}
+                    />
                 );
             })}
         </ul>
