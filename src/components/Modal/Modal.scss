@@ -323,7 +323,11 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     .Title {
         //align-items: stretch;
         justify-items: center;
+        align-items: flex-end;
 
+        > span {
+            line-height: 35px;
+        }
         .ButtonsBar {
             padding: 0;
             margin: 0 4px;
@@ -334,9 +338,8 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             padding: 0 5px;
             margin: 0;
             font-size: 20px;
-            // color: #666;
             background-color: #222;
-            border-radius: 15px 15px 0 0;
+            border-radius: 10px 10px 0 0;
             &.active {
                 color: white;
                 background-color: #444;
@@ -351,6 +354,9 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
                     margin: 0 5px 0 0;
                 }
                 font-size: 16px;
+            }
+            &.CommandButton {
+                height: auto !important;
             }
         }
     }
