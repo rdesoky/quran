@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "../../context/App";
+import { AppConsumer, AppContext } from "../../context/App";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { BookmarksList } from "./QIndex";
 
-const Bookmarks = ({ app }) => {
+const Bookmarks = () => {
+    const app = useContext(AppContext);
     const toggleBookmark = e => {
         app.toggleBookmark();
     };
