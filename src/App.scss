@@ -8,8 +8,8 @@ $goodHifzText: greenyellow;
 $weakHifzBg: rgba(177, 0, 0, 0.15);
 $weekHifzText: #ff8c8c;
 
-$fairHifzBg: rgba(194, 149, 0, 0.15);
-$fairHifzText: #e7c400;
+$fairHifzBg: rgba(209, 160, 0, 0.15);
+$fairHifzText: #ffd900;
 
 .App {
     position: absolute;
@@ -207,17 +207,17 @@ hr {
 .GoodHifz {
     // border-color: $goodHifzBg !important;
     background-color: $goodHifzBg;
-    border-color: rgb(0, 90, 0);
+    border-color: rgb(0, 90, 0) !important;
 }
 .FairHifz {
     // border-color: $fairHifzBg !important;
     background-color: $fairHifzBg;
-    border-color: rgb(121, 86, 0);
+    border-color: rgb(121, 86, 0) !important;
 }
 .WeakHifz {
     // border-color: $weakHifzBg !important;
     background-color: $weakHifzBg;
-    border-color: brown;
+    border-color: brown !important;
 }
 
 .HifzRangeRow {
