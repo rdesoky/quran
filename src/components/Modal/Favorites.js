@@ -54,7 +54,8 @@ const Favorites = ({ app }) => {
                                         hifzRange || {
                                             sura,
                                             startPage: pageIndex,
-                                            endPage: pageIndex
+                                            endPage: pageIndex,
+                                            pages: 1
                                         }
                                     }
                                     key={
