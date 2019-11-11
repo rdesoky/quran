@@ -20,7 +20,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     const player = useContext(PlayerContext);
     const [suraName, setSuraName] = useState("");
     const [rangeInfo, setRangeInfo] = useState("");
-    const [ageClass, setAgeClass] = useState("");
+    const [ageClass, setAgeClass] = useState("NoHifz");
     const [ageInfo, setAgeInfo] = useState("");
     const [actions, setActions] = useState(showActions);
 
