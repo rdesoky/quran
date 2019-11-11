@@ -44,6 +44,11 @@ code {
             top: 0;
             right: 0;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            min-width: 22px;
+            pointer-events: none;
             [dir="rtl"] & {
                 left: 0;
                 right: auto;

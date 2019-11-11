@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "../../context/App";
-import { PlayerConsumer } from "../../context/Player";
+import { AppConsumer, AppContext } from "../../context/App";
+import { PlayerConsumer, PlayerContext } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faTimes as faDelete,
@@ -17,7 +17,8 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges } from "../Hifz";
 
-const QIndex = ({ app }) => {
+const QIndex = ({}) => {
+    const app = useContext(AppContext);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
@@ -137,12 +138,12 @@ const QIndex = ({ app }) => {
 
 export const SuraList = AppConsumer(
     PlayerConsumer(({ app, player, filter }) => {
-        const [indexActions, setIndexActions] = useState(0);
+        const [actionsIndex, setActionsIndex] = useState(0);
 
         useEffect(() => {
             const { selectStart } = app;
             const currentSura = QData.ayaIdInfo(selectStart).sura;
-            setIndexActions(currentSura);
+            setActionsIndex(currentSura);
         }, []);
 
         const { selectStart } = app;
@@ -156,10 +157,14 @@ export const SuraList = AppConsumer(
         };
 
         const gotoSura = ({ target }) => {
-            app.hideMask();
             const index = parseInt(target.getAttribute("sura"));
-            checkClosePopup();
-            return app.gotoSura(index);
+            if (actionsIndex === index) {
+                app.hideMask();
+                checkClosePopup();
+                return app.gotoSura(index);
+            } else {
+                setActionsIndex(index);
+            }
         };
         const addSuraToHifz = ({ target }) => {
             const sura = parseInt(target.getAttribute("sura"));
@@ -213,7 +218,7 @@ export const SuraList = AppConsumer(
                                 {suraIndex + 1 + ". " + suraName}
                             </button>
                             <div className="actions">
-                                {indexActions === suraIndex ? (
+                                {actionsIndex === suraIndex ? (
                                     <>
                                         <button
                                             sura={suraIndex}
@@ -235,13 +240,7 @@ export const SuraList = AppConsumer(
                                         </button>
                                     </>
                                 ) : (
-                                    <button
-                                        onClick={e =>
-                                            setIndexActions(suraIndex)
-                                        }
-                                    >
-                                        <Icon icon={faEllipsisH} />
-                                    </button>
+                                    <Icon icon={faEllipsisH} />
                                 )}
                             </div>
                         </li>
@@ -252,119 +251,128 @@ export const SuraList = AppConsumer(
     })
 );
 
-export const BookmarksList = AppConsumer(
-    PlayerConsumer(({ app, player, filter }) => {
-        const { bookmarks } = app;
+export const BookmarksList = ({ filter }) => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
+    const [actionsIndex, setActionsIndex] = useState(-1);
 
-        if (!bookmarks.length) {
-            return (
-                <div>
-                    <String id="no_bookmarks" />
-                </div>
-            );
-        }
+    const { bookmarks } = app;
 
-        const sura_names = app.suraNames();
-
-        const checkClosePopup = () => {
-            if (!app.isCompact && app.pagesCount === 1) {
-                app.closePopup();
-            }
-        };
-
-        const gotoAya = ({ target }) => {
-            const aya = parseInt(target.getAttribute("aya"));
-            app.gotoAya(aya, { sel: true });
-            checkClosePopup();
-        };
-
-        const removeBookmark = ({ target }) => {
-            const verse = parseInt(target.getAttribute("verse"));
-            app.removeBookmark(verse);
-        };
-
-        const playVerse = ({ target }) => {
-            const attr = target.getAttribute("verse") || app.selectStart;
-            const verse = parseInt(attr);
-            player.stop(true);
-            app.gotoAya(verse, { sel: true });
-            setTimeout(() => {
-                player.play();
-            }, 500);
-        };
-
-        const reviewVerse = ({ target }) => {
-            const attr = target.getAttribute("verse") || app.selectStart;
-            const verse = parseInt(attr);
-            app.gotoAya(verse, { sel: true });
-            setTimeout(() => {
-                app.setMaskStart();
-                app.closePopup();
-            });
-            app.pushRecentCommand("Mask");
-        };
-
+    if (!bookmarks.length) {
         return (
-            <ul className="FlowingList">
-                {bookmarks.map(bookmark => {
-                    const suraName =
-                        sura_names[QData.ayaIdInfo(bookmark.aya).sura];
-
-                    if (filter && -1 === suraName.indexOf(filter)) {
-                        return "";
-                    }
-
-                    return (
-                        <li className="BookmarkRow" key={bookmark.aya}>
-                            <div className="actions">
-                                <button
-                                    verse={bookmark.aya}
-                                    onClick={removeBookmark}
-                                >
-                                    <Icon icon={faDelete} />
-                                </button>
-                                <button
-                                    verse={bookmark.aya}
-                                    onClick={playVerse}
-                                >
-                                    <Icon icon={faPlayCircle} />
-                                </button>
-                                <button
-                                    verse={bookmark.aya}
-                                    onClick={reviewVerse}
-                                >
-                                    <Icon icon={faEyeSlash} />
-                                </button>
-                            </div>
-                            <button aya={bookmark.aya} onClick={gotoAya}>
-                                <Icon icon={faBookmark} />
-                                &nbsp;
-                                <String
-                                    id="bookmark_desc"
-                                    values={{
-                                        sura: suraName,
-                                        verse:
-                                            QData.ayaIdInfo(bookmark.aya).aya +
-                                            1
-                                    }}
-                                />
-                                <div
-                                    style={{
-                                        whiteSpace: "nowrap",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        pointerEvents: "none"
-                                    }}
-                                >
-                                    {app.verseList()[bookmark.aya]}
-                                </div>
-                            </button>
-                        </li>
-                    );
-                })}
-            </ul>
+            <div>
+                <String id="no_bookmarks" />
+            </div>
         );
-    })
-);
+    }
 
-export default AppConsumer(PlayerConsumer(QIndex));
+    const sura_names = app.suraNames();
+
+    const checkClosePopup = () => {
+        if (!app.isCompact && app.pagesCount === 1) {
+            app.closePopup();
+        }
+    };
+
+    const gotoAya = ({ target }) => {
+        const aya = parseInt(target.getAttribute("aya"));
+        if (actionsIndex !== aya) {
+            setActionsIndex(aya);
+            return;
+        }
+        app.gotoAya(aya, { sel: true });
+        checkClosePopup();
+    };
+
+    const removeBookmark = ({ target }) => {
+        const verse = parseInt(target.getAttribute("verse"));
+        app.removeBookmark(verse);
+    };
+
+    const playVerse = ({ target }) => {
+        const attr = target.getAttribute("verse") || app.selectStart;
+        const verse = parseInt(attr);
+        player.stop(true);
+        app.gotoAya(verse, { sel: true });
+        setTimeout(() => {
+            player.play();
+        }, 500);
+    };
+
+    const reviewVerse = ({ target }) => {
+        const attr = target.getAttribute("verse") || app.selectStart;
+        const verse = parseInt(attr);
+        app.gotoAya(verse, { sel: true });
+        setTimeout(() => {
+            app.setMaskStart();
+            app.closePopup();
+        });
+        app.pushRecentCommand("Mask");
+    };
+
+    return (
+        <ul className="FlowingList">
+            {bookmarks.map(bookmark => {
+                const suraName = sura_names[QData.ayaIdInfo(bookmark.aya).sura];
+
+                if (filter && -1 === suraName.indexOf(filter)) {
+                    return "";
+                }
+
+                return (
+                    <li className="BookmarkRow" key={bookmark.aya}>
+                        <div className="actions">
+                            {actionsIndex == bookmark.aya ? (
+                                <>
+                                    <button
+                                        verse={bookmark.aya}
+                                        onClick={playVerse}
+                                    >
+                                        <Icon icon={faPlayCircle} />
+                                    </button>
+                                    <button
+                                        verse={bookmark.aya}
+                                        onClick={reviewVerse}
+                                    >
+                                        <Icon icon={faEyeSlash} />
+                                    </button>
+                                    <button
+                                        verse={bookmark.aya}
+                                        onClick={removeBookmark}
+                                    >
+                                        <Icon icon={faDelete} />
+                                    </button>
+                                </>
+                            ) : (
+                                <Icon icon={faEllipsisH} />
+                            )}
+                        </div>
+                        <button aya={bookmark.aya} onClick={gotoAya}>
+                            <Icon icon={faBookmark} />
+                            &nbsp;
+                            <String
+                                id="bookmark_desc"
+                                values={{
+                                    sura: suraName,
+                                    verse: QData.ayaIdInfo(bookmark.aya).aya + 1
+                                }}
+                            />
+                            <div
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    pointerEvents: "none"
+                                }}
+                            >
+                                {app.verseList()[bookmark.aya]}
+                            </div>
+                        </button>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+};
+
+export default QIndex;
