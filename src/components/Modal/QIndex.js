@@ -15,7 +15,7 @@ import {
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
-import { HifzRanges } from "../Hifz";
+import { HifzRanges, SuraHifzChart } from "../Hifz";
 
 const QIndex = ({}) => {
     const app = useContext(AppContext);
@@ -208,6 +208,7 @@ export const SuraList = AppConsumer(
 
                     return (
                         <li key={suraIndex}>
+                            <SuraHifzChart sura={suraIndex} />
                             <button
                                 sura={suraIndex}
                                 onClick={gotoSura}

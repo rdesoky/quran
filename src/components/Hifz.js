@@ -40,11 +40,12 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
         let values = {
             // sura: suraName,
-            page: range.startPage,
+            page: range.startPage - (suraInfo.sp - 1) + 1,
             start_page: range.startPage - (suraInfo.sp - 1) + 1,
             end_page: range.pages > 1 ? "-" + (range.endPage + 1) : "",
             pages: rangePagesCount
         };
+
         setRangeInfo(app.formatMessage({ id }, values));
 
         if (!range.date) {
@@ -171,15 +172,16 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     }
 
     const toggleActions = e => {
-        // selectRange(e);
-        // setActions(!actions);
-        setTimeout(() => {
-            setActiveRange && setActiveRange(range.id);
-        }, 100);
+        if (showActions) {
+            readRange(e);
+            return;
+        }
+        setActiveRange && setActiveRange(range.id);
     };
 
     return (
         <li className={"HifzRangeRow".appendWord(ageClass)}>
+            <SuraHifzChart range={range} />
             <button
                 onClick={toggleActions}
                 style={{
@@ -288,4 +290,43 @@ const HifzRanges = ({ filter }) => {
 };
 //});
 
-export { HifzRange, HifzRanges };
+const SuraHifzChart = ({ sura, range }) => {
+    const app = useContext(AppContext);
+    const [suraRanges, setSuraRanges] = useState([]);
+
+    useEffect(() => {
+        if (sura !== undefined) {
+            const suraRanges = app.hifzRanges
+                .filter(r => r.sura === sura)
+                .sort((r1, r2) => (r1.startPage > r2.startPage ? 1 : -1));
+            setSuraRanges(suraRanges);
+        }
+        if (range) {
+            setSuraRanges([range]);
+        }
+    }, [app.hifzRanges, range]);
+
+    return (
+        <div className="SuraHifzChart">
+            {suraRanges.map((r, i) => {
+                const suraInfo = QData.sura_info[r.sura];
+                const suraPages = suraInfo.ep - suraInfo.sp + 1;
+                const rangeStart = r.startPage - suraInfo.sp + 1;
+                const start = (100 * rangeStart) / suraPages;
+                const width = (100 * r.pages) / suraPages;
+                const age = Math.floor((Date.now() - r.date) / dayLength);
+                const ageClass =
+                    age <= 7 ? "GoodHifz" : age <= 14 ? "FairHifz" : "WeakHifz";
+                return (
+                    <div
+                        key={r.id}
+                        className={"SuraRange".appendWord(ageClass)}
+                        style={{ right: `${start}%`, width: `${width}%` }}
+                    />
+                );
+            })}
+        </div>
+    );
+};
+
+export { SuraHifzChart, HifzRange, HifzRanges };
