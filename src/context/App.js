@@ -436,18 +436,26 @@ class AppProvider extends Component {
         const rangeNodeRef = this.hifzRef.child(range.id);
         rangeNodeRef.once("value", snapshot => {
             let curr_range = snapshot.val();
-            curr_range.ts = Date.now();
-            curr_range.revs++;
+            const now = Date.now();
+            const timeSinceLastRevision = now - curr_range.ts;
+            if (timeSinceLastRevision > 60 * 60 * 1000) {
+                //One hour has passed since last revision
+                curr_range.ts = now;
+                curr_range.revs++;
+                //Record new activity
+                const today = new Date();
+                const activityKey = `${today.getFullYear()}-${today.getMonth() +
+                    1}-${today.getDate()}`;
+                const activityPagesRef = this.activityRef.child(
+                    activityKey + "/pages"
+                );
+                activityPagesRef.once("value", snapshot => {
+                    let pages = snapshot.val() || 0;
+                    pages += range.pages;
+                    activityPagesRef.set(pages);
+                });
+            }
             rangeNodeRef.set(curr_range);
-        });
-        const today = new Date();
-        const activityKey = `${today.getFullYear()}-${today.getMonth() +
-            1}-${today.getDate()}`;
-        const activityPagesRef = this.activityRef.child(activityKey + "/pages");
-        activityPagesRef.once("value", snapshot => {
-            let pages = snapshot.val() || 0;
-            pages += range.pages;
-            activityPagesRef.set(pages);
         });
     };
 
