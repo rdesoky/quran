@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/quran/static/css/main.ff556c43.chunk.css",
-    "main.js": "/quran/static/js/main.c4c5a4f0.chunk.js",
-    "main.js.map": "/quran/static/js/main.c4c5a4f0.chunk.js.map",
+    "main.css": "/quran/static/css/main.9ae4ec5e.chunk.css",
+    "main.js": "/quran/static/js/main.7c46ff97.chunk.js",
+    "main.js.map": "/quran/static/js/main.7c46ff97.chunk.js.map",
     "runtime~main.js": "/quran/static/js/runtime~main.72f9a983.js",
     "runtime~main.js.map": "/quran/static/js/runtime~main.72f9a983.js.map",
     "static/js/2.afde39d6.chunk.js": "/quran/static/js/2.afde39d6.chunk.js",
     "static/js/2.afde39d6.chunk.js.map": "/quran/static/js/2.afde39d6.chunk.js.map",
     "index.html": "/quran/index.html",
-    "precache-manifest.4c25c0fef92ad917a1eccde3861277d7.js": "/quran/precache-manifest.4c25c0fef92ad917a1eccde3861277d7.js",
+    "precache-manifest.1e4c64c93766023cd90ecd8f2e2f6702.js": "/quran/precache-manifest.1e4c64c93766023cd90ecd8f2e2f6702.js",
     "service-worker.js": "/quran/service-worker.js",
-    "static/css/main.ff556c43.chunk.css.map": "/quran/static/css/main.ff556c43.chunk.css.map"
+    "static/css/main.9ae4ec5e.chunk.css.map": "/quran/static/css/main.9ae4ec5e.chunk.css.map"
   }
 }
