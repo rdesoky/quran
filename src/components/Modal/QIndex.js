@@ -55,36 +55,38 @@ const QIndex = ({ app }) => {
     return (
         <>
             <div className="Title">
-                <button
-                    onClick={e => selectTab("index")}
-                    className={"CommandButton".appendWord(
-                        "active",
-                        activeTab == "index"
-                    )}
-                >
-                    <Icon icon={faListAlt} />
-                    {activeTab == "index" ? <String id="index" /> : ""}
-                </button>
-                <button
-                    onClick={e => selectTab("hifz")}
-                    className={"CommandButton".appendWord(
-                        "active",
-                        activeTab == "hifz"
-                    )}
-                >
-                    <Icon icon={faHeart} />
-                    {activeTab == "hifz" ? <String id="favorites" /> : ""}
-                </button>
-                <button
-                    onClick={e => selectTab("bookmarks")}
-                    className={"CommandButton".appendWord(
-                        "active",
-                        activeTab == "bookmarks"
-                    )}
-                >
-                    <Icon icon={faBookmark} />
-                    {activeTab == "bookmarks" ? <String id="bookmarks" /> : ""}
-                </button>
+                <div className="ButtonsBar">
+                    <button
+                        onClick={e => selectTab("index")}
+                        className={"CommandButton".appendWord(
+                            "active",
+                            activeTab == "index"
+                        )}
+                    >
+                        <Icon icon={faListAlt} />
+                        <String id="index" />
+                    </button>
+                    <button
+                        onClick={e => selectTab("hifz")}
+                        className={"CommandButton".appendWord(
+                            "active",
+                            activeTab == "hifz"
+                        )}
+                    >
+                        <Icon icon={faHeart} />
+                        <String id="favorites" />
+                    </button>
+                    <button
+                        onClick={e => selectTab("bookmarks")}
+                        className={"CommandButton".appendWord(
+                            "active",
+                            activeTab == "bookmarks"
+                        )}
+                    >
+                        <Icon icon={faBookmark} />
+                        <String id="bookmarks" />
+                    </button>
+                </div>
             </div>
             <div
                 className={"TypingConsole" + (!filter.length ? " empty" : "")}

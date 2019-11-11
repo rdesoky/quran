@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Page.scss";
 import Spinner from "../Spinner/Spinner";
-import { AppConsumer } from "../../context/App";
-import VerseLayout from "./VerseLayout";
+import { AppConsumer, AppContext } from "../../context/App";
+import VerseLayout, { HifzSegments } from "./VerseLayout";
 import PageHeader from "./PageHeader";
-import DDrop from "../DDrop";
 import Utils from "../../services/utils";
+import QData from "../../services/QData";
 
 const Page = ({
-    index,
+    index: pageIndex,
     order,
-    app,
     onIncrement,
     onDecrement,
     onPageUp,
@@ -18,7 +17,9 @@ const Page = ({
     scaleX,
     shiftX
 }) => {
+    const app = useContext(AppContext);
     const [imageUrl, setImageUrl] = useState(null);
+    const [versesInfo, setVerseInfo] = useState([]);
 
     const onImageLoaded = url => {
         setTimeout(() => {
@@ -31,16 +32,44 @@ const Page = ({
 
     const pageWidth = app.pageWidth();
 
-    //Run after componentDidMount, componentDidUpdate, and props update
+    //Handle pageIndex update
     useEffect(() => {
         setImageUrl(null);
-        Utils.downloadPageImage(index).then(onImageLoaded);
-    }, [index]);
+        Utils.downloadPageImage(pageIndex).then(onImageLoaded);
+        setVerseInfo([]);
+        let pageNumber = parseInt(pageIndex) + 1;
+        let controller = new AbortController();
+        let url = `${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`;
+        fetch(url, {
+            signal: controller.signal
+        })
+            .then(response => response.json())
+            .then(({ child_list }) => {
+                setVerseInfo(
+                    child_list.map(c => {
+                        const aya_id = QData.ayaID(c.sura, c.aya);
+                        let epos = c.epos;
+                        if (epos > 980) {
+                            epos = 1000;
+                        }
+                        return { ...c, epos, aya_id };
+                    })
+                );
+            })
+            .catch(e => {
+                const { name, message } = e;
+                console.info(`${name}: ${message}\n${url}`);
+            });
+        return () => {
+            //Cleanup function
+            controller.abort();
+        };
+    }, [pageIndex]);
 
     return (
         <div className="Page">
             <PageHeader
-                index={index}
+                index={pageIndex}
                 order={order}
                 onIncrement={onIncrement}
                 onDecrement={onDecrement}
@@ -67,7 +96,12 @@ const Page = ({
                             1}) translateX(${shiftX || 0}px)`
                     }}
                 >
-                    <VerseLayout page={index} pageWidth={pageWidth}>
+                    <HifzSegments page={pageIndex} versesInfo={versesInfo} />
+                    <VerseLayout
+                        page={pageIndex}
+                        pageWidth={pageWidth}
+                        versesInfo={versesInfo}
+                    >
                         <img
                             style={{
                                 visibility: imageUrl ? "visible" : "hidden",
@@ -85,12 +119,4 @@ const Page = ({
     );
 };
 
-function NumToString(number, padding = 3) {
-    let padded = number.toString();
-    while (padded.length < padding) {
-        padded = "0" + padded;
-    }
-    return padded;
-}
-
-export default AppConsumer(Page);
+export default Page;

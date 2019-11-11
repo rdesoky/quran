@@ -2,13 +2,13 @@ $appBgColor: #444;
 $appBgColorDk: black;
 $appHeaderBgColor: #282c34;
 
-$goodHifzBg: #103d00;
+$goodHifzBg: rgba(0, 128, 0, 0.2);
 $goodHifzText: greenyellow;
 
-$weakHifzBg: #490900;
+$weakHifzBg: rgba(177, 0, 0, 0.2);
 $weekHifzText: #ff8c8c;
 
-$fairHifzBg: #574a00;
+$fairHifzBg: rgba(194, 149, 0, 0.2);
 $fairHifzText: #e7c400;
 
 .App {
@@ -92,6 +92,20 @@ button {
     }
 }
 
+.ActionsBar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    button {
+        li & {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: inherit;
+            margin: 0 2px;
+        }
+        background-color: #444;
+    }
+}
+
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);
@@ -140,7 +154,9 @@ hr {
 .VerseText {
     margin: 0;
     line-height: 22px;
-    color: yellow;
+    color: rgb(207, 207, 0);
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .circle-background,
@@ -179,38 +195,26 @@ hr {
 }
 
 .GoodHifz {
-    border-color: rgba(0, 128, 0, 0.4) !important;
+    // border-color: $goodHifzBg !important;
+    background-color: $goodHifzBg;
 }
 .FairHifz {
-    border-color: rgba(194, 149, 0, 0.4) !important;
+    // border-color: $fairHifzBg !important;
+    background-color: $fairHifzBg;
 }
 .WeakHifz {
-    border-color: rgba(177, 0, 0, 0.4) !important;
+    // border-color: $weakHifzBg !important;
+    background-color: $weakHifzBg;
 }
 
 .HifzRangeRow {
-    border-style: solid;
-    border-width: 0 10px 1px 0;
-    border-color: rgba(0, 0, 0, 0);
-    // &.GoodHifz {
-    //     button {
-    //         color: $goodHifzText;
-    //     }
-    // }
-    // &.FairHifz {
-    //     button {
-    //         color: $fairHifzText;
-    //     }
-    // }
-    // &.WeakHifz {
-    //     button {
-    //         color: $weekHifzText;
-    //     }
-    // }
+    margin-bottom: 5px;
+    border-radius: 5px;
+
     .AgeInfo {
-        text-align: right;
+        float: right;
         [dir="rtl"] & {
-            text-align: left;
+            float: left;
         }
     }
     .RangeInfo {

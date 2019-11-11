@@ -7,18 +7,22 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faPlayCircle,
     faCheck,
-    faEyeSlash
+    faEyeSlash,
+    faBookOpen,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
+import { VerseText } from "./Widgets";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
-const HifzRange = ({ range, filter }) => {
+const HifzRange = ({ range, filter, showActions = false }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [suraName, setSuraName] = useState("");
     const [rangeInfo, setRangeInfo] = useState("");
     const [ageClass, setAgeClass] = useState("");
     const [ageInfo, setAgeInfo] = useState("");
+    const [actions, setActions] = useState(showActions);
 
     const suraInfo = QData.sura_info[range.sura];
 
@@ -28,13 +32,15 @@ const HifzRange = ({ range, filter }) => {
 
         const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
         const rangePagesCount = range.endPage - range.startPage + 1;
-        const id =
-            rangePagesCount === suraPagesCount
+        const id = range.date
+            ? rangePagesCount === suraPagesCount
                 ? "sura_hifz_desc"
-                : "range_desc";
+                : "range_desc"
+            : "the_page_num";
 
         const values = {
-            sura: suraName,
+            // sura: suraName,
+            page: range.startPage,
             start_page: range.startPage - (suraInfo.sp - 1) + 1,
             end_page: range.pages > 1 ? "-" + (range.endPage + 1) : "",
             pages: rangePagesCount
@@ -43,6 +49,9 @@ const HifzRange = ({ range, filter }) => {
     }, [range.sura]);
 
     useEffect(() => {
+        if (!range.date) {
+            return;
+        }
         const age = Math.floor((Date.now() - range.date) / dayLength);
         const id = age === 0 ? "last_review_today" : "last_review_since";
         const values = { days: age };
@@ -86,7 +95,7 @@ const HifzRange = ({ range, filter }) => {
         });
     };
 
-    const selectRange = ({ target }) => {
+    const selectRange = e => {
         const sura = range.sura;
         const startPage = range.startPage;
         const endPage = range.endPage;
@@ -96,10 +105,17 @@ const HifzRange = ({ range, filter }) => {
             endPage
         );
         app.gotoAya(rangeStartVerse, { sel: true });
-        // app.gotoPage(startPage + 1);
-        // app.setSelectStart(rangeStartVerse);
-        //app.setSelectEnd(rangeEndVerse);
-        checkClosePopup();
+        app.gotoPage(startPage + 1);
+        app.setSelectStart(rangeStartVerse);
+        app.setSelectEnd(rangeEndVerse);
+    };
+
+    const readRange = e => {
+        selectRange(e);
+        setTimeout(() => {
+            app.closePopup();
+            app.setSelectEnd(app.selectStart);
+        });
     };
 
     const checkClosePopup = () => {
@@ -116,41 +132,80 @@ const HifzRange = ({ range, filter }) => {
         return "";
     }
 
+    const toggleActions = e => {
+        selectRange(e);
+        setActions(!actions);
+    };
+
     return (
         <li className={"HifzRangeRow".appendWord(ageClass)}>
             <button
-                onClick={selectRange}
+                onClick={toggleActions}
                 style={{
                     width: "100%",
                     textAlign: "inherit",
                     padding: 10
                 }}
             >
-                <div className="RangeInfo">{rangeInfo}</div>
+                <div className="AgeInfo">{ageInfo}</div>
+                <div className="RangeInfo">
+                    {suraName}
+                    {": "}
+                    {rangeInfo}
+                </div>
                 <div
                     className="RangeText"
                     style={{
                         whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
                         pointerEvents: "none"
                     }}
                 >
-                    {app.verseText(rangeStartAya(range.sura, range.startPage))}
+                    <VerseText
+                        verse={rangeStartAya(range.sura, range.startPage)}
+                    />
                 </div>
-                <div className="AgeInfo">{ageInfo}</div>
             </button>
-            <div className="actions">
-                <button onClick={reviewRange}>
-                    <Icon icon={faEyeSlash} />
-                </button>
-                <button onClick={playRange}>
-                    <Icon icon={faPlayCircle} />
-                </button>
-                <button onClick={setRangeRevised}>
-                    <Icon icon={faCheck} />
-                </button>
-            </div>
+            {range.date ? (
+                actions ? (
+                    <div className="ActionsBar">
+                        <button onClick={reviewRange}>
+                            <Icon icon={faEyeSlash} /> <String id="revise" />
+                        </button>
+                        <button onClick={setRangeRevised}>
+                            <Icon icon={faCheck} /> <String id="revised" />
+                        </button>
+                        <button onClick={readRange}>
+                            <Icon icon={faBookOpen} />
+                        </button>
+                        <button onClick={playRange}>
+                            <Icon icon={faPlayCircle} />
+                        </button>
+                        <button>
+                            <Icon icon={faTimes} /> <String id="remove" />
+                        </button>
+                    </div>
+                ) : (
+                    ""
+                )
+            ) : (
+                <div className="ActionsBar">
+                    <span>
+                        <String id="add" />:
+                    </span>
+                    <button>
+                        <String id="the_page" />
+                    </button>
+                    <button>
+                        <String id="the_sura" />
+                    </button>
+                    <button>
+                        <String id="from_start" />
+                    </button>
+                    <button>
+                        <String id="to_end" />
+                    </button>
+                </div>
+            )}
         </li>
     );
 };
@@ -174,11 +229,6 @@ const HifzRanges = ({ filter }) => {
     return (
         <ul id="HifzRanges" className="FlowingList">
             {hifzRanges.map((range, index) => {
-                // const suraName =
-                //     suraNames.length > range.sura ? suraNames[range.sura] : "";
-                // if (filter && -1 === suraName.indexOf(filter)) {
-                //     return "";
-                // }
                 return (
                     <HifzRange range={range} key={range.id} filter={filter} />
                 );

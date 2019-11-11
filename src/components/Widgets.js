@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import QData from "./../services/QData";
 import { AppConsumer } from "./../context/App";
 import { FormattedMessage as String } from "react-intl";
@@ -81,14 +81,20 @@ const VerseInfo = AppConsumer(
 );
 
 const VerseText = AppConsumer(({ verse, app, showInfo, navigate = true }) => {
-    if (verse === undefined) {
-        verse = app.selectStart;
-    }
-    const verseList = app.verseList();
+    const [text, setText] = useState("");
+
+    useEffect(() => {
+        if (verse === undefined) {
+            verse = app.selectStart;
+        }
+        const verseList = app.verseList();
+        setText(verse < verseList.length ? verseList[verse] : "");
+    }, [verse]);
+
     return (
         <div className="VerseText">
             {showInfo ? <VerseInfo navigate={navigate} /> : ""}
-            {verse < verseList.length ? verseList[verse] : ""}
+            {text}
         </div>
     );
 });
