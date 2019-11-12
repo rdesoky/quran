@@ -488,6 +488,15 @@ class AppProvider extends Component {
         //check tailed ranges first
         suraRanges.forEach(r => {
             if (
+                newRange.startPage == r.startPage &&
+                newRange.pages == r.pages
+            ) {
+                //found exact range, skip it
+                addNew = false;
+                return;
+            }
+
+            if (
                 newRange.startPage <= r.startPage &&
                 newRange.endPage + 1 >= r.startPage
             ) {
