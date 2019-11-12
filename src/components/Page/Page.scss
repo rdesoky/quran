@@ -92,17 +92,24 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 pointer-events: none;
                 .Verse {
                     position: absolute;
+
                     background-color: #888;
-                    // transition: top 0.15s, left 0.15s, right 0.15s;
+                    .DarkTheme & {
+                        background-color: #555;
+                    }
                 }
                 .Mask {
                     position: absolute;
                     background-color: #999998fa;
-                    // transition: top 0.15s, left 0.15s, right 0.15s;
+                    .DarkTheme & {
+                        background-color: #666;
+                    }
                 }
                 button {
                     transition: none;
-                    // transition: top 0.15s, left 0.15s, right 0.15s;
+                    .DarkTheme & {
+                        background-color: #444 !important;
+                    }
                 }
             }
         }

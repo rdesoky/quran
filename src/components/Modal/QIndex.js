@@ -167,6 +167,10 @@ export const SuraList = AppConsumer(
             }
         };
         const addSuraToHifz = ({ target }) => {
+            //TODO: check if sura has old ranges, then confirmation is required
+            if (!window.confirm("Are you sure?")) {
+                return;
+            }
             const sura = parseInt(target.getAttribute("sura"));
             const suraInfo = QData.sura_info[sura];
             app.addHifzRange(
@@ -188,7 +192,8 @@ export const SuraList = AppConsumer(
             const verse = gotoSura(e);
             setTimeout(() => {
                 app.setMaskStart(verse, { sel: true });
-                app.closePopup();
+                //app.closePopup();
+                checkClosePopup();
             });
             app.pushRecentCommand("Mask");
         };
@@ -306,7 +311,8 @@ export const BookmarksList = ({ filter }) => {
         app.gotoAya(verse, { sel: true });
         setTimeout(() => {
             app.setMaskStart();
-            app.closePopup();
+            //app.closePopup();
+            checkClosePopup();
         });
         app.pushRecentCommand("Mask");
     };

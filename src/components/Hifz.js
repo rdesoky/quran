@@ -99,7 +99,8 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
         selectRange(e);
         setTimeout(() => {
             app.setMaskStart();
-            app.closePopup();
+            //app.closePopup();
+            checkClosePopup();
         });
     };
 
@@ -121,14 +122,15 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             range.endPage
         );
         app.gotoAya(rangeStartVerse, { sel: true });
-        app.closePopup();
+        //app.closePopup();
+        checkClosePopup();
     };
 
-    // const checkClosePopup = () => {
-    //     if (!app.isCompact && app.pagesCount === 1) {
-    //         app.closePopup();
-    //     }
-    // };
+    const checkClosePopup = () => {
+        if (!app.isCompact && app.pagesCount === 1) {
+            app.closePopup();
+        }
+    };
 
     const setRangeRevised = () => {
         if (window.confirm("Are you sure?")) {
