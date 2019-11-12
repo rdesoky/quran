@@ -279,6 +279,9 @@ hr {
     left: 0;
     height: 100%;
     width: 100%;
+    .HifzRangeRow & {
+        height: 50%;
+    }
     pointer-events: none;
     .SuraRange {
         position: absolute;
