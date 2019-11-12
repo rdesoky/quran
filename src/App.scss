@@ -205,8 +205,8 @@ hr {
 }
 
 .NoHifz {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.322);
+    background-color: rgba(0, 117, 195, 0.219);
+    border-color: rgb(0, 109, 182);
 }
 
 .GoodHifz {
@@ -280,7 +280,7 @@ hr {
     height: 100%;
     width: 100%;
     .HifzRangeRow & {
-        height: 50%;
+        height: 46%;
     }
     pointer-events: none;
     .SuraRange {
