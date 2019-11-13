@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { AppConsumer } from "../../context/App";
+import React, { useState, useEffect, useContext } from "react";
+import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
 import { ThemeConsumer } from "../../context/Theme";
 import { FormattedMessage as String } from "react-intl";
@@ -35,6 +35,7 @@ import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import Utils from "../../services/utils";
 import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
+import { UserImage } from "./User";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -77,6 +78,8 @@ const getIcon = (commandId, app) => {
 
 const commandIcon = (command, app, player) => {
     switch (command) {
+        case "Profile":
+            return <UserImage />;
         case "AudioPlayer":
             return (
                 // <div
@@ -107,7 +110,9 @@ const commandIcon = (command, app, player) => {
     }
 };
 
-const Commands = ({ app }) => {
+const Commands = () => {
+    const app = useContext(AppContext);
+
     const list = [
         "Index",
         "AudioPlayer",
