@@ -136,130 +136,235 @@ const QIndex = ({}) => {
     );
 };
 
-export const SuraList = AppConsumer(
-    PlayerConsumer(({ app, player, filter }) => {
-        const [actionsIndex, setActionsIndex] = useState(0);
+export const SuraList = ({ filter }) => {
+    const app = useContext(AppContext);
+    const [actionsIndex, setActionsIndex] = useState(0);
 
-        useEffect(() => {
-            const { selectStart } = app;
-            const currentSura = QData.ayaIdInfo(selectStart).sura;
-            setActionsIndex(currentSura);
-        }, []);
-
+    useEffect(() => {
         const { selectStart } = app;
-        const sura_names = app.suraNames();
         const currentSura = QData.ayaIdInfo(selectStart).sura;
+        setActionsIndex(currentSura);
+    }, []);
 
-        const checkClosePopup = () => {
-            if (!app.isCompact && app.pagesCount === 1) {
-                app.closePopup();
-            }
-        };
+    return (
+        <ul
+            className="SpreadSheet"
+            style={{
+                columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
+            }}
+        >
+            {new Array(114).fill(0).map((zero, suraIndex) => {
+                return (
+                    <SuraIndexCell
+                        key={suraIndex}
+                        sura={suraIndex}
+                        filter={filter}
+                        selectSura={setActionsIndex}
+                        selectedSura={actionsIndex}
+                    />
+                );
+            })}
+        </ul>
+    );
+};
 
-        const gotoSura = ({ target }) => {
-            const index = parseInt(target.getAttribute("sura"));
-            if (actionsIndex === index) {
-                app.hideMask();
-                checkClosePopup();
-                return app.gotoSura(index);
-            } else {
-                setActionsIndex(index);
-            }
-        };
-        const addSuraToHifz = ({ target }) => {
-            //TODO: check if sura has old ranges, then confirmation is required
-            if (!window.confirm("Are you sure?")) {
-                return;
-            }
-            const sura = parseInt(target.getAttribute("sura"));
-            const suraInfo = QData.sura_info[sura];
-            app.addHifzRange(
-                suraInfo.sp - 1,
-                sura,
-                suraInfo.ep - suraInfo.sp + 1
-            );
-        };
+export const SuraIndexCell = ({ sura, filter, selectedSura, selectSura }) => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
+    const [suraName, setSuraName] = useState("");
 
-        const playSura = e => {
-            player.stop(true);
-            gotoSura(e);
-            setTimeout(() => {
-                player.play();
-            }, 500);
-        };
+    const checkClosePopup = () => {
+        if (!app.isCompact && app.pagesCount === 1) {
+            app.closePopup();
+        }
+    };
 
-        const reviewSura = e => {
-            const verse = gotoSura(e);
-            setTimeout(() => {
-                app.setMaskStart(verse, { sel: true });
-                //app.closePopup();
-                checkClosePopup();
-            });
-            app.pushRecentCommand("Mask");
-        };
+    const gotoSura = e => {
+        if (selectedSura === sura) {
+            app.hideMask();
+            checkClosePopup();
+            return app.gotoSura(sura);
+        } else {
+            selectSura && selectSura(sura);
+        }
+    };
+    const addSuraToHifz = e => {
+        //TODO: check if sura has old ranges, then confirmation is required
+        if (!window.confirm("Are you sure?")) {
+            return;
+        }
+        const suraInfo = QData.sura_info[sura];
+        app.addHifzRange(suraInfo.sp - 1, sura, suraInfo.ep - suraInfo.sp + 1);
+    };
 
-        return (
-            <ul
-                className="SpreadSheet"
-                style={{
-                    columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
-                }}
+    const playSura = e => {
+        player.stop(true);
+        gotoSura(e);
+        setTimeout(() => {
+            player.play();
+        }, 500);
+    };
+
+    const reviewSura = e => {
+        const verse = gotoSura(e);
+        setTimeout(() => {
+            app.setMaskStart(verse, { sel: true });
+            //app.closePopup();
+            checkClosePopup();
+        });
+        app.pushRecentCommand("Mask");
+    };
+
+    useEffect(() => {
+        setSuraName(app.suraNames()[sura]);
+    }, [sura]);
+
+    if (filter && -1 === suraName.indexOf(filter)) {
+        return "";
+    }
+
+    return (
+        <li className="SuraIndexCell">
+            <SuraHifzChart sura={sura} />
+            <button
+                onClick={gotoSura}
+                className={sura == selectedSura ? "active" : ""}
             >
-                {new Array(114).fill(0).map((zero, suraIndex) => {
-                    const suraName = sura_names[suraIndex];
-                    if (filter && -1 === suraName.indexOf(filter)) {
-                        return "";
-                    }
+                {sura + 1 + ". " + suraName}
+            </button>
+            <div className="actions">
+                {selectedSura === sura ? (
+                    <>
+                        <button sura={sura} onClick={addSuraToHifz}>
+                            <Icon icon={faHeart} />
+                        </button>
+                        <button sura={sura} onClick={playSura}>
+                            <Icon icon={faPlayCircle} />
+                        </button>
+                        <button sura={sura} onClick={reviewSura}>
+                            <Icon icon={faEyeSlash} />
+                        </button>
+                    </>
+                ) : (
+                    <Icon icon={faEllipsisH} />
+                )}
+            </div>
+        </li>
+    );
+};
 
-                    return (
-                        <li key={suraIndex}>
-                            <SuraHifzChart sura={suraIndex} />
-                            <button
-                                sura={suraIndex}
-                                onClick={gotoSura}
-                                className={
-                                    suraIndex == currentSura ? "active" : ""
-                                }
-                            >
-                                {suraIndex + 1 + ". " + suraName}
-                            </button>
-                            <div className="actions">
-                                {actionsIndex === suraIndex ? (
-                                    <>
-                                        <button
-                                            sura={suraIndex}
-                                            onClick={addSuraToHifz}
-                                        >
-                                            <Icon icon={faHeart} />
-                                        </button>
-                                        <button
-                                            sura={suraIndex}
-                                            onClick={playSura}
-                                        >
-                                            <Icon icon={faPlayCircle} />
-                                        </button>
-                                        <button
-                                            sura={suraIndex}
-                                            onClick={reviewSura}
-                                        >
-                                            <Icon icon={faEyeSlash} />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <Icon icon={faEllipsisH} />
-                                )}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
+export const BookmarkListItem = ({
+    verse,
+    filter,
+    selectedVerse,
+    selectVerse
+}) => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
+    const [verseText, setVerseText] = useState("");
+    const [bookmarkDesc, setBookmarkDesc] = useState("");
+    const [suraName, setSuraName] = useState("");
+
+    useEffect(() => {
+        const sura = QData.ayaIdInfo(verse).sura;
+        const suraName = app.suraNames()[sura];
+
+        setSuraName(suraName);
+
+        setVerseText(app.verseList()[verse]);
+
+        const bookmarkDesc = app.formatMessage(
+            { id: "bookmark_desc" },
+            {
+                sura: suraName,
+                verse: QData.ayaIdInfo(verse).aya + 1
+            }
         );
-    })
-);
+
+        setBookmarkDesc(bookmarkDesc);
+    }, [verse]);
+
+    const checkClosePopup = () => {
+        if (!app.isCompact && app.pagesCount === 1) {
+            app.closePopup();
+        }
+    };
+
+    const gotoAya = e => {
+        if (selectedVerse !== verse) {
+            selectVerse(verse);
+            return;
+        }
+        app.gotoAya(verse, { sel: true });
+        checkClosePopup();
+    };
+
+    const removeBookmark = e => {
+        app.removeBookmark(verse);
+    };
+
+    const playVerse = e => {
+        player.stop(true);
+        app.gotoAya(verse, { sel: true });
+        setTimeout(() => {
+            player.play();
+        }, 500);
+    };
+
+    const reviewVerse = e => {
+        app.gotoAya(verse, { sel: true });
+        setTimeout(() => {
+            app.setMaskStart();
+            //app.closePopup();
+            checkClosePopup();
+        });
+        app.pushRecentCommand("Mask");
+    };
+
+    if (filter && -1 === suraName.indexOf(filter)) {
+        return "";
+    }
+
+    return (
+        <li className="BookmarkRow">
+            <div className="actions">
+                {selectedVerse == verse ? (
+                    <>
+                        <button onClick={playVerse}>
+                            <Icon icon={faPlayCircle} />
+                        </button>
+                        <button onClick={reviewVerse}>
+                            <Icon icon={faEyeSlash} />
+                        </button>
+                        <button onClick={removeBookmark}>
+                            <Icon icon={faDelete} />
+                        </button>
+                    </>
+                ) : (
+                    <Icon icon={faEllipsisH} />
+                )}
+            </div>
+            <button onClick={gotoAya}>
+                <Icon icon={faBookmark} />
+                &nbsp;
+                {bookmarkDesc}
+                <div
+                    style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        pointerEvents: "none"
+                    }}
+                >
+                    {verseText}
+                </div>
+            </button>
+        </li>
+    );
+};
 
 export const BookmarksList = ({ filter }) => {
     const app = useContext(AppContext);
-    const player = useContext(PlayerContext);
     const [actionsIndex, setActionsIndex] = useState(-1);
 
     const { bookmarks } = app;
@@ -271,111 +376,18 @@ export const BookmarksList = ({ filter }) => {
             </div>
         );
     }
-
-    const sura_names = app.suraNames();
-
-    const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
-            app.closePopup();
-        }
-    };
-
-    const gotoAya = ({ target }) => {
-        const aya = parseInt(target.getAttribute("aya"));
-        if (actionsIndex !== aya) {
-            setActionsIndex(aya);
-            return;
-        }
-        app.gotoAya(aya, { sel: true });
-        checkClosePopup();
-    };
-
-    const removeBookmark = ({ target }) => {
-        const verse = parseInt(target.getAttribute("verse"));
-        app.removeBookmark(verse);
-    };
-
-    const playVerse = ({ target }) => {
-        const attr = target.getAttribute("verse") || app.selectStart;
-        const verse = parseInt(attr);
-        player.stop(true);
-        app.gotoAya(verse, { sel: true });
-        setTimeout(() => {
-            player.play();
-        }, 500);
-    };
-
-    const reviewVerse = ({ target }) => {
-        const attr = target.getAttribute("verse") || app.selectStart;
-        const verse = parseInt(attr);
-        app.gotoAya(verse, { sel: true });
-        setTimeout(() => {
-            app.setMaskStart();
-            //app.closePopup();
-            checkClosePopup();
-        });
-        app.pushRecentCommand("Mask");
-    };
-
     return (
         <ul className="FlowingList">
             {bookmarks.map(bookmark => {
-                const suraName = sura_names[QData.ayaIdInfo(bookmark.aya).sura];
-
-                if (filter && -1 === suraName.indexOf(filter)) {
-                    return "";
-                }
-
+                const verse = parseInt(bookmark.aya);
                 return (
-                    <li className="BookmarkRow" key={bookmark.aya}>
-                        <div className="actions">
-                            {actionsIndex == bookmark.aya ? (
-                                <>
-                                    <button
-                                        verse={bookmark.aya}
-                                        onClick={playVerse}
-                                    >
-                                        <Icon icon={faPlayCircle} />
-                                    </button>
-                                    <button
-                                        verse={bookmark.aya}
-                                        onClick={reviewVerse}
-                                    >
-                                        <Icon icon={faEyeSlash} />
-                                    </button>
-                                    <button
-                                        verse={bookmark.aya}
-                                        onClick={removeBookmark}
-                                    >
-                                        <Icon icon={faDelete} />
-                                    </button>
-                                </>
-                            ) : (
-                                <Icon icon={faEllipsisH} />
-                            )}
-                        </div>
-                        <button aya={bookmark.aya} onClick={gotoAya}>
-                            <Icon icon={faBookmark} />
-                            &nbsp;
-                            <String
-                                id="bookmark_desc"
-                                values={{
-                                    sura: suraName,
-                                    verse: QData.ayaIdInfo(bookmark.aya).aya + 1
-                                }}
-                            />
-                            <div
-                                style={{
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    pointerEvents: "none"
-                                }}
-                            >
-                                {app.verseList()[bookmark.aya]}
-                            </div>
-                        </button>
-                    </li>
+                    <BookmarkListItem
+                        key={verse}
+                        verse={verse}
+                        filter={filter}
+                        selectedVerse={actionsIndex}
+                        selectVerse={setActionsIndex}
+                    />
                 );
             })}
         </ul>
