@@ -28,14 +28,16 @@ function Pager({ match, app, player }) {
     let { page } = match.params;
 
     const pageUp = e => {
-        //const count = app.popup && !app.isWide ? 1 : app.pagesCount;
-        app.offsetPage(-app.pagesCount);
-        // e.stopPropagation();
+        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        //const count = typeof e == "number" ? e : 1;
+        app.offsetPage(-count);
+        "object" == typeof e && e.stopPropagation();
     };
     const pageDown = e => {
-        //const count = app.popup && !app.isWide ? 1 : app.pagesCount;
-        app.offsetPage(app.pagesCount);
-        // e.stopPropagation();
+        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        //const count = typeof e == "number" ? e : 1;
+        app.offsetPage(count);
+        "object" == typeof e && e.stopPropagation();
     };
 
     //ComponentDidMount
@@ -263,17 +265,15 @@ function Pager({ match, app, player }) {
         let thisPage =
             pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
 
-        function selectPage() {
+        function selectPage(e) {
             if (pageIndex !== thisPage) {
                 app.gotoPage(thisPage + 1);
+                console.log(`Set active page: ${thisPage + 1}`);
             }
         }
 
         let pageClass = thisPage % 2 === 0 ? " RightPage" : " LeftPage";
         let activeClass = pageIndex === thisPage ? " Active" : "";
-
-        // let textAlign =
-        // 	app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
         return (
             <div
@@ -305,10 +305,10 @@ function Pager({ match, app, player }) {
             maxShift={200}
             onDrop={({ dX, dY }) => {
                 if (dX > 50) {
-                    pageDown();
+                    pageDown(2);
                 }
                 if (dX < -50) {
-                    pageUp();
+                    pageUp(2);
                 }
             }}
         >

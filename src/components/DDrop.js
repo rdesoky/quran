@@ -19,7 +19,8 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
         onMouseMove({ clientX, clientY, target });
         e.preventDefault();
     };
-    const onMouseDown = ({ target, clientX, clientY, pointerId }) => {
+    const onMouseDown = e => {
+        const { target, clientX, clientY, pointerId } = e;
         if (pointerId) {
             target.setPointerCapture(pointerId);
         }
@@ -28,6 +29,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
         setStartY(clientY);
         setDX(0);
         setDY(0);
+        e.stopPropagation();
     };
     const onMouseMove = e => {
         const { clientX, clientY } = e;
@@ -41,16 +43,19 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             if (shiftY > min && shiftY < maxShift) {
                 setDY(clientY - startY);
             }
+            e.stopPropagation();
         }
     };
-    const onMouseUp = ({ target, pointerId }) => {
+    const onMouseUp = e => {
+        const { target, pointerId } = e;
         if (pointerId) {
             target.releasePointerCapture(pointerId);
         }
-        setCaptured(false);
         onDrop({ dX, dY });
         setDX(0);
         setDY(0);
+        e.stopPropagation();
+        setCaptured(false);
     };
     useEffect(() => {
         rootElement.addEventListener("touchstart", onTouchStart, {

@@ -460,6 +460,7 @@ class AppProvider extends Component {
     };
 
     addHifzRange = (startPage, sura, pages) => {
+        //TODO: implement the merging logic in a Firebase function
         const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
         const newRangeID =
             Utils.num2string(startPage, 3) + Utils.num2string(sura);
