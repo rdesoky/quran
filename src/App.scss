@@ -292,3 +292,28 @@ hr {
         // background-color: $fairHifzBg;
     }
 }
+
+.UserIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 50px;
+    margin: 10px;
+    .Sidebar & {
+        width: 25px;
+        height: 25px;
+        font-size: 25px;
+        margin: 0;
+    }
+}
+
+.UserImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    margin: 10px;
+    .Sidebar & {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+    }
+}
