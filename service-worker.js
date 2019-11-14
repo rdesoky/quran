@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/quran/precache-manifest.b80044f46502b06d17229d9af85543a0.js"
+  "/quran/precache-manifest.199e47818863f59f6cd4588d716f9218.js"
 );
 
 self.addEventListener('message', (event) => {
