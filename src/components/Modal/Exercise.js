@@ -13,7 +13,6 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
-import Switch from "react-switch";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];

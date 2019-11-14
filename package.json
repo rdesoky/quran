@@ -18,7 +18,8 @@
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.0.1",
 		"react-switch": "^5.0.1",
-		"react-touch": "^0.4.4"
+		"react-touch": "^0.4.4",
+		"recharts": "^1.8.5"
 	},
 	"scripts": {
 		"start": "react-scripts start",
