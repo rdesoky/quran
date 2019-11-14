@@ -1,5 +1,5 @@
-import React from "react";
-import { AppConsumer } from "../../context/App";
+import React, { useContext } from "react";
+import { AppConsumer, AppContext } from "../../context/App";
 import GotoPage from "./GotoPage";
 import QIndex from "./QIndex";
 import Commands from "./Commands";
@@ -16,7 +16,8 @@ import Modal from "./Modal";
 import User from "./User";
 import Exercise from "./Exercise";
 
-function PopupView({ app }) {
+function PopupView() {
+    const app = useContext(AppContext);
     const componentMap = {
         Commands,
         Goto: GotoPage,
@@ -52,4 +53,4 @@ function PopupView({ app }) {
     return null;
 }
 
-export default AppConsumer(PopupView);
+export default PopupView;

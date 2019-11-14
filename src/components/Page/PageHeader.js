@@ -1,5 +1,5 @@
-import React from "react";
-import { AppConsumer } from "../../context/App";
+import React, { useContext } from "react";
+import { AppConsumer, AppContext } from "../../context/App";
 import { FormattedMessage as String } from "react-intl";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
@@ -14,7 +14,6 @@ import {
 
 const PageHeader = ({
     index: pageIndex,
-    app,
     order,
     onPageUp,
     onPageDown,
@@ -27,14 +26,12 @@ const PageHeader = ({
     // const showFindPopup = e => {
     // 	app.setPopup("Find");
     // };
+    const app = useContext(AppContext);
 
     const onSelectSura = ({ target }) => {
         app.hideMask();
         const suraIndex = parseInt(target.value);
         app.gotoSura(suraIndex);
-        // if (player.audioState !== AudioState.stopped) {
-        //     player.stop();
-        // }
         Utils.selectTopCommand();
     };
 
@@ -42,9 +39,6 @@ const PageHeader = ({
         app.hideMask();
         const partIndex = target.value;
         app.gotoPart(partIndex);
-        // if (player.audioState !== AudioState.stopped) {
-        //     player.stop();
-        // }
         Utils.selectTopCommand();
     };
 
@@ -148,4 +142,4 @@ const PageHeader = ({
     );
 };
 
-export default AppConsumer(PlayerConsumer(PageHeader));
+export default PageHeader;
