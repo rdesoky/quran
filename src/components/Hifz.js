@@ -372,8 +372,8 @@ const ActivityTooltip = ({ active, payload, label }) => {
         return (
             <div className="custom-tooltip">
                 <p className="label">
-                    {label}
-                    <br />{" "}
+                    {new Date(label).toDateString()}
+                    <br />
                     <String
                         id="revised_pages"
                         values={{ pages: payload[0].value }}

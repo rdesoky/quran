@@ -112,6 +112,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
 
     const handleKeyDown = e => {
         const { code, ctrlKey, target } = e;
+        e.preventDefault();
         setTypedChar(code);
         // setTimeout(() => {
         //     setTypedChar("");
