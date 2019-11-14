@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "./../../context/App";
+import { AppConsumer, AppContext } from "./../../context/App";
 import {
     PlayerConsumer,
     AudioState,
-    AudioRepeat
+    AudioRepeat,
+    PlayerContext
 } from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
@@ -25,7 +26,9 @@ const Step = {
     results: 3
 };
 
-const Exercise = ({ app, player }) => {
+const Exercise = ({}) => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
     const [currStep, setCurrStep] = useState(Step.unknown);
     const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
@@ -674,4 +677,4 @@ const Exercise = ({ app, player }) => {
     );
 };
 
-export default AppConsumer(PlayerConsumer(Exercise));
+export default Exercise;

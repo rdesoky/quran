@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./AudioPlayer.scss";
-import { AppConsumer } from "../../context/App";
+import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
 import QData from "./../../services/QData";
 import { FormattedMessage as String } from "react-intl";
@@ -217,52 +217,50 @@ const PlayerButtons = PlayerConsumer(({ player, showReciter, showLabels }) => {
     );
 });
 
-const PlayerStatus = AppConsumer(
-    PlayerConsumer(({ app, player }) => {
-        const { selectStart } = app;
-        const { playingAya, audioState } = player;
-        let ayaId = playingAya === -1 ? selectStart : playingAya;
-        let { sura, aya } = QData.ayaIdInfo(ayaId);
-        let stateId = "unknown";
-        switch (audioState) {
-            case AudioState.stopped:
-                stateId = "stopped";
-                break;
-            case AudioState.buffering:
-                stateId = "buffering";
-                break;
-            case AudioState.playing:
-                stateId = "playing";
-                break;
-            case AudioState.paused:
-                stateId = "paused";
-                break;
-            case AudioState.error:
-                stateId = "error";
-                break;
-            default:
-                break;
-        }
+const PlayerStatus = ({}) => {
+    const app = useContext(AppContext);
+    const player = useContext(AppContext);
+    const { selectStart } = app;
+    const { playingAya, audioState } = player;
+    let ayaId = playingAya === -1 ? selectStart : playingAya;
+    let { sura, aya } = QData.ayaIdInfo(ayaId);
+    let stateId = "unknown";
+    switch (audioState) {
+        case AudioState.stopped:
+            stateId = "stopped";
+            break;
+        case AudioState.buffering:
+            stateId = "buffering";
+            break;
+        case AudioState.playing:
+            stateId = "playing";
+            break;
+        case AudioState.paused:
+            stateId = "paused";
+            break;
+        case AudioState.error:
+            stateId = "error";
+            break;
+        default:
+            break;
+    }
 
-        const gotoPlayingAya = e => {
-            app.gotoAya(ayaId, { sel: true });
-        };
+    const gotoPlayingAya = e => {
+        app.gotoAya(ayaId, { sel: true });
+    };
 
-        return (
-            <button onClick={gotoPlayingAya} className="AudioStatusButton">
-                <String id={stateId} />
-                :&nbsp;
-                <String id="sura_names">
-                    {sura_names => {
-                        return (
-                            sura_names.split(",")[sura] + " (" + (aya + 1) + ")"
-                        );
-                    }}
-                </String>
-            </button>
-        );
-    })
-);
+    return (
+        <button onClick={gotoPlayingAya} className="AudioStatusButton">
+            <String id={stateId} />
+            :&nbsp;
+            <String id="sura_names">
+                {sura_names => {
+                    return sura_names.split(",")[sura] + " (" + (aya + 1) + ")";
+                }}
+            </String>
+        </button>
+    );
+};
 
 export { PlayerButtons, PlayerStatus };
 

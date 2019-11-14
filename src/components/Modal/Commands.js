@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AppConsumer, AppContext } from "../../context/App";
-import { PlayerConsumer, AudioState } from "../../context/Player";
-import { ThemeConsumer } from "../../context/Theme";
+import {
+    PlayerConsumer,
+    AudioState,
+    PlayerContext
+} from "../../context/Player";
+import { ThemeConsumer, ThemeContext } from "../../context/Theme";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -157,126 +161,114 @@ const Commands = () => {
     );
 };
 
-const CommandButton = ThemeConsumer(
-    AppConsumer(
-        PlayerConsumer(
-            ({
-                id,
-                app,
-                player,
-                command,
-                themeContext,
-                showLabel,
-                style,
-                className
-            }) => {
-                const runCommand = command => {
-                    app.setExpandedMenu(false);
-                    Utils.selectTopCommand();
-                    switch (command) {
-                        case "Commands":
-                            app.setExpandedMenu(!app.expandedMenu);
-                            break;
-                        case "Play":
-                            player.play();
-                            return;
-                        case "Pause":
-                            if (player.audioState === AudioState.playing) {
-                                player.pause();
-                            } else {
-                                player.resume();
-                            }
-                            return;
-                        case "Stop":
-                            player.stop(true);
-                            return;
-                        case "Downloading":
-                            player.stop();
-                            setTimeout(() => {
-                                player.play();
-                            }, 500);
-                            return;
-                        case "ToggleButton":
-                            app.toggleShowMenu();
-                            return;
-                        case "Theme":
-                            themeContext.toggleTheme();
-                            app.pushRecentCommand(command);
-                            app.setShowMenu(false);
-                            return;
-                        case "Mask":
-                            app.setMaskStart();
-                            break;
-                        case "Copy":
-                            Utils.copy2Clipboard(app.getSelectedText());
-                            break;
-                        case "Share":
-                            break;
-                        case "Fullscreen":
-                            Utils.requestFullScreen();
-                            break;
-                        case "Bookmarks":
-                            if (app.popup === "Exercise") {
-                                app.toggleBookmark();
-                                break;
-                            }
-                        default:
-                            app.setPopup(command); //already calls pushRecentCommand()
-                            return;
-                    }
-                    app.pushRecentCommand(command);
-                    // if (app.pagesCount == 1) {
-                    //     app.closePopup();
-                    // }
-                    app.setShowMenu(false);
-                };
+const CommandButton = ({ id, command, showLabel, style, className }) => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
+    const themeContext = useContext(ThemeContext);
+    const runCommand = command => {
+        app.setExpandedMenu(false);
+        Utils.selectTopCommand();
+        switch (command) {
+            case "Commands":
+                app.setExpandedMenu(!app.expandedMenu);
+                break;
+            case "Play":
+                player.play();
+                return;
+            case "Pause":
+                if (player.audioState === AudioState.playing) {
+                    player.pause();
+                } else {
+                    player.resume();
+                }
+                return;
+            case "Stop":
+                player.stop(true);
+                return;
+            case "Downloading":
+                player.stop();
+                setTimeout(() => {
+                    player.play();
+                }, 500);
+                return;
+            case "ToggleButton":
+                app.toggleShowMenu();
+                return;
+            case "Theme":
+                themeContext.toggleTheme();
+                app.pushRecentCommand(command);
+                app.setShowMenu(false);
+                return;
+            case "Mask":
+                app.setMaskStart();
+                break;
+            case "Copy":
+                Utils.copy2Clipboard(app.getSelectedText());
+                break;
+            case "Share":
+                break;
+            case "Fullscreen":
+                Utils.requestFullScreen();
+                break;
+            case "Bookmarks":
+                if (app.popup === "Exercise") {
+                    app.toggleBookmark();
+                    break;
+                }
+            default:
+                app.setPopup(command); //already calls pushRecentCommand()
+                return;
+        }
+        app.pushRecentCommand(command);
+        // if (app.pagesCount == 1) {
+        //     app.closePopup();
+        // }
+        app.setShowMenu(false);
+    };
 
-                const renderLabel = () => {
-                    if (showLabel === true) {
-                        return (
-                            <span className="CommandLabel">
-                                <String
-                                    className="CommandLabel"
-                                    id={command.toLowerCase()}
-                                />
-                            </span>
-                        );
-                    }
-                };
+    const renderLabel = () => {
+        if (showLabel === true) {
+            return (
+                <span className="CommandLabel">
+                    <String
+                        className="CommandLabel"
+                        id={command.toLowerCase()}
+                    />
+                </span>
+            );
+        }
+    };
 
-                const isDisabled = command => {
-                    return (
-                        app.popup === "Exercise" &&
-                        ![
-                            "Commands",
-                            "Play",
-                            "Pause",
-                            "Exercise",
-                            "Stop",
-                            "Bookmarks"
-                        ].includes(command)
-                    );
-                };
+    const isDisabled = command => {
+        return (
+            app.popup === "Exercise" &&
+            ![
+                "Commands",
+                "Play",
+                "Pause",
+                "Exercise",
+                "Stop",
+                "Bookmarks",
+                "Copy"
+            ].includes(command)
+        );
+    };
 
-                return (
-                    <button
-                        id={id}
-                        onClick={e => {
-                            runCommand(command);
-                            e.stopPropagation();
-                        }}
-                        style={style}
-                        disabled={isDisabled(command)}
-                        className={"CommandButton".appendWord(className)}
-                    >
-                        {commandIcon(command, app, player)}
-                        {renderLabel()}
-                    </button>
-                );
-            }
-        )
-    )
-);
-
+    return (
+        <button
+            id={id}
+            onClick={e => {
+                runCommand(command);
+                e.stopPropagation();
+            }}
+            style={style}
+            disabled={isDisabled(command)}
+            className={"CommandButton".appendWord(className)}
+        >
+            {commandIcon(command, app, player)}
+            {renderLabel()}
+        </button>
+    );
+};
 export default AppConsumer(Commands);
 export { commandIcon, CommandButton };

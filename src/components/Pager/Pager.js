@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Page from "../Page/Page";
-import { AppConsumer } from "../../context/App";
+import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
 import DDrop from "./../DDrop";
 
-function fnPageRedirect({ match, app }) {
+export function PageRedirect({ match }) {
     let { aya } = match.params;
     let pageNum = 1;
+    const app = useContext(AppContext);
 
     if (aya !== undefined) {
         setTimeout(() => {
@@ -21,27 +22,32 @@ function fnPageRedirect({ match, app }) {
     return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
 }
 
-function Pager({ match, app, player }) {
+function Pager({ match, app }) {
     let pageIndex = 0;
     const REPLACE = true;
 
     let { page } = match.params;
 
+    if (page !== undefined) {
+        pageIndex = parseInt(page) - 1;
+    }
+
     const pageUp = e => {
-        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
-        //const count = typeof e == "number" ? e : 1;
+        let count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        if (count > 1 && pageIndex % 2 === 0) {
+            count = 1; //right page is active
+        }
         app.offsetPage(-count);
         "object" == typeof e && e.stopPropagation();
     };
     const pageDown = e => {
-        const count = app.popup && !app.isWide ? 1 : app.pagesCount;
-        //const count = typeof e == "number" ? e : 1;
+        let count = app.popup && !app.isWide ? 1 : app.pagesCount;
+        if (count > 1 && pageIndex % 2 === 1) {
+            count = 1; //left page is active
+        }
         app.offsetPage(count);
         "object" == typeof e && e.stopPropagation();
     };
-
-    //ComponentDidMount
-    useEffect(() => {}, []);
 
     //ComponentDidUpdate
     useEffect(() => {
@@ -193,10 +199,6 @@ function Pager({ match, app, player }) {
         }
     };
 
-    if (page !== undefined) {
-        pageIndex = parseInt(page) - 1;
-    }
-
     const decrement = e => {
         // if (inExercise()) {
         //     offsetSelection(e, -1);
@@ -340,4 +342,4 @@ function Pager({ match, app, player }) {
 }
 
 export default AppConsumer(Pager);
-export let PageRedirect = AppConsumer(PlayerConsumer(fnPageRedirect));
+// export const PageRedirect = AppConsumer(fnPageRedirect);
