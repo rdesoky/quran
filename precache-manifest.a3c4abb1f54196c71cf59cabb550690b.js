@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e238e4d9c293da2428acca9404b196c3",
+    "revision": "ab67b44387360b211babab0406a31fb9",
     "url": "/quran/index.html"
   },
   {
-    "revision": "20a27e5d658fef1c5135",
+    "revision": "919cd863b09f9ddb192b",
     "url": "/quran/static/css/main.613b74b2.chunk.css"
   },
   {
-    "revision": "c2a41f9915e04084bd33",
-    "url": "/quran/static/js/2.aa061156.chunk.js"
+    "revision": "13e2a56d7c3193461e29",
+    "url": "/quran/static/js/2.6ae190d2.chunk.js"
   },
   {
-    "revision": "20a27e5d658fef1c5135",
-    "url": "/quran/static/js/main.5defe977.chunk.js"
+    "revision": "919cd863b09f9ddb192b",
+    "url": "/quran/static/js/main.a01d2293.chunk.js"
   },
   {
     "revision": "5eb79085e85e295b3b3e",
