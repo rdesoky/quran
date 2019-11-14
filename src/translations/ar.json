@@ -7,6 +7,7 @@
     "pg": "ص",
     "pg_num": "ص:{num}",
     "browse": "عرض",
+    "revised_pages": "الصفحات المراجعة: {pages}",
     "the_page_num": "الصفحة: {page}",
     "the_page": "الصفحة",
     "range_desc": "من الصفحة {start_page} - الصفحات: {pages}",

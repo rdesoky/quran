@@ -8,6 +8,13 @@ const Utils = {
         return padding + ret;
     },
 
+    dateKey: dt => {
+        return `${dt.getFullYear()}-${Utils.num2string(
+            dt.getMonth() + 1,
+            2
+        )}-${Utils.num2string(dt.getDate(), 2)}`;
+    },
+
     downloadImage: url => {
         return new Promise((resolve, reject) => {
             let img = document.createElement("img");

@@ -357,7 +357,7 @@ const SuraHifzChart = ({ sura, range }) => {
                 }
                 return (
                     <div
-                        key={r.id}
+                        key={`${r.startPage}-${r.sura}`}
                         className={"SuraRange".appendWord(ageClass)}
                         style={{ right: `${start}%`, width: `${width}%` }}
                     />
@@ -367,18 +367,47 @@ const SuraHifzChart = ({ sura, range }) => {
     );
 };
 
+const ActivityTooltip = ({ active, payload, label }) => {
+    if (active) {
+        return (
+            <div className="custom-tooltip">
+                <p className="label">
+                    {label}
+                    <br />{" "}
+                    <String
+                        id="revised_pages"
+                        values={{ pages: payload[0].value }}
+                    />
+                </p>
+            </div>
+        );
+    }
+
+    return null;
+};
+
 const ActivityChart = () => {
     const [dailyPages, setDailyPages] = useState([]);
     const app = useContext(AppContext);
 
     useEffect(() => {
         setDailyPages(
-            app.dailyPages ? app.dailyPages.slice(0, 7).reverse() : []
+            app.dailyPages ? app.dailyPages.slice(0, 14).reverse() : []
         );
     }, [app.dailyPages]);
 
     return (
-        <AreaChart width={app.popupWidth() - 40} height={300} data={dailyPages}>
+        <AreaChart
+            width={app.popupWidth() - 40}
+            height={300}
+            data={dailyPages}
+            margin={{
+                top: 10,
+                right: 0,
+                left: 0,
+                bottom: 0
+            }}
+        >
             <Area
                 type="monotone"
                 dataKey="pages"
@@ -388,7 +417,7 @@ const ActivityChart = () => {
             <CartesianGrid stroke="#444" />
             <XAxis dataKey="day" />
             <YAxis />
-            {/* <Tooltip /> */}
+            <Tooltip content={<ActivityTooltip />} />
         </AreaChart>
     );
 };
