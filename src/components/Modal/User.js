@@ -7,8 +7,8 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Utils from "./../../services/utils";
 
 const User = () => {
-    const { user } = app;
     const app = useContext(AppContext);
+    const { user } = app;
 
     const signOut = () => {
         app.signOut();

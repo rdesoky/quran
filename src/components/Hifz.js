@@ -1,3 +1,11 @@
+import {
+    AreaChart,
+    Area,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Tooltip
+} from "recharts";
 import React, { useContext, useState, useEffect } from "react";
 import { FormattedMessage as String } from "react-intl";
 import QData from "./../services/QData";
@@ -360,7 +368,29 @@ const SuraHifzChart = ({ sura, range }) => {
 };
 
 const ActivityChart = () => {
+    const [dailyPages, setDailyPages] = useState([]);
     const app = useContext(AppContext);
+
+    useEffect(() => {
+        setDailyPages(
+            app.dailyPages ? app.dailyPages.slice(0, 7).reverse() : []
+        );
+    }, [app.dailyPages]);
+
+    return (
+        <AreaChart width={app.popupWidth() - 40} height={300} data={dailyPages}>
+            <Area
+                type="monotone"
+                dataKey="pages"
+                stroke="green"
+                fill="rgba(0, 128, 0, 0.3)"
+            />
+            <CartesianGrid stroke="#444" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            {/* <Tooltip /> */}
+        </AreaChart>
+    );
 };
 
 export { SuraHifzChart, HifzRange, HifzRanges, ActivityChart };

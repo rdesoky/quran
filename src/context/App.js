@@ -14,6 +14,7 @@ const AppState = {
     modalPopup: false,
     hifzRanges: [],
     bookmarks: [],
+    dailyPages: [], //{date:'??',pages:123}
     isNarrow: false, //hidden sidebar and streched single page width
     isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
@@ -444,8 +445,10 @@ class AppProvider extends Component {
                 curr_range.revs++;
                 //Record new activity
                 const today = new Date();
-                const activityKey = `${today.getFullYear()}-${today.getMonth() +
-                    1}-${today.getDate()}`;
+                const activityKey = `${today.getFullYear()}-${Utils.num2string(
+                    today.getMonth() + 1,
+                    2
+                )}-${Utils.num2string(today.getDate(), 2)}`;
                 const activityPagesRef = this.activityRef.child(
                     activityKey + "/pages"
                 );
@@ -653,6 +656,7 @@ class AppProvider extends Component {
     activityRef = null;
     bookmarksRef = null;
     onBookmarkUpdate = null;
+    onActivityUpdate = null;
     onHifzUpdate = null;
 
     readFireData() {
@@ -662,6 +666,10 @@ class AppProvider extends Component {
         }
         if (this.hifzRef && this.onHifzUpdate) {
             this.hifzRef.off("value", this.onHifzUpdate);
+        }
+
+        if (this.activityRef && this.onActivityUpdate) {
+            this.hifzRef.off("value", this.onActivityUpdate);
         }
 
         this.userRef = this.dbRef.child(`data/${this.state.user.uid}`);
@@ -712,6 +720,18 @@ class AppProvider extends Component {
                       })
                 : [];
             this.setState({ hifzRanges });
+        });
+
+        this.onActivityUpdate = this.activityRef.on("value", snapshot => {
+            const snapshot_val = snapshot.val();
+            const dailyPages = snapshot_val
+                ? Object.keys(snapshot_val)
+                      .sort((k1, k2) => (k1 < k2 ? 1 : -1))
+                      .map(k => {
+                          return { day: k, pages: snapshot_val[k].pages };
+                      })
+                : [];
+            this.setState({ dailyPages });
         });
     }
 
