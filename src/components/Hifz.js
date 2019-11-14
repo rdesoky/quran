@@ -323,6 +323,7 @@ const SuraHifzChart = ({ sura, range }) => {
                     activePage == i + suraInfo.sp - 1 ? "ActivePage" : "";
                 return (
                     <div
+                        key={i}
                         className={"PageThumb".appendWord(activeClass)}
                         style={{
                             right: `${(100 * i) / suraPages}%`,
@@ -358,4 +359,8 @@ const SuraHifzChart = ({ sura, range }) => {
     );
 };
 
-export { SuraHifzChart, HifzRange, HifzRanges };
+const ActivityChart = () => {
+    const app = useContext(AppContext);
+};
+
+export { SuraHifzChart, HifzRange, HifzRanges, ActivityChart };

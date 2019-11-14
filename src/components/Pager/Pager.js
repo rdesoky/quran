@@ -22,7 +22,8 @@ export function PageRedirect({ match }) {
     return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
 }
 
-function Pager({ match, app }) {
+function Pager({ match }) {
+    const app = useContext(AppContext);
     let pageIndex = 0;
     const REPLACE = true;
 
@@ -341,5 +342,4 @@ function Pager({ match, app }) {
     );
 }
 
-export default AppConsumer(Pager);
-// export const PageRedirect = AppConsumer(fnPageRedirect);
+export default Pager;

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import "./Sidebar.scss";
-import { AppConsumer } from "../../context/App";
-import { PlayerConsumer, AudioState, AudioRepeat } from "../../context/Player";
-import { ThemeConsumer } from "../../context/Theme";
+import { AppContext } from "../../context/App";
 import { CommandButton } from "./../Modal/Commands";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import Utils from "../../services/utils";
 
-function Sidebar({ app, player, themeContext }) {
+function Sidebar() {
+    const app = useContext(AppContext);
     useEffect(() => {
         if (recentDiv) {
             recentDiv.scrollTop = 0;
@@ -97,4 +96,4 @@ function Sidebar({ app, player, themeContext }) {
     );
 }
 
-export default ThemeConsumer(AppConsumer(PlayerConsumer(Sidebar)));
+export default Sidebar;

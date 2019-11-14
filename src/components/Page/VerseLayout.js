@@ -375,4 +375,4 @@ export const HifzSegment = ({ sura, page, pageHeight, versesInfo }) => {
     );
 };
 
-export default AppConsumer(PlayerConsumer(VerseLayout));
+export default VerseLayout;
