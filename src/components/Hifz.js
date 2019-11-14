@@ -296,6 +296,12 @@ const SuraHifzChart = ({ sura, range }) => {
     const app = useContext(AppContext);
     const [suraRanges, setSuraRanges] = useState([]);
 
+    const suraIndex = sura !== undefined ? sura : range.sura;
+    const suraInfo = QData.sura_info[suraIndex];
+    const suraPages = suraInfo.ep - suraInfo.sp + 1;
+    const pageList = Array(suraPages).fill(0);
+    const pageWidth = `${100 / suraPages}%`;
+
     useEffect(() => {
         if (sura !== undefined) {
             const suraRanges = app.hifzRanges
@@ -308,11 +314,24 @@ const SuraHifzChart = ({ sura, range }) => {
         }
     }, [app.hifzRanges, range]);
 
+    const activePage = app.getCurrentPageIndex();
+
     return (
         <div className="SuraHifzChart">
+            {pageList.map((z, i) => {
+                const activeClass =
+                    activePage == i + suraInfo.sp - 1 ? "ActivePage" : "";
+                return (
+                    <div
+                        className={"PageThumb".appendWord(activeClass)}
+                        style={{
+                            right: `${(100 * i) / suraPages}%`,
+                            width: pageWidth
+                        }}
+                    />
+                );
+            })}
             {suraRanges.map((r, i) => {
-                const suraInfo = QData.sura_info[r.sura];
-                const suraPages = suraInfo.ep - suraInfo.sp + 1;
                 const rangeStart = r.startPage - suraInfo.sp + 1;
                 const start = (100 * rangeStart) / suraPages;
                 const width = (100 * r.pages) / suraPages;

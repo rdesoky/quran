@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AppConsumer, AppContext } from "../../context/App";
+import { AppContext } from "../../context/App";
 import { FormattedMessage as String } from "react-intl";
 import Login from "./../Login";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Utils from "./../../services/utils";
 
-const User = ({ app }) => {
+const User = () => {
     const { user } = app;
+    const app = useContext(AppContext);
 
     const signOut = () => {
         app.signOut();
@@ -18,21 +19,22 @@ const User = ({ app }) => {
             <div className="Title">
                 <String id="profile" />
             </div>
-            {user && user.isAnonymous === false ? (
-                <>
-                    <UserImage />
-                    <div>{user.displayName}</div>
-                    <div>{user.email}</div>
-                    <hr />
-                    <div className="FieldAction">
-                        <button onClick={signOut}>
-                            <String id="sign_out" />
-                        </button>
-                    </div>
-                </>
-            ) : (
-                <Login />
-            )}
+            <div className="PopupBody">
+                {user && user.isAnonymous === false ? (
+                    <>
+                        <UserImage />
+                        <div>{user.displayName}</div>
+                        <div>{user.email}</div>
+                        <div className="ButtonsBar">
+                            <button onClick={signOut}>
+                                <String id="sign_out" />
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <Login />
+                )}
+            </div>
         </>
     );
 };
@@ -61,4 +63,4 @@ export const UserImage = () => {
     );
 };
 
-export default AppConsumer(User);
+export default User;

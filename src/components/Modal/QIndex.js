@@ -153,17 +153,19 @@ export const SuraList = ({ filter }) => {
                 columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
             }}
         >
-            {new Array(114).fill(0).map((zero, suraIndex) => {
-                return (
-                    <SuraIndexCell
-                        key={suraIndex}
-                        sura={suraIndex}
-                        filter={filter}
-                        selectSura={setActionsIndex}
-                        selectedSura={actionsIndex}
-                    />
-                );
-            })}
+            {Array(114)
+                .fill(0)
+                .map((zero, suraIndex) => {
+                    return (
+                        <SuraIndexCell
+                            key={suraIndex}
+                            sura={suraIndex}
+                            filter={filter}
+                            selectSura={setActionsIndex}
+                            selectedSura={actionsIndex}
+                        />
+                    );
+                })}
         </ul>
     );
 };
