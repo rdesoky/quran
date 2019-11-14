@@ -445,10 +445,7 @@ class AppProvider extends Component {
                 curr_range.revs++;
                 //Record new activity
                 const today = new Date();
-                const activityKey = `${today.getFullYear()}-${Utils.num2string(
-                    today.getMonth() + 1,
-                    2
-                )}-${Utils.num2string(today.getDate(), 2)}`;
+                const activityKey = Utils.dateKey(today);
                 const activityPagesRef = this.activityRef.child(
                     activityKey + "/pages"
                 );
