@@ -19,7 +19,7 @@ const AppState = {
     isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
     isScrollable: false, // too wide
-    pagesCount: 2,
+    pagesCount: 1,
     appWidth: 800,
     appHeight: 600,
     displayMode: 0, //0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
