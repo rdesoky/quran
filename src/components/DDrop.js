@@ -82,6 +82,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
     }, []);
     return (
         <div
+            className="DDrop"
             ref={ref => {
                 rootElement = ref;
             }}
