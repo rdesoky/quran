@@ -1,4 +1,10 @@
 {
     "editor.formatOnSave": true,
-    "git.enableSmartCommit": true
+    "git.enableSmartCommit": true,
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    }
 }

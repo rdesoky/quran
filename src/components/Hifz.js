@@ -6,7 +6,7 @@ import {
     YAxis,
     Tooltip
 } from "recharts";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, memo } from "react";
 import { FormattedMessage as String } from "react-intl";
 import QData from "./../services/QData";
 import { AppConsumer, AppContext } from "./../context/App";
@@ -218,8 +218,8 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                             verse={rangeStartAya(range.sura, range.startPage)}
                         />
                     ) : (
-                        ""
-                    )}
+                            ""
+                        )}
                 </div>
             </button>
             {range.date ? (
@@ -242,25 +242,25 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                         </button>
                     </div>
                 ) : (
-                    ""
-                )
+                        ""
+                    )
             ) : (
-                <div className="ActionsBar">
-                    <String id="add" />
-                    <button onClick={addCurrentPage}>
-                        <String id="the_page" />
-                    </button>
-                    <button onClick={addSura}>
-                        <String id="the_sura" />
-                    </button>
-                    <button onClick={addFromSuraStart}>
-                        <String id="from_start" />
-                    </button>
-                    <button onClick={addToSuraEnd}>
-                        <String id="to_end" />
-                    </button>
-                </div>
-            )}
+                    <div className="ActionsBar">
+                        <String id="add" />
+                        <button onClick={addCurrentPage}>
+                            <String id="the_page" />
+                        </button>
+                        <button onClick={addSura}>
+                            <String id="the_sura" />
+                        </button>
+                        <button onClick={addFromSuraStart}>
+                            <String id="from_start" />
+                        </button>
+                        <button onClick={addToSuraEnd}>
+                            <String id="to_end" />
+                        </button>
+                    </div>
+                )}
         </li>
     );
 };
@@ -300,7 +300,7 @@ const HifzRanges = ({ filter }) => {
 };
 //});
 
-const SuraHifzChart = ({ sura, range }) => {
+const SuraHifzChart = memo(({ sura, range }) => {
     const app = useContext(AppContext);
     const [suraRanges, setSuraRanges] = useState([]);
 
@@ -352,8 +352,8 @@ const SuraHifzChart = ({ sura, range }) => {
                         age <= 7
                             ? "GoodHifz"
                             : age <= 14
-                            ? "FairHifz"
-                            : "WeakHifz";
+                                ? "FairHifz"
+                                : "WeakHifz";
                 }
                 return (
                     <div
@@ -365,7 +365,7 @@ const SuraHifzChart = ({ sura, range }) => {
             })}
         </div>
     );
-};
+});
 
 const ActivityTooltip = ({ active, payload, label }) => {
     if (active) {

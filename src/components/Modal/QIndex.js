@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, memo } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer, AppContext } from "../../context/App";
@@ -17,7 +17,7 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 
-const QIndex = ({}) => {
+const QIndex = ({ }) => {
     const app = useContext(AppContext);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
@@ -103,8 +103,8 @@ const QIndex = ({}) => {
                         <Icon icon={faTimes} />
                     </div>
                 ) : (
-                    ""
-                )}
+                        ""
+                    )}
             </div>
 
             <AKeyboard
@@ -129,14 +129,14 @@ const QIndex = ({}) => {
                 ) : activeTab == "hifz" ? (
                     <HifzRanges filter={filter} />
                 ) : (
-                    <BookmarksList filter={filter} />
-                )}
+                            <BookmarksList filter={filter} />
+                        )}
             </div>
         </>
     );
 };
 
-export const SuraList = ({ filter }) => {
+export const SuraList = memo(({ filter }) => {
     const app = useContext(AppContext);
     const [actionsIndex, setActionsIndex] = useState(0);
 
@@ -168,7 +168,7 @@ export const SuraList = ({ filter }) => {
                 })}
         </ul>
     );
-};
+});
 
 export const SuraIndexCell = ({ sura, filter, selectedSura, selectSura }) => {
     const app = useContext(AppContext);
@@ -248,8 +248,8 @@ export const SuraIndexCell = ({ sura, filter, selectedSura, selectSura }) => {
                         </button>
                     </>
                 ) : (
-                    <Icon icon={faEllipsisH} />
-                )}
+                        <Icon icon={faEllipsisH} />
+                    )}
             </div>
         </li>
     );
@@ -343,8 +343,8 @@ export const BookmarkListItem = ({
                         </button>
                     </>
                 ) : (
-                    <Icon icon={faEllipsisH} />
-                )}
+                        <Icon icon={faEllipsisH} />
+                    )}
             </div>
             <button onClick={gotoAya}>
                 <Icon icon={faBookmark} />
