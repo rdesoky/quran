@@ -104,18 +104,18 @@ const Utils = {
         return { __html: ret };
     },
     normalizeText: t => {
+        let ret;
         try {
-            let ret = t
+            ret = t
                 .replace(/ {2}/g, " ")
-                .replace(new RegExp("\\p{M}", "gu"), "")
                 .replace(/[أإآ]/g, "ا")
                 .replace(/[ؤ]/g, "و")
                 .replace(/[ة]/g, "ه")
                 .replace(/[ئي]/g, "ى");
-            return ret;
-        } catch (e) {
-            return t;
-        }
+
+            ret = ret.replace(new RegExp("\\p{M}", "gu"), ""); //Not supported by some browsers
+        } catch (e) {}
+        return ret;
     },
     copy2Clipboard: t => {
         navigator.clipboard.writeText(t).then(
