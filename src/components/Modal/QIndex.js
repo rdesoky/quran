@@ -17,7 +17,7 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 
-const QIndex = ({ }) => {
+const QIndex = ({}) => {
     const app = useContext(AppContext);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
@@ -103,8 +103,8 @@ const QIndex = ({ }) => {
                         <Icon icon={faTimes} />
                     </div>
                 ) : (
-                        ""
-                    )}
+                    ""
+                )}
             </div>
 
             <AKeyboard
@@ -129,8 +129,8 @@ const QIndex = ({ }) => {
                 ) : activeTab == "hifz" ? (
                     <HifzRanges filter={filter} />
                 ) : (
-                            <BookmarksList filter={filter} />
-                        )}
+                    <BookmarksList filter={filter} />
+                )}
             </div>
         </>
     );
@@ -170,90 +170,96 @@ export const SuraList = memo(({ filter }) => {
     );
 });
 
-export const SuraIndexCell = ({ sura, filter, selectedSura, selectSura }) => {
-    const app = useContext(AppContext);
-    const player = useContext(PlayerContext);
-    const [suraName, setSuraName] = useState("");
+export const SuraIndexCell = memo(
+    ({ sura, filter, selectedSura, selectSura }) => {
+        const app = useContext(AppContext);
+        const player = useContext(PlayerContext);
+        const [suraName, setSuraName] = useState("");
 
-    const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
-            app.closePopup();
+        const checkClosePopup = () => {
+            if (!app.isCompact && app.pagesCount === 1) {
+                app.closePopup();
+            }
+        };
+
+        const gotoSura = e => {
+            if (selectedSura === sura) {
+                app.hideMask();
+                checkClosePopup();
+                return app.gotoSura(sura);
+            } else {
+                selectSura && selectSura(sura);
+            }
+        };
+        const addSuraToHifz = e => {
+            //TODO: check if sura has old ranges, then confirmation is required
+            if (!window.confirm("Are you sure?")) {
+                return;
+            }
+            const suraInfo = QData.sura_info[sura];
+            app.addHifzRange(
+                suraInfo.sp - 1,
+                sura,
+                suraInfo.ep - suraInfo.sp + 1
+            );
+        };
+
+        const playSura = e => {
+            player.stop(true);
+            gotoSura(e);
+            setTimeout(() => {
+                player.play();
+            }, 500);
+        };
+
+        const reviewSura = e => {
+            const verse = gotoSura(e);
+            setTimeout(() => {
+                app.setMaskStart(verse, { sel: true });
+                //app.closePopup();
+                checkClosePopup();
+            });
+            app.pushRecentCommand("Mask");
+        };
+
+        useEffect(() => {
+            setSuraName(app.suraNames()[sura]);
+        }, [sura]);
+
+        if (filter && -1 === suraName.indexOf(filter)) {
+            return "";
         }
-    };
 
-    const gotoSura = e => {
-        if (selectedSura === sura) {
-            app.hideMask();
-            checkClosePopup();
-            return app.gotoSura(sura);
-        } else {
-            selectSura && selectSura(sura);
-        }
-    };
-    const addSuraToHifz = e => {
-        //TODO: check if sura has old ranges, then confirmation is required
-        if (!window.confirm("Are you sure?")) {
-            return;
-        }
-        const suraInfo = QData.sura_info[sura];
-        app.addHifzRange(suraInfo.sp - 1, sura, suraInfo.ep - suraInfo.sp + 1);
-    };
-
-    const playSura = e => {
-        player.stop(true);
-        gotoSura(e);
-        setTimeout(() => {
-            player.play();
-        }, 500);
-    };
-
-    const reviewSura = e => {
-        const verse = gotoSura(e);
-        setTimeout(() => {
-            app.setMaskStart(verse, { sel: true });
-            //app.closePopup();
-            checkClosePopup();
-        });
-        app.pushRecentCommand("Mask");
-    };
-
-    useEffect(() => {
-        setSuraName(app.suraNames()[sura]);
-    }, [sura]);
-
-    if (filter && -1 === suraName.indexOf(filter)) {
-        return "";
-    }
-
-    return (
-        <li className="SuraIndexCell">
-            <SuraHifzChart sura={sura} />
-            <button
-                onClick={gotoSura}
-                className={sura == selectedSura ? "active" : ""}
-            >
-                {sura + 1 + ". " + suraName}
-            </button>
-            <div className="actions">
-                {selectedSura === sura ? (
-                    <>
-                        <button sura={sura} onClick={addSuraToHifz}>
-                            <Icon icon={faHeart} />
-                        </button>
-                        <button sura={sura} onClick={playSura}>
-                            <Icon icon={faPlayCircle} />
-                        </button>
-                        <button sura={sura} onClick={reviewSura}>
-                            <Icon icon={faEyeSlash} />
-                        </button>
-                    </>
-                ) : (
+        return (
+            <li className="SuraIndexCell">
+                <SuraHifzChart sura={sura} />
+                <button
+                    onClick={gotoSura}
+                    className={sura == selectedSura ? "active" : ""}
+                >
+                    {sura + 1 + ". " + suraName}
+                </button>
+                <div className="actions">
+                    {selectedSura === sura ? (
+                        <>
+                            <button sura={sura} onClick={addSuraToHifz}>
+                                <Icon icon={faHeart} />
+                            </button>
+                            <button sura={sura} onClick={playSura}>
+                                <Icon icon={faPlayCircle} />
+                            </button>
+                            <button sura={sura} onClick={reviewSura}>
+                                <Icon icon={faEyeSlash} />
+                            </button>
+                        </>
+                    ) : (
                         <Icon icon={faEllipsisH} />
                     )}
-            </div>
-        </li>
-    );
-};
+                </div>
+            </li>
+        );
+    }
+);
 
 export const BookmarkListItem = ({
     verse,
@@ -343,8 +349,8 @@ export const BookmarkListItem = ({
                         </button>
                     </>
                 ) : (
-                        <Icon icon={faEllipsisH} />
-                    )}
+                    <Icon icon={faEllipsisH} />
+                )}
             </div>
             <button onClick={gotoAya}>
                 <Icon icon={faBookmark} />

@@ -218,8 +218,8 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                             verse={rangeStartAya(range.sura, range.startPage)}
                         />
                     ) : (
-                            ""
-                        )}
+                        ""
+                    )}
                 </div>
             </button>
             {range.date ? (
@@ -242,25 +242,25 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                         </button>
                     </div>
                 ) : (
-                        ""
-                    )
+                    ""
+                )
             ) : (
-                    <div className="ActionsBar">
-                        <String id="add" />
-                        <button onClick={addCurrentPage}>
-                            <String id="the_page" />
-                        </button>
-                        <button onClick={addSura}>
-                            <String id="the_sura" />
-                        </button>
-                        <button onClick={addFromSuraStart}>
-                            <String id="from_start" />
-                        </button>
-                        <button onClick={addToSuraEnd}>
-                            <String id="to_end" />
-                        </button>
-                    </div>
-                )}
+                <div className="ActionsBar">
+                    <String id="add" />
+                    <button onClick={addCurrentPage}>
+                        <String id="the_page" />
+                    </button>
+                    <button onClick={addSura}>
+                        <String id="the_sura" />
+                    </button>
+                    <button onClick={addFromSuraStart}>
+                        <String id="from_start" />
+                    </button>
+                    <button onClick={addToSuraEnd}>
+                        <String id="to_end" />
+                    </button>
+                </div>
+            )}
         </li>
     );
 };
@@ -352,8 +352,8 @@ const SuraHifzChart = memo(({ sura, range }) => {
                         age <= 7
                             ? "GoodHifz"
                             : age <= 14
-                                ? "FairHifz"
-                                : "WeakHifz";
+                            ? "FairHifz"
+                            : "WeakHifz";
                 }
                 return (
                     <div
@@ -399,9 +399,10 @@ const ActivityChart = () => {
         return null;
     }
 
+    const chartWidth = app.popupWidth() - 60;
     return (
         <AreaChart
-            width={app.popupWidth() - 40}
+            width={chartWidth}
             height={300}
             data={dailyPages}
             margin={{
