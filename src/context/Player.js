@@ -136,7 +136,7 @@ class PlayerProvider extends Component {
         document.title = "Reciting...";
         if (this.state.followPlayer) {
             //TODO: check if url state inside pager
-            app.gotoAya(playingAya, { sel: false });
+            app.gotoAya(playingAya, { sel: false, replace: true, keepMask: true });
         }
 
         if (
