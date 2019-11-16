@@ -232,16 +232,17 @@ $selectionBgColorDark: rgb(38, 93, 138);
         }
 
         select {
-            color: #aaa;
             height: 25px;
-            background-color: transparent;
+            // color: #aaa;
+            // background-color: transparent;
+            background-color: #bbb;
             border: none;
             // background-color: #444;
             border-radius: 5px;
-            option {
-                color: black;
-                background-color: silver;
-            }
+            // option {
+            //     color: black;
+            //     background-color: silver;
+            // }
             font-size: 14px;
             margin: 0 2px;
         }

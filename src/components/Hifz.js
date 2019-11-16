@@ -369,15 +369,14 @@ const SuraHifzChart = ({ sura, range }) => {
 
 const ActivityTooltip = ({ active, payload, label }) => {
     if (active) {
+        const pages =
+            Array.isArray(payload) && payload.length ? payload[0].value : 0;
         return (
             <div className="custom-tooltip">
                 <p className="label">
                     {new Date(label).toDateString()}
                     <br />
-                    <String
-                        id="revised_pages"
-                        values={{ pages: payload[0].value }}
-                    />
+                    <String id="revised_pages" values={{ pages }} />
                 </p>
             </div>
         );
@@ -395,6 +394,10 @@ const ActivityChart = () => {
             app.dailyPages ? app.dailyPages.slice(0, 14).reverse() : []
         );
     }, [app.dailyPages]);
+
+    if (!dailyPages.length) {
+        return null;
+    }
 
     return (
         <AreaChart

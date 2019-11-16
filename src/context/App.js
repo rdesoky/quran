@@ -308,6 +308,9 @@ class AppProvider extends Component {
     };
 
     gotoAya = (ayaId, opt = { sel: false, replace: true, keepMask: false }) => {
+        if (ayaId === undefined) {
+            ayaId = this.state.selectStart;
+        }
         if (opt.sel) {
             this.selectAya(ayaId);
             if (opt.keepMask !== true) {

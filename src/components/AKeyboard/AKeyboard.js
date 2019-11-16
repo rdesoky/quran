@@ -112,7 +112,6 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
 
     const handleKeyDown = e => {
         const { code, ctrlKey, target } = e;
-        e.preventDefault();
         setTypedChar(code);
         // setTimeout(() => {
         //     setTypedChar("");
@@ -157,7 +156,12 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
             default:
                 if (keyMap[code]) {
                     updateText(text.concat(keyMap[code][0]));
+                    break;
                 }
+                return; //not handled
+        }
+        if (e && typeof e.preventDefault === "function") {
+            e.preventDefault();
         }
     };
 

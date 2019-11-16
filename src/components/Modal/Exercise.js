@@ -97,6 +97,7 @@ const Exercise = ({}) => {
         player.stop(true);
         setCurrStep(Step.intro);
         document.addEventListener("keydown", handleKeyDown);
+        app.gotoAya();
         return () => {
             player.setRepeat(savedRepeat);
             player.setFollowPlayer(savedFollowPlayer);

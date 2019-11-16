@@ -21,6 +21,9 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
     };
     const onMouseDown = e => {
         const { target, clientX, clientY, pointerId } = e;
+        if (target.tagName.toLowerCase() == "select") {
+            return;
+        }
         if (pointerId) {
             target.setPointerCapture(pointerId);
         }
@@ -29,7 +32,13 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
         setStartY(clientY);
         setDX(0);
         setDY(0);
-        e.stopPropagation();
+        if (
+            typeof e === "object" &&
+            e !== null &&
+            typeof e.stopPropagation === "function"
+        ) {
+            e.stopPropagation();
+        }
     };
     const onMouseMove = e => {
         const { clientX, clientY } = e;
