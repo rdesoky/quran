@@ -371,10 +371,17 @@ const ActivityTooltip = ({ active, payload, label }) => {
     if (active) {
         const pages =
             Array.isArray(payload) && payload.length ? payload[0].value : 0;
+
+        const [month, day] = label.split("-").map(x => parseInt(x));
+        const date = new Date();
+        date.setMonth(month - 1);
+        date.setDate(day);
+        const dateStr = new Date(date).toDateString();
+
         return (
             <div className="custom-tooltip">
                 <p className="label">
-                    {new Date(label).toDateString()}
+                    {dateStr}
                     <br />
                     <String id="revised_pages" values={{ pages }} />
                 </p>
@@ -391,7 +398,16 @@ const ActivityChart = () => {
 
     useEffect(() => {
         setDailyPages(
-            app.dailyPages ? app.dailyPages.slice(0, 14).reverse() : []
+            app.dailyPages
+                ? app.dailyPages
+                      .slice(0, 14)
+                      .reverse()
+                      .map(pgInfo => {
+                          return Object.assign({}, pgInfo, {
+                              day: pgInfo.day.substring(5)
+                          });
+                      })
+                : []
         );
     }, [app.dailyPages]);
 

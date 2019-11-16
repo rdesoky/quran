@@ -5,6 +5,7 @@ import Login from "./../Login";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Utils from "./../../services/utils";
+import { ActivityChart } from "../Hifz";
 
 const User = () => {
     const app = useContext(AppContext);
@@ -34,6 +35,7 @@ const User = () => {
                 ) : (
                     <Login />
                 )}
+                <ActivityChart />
             </div>
         </>
     );
