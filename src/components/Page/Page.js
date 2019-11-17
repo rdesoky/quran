@@ -36,7 +36,9 @@ const Page = ({
     //Handle pageIndex update
     useEffect(() => {
         setImageUrl(null);
-        Utils.downloadPageImage(pageIndex).then(onImageLoaded);
+        Utils.downloadPageImage(pageIndex)
+            .then(onImageLoaded)
+            .catch(e => {});
         setVerseInfo([]);
         let pageNumber = parseInt(pageIndex) + 1;
         let controller = new AbortController();
@@ -93,8 +95,8 @@ const Page = ({
                         "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
                     }
                     style={{
-                        transform: `translateX(${shiftX || 0}px) scaleX(${scaleX ||
-                            1})`
+                        transform: `translateX(${shiftX ||
+                            0}px) scaleX(${scaleX || 1})`
                         // transform: `translateX(${shiftX || 0}px) scaleX(1)`
                     }}
                 >
