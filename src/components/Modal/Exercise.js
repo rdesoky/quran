@@ -318,6 +318,9 @@ const Exercise = ({}) => {
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
+                    <button onClick={typeNextVerse}>
+                        <String id="type_next" />
+                    </button>
                     <button onClick={gotoRandomVerse}>
                         <String id="new_verse" />
                     </button>

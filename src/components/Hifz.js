@@ -372,7 +372,7 @@ const SuraHifzChart = memo(({ sura, range }) => {
 
 const ActivityTooltip = ({ active, payload, label, activity }) => {
     if (active) {
-        const activity =
+        const value =
             Array.isArray(payload) && payload.length ? payload[0].value : 0;
 
         const [month, day] = label.split("-").map(x => parseInt(x));
@@ -388,7 +388,7 @@ const ActivityTooltip = ({ active, payload, label, activity }) => {
                     <br />
                     <String
                         id={`activity_${activity}`}
-                        values={{ value: activity }}
+                        values={{ value: value }}
                     />
                 </p>
             </div>
