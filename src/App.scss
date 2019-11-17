@@ -347,5 +347,11 @@ hr {
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
-    // margin: 0;
+    margin: 10px 20px;
+}
+
+.VCentered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

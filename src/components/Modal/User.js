@@ -20,22 +20,30 @@ const User = () => {
             <div className="Title">
                 <String id="profile" />
             </div>
-            <div className="PopupBody">
+            <div
+                className="PopupBody"
+                style={{ maxHeight: app.appHeight - 80 }}
+            >
                 {user && user.isAnonymous === false ? (
-                    <>
+                    <div className="ButtonsBar">
                         <UserImage />
-                        <div>{user.displayName}</div>
-                        <div>{user.email}</div>
+                        <div className="VCentered" style={{ flexGrow: 1 }}>
+                            <div>{user.displayName}</div>
+                            <div>{user.email}</div>
+                        </div>
                         <div className="ButtonsBar">
                             <button onClick={signOut}>
                                 <String id="sign_out" />
                             </button>
                         </div>
-                    </>
+                    </div>
                 ) : (
                     <Login />
                 )}
-                <ActivityChart />
+                <hr />
+                <ActivityChart activity="chars" />
+                <hr />
+                <ActivityChart activity="pages" />
             </div>
         </>
     );
@@ -48,9 +56,11 @@ export const UserImage = () => {
     useEffect(() => {
         if (app.user) {
             const url = app.user.photoURL;
-            Utils.downloadImage(url).then(() => {
-                setImageUrl(url);
-            });
+            Utils.downloadImage(url)
+                .then(() => {
+                    setImageUrl(url);
+                })
+                .catch(e => {});
         } else {
             setImageUrl(null);
         }

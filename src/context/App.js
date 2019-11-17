@@ -4,7 +4,6 @@ import QData from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
 import { injectIntl } from "react-intl";
-import ThemeProvider from "./Theme";
 
 let rc = localStorage.getItem("commands");
 
@@ -14,7 +13,10 @@ const AppState = {
     modalPopup: false,
     hifzRanges: [],
     bookmarks: [],
-    dailyPages: [], //{date:'??',pages:123}
+    daily: {
+        pages: [], //{date:'??',pages:123}
+        chars: [] //{date:'??',chars:123}
+    },
     isNarrow: false, //hidden sidebar and streched single page width
     isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
@@ -462,6 +464,18 @@ class AppProvider extends Component {
         });
     };
 
+    logTypedVerse = verseId => {
+        const verseText = this._normVerseList[verseId];
+        const today = new Date();
+        const activityKey = Utils.dateKey(today);
+        const activityCharsRef = this.activityRef.child(activityKey + "/chars");
+        activityCharsRef.once("value", snapshot => {
+            let chars = snapshot.val() || 0;
+            chars += verseText.replace(/\s/g, "").length;
+            activityCharsRef.set(chars);
+        });
+    };
+
     addHifzRange = (startPage, sura, pages) => {
         //TODO: implement the merging logic in a Firebase function
         const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
@@ -572,11 +586,12 @@ class AppProvider extends Component {
     methods = {
         deleteHifzRange: this.deleteHifzRange,
         addHifzRange: this.addHifzRange,
+        setRangeRevised: this.setRangeRevised,
+        logTypedVerse: this.logTypedVerse,
         formatMessage: this.formatMessage,
         isBookmarked: this.isBookmarked,
         setExpandedMenu: this.setExpandedMenu,
         signOut: this.signOut,
-        setRangeRevised: this.setRangeRevised,
         suraName: this.suraName,
         suraNames: this.suraNames,
         selectedRange: this.selectedRange,
@@ -724,14 +739,23 @@ class AppProvider extends Component {
 
         this.onActivityUpdate = this.activityRef.on("value", snapshot => {
             const snapshot_val = snapshot.val();
-            const dailyPages = snapshot_val
+            const pages = snapshot_val
                 ? Object.keys(snapshot_val)
                       .sort((k1, k2) => (k1 < k2 ? 1 : -1))
                       .map(k => {
                           return { day: k, pages: snapshot_val[k].pages };
                       })
                 : [];
-            this.setState({ dailyPages });
+            const chars = snapshot_val
+                ? Object.keys(snapshot_val)
+                      .sort((k1, k2) => (k1 < k2 ? 1 : -1))
+                      .map(k => {
+                          return { day: k, chars: snapshot_val[k].chars };
+                      })
+                : [];
+            this.setState({
+                daily: { chars, pages }
+            });
         });
     }
 

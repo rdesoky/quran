@@ -69,10 +69,10 @@ function Pager({ match }) {
         //cache next pages
         const pageIndex = match.params.page - 1;
         if (app.pagesCount === 1) {
-            Utils.downloadPageImage(pageIndex + 1);
+            Utils.downloadPageImage(pageIndex + 1).catch(e => {});
         } else {
-            Utils.downloadPageImage(pageIndex + 2);
-            Utils.downloadPageImage(pageIndex + 3);
+            Utils.downloadPageImage(pageIndex + 2).catch(e => {});
+            Utils.downloadPageImage(pageIndex + 3).catch(e => {});
         }
     }, [match.params.page]);
 
@@ -281,7 +281,9 @@ function Pager({ match }) {
         return (
             <div
                 onClick={selectPage}
-                className={"PageSide".appendWord(pageClass).appendWord(activeClass)}
+                className={"PageSide"
+                    .appendWord(pageClass)
+                    .appendWord(activeClass)}
                 style={{
                     height: app.appHeight + "px",
                     width: 100 / pagesCount + "%"
@@ -319,7 +321,9 @@ function Pager({ match }) {
                 //Shrink the width using the scaling
                 const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
                 const shiftX = dX * scaleX;
-                console.log(`dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`);
+                console.log(
+                    `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
+                );
                 const firstPageShiftX =
                     pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
                 const firstPageScaleX =

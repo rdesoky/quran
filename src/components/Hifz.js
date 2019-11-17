@@ -1,4 +1,7 @@
 import {
+    BarChart,
+    Bar,
+    Line,
     AreaChart,
     Area,
     CartesianGrid,
@@ -9,8 +12,8 @@ import {
 import React, { useContext, useState, useEffect, memo } from "react";
 import { FormattedMessage as String } from "react-intl";
 import QData from "./../services/QData";
-import { AppConsumer, AppContext } from "./../context/App";
-import { PlayerConsumer, PlayerContext } from "./../context/Player";
+import { AppContext } from "./../context/App";
+import { PlayerContext } from "./../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faPlayCircle,
@@ -367,9 +370,9 @@ const SuraHifzChart = memo(({ sura, range }) => {
     );
 });
 
-const ActivityTooltip = ({ active, payload, label }) => {
+const ActivityTooltip = ({ active, payload, label, activity }) => {
     if (active) {
-        const pages =
+        const activity =
             Array.isArray(payload) && payload.length ? payload[0].value : 0;
 
         const [month, day] = label.split("-").map(x => parseInt(x));
@@ -383,7 +386,10 @@ const ActivityTooltip = ({ active, payload, label }) => {
                 <p className="label">
                     {dateStr}
                     <br />
-                    <String id="revised_pages" values={{ pages }} />
+                    <String
+                        id={`activity_${activity}`}
+                        values={{ value: activity }}
+                    />
                 </p>
             </div>
         );
@@ -392,53 +398,56 @@ const ActivityTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-const ActivityChart = () => {
-    const [dailyPages, setDailyPages] = useState([]);
+const ActivityChart = ({ activity = "pages" }) => {
+    const [data, setData] = useState([]);
     const app = useContext(AppContext);
 
     useEffect(() => {
-        setDailyPages(
-            app.dailyPages
-                ? app.dailyPages
-                      .slice(0, 14)
-                      .reverse()
-                      .map(pgInfo => {
-                          return Object.assign({}, pgInfo, {
-                              day: pgInfo.day.substring(5)
-                          });
-                      })
-                : []
+        setData(
+            app.daily[activity]
+                .slice(0, 14)
+                .reverse()
+                .map(pgInfo => {
+                    return Object.assign({}, pgInfo, {
+                        day: pgInfo.day.substring(5)
+                    });
+                })
         );
-    }, [app.dailyPages]);
+    }, [app.daily]);
 
-    if (!dailyPages.length) {
+    if (!data.length) {
         return null;
     }
 
     const chartWidth = app.popupWidth() - 60;
     return (
-        <AreaChart
-            width={chartWidth}
-            height={300}
-            data={dailyPages}
-            margin={{
-                top: 10,
-                right: 0,
-                left: 0,
-                bottom: 0
-            }}
-        >
-            <Area
-                type="monotone"
-                dataKey="pages"
-                stroke="green"
-                fill="rgba(0, 128, 0, 0.3)"
-            />
-            <CartesianGrid stroke="#444" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip content={<ActivityTooltip />} />
-        </AreaChart>
+        <>
+            <String id={`${activity}_daily_graph`} />
+            <BarChart
+                width={chartWidth}
+                height={240}
+                data={data}
+                margin={{
+                    top: 5,
+                    right: 0,
+                    left: 0,
+                    bottom: 5
+                }}
+            >
+                <Bar
+                    dataKey={activity}
+                    stroke="green"
+                    fill="rgba(0, 128, 0, 0.3)"
+                />
+                <CartesianGrid stroke="#444" strokeDasharray="3 3" />
+                <XAxis dataKey="day" />
+                <YAxis />
+                <Tooltip
+                    content={<ActivityTooltip activity={activity} />}
+                    cursor={{ fill: "#eeeeee20" }}
+                />
+            </BarChart>
+        </>
     );
 };
 

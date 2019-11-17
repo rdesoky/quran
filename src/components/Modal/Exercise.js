@@ -13,6 +13,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
+import { ActivityChart } from "../Hifz";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -25,7 +26,7 @@ const Step = {
     results: 3
 };
 
-const Exercise = ({ }) => {
+const Exercise = ({}) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [currStep, setCurrStep] = useState(Step.unknown);
@@ -139,7 +140,8 @@ const Exercise = ({ }) => {
                 app.setMaskStart(app.selectStart + 1, true);
                 break;
             case Step.results:
-                //TODO: if correct answer, save number of verse letters in Firebase
+                //if correct answer, save number of verse letters in Firebase
+                logActivity();
                 app.setMaskStart(app.selectStart + 1, true);
                 app.setModalPopup(false);
                 break;
@@ -149,6 +151,13 @@ const Exercise = ({ }) => {
                 app.setModalPopup(false); //allow selecting outside
         }
     }, [currStep]);
+
+    const logActivity = () => {
+        if (!isCorrect()) {
+            return;
+        }
+        app.logTypedVerse(verse);
+    };
 
     //monitor player to start answer upon player ends
     useEffect(() => {
@@ -287,7 +296,8 @@ const Exercise = ({ }) => {
                 <div className="FootNote">
                     <String id="exercise_intro" />
                 </div>
-                {/* <TafseerView verse={verse} /> */}
+                <hr />
+                <ActivityChart activity="chars" />
             </div>
         );
     };
@@ -436,8 +446,8 @@ const Exercise = ({ }) => {
                             (!writtenText.length
                                 ? " empty"
                                 : correct
-                                    ? " Correct"
-                                    : " Wrong")
+                                ? " Correct"
+                                : " Wrong")
                         }
                     >
                         {renderText()}
@@ -448,7 +458,7 @@ const Exercise = ({ }) => {
                                 type="checkbox"
                                 onChange={onUpdateQuickMode}
                                 checked={quickMode}
-                            // disabled={player.repeat == 1}
+                                // disabled={player.repeat == 1}
                             />
                             <span>
                                 <String id="quick_mode" />
@@ -501,20 +511,20 @@ const Exercise = ({ }) => {
                             </button>
                         </>
                     ) : (
-                            <>
-                                <button
-                                    ref={ref => {
-                                        defaultButton = ref;
-                                    }}
-                                    onClick={startAnswer}
-                                >
-                                    <String id="correct" />
-                                </button>
-                                <button onClick={startReciting}>
-                                    <String id="start" />
-                                </button>
-                            </>
-                        )}
+                        <>
+                            <button
+                                ref={ref => {
+                                    defaultButton = ref;
+                                }}
+                                onClick={startAnswer}
+                            >
+                                <String id="correct" />
+                            </button>
+                            <button onClick={startReciting}>
+                                <String id="start" />
+                            </button>
+                        </>
+                    )}
                     <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
@@ -597,15 +607,17 @@ const Exercise = ({ }) => {
                             </button>
                         </div>
                         <TafseerView verse={verse} showVerse={false} />
+                        <hr />
+                        <ActivityChart activity="chars" />
                     </>
                 ) : (
-                        <>
-                            <hr />
-                            <h3 className="Correct">
-                                <VerseText />
-                            </h3>
-                        </>
-                    )}
+                    <>
+                        <hr />
+                        <h3 className="Correct">
+                            <VerseText />
+                        </h3>
+                    </>
+                )}
             </div>
         );
     };
