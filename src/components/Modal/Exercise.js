@@ -25,7 +25,7 @@ const Step = {
     results: 3
 };
 
-const Exercise = ({}) => {
+const Exercise = ({ }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [currStep, setCurrStep] = useState(Step.unknown);
@@ -139,6 +139,7 @@ const Exercise = ({}) => {
                 app.setMaskStart(app.selectStart + 1, true);
                 break;
             case Step.results:
+                //TODO: if correct answer, save number of verse letters in Firebase
                 app.setMaskStart(app.selectStart + 1, true);
                 app.setModalPopup(false);
                 break;
@@ -435,8 +436,8 @@ const Exercise = ({}) => {
                             (!writtenText.length
                                 ? " empty"
                                 : correct
-                                ? " Correct"
-                                : " Wrong")
+                                    ? " Correct"
+                                    : " Wrong")
                         }
                     >
                         {renderText()}
@@ -447,7 +448,7 @@ const Exercise = ({}) => {
                                 type="checkbox"
                                 onChange={onUpdateQuickMode}
                                 checked={quickMode}
-                                // disabled={player.repeat == 1}
+                            // disabled={player.repeat == 1}
                             />
                             <span>
                                 <String id="quick_mode" />
@@ -500,20 +501,20 @@ const Exercise = ({}) => {
                             </button>
                         </>
                     ) : (
-                        <>
-                            <button
-                                ref={ref => {
-                                    defaultButton = ref;
-                                }}
-                                onClick={startAnswer}
-                            >
-                                <String id="correct" />
-                            </button>
-                            <button onClick={startReciting}>
-                                <String id="start" />
-                            </button>
-                        </>
-                    )}
+                            <>
+                                <button
+                                    ref={ref => {
+                                        defaultButton = ref;
+                                    }}
+                                    onClick={startAnswer}
+                                >
+                                    <String id="correct" />
+                                </button>
+                                <button onClick={startReciting}>
+                                    <String id="start" />
+                                </button>
+                            </>
+                        )}
                     <button onClick={showIntro}>
                         <String id="cancel" />
                     </button>
@@ -598,13 +599,13 @@ const Exercise = ({}) => {
                         <TafseerView verse={verse} showVerse={false} />
                     </>
                 ) : (
-                    <>
-                        <hr />
-                        <h3 className="Correct">
-                            <VerseText />
-                        </h3>
-                    </>
-                )}
+                        <>
+                            <hr />
+                            <h3 className="Correct">
+                                <VerseText />
+                            </h3>
+                        </>
+                    )}
             </div>
         );
     };

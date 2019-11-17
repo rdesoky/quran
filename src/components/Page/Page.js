@@ -23,8 +23,9 @@ const Page = ({
 
     const onImageLoaded = url => {
         setTimeout(() => {
+            //TODO: don't update the Url state unless the component is mounted
             setImageUrl(url);
-        }, 100); //Make sure imageLoaded is set after index update event handler
+        }, 100); //The delay is to make sure imageLoaded is set after index update event handler
     };
 
     let textAlign =
@@ -92,8 +93,9 @@ const Page = ({
                         "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
                     }
                     style={{
-                        transform: `scaleX(${scaleX ||
-                            1}) translateX(${shiftX || 0}px)`
+                        transform: `translateX(${shiftX || 0}px) scaleX(${scaleX ||
+                            1})`
+                        // transform: `translateX(${shiftX || 0}px) scaleX(1)`
                     }}
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />

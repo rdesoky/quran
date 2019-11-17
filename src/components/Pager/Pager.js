@@ -275,13 +275,13 @@ function Pager({ match }) {
             }
         }
 
-        let pageClass = thisPage % 2 === 0 ? " RightPage" : " LeftPage";
-        let activeClass = pageIndex === thisPage ? " Active" : "";
+        let pageClass = thisPage % 2 === 0 ? "RightPage" : "LeftPage";
+        let activeClass = pageIndex === thisPage ? "Active" : "";
 
         return (
             <div
                 onClick={selectPage}
-                className={"PageSide" + pageClass + activeClass}
+                className={"PageSide".appendWord(pageClass).appendWord(activeClass)}
                 style={{
                     height: app.appHeight + "px",
                     width: 100 / pagesCount + "%"
@@ -316,8 +316,10 @@ function Pager({ match }) {
             }}
         >
             {({ dX, dY }) => {
+                //Shrink the width using the scaling
                 const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
-                const shiftX = dX; //pageWidth - pageWidth * scaleX;
+                const shiftX = dX * scaleX;
+                console.log(`dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`);
                 const firstPageShiftX =
                     pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
                 const firstPageScaleX =
