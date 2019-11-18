@@ -15,6 +15,7 @@ import AppProvider from "./context/App";
 import PlayerProvider from "./context/Player";
 import firebase from "firebase";
 import Exercise from "./components/Modal/Exercise";
+import { ToastMessage } from "./components/Widgets";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -93,7 +94,7 @@ function App({ themeContext }) {
                             </Switch>
                             <Sidebar />
                             <PopupView />
-                            {/* <AudioPlayer /> */}
+                            <ToastMessage />
                         </PlayerProvider>
                     </AppProvider>
                 </Router>

@@ -115,4 +115,40 @@ const VerseText = ({ verse, showInfo, navigate = true }) => {
     );
 };
 
-export { VerseInfo, VerseText };
+const ToastMessage = () => {
+    const app = useContext(AppContext);
+    const [toastMessage, setToastMessage] = useState(null);
+    const [hiding, setHiding] = useState(false);
+
+    useEffect(() => {
+        if (app.toastMessage) {
+            setToastMessage(app.toastMessage);
+            setTimeout(() => {
+                app.showToast(null);
+            }, 3000);
+        } else if (toastMessage) {
+            setHiding(true);
+            setTimeout(() => {
+                setToastMessage(null);
+                setHiding(false);
+            }, 500);
+        }
+    }, [app.toastMessage]);
+
+    // const hideMessage = e => {
+    //     app.showToast(null);
+    // };
+
+    return (
+        <div
+            className={"ToastMessage"
+                .appendWord("ShowToast", toastMessage !== null)
+                .appendWord("HideToast", hiding)}
+            // onClick={hideMessage}
+        >
+            {toastMessage}
+        </div>
+    );
+};
+
+export { VerseInfo, VerseText, ToastMessage };
