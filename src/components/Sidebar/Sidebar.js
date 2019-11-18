@@ -84,12 +84,12 @@ function Sidebar() {
                                 ))}
                         </div>
                     </div>
-                    <div id="SidebarFooter" className="SidebarSection">
+                    {/* <div id="SidebarFooter" className="SidebarSection">
                         <CommandButton
                             command="Profile"
                             showLabel={app.expandedMenu}
                         />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

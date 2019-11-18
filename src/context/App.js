@@ -5,10 +5,29 @@ import Utils from "./../services/utils";
 import firebase from "firebase";
 import { injectIntl } from "react-intl";
 
-let rc = localStorage.getItem("commands");
+const rc = localStorage.getItem("commands");
+const recentCommands = rc ? JSON.parse(rc) : [];
+const initSidebarCommands = [
+    "Index",
+    "AudioPlayer",
+    "Search",
+    "Exercise",
+    "Tafseer",
+    "Mask",
+    "Goto",
+    "Theme",
+    "Bookmarks",
+    "Copy",
+    "Share",
+    "Favorites",
+    "Profile",
+    "Settings",
+    "Help"
+];
 
 const AppState = {
     user: null,
+    toastMessage: null,
     expandedMenu: false,
     modalPopup: false,
     hifzRanges: [],
@@ -31,25 +50,10 @@ const AppState = {
     selectStart: 0,
     selectEnd: 0,
     maskStart: -1,
-    recentCommands: rc
-        ? JSON.parse(rc)
-        : [
-              "Index",
-              "AudioPlayer",
-              "Search",
-              "Exercise",
-              "Tafseer",
-              "Mask",
-              "Goto",
-              "Theme",
-              "Bookmarks",
-              "Copy",
-              "Share",
-              "Favorites",
-              //   "Profile",
-              "Settings",
-              "Help"
-          ]
+    recentCommands:
+        recentCommands.length === initSidebarCommands.length
+            ? recentCommands
+            : initSidebarCommands
 };
 
 const AppContext = React.createContext(AppState);
@@ -113,7 +117,7 @@ class AppProvider extends Component {
                 "Play",
                 // "AudioPlayer",
                 // "Settings",
-                "Profile",
+                // "Profile",
                 // "ToggleButton",
                 "Pause",
                 "Stop"
@@ -464,14 +468,21 @@ class AppProvider extends Component {
         });
     };
 
-    logTypedVerse = verseId => {
+    logTypedVerse = (verseId, words) => {
         const verseText = this._normVerseList[verseId];
         const today = new Date();
         const activityKey = Utils.dateKey(today);
         const activityCharsRef = this.activityRef.child(activityKey + "/chars");
         activityCharsRef.once("value", snapshot => {
             let chars = snapshot.val() || 0;
-            chars += verseText.replace(/\s/g, "").length;
+            if (words) {
+                chars += verseText
+                    .split(" ")
+                    .slice(0, 3)
+                    .join("").length;
+            } else {
+                chars += verseText.replace(/\s/g, "").length;
+            }
             activityCharsRef.set(chars);
         });
     };
@@ -583,7 +594,12 @@ class AppProvider extends Component {
         );
     };
 
+    showToast = toastMessage => {
+        this.setState({ toastMessage });
+    };
+
     methods = {
+        showToast: this.showToast,
         deleteHifzRange: this.deleteHifzRange,
         addHifzRange: this.addHifzRange,
         setRangeRevised: this.setRangeRevised,

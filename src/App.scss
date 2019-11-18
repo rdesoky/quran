@@ -355,3 +355,64 @@ hr {
     flex-direction: column;
     justify-content: center;
 }
+
+.RadioGroup {
+    label {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        span {
+            display: inline-block;
+        }
+        input {
+            margin: 0 10px;
+        }
+        &:hover {
+            background-color: #ffffff15;
+        }
+    }
+}
+
+.ToastMessage {
+    z-index: 1;
+    position: fixed;
+    max-width: 200px;
+    border-radius: 10px;
+    background-color: #000000a1;
+    color: yellow;
+    display: none;
+    align-items: center;
+    padding: 20px;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    border: solid 3px rgba(255, 255, 255, 0.493);
+    cursor: default;
+    &.ShowToast {
+        display: flex;
+        animation: ShowToast 0.5s;
+    }
+    &.HideToast {
+        animation: HideToast 0.5s;
+        display: flex;
+    }
+}
+
+@keyframes ShowToast {
+    from {
+        top: 100%;
+    }
+    to {
+        top: 50%;
+    }
+}
+
+@keyframes HideToast {
+    from {
+        top: 50%;
+    }
+    to {
+        top: 100%;
+        transform: translateX(-50%) translateY(0);
+    }
+}

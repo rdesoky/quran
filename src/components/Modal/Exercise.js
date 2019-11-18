@@ -39,7 +39,7 @@ const Exercise = ({}) => {
     const [missingWords, setMissingWords] = useState(0);
     const verseList = app.verseList();
     const normVerseList = app.normVerseList();
-    const [quickMode, setQuickMode] = useState(false);
+    const [quickMode, setQuickMode] = useState(0);
 
     const isNarrowLayout = () => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
@@ -141,7 +141,6 @@ const Exercise = ({}) => {
                 break;
             case Step.results:
                 //if correct answer, save number of verse letters in Firebase
-                logActivity();
                 app.setMaskStart(app.selectStart + 1, true);
                 app.setModalPopup(false);
                 break;
@@ -151,13 +150,6 @@ const Exercise = ({}) => {
                 app.setModalPopup(false); //allow selecting outside
         }
     }, [currStep]);
-
-    const logActivity = () => {
-        if (!isCorrect()) {
-            return;
-        }
-        app.logTypedVerse(verse);
-    };
 
     //monitor player to start answer upon player ends
     useEffect(() => {
@@ -336,7 +328,10 @@ const Exercise = ({}) => {
         setMissingWords(0);
         if (testAnswer(text)) {
             setTimeout(() => {
-                if (quickMode) {
+                if (quickMode > 0) {
+                    app.showToast(
+                        app.formatMessage({ id: "success_write_next" })
+                    );
                     typeNextVerse();
                     return;
                 }
@@ -382,10 +377,16 @@ const Exercise = ({}) => {
 
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
-        if (quickMode && wrongWord === -1 && answerWords.length >= 3) {
+        if (quickMode == 2 && wrongWord === -1 && answerWords.length >= 3) {
+            app.logTypedVerse(verse, 3);
             return true;
         }
-        return wrongWord === -1 && correctWords.length === answerWords.length;
+        const success =
+            wrongWord === -1 && correctWords.length === answerWords.length;
+        if (success) {
+            app.logTypedVerse(verse);
+        }
+        return success;
     };
 
     const renderTypingTitle = () => {
@@ -425,7 +426,8 @@ const Exercise = ({}) => {
     };
 
     const onUpdateQuickMode = ({ target }) => {
-        setQuickMode(target.checked);
+        //setQuickMode(target.checked);
+        setQuickMode(parseInt(target.value));
         defaultButton.focus();
     };
 
@@ -455,18 +457,49 @@ const Exercise = ({}) => {
                     >
                         {renderText()}
                     </div>
-                    <div>
-                        <label>
-                            <input
-                                type="checkbox"
-                                onChange={onUpdateQuickMode}
-                                checked={quickMode}
-                                // disabled={player.repeat == 1}
-                            />
-                            <span>
-                                <String id="quick_mode" />
-                            </span>
-                        </label>
+                    <div className="RadioGroup">
+                        <div>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="quickMode"
+                                    value={0}
+                                    checked={quickMode === 0}
+                                    onChange={onUpdateQuickMode}
+                                />
+                                <span>
+                                    <String id="quick_mode_0" />
+                                </span>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="quickMode"
+                                    value={1}
+                                    checked={quickMode === 1}
+                                    onChange={onUpdateQuickMode}
+                                />
+                                <span>
+                                    <String id="quick_mode_1" />
+                                </span>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="quickMode"
+                                    value={2}
+                                    checked={quickMode === 2}
+                                    onChange={onUpdateQuickMode}
+                                />
+                                <span>
+                                    <String id="quick_mode_2" />
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <AKeyboard

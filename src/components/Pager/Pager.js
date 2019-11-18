@@ -112,15 +112,6 @@ function Pager({ match }) {
         }
 
         switch (e.code) {
-            // case "Enter":
-            // 	if (!isTextInput && app.popup === null) {
-            // 		app.selectAya();
-            // 		app.setPopup("Tafseer");
-            // 	}
-            // 	break;
-            // case "KeyP":
-            //   player.show(player.visible === false);
-            //   break;
             case "Insert":
                 Utils.copy2Clipboard(app.getSelectedText());
                 app.pushRecentCommand("Copy");
@@ -137,17 +128,27 @@ function Pager({ match }) {
                     app.setPopup("Index");
                 }
                 break;
+            case "KeyF":
+                if (canShowPopup) {
+                    app.setPopup("Favorites");
+                }
+                break;
             case "KeyG":
                 if (canShowPopup) {
                     app.setPopup("Goto");
                 }
                 break;
-            case "KeyC":
+            case "KeyX":
                 if (canShowPopup) {
-                    app.setPopup("Commands");
+                    app.setPopup("Exercise");
                 }
                 break;
-            case "KeyF":
+            case "KeyB":
+                if (canShowPopup) {
+                    app.setPopup("Bookmarks");
+                }
+                break;
+            case "KeyS":
                 if (canShowPopup) {
                     app.setPopup("Search");
                 }
