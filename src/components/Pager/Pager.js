@@ -181,14 +181,18 @@ function Pager({ match }) {
                     }
                 }
                 break;
-            case "PageDown":
             case "ArrowLeft":
+                app.offsetPage(1);
+                break;
+            case "PageDown":
                 if (!isTextInput) {
                     pageDown(e);
                 }
                 break;
-            case "PageUp":
             case "ArrowRight":
+                app.offsetPage(-1);
+                break;
+            case "PageUp":
                 if (!isTextInput) {
                     pageUp(e);
                 }
