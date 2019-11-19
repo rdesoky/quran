@@ -100,17 +100,23 @@ const commandIcon = (command, app, player) => {
                 //             ".jpg)"
                 //     }}
                 // />
-                <img
-                    src={`${process.env.PUBLIC_URL}/images/${player.reciter}.jpg`}
-                    className={"ReciterIcon".appendWord(
-                        "blinking",
-                        player.audioState === AudioState.playing
-                    )}
-                />
+                <span>
+                    <img
+                        src={`${process.env.PUBLIC_URL}/images/${player.reciter}.jpg`}
+                        className={"ReciterIcon".appendWord(
+                            "blinking",
+                            player.audioState === AudioState.playing
+                        )}
+                    />
+                </span>
             );
 
         default:
-            return <Icon icon={getIcon(command, app)} />;
+            return (
+                <span>
+                    <Icon icon={getIcon(command, app)} />
+                </span>
+            );
     }
 };
 

@@ -67,11 +67,13 @@ export const UserImage = () => {
     }, [app.user]);
 
     return imageUrl ? (
-        <img className="UserImage" src={imageUrl} />
+        <span>
+            <img className="UserImage" src={imageUrl} />
+        </span>
     ) : (
-        <div className="UserIcon">
+        <span className="UserIcon">
             <Icon icon={faUserCircle} />
-        </div>
+        </span>
     );
 };
 

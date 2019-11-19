@@ -81,6 +81,13 @@ button {
         // .ModalContent .Title & {
         //     margin: 0 1px;
         // }
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        span {
+            line-height: 16px;
+        }
 
         flex-grow: 1;
         font-size: 15px;
@@ -192,16 +199,29 @@ hr {
 }
 
 .CommandButton {
+    display: flex;
+    // flex-direction: row;
+    justify-content: center;
+    align-items: center;
     font-size: 25px !important;
     height: 50px !important;
     min-width: 50px;
-    vertical-align: top;
     padding: 0;
-    img {
-        vertical-align: middle;
-    }
     pointer-events: fill;
-    // background-color: black;
+    span {
+        svg {
+            width: 50px;
+        }
+        img {
+            width: 40px;
+        }
+    }
+    .CommandLabel {
+        flex-grow: 1;
+    }
+    .Sidebar & {
+        justify-content: initial;
+    }
 }
 
 .NoHifz {
@@ -311,16 +331,16 @@ hr {
 }
 
 .UserIcon {
-    width: 50px;
-    height: 50px;
-    font-size: 50px;
-    margin: 10px;
-    .Sidebar & {
-        width: 25px;
-        height: 25px;
-        font-size: 25px;
-        margin: 0;
-    }
+    // width: 50px;
+    // height: 50px;
+    // // font-size: 30px !important;
+    // // margin: 10px;
+    // .Sidebar & {
+    //     // width: 25px;
+    //     // height: 25px;
+    //     // font-size: 25px;
+    //     margin: 0;
+    // }
 }
 
 .UserImage {
