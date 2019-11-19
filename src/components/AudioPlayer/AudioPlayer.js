@@ -11,6 +11,12 @@ import { CommandButton } from "./../Modal/Commands";
 import { VerseInfo } from "./../Widgets";
 
 class AudioPlayer extends Component {
+    componentDidMount() {
+        if (this.selectRepeat) {
+            this.selectRepeat.focus();
+        }
+    }
+
     onChangeRepeat = ({ currentTarget }) => {
         const repeat = currentTarget.value;
         this.props.player.setRepeat(parseInt(repeat));
@@ -33,6 +39,7 @@ class AudioPlayer extends Component {
     };
 
     popupBody;
+    selectRepeat;
 
     render() {
         const { app, player } = this.props;
@@ -66,6 +73,9 @@ class AudioPlayer extends Component {
                         <label>
                             <String id="repeat" />
                             <select
+                                ref={ref => {
+                                    this.selectRepeat = ref;
+                                }}
                                 onChange={this.onChangeRepeat}
                                 value={player.repeat}
                             >
@@ -127,7 +137,7 @@ class AudioPlayer extends Component {
                                 (col * buttonWidth + centerPadding) -
                                 buttonWidth;
                             return (
-                                <div
+                                <button
                                     reciter={reciter}
                                     key={reciter}
                                     className={
@@ -154,7 +164,7 @@ class AudioPlayer extends Component {
                                     <div>
                                         <ReciterName id={reciter} />
                                     </div>
-                                </div>
+                                </button>
                             );
                         })}
                     </div>
