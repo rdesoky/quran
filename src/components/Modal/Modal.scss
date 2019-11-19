@@ -79,7 +79,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
-        padding: 0 15px 0 50px;
+        padding: 0 3px 0 50px;
         background-color: black;
         margin: 0 -15px 0 -15px;
         border-bottom: solid 1px #444;
@@ -199,14 +199,14 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
                 font-size: 12px;
             }
             .ReciterIcon {
-                display: inline-block;
-                border-radius: 6px;
-                height: 34px;
-                width: 34px;
-                margin-bottom: -12px;
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
+                // display: inline-block;
+                // border-radius: 6px;
+                // height: 34px;
+                // width: 34px;
+                // margin-bottom: -12px;
+                // background-repeat: no-repeat;
+                // background-position: center;
+                // background-size: cover;
             }
         }
     }

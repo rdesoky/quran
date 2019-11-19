@@ -30,7 +30,7 @@
     // box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.35);
 
     button {
-        display: block;
+        // display: block;
         // font-size: 24px;
         width: 100%;
         // height: 25px;
@@ -64,8 +64,14 @@
             svg {
                 width: 50px;
             }
-            span {
+            span.CommandLabel {
                 font-size: 15px;
+            }
+            img {
+                width: 32px;
+                height: 32px;
+                margin: 8px;
+                border-radius: 16px;
             }
         }
         #RecentCommands {
