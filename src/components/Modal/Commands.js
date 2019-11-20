@@ -37,7 +37,7 @@ import {
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 
 import Utils from "../../services/utils";
-import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { UserImage } from "./User";
 

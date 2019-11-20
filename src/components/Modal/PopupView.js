@@ -11,7 +11,8 @@ import Settings from "./Settings";
 import Tafseer from "./Tafseer";
 import Favorites from "./Favorites";
 import Bookmarks from "./Bookmarks";
-import AudioPlayer from "./../../components/AudioPlayer/AudioPlayer";
+// import AudioPlayer from "./../../components/AudioPlayer/AudioPlayer";
+import { AudioSettings } from "./../../components/AudioPlayer/AudioPlayer";
 import Modal from "./Modal";
 import User from "./User";
 import Exercise from "./Exercise";
@@ -28,7 +29,7 @@ function PopupView() {
         Help,
         Settings,
         Tafseer,
-        AudioPlayer,
+        AudioPlayer: AudioSettings,
         Favorites,
         Profile: User,
         Bookmarks,
