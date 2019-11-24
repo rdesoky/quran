@@ -777,12 +777,10 @@ class AppProvider extends Component {
 
     signOut() {
         this.hifzRanges.length = this.bookmarks.length = 0;
-        firebase
-            .auth()
-            .signOut()
-            .then(() => {
-                firebase.auth().signInAnonymously();
-            });
+        return firebase.auth().signOut();
+        // .then(() => {
+        //     firebase.auth().signInAnonymously();
+        // });
     }
 
     componentDidMount() {
