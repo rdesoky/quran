@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { AppConsumer } from "./../context/App";
+import { AppContext } from "./../context/App";
 import firebase from "firebase";
 
-const Login = ({ app, onClose }) => {
+export default function Login({ onClose }) {
+    const app = useContext(AppContext);
     const { user } = app;
 
-    const finishLogin = () => {
+    const handleClose = () => {
         if (typeof onClose === "function") {
             onClose();
         }
@@ -21,10 +22,64 @@ const Login = ({ app, onClose }) => {
             firebase.auth.GithubAuthProvider.PROVIDER_ID,
             firebase.auth.EmailAuthProvider.PROVIDER_ID
         ],
-
+        autoUpgradeAnonymousUsers: true,
         callbacks: {
             // Avoid redirects after sign-in.
-            signInSuccessWithAuthResult: finishLogin
+            signInSuccessWithAuthResult: handleClose,
+            // signInFailure callback must be provided to handle merge conflicts which
+            // occur when an existing credential is linked to an anonymous user.
+            signInFailure: function(error) {
+                let anonymousUser = firebase.auth().currentUser;
+                let data = null;
+                // For merge conflicts, the error.code will be
+                // 'firebaseui/anonymous-upgrade-merge-conflict'.
+                if (
+                    error.code != "firebaseui/anonymous-upgrade-merge-conflict"
+                ) {
+                    return Promise.resolve();
+                }
+                // The credential the user tried to sign in with.
+                var cred = error.credential;
+                // If using Firebase Realtime Database. The anonymous user data has to be
+                // copied to the non-anonymous user.
+                var fbApp = firebase.app();
+                // Save anonymous user data first.
+                return fbApp
+                    .database()
+                    .ref("data/" + anonymousUser.uid)
+                    .once("value")
+                    .then(function(snapshot) {
+                        data = snapshot.val();
+                        // This will trigger onAuthStateChanged listener which
+                        // could trigger a redirect to another page.
+                        // Ensure the upgrade flow is not interrupted by that callback
+                        // and that this is given enough time to complete before
+                        // redirection.
+                        return firebase.auth().signInWithCredential(cred);
+                    })
+                    .then(function(signInResponse) {
+                        //TODO: merge data[activity,aya_marks,hifz,page_marks] into the new user data
+                        // return fbApp
+                        //     .database()
+                        //     .ref("data/" + signInResponse.user.uid)
+                        //     .set(data);
+                        return;
+                    })
+                    .then(function() {
+                        // Delete anonymnous user.
+                        return anonymousUser.delete();
+                    })
+                    .then(function() {
+                        // Clear data in case a new user signs in, and the state change
+                        // triggers.
+                        // data = null;
+                        // FirebaseUI will reset and the UI cleared when this promise
+                        // resolves.
+                        // signInSuccessWithAuthResult will not run. Successful sign-in
+                        // logic has to be run explicitly.
+                        handleClose();
+                    });
+            }
         }
     };
 
@@ -42,13 +97,11 @@ const Login = ({ app, onClose }) => {
             </div>
             {typeof onClose == "function" ? (
                 <div>
-                    <button onClick={finishLogin}>Cancel</button>
+                    <button onClick={handleClose}>Cancel</button>
                 </div>
             ) : (
                 ""
             )}
         </div>
     );
-};
-
-export default AppConsumer(Login);
+}
