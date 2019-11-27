@@ -26,6 +26,7 @@ const initSidebarCommands = [
 ];
 
 const AppState = {
+    contextPopup: false,
     user: null,
     toastMessage: null,
     expandedMenu: false,
@@ -46,6 +47,7 @@ const AppState = {
     displayMode: 0, //0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
     showMenu: false,
     popup: null,
+    popupParams: {},
     showPopup: false,
     selectStart: 0,
     selectEnd: 0,
@@ -64,6 +66,19 @@ class AppProvider extends Component {
     _verseList = [];
     _normVerseList = [];
     _suraNames = undefined;
+    _contextPopupGetter = null;
+
+    setContextPopup = (contextPopupGetter = null) => {
+        this._contextPopupGetter = contextPopupGetter;
+        this.setState({ contextPopup: contextPopupGetter !== null });
+    };
+
+    getContextPopup = () => {
+        if (this._contextPopupGetter) {
+            return this._contextPopupGetter();
+        }
+        return null;
+    };
 
     setTheme = theme => {
         this.setState({ theme });
@@ -214,12 +229,18 @@ class AppProvider extends Component {
         this.setShowMenu(!this.state.showMenu);
     };
 
-    setPopup = popup => {
+    setPopup = (popup, popupParams = {}) => {
         if (this.state.popup) {
             const newPopup = this.state.popup == popup ? null : popup;
             this.closePopup(newPopup);
         } else {
-            this.setState({ popup, showMenu: null, showPopup: true });
+            this.setState({
+                popup,
+                popupParams,
+                showMenu: null,
+                showPopup: true,
+                contextPopup: null
+            });
         }
         if (popup !== null && popup !== "Commands") {
             this.pushRecentCommand(popup);
@@ -227,7 +248,7 @@ class AppProvider extends Component {
     };
 
     closePopup = (newPopup = null) => {
-        this.setState({ showPopup: false });
+        this.setState({ showPopup: false, contextPopup: null });
         setTimeout(() => {
             this.setState({ popup: newPopup, showPopup: newPopup !== null });
             Utils.selectTopCommand();
@@ -298,7 +319,11 @@ class AppProvider extends Component {
      * Navigate to sura Index
      */
     gotoSura = index => {
-        const page = QData.sura_info[index].sp;
+        const suraInfo = QData.sura_info[index];
+        if (!suraInfo) {
+            return 0;
+        }
+        const page = suraInfo.sp;
         this.gotoPage(page);
         const ayaId = QData.ayaID(parseInt(index), 0);
         this.selectAya(ayaId);
@@ -599,6 +624,8 @@ class AppProvider extends Component {
     };
 
     methods = {
+        setContextPopup: this.setContextPopup,
+        getContextPopup: this.getContextPopup,
         showToast: this.showToast,
         deleteHifzRange: this.deleteHifzRange,
         addHifzRange: this.addHifzRange,

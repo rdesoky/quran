@@ -85,6 +85,10 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
         border-bottom: solid 1px #444;
         min-height: 50px;
         position: relative;
+        .PlayerButtons {
+            display: flex;
+        }
+
         button {
             font-size: 15px;
             min-width: 50px;

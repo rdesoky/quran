@@ -57,13 +57,7 @@ const Tafseer = ({ app, player }) => {
         <>
             <div className="Title">
                 <String id="tafseer" />
-                {app.isNarrow ? (
-                    <div>
-                        <PlayerButtons />
-                    </div>
-                ) : (
-                    ""
-                )}
+                {app.isNarrow ? <PlayerButtons /> : ""}
             </div>
             <div
                 className="PopupBody"
@@ -101,13 +95,6 @@ const TafseerView = AppConsumer(
             };
         }, [tafseer]);
 
-        const renderVerse = () => {
-            // const aya = playingAya();
-            const verseList = app.verseList();
-            if (verseList.length > verse) {
-                return verseList[verse];
-            }
-        };
         const renderTafseer = () => {
             if (tafseerData.length > verse) {
                 //validate aya exists whithin tafseer array

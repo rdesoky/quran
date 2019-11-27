@@ -17,7 +17,7 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 
-const QIndex = ({}) => {
+const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
@@ -37,7 +37,9 @@ const QIndex = ({}) => {
     };
 
     useEffect(() => {
-        typingConsole.focus();
+        if (typingConsole) {
+            typingConsole.focus();
+        }
     }, [activeTab]);
 
     const showKeyboard = e => {
@@ -52,6 +54,22 @@ const QIndex = ({}) => {
         setFilter("");
         e.stopPropagation();
     };
+
+    if (simple) {
+        return (
+            <>
+                <div className="Title"></div>
+                <div
+                    className="PopupBody"
+                    style={{
+                        height: app.appHeight - 80
+                    }}
+                >
+                    <SuraList simple={simple} />
+                </div>
+            </>
+        );
+    }
 
     return (
         <>
@@ -136,7 +154,7 @@ const QIndex = ({}) => {
     );
 };
 
-export const SuraList = memo(({ filter }) => {
+export const SuraList = memo(({ filter, simple }) => {
     const app = useContext(AppContext);
     const [actionsIndex, setActionsIndex] = useState(0);
 
@@ -145,6 +163,8 @@ export const SuraList = memo(({ filter }) => {
         const currentSura = QData.ayaIdInfo(selectStart).sura;
         setActionsIndex(currentSura);
     }, []);
+
+    const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
 
     return (
         <ul
@@ -157,12 +177,13 @@ export const SuraList = memo(({ filter }) => {
                 .fill(0)
                 .map((zero, suraIndex) => {
                     return (
-                        <SuraIndexCell
+                        <CellComponent
                             key={suraIndex}
                             sura={suraIndex}
                             filter={filter}
                             selectSura={setActionsIndex}
                             selectedSura={actionsIndex}
+                            simple={simple}
                         />
                     );
                 })}
@@ -170,8 +191,36 @@ export const SuraList = memo(({ filter }) => {
     );
 });
 
+export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
+    const app = useContext(AppContext);
+    let btn;
+    const gotoSura = e => {
+        return app.gotoSura(sura);
+    };
+
+    useEffect(() => {
+        if (btn && sura === selectedSura) {
+            btn.focus();
+        }
+    }, [selectedSura]);
+
+    return (
+        <li className="SuraIndexCell">
+            <button
+                ref={ref => {
+                    btn = ref;
+                }}
+                onClick={gotoSura}
+                className={sura == selectedSura ? "active" : ""}
+            >
+                {sura + 1 + ". " + app.suraName(sura)}
+            </button>
+        </li>
+    );
+};
+
 export const SuraIndexCell = memo(
-    ({ sura, filter, selectedSura, selectSura }) => {
+    ({ sura, filter, selectedSura, selectSura, simple }) => {
         const app = useContext(AppContext);
         const player = useContext(PlayerContext);
         const [suraName, setSuraName] = useState("");
@@ -226,16 +275,27 @@ export const SuraIndexCell = memo(
             setSuraName(app.suraNames()[sura]);
         }, [sura]);
 
+        let btn;
+
+        useEffect(() => {
+            if (btn && sura === selectedSura) {
+                btn.focus();
+            }
+        }, [selectedSura]);
+
         if (filter && -1 === suraName.indexOf(filter)) {
             return "";
         }
 
         return (
             <li className="SuraIndexCell">
-                <SuraHifzChart sura={sura} />
+                {simple ? "" : <SuraHifzChart sura={sura} />}
                 <button
                     onClick={gotoSura}
                     className={sura == selectedSura ? "active" : ""}
+                    ref={ref => {
+                        btn = ref;
+                    }}
                 >
                     {sura + 1 + ". " + suraName}
                 </button>

@@ -3,6 +3,7 @@
     "sura": "سورة",
     "sura_name": "سورة {sura}",
     "part": "جزء",
+    "part_num": "جزء: {num}",
     "page": "صفحة",
     "pg": "ص",
     "pg_num": "ص:{num}",
