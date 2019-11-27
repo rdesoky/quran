@@ -154,6 +154,58 @@ const QIndex = ({ simple }) => {
     );
 };
 
+export const PartCell = ({ part, selected }) => {
+    const app = useContext(AppContext);
+    let btn;
+    const gotoPart = e => {
+        app.gotoPart(part);
+    };
+    useEffect(() => {
+        if (selected === part && btn) {
+            btn.focus();
+        }
+    }, [selected]);
+    return (
+        <li>
+            <button
+                onClick={gotoPart}
+                ref={ref => {
+                    btn = ref;
+                }}
+            >
+                <String id="part_num" values={{ num: part + 1 }} />
+            </button>
+        </li>
+    );
+};
+
+export const PartsList = ({ part }) => {
+    const [listWidth, setListWidth] = useState(0);
+    let list;
+    useEffect(() => {
+        if (list) {
+            setListWidth(list.clientWidth);
+        }
+    }, []);
+    return (
+        <ul
+            className="SpreadSheet"
+            ref={ref => {
+                list = ref;
+            }}
+            style={{
+                columnCount: Math.floor(listWidth / 80)
+            }}
+        >
+            {Array(30)
+                .fill(0)
+                .map((zero, index) => (
+                    <PartCell part={index} selected={part} key={index} />
+                ))}
+        </ul>
+    );
+};
+
 export const SuraList = memo(({ filter, simple }) => {
     const app = useContext(AppContext);
     const [actionsIndex, setActionsIndex] = useState(0);
