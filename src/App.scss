@@ -443,6 +443,7 @@ hr {
 
 .IconButton {
     position: relative;
+    font-weight: bold;
     > * {
         position: absolute;
         top: 50%;
@@ -469,6 +470,7 @@ hr {
         background-color: #444;
         transform: rotate(45deg) translateY(50%);
         // transform: translateX(-50%);
+        animation: FadeIn 0.5s;
     }
 
     .ContextPopup {
@@ -480,6 +482,16 @@ hr {
         max-width: 400px;
         overflow-y: auto;
         box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
-        padding: 10px 15px 10px 10px;
+        padding: 15px 10px 10px;
+        animation: FadeIn 0.4s;
+    }
+}
+
+@keyframes FadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }

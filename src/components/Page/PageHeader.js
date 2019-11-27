@@ -15,7 +15,7 @@ import {
     faFile
 } from "@fortawesome/free-solid-svg-icons";
 import { CircleProgress } from "../Widgets";
-import { SuraList } from "../Modal/QIndex";
+import { SuraList, PartsList } from "../Modal/QIndex";
 
 const PageHeader = ({
     index: pageIndex,
@@ -25,64 +25,32 @@ const PageHeader = ({
     onIncrement,
     onDecrement
 }) => {
-    // const showIndexPopup = e => {
-    // 	app.setPopup("QIndex");
-    // };
-    // const showFindPopup = e => {
-    // 	app.setPopup("Find");
-    // };
     const app = useContext(AppContext);
-
-    // const onSelectSura = ({ target }) => {
-    //     app.hideMask();
-    //     const suraIndex = parseInt(target.value);
-    //     app.gotoSura(suraIndex);
-    //     Utils.selectTopCommand();
-    // };
-
-    // const onSelectPart = ({ target }) => {
-    //     app.hideMask();
-    //     const partIndex = target.value;
-    //     app.gotoPart(partIndex);
-    //     Utils.selectTopCommand();
-    // };
+    const partIndex = QData.pagePart(pageIndex + 1) - 1;
+    const selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         app.setContextPopup(() => {
             return {
                 target,
-                component: (
-                    <ul className="SpreadSheet">
-                        {Array(30)
-                            .fill(0)
-                            .map((zero, index) => (
-                                <li key={index}>
-                                    <button
-                                        onClick={e => {
-                                            app.gotoPart(index);
-                                        }}
-                                    >
-                                        <String
-                                            id="part_num"
-                                            values={{ num: index + 1 }}
-                                        />
-                                    </button>
-                                </li>
-                            ))}
-                    </ul>
-                )
+                component: <PartsList part={partIndex} />
             };
         });
     };
 
     const showPageContextPopup = ({ target }) => {
+        const openGoto = e => {
+            app.setPopup("Goto");
+        };
         app.setContextPopup(() => {
             return {
                 target,
                 component: (
                     <ul className="SpreadSheet">
                         <li>
-                            <button>Goto Page</button>
+                            <button onClick={openGoto}>
+                                <String id="goto" />
+                            </button>
                         </li>
                         <li>
                             <button>Add To Hifz</button>
@@ -110,8 +78,6 @@ const PageHeader = ({
             ? "flex-end"
             : "flex-start";
 
-    let partIndex = QData.pagePart(pageIndex + 1) - 1;
-    let selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
     // let isActive = app.pagesCount === 1 ? true : app.getActiveSide() === order;
 
     return (
