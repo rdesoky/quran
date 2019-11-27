@@ -151,4 +151,101 @@ const ToastMessage = () => {
     );
 };
 
-export { VerseInfo, VerseText, ToastMessage };
+const CircleProgress = ({
+    sqSize = 25,
+    strokeWidth = 2,
+    progress = 1,
+    target = 5,
+    display = null,
+    onClick = e => false
+}) => {
+    const radius = (sqSize - strokeWidth) / 2;
+    // Enclose cicle in a circumscribing square
+    // const viewBox = `0 0 ${sqSize} ${sqSize}`;
+    // Arc length at 100% coverage is the circle circumference
+    const dashArray = radius * Math.PI * 2;
+    // Scale 100% coverage overlay with the actual percent
+    const percentage = progress / target;
+    const dashOffset = dashArray - dashArray * percentage;
+
+    return (
+        <svg
+            width={sqSize}
+            height={sqSize}
+            viewBox={`0 0 ${sqSize} ${sqSize}`}
+            onClick={onClick}
+        >
+            <circle
+                className="circle-background"
+                cx={sqSize / 2}
+                cy={sqSize / 2}
+                r={radius}
+                strokeWidth={`${strokeWidth}px`}
+            />
+            <circle
+                className="circle-progress"
+                cx={sqSize / 2}
+                cy={sqSize / 2}
+                r={radius}
+                strokeWidth={`${strokeWidth}px`}
+                // Start progress marker at 12 O'Clock
+                transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
+                style={{
+                    strokeDasharray: dashArray,
+                    strokeDashoffset: dashOffset
+                }}
+            />
+            <text
+                className="circle-text"
+                x="50%"
+                y="50%"
+                dy=".3em"
+                textAnchor="middle"
+            >
+                {`${display || progress}`}
+            </text>
+        </svg>
+    );
+};
+
+const ContextPopup = ({}) => {
+    const app = useContext(AppContext);
+    const closePopup = e => {
+        app.setContextPopup(null);
+    };
+    useEffect(() => {
+        app.setContextPopup(null);
+    }, [app.appWidth]);
+    // const stopPropagation = e => {
+    //     e.stopPropagation();
+    // };
+    if (app.contextPopup) {
+        const { target, component } = app.getContextPopup();
+        const rect = target.getBoundingClientRect();
+        const left = rect.left + rect.width / 2;
+        return (
+            <div className="ContextPopupBlocker" onClick={closePopup}>
+                <div
+                    className="ContextPopup"
+                    style={{
+                        top: rect.bottom + 15,
+                        left: left,
+                        maxHeight: app.appHeight - rect.bottom - 40
+                    }}
+                >
+                    {component}
+                </div>
+                <div
+                    className="PopupPointer"
+                    style={{
+                        top: rect.bottom,
+                        left: left
+                    }}
+                ></div>
+            </div>
+        );
+    }
+    return null;
+};
+
+export { VerseInfo, VerseText, ToastMessage, CircleProgress, ContextPopup };

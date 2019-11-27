@@ -202,10 +202,15 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 direction: rtl;
             }
 
-            position: relative;
-            text-align: center;
+            svg {
+                vertical-align: middle;
+                cursor: default;
+            }
+
+            // position: relative;
+            // text-align: center;
             > * {
-                margin: 0 1px;
+                margin: 0 4px;
             }
             button {
                 padding: 0 10px;

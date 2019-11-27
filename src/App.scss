@@ -440,3 +440,46 @@ hr {
         transform: translateX(-50%) translateY(0);
     }
 }
+
+.IconButton {
+    position: relative;
+    > * {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+    svg {
+        font-size: 25px;
+        opacity: 0.3;
+    }
+}
+
+.ContextPopupBlocker {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    .PopupPointer {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #444;
+        transform: rotate(45deg) translateY(50%);
+        // transform: translateX(-50%);
+    }
+
+    .ContextPopup {
+        position: absolute;
+        color: white;
+        background-color: #444;
+        transform: translateX(-50%);
+        // min-width: 200px;
+        max-width: 400px;
+        overflow-y: auto;
+        box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
+        padding: 10px 15px 10px 10px;
+    }
+}

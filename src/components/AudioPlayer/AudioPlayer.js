@@ -204,10 +204,10 @@ const PlayerButtons = ({ showReciter, showLabels }) => {
         );
 
     return (
-        <>
+        <div className="PlayerButtons">
             {reciterButton}
             {playButton} {stopBtn}
-        </>
+        </div>
     );
 };
 

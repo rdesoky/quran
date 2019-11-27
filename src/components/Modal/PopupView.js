@@ -40,13 +40,13 @@ function PopupView() {
         app.closePopup();
     };
 
-    const { popup, showPopup } = app;
+    const { popup, showPopup, popupParams } = app;
     const Component = componentMap[popup];
 
     if (Component !== undefined) {
         return (
             <Modal onClose={onClose} show={showPopup} name={popup}>
-                <Component />
+                <Component {...popupParams} />
             </Modal>
         );
     }
