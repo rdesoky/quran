@@ -248,7 +248,7 @@ export const MessageBox = () => {
         return (
             <div className="MessageBox">
                 <div className="MessageBoxTitle">{msgBoxInfo.title}</div>
-                <button class="CloseButton" onClick={onClose}>
+                <button className="CloseButton" onClick={onClose}>
                     <Icon icon={faTimes} />
                 </button>
                 <div className="MessageBoxContent">{msgBoxInfo.content}</div>
