@@ -294,15 +294,18 @@ export const SuraIndexCell = memo(
         };
         const addSuraToHifz = e => {
             //TODO: check if sura has old ranges, then confirmation is required
-            if (!window.confirm("Are you sure?")) {
-                return;
-            }
-            const suraInfo = QData.sura_info[sura];
-            app.addHifzRange(
-                suraInfo.sp - 1,
-                sura,
-                suraInfo.ep - suraInfo.sp + 1
-            );
+            app.setMessageBox({
+                title: <String id="add_hifz" />,
+                content: <String id="are_you_sure" />,
+                onYes: () => {
+                    const suraInfo = QData.sura_info[sura];
+                    app.addHifzRange(
+                        suraInfo.sp - 1,
+                        sura,
+                        suraInfo.ep - suraInfo.sp + 1
+                    );
+                }
+            });
         };
 
         const playSura = e => {
