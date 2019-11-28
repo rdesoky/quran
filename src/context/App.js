@@ -68,7 +68,7 @@ class AppProvider extends Component {
     _normVerseList = [];
     _suraNames = undefined;
     _contextPopupInfo = null;
-    _messageBoxInfo = null;
+    _messageBoxInfo = [];
 
     setContextPopup = (contextPopupInfo = null) => {
         this._contextPopupInfo = contextPopupInfo;
@@ -80,12 +80,17 @@ class AppProvider extends Component {
     };
 
     setMessageBox = (msgBoxInfo = null) => {
-        this._messageBoxInfo = msgBoxInfo;
-        this.setState({ messageBox: msgBoxInfo !== null });
+        if(msgBoxInfo){
+            this._messageBoxInfo.push(msgBoxInfo);    
+        }else{
+            this._messageBoxInfo.pop();
+        }
+        this.setState({ messageBox: this._messageBoxInfo.length>0 });
     };
 
     getMessageBox = () => {
-        return this._messageBoxInfo;
+        const msgsCount = this._messageBoxInfo.length; 
+        return msgsCount ? this._messageBoxInfo[msgsCount-1]:null;
     };
 
     setTheme = theme => {
