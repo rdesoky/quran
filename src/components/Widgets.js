@@ -208,6 +208,60 @@ const CircleProgress = ({
     );
 };
 
+export const MessageBox = () => {
+    const app = useContext(AppContext);
+
+    const msgBoxInfo = app.getMessageBox();
+
+    const onClose = e => {
+        app.setMessageBox(null);
+    };
+
+    const onYes = e => {
+        if (msgBoxInfo.onYes) {
+            setTimeout(() => {
+                msgBoxInfo.onYes();
+            });
+        }
+        onClose(e);
+    };
+
+    const onNo = e => {
+        if (msgBoxInfo.onYes) {
+            msgBoxInfo.onNo();
+        }
+        onClose(e);
+    };
+
+    if (msgBoxInfo !== null) {
+        return (
+            <div className="MessageBox">
+                {msgBoxInfo.title ? (
+                    <div className="MessageBoxTitle">{msgBoxInfo.title}</div>
+                ) : null}
+                <div className="MessageBoxContent">{msgBoxInfo.content}</div>
+                <div className="ButtonsBar">
+                    {msgBoxInfo.onYes ? (
+                        <button onClick={onYes}>
+                            <String id="yes" />
+                        </button>
+                    ) : null}
+                    {msgBoxInfo.onNo ? (
+                        <button onClick={onNo}>
+                            <String id="no" />
+                        </button>
+                    ) : (
+                        <button onClick={onClose}>
+                            <String id="close" />
+                        </button>
+                    )}
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
+
 const ContextPopup = ({}) => {
     const app = useContext(AppContext);
     const closePopup = e => {
@@ -220,7 +274,7 @@ const ContextPopup = ({}) => {
     //     e.stopPropagation();
     // };
     if (app.contextPopup) {
-        const { target, component } = app.getContextPopup();
+        const { target, content } = app.getContextPopup();
         const rect = target.getBoundingClientRect();
         const left = rect.left + rect.width / 2;
         return (
@@ -233,7 +287,7 @@ const ContextPopup = ({}) => {
                         maxHeight: app.appHeight - rect.bottom - 40
                     }}
                 >
-                    {component}
+                    {content}
                 </div>
                 <div
                     className="PopupPointer"
