@@ -320,7 +320,10 @@ export const ContextPopup = ({}) => {
                             ? app.appHeight - targetRect.top + 15
                             : undefined,
                         left: left,
-                        maxHeight: app.appHeight - targetRect.bottom - 40
+                        maxHeight:
+                            app.appHeight -
+                            (isSouth ? targetRect.bottom : targetRect.top) -
+                            40
                     }}
                 >
                     {content}
