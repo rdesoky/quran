@@ -400,11 +400,11 @@ hr {
 }
 
 .ToastMessage {
-    z-index: 1;
+    z-index: 4;
     position: fixed;
     max-width: 200px;
     border-radius: 10px;
-    background-color: #000000a1;
+    background-color: #000000c2;
     color: yellow;
     display: none;
     align-items: center;
@@ -414,6 +414,7 @@ hr {
     transform: translateY(-50%) translateX(-50%);
     border: solid 3px rgba(255, 255, 255, 0.493);
     cursor: default;
+    text-align: center;
     &.ShowToast {
         display: flex;
         animation: ShowToast 0.5s;

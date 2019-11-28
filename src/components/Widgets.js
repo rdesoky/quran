@@ -282,6 +282,9 @@ export const ContextPopup = ({}) => {
     if (app.contextPopup) {
         const { target, content } = app.getContextPopup();
         const rect = target.getBoundingClientRect();
+        if (!rect.width) {
+            return null;
+        }
         const left = rect.left + rect.width / 2;
         const isSouth = app.appHeight - rect.bottom > rect.top;
         return (
