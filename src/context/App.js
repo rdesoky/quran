@@ -26,6 +26,7 @@ const initSidebarCommands = [
 ];
 
 const AppState = {
+    messageBox: false,
     contextPopup: false,
     user: null,
     toastMessage: null,
@@ -66,18 +67,25 @@ class AppProvider extends Component {
     _verseList = [];
     _normVerseList = [];
     _suraNames = undefined;
-    _contextPopupGetter = null;
+    _contextPopupInfo = null;
+    _messageBoxInfo = null;
 
-    setContextPopup = (contextPopupGetter = null) => {
-        this._contextPopupGetter = contextPopupGetter;
-        this.setState({ contextPopup: contextPopupGetter !== null });
+    setContextPopup = (contextPopupInfo = null) => {
+        this._contextPopupInfo = contextPopupInfo;
+        this.setState({ contextPopup: contextPopupInfo !== null });
     };
 
     getContextPopup = () => {
-        if (this._contextPopupGetter) {
-            return this._contextPopupGetter();
-        }
-        return null;
+        return this._contextPopupInfo;
+    };
+
+    setMessageBox = (msgBoxInfo = null) => {
+        this._messageBoxInfo = msgBoxInfo;
+        this.setState({ messageBox: msgBoxInfo !== null });
+    };
+
+    getMessageBox = () => {
+        return this._messageBoxInfo;
     };
 
     setTheme = theme => {
@@ -624,6 +632,8 @@ class AppProvider extends Component {
     };
 
     methods = {
+        setMessageBox: this.setMessageBox,
+        getMessageBox: this.getMessageBox,
         setContextPopup: this.setContextPopup,
         getContextPopup: this.getContextPopup,
         showToast: this.showToast,

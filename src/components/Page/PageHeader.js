@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CircleProgress } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
+import { AddHifz } from "../Modal/Favorites";
 
 const PageHeader = ({
     index: pageIndex,
@@ -30,11 +31,9 @@ const PageHeader = ({
     const selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
-        app.setContextPopup(() => {
-            return {
-                target,
-                component: <PartsList part={partIndex} />
-            };
+        app.setContextPopup({
+            target,
+            content: <PartsList part={partIndex} />
         });
     };
 
@@ -42,31 +41,35 @@ const PageHeader = ({
         const openGoto = e => {
             app.setPopup("Goto");
         };
-        app.setContextPopup(() => {
-            return {
-                target,
-                component: (
-                    <ul className="SpreadSheet">
-                        <li>
-                            <button onClick={openGoto}>
-                                <String id="goto" />
-                            </button>
-                        </li>
-                        <li>
-                            <button>Add To Hifz</button>
-                        </li>
-                    </ul>
-                )
-            };
+        const addToHifz = e => {
+            app.setMessageBox({
+                title: <String id="update_hifz" />,
+                content: <AddHifz page={pageIndex} />
+            });
+        };
+        app.setContextPopup({
+            target,
+            content: (
+                <ul className="SpreadSheet">
+                    <li>
+                        <button onClick={openGoto}>
+                            <String id="goto" />
+                        </button>
+                    </li>
+                    <li>
+                        <button onClick={addToHifz}>
+                            <String id="update_hifz" />
+                        </button>
+                    </li>
+                </ul>
+            )
         });
     };
 
     const showSuraContextPopup = ({ target }) => {
-        app.setContextPopup(() => {
-            return {
-                target,
-                component: <SuraList simple={true} />
-            };
+        app.setContextPopup({
+            target,
+            content: <SuraList simple={true} />
         });
     };
 

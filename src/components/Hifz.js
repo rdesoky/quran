@@ -144,9 +144,12 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     const setRangeRevised = () => {
-        if (window.confirm("Are you sure?")) {
-            app.setRangeRevised(range);
-        }
+        app.setMessageBox({
+            onYes: () => {
+                app.setRangeRevised(range);
+            },
+            content: <String id="are_you_sure" />
+        });
     };
 
     const addCurrentPage = e => {
@@ -175,9 +178,12 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     const deleteHifzRange = e => {
-        if (window.confirm("Are you sure?")) {
-            app.deleteHifzRange(range);
-        }
+        app.setMessageBox({
+            onYes: () => {
+                app.deleteHifzRange(range);
+            },
+            content: <String id="are_you_sure" />
+        });
     };
 
     if (filter && suraName.indexOf(filter) === -1) {

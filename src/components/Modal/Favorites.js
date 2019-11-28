@@ -7,7 +7,40 @@ import { ActivityChart } from "../Hifz";
 import { faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-const Favorites = ({ app }) => {
+export const AddHifz = ({ page }) => {
+    const app = useContext(AppContext);
+    const suras = QData.pageSuras(page);
+    return (
+        <ul className="FlowingList">
+            {suras.map(sura => {
+                const hifzRange = app.hifzRanges.find(r => {
+                    return (
+                        r.sura === sura &&
+                        page >= r.startPage &&
+                        page <= r.endPage
+                    );
+                });
+                return (
+                    <HifzRange
+                        range={
+                            hifzRange || {
+                                sura,
+                                startPage: page,
+                                endPage: page,
+                                pages: 1
+                            }
+                        }
+                        key={page.toString() + "-" + sura.toString()}
+                        showActions={true}
+                    />
+                );
+            })}
+        </ul>
+    );
+};
+
+const Favorites = () => {
+    const app = useContext(AppContext);
     const [activeTab, selectTab] = useState("add");
     const pageIndex = app.getCurrentPageIndex();
     const suras = QData.pageSuras(pageIndex);
@@ -15,37 +48,7 @@ const Favorites = ({ app }) => {
     const renderBody = () => {
         switch (activeTab) {
             case "add":
-                return (
-                    <ul className="FlowingList">
-                        {suras.map(sura => {
-                            const hifzRange = app.hifzRanges.find(r => {
-                                return (
-                                    r.sura === sura &&
-                                    pageIndex >= r.startPage &&
-                                    pageIndex <= r.endPage
-                                );
-                            });
-                            return (
-                                <HifzRange
-                                    range={
-                                        hifzRange || {
-                                            sura,
-                                            startPage: pageIndex,
-                                            endPage: pageIndex,
-                                            pages: 1
-                                        }
-                                    }
-                                    key={
-                                        pageIndex.toString() +
-                                        "-" +
-                                        sura.toString()
-                                    }
-                                    showActions={true}
-                                />
-                            );
-                        })}
-                    </ul>
-                );
+                return <AddHifz page={pageIndex} />;
             case "update":
                 return <HifzRanges />;
             case "graph":
@@ -99,4 +102,4 @@ const Favorites = ({ app }) => {
     );
 };
 
-export default AppConsumer(Favorites);
+export default Favorites;
