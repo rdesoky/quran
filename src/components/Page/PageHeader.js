@@ -44,7 +44,7 @@ const PageHeader = ({
         const addToHifz = e => {
             app.setMessageBox({
                 title: <String id="update_hifz" />,
-                content: <AddHifz page={pageIndex} />
+                content: <AddHifz />
             });
         };
         app.setContextPopup({

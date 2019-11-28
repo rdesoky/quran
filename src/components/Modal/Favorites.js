@@ -9,15 +9,17 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 export const AddHifz = ({ page }) => {
     const app = useContext(AppContext);
-    const suras = QData.pageSuras(page);
+    const pageIndex = page === undefined ? app.match.params.page : page;
+    const suras = QData.pageSuras(pageIndex);
+
     return (
         <ul className="FlowingList">
             {suras.map(sura => {
                 const hifzRange = app.hifzRanges.find(r => {
                     return (
                         r.sura === sura &&
-                        page >= r.startPage &&
-                        page <= r.endPage
+                        pageIndex >= r.startPage &&
+                        pageIndex <= r.endPage
                     );
                 });
                 return (
@@ -25,12 +27,12 @@ export const AddHifz = ({ page }) => {
                         range={
                             hifzRange || {
                                 sura,
-                                startPage: page,
-                                endPage: page,
+                                startPage: pageIndex,
+                                endPage: pageIndex,
                                 pages: 1
                             }
                         }
-                        key={page.toString() + "-" + sura.toString()}
+                        key={pageIndex.toString() + "-" + sura.toString()}
                         showActions={true}
                     />
                 );
