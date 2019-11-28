@@ -14,7 +14,7 @@ import {
     faBookOpen,
     faFile
 } from "@fortawesome/free-solid-svg-icons";
-import { CircleProgress } from "../Widgets";
+import { CircleProgress, VerseContextButtons } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
 import { AddHifz } from "../Modal/Favorites";
 
@@ -73,6 +73,13 @@ const PageHeader = ({
         });
     };
 
+    const showVerseContextPopup = ({ target }) => {
+        app.setContextPopup({
+            target,
+            content: <VerseContextButtons verse={app.selectStart} />
+        });
+    };
+
     const suraIndex = QData.pageSura(pageIndex + 1);
     let justifyContent =
         app.pagesCount === 1
@@ -91,6 +98,7 @@ const PageHeader = ({
                     progress={pageIndex + 1}
                     display={partIndex + 1}
                     onClick={showPartContextPopup}
+                    strokeWidth={3}
                 />
                 <button onClick={showSuraContextPopup}>
                     {app.suraName(suraIndex)}
@@ -114,6 +122,7 @@ const PageHeader = ({
                     <button
                         onClick={e => {
                             app.gotoAya(app.selectStart);
+                            showVerseContextPopup(e);
                         }}
                         className="SelectionButton"
                     >

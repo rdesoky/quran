@@ -74,6 +74,7 @@ const getIcon = (commandId, app) => {
         case "ToggleButton":
             return app.showMenu ? faAngleDoubleUp : faAngleDoubleDown;
         case "Bookmarks":
+        case "Bookmark":
             return app.isBookmarked() ? faBookmark : farBookmark;
         default:
             return CommandIcons[commandId];
@@ -217,6 +218,9 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
             case "Fullscreen":
                 Utils.requestFullScreen();
                 break;
+            case "Bookmark":
+                app.toggleBookmark();
+                return;
             case "Bookmarks":
                 if (app.popup === "Exercise") {
                     app.toggleBookmark();
@@ -266,7 +270,11 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
             id={id}
             onClick={e => {
                 runCommand(command);
-                e.stopPropagation();
+                switch (command) {
+                    case "Commands":
+                        e.stopPropagation();
+                        break;
+                }
             }}
             style={style}
             disabled={isDisabled(command)}

@@ -5,6 +5,7 @@ import QData from "../../services/QData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
+import { VerseContextButtons } from "../Widgets";
 
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const app = useContext(AppContext);
@@ -71,8 +72,14 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
             if (shiftKey || ctrlKey) {
                 app.extendSelection(aya_id);
             } else {
-                if (app.selectStart === aya_id && app.popup === null) {
-                    app.toggleShowMenu();
+                if (aya_id.between(app.selectStart, app.selectEnd)) {
+                    app.setContextPopup({
+                        target: e.target,
+                        content: <VerseContextButtons verse={aya_id} />
+                    });
+                    // if (app.popup === null) {
+                    //     app.toggleShowMenu();
+                    // }
                     e.stopPropagation();
                 } else {
                     app.selectAya(aya_id);
