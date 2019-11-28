@@ -273,31 +273,54 @@ export const ContextPopup = ({}) => {
     const closePopup = e => {
         app.setContextPopup(null);
     };
+    let popup;
+
     useEffect(() => {
         app.setContextPopup(null);
     }, [app.appWidth]);
+
+    useEffect(() => {
+        if (popup) {
+            const popupRect = popup.getBoundingClientRect();
+            if (popupRect.left < 0) {
+                popup.style.left = popupRect.width / 2 + "px";
+            } else if (popupRect.right > app.appWidth) {
+                let shift = popupRect.right - app.appWidth;
+                if (shift > popupRect.left) {
+                    shift = popupRect.left;
+                }
+                popup.style.left =
+                    (popupRect.width / 2 + popupRect.left - shift).toString() +
+                    "px";
+            }
+        }
+    }, [app.contextPopup]);
+
     // const stopPropagation = e => {
     //     e.stopPropagation();
     // };
     if (app.contextPopup) {
         const { target, content } = app.getContextPopup();
-        const rect = target.getBoundingClientRect();
-        if (!rect.width) {
+        const targetRect = target.getBoundingClientRect();
+        if (!targetRect.width) {
             return null;
         }
-        const left = rect.left + rect.width / 2;
-        const isSouth = app.appHeight - rect.bottom > rect.top;
+        const left = targetRect.left + targetRect.width / 2;
+        const isSouth = app.appHeight - targetRect.bottom > targetRect.top;
         return (
             <div className="ContextPopupBlocker" onClick={closePopup}>
                 <div
                     className="ContextPopup"
+                    ref={ref => {
+                        popup = ref;
+                    }}
                     style={{
-                        top: isSouth ? rect.bottom + 15 : undefined,
+                        top: isSouth ? targetRect.bottom + 15 : undefined,
                         bottom: !isSouth
-                            ? app.appHeight - rect.top + 15
+                            ? app.appHeight - targetRect.top + 15
                             : undefined,
                         left: left,
-                        maxHeight: app.appHeight - rect.bottom - 40
+                        maxHeight: app.appHeight - targetRect.bottom - 40
                     }}
                 >
                     {content}
@@ -308,8 +331,10 @@ export const ContextPopup = ({}) => {
                         !isSouth
                     )}
                     style={{
-                        top: isSouth ? rect.bottom : undefined,
-                        bottom: !isSouth ? app.appHeight - rect.top : undefined,
+                        top: isSouth ? targetRect.bottom : undefined,
+                        bottom: !isSouth
+                            ? app.appHeight - targetRect.top
+                            : undefined,
                         left: left
                     }}
                 ></div>
@@ -327,8 +352,26 @@ export const VerseContextButtons = ({ verse }) => {
             <CommandButton command="Bookmark" />
             {player.audioState === AudioState.stopped ? (
                 <CommandButton command="Play" />
-            ) : null}
+            ) : (
+                <CommandButton command="Stop" />
+            )}
             <CommandButton command="Copy" />
+        </div>
+    );
+};
+
+export const PageContextButtons = ({ page }) => {
+    const player = useContext(PlayerContext);
+    return (
+        <div className="IconsBar">
+            <CommandButton command="Mask" />
+            <CommandButton command="Goto" />
+            {player.audioState === AudioState.stopped ? (
+                <CommandButton command="Play" />
+            ) : (
+                <CommandButton command="Stop" />
+            )}
+            <CommandButton command="Favorites" />
         </div>
     );
 };

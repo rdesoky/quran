@@ -40,6 +40,7 @@ import Utils from "../../services/utils";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { UserImage } from "./User";
+import { AddHifz } from "./Favorites";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -221,6 +222,12 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
             case "Bookmark":
                 app.toggleBookmark();
                 return;
+            case "Favorites":
+                app.setMessageBox({
+                    title: <String id="update_hifz" />,
+                    content: <AddHifz />
+                });
+                break;
             case "Bookmarks":
                 if (app.popup === "Exercise") {
                     app.toggleBookmark();
