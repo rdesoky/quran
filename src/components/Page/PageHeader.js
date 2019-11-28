@@ -6,15 +6,15 @@ import Utils from "../../services/utils";
 import { PlayerConsumer, AudioState } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faAngleRight,
-    faAngleLeft,
     faAngleDown,
     faAngleUp,
-    faBoxOpen,
-    faBookOpen,
-    faFile
+    faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
-import { CircleProgress, VerseContextButtons } from "../Widgets";
+import {
+    CircleProgress,
+    VerseContextButtons,
+    PageContextButtons
+} from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
 import { AddHifz } from "../Modal/Favorites";
 
@@ -49,20 +49,7 @@ const PageHeader = ({
         };
         app.setContextPopup({
             target,
-            content: (
-                <ul className="SpreadSheet">
-                    <li>
-                        <button onClick={openGoto}>
-                            <String id="goto" />
-                        </button>
-                    </li>
-                    <li>
-                        <button onClick={addToHifz}>
-                            <String id="update_hifz" />
-                        </button>
-                    </li>
-                </ul>
-            )
+            content: <PageContextButtons page={pageIndex} />
         });
     };
 
