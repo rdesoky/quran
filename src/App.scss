@@ -12,509 +12,520 @@ $fairHifzBg: rgba(189, 145, 0, 0.2);
 $fairHifzText: #ffd900;
 
 *:focus {
-    // outline: solid 2px rgb(61, 145, 255);
+	// outline: solid 2px rgb(61, 145, 255);
 }
 
 .App {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    /* text-align: center; */
-    background-color: $appBgColor;
-    direction: rtl;
-    &.DarkTheme {
-        background-color: $appBgColorDk;
-    }
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	/* text-align: center; */
+	background-color: $appBgColor;
+	direction: rtl;
+	&.DarkTheme {
+		background-color: $appBgColorDk;
+	}
 }
 
 .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 40vmin;
-    pointer-events: none;
+	animation: App-logo-spin infinite 20s linear;
+	height: 40vmin;
+	pointer-events: none;
 }
 
 .App-header {
-    background-color: $appHeaderBgColor;
-    // background-color: rgba(0, 0, 0, 0.6);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+	background-color: $appHeaderBgColor;
+	// background-color: rgba(0, 0, 0, 0.6);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
 }
 
 .App-link {
-    color: #61dafb;
+	color: #61dafb;
 }
 
 button {
-    transition: background-color 0.3s, top 0.5s;
-    border: none;
-    border-width: 0;
-    background-color: transparent;
-    color: #ddd;
-    pointer-events: all;
-    text-align: center;
-    &:hover {
-        color: white !important;
-        background: #666;
-    }
+	transition: background-color 0.3s, top 0.5s;
+	border: none;
+	border-width: 0;
+	background-color: transparent;
+	color: #ddd;
+	pointer-events: all;
+	text-align: center;
+	&:hover {
+		color: white !important;
+		background: #666;
+	}
 
-    * {
-        pointer-events: none;
-    }
+	* {
+		pointer-events: none;
+	}
 }
 
 .ButtonsBar {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    align-items: stretch;
-    padding: 5px 4px;
-    flex-grow: 1;
-    min-height: 40px;
-    button {
-        margin: 0 2px;
-        padding: 0;
-        border-radius: 6px;
-        // .ModalContent .Title & {
-        //     margin: 0 1px;
-        // }
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        span {
-            line-height: 16px;
-        }
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: stretch;
+	padding: 5px 4px;
+	flex-grow: 1;
+	min-height: 40px;
+	button {
+		margin: 0 2px;
+		padding: 0;
+		border-radius: 6px;
+		// .ModalContent .Title & {
+		//     margin: 0 1px;
+		// }
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		span {
+			line-height: 16px;
+		}
 
-        flex-grow: 1;
-        font-size: 15px;
-        background: #444;
-        &:hover {
-            color: white;
-            background: #666;
-        }
-    }
+		flex-grow: 1;
+		font-size: 15px;
+		background: #444;
+		&:hover {
+			color: white;
+			background: #666;
+		}
+	}
 }
 
 .ActionsBar {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-    > span {
-        line-height: 30px;
-        padding: 0 3px 0 0;
-        [dir="rtl"] & {
-            padding: 0 0 0 3px;
-        }
-        &:first-child::after {
-            content: ":";
-        }
-    }
-    button {
-        li & {
-            background-color: rgba(255, 255, 255, 0.2);
-            width: inherit;
-            margin: 0 2px 2px 0;
-        }
-        background-color: #444;
-    }
+	display: flex;
+	justify-content: flex-start;
+	align-items: stretch;
+	> span {
+		line-height: 30px;
+		padding: 0 3px 0 0;
+		[dir="rtl"] & {
+			padding: 0 0 0 3px;
+		}
+		&:first-child::after {
+			content: ":";
+		}
+	}
+	button {
+		li & {
+			background-color: rgba(255, 255, 255, 0.2);
+			width: inherit;
+			margin: 0 2px 2px 0;
+		}
+		background-color: #444;
+	}
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 hr {
-    border-style: solid;
-    border-width: 1px 0;
-    border-color: #222 #888 #888 #222;
+	border-style: solid;
+	border-width: 1px 0;
+	border-color: #222 #888 #888 #222;
 }
 
 .iBlock {
-    display: inline-block;
-    margin: 0 5px;
+	display: inline-block;
+	margin: 0 5px;
 }
 
 .flipHorizontal {
-    transform: scaleX(-1);
+	transform: scaleX(-1);
 }
 
 // .VerseInfoFrame {
 // }
 .VerseInfo {
-    float: left;
-    .PopupBody & {
-        margin: 0 10px 10px 0;
-    }
-    display: flex;
-    min-width: 60px;
-    flex-direction: column;
-    .VerseInfoList {
-        font-size: 13px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    button {
-        min-height: 25px;
-    }
+	float: left;
+	.PopupBody & {
+		margin: 0 10px 10px 0;
+	}
+	display: flex;
+	min-width: 60px;
+	flex-direction: column;
+	.VerseInfoList {
+		font-size: 13px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	button {
+		min-height: 25px;
+	}
 }
 
 .VerseText {
-    margin: 0;
-    line-height: 22px;
-    color: rgb(207, 207, 0);
-    text-overflow: ellipsis;
-    overflow: hidden;
+	margin: 0;
+	line-height: 22px;
+	color: rgb(207, 207, 0);
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .circle-background,
 .circle-progress {
-    fill: none;
+	fill: none;
 }
 
 .circle-background {
-    stroke: #444;
+	stroke: #444;
 }
 
 .circle-progress {
-    stroke: yellowgreen;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+	stroke: yellowgreen;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 .circle-text {
-    font-size: 10px;
-    font-weight: bold;
-    fill: yellowgreen;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	fill: yellowgreen;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .CommandButton {
-    display: flex;
-    // flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px !important;
-    height: 50px !important;
-    min-width: 50px;
-    padding: 0;
-    pointer-events: fill;
-    span {
-        svg {
-            width: 50px;
-        }
-        img {
-            width: 40px;
-        }
-    }
-    .CommandLabel {
-        flex-grow: 1;
-    }
-    .Sidebar & {
-        justify-content: initial;
-    }
+	display: flex;
+	// flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	font-size: 25px !important;
+	height: 50px !important;
+	min-width: 50px;
+	padding: 0;
+	pointer-events: fill;
+	span {
+		svg {
+			width: 50px;
+		}
+		img {
+			width: 40px;
+		}
+	}
+	.CommandLabel {
+		flex-grow: 1;
+	}
+	.Sidebar & {
+		justify-content: initial;
+	}
 }
 
 .NoHifz {
-    background-color: rgba(0, 117, 195, 0.219);
-    border-color: rgb(0, 109, 182);
+	background-color: rgba(0, 117, 195, 0.219);
+	border-color: rgb(0, 109, 182);
 }
 
 .GoodHifz {
-    // border-color: $goodHifzBg !important;
-    background-color: $goodHifzBg;
-    border-color: rgb(0, 90, 0) !important;
+	// border-color: $goodHifzBg !important;
+	background-color: $goodHifzBg;
+	border-color: rgb(0, 90, 0) !important;
 }
 .FairHifz {
-    // border-color: $fairHifzBg !important;
-    background-color: $fairHifzBg;
-    border-color: rgb(121, 86, 0) !important;
+	// border-color: $fairHifzBg !important;
+	background-color: $fairHifzBg;
+	border-color: rgb(121, 86, 0) !important;
 }
 .WeakHifz {
-    // border-color: $weakHifzBg !important;
-    background-color: $weakHifzBg;
-    border-color: brown !important;
+	// border-color: $weakHifzBg !important;
+	background-color: $weakHifzBg;
+	border-color: brown !important;
 }
 
 .HifzRangeRow {
-    margin-bottom: 5px;
-    // border-radius: 5px;
-    // border: solid 1px #444;
-    min-width: 300px;
+	margin-bottom: 5px;
+	// border-radius: 5px;
+	// border: solid 1px #444;
+	min-width: 280px;
 
-    > button:hover {
-        background-color: transparent !important;
-    }
+	> button:hover {
+		background-color: transparent !important;
+	}
 
-    .AgeInfo {
-        float: right;
-        [dir="rtl"] & {
-            float: left;
-        }
-    }
-    .RangeInfo {
-        font-weight: bold;
-    }
-    .ActionsBar {
-        position: absolute;
-        bottom: 0;
-    }
-    .RangeText {
-        height: 30px;
-        display: flex;
-        align-items: center;
-    }
+	.AgeInfo {
+		float: right;
+		[dir="rtl"] & {
+			float: left;
+		}
+	}
+	.RangeInfo {
+		font-weight: bold;
+	}
+	.ActionsBar {
+		position: absolute;
+		bottom: 0;
+	}
+	.RangeText {
+		height: 30px;
+		display: flex;
+		align-items: center;
+	}
 }
 
 .ContentFrame {
-    padding: 15px 10px;
+	padding: 15px 10px;
 }
 
 .FootNote {
-    border-top: solid 1px white;
-    padding-top: 5px;
-    margin-top: 15px;
-    font-size: smaller;
-    clear: both;
+	border-top: solid 1px white;
+	padding-top: 5px;
+	margin-top: 15px;
+	font-size: smaller;
+	clear: both;
 }
 
 .HiddenScroller {
-    overflow: -moz-scrollbars-none;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-        width: 0 !important;
-    }
+	overflow: -moz-scrollbars-none;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		width: 0 !important;
+	}
 }
 
 .SuraHifzChart {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    border: solid 1px #444;
-    box-sizing: border-box;
-    border-radius: 5px;
-    .HifzRangeRow & {
-        height: 46%;
-    }
-    pointer-events: none;
-    .SuraRange {
-        position: absolute;
-        height: 100%;
-        border-style: solid;
-        border-width: 1px;
-        box-sizing: border-box;
-        border-radius: 4px;
-        // background-color: $fairHifzBg;
-    }
-    .PageThumb {
-        position: absolute;
-        height: 100%;
-        border-style: solid;
-        border-color: rgba(170, 170, 170, 0.2);
-        border-width: 0 0 0 1px;
-        background-position-x: 2px;
-        box-sizing: border-box;
-        &.ActivePage {
-            background-color: rgba(170, 170, 170, 0.2);
-        }
-    }
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	border: solid 1px #444;
+	box-sizing: border-box;
+	border-radius: 5px;
+	.HifzRangeRow & {
+		height: 46%;
+	}
+	pointer-events: none;
+	.SuraRange {
+		position: absolute;
+		height: 100%;
+		border-style: solid;
+		border-width: 1px;
+		box-sizing: border-box;
+		border-radius: 4px;
+		// background-color: $fairHifzBg;
+	}
+	.PageThumb {
+		position: absolute;
+		height: 100%;
+		border-style: solid;
+		border-color: rgba(170, 170, 170, 0.2);
+		border-width: 0 0 0 1px;
+		background-position-x: 2px;
+		box-sizing: border-box;
+		&.ActivePage {
+			background-color: rgba(170, 170, 170, 0.2);
+		}
+	}
 }
 
 .UserIcon {
-    // width: 50px;
-    // height: 50px;
-    // // font-size: 30px !important;
-    // // margin: 10px;
-    .ButtonsBar & {
-        // width: 25px;
-        // height: 25px;
-        font-size: 50px;
-        margin: 0 10px;
-    }
+	// width: 50px;
+	// height: 50px;
+	// // font-size: 30px !important;
+	// // margin: 10px;
+	.ButtonsBar & {
+		// width: 25px;
+		// height: 25px;
+		font-size: 50px;
+		margin: 0 10px;
+	}
 }
 
 .UserImage {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    margin: 10px;
-    .Sidebar & {
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-    }
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	margin: 10px;
+	.Sidebar & {
+		width: 30px;
+		height: 30px;
+		border-radius: 15px;
+	}
 }
 
 .SuraIndexCell {
-    margin: 2px 0;
-    button {
-        border-radius: 5px;
-    }
+	margin: 2px 0;
+	button {
+		border-radius: 5px;
+	}
 }
 
 .recharts-wrapper {
-    direction: ltr;
-    text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 12px;
-    margin: 10px 20px;
+	direction: ltr;
+	text-align: center;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 12px;
+	margin: 10px 20px;
 }
 
 .VCentered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .RadioGroup {
-    label {
-        display: flex;
-        align-items: center;
-        height: 30px;
-        span {
-            display: inline-block;
-        }
-        input {
-            margin: 0 10px;
-        }
-        &:hover {
-            background-color: #ffffff15;
-        }
-    }
+	label {
+		display: flex;
+		align-items: center;
+		height: 30px;
+		span {
+			display: inline-block;
+		}
+		input {
+			margin: 0 10px;
+		}
+		&:hover {
+			background-color: #ffffff15;
+		}
+	}
 }
 
 .ToastMessage {
-    z-index: 1;
-    position: fixed;
-    max-width: 200px;
-    border-radius: 10px;
-    background-color: #000000a1;
-    color: yellow;
-    display: none;
-    align-items: center;
-    padding: 20px;
-    left: 50%;
-    top: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    border: solid 3px rgba(255, 255, 255, 0.493);
-    cursor: default;
-    &.ShowToast {
-        display: flex;
-        animation: ShowToast 0.5s;
-    }
-    &.HideToast {
-        animation: HideToast 0.5s;
-        display: flex;
-    }
+	z-index: 1;
+	position: fixed;
+	max-width: 200px;
+	border-radius: 10px;
+	background-color: #000000a1;
+	color: yellow;
+	display: none;
+	align-items: center;
+	padding: 20px;
+	left: 50%;
+	top: 50%;
+	transform: translateY(-50%) translateX(-50%);
+	border: solid 3px rgba(255, 255, 255, 0.493);
+	cursor: default;
+	&.ShowToast {
+		display: flex;
+		animation: ShowToast 0.5s;
+	}
+	&.HideToast {
+		animation: HideToast 0.5s;
+		display: flex;
+	}
 }
 
 @keyframes ShowToast {
-    from {
-        top: 100%;
-    }
-    to {
-        top: 50%;
-    }
+	from {
+		top: 100%;
+	}
+	to {
+		top: 50%;
+	}
 }
 
 @keyframes HideToast {
-    from {
-        top: 50%;
-    }
-    to {
-        top: 100%;
-        transform: translateX(-50%) translateY(0);
-    }
+	from {
+		top: 50%;
+	}
+	to {
+		top: 100%;
+		transform: translateX(-50%) translateY(0);
+	}
 }
 
 .IconButton {
-    position: relative;
-    font-weight: bold;
-    > * {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-    svg {
-        font-size: 25px;
-        opacity: 0.3;
-    }
+	position: relative;
+	font-weight: bold;
+	> * {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+	svg {
+		font-size: 25px;
+		opacity: 0.3;
+	}
 }
 
 .ContextPopupBlocker {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
 
-    .PopupPointer {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: #444;
-        transform: rotate(45deg) translateY(50%);
-        // transform: translateX(-50%);
-        animation: FadeIn 0.5s;
-    }
+	.PopupPointer {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background-color: #444;
+		transform: rotate(45deg) translateY(50%);
+		// transform: translateX(-50%);
+		animation: FadeIn 0.5s;
+	}
 
-    .ContextPopup {
-        position: absolute;
-        color: white;
-        background-color: #444;
-        transform: translateX(-50%);
-        // min-width: 200px;
-        max-width: 400px;
-        overflow-y: auto;
-        box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
-        padding: 15px 10px 10px;
-        animation: FadeIn 0.4s;
-    }
+	.ContextPopup {
+		position: absolute;
+		color: white;
+		background-color: #444;
+		transform: translateX(-50%);
+		// min-width: 200px;
+		max-width: 400px;
+		overflow-y: auto;
+		box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
+		padding: 15px 10px 10px;
+		animation: FadeIn 0.4s;
+	}
 }
 
 @keyframes FadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 .MessageBox {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    background-color: #555;
-    color: white;
-    min-width: 200px;
-    text-align: center;
-    box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
-    animation: FadeIn 0.4s;
-    .MessageBoxTitle {
-        background-color: #444;
-        padding: 10px;
-    }
-    .MessageBoxContent {
-        padding: 15px;
-        min-height: 40px;
-    }
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	background-color: #555;
+	color: white;
+	min-width: 200px;
+	box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
+	animation: FadeIn 0.4s;
+	.MessageBoxTitle {
+		background-color: #444;
+		height: 30px;
+		line-height: 30px;
+		padding: 0 10px;
+	}
+	.MessageBoxContent {
+		padding: 15px;
+		min-height: 40px;
+		text-align: center;
+	}
+	.CloseButton {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 30px;
+		height: 30px;
+		color: white;
+		font-size: 20px;
+	}
 }
