@@ -80,17 +80,17 @@ class AppProvider extends Component {
     };
 
     setMessageBox = (msgBoxInfo = null) => {
-        if(msgBoxInfo){
-            this._messageBoxInfo.push(msgBoxInfo);    
-        }else{
+        if (msgBoxInfo) {
+            this._messageBoxInfo.push(msgBoxInfo);
+        } else {
             this._messageBoxInfo.pop();
         }
-        this.setState({ messageBox: this._messageBoxInfo.length>0 });
+        this.setState({ messageBox: this._messageBoxInfo.length > 0 });
     };
 
     getMessageBox = () => {
-        const msgsCount = this._messageBoxInfo.length; 
-        return msgsCount ? this._messageBoxInfo[msgsCount-1]:null;
+        const msgsCount = this._messageBoxInfo.length;
+        return msgsCount ? this._messageBoxInfo[msgsCount - 1] : null;
     };
 
     setTheme = theme => {
@@ -468,6 +468,7 @@ class AppProvider extends Component {
             verse = this.selectedRange().start;
         }
         this.bookmarksRef.child(verse).set(-new Date().getTime());
+        this.showToast(this.formatMessage({ id: "bookmark_added" }));
     };
 
     removeBookmark = verse => {
@@ -478,6 +479,7 @@ class AppProvider extends Component {
             verse = this.state.selectStart;
         }
         this.bookmarksRef.child(verse).set(null);
+        this.showToast(this.formatMessage({ id: "bookmark_deleted" }));
     };
 
     setRangeRevised = range => {

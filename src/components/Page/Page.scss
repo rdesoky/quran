@@ -190,6 +190,16 @@ $selectionBgColorDark: rgb(38, 93, 138);
         position: relative;
         background-color: #444;
         box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.35);
+        .circle-background {
+            stroke: #555;
+        }
+        .circle-progress {
+            stroke: #bbb;
+        }
+        .circle-text {
+            fill: #bbb;
+            font-size: 12px;
+        }
 
         .Active & {
             background-color: black;
@@ -210,14 +220,14 @@ $selectionBgColorDark: rgb(38, 93, 138);
             // position: relative;
             // text-align: center;
             > * {
-                margin: 0 4px;
+                margin: 0 2px;
             }
             button {
                 padding: 0 10px;
                 // color: inherit;
                 // height: 100%;
                 line-height: 24px;
-                // border-radius: 12px;
+                border-radius: 3px;
                 // margin: 0 1px;
                 // &:hover {
                 //     background-color: #444;
