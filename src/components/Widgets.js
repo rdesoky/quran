@@ -306,7 +306,7 @@ export const ContextPopup = ({}) => {
             return null;
         }
         const left = targetRect.left + targetRect.width / 2;
-        const isSouth = app.appHeight - targetRect.bottom > targetRect.top;
+        const isBelow = app.appHeight - targetRect.bottom > targetRect.top;
         return (
             <div className="ContextPopupBlocker" onClick={closePopup}>
                 <div
@@ -315,15 +315,15 @@ export const ContextPopup = ({}) => {
                         popup = ref;
                     }}
                     style={{
-                        top: isSouth ? targetRect.bottom + 15 : undefined,
-                        bottom: !isSouth
+                        top: isBelow ? targetRect.bottom + 15 : undefined,
+                        bottom: !isBelow
                             ? app.appHeight - targetRect.top + 15
                             : undefined,
                         left: left,
                         maxHeight:
-                            app.appHeight -
-                            (isSouth ? targetRect.bottom : targetRect.top) -
-                            40
+                            (isBelow
+                                ? app.appHeight - targetRect.bottom
+                                : targetRect.top) - 40
                     }}
                 >
                     {content}
@@ -331,11 +331,11 @@ export const ContextPopup = ({}) => {
                 <div
                     className={"PopupPointer".appendWord(
                         "DownPointer",
-                        !isSouth
+                        !isBelow
                     )}
                     style={{
-                        top: isSouth ? targetRect.bottom : undefined,
-                        bottom: !isSouth
+                        top: isBelow ? targetRect.bottom : undefined,
+                        bottom: !isBelow
                             ? app.appHeight - targetRect.top
                             : undefined,
                         left: left
