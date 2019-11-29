@@ -383,14 +383,15 @@ export const BookmarkListItem = ({
     verse,
     filter,
     selectedVerse,
-    selectVerse
+    selectVerse,
+    showTafseer = false
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [verseText, setVerseText] = useState("");
     const [bookmarkDesc, setBookmarkDesc] = useState("");
     const [suraName, setSuraName] = useState("");
-    const [showTafseer, setShowTafseer] = useState(false);
+    const [showTafseerView, setShowTafseer] = useState(showTafseer);
 
     useEffect(() => {
         const sura = QData.ayaIdInfo(verse).sura;
@@ -454,6 +455,10 @@ export const BookmarkListItem = ({
     //     app.pushRecentCommand("Mask");
     // };
 
+    useEffect(() => {
+        setShowTafseer(showTafseer);
+    }, [showTafseer]);
+
     if (filter && -1 === suraName.indexOf(filter)) {
         return "";
     }
@@ -467,7 +472,7 @@ export const BookmarkListItem = ({
     };
 
     const toggleTafseer = e => {
-        setShowTafseer(!showTafseer);
+        setShowTafseer(!showTafseerView);
     };
 
     return (
@@ -478,6 +483,9 @@ export const BookmarkListItem = ({
                         <button onClick={playVerse}>
                             <Icon icon={faPlayCircle} />
                         </button>
+                        <button onClick={toggleTafseer}>
+                            <Icon icon={faQuran} />
+                        </button>
                         <div className="LinkButton">
                             <a
                                 href={player.audioSource(verse)}
@@ -486,9 +494,6 @@ export const BookmarkListItem = ({
                                 <Icon icon={faFileDownload} />
                             </a>
                         </div>
-                        <button onClick={toggleTafseer}>
-                            <Icon icon={faQuran} />
-                        </button>
                         <button onClick={removeBookmark}>
                             <Icon icon={faDelete} />
                         </button>
@@ -501,7 +506,7 @@ export const BookmarkListItem = ({
                 <Icon icon={faBookmark} />
                 &nbsp;
                 {bookmarkDesc}
-                {showTafseer ? null : (
+                {showTafseerView ? null : (
                     <div
                         style={{
                             whiteSpace: "nowrap",
@@ -514,14 +519,14 @@ export const BookmarkListItem = ({
                     </div>
                 )}
             </button>
-            {showTafseer ? (
+            {showTafseerView ? (
                 <TafseerView verse={verse} showVerse={false} />
             ) : null}
         </li>
     );
 };
 
-export const BookmarksList = ({ filter }) => {
+export const BookmarksList = ({ filter, showTafseer = false }) => {
     const app = useContext(AppContext);
     const [actionsIndex, setActionsIndex] = useState(-1);
 
@@ -545,6 +550,7 @@ export const BookmarksList = ({ filter }) => {
                         filter={filter}
                         selectedVerse={actionsIndex}
                         selectVerse={setActionsIndex}
+                        showTafseer={showTafseer}
                     />
                 );
             })}
