@@ -132,6 +132,8 @@
     "no": "لا",
     "close": "اغلاق",
     "bookmark_added": "تم اضافة علامة للآية",
+    "delete_bookmark": "حذف علامة",
     "bookmark_deleted": "تم حذف علامة الآية",
+    "download_verse_audio": "تنزيل تلاوة الآية",
     "download_guide": "لتنزيل الملف انقر بزر الماوس الايمن, ثم اختر: 'حفظ الرابط باسم ...'"
 }

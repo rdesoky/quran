@@ -13,10 +13,12 @@ import {
     faEllipsisH,
     faTimes,
     faEyeSlash,
-    faFileDownload
+    faFileDownload,
+    faQuran
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
+import { TafseerView } from "./Tafseer";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
@@ -388,6 +390,7 @@ export const BookmarkListItem = ({
     const [verseText, setVerseText] = useState("");
     const [bookmarkDesc, setBookmarkDesc] = useState("");
     const [suraName, setSuraName] = useState("");
+    const [showTafseer, setShowTafseer] = useState(false);
 
     useEffect(() => {
         const sura = QData.ayaIdInfo(verse).sura;
@@ -414,7 +417,7 @@ export const BookmarkListItem = ({
         }
     };
 
-    const gotoAya = e => {
+    const gotoVerse = e => {
         if (selectedVerse !== verse) {
             selectVerse(verse);
             return;
@@ -425,6 +428,7 @@ export const BookmarkListItem = ({
 
     const removeBookmark = e => {
         app.setMessageBox({
+            title: <String id="delete_bookmark" />,
             content: <String id="are_you_sure" />,
             onYes: () => {
                 app.removeBookmark(verse);
@@ -440,15 +444,15 @@ export const BookmarkListItem = ({
         }, 500);
     };
 
-    const reviewVerse = e => {
-        app.gotoAya(verse, { sel: true });
-        setTimeout(() => {
-            app.setMaskStart();
-            //app.closePopup();
-            checkClosePopup();
-        });
-        app.pushRecentCommand("Mask");
-    };
+    // const reviewVerse = e => {
+    //     app.gotoAya(verse, { sel: true });
+    //     setTimeout(() => {
+    //         app.setMaskStart();
+    //         //app.closePopup();
+    //         checkClosePopup();
+    //     });
+    //     app.pushRecentCommand("Mask");
+    // };
 
     if (filter && -1 === suraName.indexOf(filter)) {
         return "";
@@ -456,9 +460,14 @@ export const BookmarkListItem = ({
 
     const download = e => {
         app.setMessageBox({
+            title: <String id="download_verse_audio" />,
             content: <String id="download_guide" />
         });
         e.preventDefault();
+    };
+
+    const toggleTafseer = e => {
+        setShowTafseer(!showTafseer);
     };
 
     return (
@@ -466,6 +475,9 @@ export const BookmarkListItem = ({
             <div className="actions">
                 {selectedVerse == verse ? (
                     <>
+                        <button onClick={playVerse}>
+                            <Icon icon={faPlayCircle} />
+                        </button>
                         <div className="LinkButton">
                             <a
                                 href={player.audioSource(verse)}
@@ -474,12 +486,9 @@ export const BookmarkListItem = ({
                                 <Icon icon={faFileDownload} />
                             </a>
                         </div>
-                        <button onClick={playVerse}>
-                            <Icon icon={faPlayCircle} />
+                        <button onClick={toggleTafseer}>
+                            <Icon icon={faQuran} />
                         </button>
-                        {/* <button onClick={reviewVerse}>
-                            <Icon icon={faEyeSlash} />
-                        </button> */}
                         <button onClick={removeBookmark}>
                             <Icon icon={faDelete} />
                         </button>
@@ -488,21 +497,26 @@ export const BookmarkListItem = ({
                     <Icon icon={faEllipsisH} />
                 )}
             </div>
-            <button onClick={gotoAya}>
+            <button onClick={gotoVerse}>
                 <Icon icon={faBookmark} />
                 &nbsp;
                 {bookmarkDesc}
-                <div
-                    style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        pointerEvents: "none"
-                    }}
-                >
-                    {verseText}
-                </div>
+                {showTafseer ? null : (
+                    <div
+                        style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            pointerEvents: "none"
+                        }}
+                    >
+                        {verseText}
+                    </div>
+                )}
             </button>
+            {showTafseer ? (
+                <TafseerView verse={verse} showVerse={false} />
+            ) : null}
         </li>
     );
 };
