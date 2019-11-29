@@ -535,7 +535,7 @@ hr {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    background-color: black;
+    background-color: #222;
     color: white;
     min-width: 200px;
     box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
@@ -564,4 +564,15 @@ hr {
 
 .IconsBar {
     display: flex;
+}
+
+.BigToggler {
+    float: right;
+    margin: 0 0 0 10px;
+    button {
+        padding: 10px 5px;
+    }
+    svg {
+        font-size: 30px;
+    }
 }
