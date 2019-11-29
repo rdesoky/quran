@@ -12,7 +12,8 @@ import {
     faListAlt,
     faEllipsisH,
     faTimes,
-    faEyeSlash
+    faEyeSlash,
+    faFileDownload
 } from "@fortawesome/free-solid-svg-icons";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
@@ -423,7 +424,12 @@ export const BookmarkListItem = ({
     };
 
     const removeBookmark = e => {
-        app.removeBookmark(verse);
+        app.setMessageBox({
+            content: <String id="are_you_sure" />,
+            onYes: () => {
+                app.removeBookmark(verse);
+            }
+        });
     };
 
     const playVerse = e => {
@@ -448,17 +454,32 @@ export const BookmarkListItem = ({
         return "";
     }
 
+    const download = e => {
+        app.setMessageBox({
+            content: <String id="download_guide" />
+        });
+        e.preventDefault();
+    };
+
     return (
         <li className="BookmarkRow">
             <div className="actions">
                 {selectedVerse == verse ? (
                     <>
+                        <div className="LinkButton">
+                            <a
+                                href={player.audioSource(verse)}
+                                onClick={download}
+                            >
+                                <Icon icon={faFileDownload} />
+                            </a>
+                        </div>
                         <button onClick={playVerse}>
                             <Icon icon={faPlayCircle} />
                         </button>
-                        <button onClick={reviewVerse}>
+                        {/* <button onClick={reviewVerse}>
                             <Icon icon={faEyeSlash} />
-                        </button>
+                        </button> */}
                         <button onClick={removeBookmark}>
                             <Icon icon={faDelete} />
                         </button>

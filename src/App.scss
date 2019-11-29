@@ -52,7 +52,8 @@ $fairHifzText: #ffd900;
     color: #61dafb;
 }
 
-button {
+button,
+.LinkButton {
     transition: background-color 0.3s, top 0.5s;
     border: none;
     border-width: 0;
@@ -60,6 +61,9 @@ button {
     color: #ddd;
     pointer-events: all;
     text-align: center;
+    .actions & {
+        text-align: center !important;
+    }
     &:hover {
         color: white !important;
         background: #666;
@@ -67,6 +71,17 @@ button {
 
     * {
         pointer-events: none;
+    }
+    a {
+        pointer-events: fill;
+    }
+}
+
+.LinkButton {
+    padding: 0 !important;
+    a {
+        display: block;
+        padding: 8px;
     }
 }
 
@@ -461,6 +476,7 @@ hr {
 
 .ContextPopupBlocker {
     position: fixed;
+    z-index: 3;
     left: 0;
     top: 0;
     bottom: 0;

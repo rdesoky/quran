@@ -366,6 +366,9 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             &.CommandButton {
                 height: auto !important;
             }
+            svg {
+                font-size: 15px;
+            }
         }
     }
     #AKeyboard {

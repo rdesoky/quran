@@ -29,8 +29,14 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     };
 
     const onContextMenu = e => {
+        const { target } = e;
         //Extend selection
-        onClickVerse({ target: e.target, shiftKey: true });
+        const aya_id = parseInt(target.getAttribute("aya-id"));
+        onClickVerse({ target, shiftKey: true });
+        app.setContextPopup({
+            target,
+            content: <VerseContextButtons verse={aya_id} />
+        });
         e.preventDefault();
     };
 
