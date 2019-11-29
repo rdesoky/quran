@@ -42,10 +42,10 @@ function App({ themeContext }) {
 
     //Handles componentDidMount/unmount, props changes
     useEffect(() => {
-        window.addEventListener("selectstart", e => {
-            e.preventDefault();
-        });
-    });
+        // window.addEventListener("selectstart", e => {
+        //     e.preventDefault();
+        // });
+    }, []);
 
     const locale_data = require(`react-intl/locale-data/${locale}`);
 

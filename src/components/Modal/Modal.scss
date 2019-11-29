@@ -292,6 +292,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     }
     .TafseerVerse {
         color: yellow;
+        // white-space: normal;
     }
 }
 
@@ -400,19 +401,20 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     }
 }
 
-// .TafseerView {
-//     .VerseInfo {
-//         float: left;
-//         margin: 0 10px 10px 0;
-//         min-width: 60px;
-//         button {
-//             min-height: 2zpx;
-//         }
-//     }
-//     .TafseerText {
-//         // clear: both;
-//     }
-// }
+.TafseerView {
+    white-space: normal;
+    //     .VerseInfo {
+    //         float: left;
+    //         margin: 0 10px 10px 0;
+    //         min-width: 60px;
+    //         button {
+    //             min-height: 2zpx;
+    //         }
+    //     }
+    .TafseerText {
+        // clear: both;
+    }
+}
 
 .TypingConsole {
     padding: 10px;
