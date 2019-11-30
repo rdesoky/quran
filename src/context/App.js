@@ -8,20 +8,20 @@ import { injectIntl } from "react-intl";
 const rc = localStorage.getItem("commands");
 const recentCommands = rc ? JSON.parse(rc) : [];
 const initSidebarCommands = [
+    // "AudioPlayer",
     "Index",
-    "AudioPlayer",
     "Search",
-    "Exercise",
-    "Tafseer",
-    "Mask",
-    "Goto",
-    "Theme",
     "Bookmarks",
+    "Tafseer",
+    "Exercise",
+    "Favorites",
+    "Goto",
+    "Mask",
     "Copy",
     "Share",
-    "Favorites",
-    "Profile",
-    "Settings",
+    // "Profile",
+    // "Theme",
+    // "Settings",
     "Help"
 ];
 
@@ -53,10 +53,11 @@ const AppState = {
     selectStart: 0,
     selectEnd: 0,
     maskStart: -1,
-    recentCommands:
-        recentCommands.length === initSidebarCommands.length
-            ? recentCommands
-            : initSidebarCommands
+    recentCommands: initSidebarCommands
+    // recentCommands:
+    //     recentCommands.length === initSidebarCommands.length
+    //         ? recentCommands
+    //         : initSidebarCommands
 };
 
 const AppContext = React.createContext(AppState);
@@ -139,27 +140,22 @@ class AppProvider extends Component {
     };
 
     pushRecentCommand = command => {
-        if (
-            [
-                "Commands",
-                "Play",
-                // "AudioPlayer",
-                // "Settings",
-                // "Profile",
-                // "ToggleButton",
-                "Pause",
-                "Stop"
-            ].includes(command)
-        ) {
-            return;
-        }
-        let recentCommands = [
-            command,
-            ...this.state.recentCommands.filter(c => c !== command)
-        ];
-        // recentCommands.length = 12;
-        setTimeout(() => this.setState({ recentCommands }), 1);
-        localStorage.setItem("commands", JSON.stringify(recentCommands));
+        // if (
+        //     [
+        //         "Commands",
+        //         "Play",
+        //         "Pause",
+        //         "Stop"
+        //     ].includes(command)
+        // ) {
+        //     return;
+        // }
+        // let recentCommands = [
+        //     command,
+        //     ...this.state.recentCommands.filter(c => c !== command)
+        // ];
+        // setTimeout(() => this.setState({ recentCommands }), 1);
+        // localStorage.setItem("commands", JSON.stringify(recentCommands));
     };
 
     extendSelection = ayaId => {

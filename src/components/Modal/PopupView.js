@@ -29,7 +29,7 @@ function PopupView() {
         Help,
         Settings,
         Tafseer,
-        AudioPlayer: AudioSettings,
+        AudioPlayer: Settings,
         Favorites,
         Profile: User,
         Bookmarks,
