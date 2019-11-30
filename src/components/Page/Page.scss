@@ -92,7 +92,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 pointer-events: none;
                 .Verse {
                     position: absolute;
-
+                    pointer-events: none;
                     background-color: #888;
                     .DarkTheme & {
                         background-color: #555;
@@ -100,6 +100,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 }
                 .Mask {
                     position: absolute;
+                    pointer-events: fill;
                     background-color: #999998fa;
                     .DarkTheme & {
                         background-color: #666;

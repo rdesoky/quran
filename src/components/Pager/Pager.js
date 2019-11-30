@@ -326,9 +326,9 @@ function Pager({ match }) {
                 //Shrink the width using the scaling
                 const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
                 const shiftX = dX * scaleX;
-                console.log(
-                    `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
-                );
+                // console.log(
+                //     `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
+                // );
                 const firstPageShiftX =
                     pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
                 const firstPageScaleX =
