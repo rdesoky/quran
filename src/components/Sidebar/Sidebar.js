@@ -59,7 +59,7 @@ function Sidebar() {
                     <div id="SidebarPlayer" className="SidebarSection">
                         <PlayerButtons
                             showLabels={app.expandedMenu}
-                            showReciter={false}
+                            showReciter={true}
                         />
                     </div>
                     <div
@@ -84,12 +84,16 @@ function Sidebar() {
                                 ))}
                         </div>
                     </div>
-                    {/* <div id="SidebarFooter" className="SidebarSection">
+                    <div id="SidebarFooter" className="SidebarSection">
                         <CommandButton
                             command="Profile"
                             showLabel={app.expandedMenu}
                         />
-                    </div> */}
+                        <CommandButton
+                            command="Settings"
+                            showLabel={app.expandedMenu}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

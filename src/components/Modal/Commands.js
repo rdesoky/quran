@@ -246,14 +246,16 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
 
     const renderLabel = () => {
         if (showLabel === true) {
-            return (
-                <span className="CommandLabel">
-                    <String
-                        className="CommandLabel"
-                        id={command.toLowerCase()}
-                    />
-                </span>
+            let label = (
+                <String className="CommandLabel" id={command.toLowerCase()} />
             );
+            switch (command) {
+                case "Profile":
+                    if (!app.user.isAnonymous) {
+                        label = app.user.email;
+                    }
+            }
+            return <span className="CommandLabel">{label}</span>;
         }
     };
 

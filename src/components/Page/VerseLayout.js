@@ -33,10 +33,10 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         //Extend selection
         const aya_id = parseInt(target.getAttribute("aya-id"));
         onClickVerse({ target, shiftKey: true });
-        app.setContextPopup({
-            target,
-            content: <VerseContextButtons verse={aya_id} />
-        });
+        // app.setContextPopup({
+        //     target,
+        //     content: <VerseContextButtons verse={aya_id} />
+        // });
         e.preventDefault();
     };
 

@@ -134,7 +134,7 @@ export const ToastMessage = () => {
             setToastMessage(app.toastMessage);
             setTimeout(() => {
                 app.showToast(null);
-            }, 3000);
+            }, 2000);
         } else if (toastMessage) {
             setHiding(true);
             setTimeout(() => {
