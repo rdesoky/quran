@@ -22,3 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 public/pg_map/create_page_map_json.pl
+
+.history

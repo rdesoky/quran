@@ -42,9 +42,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
 
     const isHovered = aya_id => hoverVerse === aya_id;
     const isSelected = aya_id => {
-        const start = Math.min(app.selectStart, app.selectEnd);
-        const end = Math.max(app.selectStart, app.selectEnd);
-        return aya_id >= start && aya_id <= end;
+        const { selectStart, selectEnd } = app;
+        return aya_id.between(selectStart, selectEnd);
     };
     const isMasked = aya_id => {
         let { maskStart } = app;
@@ -54,6 +53,20 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         return false;
     };
 
+    const onClickMask = e => {
+        let nPageIndex = parseInt(e.target.getAttribute("page"));
+        let maskStartPage = QData.ayaIdPage(app.maskStart);
+        if (maskStartPage === nPageIndex) {
+            //same page
+            app.offsetMask(1);
+        } else {
+            let clickedPageFirstAyaId = QData.pageAyaId(nPageIndex);
+
+            app.setMaskStart(clickedPageFirstAyaId);
+        }
+        e.stopPropagation();
+    };
+
     const onClickVerse = e => {
         const { shiftKey, ctrlKey, altKey, target } = e;
         const aya_id = parseInt(target.getAttribute("aya-id"));
@@ -61,18 +74,6 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         if (app.maskStart !== -1) {
             if (app.maskStart > aya_id) {
                 app.setMaskStart(aya_id);
-            } else {
-                let nPageIndex = parseInt(pageIndex);
-                let maskStartPage = QData.ayaIdPage(app.maskStart);
-                if (maskStartPage === nPageIndex) {
-                    //same page
-                    app.offsetMask(1);
-                } else {
-                    let clickedPage = QData.ayaIdPage(aya_id);
-                    let clickedPageFirstAyaId = QData.pageAyaId(clickedPage);
-
-                    app.setMaskStart(clickedPageFirstAyaId);
-                }
             }
         } else {
             if (shiftKey || ctrlKey) {
@@ -97,26 +98,26 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const ayaClass = aya_id => {
         let className = "";
         let selected = isSelected(aya_id);
+
         if (selected) {
             className = "Selected";
         }
-        let hovered = isHovered(aya_id);
-        if (hovered) {
-            className += " Hovered";
-        }
+
+        className = className.appendWord("Hovered", isHovered(aya_id));
+
         if (isMasked(aya_id)) {
-            className = "Masked";
-            if (selected) {
-                className += " Selected";
-            }
+            className = "Masked".appendWord("Selected", selected);
         }
-        if (aya_id === player.playingAya) {
-            className += " Playing";
-        }
-        return className.trim();
+
+        className = className.appendWord(
+            "Playing",
+            aya_id === player.playingAya
+        );
+
+        return className;
     };
 
-    const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const VerseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         let aClass = ayaClass(aya_id);
 
         return (
@@ -144,7 +145,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         );
     };
 
-    const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const VerseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         if (eline - sline > 0) {
             let aClass = ayaClass(aya_id);
             return (
@@ -170,9 +171,10 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 />
             );
         }
+        return null;
     };
 
-    const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const VerseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         if (eline - sline > 1) {
             let aClass = ayaClass(aya_id);
             let lines = [];
@@ -207,15 +209,19 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 );
             });
         }
+        return null;
     };
 
-    const verseStructure = verse => {
+    const VerseStructure = verse => {
         return (
-            <>
-                {verseHead(verse)}
-                {verseBody(verse)}
-                {verseTail(verse)}
-            </>
+            <div className="VerseParts" aya={verse.aya_id}>
+                {VerseHead(verse)}
+                {VerseBody(verse)}
+                {VerseTail(verse)}
+                {/* <VerseHead {...verse} />
+                <VerseBody {...verse} />
+                <VerseTail {...verse} /> */}
+            </div>
         );
     };
 
@@ -229,10 +235,12 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
             return;
         }
 
-        const fullPageMask = () => {
+        const fullPageMask = pageIndex => {
             return (
                 <div
                     className="Mask MaskBody"
+                    onClick={onClickMask}
+                    page={pageIndex}
                     style={{
                         top: 0,
                         bottom: 0,
@@ -256,6 +264,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     <>
                         <div
                             className="Mask Head"
+                            onClick={onClickMask}
+                            page={pageIndex}
                             style={{
                                 height: lineHeight,
                                 top: (sline * pageHeight) / 15,
@@ -265,6 +275,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                         />
                         <div
                             className="Mask MaskBody"
+                            onClick={onClickMask}
+                            page={pageIndex}
                             style={{
                                 top: ((parseInt(sline) + 1) * pageHeight) / 15,
                                 bottom: 0,
@@ -272,7 +284,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                                 left: 0
                             }}
                         />
-                        {verseStructure(maskStartInfo)}
+                        {/* <VerseStructure {...maskStartInfo} /> */}
+                        {VerseStructure(maskStartInfo)}
                         <button
                             onClick={closeMask}
                             style={{
@@ -290,18 +303,19 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     </>
                 );
             } else {
-                return fullPageMask();
+                return fullPageMask(pageIndex);
             }
         } else {
-            return fullPageMask();
+            return fullPageMask(pageIndex);
         }
     }
 
-    function renderVerses() {
+    const Verses = versesInfo => {
         return versesInfo.map((verse, index) => {
-            return <div key={index}>{verseStructure(verse)}</div>;
+            return VerseStructure(verse);
+            // return <VerseStructure key={verse.aya_id} {...verse} />;
         });
-    }
+    };
 
     return (
         <>
@@ -314,7 +328,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     margin: app.pageMargin()
                 }}
             >
-                {renderVerses()}
+                {/* <Verses verseInfo={versesInfo} /> */}
+                {Verses(versesInfo)}
             </div>
             {children}
             <div
