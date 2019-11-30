@@ -360,15 +360,15 @@ export const SuraIndexCell = memo(
                 <div className="actions">
                     {selectedSura === sura ? (
                         <>
-                            <button sura={sura} onClick={addSuraToHifz}>
-                                <Icon icon={faHeart} />
-                            </button>
                             <button sura={sura} onClick={playSura}>
                                 <Icon icon={faPlayCircle} />
                             </button>
-                            <button sura={sura} onClick={reviewSura}>
-                                <Icon icon={faEyeSlash} />
+                            <button sura={sura} onClick={addSuraToHifz}>
+                                <Icon icon={faHeart} />
                             </button>
+                            {/* <button sura={sura} onClick={reviewSura}>
+                                <Icon icon={faEyeSlash} />
+                            </button> */}
                         </>
                     ) : (
                         <Icon icon={faEllipsisH} />

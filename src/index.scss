@@ -29,7 +29,7 @@ code {
         position: relative;
         button,
         .LinkButton {
-            width: 100%;
+            // width: 100%;
             padding: 8px;
             background-color: transparent;
             text-align: inherit;
@@ -58,6 +58,9 @@ code {
                 width: 30px;
                 text-align: center;
                 color: white;
+                svg {
+                    font-size: 15px;
+                }
             }
         }
     }
@@ -101,10 +104,11 @@ li.BookmarkRow {
     > button {
         width: 100%;
         display: block;
-        padding: 10px 100px 10px 10px;
-        [dir="rtl"] & {
-            padding: 10px 10px 10px 100px;
-        }
+        line-height: 22px;
+        // padding: 10px 100px 10px 10px;
+        // [dir="rtl"] & {
+        //     padding: 10px 10px 10px 100px;
+        // }
     }
     // > div {
     //     width: 80px;

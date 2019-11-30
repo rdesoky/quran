@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CommandButton } from "./Modal/Commands";
 import { PlayerContext, AudioState } from "../context/Player";
+import Utils from "../services/utils";
 
 export const VerseInfo = ({
     verse,
@@ -104,6 +105,14 @@ export const VerseText = ({ verse, showInfo, navigate = true }) => {
         setText(verseIndex < verseList.length ? verseList[verseIndex] : "");
     };
 
+    const copyVerse = e => {
+        const verseInfo = QData.ayaIdInfo(verse);
+        Utils.copy2Clipboard(
+            `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
+        );
+        app.showToast(app.formatMessage({ id: "text_copied" }));
+    };
+
     useEffect(() => {
         if (verse !== undefined) {
             updateText(verse);
@@ -120,6 +129,9 @@ export const VerseText = ({ verse, showInfo, navigate = true }) => {
         <div className="VerseText">
             {showInfo ? <VerseInfo navigate={navigate} /> : ""}
             {text}
+            <button onClick={copyVerse}>
+                <Icon icon={faCopy} />
+            </button>
         </div>
     );
 };

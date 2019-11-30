@@ -4,9 +4,14 @@ import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+    faAngleLeft,
+    faAngleRight,
+    faCopy
+} from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import Utils from "../../services/utils";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -103,6 +108,19 @@ const TafseerView = AppConsumer(
             return "Loading...";
         };
 
+        const tafseerName = () =>
+            TafseerList.find(item => item.id === tafseer).name;
+
+        const copyTafseer = e => {
+            const verseInfo = QData.ayaIdInfo(verse);
+            const text = tafseerData[verse];
+            Utils.copy2Clipboard(
+                `${tafseerName()}:\n ${text} (${verseInfo.sura +
+                    1}:${verseInfo.aya + 1})`
+            );
+            app.showToast(app.formatMessage({ id: "text_copied" }));
+        };
+
         const onSelectTafseer = e => {
             const { target: option } = e;
             const tafseer = option.value;
@@ -147,6 +165,9 @@ const TafseerView = AppConsumer(
                         {renderSelector()}
                         {" - "}
                         {renderTafseer()}
+                        <button onClick={copyTafseer}>
+                            <Icon icon={faCopy} />
+                        </button>
                     </p>
                 </div>
             </div>

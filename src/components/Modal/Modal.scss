@@ -458,4 +458,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
 
 .BookmarkRow {
     border-bottom: solid 1px #444;
+    &:last-child {
+        border-bottom: none;
+    }
 }
