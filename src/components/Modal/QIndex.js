@@ -520,7 +520,7 @@ export const BookmarkListItem = ({
                 )}
             </button>
             {showTafseerView ? (
-                <TafseerView verse={verse} showVerse={false} />
+                <TafseerView verse={verse} showVerse={false} copy={true} />
             ) : null}
         </li>
     );

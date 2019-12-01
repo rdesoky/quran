@@ -101,7 +101,8 @@ export const VerseText = ({
     verse,
     showInfo,
     navigate = true,
-    bookmark = false
+    bookmark = false,
+    copy = false
 }) => {
     const [text, setText] = useState("");
     const app = useContext(AppContext);
@@ -147,9 +148,11 @@ export const VerseText = ({
                 </button>
             ) : null}
             {text}
-            <button onClick={copyVerse}>
-                <Icon icon={faCopy} />
-            </button>
+            {copy ? (
+                <button onClick={copyVerse}>
+                    <Icon icon={faCopy} />
+                </button>
+            ) : null}
         </div>
     );
 };

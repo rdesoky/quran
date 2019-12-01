@@ -3,7 +3,7 @@
     "sura": "Chapter",
     "sura_name": " {sura}",
     "part": "Part",
-    "part_num": "part: {num}",
+    "part_num": "Part: {num}",
     "page": "page",
     "pg": "p",
     "pg_num": "p:{num}",
@@ -122,11 +122,11 @@
     "writing_prompt": "Type the verse text from your memory",
     "search_prompt": "find text or chapter",
     "find_sura": "find chapter",
-    "quick_mode_0": "عرض الاية وتفسيرها بعد انتهاء الكتابة",
-    "quick_mode_1": "انتقل للاية التالية مباشرة بعد انتهاء الكتابة",
-    "quick_mode_2": "انتقل للاية التالية بعد 3 كلمات صحيحة",
-    "exercise_intro": "راجع او تدرب على الحفظ بان تكتب الاية من ذاكرتك",
-    "success_write_next": "الاية مطابقة - اكتب الاية التالية",
+    "quick_mode_0": "Review verse and translation after finishing",
+    "quick_mode_1": "Move to next verse after finishing",
+    "quick_mode_2": "Move to next verse after typing 3 correct words",
+    "exercise_intro": "Revise or memorize by typing verses text",
+    "success_write_next": "Matched successfully! - type next verse",
     "text_copied": "Text copied to clipboard",
     "are_you_sure": "Are you sure?",
     "yes": "Yes",
@@ -144,5 +144,6 @@
     "moderate_level": "Intermediate level",
     "high_level": "High level",
     "advanced_level": "Advance level",
-    "exercise_memorized": "Pick memorized"
+    "exercise_memorized": "Pick memorized",
+    "language": "Language"
 }
