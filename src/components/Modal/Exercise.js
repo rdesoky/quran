@@ -14,6 +14,8 @@ import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
+import { SettingsContext } from "../../context/Settings";
+import QData from "../../services/QData";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -29,6 +31,7 @@ const Step = {
 const Exercise = ({}) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
+    const settings = useContext(SettingsContext);
     const [currStep, setCurrStep] = useState(Step.unknown);
     const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
@@ -45,10 +48,55 @@ const Exercise = ({}) => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
     };
 
+    const checkVerseLevel = new_verse => {
+        const text = app.verseText(new_verse);
+        const length = text.length;
+        switch (parseInt(settings.exerciseLevel)) {
+            case 0:
+                if (!length.between(1, 50)) {
+                    return false;
+                }
+                break;
+            case 1:
+                if (!length.between(51, 150)) {
+                    return false;
+                }
+                break;
+            case 2:
+                if (!length.between(151, 300)) {
+                    return false;
+                }
+                break;
+            default:
+                if (!(length > 200)) {
+                    return false;
+                }
+        }
+        //Length is good, check memorized
+        if (settings.exerciseMemorized === false) {
+            const { sura, aya } = QData.ayaIdInfo(new_verse);
+            const page = QData.ayaPage(sura, aya);
+            const { hifzRanges } = app;
+
+            const hifzRange = hifzRanges.find(r => {
+                return (
+                    r.sura === sura && page >= r.startPage && page <= r.endPage
+                );
+            });
+            if (hifzRange) {
+                return false; //verse is memorized,
+            }
+        }
+        return true;
+    };
+
     const gotoRandomVerse = e => {
         player.stop();
         player.setPlayingAya(-1);
-        const new_verse = Math.floor(Math.random() * verseList.length);
+        let new_verse;
+        do {
+            new_verse = Math.floor(Math.random() * verseList.length);
+        } while (!checkVerseLevel(new_verse));
         app.gotoAya(new_verse, { sel: true, keepMask: true });
         // app.setMaskStart(new_verse + 1, true);
         setCurrStep(Step.intro);

@@ -494,7 +494,7 @@ hr {
             transform: rotate(45deg) translateY(-50%);
         }
         .DarkTheme & {
-            background-color: #555;
+            background-color: #444;
         }
     }
 
@@ -511,7 +511,7 @@ hr {
         animation: FadeIn 0.4s;
 
         .DarkTheme & {
-            background-color: #555;
+            background-color: #444;
         }
     }
 }

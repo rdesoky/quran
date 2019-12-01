@@ -136,5 +136,12 @@
     "bookmark_deleted": "تم حذف علامة الآية",
     "download_verse_audio": "تنزيل تلاوة الآية",
     "download_guide": "لتنزيل الملف انقر بزر الماوس الايمن, ثم اختر: 'حفظ الرابط باسم ...'",
-    "dark_mode": "قراءة ليلية"
+    "dark_mode": "قراءة ليلية",
+    "random_exercise": "الايات العشوائية في الحفظ بالكتابة",
+    "exercise_level": "طول الايات العشوائية",
+    "beginner_level": "مستوى مبتدئ",
+    "moderate_level": "مستوى متوسط",
+    "high_level": "مستوى مرتفع",
+    "advanced_level": "مستوى متميز",
+    "exercise_memorized": "الصفحات المحفوظة"
 }

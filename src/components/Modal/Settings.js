@@ -8,6 +8,7 @@ import Switch from "react-switch";
 import { VerseInfo } from "./../Widgets";
 import { PlayerButtons } from "./../AudioPlayer/AudioPlayer";
 import { ThemeContext } from "../../context/Theme";
+import { SettingsContext } from "../../context/Settings";
 
 // const Settings = (onClose, isOpen) => {
 // 	return (
@@ -22,6 +23,7 @@ const Settings = () => {
     const player = useContext(PlayerContext);
     const app = useContext(AppContext);
     const theme = useContext(ThemeContext);
+    const settings = useContext(SettingsContext);
 
     let popupBody;
     let selectRepeat;
@@ -56,6 +58,15 @@ const Settings = () => {
         theme.setTheme(checked ? "Dark" : "Default");
     };
 
+    const updateExerciseLevel = ({ currentTarget }) => {
+        const exerciseLevel = parseInt(currentTarget.value);
+        settings.setExerciseLevel(exerciseLevel);
+    };
+
+    const updateExerciseMemorized = checked => {
+        settings.setExerciseMemorized(checked);
+    };
+
     return (
         <>
             <div className="Title">
@@ -71,6 +82,45 @@ const Settings = () => {
                     height: app.appHeight - 80
                 }}
             >
+                <div>
+                    <String id="random_exercise" />
+                </div>
+                <div className="OptionRow">
+                    <label>
+                        <String id="exercise_level" />
+                        <select
+                            onChange={updateExerciseLevel}
+                            value={settings.exerciseLevel}
+                        >
+                            <option value={0}>
+                                {app.formatMessage({ id: "beginner_level" })}
+                            </option>
+                            <option value={1}>
+                                {app.formatMessage({ id: "moderate_level" })}
+                            </option>
+                            <option value={2}>
+                                {app.formatMessage({ id: "high_level" })}
+                            </option>
+                            <option value={3}>
+                                {app.formatMessage({ id: "advanced_level" })}
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div className="OptionRow">
+                    <label>
+                        <span>
+                            <String id="exercise_memorized" />
+                        </span>
+                        <Switch
+                            height={22}
+                            width={42}
+                            onChange={updateExerciseMemorized}
+                            checked={settings.exerciseMemorized}
+                        />
+                    </label>
+                </div>
+                <hr />
                 <div className="OptionRow">
                     <label>
                         <span>
@@ -84,6 +134,7 @@ const Settings = () => {
                         />
                     </label>
                 </div>
+                <hr />
                 <div className="OptionRow">
                     <label>
                         <span>
