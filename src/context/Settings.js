@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 const SettingsState = {
     exerciseLevel: localStorage.getItem("exerciseLevel") || 0,
-    exerciseMemorized: localStorage.getItem("exerciseMemorized") || false
+    exerciseMemorized: JSON.parse(
+        localStorage.getItem("exerciseMemorized") || false
+    )
 };
 
 export const SettingsContext = React.createContext(SettingsState);
