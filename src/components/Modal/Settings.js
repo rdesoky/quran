@@ -82,8 +82,22 @@ const Settings = () => {
                     height: app.appHeight - 80
                 }}
             >
+                <div className="OptionRow">
+                    <label>
+                        <span>
+                            <String id="dark_mode" />
+                        </span>
+                        <Switch
+                            height={22}
+                            width={42}
+                            onChange={updateTheme}
+                            checked={theme.theme === "Dark"}
+                        />
+                    </label>
+                </div>
+                <hr />
                 <div>
-                    <String id="random_exercise" />
+                    <String id="random_exercise" />:
                 </div>
                 <div className="OptionRow">
                     <label>
@@ -117,20 +131,6 @@ const Settings = () => {
                             width={42}
                             onChange={updateExerciseMemorized}
                             checked={settings.exerciseMemorized}
-                        />
-                    </label>
-                </div>
-                <hr />
-                <div className="OptionRow">
-                    <label>
-                        <span>
-                            <String id="dark_mode" />
-                        </span>
-                        <Switch
-                            height={22}
-                            width={42}
-                            onChange={updateTheme}
-                            checked={theme.theme === "Dark"}
                         />
                     </label>
                 </div>

@@ -417,6 +417,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
 }
 
 .TypingConsole {
+    direction: rtl;
     padding: 10px;
     min-height: 21px;
     max-height: calc(100% - 40px);

@@ -228,11 +228,11 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                     content: <AddHifz />
                 });
                 break;
-            case "Bookmarks":
-                if (app.popup === "Exercise") {
-                    app.toggleBookmark();
-                    break;
-                }
+            // case "Bookmarks":
+            //     if (app.popup === "Exercise") {
+            //         app.toggleBookmark();
+            //         break;
+            //     }
             default:
                 app.setPopup(command); //already calls pushRecentCommand()
                 return;

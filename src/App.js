@@ -38,7 +38,7 @@ firebase.initializeApp(firebaseConfig);
 
 function App({ themeContext }) {
     const [locale, setLocale] = useState(
-        localStorage.getItem("locale") || "ar"
+        localStorage.getItem("locale") || "en"
     );
 
     //Handles componentDidMount/unmount, props changes
@@ -47,6 +47,10 @@ function App({ themeContext }) {
             e.preventDefault();
         });
     }, []);
+
+    useEffect(() => {
+        document.body.dir = locale == "en" ? "ltr" : "rtl";
+    }, [locale]);
 
     const locale_data = require(`react-intl/locale-data/${locale}`);
 

@@ -692,7 +692,11 @@ const Exercise = ({}) => {
                             </button>
                             <CommandButton command="Settings" />
                         </div>
-                        <TafseerView verse={verse} showVerse={false} />
+                        <TafseerView
+                            verse={verse}
+                            showVerse={false}
+                            bookmark={true}
+                        />
                         <hr />
                         <ActivityChart activity="chars" />
                     </>

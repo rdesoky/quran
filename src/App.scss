@@ -24,9 +24,12 @@ $fairHifzText: #ffd900;
     overflow: hidden;
     /* text-align: center; */
     background-color: $appBgColor;
-    direction: rtl;
     &.DarkTheme {
         background-color: $appBgColorDk;
+    }
+
+    [dir="rtl"] & {
+        direction: "rtl";
     }
 }
 
@@ -169,7 +172,10 @@ hr {
 // .VerseInfoFrame {
 // }
 .VerseInfo {
-    float: left;
+    float: right;
+    [dir="rtl"] & {
+        float: left;
+    }
     .PopupBody & {
         margin: 0 10px 10px 0;
     }
@@ -268,7 +274,7 @@ hr {
     margin-bottom: 5px;
     // border-radius: 5px;
     // border: solid 1px #444;
-    min-width: 320px;
+    min-width: 310px;
 
     > button:hover {
         background-color: transparent !important;

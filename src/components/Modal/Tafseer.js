@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "../../context/App";
+import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -74,106 +74,110 @@ const Tafseer = ({ app, player }) => {
     );
 };
 
-const TafseerView = AppConsumer(
-    ({ app, verse, onMoveNext, showVerse = true }) => {
-        const [tafseer, setTafseer] = useState(
-            localStorage.getItem("tafseer") || "muyassar"
+const TafseerView = ({
+    verse,
+    onMoveNext,
+    showVerse = true,
+    bookmark = false
+}) => {
+    const [tafseer, setTafseer] = useState(
+        localStorage.getItem("tafseer") || "muyassar"
+    );
+    const [tafseerData, setTafseerData] = useState([]);
+
+    const app = useContext(AppContext);
+
+    useEffect(() => {
+        let fileName = TafseerList.find(i => i.id === tafseer).file;
+        let controller = new AbortController();
+        let url = `${process.env.PUBLIC_URL}/${fileName}`;
+        fetch(url, { signal: controller.signal })
+            .then(r => r.text())
+            .then(txt => {
+                setTafseerData(txt.split("\n"));
+            })
+            .catch(e => {
+                const { name, message } = e;
+                console.info(`${name}: ${message}\n${url}`);
+            });
+
+        return () => {
+            controller.abort();
+        };
+    }, [tafseer]);
+
+    const renderTafseer = () => {
+        if (tafseerData.length > verse) {
+            //validate aya exists whithin tafseer array
+            return tafseerData[verse];
+        }
+        return "Loading...";
+    };
+
+    const tafseerName = () =>
+        TafseerList.find(item => item.id === tafseer).name;
+
+    const copyTafseer = e => {
+        const verseInfo = QData.ayaIdInfo(verse);
+        const text = tafseerData[verse];
+        Utils.copy2Clipboard(
+            `${tafseerName()}:\n ${text} (${verseInfo.sura +
+                1}:${verseInfo.aya + 1})`
         );
-        const [tafseerData, setTafseerData] = useState([]);
+        app.showToast(app.formatMessage({ id: "text_copied" }));
+    };
 
-        useEffect(() => {
-            let fileName = TafseerList.find(i => i.id === tafseer).file;
-            let controller = new AbortController();
-            let url = `${process.env.PUBLIC_URL}/${fileName}`;
-            fetch(url, { signal: controller.signal })
-                .then(r => r.text())
-                .then(txt => {
-                    setTafseerData(txt.split("\n"));
-                })
-                .catch(e => {
-                    const { name, message } = e;
-                    console.info(`${name}: ${message}\n${url}`);
-                });
+    const onSelectTafseer = e => {
+        const { target: option } = e;
+        const tafseer = option.value;
+        localStorage.setItem("tafseer", option.value);
+        setTafseer(tafseer);
+    };
 
-            return () => {
-                controller.abort();
-            };
-        }, [tafseer]);
-
-        const renderTafseer = () => {
-            if (tafseerData.length > verse) {
-                //validate aya exists whithin tafseer array
-                return tafseerData[verse];
-            }
-            return "Loading...";
-        };
-
-        const tafseerName = () =>
-            TafseerList.find(item => item.id === tafseer).name;
-
-        const copyTafseer = e => {
-            const verseInfo = QData.ayaIdInfo(verse);
-            const text = tafseerData[verse];
-            Utils.copy2Clipboard(
-                `${tafseerName()}:\n ${text} (${verseInfo.sura +
-                    1}:${verseInfo.aya + 1})`
-            );
-            app.showToast(app.formatMessage({ id: "text_copied" }));
-        };
-
-        const onSelectTafseer = e => {
-            const { target: option } = e;
-            const tafseer = option.value;
-            localStorage.setItem("tafseer", option.value);
-            setTafseer(tafseer);
-        };
-
-        const renderSelector = () => {
-            return (
-                <select onChange={onSelectTafseer} value={tafseer}>
-                    {TafseerList.map(taf => {
-                        return (
-                            <option key={taf.id} value={taf.id}>
-                                {taf.name}
-                            </option>
-                        );
-                    })}
-                </select>
-            );
-        };
-
-        const tafDirection = () => {
-            return TafseerList.find(i => i.id === tafseer).dir;
-        };
+    const renderSelector = () => {
         return (
-            <div className="TafseerView">
-                <div>
-                    {showVerse ? (
-                        <VerseInfo onMoveNext={onMoveNext} verse={verse} />
-                    ) : (
-                        ""
-                    )}
-                    <div className="TafseerVerse">
-                        <VerseText verse={verse} />
-                    </div>
-                </div>
-                <div>
-                    <p
-                        className="TafseerText"
-                        style={{ direction: tafDirection() }}
-                    >
-                        {renderSelector()}
-                        {" - "}
-                        {renderTafseer()}
-                        <button onClick={copyTafseer}>
-                            <Icon icon={faCopy} />
-                        </button>
-                    </p>
+            <select onChange={onSelectTafseer} value={tafseer}>
+                {TafseerList.map(taf => {
+                    return (
+                        <option key={taf.id} value={taf.id}>
+                            {taf.name}
+                        </option>
+                    );
+                })}
+            </select>
+        );
+    };
+
+    const tafDirection = () => {
+        return TafseerList.find(i => i.id === tafseer).dir;
+    };
+    return (
+        <div className="TafseerView">
+            <div>
+                {showVerse ? (
+                    <VerseInfo onMoveNext={onMoveNext} verse={verse} />
+                ) : (
+                    ""
+                )}
+                <div className="TafseerVerse">
+                    <VerseText verse={verse} bookmark={bookmark} />
                 </div>
             </div>
-        );
-    }
-);
-
+            <div>
+                <p
+                    className="TafseerText"
+                    style={{ direction: tafDirection() }}
+                >
+                    {renderSelector()}
+                    {" - "}
+                    {renderTafseer()}
+                    <button onClick={copyTafseer}>
+                        <Icon icon={faCopy} />
+                    </button>
+                </p>
+            </div>
+        </div>
+    );
+};
 export default AppConsumer(PlayerConsumer(Tafseer));
 export { TafseerView };
