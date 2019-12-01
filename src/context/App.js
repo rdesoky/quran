@@ -25,6 +25,7 @@ const initSidebarCommands = [
     "Help"
 ];
 
+//Default context values
 const AppState = {
     messageBox: false,
     contextPopup: false,

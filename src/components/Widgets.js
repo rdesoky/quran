@@ -101,8 +101,7 @@ export const VerseText = ({ verse, showInfo, navigate = true }) => {
     const app = useContext(AppContext);
 
     const updateText = verseIndex => {
-        const verseList = app.verseList();
-        setText(verseIndex < verseList.length ? verseList[verseIndex] : "");
+        setText(app.verseText(verseIndex));
     };
 
     const copyVerse = e => {

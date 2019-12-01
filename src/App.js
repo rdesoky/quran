@@ -16,6 +16,7 @@ import PlayerProvider from "./context/Player";
 import firebase from "firebase";
 import Exercise from "./components/Modal/Exercise";
 import { ToastMessage, ContextPopup, MessageBox } from "./components/Widgets";
+import { SettingsProvider } from "./context/Settings";
 
 //import ar_strings from "./translations/ar.json"
 //import en_strings from "./translations/en.json"
@@ -42,9 +43,9 @@ function App({ themeContext }) {
 
     //Handles componentDidMount/unmount, props changes
     useEffect(() => {
-        // window.addEventListener("selectstart", e => {
-        //     e.preventDefault();
-        // });
+        window.addEventListener("selectstart", e => {
+            e.preventDefault();
+        });
     }, []);
 
     const locale_data = require(`react-intl/locale-data/${locale}`);
@@ -58,46 +59,54 @@ function App({ themeContext }) {
             <div className={"App " + themeContext.theme + "Theme"}>
                 <Router>
                     <AppProvider>
-                        <PlayerProvider>
-                            <Switch>
-                                <Route
-                                    path={
-                                        process.env.PUBLIC_URL + "/page/:page"
-                                    }
-                                    component={Pager}
-                                />
-                                <Route
-                                    path={
-                                        process.env.PUBLIC_URL +
-                                        "/sura/:sura/aya/:aya"
-                                    }
-                                    component={Pager}
-                                />
-                                <Route
-                                    path={process.env.PUBLIC_URL + "/aya/:aya"}
-                                    component={PageRedirect}
-                                />
-                                <Route
-                                    path={process.env.PUBLIC_URL + "/exercise"}
-                                    component={Exercise}
-                                />
-                                <Route
-                                    render={() => {
-                                        const defUrl =
-                                            process.env.PUBLIC_URL + "/page/1";
-                                        console.log(
-                                            `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                        );
-                                        return <Redirect to={defUrl} />;
-                                    }}
-                                />
-                            </Switch>
-                            <Sidebar />
-                            <PopupView />
-                            <ToastMessage />
-                            <ContextPopup />
-                            <MessageBox />
-                        </PlayerProvider>
+                        <SettingsProvider>
+                            <PlayerProvider>
+                                <Switch>
+                                    <Route
+                                        path={
+                                            process.env.PUBLIC_URL +
+                                            "/page/:page"
+                                        }
+                                        component={Pager}
+                                    />
+                                    <Route
+                                        path={
+                                            process.env.PUBLIC_URL +
+                                            "/sura/:sura/aya/:aya"
+                                        }
+                                        component={Pager}
+                                    />
+                                    <Route
+                                        path={
+                                            process.env.PUBLIC_URL + "/aya/:aya"
+                                        }
+                                        component={PageRedirect}
+                                    />
+                                    <Route
+                                        path={
+                                            process.env.PUBLIC_URL + "/exercise"
+                                        }
+                                        component={Exercise}
+                                    />
+                                    <Route
+                                        render={() => {
+                                            const defUrl =
+                                                process.env.PUBLIC_URL +
+                                                "/page/1";
+                                            console.log(
+                                                `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+                                            );
+                                            return <Redirect to={defUrl} />;
+                                        }}
+                                    />
+                                </Switch>
+                                <Sidebar />
+                                <PopupView />
+                                <ToastMessage />
+                                <ContextPopup />
+                                <MessageBox />
+                            </PlayerProvider>
+                        </SettingsProvider>
                     </AppProvider>
                 </Router>
             </div>
