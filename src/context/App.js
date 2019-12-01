@@ -11,18 +11,18 @@ const initSidebarCommands = [
     // "AudioPlayer",
     "Index",
     "Search",
-    "Bookmarks",
     "Tafseer",
     "Exercise",
+    "Bookmarks",
     "Favorites",
     "Goto",
     "Mask",
-    "Copy",
-    "Share",
+    "Copy"
+    // "Share",
     // "Profile",
     // "Theme",
     // "Settings",
-    "Help"
+    // "Help"
 ];
 
 //Default context values

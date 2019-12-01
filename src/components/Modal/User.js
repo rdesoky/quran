@@ -41,9 +41,9 @@ const User = () => {
                     <Login />
                 )}
                 <hr />
-                <ActivityChart activity="chars" />
-                <hr />
                 <ActivityChart activity="pages" />
+                <hr />
+                <ActivityChart activity="chars" />
             </div>
         </>
     );

@@ -7,9 +7,10 @@ import {
     faChevronUp,
     faChevronDown,
     faTimes,
-    faPlayCircle,
-    faCopy
+    faCopy,
+    faBookmark
 } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
 import { PlayerContext, AudioState } from "../context/Player";
 import Utils from "../services/utils";
@@ -96,7 +97,12 @@ export const VerseInfo = ({
     );
 };
 
-export const VerseText = ({ verse, showInfo, navigate = true }) => {
+export const VerseText = ({
+    verse,
+    showInfo,
+    navigate = true,
+    bookmark = false
+}) => {
     const [text, setText] = useState("");
     const app = useContext(AppContext);
 
@@ -124,9 +130,22 @@ export const VerseText = ({ verse, showInfo, navigate = true }) => {
         }
     }, [app.selectStart]);
 
+    const toggleBookmark = e => {
+        app.toggleBookmark(verse);
+    };
+
     return (
         <div className="VerseText">
             {showInfo ? <VerseInfo navigate={navigate} /> : ""}
+            {bookmark ? (
+                <button onClick={toggleBookmark}>
+                    <Icon
+                        icon={
+                            app.isBookmarked(verse) ? faBookmark : farBookmark
+                        }
+                    />
+                </button>
+            ) : null}
             {text}
             <button onClick={copyVerse}>
                 <Icon icon={faCopy} />
