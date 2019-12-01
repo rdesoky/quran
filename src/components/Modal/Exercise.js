@@ -16,6 +16,7 @@ import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
 import { SettingsContext } from "../../context/Settings";
 import QData from "../../services/QData";
+import { CommandButton } from "./Commands";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -689,6 +690,7 @@ const Exercise = ({}) => {
                             <button onClick={gotoRandomVerse}>
                                 <String id="new_verse" />
                             </button>
+                            <CommandButton command="Settings" />
                         </div>
                         <TafseerView verse={verse} showVerse={false} />
                         <hr />

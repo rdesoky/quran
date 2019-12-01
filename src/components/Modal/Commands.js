@@ -260,18 +260,19 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
     };
 
     const isDisabled = command => {
-        return (
-            app.popup === "Exercise" &&
-            ![
-                "Commands",
-                "Play",
-                "Pause",
-                "Exercise",
-                "Stop",
-                "Bookmarks",
-                "Copy"
-            ].includes(command)
-        );
+        return false;
+        // return (
+        //     app.popup === "Exercise" &&
+        //     ![
+        //         "Commands",
+        //         "Play",
+        //         "Pause",
+        //         "Exercise",
+        //         "Stop",
+        //         "Bookmarks",
+        //         "Copy"
+        //     ].includes(command)
+        // );
     };
 
     return (
