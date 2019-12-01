@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import "./App.scss";
 import Pager, { PageRedirect } from "./components/Pager/Pager";
 import {
@@ -10,7 +10,7 @@ import {
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
-import { ThemeConsumer } from "./context/Theme";
+import { ThemeConsumer, ThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
 import PlayerProvider from "./context/Player";
 import firebase from "firebase";
@@ -36,12 +36,11 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-function App({ themeContext }) {
-    const [locale, setLocale] = useState(
-        localStorage.getItem("locale") || "en"
-    );
-
+function App({}) {
     //Handles componentDidMount/unmount, props changes
+
+    const themeContext = useContext(ThemeContext);
+
     useEffect(() => {
         window.addEventListener("selectstart", e => {
             e.preventDefault();
@@ -49,17 +48,19 @@ function App({ themeContext }) {
     }, []);
 
     useEffect(() => {
-        document.body.dir = locale == "en" ? "ltr" : "rtl";
-    }, [locale]);
+        document.body.dir = lang == "en" ? "ltr" : "rtl";
+    }, [themeContext.lang]);
 
-    const locale_data = require(`react-intl/locale-data/${locale}`);
+    const lang = themeContext.lang;
+
+    const locale_data = require(`react-intl/locale-data/${lang}`);
 
     addLocaleData(locale_data);
 
-    const locale_messages = require(`./translations/${locale}.json`);
+    const locale_messages = require(`./translations/${lang}.json`);
 
     return (
-        <IntlProvider locale={locale} messages={locale_messages}>
+        <IntlProvider locale={lang} messages={locale_messages}>
             <div className={"App " + themeContext.theme + "Theme"}>
                 <Router>
                     <AppProvider>
@@ -118,4 +119,4 @@ function App({ themeContext }) {
     );
 }
 
-export default ThemeConsumer(App);
+export default App;

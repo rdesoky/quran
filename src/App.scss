@@ -407,7 +407,7 @@ hr {
     label {
         display: flex;
         align-items: center;
-        height: 30px;
+        min-height: 30px;
         span {
             display: inline-block;
         }
@@ -415,7 +415,7 @@ hr {
             margin: 0 10px;
         }
         &:hover {
-            background-color: #ffffff15;
+            background-color: #444;
         }
     }
 }

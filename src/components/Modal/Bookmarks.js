@@ -49,7 +49,7 @@ const Bookmarks = () => {
                         />
                     </button>
                 </div>
-                <VerseText showInfo={true} />
+                <VerseText showInfo={true} copy={true} />
                 <hr style={{ clear: "both" }} />
                 <BookmarksList showTafseer={showTafseer} />
             </div>

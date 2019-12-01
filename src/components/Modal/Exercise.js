@@ -696,6 +696,7 @@ const Exercise = ({}) => {
                             verse={verse}
                             showVerse={false}
                             bookmark={true}
+                            copy={true}
                         />
                         <hr />
                         <ActivityChart activity="chars" />

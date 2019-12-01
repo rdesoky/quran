@@ -9,15 +9,8 @@ import { VerseInfo } from "./../Widgets";
 import { PlayerButtons } from "./../AudioPlayer/AudioPlayer";
 import { ThemeContext } from "../../context/Theme";
 import { SettingsContext } from "../../context/Settings";
-
-// const Settings = (onClose, isOpen) => {
-// 	return (
-// 		<div className="Title">
-// 			<FormattedMessage id="settings" />
-// 		</div>
-
-// 	);
-// };
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faGlobe, faLanguage } from "@fortawesome/free-solid-svg-icons";
 
 const Settings = () => {
     const player = useContext(PlayerContext);
@@ -67,6 +60,10 @@ const Settings = () => {
         settings.setExerciseMemorized(checked);
     };
 
+    const updateLang = ({ currentTarget }) => {
+        theme.setLang(currentTarget.value);
+    };
+
     return (
         <>
             <div className="Title">
@@ -82,6 +79,18 @@ const Settings = () => {
                     height: app.appHeight - 80
                 }}
             >
+                <div className="OptionRow">
+                    <label>
+                        <span>
+                            <Icon icon={faLanguage} />
+                        </span>
+                        <select onChange={updateLang} value={theme.lang}>
+                            <option value="ar">عربي</option>
+                            <option value="en">English</option>
+                        </select>
+                    </label>
+                </div>
+                <hr />
                 <div className="OptionRow">
                     <label>
                         <span>

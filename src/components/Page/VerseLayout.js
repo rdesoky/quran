@@ -214,7 +214,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
 
     const VerseStructure = verse => {
         return (
-            <div className="VerseParts" aya={verse.aya_id}>
+            <div className="VerseParts" aya={verse.aya_id} key={verse.aya_id}>
                 {VerseHead(verse)}
                 {VerseBody(verse)}
                 {VerseTail(verse)}

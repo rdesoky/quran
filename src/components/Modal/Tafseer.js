@@ -68,7 +68,11 @@ const Tafseer = ({ app, player }) => {
                 className="PopupBody"
                 style={{ maxHeight: app.appHeight - 85 }}
             >
-                <TafseerView verse={verse} onMoveNext={offsetSelection} />
+                <TafseerView
+                    verse={verse}
+                    onMoveNext={offsetSelection}
+                    copy={true}
+                />
             </div>
         </>
     );
@@ -78,7 +82,8 @@ const TafseerView = ({
     verse,
     onMoveNext,
     showVerse = true,
-    bookmark = false
+    bookmark = false,
+    copy = false
 }) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
@@ -160,7 +165,7 @@ const TafseerView = ({
                     ""
                 )}
                 <div className="TafseerVerse">
-                    <VerseText verse={verse} bookmark={bookmark} />
+                    <VerseText verse={verse} bookmark={bookmark} copy={copy} />
                 </div>
             </div>
             <div>
@@ -171,9 +176,11 @@ const TafseerView = ({
                     {renderSelector()}
                     {" - "}
                     {renderTafseer()}
-                    <button onClick={copyTafseer}>
-                        <Icon icon={faCopy} />
-                    </button>
+                    {copy ? (
+                        <button onClick={copyTafseer}>
+                            <Icon icon={faCopy} />
+                        </button>
+                    ) : null}
                 </p>
             </div>
         </div>

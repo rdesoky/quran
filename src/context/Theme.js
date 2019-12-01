@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
 const ThemeState = {
-    theme: localStorage.getItem("theme") || "Default"
+    theme: localStorage.getItem("theme") || "Default",
+    lang: localStorage.getItem("lang") || "ar"
 };
 
 const ThemeContext = React.createContext(ThemeState);
@@ -14,13 +15,19 @@ class ThemeProvider extends Component {
         localStorage.setItem("theme", theme);
     };
 
+    setLang = lang => {
+        this.setState({ lang });
+        localStorage.setItem("lang", lang);
+    };
+
     toggleTheme = () => {
         this.setTheme(this.state.theme === "Default" ? "Dark" : "Default");
     };
 
     methods = {
         setTheme: this.setTheme,
-        toggleTheme: this.toggleTheme
+        toggleTheme: this.toggleTheme,
+        setLang: this.setLang
     };
 
     render() {
