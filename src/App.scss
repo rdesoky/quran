@@ -199,6 +199,10 @@ hr {
     color: rgb(207, 207, 0);
     text-overflow: ellipsis;
     overflow: hidden;
+    direction: rtl;
+}
+.TypedVerseText {
+    direction: rtl;
 }
 
 .circle-background,
@@ -274,7 +278,7 @@ hr {
     margin-bottom: 5px;
     // border-radius: 5px;
     // border: solid 1px #444;
-    min-width: 310px;
+    min-width: 300px;
 
     > button:hover {
         background-color: transparent !important;
@@ -567,7 +571,13 @@ hr {
     .CloseButton {
         position: absolute;
         top: 0;
-        left: 0;
+        right: 0;
+        left: auto;
+        [dir="rtl"] & {
+            left: 0;
+            right: auto;
+        }
+
         width: 30px;
         height: 30px;
         color: white;

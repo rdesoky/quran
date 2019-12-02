@@ -23,6 +23,7 @@ function PopupView() {
         Commands,
         Goto: GotoPage,
         Index: QIndex,
+        Indices: QIndex,
         Search,
         Play,
         Hifz,

@@ -45,6 +45,7 @@ import { AddHifz } from "./Favorites";
 export const CommandIcons = {
     Commands: faBars,
     Index: faListAlt,
+    Indices: faListAlt,
     Goto: faBookOpen,
     Search: faSearch,
     Play: faPlayCircle,

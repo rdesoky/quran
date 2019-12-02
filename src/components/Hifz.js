@@ -145,6 +145,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
     const setRangeRevised = () => {
         app.setMessageBox({
+            title: <String id="revised" />,
             onYes: () => {
                 app.setRangeRevised(range);
             },
@@ -179,6 +180,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
     const deleteHifzRange = e => {
         app.setMessageBox({
+            title: <String id="remove_hifz" />,
             onYes: () => {
                 app.deleteHifzRange(range);
             },
@@ -234,18 +236,18 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             {range.date ? (
                 actions ? (
                     <div className="ActionsBar">
+                        <button onClick={playRange}>
+                            <Icon icon={faPlayCircle} />
+                        </button>
                         <button onClick={reviewRange}>
                             <Icon icon={faEyeSlash} /> <String id="revise" />
                         </button>
                         <button onClick={setRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
                         </button>
-                        <button onClick={readRange}>
+                        {/* <button onClick={readRange}>
                             <Icon icon={faBookOpen} />
-                        </button>
-                        <button onClick={playRange}>
-                            <Icon icon={faPlayCircle} />
-                        </button>
+                        </button> */}
                         <button onClick={deleteHifzRange}>
                             <Icon icon={faTimes} /> <String id="remove" />
                         </button>

@@ -9,14 +9,14 @@ const rc = localStorage.getItem("commands");
 const recentCommands = rc ? JSON.parse(rc) : [];
 const initSidebarCommands = [
     // "AudioPlayer",
-    "Index",
+    "Indices",
     "Search",
     "Tafseer",
     "Exercise",
-    "Bookmarks",
-    "Favorites",
-    "Goto",
     "Mask",
+    "Favorites",
+    "Bookmarks",
+    "Goto",
     "Copy"
     // "Share",
     // "Profile",

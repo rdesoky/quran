@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { AppConsumer, AppContext } from "../../context/App";
 import { PlayerConsumer, PlayerContext } from "../../context/Player";
 import QData from "../../services/QData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faTimes, faEye } from "@fortawesome/free-solid-svg-icons";
 import Utils from "../../services/utils";
 import { VerseContextButtons } from "../Widgets";
 
@@ -298,7 +298,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                                 backgroundColor: "#777"
                             }}
                         >
-                            <FontAwesomeIcon icon={faTimes} />
+                            <Icon icon={faTimes} />
                         </button>
                     </>
                 );
