@@ -663,7 +663,7 @@ const Exercise = ({}) => {
         return (
             <div className="ContentFrame">
                 {renderMessage()}
-                <h3>
+                <h3 className="TypedVerseText">
                     {answerWords.map((word, index) => (
                         <span
                             key={index}
@@ -682,7 +682,7 @@ const Exercise = ({}) => {
                     <>
                         <div className="ButtonsBar">
                             <button onClick={redoTyping}>
-                                <String id="retry" />
+                                <String id="redo" />
                             </button>
                             <button onClick={redoReciting}>
                                 <String id="start" />
