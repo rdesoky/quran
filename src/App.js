@@ -40,6 +40,7 @@ function App({}) {
     //Handles componentDidMount/unmount, props changes
 
     const themeContext = useContext(ThemeContext);
+    const lang = themeContext.lang;
 
     useEffect(() => {
         window.addEventListener("selectstart", e => {
@@ -47,17 +48,13 @@ function App({}) {
         });
     }, []);
 
+    const locale_messages = require(`./translations/${lang}.json`);
+    const locale_data = require(`react-intl/locale-data/${lang}`);
+    addLocaleData(locale_data);
+
     useEffect(() => {
         document.body.dir = lang == "en" ? "ltr" : "rtl";
     }, [themeContext.lang]);
-
-    const lang = themeContext.lang;
-
-    const locale_data = require(`react-intl/locale-data/${lang}`);
-
-    addLocaleData(locale_data);
-
-    const locale_messages = require(`./translations/${lang}.json`);
 
     return (
         <IntlProvider locale={lang} messages={locale_messages}>

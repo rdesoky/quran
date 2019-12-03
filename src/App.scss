@@ -172,10 +172,7 @@ hr {
 // .VerseInfoFrame {
 // }
 .VerseInfo {
-    float: right;
-    [dir="rtl"] & {
-        float: left;
-    }
+    float: left;
     .PopupBody & {
         margin: 0 10px 10px 0;
     }
@@ -200,6 +197,7 @@ hr {
     text-overflow: ellipsis;
     overflow: hidden;
     direction: rtl;
+    text-align: right;
 }
 .TypedVerseText {
     direction: rtl;
@@ -566,7 +564,7 @@ hr {
     .MessageBoxContent {
         padding: 15px;
         min-height: 40px;
-        text-align: center;
+        // text-align: center;
     }
     .CloseButton {
         position: absolute;
