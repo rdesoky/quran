@@ -4,6 +4,7 @@ import QData from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
 import { injectIntl } from "react-intl";
+import { ThemeConsumer } from "./Theme";
 
 const rc = localStorage.getItem("commands");
 const recentCommands = rc ? JSON.parse(rc) : [];
@@ -824,6 +825,12 @@ class AppProvider extends Component {
         // });
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.themeContext.lang !== this.props.themeContext.lang) {
+            this._suraNames = undefined;
+        }
+    }
+
     componentDidMount() {
         this.unregisterAuthObserver = firebase
             .auth()
@@ -888,5 +895,5 @@ const AppConsumer = Component =>
         );
     };
 
-export default injectIntl(withRouter(AppProvider));
+export default injectIntl(withRouter(ThemeConsumer(AppProvider)));
 export { AppContext, AppConsumer };

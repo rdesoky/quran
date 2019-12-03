@@ -140,7 +140,10 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     }
     .FieldLabel {
         width: 38%;
-        text-align: left;
+        text-align: right;
+        [dir="rtl"] & {
+            text-align: left;
+        }
         padding: 0 10px;
         box-sizing: border-box;
     }
@@ -341,6 +344,11 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
         .ButtonsBar {
             padding: 0;
             margin: 0 4px;
+            .CommandButton {
+                span {
+                    font-size: 12px;
+                }
+            }
         }
         button {
             // height: 100%;
@@ -407,6 +415,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
 
 .TafseerView {
     white-space: normal;
+    direction: rtl;
     //     .VerseInfo {
     //         float: left;
     //         margin: 0 10px 10px 0;
@@ -444,7 +453,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     .ClearButton {
         position: absolute;
         // right: 10px;
-        // top: 10px;
+        top: 10px;
         color: #999;
         // [dir="rtl"] & {
         left: 10px;

@@ -333,7 +333,7 @@ const Exercise = ({}) => {
         return (
             <div className="ContentFrame">
                 <VerseInfo onMoveNext={onMoveNext} />
-                <VerseText />
+                <VerseText copy={true} bookmark={true} />
                 <div className="FootNote">
                     <String id="exercise_intro" />
                 </div>

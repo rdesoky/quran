@@ -156,6 +156,13 @@ const TafseerView = ({
     const tafDirection = () => {
         return TafseerList.find(i => i.id === tafseer).dir;
     };
+
+    const tafTextAlign = () => {
+        return TafseerList.find(i => i.id === tafseer).dir === "ltr"
+            ? "left"
+            : "right";
+    };
+
     return (
         <div className="TafseerView">
             <div>
@@ -171,7 +178,10 @@ const TafseerView = ({
             <div>
                 <p
                     className="TafseerText"
-                    style={{ direction: tafDirection() }}
+                    style={{
+                        direction: tafDirection(),
+                        textAlign: tafTextAlign()
+                    }}
                 >
                     {renderSelector()}
                     {" - "}

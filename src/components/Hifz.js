@@ -23,12 +23,14 @@ import {
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { VerseText } from "./Widgets";
+import { ThemeContext } from "../context/Theme";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
 const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
+    const theme = useContext(ThemeContext);
     const [suraName, setSuraName] = useState("");
     const [rangeInfo, setRangeInfo] = useState("");
     const [ageClass, setAgeClass] = useState("NoHifz");
@@ -83,7 +85,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
         setAgeClass(ageClass);
         setAgeInfo(ageInfo);
-    }, [range.date]);
+    }, [range.date, theme.lang]);
 
     useEffect(() => {
         setActions(showActions);

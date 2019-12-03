@@ -7,6 +7,8 @@ import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
 import DDrop from "./../DDrop";
+import { FormattedMessage as String } from "react-intl";
+import { AddHifz } from "../Modal/Favorites";
 
 export function PageRedirect({ match }) {
     let { aya } = match.params;
@@ -117,7 +119,9 @@ function Pager({ match }) {
                 app.pushRecentCommand("Copy");
                 break;
             case "Escape":
-                if (app.popup !== null) {
+                if (app.getMessageBox()) {
+                    app.setMessageBox(null);
+                } else if (app.popup !== null) {
                     app.closePopup();
                 } else if (app.maskStart !== -1) {
                     app.hideMask();
@@ -125,12 +129,15 @@ function Pager({ match }) {
                 break;
             case "KeyI":
                 if (canShowPopup) {
-                    app.setPopup("Index");
+                    app.setPopup("Indices");
                 }
                 break;
             case "KeyF":
                 if (canShowPopup) {
-                    app.setPopup("Favorites");
+                    app.setMessageBox({
+                        title: <String id="update_hifz" />,
+                        content: <AddHifz />
+                    });
                 }
                 break;
             case "KeyG":
@@ -146,6 +153,11 @@ function Pager({ match }) {
             case "KeyB":
                 if (canShowPopup) {
                     app.setPopup("Bookmarks");
+                }
+                break;
+            case "KeyO":
+                if (canShowPopup) {
+                    app.setPopup("Settings");
                 }
                 break;
             case "KeyS":
