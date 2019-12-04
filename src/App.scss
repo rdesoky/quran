@@ -10,6 +10,10 @@ $weekHifzText: #ff8c8c;
 
 $fairHifzBg: rgba(189, 145, 0, 0.2);
 $fairHifzText: #ffd900;
+$chartHeight: 35px;
+$hifzRowHeight: 70px;
+
+$PageThumbColor: rgba(170, 170, 170, 0.2);
 
 // *:focus {
 //     // outline: solid 2px rgb(61, 145, 255);
@@ -193,7 +197,7 @@ hr {
 
 .VerseText {
     margin: 0;
-    line-height: 22px;
+    // line-height: 22px;
     color: rgb(207, 207, 0);
     text-overflow: ellipsis;
     overflow: hidden;
@@ -274,32 +278,52 @@ hr {
 }
 
 .HifzRangeRow {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     // border-radius: 5px;
     // border: solid 1px #444;
     min-width: 300px;
+    &:last-child {
+        margin-bottom: 0;
+    }
 
-    > button:hover {
-        background-color: transparent !important;
+    > .HifzRangeBody {
+        padding: 0 !important;
+        width: 100%;
+        text-align: inherit;
+        height: $hifzRowHeight;
+        &:hover {
+            background-color: transparent !important;
+        }
+        > div {
+            line-height: $chartHeight;
+            margin: 0 5px;
+        }
+    }
+
+    .ActionsBar {
+        button {
+            background-color: #444;
+        }
     }
 
     .AgeInfo {
         float: right;
-        [dir="rtl"] & {
-            float: left;
-        }
+        // [dir="rtl"] & {
+        //     float: left;
+        // }
     }
     .RangeInfo {
         font-weight: bold;
     }
     .ActionsBar {
         position: absolute;
-        bottom: 0;
+        bottom: 0px;
+        left: 2px;
     }
     .RangeText {
         height: 30px;
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
     }
 }
 
@@ -326,16 +350,18 @@ hr {
 
 .SuraHifzChart {
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+    // top: 0;
+    // left: 0;
+    // height: 100%;
+    // width: 100%;
+    height: $chartHeight;
     width: 100%;
-    border: solid 1px #444;
+    border: solid 1px $PageThumbColor;
     box-sizing: border-box;
     border-radius: 5px;
-    .HifzRangeRow & {
-        height: 46%;
-    }
+    // .HifzRangeRow & {
+    //     height: 46%;
+    // }
     pointer-events: none;
     .SuraRange {
         position: absolute;
@@ -350,12 +376,12 @@ hr {
         position: absolute;
         height: 100%;
         border-style: solid;
-        border-color: rgba(170, 170, 170, 0.2);
+        border-color: $PageThumbColor;
         border-width: 0 0 0 1px;
         background-position-x: 2px;
         box-sizing: border-box;
         &.ActivePage {
-            background-color: rgba(170, 170, 170, 0.2);
+            background-color: $PageThumbColor;
         }
     }
 }
@@ -557,13 +583,13 @@ hr {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    background-color: #333;
+    background-color: #222;
     color: white;
     min-width: 200px;
     box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
     animation: FadeInToCenter 0.4s;
     .MessageBoxTitle {
-        background-color: #444;
+        background-color: #333;
         height: 30px;
         line-height: 30px;
         padding: 0 10px;
