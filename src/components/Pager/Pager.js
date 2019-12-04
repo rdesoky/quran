@@ -64,7 +64,8 @@ function Pager({ match }) {
         app.popup,
         app.maskStart,
         app.modalPopup,
-        app.selectStart
+        app.selectStart,
+        app.expandedMenu
     ]);
 
     useEffect(() => {
@@ -123,6 +124,8 @@ function Pager({ match }) {
                     app.setMessageBox(null);
                 } else if (app.popup !== null) {
                     app.closePopup();
+                } else if (app.expandedMenu) {
+                    app.setExpandedMenu(false);
                 } else if (app.maskStart !== -1) {
                     app.hideMask();
                 }
