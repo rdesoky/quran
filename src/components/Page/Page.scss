@@ -147,9 +147,15 @@ $selectionBgColorDark: rgb(38, 93, 138);
     .SelectionButton {
         color: black;
         background-color: $selectionBgColor;
+        &:hover {
+            color: black !important;
+        }
         .DarkTheme & {
             color: white;
             background-color: $selectionBgColorDark;
+            &:hover {
+                color: white !important;
+            }
         }
     }
 

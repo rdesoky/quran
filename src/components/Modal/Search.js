@@ -169,29 +169,25 @@ const Search = ({ app }) => {
                     ({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
                         const ayaInfo = QData.ayaIdInfo(aya);
                         return (
-                            <String id="sura_names" key={i}>
-                                {sura_names => (
-                                    <li className="ResultItem">
-                                        <button onClick={gotoAya} aya={aya}>
-                                            <span className="ResultInfo">
-                                                {sura_names.split(",")[
-                                                    ayaInfo.sura
-                                                ] + ` (${ayaInfo.aya + 1})`}
-                                            </span>
-                                            <span
-                                                className="ResultText link"
-                                                dangerouslySetInnerHTML={Utils.hilightSearch(
-                                                    nSearchTerm,
-                                                    ayaText,
-                                                    normalizedAyaText
-                                                )}
-                                            />
-                                        </button>
-                                        {/* <div>{text}</div>
-									<div>{ntext}</div> */}
-                                    </li>
-                                )}
-                            </String>
+                            <li
+                                key={aya}
+                                onClick={gotoAya}
+                                aya={aya}
+                                className="ResultItem"
+                                tabIndex="0"
+                            >
+                                <span className="ResultInfo">
+                                    {app.suraName(ayaInfo.sura)}
+                                </span>
+                                <span
+                                    className="ResultText link"
+                                    dangerouslySetInnerHTML={Utils.hilightSearch(
+                                        nSearchTerm,
+                                        ayaText,
+                                        normalizedAyaText
+                                    )}
+                                />
+                            </li>
                         );
                     }
                 )}
