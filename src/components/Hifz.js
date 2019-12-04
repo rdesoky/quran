@@ -59,7 +59,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             pages: rangePagesCount
         };
 
-        setRangeInfo(app.formatMessage({ id }, values));
+        setRangeInfo(app.intl.formatMessage({ id }, values));
 
         if (!range.date) {
             return;
@@ -73,7 +73,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                 : "not_revised";
         values = { days: age };
 
-        const ageInfo = app.formatMessage({ id }, values);
+        const ageInfo = app.intl.formatMessage({ id }, values);
 
         let ageClass = "GoodHifz";
         if (age > 7) {

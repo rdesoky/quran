@@ -213,7 +213,7 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                 break;
             case "Copy":
                 Utils.copy2Clipboard(app.getSelectedText());
-                app.showToast(app.formatMessage({ id: "text_copied" }));
+                app.showToast(app.intl.formatMessage({ id: "text_copied" }));
                 break;
             case "Share":
                 break;

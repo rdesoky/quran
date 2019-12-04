@@ -401,7 +401,7 @@ export const BookmarkListItem = ({
 
         setVerseText(app.verseList()[verse]);
 
-        const bookmarkDesc = app.formatMessage(
+        const bookmarkDesc = app.intl.formatMessage(
             { id: "bookmark_desc" },
             {
                 sura: suraName,

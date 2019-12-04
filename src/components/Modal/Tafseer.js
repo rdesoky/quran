@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer, AppContext } from "../../context/App";
-import { PlayerConsumer } from "../../context/Player";
+import { PlayerConsumer, PlayerContext } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleLeft,
@@ -36,7 +36,9 @@ const TafseerList = [
     { id: "muntahab", name: "русский", dir: "ltr", file: "ru.muntahab.txt" }
 ];
 
-const Tafseer = ({ app, player }) => {
+const Tafseer = () => {
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
     const [verse, setVerse] = useState(app.selectStart);
 
     const offsetSelection = offset => {
@@ -71,6 +73,7 @@ const Tafseer = ({ app, player }) => {
                 <TafseerView
                     verse={verse}
                     onMoveNext={offsetSelection}
+                    bookmark={true}
                     copy={true}
                 />
             </div>
@@ -78,7 +81,7 @@ const Tafseer = ({ app, player }) => {
     );
 };
 
-const TafseerView = ({
+export const TafseerView = ({
     verse,
     onMoveNext,
     showVerse = true,
@@ -129,7 +132,7 @@ const TafseerView = ({
             `${tafseerName()}:\n ${text} (${verseInfo.sura +
                 1}:${verseInfo.aya + 1})`
         );
-        app.showToast(app.formatMessage({ id: "text_copied" }));
+        app.showToast(app.intl.formatMessage({ id: "text_copied" }));
     };
 
     const onSelectTafseer = e => {
@@ -196,5 +199,4 @@ const TafseerView = ({
         </div>
     );
 };
-export default AppConsumer(PlayerConsumer(Tafseer));
-export { TafseerView };
+export default Tafseer;
