@@ -244,10 +244,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     }
 
     .ResultInfo {
-        float: left;
-        [dir="rtl"] & {
-            float: right;
-        }
+        float: right;
         color: cyan;
         background-color: #444;
         border-radius: 5px;
@@ -265,6 +262,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
 
     .ResultsList {
         // margin-top: 20px;
+        direction: rtl;
         margin: 0;
         padding-inline-start: 30px;
         // overflow: auto;

@@ -57,6 +57,7 @@ $fairHifzText: #ffd900;
 
 button,
 .LinkButton {
+    font-family: Arial;
     transition: background-color 0.3s, top 0.5s;
     border: none;
     border-width: 0;
@@ -492,14 +493,17 @@ hr {
 
     .PopupPointer {
         position: absolute;
-        width: 20px;
-        height: 20px;
+        width: 17px;
+        height: 17px;
+        border-style: solid;
+        border-color: #aaa;
+        border-width: 1px 0 0 1px;
         background-color: #333;
         transform: rotate(45deg) translateY(50%);
-        // transform: translateX(-50%);
         animation: FadeIn 0.5s;
         &.DownPointer {
             transform: rotate(45deg) translateY(-50%);
+            border-width: 0 1px 1px 0;
         }
         .DarkTheme & {
             background-color: #444;
@@ -517,7 +521,8 @@ hr {
         box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
         padding: 15px 10px 10px;
         animation: FadeIn 0.4s;
-
+        border: solid 1px #aaa;
+        border-radius: 4px;
         .DarkTheme & {
             background-color: #444;
         }
@@ -547,10 +552,12 @@ hr {
 .MessageBox {
     position: fixed;
     z-index: 4;
+    border: solid 1px #aaa;
+    border-radius: 4px;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    background-color: #222;
+    background-color: #333;
     color: white;
     min-width: 200px;
     box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
@@ -560,6 +567,7 @@ hr {
         height: 30px;
         line-height: 30px;
         padding: 0 10px;
+        border-radius: 4px 4px 0 0;
     }
     .MessageBoxContent {
         padding: 15px;
@@ -578,6 +586,7 @@ hr {
 
         width: 30px;
         height: 30px;
+        border-radius: 15px;
         color: white;
         font-size: 20px;
     }

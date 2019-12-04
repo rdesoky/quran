@@ -116,16 +116,22 @@ const Settings = () => {
                             value={settings.exerciseLevel}
                         >
                             <option value={0}>
-                                {app.formatMessage({ id: "beginner_level" })}
+                                {app.intl.formatMessage({
+                                    id: "beginner_level"
+                                })}
                             </option>
                             <option value={1}>
-                                {app.formatMessage({ id: "moderate_level" })}
+                                {app.intl.formatMessage({
+                                    id: "moderate_level"
+                                })}
                             </option>
                             <option value={2}>
-                                {app.formatMessage({ id: "high_level" })}
+                                {app.intl.formatMessage({ id: "high_level" })}
                             </option>
                             <option value={3}>
-                                {app.formatMessage({ id: "advanced_level" })}
+                                {app.intl.formatMessage({
+                                    id: "advanced_level"
+                                })}
                             </option>
                         </select>
                     </label>

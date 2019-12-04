@@ -379,7 +379,7 @@ const Exercise = ({}) => {
             setTimeout(() => {
                 if (quickMode > 0) {
                     app.showToast(
-                        app.formatMessage({ id: "success_write_next" })
+                        app.intl.formatMessage({ id: "success_write_next" })
                     );
                     typeNextVerse();
                     return;

@@ -116,7 +116,7 @@ export const VerseText = ({
         Utils.copy2Clipboard(
             `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
         );
-        app.showToast(app.formatMessage({ id: "text_copied" }));
+        app.showToast(app.intl.formatMessage({ id: "text_copied" }));
     };
 
     useEffect(() => {
