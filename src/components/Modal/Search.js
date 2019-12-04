@@ -228,7 +228,7 @@ const Search = ({ app }) => {
     };
 
     const onSubmitSearch = txt => {
-        let firstResult = resultsDiv.querySelector("button");
+        let firstResult = resultsDiv.querySelector("li");
         if (firstResult) {
             firstResult.focus();
             addToSearchHistory();

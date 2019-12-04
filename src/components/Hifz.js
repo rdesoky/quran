@@ -205,20 +205,20 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     return (
         <li className={"HifzRangeRow".appendWord(ageClass)}>
             <SuraHifzChart range={range} />
-            <button
+            <div
+                className="HifzRangeBody"
+                tabIndex="0"
                 onClick={toggleActions}
                 style={{
-                    width: "100%",
-                    textAlign: "inherit",
-                    padding: 10
+                    textAlign: "inherit"
                 }}
             >
-                <div className="AgeInfo">{ageInfo}</div>
                 <div className="RangeInfo">
                     {suraName}
                     {": "}
                     {rangeInfo}
                 </div>
+                <div className="AgeInfo">{ageInfo}</div>
                 <div
                     className="RangeText"
                     style={{
@@ -234,7 +234,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                         ""
                     )}
                 </div>
-            </button>
+            </div>
             {range.date ? (
                 actions ? (
                     <div className="ActionsBar">
@@ -242,7 +242,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                             <Icon icon={faPlayCircle} />
                         </button>
                         <button onClick={reviewRange}>
-                            <Icon icon={faEyeSlash} /> <String id="revise" />
+                            <Icon icon={faEyeSlash} />
                         </button>
                         <button onClick={setRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
@@ -251,7 +251,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
                             <Icon icon={faBookOpen} />
                         </button> */}
                         <button onClick={deleteHifzRange}>
-                            <Icon icon={faTimes} /> <String id="remove" />
+                            <Icon icon={faTimes} />
                         </button>
                     </div>
                 ) : (
