@@ -384,13 +384,13 @@ export const VerseContextButtons = ({ verse }) => {
     const player = useContext(PlayerContext);
     return (
         <div className="IconsBar">
-            <CommandButton command="Mask" />
-            <CommandButton command="Bookmark" />
             {player.audioState === AudioState.stopped ? (
                 <CommandButton command="Play" />
             ) : (
                 <CommandButton command="Stop" />
             )}
+            <CommandButton command="Tafseer" />
+            <CommandButton command="Mask" />
             <CommandButton command="Copy" />
         </div>
     );

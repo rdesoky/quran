@@ -12,6 +12,7 @@ import {
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import Utils from "../../services/utils";
+import { CommandButton } from "./Commands";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -64,7 +65,14 @@ const Tafseer = () => {
         <>
             <div className="Title">
                 <String id="tafseer" />
-                {app.isNarrow ? <PlayerButtons /> : ""}
+                {app.isNarrow ? (
+                    <>
+                        <PlayerButtons />
+                        <CommandButton command="Exercise" />
+                    </>
+                ) : (
+                    ""
+                )}
             </div>
             <div
                 className="PopupBody"

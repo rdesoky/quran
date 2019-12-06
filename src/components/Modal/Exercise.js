@@ -694,9 +694,10 @@ const Exercise = ({}) => {
                         </div>
                         <TafseerView
                             verse={verse}
-                            showVerse={false}
+                            showVerse={true}
                             bookmark={true}
                             copy={true}
+                            onMoveNext={onMoveNext}
                         />
                         <hr />
                         <ActivityChart activity="chars" />
