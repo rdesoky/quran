@@ -63,13 +63,7 @@ export const VerseInfo = ({
             )}
             <button onClick={handleClick}>
                 <div className="VerseInfoList">
-                    <div>
-                        <String id="sura_names">
-                            {sura_names => (
-                                <>{sura_names.split(",")[verseInfo.sura]}</>
-                            )}
-                        </String>
-                    </div>
+                    <div>{app.suraName(verseInfo.sura)}</div>
                     <div>
                         <String
                             id="verse_num"
@@ -395,6 +389,7 @@ export const VerseContextButtons = ({ verse }) => {
             ) : null}
             <CommandButton command="Mask" />
             <CommandButton command="Copy" />
+            {/* <CommandButton command="Favorites" /> */}
         </div>
     );
 };

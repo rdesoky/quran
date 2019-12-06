@@ -10,7 +10,15 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import {
+    faThumbsUp,
+    faThumbsDown,
+    faPenNib,
+    faPlayCircle,
+    faRandom,
+    faBackward,
+    faBackspace
+} from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
@@ -344,6 +352,7 @@ const Exercise = ({}) => {
     };
 
     const renderIntroTitle = () => {
+        const narrow = app.isNarrow;
         return (
             <>
                 <VerseInfo show={isNarrowLayout()} />
@@ -354,16 +363,28 @@ const Exercise = ({}) => {
                             defaultButton = ref;
                         }}
                     >
-                        <String id="answer" />
+                        {narrow ? (
+                            <Icon icon={faPenNib} />
+                        ) : (
+                            <String id="answer" />
+                        )}
                     </button>
                     <button onClick={startReciting}>
-                        <String id="start" />
+                        {narrow ? (
+                            <Icon icon={faPlayCircle} />
+                        ) : (
+                            <String id="start" />
+                        )}
                     </button>
                     <button onClick={typeNextVerse}>
                         <String id="type_next" />
                     </button>
                     <button onClick={gotoRandomVerse}>
-                        <String id="new_verse" />
+                        {narrow ? (
+                            <Icon icon={faRandom} />
+                        ) : (
+                            <String id="new_verse" />
+                        )}
                     </button>
                 </div>
             </>
