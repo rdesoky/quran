@@ -316,6 +316,7 @@ export const SuraIndexCell = memo(
                     sura,
                     suraInfo.ep - suraInfo.sp + 1
                 );
+                app.showToast(<String id="sura_memorized" />);
             }
             // app.setMessageBox({
             //     title: <String id="add_hifz" />,
