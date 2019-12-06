@@ -382,6 +382,7 @@ export const ContextPopup = ({}) => {
 
 export const VerseContextButtons = ({ verse }) => {
     const player = useContext(PlayerContext);
+    const app = useContext(AppContext);
     return (
         <div className="IconsBar">
             {player.audioState === AudioState.stopped ? (
@@ -389,7 +390,9 @@ export const VerseContextButtons = ({ verse }) => {
             ) : (
                 <CommandButton command="Stop" />
             )}
-            <CommandButton command="Tafseer" />
+            {app.popup !== "Tafseer" ? (
+                <CommandButton command="Tafseer" />
+            ) : null}
             <CommandButton command="Mask" />
             <CommandButton command="Copy" />
         </div>

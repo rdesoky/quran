@@ -13,7 +13,7 @@ $fairHifzText: #ffd900;
 $chartHeight: 35px;
 $hifzRowHeight: 70px;
 
-$PageThumbColor: rgba(170, 170, 170, 0.2);
+$PageThumbColor: rgba(170, 170, 170, 0.25);
 
 // *:focus {
 //     // outline: solid 2px rgb(61, 145, 255);
@@ -257,7 +257,7 @@ hr {
 }
 
 .NoHifz {
-    background-color: rgba(0, 117, 195, 0.219);
+    // background-color: rgba(0, 117, 195, 0.219);
     border-color: rgb(0, 109, 182);
 }
 
@@ -367,10 +367,13 @@ hr {
         position: absolute;
         height: 100%;
         border-style: solid;
-        border-width: 1px;
+        border-width: 0;
         box-sizing: border-box;
         border-radius: 4px;
         // background-color: $fairHifzBg;
+        &.active {
+            border-width: 1px;
+        }
     }
     .PageThumb {
         position: absolute;
