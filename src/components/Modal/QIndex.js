@@ -305,6 +305,7 @@ export const SuraIndexCell = memo(
             const suraRanges = app.suraRanges(sura);
 
             if (suraRanges.length) {
+                checkClosePopup();
                 app.gotoSura(sura);
                 app.setMessageBox({
                     title: <String id="update_hifz" />,

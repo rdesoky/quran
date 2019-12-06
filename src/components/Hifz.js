@@ -145,6 +145,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
         }
+        app.setMessageBox(null);
     };
 
     const setRangeRevised = () => {
@@ -349,7 +350,9 @@ const SuraHifzChart = memo(({ sura, range }) => {
                 return (
                     <div
                         key={i}
-                        // onClick={e => app.gotoPage(i + suraInfo.sp)}
+                        onClick={e => {
+                            app.gotoPage(i + suraInfo.sp);
+                        }}
                         className={"PageThumb".appendWord(activeClass)}
                         style={{
                             right: `${(100 * i) / suraPages}%`,
