@@ -150,5 +150,6 @@
     "high_level": "High level",
     "advanced_level": "Advance level",
     "exercise_memorized": "Pick memorized",
-    "language": "Language"
+    "language": "Language",
+    "sura_memorized": "The chapter has been marked as memorized"
 }
