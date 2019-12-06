@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Modal from "./Modal";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "./../../context/App";
+import { AppConsumer, AppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { ThemeContext } from "../../context/Theme";
 
-const Search = ({ app }) => {
+const Search = ({}) => {
+    const app = useContext(AppContext);
+    const theme = useContext(ThemeContext);
     const input = useRef(null);
     const [searchTerm, setSearchTerm] = useState(
         localStorage.getItem("LastSearch") || ""
@@ -121,9 +124,12 @@ const Search = ({ app }) => {
                             })
                             .filter(
                                 suraInfo =>
-                                    nSuraNames[suraInfo.index].indexOf(
-                                        nSearchTerm
-                                    ) !== -1
+                                    nSuraNames[suraInfo.index].match(
+                                        new RegExp(nSearchTerm, "i")
+                                    ) !== null
+                                // nSuraNames[suraInfo.index].indexOf(
+                                //     nSearchTerm
+                                // ) !== -1
                             )
                             .map(suraInfo => {
                                 return (
@@ -349,4 +355,4 @@ const Search = ({ app }) => {
     );
 };
 
-export default AppConsumer(Search);
+export default Search;

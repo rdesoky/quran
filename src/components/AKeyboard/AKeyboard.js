@@ -98,10 +98,17 @@ const keyRows = [
         "KeyX",
         "KeyZ"
     ],
-    ["Enter", "Backspace", "ClearWord", "Space", "ClearAll", "Backquote"]
+    ["Backspace", "Enter", "ClearWord", "Space", "ClearAll", "Backquote"]
 ];
 
-const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
+const AKeyboard = ({
+    initText,
+    onUpdateText,
+    onEnter,
+    onCancel,
+    style,
+    lang = "ar"
+}) => {
     const [text, setText] = useState(initText);
     const [typedChar, setTypedChar] = useState("");
 
@@ -109,6 +116,9 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
         setText(newText);
         onUpdateText(newText);
     };
+
+    const langIndex = lang === "ar" ? 0 : 1;
+    const secondaryLangIndex = lang === "ar" ? 1 : 0;
 
     const handleKeyDown = e => {
         const { code, ctrlKey, target } = e;
@@ -155,7 +165,7 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
                 }
             default:
                 if (keyMap[code]) {
-                    updateText(text.concat(keyMap[code][0]));
+                    updateText(text.concat(keyMap[code][langIndex]));
                     break;
                 }
                 return; //not handled
@@ -193,10 +203,10 @@ const AKeyboard = ({ initText, onUpdateText, onEnter, onCancel, style }) => {
                             }}
                         >
                             <span className="KeyMainChar">
-                                {keyMap[key][0]}
+                                {keyMap[key][langIndex]}
                             </span>
                             <span className="KeyLatinChar">
-                                {keyMap[key][1]}
+                                {keyMap[key][secondaryLangIndex]}
                             </span>
                         </span>
                     ))}

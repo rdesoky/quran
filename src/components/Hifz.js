@@ -158,6 +158,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     const addCurrentPage = e => {
         app.addHifzRange(range.startPage, range.sura, 1);
     };
+
     const addSura = e => {
         app.addHifzRange(
             suraInfo.sp - 1,
@@ -165,6 +166,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             suraInfo.ep - suraInfo.sp + 1
         );
     };
+
     const addFromSuraStart = e => {
         app.addHifzRange(
             suraInfo.sp - 1,
@@ -172,6 +174,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
             range.startPage - suraInfo.sp + 2
         );
     };
+
     const addToSuraEnd = e => {
         app.addHifzRange(
             range.startPage,
@@ -190,7 +193,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
         });
     };
 
-    if (filter && suraName.indexOf(filter) === -1) {
+    if (filter && suraName.match(new RegExp(filter, "i")) === null) {
         return "";
     }
 
