@@ -18,12 +18,10 @@ const initSidebarCommands = [
     "Favorites",
     "Bookmarks",
     "Goto",
-    "Copy"
+    "Copy",
     // "Share",
-    // "Profile",
     // "Theme",
-    // "Settings",
-    // "Help"
+    "Help"
 ];
 
 //Default context values
