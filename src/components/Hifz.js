@@ -62,6 +62,8 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
         setRangeInfo(app.intl.formatMessage({ id }, values));
 
         if (!range.date) {
+            setAgeClass("NoHifz");
+            setAgeInfo("");
             return;
         }
         const age = Math.floor((Date.now() - range.date) / dayLength);

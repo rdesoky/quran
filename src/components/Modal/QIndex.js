@@ -20,6 +20,7 @@ import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 import { TafseerView } from "./Tafseer";
 import { ThemeContext } from "../../context/Theme";
+import { AddHifz } from "./Favorites";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
@@ -298,20 +299,36 @@ export const SuraIndexCell = memo(
                 selectSura && selectSura(sura);
             }
         };
-        const addSuraToHifz = e => {
+        const addUpdateHifz = e => {
             //TODO: check if sura has old ranges, then confirmation is required
-            app.setMessageBox({
-                title: <String id="add_hifz" />,
-                content: <String id="are_you_sure" />,
-                onYes: () => {
-                    const suraInfo = QData.sura_info[sura];
-                    app.addHifzRange(
-                        suraInfo.sp - 1,
-                        sura,
-                        suraInfo.ep - suraInfo.sp + 1
-                    );
-                }
-            });
+            const suraInfo = QData.sura_info[sura];
+            const suraRanges = app.suraRanges(sura);
+
+            if (suraRanges.length) {
+                app.gotoSura(sura);
+                app.setMessageBox({
+                    title: <String id="update_hifz" />,
+                    content: <AddHifz />
+                });
+            } else {
+                app.addHifzRange(
+                    suraInfo.sp - 1,
+                    sura,
+                    suraInfo.ep - suraInfo.sp + 1
+                );
+            }
+            // app.setMessageBox({
+            //     title: <String id="add_hifz" />,
+            //     content: <String id="are_you_sure" />,
+            //     onYes: () => {
+            //         const suraInfo = QData.sura_info[sura];
+            //         app.addHifzRange(
+            //             suraInfo.sp - 1,
+            //             sura,
+            //             suraInfo.ep - suraInfo.sp + 1
+            //         );
+            //     }
+            // });
         };
 
         const playSura = e => {
@@ -366,7 +383,7 @@ export const SuraIndexCell = memo(
                             <button sura={sura} onClick={playSura}>
                                 <Icon icon={faPlayCircle} />
                             </button>
-                            <button sura={sura} onClick={addSuraToHifz}>
+                            <button sura={sura} onClick={addUpdateHifz}>
                                 <Icon icon={faHeart} />
                             </button>
                             {/* <button sura={sura} onClick={reviewSura}>

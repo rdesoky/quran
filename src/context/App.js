@@ -636,7 +636,13 @@ class AppProvider extends Component {
         this.setState({ toastMessage });
     };
 
+    suraRanges = sura =>
+        this.state.hifzRanges
+            .filter(r => r.sura === sura)
+            .sort((r1, r2) => (r1.startPage > r2.startPage ? 1 : -1));
+
     methods = {
+        suraRanges: this.suraRanges,
         setMessageBox: this.setMessageBox,
         getMessageBox: this.getMessageBox,
         setContextPopup: this.setContextPopup,
