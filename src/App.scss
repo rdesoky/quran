@@ -415,6 +415,7 @@ hr {
     margin: 2px 0;
     button {
         border-radius: 5px;
+        height: $chartHeight;
     }
 }
 
@@ -630,5 +631,104 @@ hr {
     }
     svg {
         font-size: 30px;
+    }
+}
+
+.SpreadSheet,
+.FlowingList {
+    list-style: none;
+    margin: 0;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+
+    li {
+        list-style: none;
+        display: inline-block;
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        > button {
+            width: 100%;
+        }
+        button,
+        .LinkButton {
+            padding: 8px;
+            background-color: transparent;
+            text-align: inherit;
+            &:hover {
+                background-color: #666;
+            }
+            &.active {
+                background-color: #333;
+            }
+        }
+        .actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            height: $chartHeight;
+            min-width: 25px;
+            pointer-events: none;
+            [dir="rtl"] & {
+                left: 0;
+                right: auto;
+            }
+            button {
+                width: 30px;
+                text-align: center;
+                color: white;
+                svg {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
+
+.FlowingList {
+    li {
+        display: block;
+        width: auto;
+    }
+}
+
+.blinking {
+    animation: smooth-blink 3s linear infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    50.01% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes smooth-blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+li.BookmarkRow {
+    > button {
+        width: 100%;
+        display: block;
+        line-height: 22px;
     }
 }

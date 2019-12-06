@@ -19,9 +19,11 @@ import {
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 import { TafseerView } from "./Tafseer";
+import { ThemeContext } from "../../context/Theme";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
+    const theme = useContext(ThemeContext);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
@@ -135,6 +137,7 @@ const QIndex = ({ simple }) => {
                 onEnter={hideKeyboard}
                 onCancel={hideKeyboard}
                 onEnter={hideKeyboard}
+                lang={theme.lang}
             />
 
             <div
@@ -319,18 +322,18 @@ export const SuraIndexCell = memo(
             }, 500);
         };
 
-        const reviewSura = e => {
-            const verse = gotoSura(e);
-            setTimeout(() => {
-                app.setMaskStart(verse, { sel: true });
-                //app.closePopup();
-                checkClosePopup();
-            });
-            app.pushRecentCommand("Mask");
-        };
+        // const reviewSura = e => {
+        //     const verse = gotoSura(e);
+        //     setTimeout(() => {
+        //         app.setMaskStart(verse, { sel: true });
+        //         //app.closePopup();
+        //         checkClosePopup();
+        //     });
+        //     app.pushRecentCommand("Mask");
+        // };
 
         useEffect(() => {
-            setSuraName(app.suraNames()[sura]);
+            setSuraName(app.suraName(sura));
         }, [sura]);
 
         let btn;
@@ -341,7 +344,7 @@ export const SuraIndexCell = memo(
             }
         }, [selectedSura]);
 
-        if (filter && -1 === suraName.indexOf(filter)) {
+        if (filter && suraName.match(new RegExp(filter, "i")) === null) {
             return "";
         }
 
@@ -459,7 +462,7 @@ export const BookmarkListItem = ({
         setShowTafseer(showTafseer);
     }, [showTafseer]);
 
-    if (filter && -1 === suraName.indexOf(filter)) {
+    if (filter && suraName.match(new RegExp(filter, "i")) === null) {
         return "";
     }
 
