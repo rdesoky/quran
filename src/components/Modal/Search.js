@@ -115,9 +115,9 @@ const Search = ({}) => {
                 <String id="sura_names">
                     {sura_names => {
                         const nSuraNames = Utils.normalizeText(
-                            sura_names
+                            QData.arSuraNames
                         ).split(",");
-                        return sura_names
+                        return QData.arSuraNames
                             .split(",")
                             .map((suraName, index) => {
                                 return { name: suraName, index: index };
