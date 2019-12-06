@@ -148,7 +148,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     const setRangeRevised = () => {
-        app.setMessageBox({
+        app.pushMessageBox({
             title: <String id="revised" />,
             onYes: () => {
                 app.setRangeRevised(range);
@@ -186,7 +186,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     const deleteHifzRange = e => {
-        app.setMessageBox({
+        app.pushMessageBox({
             title: <String id="remove_hifz" />,
             onYes: () => {
                 app.deleteHifzRange(range);

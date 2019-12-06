@@ -13,7 +13,7 @@ const Bookmarks = () => {
     const app = useContext(AppContext);
     const toggleBookmark = e => {
         if (app.isBookmarked()) {
-            app.setMessageBox({
+            app.pushMessageBox({
                 title: <String id="delete_bookmark" />,
                 content: <String id="are_you_sure" />,
                 onYes: () => {

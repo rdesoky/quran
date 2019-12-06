@@ -256,7 +256,7 @@ export const MessageBox = () => {
     const msgBoxInfo = app.getMessageBox();
 
     const onClose = e => {
-        app.setMessageBox(null);
+        app.pushMessageBox(null);
     };
 
     const onYes = e => {

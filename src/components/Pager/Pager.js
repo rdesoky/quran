@@ -121,7 +121,7 @@ function Pager({ match }) {
                 break;
             case "Escape":
                 if (app.getMessageBox()) {
-                    app.setMessageBox(null);
+                    app.pushMessageBox(null);
                 } else if (app.popup !== null) {
                     app.closePopup();
                 } else if (app.expandedMenu) {

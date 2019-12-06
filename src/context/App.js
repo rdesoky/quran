@@ -82,11 +82,20 @@ class AppProvider extends Component {
         return this._contextPopupInfo;
     };
 
-    setMessageBox = (msgBoxInfo = null) => {
+    pushMessageBox = (msgBoxInfo = null) => {
         if (msgBoxInfo) {
             this._messageBoxInfo.push(msgBoxInfo);
         } else {
             this._messageBoxInfo.pop();
+        }
+        this.setState({ messageBox: this._messageBoxInfo.length > 0 });
+    };
+
+    setMessageBox = (msgBoxInfo = null) => {
+        if (msgBoxInfo) {
+            this._messageBoxInfo = [msgBoxInfo];
+        } else {
+            this._messageBoxInfo = [];
         }
         this.setState({ messageBox: this._messageBoxInfo.length > 0 });
     };
@@ -643,6 +652,7 @@ class AppProvider extends Component {
 
     methods = {
         suraRanges: this.suraRanges,
+        pushMessageBox: this.pushMessageBox,
         setMessageBox: this.setMessageBox,
         getMessageBox: this.getMessageBox,
         setContextPopup: this.setContextPopup,
