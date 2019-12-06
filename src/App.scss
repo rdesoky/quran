@@ -118,6 +118,9 @@ button,
 
         flex-grow: 1;
         font-size: 13px;
+        svg {
+            font-size: 18px;
+        }
         background: #444;
         &:hover {
             color: white;
