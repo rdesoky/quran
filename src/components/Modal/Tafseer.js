@@ -7,7 +7,8 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleLeft,
     faAngleRight,
-    faCopy
+    faCopy,
+    faQuran
 } from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
@@ -64,6 +65,8 @@ const Tafseer = () => {
     return (
         <>
             <div className="Title">
+                <Icon icon={faQuran} />
+                &nbsp;
                 <String id="tafseer" />
                 {app.isNarrow ? (
                     <>

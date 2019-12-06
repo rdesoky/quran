@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Utils from "../../services/utils";
 import QData from "../../services/QData";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
+import { icon } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 
 const GotoPage = ({ open, app, player }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -67,7 +70,9 @@ const GotoPage = ({ open, app, player }) => {
     return (
         <>
             <div className="Title">
-                <FormattedMessage id="goto" />
+                <Icon icon={faBookOpen} />
+                &nbsp;
+                <String id="goto" />
             </div>
             <div className="FieldRow">
                 <form
@@ -78,7 +83,7 @@ const GotoPage = ({ open, app, player }) => {
                 >
                     <div className="FieldLabel">
                         <label htmlFor="PageNumber">
-                            <FormattedMessage id="page" />
+                            <String id="page" />
                         </label>
                     </div>
                     <div className="FieldValue">
@@ -94,7 +99,7 @@ const GotoPage = ({ open, app, player }) => {
                     </div>
                     <div className="FieldAction">
                         <button type="submit">
-                            <FormattedMessage id="go" />
+                            <String id="go" />
                         </button>
                     </div>
                 </form>
@@ -103,7 +108,7 @@ const GotoPage = ({ open, app, player }) => {
                 <form onSubmit={gotoPart}>
                     <div className="FieldLabel">
                         <label htmlFor="PartNumber">
-                            <FormattedMessage id="part" />
+                            <String id="part" />
                         </label>
                     </div>
                     <div className="FieldValue">
@@ -119,7 +124,7 @@ const GotoPage = ({ open, app, player }) => {
                     </div>
                     <div className="FieldAction">
                         <button type="submit">
-                            <FormattedMessage id="go" />
+                            <String id="go" />
                         </button>
                     </div>
                 </form>

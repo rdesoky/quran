@@ -208,7 +208,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
     };
 
     return (
-        <li className={"HifzRangeRow".appendWord(ageClass)}>
+        <li className={"HifzRangeRow"}>
             <SuraHifzChart range={range} />
             <div
                 className="HifzRangeBody"
@@ -321,6 +321,7 @@ const HifzRanges = ({ filter }) => {
 const SuraHifzChart = memo(({ sura, range }) => {
     const app = useContext(AppContext);
     const [suraRanges, setSuraRanges] = useState([]);
+    const [activeRange, setActiveRange] = useState(null);
 
     const suraIndex = sura !== undefined ? sura : range.sura;
     const suraInfo = QData.sura_info[suraIndex];
@@ -330,13 +331,11 @@ const SuraHifzChart = memo(({ sura, range }) => {
 
     useEffect(() => {
         if (sura !== undefined) {
-            const suraRanges = app.hifzRanges
-                .filter(r => r.sura === sura)
-                .sort((r1, r2) => (r1.startPage > r2.startPage ? 1 : -1));
-            setSuraRanges(suraRanges);
+            setSuraRanges(app.suraRanges(sura));
         }
         if (range) {
-            setSuraRanges([range]);
+            setSuraRanges(app.suraRanges(range.sura));
+            setActiveRange(range);
         }
     }, [app.hifzRanges, range]);
 
@@ -350,6 +349,7 @@ const SuraHifzChart = memo(({ sura, range }) => {
                 return (
                     <div
                         key={i}
+                        // onClick={e => app.gotoPage(i + suraInfo.sp)}
                         className={"PageThumb".appendWord(activeClass)}
                         style={{
                             right: `${(100 * i) / suraPages}%`,
@@ -376,7 +376,14 @@ const SuraHifzChart = memo(({ sura, range }) => {
                 return (
                     <div
                         key={`${r.startPage}-${r.sura}`}
-                        className={"SuraRange".appendWord(ageClass)}
+                        className={"SuraRange"
+                            .appendWord(ageClass)
+                            .appendWord(
+                                "active",
+                                activeRange &&
+                                    activeRange.startPage === r.startPage &&
+                                    activeRange.sura === r.sura
+                            )}
                         style={{ right: `${start}%`, width: `${width}%` }}
                     />
                 );
