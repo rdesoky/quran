@@ -151,5 +151,6 @@
     "advanced_level": "Advance level",
     "exercise_memorized": "Pick memorized",
     "language": "Language",
-    "sura_memorized": "The chapter has been marked as memorized"
+    "sura_memorized": "The chapter has been marked as memorized",
+    "contact_us": "Contact us on: {email}"
 }

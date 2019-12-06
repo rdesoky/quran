@@ -149,5 +149,6 @@
     "advanced_level": "مستوى متميز",
     "exercise_memorized": "من الايات المحفوظة",
     "language": "لغة العرض",
-    "sura_memorized": "تم اضافة السورة للحفظ"
+    "sura_memorized": "تم اضافة السورة للحفظ",
+    "contact_us": "ارسل ملاحظاتك لنا على البريد: {email}"
 }
