@@ -8,7 +8,9 @@ import {
     faChevronDown,
     faTimes,
     faCopy,
-    faBookmark
+    faBookmark,
+    faForward,
+    faBackward
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
@@ -327,7 +329,7 @@ export const ContextPopup = ({}) => {
     //     e.stopPropagation();
     // };
     if (app.contextPopup) {
-        const { target, content } = app.getContextPopup();
+        const { target, content, header } = app.getContextPopup();
         const targetRect = target.getBoundingClientRect();
         if (!targetRect.width) {
             return null;
@@ -353,7 +355,8 @@ export const ContextPopup = ({}) => {
                                 : targetRect.top) - 40
                     }}
                 >
-                    {content}
+                    <div className="ContextHeader">{header}</div>
+                    <div className="ContextBody">{content}</div>
                 </div>
                 <div
                     className={"PopupPointer".appendWord(
@@ -406,6 +409,41 @@ export const PageContextButtons = ({ page }) => {
                 <CommandButton command="Stop" />
             )}
             <CommandButton command="Favorites" />
+        </div>
+    );
+};
+
+export const SuraNavigator = () => {
+    const [suraIndex, setSuraIndex] = useState(0);
+    const app = useContext(AppContext);
+
+    const stopPropagation = e => e.stopPropagation();
+
+    const gotoNextSura = e => {
+        app.gotoSura(suraIndex + 1);
+    };
+
+    const gotoPrevSura = e => {
+        app.gotoSura(suraIndex - 1);
+    };
+
+    useEffect(() => {
+        const ayaInfo = QData.ayaIdInfo(app.selectStart);
+        setSuraIndex(ayaInfo.sura);
+    }, [app.selectStart]);
+
+    return (
+        <div className="SuraNavigator" onClick={stopPropagation}>
+            {suraIndex < 113 ? (
+                <button onClick={gotoPrevSura}>
+                    <Icon icon={faForward} />
+                </button>
+            ) : null}
+            {suraIndex > 0 ? (
+                <button onClick={gotoNextSura}>
+                    <Icon icon={faBackward} />
+                </button>
+            ) : null}
         </div>
     );
 };
