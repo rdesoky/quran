@@ -65,8 +65,6 @@ const Tafseer = () => {
     return (
         <>
             <div className="Title">
-                <Icon icon={faQuran} />
-                &nbsp;
                 <String id="tafseer" />
                 {app.isNarrow ? (
                     <>
