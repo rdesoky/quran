@@ -182,6 +182,7 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                 app.setExpandedMenu(!app.expandedMenu);
                 break;
             case "Play":
+                //TODO: first navigate to the current selection
                 player.play();
                 return;
             case "Pause":

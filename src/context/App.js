@@ -329,6 +329,8 @@ class AppProvider extends Component {
                 history.replace(targetPath);
             } else {
                 history.push(targetPath);
+                const verse = QData.pageAyaId(pageNum - 1);
+                this.selectAya(verse);
             }
         }
     };
