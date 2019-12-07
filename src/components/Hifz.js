@@ -27,7 +27,13 @@ import { ThemeContext } from "../context/Theme";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
-const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
+const HifzRange = ({
+    range,
+    filter,
+    showActions = false,
+    pages = true,
+    setActiveRange
+}) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const theme = useContext(ThemeContext);
@@ -210,7 +216,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
     return (
         <li className={"HifzRangeRow"}>
-            <SuraHifzChart pages={false} range={range} />
+            <SuraHifzChart pages={pages} range={range} />
             <div
                 className="HifzRangeBody"
                 tabIndex="0"
@@ -311,6 +317,7 @@ const HifzRanges = ({ filter }) => {
                         filter={filter}
                         showActions={activeRange === range.id}
                         setActiveRange={setActiveRange}
+                        pages={false}
                     />
                 );
             })}
