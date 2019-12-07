@@ -156,7 +156,7 @@ const HifzRange = ({
 
     const setRangeRevised = () => {
         app.pushMessageBox({
-            title: <String id="revised" />,
+            title: <String id="revise_confirmation" />,
             onYes: () => {
                 app.setRangeRevised(range);
             },
