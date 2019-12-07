@@ -8,12 +8,15 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
     faAngleUp,
-    faBookOpen
+    faBookOpen,
+    faBackward,
+    faForward
 } from "@fortawesome/free-solid-svg-icons";
 import {
     CircleProgress,
     VerseContextButtons,
-    PageContextButtons
+    PageContextButtons,
+    SuraNavigator
 } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
 import { AddHifz } from "../Modal/Favorites";
@@ -29,6 +32,7 @@ const PageHeader = ({
     const app = useContext(AppContext);
     const partIndex = QData.pagePart(pageIndex + 1) - 1;
     const selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
+    const suraIndex = QData.pageSura(pageIndex + 1);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         app.setContextPopup({
@@ -38,25 +42,19 @@ const PageHeader = ({
     };
 
     const showPageContextPopup = ({ target }) => {
-        const openGoto = e => {
-            app.setPopup("Goto");
-        };
-        const addToHifz = e => {
-            app.setMessageBox({
-                title: <String id="update_hifz" />,
-                content: <AddHifz />
-            });
-        };
+        // const openGoto = e => {
+        //     app.setPopup("Goto");
+        // };
+        // const addToHifz = e => {
+        //     app.setMessageBox({
+        //         title: <String id="update_hifz" />,
+        //         content: <AddHifz />
+        //     });
+        // };
         app.setContextPopup({
             target,
+            // header: <div>Page Header</div>,
             content: <PageContextButtons page={pageIndex} />
-        });
-    };
-
-    const showSuraContextPopup = ({ target }) => {
-        app.setContextPopup({
-            target,
-            content: <SuraList simple={true} />
         });
     };
 
@@ -67,15 +65,22 @@ const PageHeader = ({
         });
     };
 
-    const suraIndex = QData.pageSura(pageIndex + 1);
-    let justifyContent =
-        app.pagesCount === 1
-            ? "center"
-            : order === 0
-            ? "flex-end"
-            : "flex-start";
+    // let justifyContent =
+    //     app.pagesCount === 1
+    //         ? "center"
+    //         : order === 0
+    //         ? "flex-end"
+    //         : "flex-start";
 
     // let isActive = app.pagesCount === 1 ? true : app.getActiveSide() === order;
+
+    const showSuraContextPopup = ({ target }) => {
+        app.setContextPopup({
+            target,
+            header: <SuraNavigator />,
+            content: <SuraList simple={true} />
+        });
+    };
 
     return (
         <div className="PageHeader">

@@ -221,7 +221,7 @@ export const SuraList = memo(({ filter, simple }) => {
         const { selectStart } = app;
         const currentSura = QData.ayaIdInfo(selectStart).sura;
         setActionsIndex(currentSura);
-    }, []);
+    }, [app.selectStart]);
 
     const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
 
