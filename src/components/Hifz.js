@@ -210,7 +210,7 @@ const HifzRange = ({ range, filter, showActions = false, setActiveRange }) => {
 
     return (
         <li className={"HifzRangeRow"}>
-            <SuraHifzChart range={range} />
+            <SuraHifzChart pages={false} range={range} />
             <div
                 className="HifzRangeBody"
                 tabIndex="0"
@@ -319,7 +319,7 @@ const HifzRanges = ({ filter }) => {
 };
 //});
 
-const SuraHifzChart = memo(({ sura, range }) => {
+const SuraHifzChart = memo(({ sura, range, pages = true, onClickPage }) => {
     const app = useContext(AppContext);
     const [suraRanges, setSuraRanges] = useState([]);
     const [activeRange, setActiveRange] = useState(null);
@@ -342,25 +342,36 @@ const SuraHifzChart = memo(({ sura, range }) => {
 
     const activePage = app.getCurrentPageIndex();
 
+    const suraStartPage = suraInfo.sp;
+
+    const onClickChart = ({ target }) => {
+        const page = parseInt(target.getAttribute("page"));
+        if (onClickPage) {
+            onClickPage(suraStartPage + page);
+        } else {
+            app.gotoPage(suraStartPage + page);
+        }
+    };
+
     return (
-        <div className="SuraHifzChart">
-            {pageList.map((z, i) => {
-                const activeClass =
-                    activePage == i + suraInfo.sp - 1 ? "ActivePage" : "";
-                return (
-                    <div
-                        key={i}
-                        onClick={e => {
-                            app.gotoPage(i + suraInfo.sp);
-                        }}
-                        className={"PageThumb".appendWord(activeClass)}
-                        style={{
-                            right: `${(100 * i) / suraPages}%`,
-                            width: pageWidth
-                        }}
-                    />
-                );
-            })}
+        <div className="SuraHifzChart" onClick={onClickChart}>
+            {pages
+                ? pageList.map((z, i) => {
+                      const activeClass =
+                          activePage == i + suraInfo.sp - 1 ? "ActivePage" : "";
+                      return (
+                          <div
+                              key={i}
+                              page={i}
+                              className={"PageThumb".appendWord(activeClass)}
+                              style={{
+                                  right: `${(100 * i) / suraPages}%`,
+                                  width: pageWidth
+                              }}
+                          />
+                      );
+                  })
+                : null}
             {suraRanges.map((r, i) => {
                 const rangeStart = r.startPage - suraInfo.sp + 1;
                 const start = (100 * rangeStart) / suraPages;

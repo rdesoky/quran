@@ -16,10 +16,12 @@ import {
     CircleProgress,
     VerseContextButtons,
     PageContextButtons,
-    SuraNavigator
+    SuraNavigator,
+    SuraContextHeader
 } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
 import { AddHifz } from "../Modal/Favorites";
+import { SuraHifzChart } from "../Hifz";
 
 const PageHeader = ({
     index: pageIndex,
@@ -77,7 +79,7 @@ const PageHeader = ({
     const showSuraContextPopup = ({ target }) => {
         app.setContextPopup({
             target,
-            header: <SuraNavigator />,
+            header: <SuraContextHeader sura={suraIndex} />,
             content: <SuraList simple={true} />
         });
     };

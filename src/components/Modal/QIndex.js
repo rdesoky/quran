@@ -369,7 +369,7 @@ export const SuraIndexCell = memo(
 
         return (
             <li className="SuraIndexCell">
-                {simple ? "" : <SuraHifzChart sura={sura} />}
+                {simple ? "" : <SuraHifzChart pages={false} sura={sura} />}
                 <button
                     onClick={gotoSura}
                     className={sura == selectedSura ? "active" : ""}
