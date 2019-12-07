@@ -122,7 +122,6 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             > span {
                 display: inline-block;
                 margin: 0 12px;
-                vertical-align: top;
                 min-width: 100px;
                 width: 36%;
                 text-align: right;
@@ -130,9 +129,15 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
                     text-align: left;
                 }
             }
+            > * {
+                vertical-align: middle;
+            }
         }
         input[type="radio"] {
             vertical-align: text-top;
+        }
+        svg {
+            font-size: 25px;
         }
     }
     .FieldRow {
