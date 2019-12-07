@@ -16,6 +16,7 @@ import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
 import { PlayerContext, AudioState } from "../context/Player";
 import Utils from "../services/utils";
+import { SuraHifzChart } from "./Hifz";
 
 export const VerseInfo = ({
     verse,
@@ -413,37 +414,47 @@ export const PageContextButtons = ({ page }) => {
     );
 };
 
-export const SuraNavigator = () => {
-    const [suraIndex, setSuraIndex] = useState(0);
-    const app = useContext(AppContext);
-
-    const stopPropagation = e => e.stopPropagation();
-
-    const gotoNextSura = e => {
-        app.gotoSura(suraIndex + 1);
-    };
-
-    const gotoPrevSura = e => {
-        app.gotoSura(suraIndex - 1);
-    };
-
-    useEffect(() => {
-        const ayaInfo = QData.ayaIdInfo(app.selectStart);
-        setSuraIndex(ayaInfo.sura);
-    }, [app.selectStart]);
+export const SuraContextHeader = ({ sura }) => {
+    // const app = useContext(AppContext);
+    // const [suraIndex, setSura] = useState(sura || 0);
+    // useEffect(() => {
+    //     const ayaInfo = QData.ayaIdInfo(app.selectStart);
+    //     setSura(ayaInfo.sura);
+    // }, [app.selectStart]);
 
     return (
-        <div className="SuraNavigator" onClick={stopPropagation}>
-            {suraIndex < 113 ? (
-                <button onClick={gotoPrevSura}>
-                    <Icon icon={faForward} />
-                </button>
-            ) : null}
-            {suraIndex > 0 ? (
-                <button onClick={gotoNextSura}>
-                    <Icon icon={faBackward} />
-                </button>
-            ) : null}
+        <div className="SuraContextHeader">
+            <SuraHifzChart sura={sura} />
+            {/* <SuraNavigator sura={suraIndex} /> */}
         </div>
     );
 };
+
+// export const SuraNavigator = ({ sura }) => {
+//     const app = useContext(AppContext);
+
+//     const stopPropagation = e => e.stopPropagation();
+
+//     const gotoNextSura = e => {
+//         app.gotoSura(sura + 1);
+//     };
+
+//     const gotoPrevSura = e => {
+//         app.gotoSura(sura - 1);
+//     };
+
+//     return (
+//         <div className="SuraNavigator" onClick={stopPropagation}>
+//             {sura > 0 ? (
+//                 <button onClick={gotoPrevSura}>
+//                     <Icon icon={faForward} />
+//                 </button>
+//             ) : null}
+//             {sura < 113 ? (
+//                 <button onClick={gotoNextSura}>
+//                     <Icon icon={faBackward} />
+//                 </button>
+//             ) : null}
+//         </div>
+//     );
+// };

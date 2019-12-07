@@ -284,7 +284,13 @@ hr {
     margin-bottom: 10px;
     // border-radius: 5px;
     // border: solid 1px #444;
-    min-width: 300px;
+    // min-width: 280px;
+    // width: 100%;
+
+    .MessageBox & {
+        min-width: 280px;
+    }
+
     &:last-child {
         margin-bottom: 0;
     }
@@ -292,6 +298,7 @@ hr {
     > .HifzRangeBody {
         padding: 0 !important;
         width: 100%;
+        font-size: 12px;
         text-align: inherit;
         height: $hifzRowHeight;
         &:hover {
@@ -321,7 +328,14 @@ hr {
     .ActionsBar {
         position: absolute;
         bottom: 0px;
-        left: 2px;
+        left: 0;
+        height: $chartHeight;
+        button {
+            height: 100%;
+            min-width: $chartHeight;
+            text-align: center;
+            margin: 0 1px;
+        }
     }
     .RangeText {
         height: 30px;
@@ -374,6 +388,7 @@ hr {
         box-sizing: border-box;
         border-radius: 4px;
         // background-color: $fairHifzBg;
+        pointer-events: none;
         &.active {
             border-width: 1px;
         }
@@ -386,8 +401,12 @@ hr {
         border-width: 0 0 0 1px;
         background-position-x: 2px;
         box-sizing: border-box;
+        pointer-events: fill;
         &.ActivePage {
             background-color: $PageThumbColor;
+        }
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.493);
         }
     }
 }
@@ -753,7 +772,12 @@ li.BookmarkRow {
     direction: rtl;
     button {
         flex-grow: 1;
-        font-size: 20px;
+        font-size: 16px;
         padding: 5px;
     }
+}
+
+.SuraContextHeader {
+    height: $chartHeight;
+    position: relative;
 }
