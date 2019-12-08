@@ -36,7 +36,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+const analytics = firebase.analytics();
+analytics.setCurrentScreen(window.location.pathname);
+analytics.logEvent("page_view");
 
 function App({}) {
     //Handles componentDidMount/unmount, props changes
@@ -56,7 +58,7 @@ function App({}) {
 
     useEffect(() => {
         document.body.dir = lang == "en" ? "ltr" : "rtl";
-    }, [themeContext.lang]);
+    }, [themeContext.lang, lang]);
 
     return (
         <IntlProvider locale={lang} messages={locale_messages}>

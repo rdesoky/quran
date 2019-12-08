@@ -200,6 +200,11 @@ class AppProvider extends Component {
 
             maskStart = selectStart < selectEnd ? selectStart : selectEnd;
         }
+
+        if (this.state.maskStart === -1) {
+            firebase.analytics().logEvent("show_mask");
+        }
+
         if (keepSelection) {
             this.setState({ maskStart });
         } else {
@@ -213,6 +218,7 @@ class AppProvider extends Component {
 
     hideMask = () => {
         this.setState({ maskStart: -1 });
+        firebase.analytics().logEvent("hide_mask");
     };
 
     setSelectEnd = selectEnd => {
@@ -260,8 +266,9 @@ class AppProvider extends Component {
                 contextPopup: null
             });
         }
-        if (popup !== null && popup !== "Commands") {
-            this.pushRecentCommand(popup);
+        if (popup !== null) {
+            // this.pushRecentCommand(popup);
+            firebase.analytics().logEvent("show_ui", { ui_name: popup });
         }
     };
 
@@ -331,7 +338,7 @@ class AppProvider extends Component {
                 history.push(targetPath);
             }
             if (select) {
-                this.setMaskStart(-1);
+                this.hideMask();
                 const verse = QData.pageAyaId(pageNum - 1);
                 this.selectAya(verse);
             }
@@ -888,6 +895,14 @@ class AppProvider extends Component {
                 this._normVerseList = text.split("\n");
             })
             .catch(e => {});
+
+        const { history } = this.props;
+        history.listen(location => {
+            const analytics = firebase.analytics();
+
+            analytics.setCurrentScreen(location.pathname);
+            analytics.logEvent("page_view");
+        });
     }
 
     render() {
