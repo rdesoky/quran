@@ -356,7 +356,7 @@ const SuraHifzChart = memo(({ sura, range, pages = true, onClickPage }) => {
         if (onClickPage) {
             onClickPage(suraStartPage + page);
         } else {
-            app.gotoPage(suraStartPage + page);
+            app.gotoPage(suraStartPage + page, false, true);
         }
     };
 
