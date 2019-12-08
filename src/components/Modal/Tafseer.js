@@ -54,7 +54,7 @@ const Tafseer = () => {
         } else {
             setVerse(app.selectStart);
         }
-    }, [app.selectStart]);
+    }, [app.selectStart, app.maskStart]);
 
     useEffect(() => {
         if (player.playingAya !== -1) {

@@ -125,7 +125,7 @@ const AKeyboard = ({
         setTypedChar(code);
         // setTimeout(() => {
         //     setTypedChar("");
-        // }, 300);
+        // }, 400);
         if (code === "Space") {
             //Avoid entring space when user presses a button using space bar
             if (target && target.tagName.match(/input|button/i)) {
