@@ -340,7 +340,7 @@ const Exercise = ({}) => {
         }
         return (
             <div className="ContentFrame">
-                <VerseInfo onMoveNext={onMoveNext} />
+                <VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
                 <VerseText copy={true} bookmark={true} />
                 <div className="FootNote">
                     <String id="exercise_intro" />
@@ -355,7 +355,10 @@ const Exercise = ({}) => {
         const narrow = app.isNarrow;
         return (
             <>
-                <VerseInfo show={isNarrowLayout()} />
+                <VerseInfo
+                    trigger="exercise_intro_title"
+                    show={isNarrowLayout()}
+                />
                 <div className="ButtonsBar">
                     <button
                         onClick={startAnswer}
@@ -463,7 +466,7 @@ const Exercise = ({}) => {
         // const correct = wrongWord === -1;
         return (
             <>
-                <VerseInfo />
+                <VerseInfo trigger="exercise_typing_title" />
                 <div className="ButtonsBar">
                     <button onClick={startReciting}>
                         <String id="start" />
@@ -590,7 +593,7 @@ const Exercise = ({}) => {
     const renderResultsTitle = () => {
         return (
             <>
-                <VerseInfo />
+                <VerseInfo trigger="exercise_result_title" />
                 <div className="ButtonsBar">
                     {isCorrect() ? (
                         //correct answer
@@ -738,7 +741,7 @@ const Exercise = ({}) => {
     const renderRecitingTitle = () => {
         return (
             <>
-                <VerseInfo show={isNarrowLayout()} />
+                <VerseInfo trigger="reciting_title" show={isNarrowLayout()} />
                 <span id="TrackDuration">
                     {renderCounter(32, 3, Math.floor(remainingTime), duration)}
                 </span>
@@ -768,7 +771,7 @@ const Exercise = ({}) => {
         }
         return (
             <div className="ContentFrame">
-                <VerseInfo />
+                <VerseInfo trigger="exercise_reciting" />
                 <VerseText />
                 <div className="FootNote">
                     <String id="exercise_intro" />

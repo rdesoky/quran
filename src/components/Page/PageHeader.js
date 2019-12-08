@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { analytics } from "./../../services/Analytics";
 import { AppConsumer, AppContext } from "../../context/App";
 import { FormattedMessage as String } from "react-intl";
 import QData from "../../services/QData";
@@ -37,6 +38,7 @@ const PageHeader = ({
     const suraIndex = QData.pageSura(pageIndex + 1);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
+        analytics.logEvent("show_part_context", { trigger: "page_header" });
         app.setContextPopup({
             target,
             content: <PartsList part={partIndex} />
@@ -53,6 +55,7 @@ const PageHeader = ({
         //         content: <AddHifz />
         //     });
         // };
+        analytics.logEvent("show_page_context", { trigger: "page_header" });
         app.setContextPopup({
             target,
             // header: <div>Page Header</div>,
@@ -61,26 +64,31 @@ const PageHeader = ({
     };
 
     const showVerseContextPopup = ({ target }) => {
+        analytics.logEvent("show_verse_context", { trigger: "page_header" });
         app.setContextPopup({
             target,
             content: <VerseContextButtons verse={app.selectStart} />
         });
     };
 
-    // let justifyContent =
-    //     app.pagesCount === 1
-    //         ? "center"
-    //         : order === 0
-    //         ? "flex-end"
-    //         : "flex-start";
+    const onClickNext = e => {
+        onIncrement && onIncrement(e);
+        analytics.logEvent("header_next_verse", { trigger: "page_header" });
+    };
 
-    // let isActive = app.pagesCount === 1 ? true : app.getActiveSide() === order;
+    const onClickPrevious = e => {
+        onDecrement && onDecrement(e);
+        analytics.logEvent("header_prev_verse", { trigger: "page_header" });
+    };
 
     const showSuraContextPopup = ({ target }) => {
+        analytics.logEvent("show_chapter_context", {
+            trigger: "page_header"
+        });
         app.setContextPopup({
             target,
             header: <SuraContextHeader sura={suraIndex} />,
-            content: <SuraList simple={true} />
+            content: <SuraList trigger="header_chapter_context" simple={true} />
         });
     };
 
@@ -109,7 +117,7 @@ const PageHeader = ({
                 >
                     <button
                         className="NavButton NavBackward"
-                        onClick={onDecrement}
+                        onClick={onClickPrevious}
                     >
                         <Icon icon={faAngleUp} />
                     </button>
@@ -126,7 +134,7 @@ const PageHeader = ({
                             (selectedAyaInfo.aya + 1)}
                     </button>
                     <button
-                        onClick={onIncrement}
+                        onClick={onClickNext}
                         className="NavButton NavForward"
                     >
                         <Icon icon={faAngleDown} />

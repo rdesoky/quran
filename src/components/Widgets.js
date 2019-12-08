@@ -17,6 +17,7 @@ import { CommandButton } from "./Modal/Commands";
 import { PlayerContext, AudioState } from "../context/Player";
 import Utils from "../services/utils";
 import { SuraHifzChart } from "./Hifz";
+import { analytics } from "../services/Analytics";
 
 export const VerseInfo = ({
     verse,
@@ -24,7 +25,8 @@ export const VerseInfo = ({
     children,
     onClick,
     onMoveNext,
-    navigate = false
+    navigate = false,
+    trigger = "verse_info"
 }) => {
     const app = useContext(AppContext);
 
@@ -36,6 +38,8 @@ export const VerseInfo = ({
     }
 
     const handleClick = e => {
+        analytics.setTrigger(trigger);
+
         if (typeof onClick === "function") {
             onClick(verse);
         } else {
@@ -47,6 +51,7 @@ export const VerseInfo = ({
 
     if (navigate) {
         onMoveNext = offset => {
+            analytics.setTrigger(trigger);
             app.gotoAya(verse + offset, { sel: true });
         };
     }
@@ -56,6 +61,7 @@ export const VerseInfo = ({
             {onMoveNext ? (
                 <button
                     onClick={e => {
+                        analytics.setTrigger(trigger);
                         onMoveNext(-1);
                     }}
                 >
@@ -82,6 +88,7 @@ export const VerseInfo = ({
             {onMoveNext ? (
                 <button
                     onClick={e => {
+                        analytics.setTrigger(trigger);
                         onMoveNext(1);
                     }}
                 >
@@ -384,15 +391,15 @@ export const VerseContextButtons = ({ verse }) => {
     return (
         <div className="IconsBar">
             {player.audioState === AudioState.stopped ? (
-                <CommandButton command="Play" />
+                <CommandButton trigger="verse_context" command="Play" />
             ) : (
-                <CommandButton command="Stop" />
+                <CommandButton trigger="verse_context" command="Stop" />
             )}
             {app.popup !== "Tafseer" ? (
-                <CommandButton command="Tafseer" />
+                <CommandButton trigger="verse_context" command="Tafseer" />
             ) : null}
-            <CommandButton command="Mask" />
-            <CommandButton command="Copy" />
+            <CommandButton trigger="verse_context" command="Mask" />
+            <CommandButton trigger="verse_context" command="Copy" />
             {/* <CommandButton command="Favorites" /> */}
         </div>
     );
@@ -402,14 +409,14 @@ export const PageContextButtons = ({ page }) => {
     const player = useContext(PlayerContext);
     return (
         <div className="IconsBar">
-            <CommandButton command="Mask" />
-            <CommandButton command="Goto" />
+            <CommandButton trigger="page_context" command="Mask" />
+            <CommandButton trigger="page_context" command="Goto" />
             {player.audioState === AudioState.stopped ? (
-                <CommandButton command="Play" />
+                <CommandButton trigger="page_context" command="Play" />
             ) : (
-                <CommandButton command="Stop" />
+                <CommandButton trigger="page_context" command="Stop" />
             )}
-            <CommandButton command="Favorites" />
+            <CommandButton trigger="page_context" command="Favorites" />
         </div>
     );
 };
