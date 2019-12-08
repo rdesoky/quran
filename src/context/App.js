@@ -320,7 +320,7 @@ class AppProvider extends Component {
     /**
      * Change app state to page number
      */
-    gotoPage = (pageNum, replace) => {
+    gotoPage = (pageNum, replace = false, select = false) => {
         const { history } = this.props;
         if (pageNum <= 604 && pageNum >= 1) {
             let targetPath =
@@ -329,6 +329,8 @@ class AppProvider extends Component {
                 history.replace(targetPath);
             } else {
                 history.push(targetPath);
+            }
+            if (select) {
                 const verse = QData.pageAyaId(pageNum - 1);
                 this.selectAya(verse);
             }
