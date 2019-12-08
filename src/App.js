@@ -30,7 +30,8 @@ const firebaseConfig = {
     projectId: "quran-hafiz",
     storageBucket: "quran-hafiz.appspot.com",
     messagingSenderId: "922718582198",
-    appId: "1:922718582198:web:b2719fd5aa71596f"
+    appId: "1:922718582198:web:b2719fd5aa71596f",
+    measurementId: "G-XZ7PLZ8DY3"
 };
 
 // Initialize Firebase
