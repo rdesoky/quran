@@ -9,6 +9,7 @@ import Utils from "../../services/utils";
 import DDrop from "./../DDrop";
 import { FormattedMessage as String } from "react-intl";
 import { AddHifz } from "../Modal/Favorites";
+import { analytics } from "./../../services/Analytics";
 
 export function PageRedirect({ match }) {
     let { aya } = match.params;
@@ -81,9 +82,11 @@ function Pager({ match }) {
 
     const handleWheel = e => {
         if (e.deltaY > 0) {
+            analytics.setTrigger("mouse_wheel");
             //scroll down
             pageDown(e);
         } else {
+            analytics.setTrigger("mouse_wheel");
             pageUp(e);
         }
     };
@@ -180,6 +183,7 @@ function Pager({ match }) {
                 break;
             case "ArrowDown":
                 if (!isTextInput) {
+                    analytics.setTrigger("down_key");
                     if (app.maskStart !== -1) {
                         increment(e);
                     } else {
@@ -189,6 +193,7 @@ function Pager({ match }) {
                 break;
             case "ArrowUp":
                 if (!isTextInput) {
+                    analytics.setTrigger("up_key");
                     if (app.maskStart !== -1 && !inExercise()) {
                         decrement(e);
                     } else {
@@ -197,18 +202,22 @@ function Pager({ match }) {
                 }
                 break;
             case "ArrowLeft":
+                analytics.setTrigger("left_key");
                 app.offsetPage(1);
                 break;
             case "PageDown":
                 if (!isTextInput) {
+                    analytics.setTrigger("page_down_key");
                     pageDown(e);
                 }
                 break;
             case "ArrowRight":
+                analytics.setTrigger("right_key");
                 app.offsetPage(-1);
                 break;
             case "PageUp":
                 if (!isTextInput) {
+                    analytics.setTrigger("page_up_key");
                     pageUp(e);
                 }
                 break;
@@ -330,9 +339,11 @@ function Pager({ match }) {
             maxShift={200}
             onDrop={({ dX, dY }) => {
                 if (dX > 50) {
+                    analytics.setTrigger("dragging");
                     pageDown(2);
                 }
                 if (dX < -50) {
+                    analytics.setTrigger("dragging");
                     pageUp(2);
                 }
             }}

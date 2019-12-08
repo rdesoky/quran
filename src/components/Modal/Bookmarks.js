@@ -36,7 +36,11 @@ const Bookmarks = () => {
                 <button className="CommandButton" onClick={toggleTafseer}>
                     <Icon icon={faQuran} />
                 </button>
-                {app.isNarrow ? <PlayerButtons /> : ""}
+                {app.isNarrow ? (
+                    <PlayerButtons trigger="bookmarks_title" />
+                ) : (
+                    ""
+                )}
             </div>
             <div
                 className="PopupBody"

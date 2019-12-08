@@ -24,6 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { VerseText } from "./Widgets";
 import { ThemeContext } from "../context/Theme";
+import { analytics } from "../services/Analytics";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
@@ -298,6 +299,10 @@ const HifzRanges = ({ filter }) => {
     // const suraNames = app.suraNames();
 
     const { hifzRanges } = app;
+
+    useEffect(() => {
+        analytics.setTrigger("hifz_index");
+    }, []);
 
     if (!hifzRanges.length) {
         return (

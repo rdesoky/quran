@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AppConsumer, AppContext } from "../../context/App";
-import { PlayerConsumer, PlayerContext } from "../../context/Player";
+import { analytics } from "./../../services/Analytics";
+import { AppContext } from "../../context/App";
+import { PlayerContext } from "../../context/Player";
 import QData from "../../services/QData";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faTimes, faEye } from "@fortawesome/free-solid-svg-icons";
-import Utils from "../../services/utils";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { VerseContextButtons } from "../Widgets";
 
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
@@ -17,6 +17,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const lineWidth = pageWidth;
 
     const closeMask = e => {
+        analytics.logEvent("hide_mask");
         app.hideMask();
     };
 
@@ -31,7 +32,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const onContextMenu = e => {
         const { target } = e;
         //Extend selection
-        const aya_id = parseInt(target.getAttribute("aya-id"));
+        // const aya_id = parseInt(target.getAttribute("aya-id"));
         onClickVerse({ target, shiftKey: true });
         // app.setContextPopup({
         //     target,
@@ -77,16 +78,19 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
             }
         } else {
             if (shiftKey || ctrlKey) {
+                analytics.logEvent("extend_selection", {
+                    trigger: "keyboard"
+                });
                 app.extendSelection(aya_id);
             } else {
                 if (aya_id.between(app.selectStart, app.selectEnd)) {
+                    analytics.logEvent("show_verse_context", {
+                        trigger: "selected_verses"
+                    });
                     app.setContextPopup({
                         target: e.target,
                         content: <VerseContextButtons verse={aya_id} />
                     });
-                    // if (app.popup === null) {
-                    //     app.toggleShowMenu();
-                    // }
                     e.stopPropagation();
                 } else {
                     app.selectAya(aya_id);

@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import QData from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
+import { analytics } from "./../services/Analytics";
 import { injectIntl } from "react-intl";
 import { ThemeConsumer } from "./Theme";
 
@@ -201,10 +202,6 @@ class AppProvider extends Component {
             maskStart = selectStart < selectEnd ? selectStart : selectEnd;
         }
 
-        if (this.state.maskStart === -1) {
-            firebase.analytics().logEvent("show_mask");
-        }
-
         if (keepSelection) {
             this.setState({ maskStart });
         } else {
@@ -218,7 +215,7 @@ class AppProvider extends Component {
 
     hideMask = () => {
         this.setState({ maskStart: -1 });
-        firebase.analytics().logEvent("hide_mask");
+        // firebase.analytics().logEvent("hide_mask");
     };
 
     setSelectEnd = selectEnd => {
@@ -268,7 +265,7 @@ class AppProvider extends Component {
         }
         if (popup !== null) {
             // this.pushRecentCommand(popup);
-            firebase.analytics().logEvent("show_ui", { ui_name: popup });
+            // firebase.analytics().logEvent("show_ui", { ui_name: popup });
         }
     };
 
@@ -898,10 +895,7 @@ class AppProvider extends Component {
 
         const { history } = this.props;
         history.listen(location => {
-            const analytics = firebase.analytics();
-
-            analytics.setCurrentScreen(location.pathname);
-            analytics.logEvent("page_view");
+            analytics.setCurrentScreen(location.pathname).logEvent("page_view");
         });
     }
 

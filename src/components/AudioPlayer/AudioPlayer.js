@@ -6,20 +6,31 @@ import QData from "./../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { CommandButton } from "./../Modal/Commands";
 
-const PlayerButtons = ({ showReciter, showLabels }) => {
+const PlayerButtons = ({
+    showReciter,
+    showLabels,
+    trigger = "player_buttons"
+}) => {
     const player = useContext(PlayerContext);
 
     let playButton = null,
         stopBtn = null;
 
     if (player.audioState !== AudioState.stopped) {
-        stopBtn = <CommandButton command="Stop" showLabel={showLabels} />;
+        stopBtn = (
+            <CommandButton
+                trigger={trigger}
+                command="Stop"
+                showLabel={showLabels}
+            />
+        );
     }
 
     switch (player.audioState) {
         case AudioState.paused:
             playButton = (
                 <CommandButton
+                    trigger={trigger}
                     command="Pause"
                     className="blinking"
                     showLabel={showLabels}
@@ -28,12 +39,17 @@ const PlayerButtons = ({ showReciter, showLabels }) => {
             break;
         case AudioState.playing:
             playButton = (
-                <CommandButton command="Pause" showLabel={showLabels} />
+                <CommandButton
+                    trigger={trigger}
+                    command="Pause"
+                    showLabel={showLabels}
+                />
             );
             break;
         case AudioState.buffering:
             playButton = (
                 <CommandButton
+                    trigger={trigger}
                     command="Downloading"
                     className="blinking"
                     showLabel={showLabels}
@@ -42,7 +58,11 @@ const PlayerButtons = ({ showReciter, showLabels }) => {
             break;
         default:
             playButton = (
-                <CommandButton command="Play" showLabel={showLabels} />
+                <CommandButton
+                    trigger={trigger}
+                    command="Play"
+                    showLabel={showLabels}
+                />
             );
     }
 
@@ -50,7 +70,11 @@ const PlayerButtons = ({ showReciter, showLabels }) => {
         showReciter === false || player.audioState === AudioState.stopped ? (
             ""
         ) : (
-            <CommandButton command="AudioPlayer" showLabel={showLabels} />
+            <CommandButton
+                trigger={trigger}
+                command="AudioPlayer"
+                showLabel={showLabels}
+            />
         );
 
     return (

@@ -68,7 +68,7 @@ const Tafseer = () => {
                 <String id="tafseer" />
                 {app.isNarrow ? (
                     <>
-                        <PlayerButtons />
+                        <PlayerButtons trigger="tafseer_title" />
                         <CommandButton command="Exercise" />
                     </>
                 ) : (
@@ -179,7 +179,11 @@ export const TafseerView = ({
         <div className="TafseerView">
             <div>
                 {showVerse ? (
-                    <VerseInfo onMoveNext={onMoveNext} verse={verse} />
+                    <VerseInfo
+                        trigger="tafseer_view"
+                        onMoveNext={onMoveNext}
+                        verse={verse}
+                    />
                 ) : (
                     ""
                 )}

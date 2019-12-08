@@ -21,6 +21,7 @@ import { HifzRanges, SuraHifzChart } from "../Hifz";
 import { TafseerView } from "./Tafseer";
 import { ThemeContext } from "../../context/Theme";
 import { AddHifz } from "./Favorites";
+import { analytics } from "../../services/Analytics";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
@@ -165,6 +166,7 @@ export const PartCell = ({ part, selected }) => {
     const app = useContext(AppContext);
     let btn;
     const gotoPart = e => {
+        analytics.logEvent("goto_part", { part });
         app.gotoPart(part);
     };
     useEffect(() => {
@@ -193,6 +195,7 @@ export const PartsList = ({ part }) => {
         if (list) {
             setListWidth(list.clientWidth);
         }
+        analytics.setTrigger("header_parts_context");
     }, []);
     return (
         <ul
@@ -213,42 +216,48 @@ export const PartsList = ({ part }) => {
     );
 };
 
-export const SuraList = memo(({ filter, simple }) => {
-    const app = useContext(AppContext);
-    const [actionsIndex, setActionsIndex] = useState(0);
+export const SuraList = memo(
+    ({ filter, simple, trigger = "chapters_index" }) => {
+        const app = useContext(AppContext);
+        const [actionsIndex, setActionsIndex] = useState(0);
 
-    useEffect(() => {
-        const { selectStart } = app;
-        const currentSura = QData.ayaIdInfo(selectStart).sura;
-        setActionsIndex(currentSura);
-    }, [app.selectStart]);
+        useEffect(() => {
+            analytics.setTrigger(trigger);
+        }, []);
 
-    const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
+        useEffect(() => {
+            const { selectStart } = app;
+            const currentSura = QData.ayaIdInfo(selectStart).sura;
+            setActionsIndex(currentSura);
+        }, [app.selectStart]);
 
-    return (
-        <ul
-            className="SpreadSheet"
-            style={{
-                columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
-            }}
-        >
-            {Array(114)
-                .fill(0)
-                .map((zero, suraIndex) => {
-                    return (
-                        <CellComponent
-                            key={suraIndex}
-                            sura={suraIndex}
-                            filter={filter}
-                            selectSura={setActionsIndex}
-                            selectedSura={actionsIndex}
-                            simple={simple}
-                        />
-                    );
-                })}
-        </ul>
-    );
-});
+        const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
+
+        return (
+            <ul
+                className="SpreadSheet"
+                style={{
+                    columnCount: Math.floor((app.popupWidth() - 50) / 180) //-50px margin
+                }}
+            >
+                {Array(114)
+                    .fill(0)
+                    .map((zero, suraIndex) => {
+                        return (
+                            <CellComponent
+                                key={suraIndex}
+                                sura={suraIndex}
+                                filter={filter}
+                                selectSura={setActionsIndex}
+                                selectedSura={actionsIndex}
+                                simple={simple}
+                            />
+                        );
+                    })}
+            </ul>
+        );
+    }
+);
 
 export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
     const app = useContext(AppContext);
@@ -291,6 +300,7 @@ export const SuraIndexCell = memo(
         };
 
         const gotoSura = e => {
+            analytics.logEvent("goto_chapter", { chapter: sura });
             if (selectedSura === sura) {
                 app.hideMask();
                 checkClosePopup();
@@ -553,6 +563,10 @@ export const BookmarksList = ({ filter, showTafseer = false }) => {
     const [actionsIndex, setActionsIndex] = useState(-1);
 
     const { bookmarks } = app;
+
+    useEffect(() => {
+        analytics.setTrigger("bookmarks_index");
+    }, []);
 
     if (!bookmarks.length) {
         return (

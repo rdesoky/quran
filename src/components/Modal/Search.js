@@ -8,6 +8,7 @@ import AKeyboard from "../AKeyboard/AKeyboard";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "../../context/Theme";
+import { analytics } from "../../services/Analytics";
 
 const Search = ({}) => {
     const app = useContext(AppContext);
@@ -33,6 +34,7 @@ const Search = ({}) => {
     };
 
     useEffect(() => {
+        analytics.setTrigger("search_ui");
         let textInput = input.current;
         setTimeout(function() {
             textInput.focus();

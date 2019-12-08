@@ -32,6 +32,7 @@ function Sidebar() {
             <CommandButton
                 id="SideMenuExpander"
                 command="Commands"
+                trigger="side_bar"
                 style={{
                     position: "absolute",
                     left: 0,
@@ -58,6 +59,7 @@ function Sidebar() {
                 >
                     <div id="SidebarPlayer" className="SidebarSection">
                         <PlayerButtons
+                            trigger="side_bar"
                             showLabels={app.expandedMenu}
                             showReciter={true}
                         />
@@ -75,6 +77,7 @@ function Sidebar() {
                                 .map((command, index) => (
                                     <CommandButton
                                         command={command}
+                                        trigger="side_bar"
                                         key={command}
                                         style={{
                                             top: index * 50
@@ -87,10 +90,12 @@ function Sidebar() {
                     <div id="SidebarFooter" className="SidebarSection">
                         <CommandButton
                             command="Profile"
+                            trigger="side_bar"
                             showLabel={app.expandedMenu}
                         />
                         <CommandButton
                             command="Settings"
+                            trigger="side_bar"
                             showLabel={app.expandedMenu}
                         />
                     </div>

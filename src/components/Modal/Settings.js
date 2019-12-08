@@ -67,8 +67,15 @@ const Settings = () => {
     return (
         <>
             <div className="Title">
-                <VerseInfo verse={player.playingAya} />
-                {app.isNarrow ? <PlayerButtons showReciter={false} /> : ""}
+                <VerseInfo trigger="settings_title" verse={player.playingAya} />
+                {app.isNarrow ? (
+                    <PlayerButtons
+                        trigger="settings_title"
+                        showReciter={false}
+                    />
+                ) : (
+                    ""
+                )}
             </div>
             <div
                 ref={ref => {

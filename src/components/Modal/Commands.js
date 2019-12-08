@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AppConsumer, AppContext } from "../../context/App";
-import {
-    PlayerConsumer,
-    AudioState,
-    PlayerContext
-} from "../../context/Player";
-import { ThemeConsumer, ThemeContext } from "../../context/Theme";
+import { analytics } from "./../../services/Analytics";
+import { AppContext } from "../../context/App";
+import { AudioState, PlayerContext } from "../../context/Player";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -41,6 +37,7 @@ import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { UserImage } from "./User";
 import { AddHifz } from "./Favorites";
+import QData from "./../../services/QData";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -150,8 +147,11 @@ const Commands = () => {
             <div className="Title">
                 {app.isNarrow ? (
                     <>
-                        <VerseInfo />
-                        <PlayerButtons showReciter={false} />
+                        <VerseInfo trigger="commands_title" />
+                        <PlayerButtons
+                            trigger="commands_title"
+                            showReciter={false}
+                        />
                     </>
                 ) : (
                     <String id="commands" />
@@ -170,10 +170,16 @@ const Commands = () => {
     );
 };
 
-const CommandButton = ({ id, command, showLabel, style, className }) => {
+const CommandButton = ({
+    id,
+    command,
+    showLabel,
+    style,
+    className,
+    trigger
+}) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
-    const themeContext = useContext(ThemeContext);
     const runCommand = command => {
         app.setExpandedMenu(false);
         Utils.selectTopCommand();
@@ -183,9 +189,20 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                 break;
             case "Play":
                 //TODO: first navigate to the current selection
+                analytics.logEvent("play_audio", {
+                    ...QData.ayaIdInfo(app.selectStart),
+                    reciter: player.reciter,
+                    trigger
+                });
+                app.gotoAya(app.selectStart);
                 player.play();
                 return;
             case "Pause":
+                analytics.logEvent("pause_audio", {
+                    ...QData.ayaIdInfo(player.playingAya),
+                    reciter: player.reciter,
+                    trigger
+                });
                 if (player.audioState === AudioState.playing) {
                     player.pause();
                 } else {
@@ -193,26 +210,46 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                 }
                 return;
             case "Stop":
+                analytics.logEvent("stop_audio", {
+                    ...QData.ayaIdInfo(player.playingAya),
+                    reciter: player.reciter,
+                    trigger
+                });
                 player.stop(true);
                 return;
             case "Downloading":
+                analytics.logEvent("retry_stuck_audio", {
+                    ...QData.ayaIdInfo(player.playingAya),
+                    reciter: player.reciter
+                });
                 player.stop();
                 setTimeout(() => {
                     player.play();
                 }, 500);
                 return;
             case "ToggleButton":
+                analytics.logEvent(
+                    app.showMenu ? "collapse_menu" : "expand_menu",
+                    trigger
+                );
                 app.toggleShowMenu();
                 return;
-            case "Theme":
-                themeContext.toggleTheme();
-                app.pushRecentCommand(command);
-                app.setShowMenu(false);
-                return;
             case "Mask":
+                analytics.logEvent(
+                    app.maskStart === -1 ? "show_mask" : "hide_mask",
+                    {
+                        verse: app.selectStart,
+                        trigger
+                    }
+                );
                 app.setMaskStart();
                 break;
             case "Copy":
+                analytics.logEvent("copy_text", {
+                    verse: app.selectStart,
+                    to_verse: app.selectEnd,
+                    trigger
+                });
                 Utils.copy2Clipboard(app.getSelectedText());
                 app.showToast(app.intl.formatMessage({ id: "text_copied" }));
                 break;
@@ -222,9 +259,17 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
                 Utils.requestFullScreen();
                 break;
             case "Bookmark":
+                analytics.logEvent("bookmark", {
+                    verse: app.selectStart,
+                    trigger
+                });
                 app.toggleBookmark();
                 return;
             case "Favorites":
+                analytics.logEvent("update_hifz", {
+                    verse: app.selectStart,
+                    trigger
+                });
                 app.setMessageBox({
                     title: <String id="update_hifz" />,
                     content: <AddHifz />
@@ -236,6 +281,10 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
             //         break;
             //     }
             default:
+                analytics.logEvent("show_ui", {
+                    command,
+                    trigger
+                });
                 app.setPopup(command); //already calls pushRecentCommand()
                 return;
         }
@@ -297,5 +346,5 @@ const CommandButton = ({ id, command, showLabel, style, className }) => {
         </button>
     );
 };
-export default AppConsumer(Commands);
+export default Commands;
 export { commandIcon, CommandButton };

@@ -14,6 +14,7 @@ import { ThemeConsumer, ThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
 import PlayerProvider from "./context/Player";
 import firebase from "firebase";
+import { analytics } from "./services/Analytics";
 import Exercise from "./components/Modal/Exercise";
 import { ToastMessage, ContextPopup, MessageBox } from "./components/Widgets";
 import { SettingsProvider } from "./context/Settings";
@@ -36,7 +37,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics();
+// firebase.analytics();
+
 analytics.setCurrentScreen(window.location.pathname);
 analytics.logEvent("page_view");
 
