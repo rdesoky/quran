@@ -7,19 +7,19 @@ import Utils from "../../services/utils";
 
 function Sidebar() {
     const app = useContext(AppContext);
+    let recentDiv = null;
+
     useEffect(() => {
         if (recentDiv) {
             recentDiv.scrollTop = 0;
         }
-    }, [app.recentCommands]);
+    }, [app.recentCommands, recentDiv]);
 
     useEffect(() => {
         if (app.popup === null) {
             Utils.selectTopCommand();
         }
     }, [app.popup]);
-
-    let recentDiv = null;
 
     return (
         <div
