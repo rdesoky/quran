@@ -331,6 +331,7 @@ class AppProvider extends Component {
                 history.push(targetPath);
             }
             if (select) {
+                this.setMaskStart(-1);
                 const verse = QData.pageAyaId(pageNum - 1);
                 this.selectAya(verse);
             }
@@ -360,18 +361,19 @@ class AppProvider extends Component {
         this.selectAya(ayaId);
     };
 
-    gotoAya = (ayaId, opt = { sel: false, replace: true, keepMask: false }) => {
+    gotoAya = (ayaId, opt = {}) => {
+        const { sel = false, replace = true, keepMask = false } = opt;
         if (ayaId === undefined) {
             ayaId = this.state.selectStart;
         }
-        if (opt.sel) {
+        if (sel) {
             this.selectAya(ayaId);
-            if (opt.keepMask !== true) {
+            if (keepMask !== true) {
                 this.hideMask();
             }
         }
         const pageIndex = QData.ayaIdPage(ayaId);
-        this.gotoPage(pageIndex + 1, opt.replace);
+        this.gotoPage(pageIndex + 1, replace);
     };
 
     getActiveSide = () => {

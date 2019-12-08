@@ -20,6 +20,8 @@
             &:hover,
             &.typed {
                 background: #444;
+                transform: scaleY(1.3);
+                // z-index: 3;
             }
             &.Space {
                 flex-grow: 9;
