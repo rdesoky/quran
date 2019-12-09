@@ -268,7 +268,7 @@ const CommandButton = ({
                 app.toggleBookmark();
                 return;
             case "Favorites":
-                analytics.logEvent("update_hifz", {
+                analytics.logEvent("show_update_hifz", {
                     ...QData.ayaIdInfo(app.selectStart),
                     trigger
                 });

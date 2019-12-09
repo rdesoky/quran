@@ -33,7 +33,8 @@ const HifzRange = ({
     filter,
     showActions = false,
     pages = true,
-    setActiveRange
+    setActiveRange,
+    trigger = "hifz_range"
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
@@ -156,15 +157,15 @@ const HifzRange = ({
     };
 
     const setRangeRevised = e => {
-        analytics.logEvent("revised_tody", {
-            chapter: range.sura,
-            startPage: range.startPage,
-            pagesCount: range.endPage - range.startPage + 1
-        });
-
         app.pushMessageBox({
             title: <String id="revise_confirmation" />,
             onYes: () => {
+                analytics.logEvent("revised_today", {
+                    trigger,
+                    chapter: range.sura,
+                    startPage: range.startPage,
+                    pagesCount: range.pages
+                });
                 app.setRangeRevised(range);
             },
             content: <String id="are_you_sure" />
@@ -173,6 +174,7 @@ const HifzRange = ({
 
     const addCurrentPage = e => {
         analytics.logEvent("add_hifz", {
+            trigger,
             range: "page",
             chapter: range.sura,
             startPage: range.startPage,
@@ -184,6 +186,7 @@ const HifzRange = ({
     const addSura = e => {
         const pagesCount = suraInfo.ep - suraInfo.sp + 1;
         analytics.logEvent("add_hifz", {
+            trigger,
             range: "full_sura",
             chapter: range.sura,
             startPage: range.startPage,
@@ -195,6 +198,7 @@ const HifzRange = ({
     const addFromSuraStart = e => {
         const pagesCount = range.startPage - suraInfo.sp + 2;
         analytics.logEvent("add_hifz", {
+            trigger,
             range: "from_sura_start",
             chapter: range.sura,
             startPage: range.startPage,
@@ -206,6 +210,7 @@ const HifzRange = ({
     const addToSuraEnd = e => {
         const pagesCount = suraInfo.ep - range.startPage;
         analytics.logEvent("add_hifz", {
+            trigger,
             range: "from_sura_start",
             chapter: range.sura,
             startPage: range.startPage,
@@ -349,6 +354,7 @@ const HifzRanges = ({ filter }) => {
                         showActions={activeRange === range.id}
                         setActiveRange={setActiveRange}
                         pages={false}
+                        trigger="hifz_index"
                     />
                 );
             })}
