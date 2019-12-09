@@ -11,6 +11,7 @@ import { ThemeContext } from "../../context/Theme";
 import { SettingsContext } from "../../context/Settings";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faGlobe, faLanguage } from "@fortawesome/free-solid-svg-icons";
+import { analytics } from "../../services/Analytics";
 
 const Settings = () => {
     const player = useContext(PlayerContext);
@@ -35,20 +36,30 @@ const Settings = () => {
     const onChangeRepeat = ({ currentTarget }) => {
         const repeat = currentTarget.value;
         player.setRepeat(parseInt(repeat));
+        analytics.logEvent("set_repeat", { repeat, trigger: app.popup });
     };
 
     const updateFollowPlayer = checked => {
         player.setFollowPlayer(checked);
+        analytics.logEvent(
+            checked ? "set_follow_player" : "set_unfollow_player",
+            {
+                trigger: app.popup
+            }
+        );
     };
 
     const selectReciter = ({ currentTarget }) => {
         const reciter = currentTarget.getAttribute("reciter");
         player.changeReciter(reciter);
         popupBody.scrollTop = 0;
+        analytics.logEvent("set_reciter", { reciter, trigger: app.popup });
     };
 
     const updateTheme = checked => {
-        theme.setTheme(checked ? "Dark" : "Default");
+        const theme_name = checked ? "Dark" : "Default";
+        theme.setTheme(theme_name);
+        analytics.logEvent("set_theme", { theme_name, trigger: app.popup });
     };
 
     const updateExerciseLevel = ({ currentTarget }) => {
@@ -61,7 +72,9 @@ const Settings = () => {
     };
 
     const updateLang = ({ currentTarget }) => {
+        const lang = currentTarget.value;
         theme.setLang(currentTarget.value);
+        analytics.logEvent("set_lang", { lang, trigger: app.popup });
     };
 
     return (
