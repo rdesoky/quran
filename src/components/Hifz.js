@@ -155,7 +155,13 @@ const HifzRange = ({
         app.setMessageBox(null);
     };
 
-    const setRangeRevised = () => {
+    const setRangeRevised = e => {
+        analytics.logEvent("revised_tody", {
+            chapter: range.sura,
+            startPage: range.startPage,
+            pagesCount: range.endPage - range.startPage + 1
+        });
+
         app.pushMessageBox({
             title: <String id="revise_confirmation" />,
             onYes: () => {
@@ -166,37 +172,57 @@ const HifzRange = ({
     };
 
     const addCurrentPage = e => {
+        analytics.logEvent("add_hifz", {
+            range: "page",
+            chapter: range.sura,
+            startPage: range.startPage,
+            pagesCount: 1
+        });
         app.addHifzRange(range.startPage, range.sura, 1);
     };
 
     const addSura = e => {
-        app.addHifzRange(
-            suraInfo.sp - 1,
-            range.sura,
-            suraInfo.ep - suraInfo.sp + 1
-        );
+        const pagesCount = suraInfo.ep - suraInfo.sp + 1;
+        analytics.logEvent("add_hifz", {
+            range: "full_sura",
+            chapter: range.sura,
+            startPage: range.startPage,
+            pagesCount
+        });
+        app.addHifzRange(suraInfo.sp - 1, range.sura, pagesCount);
     };
 
     const addFromSuraStart = e => {
-        app.addHifzRange(
-            suraInfo.sp - 1,
-            range.sura,
-            range.startPage - suraInfo.sp + 2
-        );
+        const pagesCount = range.startPage - suraInfo.sp + 2;
+        analytics.logEvent("add_hifz", {
+            range: "from_sura_start",
+            chapter: range.sura,
+            startPage: range.startPage,
+            pagesCount
+        });
+        app.addHifzRange(suraInfo.sp - 1, range.sura, pagesCount);
     };
 
     const addToSuraEnd = e => {
-        app.addHifzRange(
-            range.startPage,
-            range.sura,
-            suraInfo.ep - range.startPage
-        );
+        const pagesCount = suraInfo.ep - range.startPage;
+        analytics.logEvent("add_hifz", {
+            range: "from_sura_start",
+            chapter: range.sura,
+            startPage: range.startPage,
+            pagesCount
+        });
+        app.addHifzRange(range.startPage, range.sura, pagesCount);
     };
 
     const deleteHifzRange = e => {
         app.pushMessageBox({
             title: <String id="remove_hifz" />,
             onYes: () => {
+                analytics.logEvent("remove_hifz", {
+                    chapter: range.sura,
+                    startPage: range.startPage,
+                    pagesCount: range.pages
+                });
                 app.deleteHifzRange(range);
             },
             content: <String id="are_you_sure" />
