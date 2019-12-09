@@ -40,6 +40,7 @@ export const AddHifz = ({ page }) => {
                         key={pageIndex.toString() + "-" + sura.toString()}
                         showActions={true}
                         pages={true}
+                        trigger="update_hifz_popup"
                     />
                 );
             })}
