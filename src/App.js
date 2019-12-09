@@ -37,7 +37,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+firebase.analytics();
 
 analytics.setCurrentScreen(window.location.pathname);
 analytics.logEvent("page_view");

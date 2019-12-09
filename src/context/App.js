@@ -305,18 +305,18 @@ class AppProvider extends Component {
         const { location } = this.props;
         let match = location.pathname.match(/page\/(.+)/);
         let pageNumber = match ? match[1] : undefined;
-        return pageNumber;
+        return parseInt(pageNumber);
     };
 
     getCurrentPageIndex = () => {
         let pageNumber = this.getCurrentPageNumber();
-        return pageNumber !== undefined ? parseInt(pageNumber) - 1 : 0;
+        return pageNumber !== undefined ? pageNumber - 1 : 0;
     };
 
     offsetPage = shift => {
         let pageNumber = this.getCurrentPageNumber();
         if (pageNumber !== undefined) {
-            let nextPage = parseInt(pageNumber) + shift;
+            let nextPage = pageNumber + shift;
             this.gotoPage(nextPage, true);
         }
     };
@@ -325,6 +325,17 @@ class AppProvider extends Component {
      * Change app state to page number
      */
     gotoPage = (pageNum, replace = false, select = false) => {
+        const selectPageAya = () => {
+            if (select) {
+                this.hideMask();
+                const verse = QData.pageAyaId(pageNum - 1);
+                this.selectAya(verse);
+            }
+        };
+        if (this.getCurrentPageNumber() === pageNum) {
+            selectPageAya();
+            return;
+        }
         const { history } = this.props;
         if (pageNum <= 604 && pageNum >= 1) {
             let targetPath =
@@ -334,11 +345,7 @@ class AppProvider extends Component {
             } else {
                 history.push(targetPath);
             }
-            if (select) {
-                this.hideMask();
-                const verse = QData.pageAyaId(pageNum - 1);
-                this.selectAya(verse);
-            }
+            selectPageAya();
         }
     };
 

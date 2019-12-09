@@ -27,6 +27,7 @@ import {
     faBars,
     faListAlt,
     faPenNib,
+    faPen,
     faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -57,7 +58,8 @@ export const CommandIcons = {
     Copy: faCopy,
     Share: faShareAlt,
     Tafseer: faQuran,
-    Exercise: faPenNib,
+    // Exercise: faPenNib,
+    Exercise: faPen,
     Fullscreen: faExpand,
     Bookmarks: faBookmark,
     ToggleButton: faAngleDoubleDown,
@@ -238,7 +240,7 @@ const CommandButton = ({
                 analytics.logEvent(
                     app.maskStart === -1 ? "show_mask" : "hide_mask",
                     {
-                        verse: app.selectStart,
+                        ...QData.ayaIdInfo(app.selectStart),
                         trigger
                     }
                 );
@@ -246,7 +248,7 @@ const CommandButton = ({
                 break;
             case "Copy":
                 analytics.logEvent("copy_text", {
-                    verse: app.selectStart,
+                    ...QData.ayaIdInfo(app.selectStart),
                     to_verse: app.selectEnd,
                     trigger
                 });
@@ -260,14 +262,14 @@ const CommandButton = ({
                 break;
             case "Bookmark":
                 analytics.logEvent("bookmark", {
-                    verse: app.selectStart,
+                    ...QData.ayaIdInfo(app.selectStart),
                     trigger
                 });
                 app.toggleBookmark();
                 return;
             case "Favorites":
                 analytics.logEvent("update_hifz", {
-                    verse: app.selectStart,
+                    ...QData.ayaIdInfo(app.selectStart),
                     trigger
                 });
                 app.setMessageBox({

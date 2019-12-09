@@ -13,7 +13,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faThumbsUp,
     faThumbsDown,
-    faPenNib,
+    faPen,
     faPlayCircle,
     faRandom,
     faBackward,
@@ -367,7 +367,7 @@ const Exercise = ({}) => {
                         }}
                     >
                         {narrow ? (
-                            <Icon icon={faPenNib} />
+                            <Icon icon={faPen} />
                         ) : (
                             <String id="answer" />
                         )}
