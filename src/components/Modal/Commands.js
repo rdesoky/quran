@@ -31,7 +31,10 @@ import {
     faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
+import {
+    faBookmark as farBookmark,
+    faKeyboard
+} from "@fortawesome/free-regular-svg-icons";
 
 import Utils from "../../services/utils";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
@@ -59,7 +62,7 @@ export const CommandIcons = {
     Share: faShareAlt,
     Tafseer: faQuran,
     // Exercise: faPenNib,
-    Exercise: faPen,
+    Exercise: faKeyboard,
     Fullscreen: faExpand,
     Bookmarks: faBookmark,
     ToggleButton: faAngleDoubleDown,

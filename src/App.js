@@ -37,7 +37,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+if (window.location.hostname !== "localhost") {
+    firebase.analytics();
+}
 
 analytics.setCurrentScreen(window.location.pathname);
 analytics.logEvent("page_view");

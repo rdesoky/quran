@@ -9,20 +9,15 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
     faAngleUp,
-    faBookOpen,
-    faBackward,
-    faForward
+    faBookOpen
 } from "@fortawesome/free-solid-svg-icons";
 import {
     CircleProgress,
     VerseContextButtons,
     PageContextButtons,
-    SuraNavigator,
     SuraContextHeader
 } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
-import { AddHifz } from "../Modal/Favorites";
-import { SuraHifzChart } from "../Hifz";
 
 const PageHeader = ({
     index: pageIndex,
