@@ -12,7 +12,6 @@ import { analytics } from "../../services/Analytics";
 
 const Search = ({}) => {
     const app = useContext(AppContext);
-    const theme = useContext(ThemeContext);
     const input = useRef(null);
     const [searchTerm, setSearchTerm] = useState(
         localStorage.getItem("LastSearch") || ""
@@ -50,10 +49,17 @@ const Search = ({}) => {
     }, []);
 
     const addToSearchHistory = () => {
-        let history = [
-            searchTerm,
-            ...searchHistory.filter(s => s !== searchTerm)
-        ];
+        const filteredHistory = searchHistory.filter(s => s !== searchTerm);
+        if (filteredHistory.length === searchHistory.length) {
+            // a new search has been added
+            analytics.logEvent("search_text", {
+                search_term: searchTerm,
+                search_type: "new"
+            });
+        }
+
+        //push the search to the top of the history
+        let history = [searchTerm, ...filteredHistory];
         history = history.slice(0, 10); //keep last 10 items
         localStorage.setItem("SearchHistory", JSON.stringify(history));
         setSearchHistory(history);
@@ -72,6 +78,11 @@ const Search = ({}) => {
 
     const gotoAya = e => {
         const aya = e.target.getAttribute("aya");
+
+        analytics.logEvent("click_search_result", {
+            ...QData.verseLocation(aya)
+        });
+
         if (!app.isCompact && app.pagesCount === 1) {
             app.closePopup();
         }
@@ -120,7 +131,6 @@ const Search = ({}) => {
                     columnCount: Math.floor((app.popupWidth() - 50) / 120) //-50px margin
                 }}
             >
-                {" "}
                 {QData.arSuraNames
                     .map((suraName, index) => {
                         return { name: suraName, index: index };
@@ -209,6 +219,10 @@ const Search = ({}) => {
         setkeyboard(false);
         setSearchTerm(searchTerm);
         doSearch(searchTerm);
+        analytics.logEvent("search_text", {
+            search_term: searchTerm,
+            search_type: "history"
+        });
     };
 
     const doSearch = searchTerm => {
@@ -238,7 +252,6 @@ const Search = ({}) => {
             addToSearchHistory();
         }
         setkeyboard(false);
-        // e.preventDefault();
     };
 
     const renderKeyboard = () => {
