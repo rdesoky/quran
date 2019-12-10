@@ -402,7 +402,7 @@ export const VerseContextButtons = ({ verse }) => {
             ) : null}
             <CommandButton trigger="verse_context" command="Mask" />
             <CommandButton trigger="verse_context" command="Copy" />
-            {/* <CommandButton command="Favorites" /> */}
+            <CommandButton command="Bookmark" />
         </div>
     );
 };
@@ -410,9 +410,9 @@ export const VerseContextButtons = ({ verse }) => {
 export const PageContextButtons = ({ page }) => {
     const player = useContext(PlayerContext);
     return (
-        <PageNavigator>
+        <PageNavigator trigger="page_context">
             <div className="IconsBar">
-                <CommandButton trigger="page_context" command="Mask" />
+                {/* <CommandButton trigger="page_context" command="Mask" /> */}
                 <CommandButton trigger="page_context" command="Goto" />
                 {player.audioState === AudioState.stopped ? (
                     <CommandButton trigger="page_context" command="Play" />
@@ -441,17 +441,19 @@ export const SuraContextHeader = ({ sura }) => {
     );
 };
 
-export const PageNavigator = ({ children }) => {
+export const PageNavigator = ({ children, trigger }) => {
     const app = useContext(AppContext);
     const pageNumber = app.getCurrentPageIndex() + 1;
 
     const stopPropagation = e => e.stopPropagation();
 
     const gotoNextPage = e => {
+        analytics.setTrigger(trigger);
         app.gotoPage(pageNumber + 1, true, true);
     };
 
     const gotoPrevPage = e => {
+        analytics.setTrigger(trigger);
         app.gotoPage(pageNumber - 1, true, true);
     };
 
