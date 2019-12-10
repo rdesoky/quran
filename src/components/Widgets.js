@@ -10,7 +10,9 @@ import {
     faCopy,
     faBookmark,
     faForward,
-    faBackward
+    faBackward,
+    faChevronRight,
+    faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
@@ -408,16 +410,18 @@ export const VerseContextButtons = ({ verse }) => {
 export const PageContextButtons = ({ page }) => {
     const player = useContext(PlayerContext);
     return (
-        <div className="IconsBar">
-            <CommandButton trigger="page_context" command="Mask" />
-            <CommandButton trigger="page_context" command="Goto" />
-            {player.audioState === AudioState.stopped ? (
-                <CommandButton trigger="page_context" command="Play" />
-            ) : (
-                <CommandButton trigger="page_context" command="Stop" />
-            )}
-            <CommandButton trigger="page_context" command="Favorites" />
-        </div>
+        <PageNavigator>
+            <div className="IconsBar">
+                <CommandButton trigger="page_context" command="Mask" />
+                <CommandButton trigger="page_context" command="Goto" />
+                {player.audioState === AudioState.stopped ? (
+                    <CommandButton trigger="page_context" command="Play" />
+                ) : (
+                    <CommandButton trigger="page_context" command="Stop" />
+                )}
+                <CommandButton trigger="page_context" command="Favorites" />
+            </div>
+        </PageNavigator>
     );
 };
 
@@ -437,31 +441,33 @@ export const SuraContextHeader = ({ sura }) => {
     );
 };
 
-// export const SuraNavigator = ({ sura }) => {
-//     const app = useContext(AppContext);
+export const PageNavigator = ({ children }) => {
+    const app = useContext(AppContext);
+    const pageNumber = app.getCurrentPageIndex() + 1;
 
-//     const stopPropagation = e => e.stopPropagation();
+    const stopPropagation = e => e.stopPropagation();
 
-//     const gotoNextSura = e => {
-//         app.gotoSura(sura + 1);
-//     };
+    const gotoNextPage = e => {
+        app.gotoPage(pageNumber + 1, true, true);
+    };
 
-//     const gotoPrevSura = e => {
-//         app.gotoSura(sura - 1);
-//     };
+    const gotoPrevPage = e => {
+        app.gotoPage(pageNumber - 1, true, true);
+    };
 
-//     return (
-//         <div className="SuraNavigator" onClick={stopPropagation}>
-//             {sura > 0 ? (
-//                 <button onClick={gotoPrevSura}>
-//                     <Icon icon={faForward} />
-//                 </button>
-//             ) : null}
-//             {sura < 113 ? (
-//                 <button onClick={gotoNextSura}>
-//                     <Icon icon={faBackward} />
-//                 </button>
-//             ) : null}
-//         </div>
-//     );
-// };
+    return (
+        <div className="SuraNavigator" onClick={stopPropagation}>
+            {pageNumber > 1 ? (
+                <button className="CommandButton" onClick={gotoPrevPage}>
+                    <Icon icon={faChevronRight} />
+                </button>
+            ) : null}
+            {children}
+            {pageNumber < QData.pages_count ? (
+                <button className="CommandButton" onClick={gotoNextPage}>
+                    <Icon icon={faChevronLeft} />
+                </button>
+            ) : null}
+        </div>
+    );
+};

@@ -12,12 +12,18 @@ export const analytics = {
     },
     logEvent: (name, payload = {}) => {
         const params = { ...analytics.params, ...payload };
-        firebaseAnalytics().logEvent(name, params);
         console.log(`Post '${name}'->${JSON.stringify(params)}`);
+        if (window.location.hostname === "localhost") {
+            return analytics;
+        }
+        firebaseAnalytics().logEvent(name, params);
         return analytics;
     },
     setCurrentScreen: name => {
         console.log(`SetScreen '${name}'`);
+        if (window.location.hostname === "localhost") {
+            return analytics;
+        }
         firebaseAnalytics().setCurrentScreen(name);
         return analytics;
     }

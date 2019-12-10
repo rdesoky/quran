@@ -25,6 +25,7 @@ import { ActivityChart } from "../Hifz";
 import { SettingsContext } from "../../context/Settings";
 import QData from "../../services/QData";
 import { CommandButton } from "./Commands";
+import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -367,7 +368,7 @@ const Exercise = ({}) => {
                         }}
                     >
                         {narrow ? (
-                            <Icon icon={faPen} />
+                            <Icon icon={faKeyboard} />
                         ) : (
                             <String id="answer" />
                         )}
