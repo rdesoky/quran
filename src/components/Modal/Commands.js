@@ -195,7 +195,7 @@ const CommandButton = ({
             case "Play":
                 //TODO: first navigate to the current selection
                 analytics.logEvent("play_audio", {
-                    ...QData.ayaIdInfo(app.selectStart),
+                    ...QData.verseLocation(app.selectStart),
                     reciter: player.reciter,
                     trigger
                 });
@@ -204,7 +204,7 @@ const CommandButton = ({
                 return;
             case "Pause":
                 analytics.logEvent("pause_audio", {
-                    ...QData.ayaIdInfo(player.playingAya),
+                    ...QData.verseLocation(player.playingAya),
                     reciter: player.reciter,
                     trigger
                 });
@@ -216,7 +216,7 @@ const CommandButton = ({
                 return;
             case "Stop":
                 analytics.logEvent("stop_audio", {
-                    ...QData.ayaIdInfo(player.playingAya),
+                    ...QData.verseLocation(player.playingAya),
                     reciter: player.reciter,
                     trigger
                 });
@@ -224,7 +224,7 @@ const CommandButton = ({
                 return;
             case "Downloading":
                 analytics.logEvent("retry_stuck_audio", {
-                    ...QData.ayaIdInfo(player.playingAya),
+                    ...QData.verseLocation(player.playingAya),
                     reciter: player.reciter
                 });
                 player.stop();
@@ -243,7 +243,7 @@ const CommandButton = ({
                 analytics.logEvent(
                     app.maskStart === -1 ? "show_mask" : "hide_mask",
                     {
-                        ...QData.ayaIdInfo(app.selectStart),
+                        ...QData.verseLocation(app.selectStart),
                         trigger
                     }
                 );
@@ -251,7 +251,7 @@ const CommandButton = ({
                 break;
             case "Copy":
                 analytics.logEvent("copy_text", {
-                    ...QData.ayaIdInfo(app.selectStart),
+                    ...QData.verseLocation(app.selectStart),
                     to_verse: app.selectEnd,
                     trigger
                 });
@@ -265,14 +265,14 @@ const CommandButton = ({
                 break;
             case "Bookmark":
                 analytics.logEvent("bookmark", {
-                    ...QData.ayaIdInfo(app.selectStart),
+                    ...QData.verseLocation(app.selectStart),
                     trigger
                 });
                 app.toggleBookmark();
                 return;
             case "Favorites":
                 analytics.logEvent("show_update_hifz", {
-                    ...QData.ayaIdInfo(app.selectStart),
+                    ...QData.verseLocation(app.selectStart),
                     trigger
                 });
                 app.setMessageBox({

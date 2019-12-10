@@ -102,10 +102,16 @@ const Search = ({}) => {
     // };
 
     const nSearchTerm = Utils.normalizeText(searchTerm);
+
     const renderSuras = () => {
         if (nSearchTerm.length < 1) {
             return null;
         }
+
+        const nSuraNames = Utils.normalizeText(
+            QData.arSuraNames.join(",")
+        ).split(",");
+
         return (
             <ul
                 id="MatchedSuraNames"
@@ -114,42 +120,32 @@ const Search = ({}) => {
                     columnCount: Math.floor((app.popupWidth() - 50) / 120) //-50px margin
                 }}
             >
-                <String id="sura_names">
-                    {sura_names => {
-                        const nSuraNames = Utils.normalizeText(
-                            QData.arSuraNames
-                        ).split(",");
-                        return QData.arSuraNames
-                            .split(",")
-                            .map((suraName, index) => {
-                                return { name: suraName, index: index };
-                            })
-                            .filter(
-                                suraInfo =>
-                                    nSuraNames[suraInfo.index].match(
-                                        new RegExp(nSearchTerm, "i")
-                                    ) !== null
-                                // nSuraNames[suraInfo.index].indexOf(
-                                //     nSearchTerm
-                                // ) !== -1
-                            )
-                            .map(suraInfo => {
-                                return (
-                                    <li key={suraInfo.index}>
-                                        <button
-                                            onClick={gotoSura}
-                                            sura={suraInfo.index}
-                                        >
-                                            {suraInfo.index +
-                                                1 +
-                                                ". " +
-                                                suraInfo.name}
-                                        </button>
-                                    </li>
-                                );
-                            });
-                    }}
-                </String>
+                {" "}
+                {QData.arSuraNames
+                    .map((suraName, index) => {
+                        return { name: suraName, index: index };
+                    })
+                    .filter(
+                        suraInfo =>
+                            nSuraNames[suraInfo.index].match(
+                                new RegExp(nSearchTerm, "i")
+                            ) !== null
+                        // nSuraNames[suraInfo.index].indexOf(
+                        //     nSearchTerm
+                        // ) !== -1
+                    )
+                    .map(suraInfo => {
+                        return (
+                            <li key={suraInfo.index}>
+                                <button
+                                    onClick={gotoSura}
+                                    sura={suraInfo.index}
+                                >
+                                    {suraInfo.index + 1 + ". " + suraInfo.name}
+                                </button>
+                            </li>
+                        );
+                    })}
             </ul>
         );
     };
