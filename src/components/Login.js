@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { AppContext } from "./../context/App";
 import firebase from "firebase";
+import { analytics } from "../services/Analytics";
 
 export default function Login({ onClose }) {
     const app = useContext(AppContext);
     const { user } = app;
 
     const handleClose = () => {
+        analytics.logEvent("user_signed_in");
         if (typeof onClose === "function") {
             onClose();
         }

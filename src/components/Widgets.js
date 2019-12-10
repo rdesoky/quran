@@ -402,7 +402,7 @@ export const VerseContextButtons = ({ verse }) => {
             ) : null}
             <CommandButton trigger="verse_context" command="Mask" />
             <CommandButton trigger="verse_context" command="Copy" />
-            <CommandButton command="Bookmark" />
+            <CommandButton trigger="verse_context" command="Bookmark" />
         </div>
     );
 };
