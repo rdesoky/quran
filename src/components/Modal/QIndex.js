@@ -263,6 +263,11 @@ export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
     const app = useContext(AppContext);
     let btn;
     const gotoSura = e => {
+        analytics.logEvent("goto_chapter", {
+            chapter_num: sura + 1,
+            chapter: QData.suraName(sura)
+        });
+
         return app.gotoSura(sura);
     };
 
@@ -300,8 +305,11 @@ export const SuraIndexCell = memo(
         };
 
         const gotoSura = e => {
-            analytics.logEvent("goto_chapter", { chapter: sura });
             if (selectedSura === sura) {
+                analytics.logEvent("goto_chapter", {
+                    chapter_num: sura + 1,
+                    chapter: QData.suraName(sura)
+                });
                 app.hideMask();
                 checkClosePopup();
                 return app.gotoSura(sura);

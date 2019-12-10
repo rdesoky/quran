@@ -1,7 +1,7 @@
 import { analytics as firebaseAnalytics } from "firebase";
 
 export const analytics = {
-    params: { trigger: "session_start" },
+    params: { trigger: "session_start", app_size: "two_pages" },
     setTrigger: trigger => {
         return analytics.setParams({ trigger });
     },

@@ -743,6 +743,19 @@ class AppProvider extends Component {
             isCompact,
             isScrollable
         });
+        const app_size =
+            pagesCount > 1
+                ? isWide
+                    ? isScrollable
+                        ? "extra_wide"
+                        : "wide_two_pages"
+                    : "two_pages"
+                : isCompact
+                ? "wide_one_page"
+                : isNarrow
+                ? "narrow_one_page"
+                : "one_page";
+        analytics.setParams({ app_size });
     }
 
     calcPagesCount({ width, height }) {
