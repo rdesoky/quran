@@ -26,6 +26,7 @@ import { SettingsContext } from "../../context/Settings";
 import QData from "../../services/QData";
 import { CommandButton } from "./Commands";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
+import { analytics } from "../../services/Analytics";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -53,6 +54,7 @@ const Exercise = ({}) => {
     const verseList = app.verseList();
     const normVerseList = app.normVerseList();
     const [quickMode, setQuickMode] = useState(0);
+    const trigger = "exercise";
 
     const isNarrowLayout = () => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
@@ -113,16 +115,24 @@ const Exercise = ({}) => {
         if (currStep === Step.intro && defaultButton) {
             defaultButton.focus();
         }
+        analytics.logEvent("get_random_verse", {
+            trigger,
+            level: settings.exerciseLevel
+        });
     };
 
     const startReciting = e => {
         setCurrStep(Step.reciting);
         //app.setMaskStart(verse + 1, true);
+        analytics.logEvent("exercise_play_audio", {
+            trigger
+        });
     };
 
     const redoReciting = e => {
         setWrittenText("");
         startReciting(e);
+        analytics.logEvent("redo_reciting", { trigger });
     };
 
     const stopCounter = () => {
@@ -138,6 +148,7 @@ const Exercise = ({}) => {
         });
         // stopCounter();
         setCurrStep(Step.typing);
+        analytics.logEvent("start_typing", { trigger });
     };
 
     let resultsDefaultButton =
@@ -146,6 +157,7 @@ const Exercise = ({}) => {
 
     const handleKeyDown = ({ code }) => {
         if (code == "Escape") {
+            analytics.logEvent("exercise_go_back", { trigger });
             showIntro();
         }
     };
@@ -291,16 +303,18 @@ const Exercise = ({}) => {
     const showIntro = e => {
         player.stop(true);
         setCurrStep(Step.intro);
+        analytics.logEvent("exercise_go_back", { trigger });
     };
 
     const moveToNextVerse = () => {
         app.gotoAya(verse + 1, { sel: true, keepMask: true });
     };
 
-    const reciteNextVerse = () => {
+    const reciteNextVerse = e => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         startReciting();
         setTimeout(moveToNextVerse);
+        analytics.logEvent("recite_next_verse", { trigger });
         // app.setMaskStart(verse + 2, true);
     };
 
@@ -313,6 +327,7 @@ const Exercise = ({}) => {
         // if (defaultButton) {
         //     defaultButton.focus();
         // }
+        analytics.logEvent("type_next_verse", { trigger });
     };
 
     const renderTitle = () => {
@@ -596,6 +611,7 @@ const Exercise = ({}) => {
     const redoTyping = e => {
         setWrittenText("");
         startAnswer(e);
+        analytics.logEvent("redo_typing", { trigger });
     };
 
     const renderResultsTitle = () => {
@@ -722,7 +738,10 @@ const Exercise = ({}) => {
                             <button onClick={gotoRandomVerse}>
                                 <String id="new_verse" />
                             </button>
-                            <CommandButton command="Settings" />
+                            <CommandButton
+                                command="Settings"
+                                trigger={trigger}
+                            />
                         </div>
                         <TafseerView
                             verse={verse}
@@ -730,6 +749,7 @@ const Exercise = ({}) => {
                             bookmark={true}
                             copy={true}
                             onMoveNext={onMoveNext}
+                            trigger={trigger}
                         />
                         <hr />
                         <ActivityChart activity="chars" />

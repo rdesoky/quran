@@ -95,7 +95,8 @@ export const TafseerView = ({
     onMoveNext,
     showVerse = true,
     bookmark = false,
-    copy = false
+    copy = false,
+    trigger = "tafseer_view"
 }) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
@@ -181,8 +182,10 @@ export const TafseerView = ({
                 {showVerse ? (
                     <VerseInfo
                         trigger="tafseer_view"
-                        onMoveNext={onMoveNext}
+                        // onMoveNext={onMoveNext}
+                        navigate={true}
                         verse={verse}
+                        trigger={trigger}
                     />
                 ) : (
                     ""

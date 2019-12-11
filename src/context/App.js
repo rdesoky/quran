@@ -261,6 +261,7 @@ class AppProvider extends Component {
                 showPopup: true,
                 contextPopup: null
             });
+            this.setMessageBox(null);
         }
         if (popup !== null) {
             // this.pushRecentCommand(popup);
@@ -912,10 +913,10 @@ class AppProvider extends Component {
             })
             .catch(e => {});
 
-        const { history } = this.props;
-        history.listen(location => {
-            analytics.setCurrentScreen(location.pathname).logEvent("page_view");
-        });
+        // const { history } = this.props;
+        // history.listen(location => {
+        //     analytics.setCurrentScreen(location.pathname).logEvent("page_view");
+        // });
     }
 
     render() {
