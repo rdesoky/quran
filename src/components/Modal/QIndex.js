@@ -469,8 +469,8 @@ export const BookmarkListItem = ({
 
     const removeBookmark = e => {
         app.pushMessageBox({
-            title: <String id="delete_bookmark" />,
-            content: <String id="are_you_sure" />,
+            title: <String id="are_you_sure" />,
+            content: <String id="delete_bookmark" />,
             onYes: () => {
                 app.removeBookmark(verse);
             }

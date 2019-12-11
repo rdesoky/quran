@@ -286,8 +286,7 @@ const CommandButton = ({
             //         break;
             //     }
             default:
-                analytics.logEvent("show_ui", {
-                    command,
+                analytics.logEvent(`show_${command.toLowerCase()}`, {
                     trigger
                 });
                 app.setPopup(command); //already calls pushRecentCommand()

@@ -53,7 +53,8 @@ export const VerseInfo = ({
 
     if (navigate) {
         onMoveNext = offset => {
-            analytics.setTrigger(trigger);
+            // analytics.setTrigger(trigger);
+            analytics.logEvent("offset_verse", { trigger });
             app.gotoAya(verse + offset, { sel: true });
         };
     }

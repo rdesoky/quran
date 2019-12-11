@@ -158,7 +158,7 @@ const HifzRange = ({
 
     const setRangeRevised = e => {
         app.pushMessageBox({
-            title: <String id="revise_confirmation" />,
+            title: <String id="are_you_sure" />,
             onYes: () => {
                 analytics.logEvent("revised_today", {
                     trigger,
@@ -168,7 +168,7 @@ const HifzRange = ({
                 });
                 app.setRangeRevised(range);
             },
-            content: <String id="are_you_sure" />
+            content: <String id="revise_confirmation" />
         });
     };
 
@@ -221,7 +221,7 @@ const HifzRange = ({
 
     const deleteHifzRange = e => {
         app.pushMessageBox({
-            title: <String id="remove_hifz" />,
+            title: <String id="are_you_sure" />,
             onYes: () => {
                 analytics.logEvent("remove_hifz", {
                     chapter: range.sura,
@@ -230,7 +230,7 @@ const HifzRange = ({
                 });
                 app.deleteHifzRange(range);
             },
-            content: <String id="are_you_sure" />
+            content: <String id="remove_hifz" />
         });
     };
 
