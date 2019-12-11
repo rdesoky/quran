@@ -317,11 +317,9 @@ const Search = ({}) => {
                 >
                     {renderTypedText()}
                 </div>
-                <div className="ButtonsBar">
-                    <button onClick={onSubmitSearch}>
-                        <Icon icon={faSearch} />
-                    </button>
-                </div>
+                <button className="CommandButton" onClick={onSubmitSearch}>
+                    <Icon icon={faSearch} />
+                </button>
             </div>
             <div id="SearchHistory">
                 {searchHistory.map((s, i) => {

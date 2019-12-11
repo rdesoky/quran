@@ -346,7 +346,7 @@ const Exercise = ({}) => {
                 <div className="FootNote">
                     <String id="exercise_intro" />
                 </div>
-                <hr />
+                <hr style={{ clear: "both" }} />
                 <ActivityChart activity="chars" />
             </div>
         );
@@ -356,40 +356,47 @@ const Exercise = ({}) => {
         const narrow = app.isNarrow;
         return (
             <>
-                <VerseInfo
-                    trigger="exercise_intro_title"
-                    show={isNarrowLayout()}
-                />
-                <div className="ButtonsBar">
-                    <button
-                        onClick={startAnswer}
-                        ref={ref => {
-                            defaultButton = ref;
-                        }}
-                    >
-                        {narrow ? (
-                            <Icon icon={faKeyboard} />
-                        ) : (
-                            <String id="answer" />
-                        )}
-                    </button>
-                    <button onClick={startReciting}>
-                        {narrow ? (
-                            <Icon icon={faPlayCircle} />
-                        ) : (
-                            <String id="start" />
-                        )}
-                    </button>
-                    <button onClick={typeNextVerse}>
-                        <String id="type_next" />
-                    </button>
-                    <button onClick={gotoRandomVerse}>
-                        {narrow ? (
-                            <Icon icon={faRandom} />
-                        ) : (
-                            <String id="new_verse" />
-                        )}
-                    </button>
+                {isNarrowLayout() ? (
+                    <div className="TitleNote">
+                        <String id="exercise_intro" />
+                    </div>
+                ) : null}
+                <div className="TitleButtons">
+                    <VerseInfo
+                        trigger="exercise_intro_title"
+                        show={isNarrowLayout()}
+                    />
+                    <div className="ButtonsBar">
+                        <button
+                            onClick={startAnswer}
+                            ref={ref => {
+                                defaultButton = ref;
+                            }}
+                        >
+                            {narrow ? (
+                                <Icon icon={faKeyboard} />
+                            ) : (
+                                <String id="answer" />
+                            )}
+                        </button>
+                        <button onClick={startReciting}>
+                            {narrow ? (
+                                <Icon icon={faPlayCircle} />
+                            ) : (
+                                <String id="start" />
+                            )}
+                        </button>
+                        <button onClick={typeNextVerse}>
+                            <String id="type_next" />
+                        </button>
+                        <button onClick={gotoRandomVerse}>
+                            {narrow ? (
+                                <Icon icon={faRandom} />
+                            ) : (
+                                <String id="new_verse" />
+                            )}
+                        </button>
+                    </div>
                 </div>
             </>
         );
@@ -466,7 +473,7 @@ const Exercise = ({}) => {
     const renderTypingTitle = () => {
         // const correct = wrongWord === -1;
         return (
-            <>
+            <div className="TitleButtons">
                 <VerseInfo trigger="exercise_typing_title" />
                 <div className="ButtonsBar">
                     <button onClick={startReciting}>
@@ -479,7 +486,7 @@ const Exercise = ({}) => {
                         <String id="cancel" />
                     </button>
                 </div>
-            </>
+            </div>
         );
     };
 
@@ -593,7 +600,7 @@ const Exercise = ({}) => {
 
     const renderResultsTitle = () => {
         return (
-            <>
+            <div className="TitleButtons">
                 <VerseInfo trigger="exercise_result_title" />
                 <div className="ButtonsBar">
                     {isCorrect() ? (
@@ -639,7 +646,7 @@ const Exercise = ({}) => {
                         <String id="cancel" />
                     </button>
                 </div>
-            </>
+            </div>
         );
     };
 
@@ -741,9 +748,9 @@ const Exercise = ({}) => {
 
     const renderRecitingTitle = () => {
         return (
-            <>
+            <div className="TitleButtons">
                 <VerseInfo trigger="reciting_title" show={isNarrowLayout()} />
-                <span id="TrackDuration">
+                <span className="TrackDuration">
                     {renderCounter(32, 3, Math.floor(remainingTime), duration)}
                 </span>
                 <div className="ButtonsBar">
@@ -762,7 +769,7 @@ const Exercise = ({}) => {
                         <String id="cancel" />
                     </button>
                 </div>
-            </>
+            </div>
         );
     };
 
