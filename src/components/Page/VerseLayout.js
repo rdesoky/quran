@@ -17,7 +17,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const lineWidth = pageWidth;
 
     const closeMask = e => {
-        analytics.logEvent("hide_mask");
+        analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
         app.hideMask();
     };
 

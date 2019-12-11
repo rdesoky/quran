@@ -20,7 +20,7 @@
             &:hover,
             &.typed {
                 background: #444;
-                transform: scaleY(1.3);
+                transform: scaleY(1.3) scaleX(1.1);
                 // z-index: 3;
             }
             &.Space {

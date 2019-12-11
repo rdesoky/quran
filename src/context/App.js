@@ -215,7 +215,6 @@ class AppProvider extends Component {
 
     hideMask = () => {
         this.setState({ maskStart: -1 });
-        // firebase.analytics().logEvent("hide_mask");
     };
 
     setSelectEnd = selectEnd => {

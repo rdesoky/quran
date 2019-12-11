@@ -100,14 +100,12 @@ button,
     align-items: stretch;
     padding: 5px 4px;
     flex-grow: 1;
-    min-height: 40px;
-    button {
+    min-height: 25px;
+    button,
+    .CommandButton {
         margin: 0 2px;
         padding: 0;
         border-radius: 6px;
-        // .ModalContent .Title & {
-        //     margin: 0 1px;
-        // }
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -187,6 +185,8 @@ hr {
     display: flex;
     min-width: 60px;
     flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
     .VerseInfoList {
         font-size: 13px;
         display: flex;
@@ -239,7 +239,8 @@ hr {
     justify-content: center;
     align-items: center;
     font-size: 25px !important;
-    height: 50px !important;
+    // height: 50px !important;
+    min-height: 40px;
     min-width: 50px;
     padding: 0;
     pointer-events: fill;
@@ -784,4 +785,8 @@ li.BookmarkRow {
 .SuraContextHeader {
     height: $chartHeight;
     position: relative;
+}
+
+hr {
+    clear: both;
 }
