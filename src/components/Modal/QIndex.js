@@ -175,12 +175,13 @@ export const PartCell = ({ part, selected }) => {
         }
     }, [selected]);
     return (
-        <li>
+        <li className="PartIndexCell">
             <button
                 onClick={gotoPart}
                 ref={ref => {
                     btn = ref;
                 }}
+                className={part === selected ? "active" : null}
             >
                 <String id="part_num" values={{ num: part + 1 }} />
             </button>
@@ -321,6 +322,7 @@ export const SuraIndexCell = memo(
             //TODO: check if sura has old ranges, then confirmation is required
             const suraInfo = QData.sura_info[sura];
             const suraRanges = app.suraRanges(sura);
+            const trigger = "chapters_index";
 
             if (suraRanges.length) {
                 checkClosePopup();
@@ -329,12 +331,25 @@ export const SuraIndexCell = memo(
                     title: <String id="update_hifz" />,
                     content: <AddHifz />
                 });
+                analytics.logEvent("show_update_hifz", {
+                    ...QData.verseLocation(app.selectStart),
+                    trigger
+                });
             } else {
+                const startPage = suraInfo.sp - 1;
+                const pagesCount = suraInfo.ep - suraInfo.sp + 1;
                 app.addHifzRange(
-                    suraInfo.sp - 1,
+                    startPage,
                     sura,
                     suraInfo.ep - suraInfo.sp + 1
                 );
+                analytics.logEvent("add_hifz", {
+                    trigger,
+                    range: "full_sura",
+                    chapter: sura,
+                    startPage,
+                    pagesCount
+                });
                 app.showToast(<String id="sura_memorized" />);
             }
             // app.setMessageBox({

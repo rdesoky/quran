@@ -411,6 +411,9 @@ hr {
         &:hover {
             background-color: rgba(255, 255, 255, 0.493);
         }
+        &:last-child {
+            border-width: 0;
+        }
     }
 }
 
@@ -439,7 +442,8 @@ hr {
     }
 }
 
-.SuraIndexCell {
+.SuraIndexCell,
+.PartIndexCell {
     margin: 2px 0;
     button {
         border-radius: 5px;
@@ -701,7 +705,10 @@ hr {
                 background-color: #666;
             }
             &.active {
-                background-color: #333;
+                background-color: #111;
+                .DarkTheme & {
+                    background-color: #333;
+                }
             }
         }
         .actions {
