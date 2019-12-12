@@ -248,7 +248,11 @@ const HifzRange = ({
 
     return (
         <li className={"HifzRangeRow"}>
-            <SuraHifzChart pages={pages} range={range} />
+            <SuraHifzChart
+                pages={pages}
+                range={range}
+                trigger="update_hifz_popup"
+            />
             <div
                 className="HifzRangeBody"
                 tabIndex="0"
@@ -363,92 +367,110 @@ const HifzRanges = ({ filter }) => {
 };
 //});
 
-const SuraHifzChart = memo(({ sura, range, pages = true, onClickPage }) => {
-    const app = useContext(AppContext);
-    const [suraRanges, setSuraRanges] = useState([]);
-    const [activeRange, setActiveRange] = useState(null);
+const SuraHifzChart = memo(
+    ({
+        sura,
+        range,
+        pages = true,
+        onClickPage,
+        trigger = "header_chapter_index"
+    }) => {
+        const app = useContext(AppContext);
+        const [suraRanges, setSuraRanges] = useState([]);
+        const [activeRange, setActiveRange] = useState(null);
 
-    const suraIndex = sura !== undefined ? sura : range.sura;
-    const suraInfo = QData.sura_info[suraIndex];
-    const suraPages = suraInfo.ep - suraInfo.sp + 1;
-    const pageList = Array(suraPages).fill(0);
-    const pageWidth = `${100 / suraPages}%`;
+        const suraIndex = sura !== undefined ? sura : range.sura;
+        const suraInfo = QData.sura_info[suraIndex];
+        const suraPages = suraInfo.ep - suraInfo.sp + 1;
+        const pageList = Array(suraPages).fill(0);
+        const pageWidth = `${100 / suraPages}%`;
 
-    useEffect(() => {
-        if (sura !== undefined) {
-            setSuraRanges(app.suraRanges(sura));
-        }
-        if (range) {
-            setSuraRanges(app.suraRanges(range.sura));
-            setActiveRange(range);
-        }
-    }, [app.hifzRanges, range]);
+        useEffect(() => {
+            if (sura !== undefined) {
+                setSuraRanges(app.suraRanges(sura));
+            }
+            if (range) {
+                setSuraRanges(app.suraRanges(range.sura));
+                setActiveRange(range);
+            }
+        }, [app.hifzRanges, range]);
 
-    const activePage = app.getCurrentPageIndex();
+        const activePage = app.getCurrentPageIndex();
 
-    const suraStartPage = suraInfo.sp;
+        const suraStartPage = suraInfo.sp;
 
-    const onClickChart = ({ target }) => {
-        const page = parseInt(target.getAttribute("page"));
-        if (onClickPage) {
-            onClickPage(suraStartPage + page);
-        } else {
-            app.gotoPage(suraStartPage + page, false, true);
-        }
-    };
+        const onClickChart = ({ target }) => {
+            const page = parseInt(target.getAttribute("page"));
+            if (onClickPage) {
+                onClickPage(suraStartPage + page);
+            } else {
+                app.gotoPage(suraStartPage + page, false, true);
+            }
+            analytics.logEvent("chart_page_click", {
+                trigger,
+                page,
+                chapter_num: sura + 1,
+                chapter: QData.suraName(sura)
+            });
+        };
 
-    return (
-        <div className="SuraHifzChart" onClick={onClickChart}>
-            {pages
-                ? pageList.map((z, i) => {
-                      const activeClass =
-                          activePage == i + suraInfo.sp - 1 ? "ActivePage" : "";
-                      return (
-                          <div
-                              key={i}
-                              page={i}
-                              className={"PageThumb".appendWord(activeClass)}
-                              style={{
-                                  right: `${(100 * i) / suraPages}%`,
-                                  width: pageWidth
-                              }}
-                          />
-                      );
-                  })
-                : null}
-            {suraRanges.map((r, i) => {
-                const rangeStart = r.startPage - suraInfo.sp + 1;
-                const start = (100 * rangeStart) / suraPages;
-                const width = (100 * r.pages) / suraPages;
-                let age,
-                    ageClass = "NoHifz";
-                if (r.date !== undefined) {
-                    age = Math.floor((Date.now() - r.date) / dayLength);
-                    ageClass =
-                        age <= 7
-                            ? "GoodHifz"
-                            : age <= 14
-                            ? "FairHifz"
-                            : "WeakHifz";
-                }
-                return (
-                    <div
-                        key={`${r.startPage}-${r.sura}`}
-                        className={"SuraRange"
-                            .appendWord(ageClass)
-                            .appendWord(
-                                "active",
-                                activeRange &&
-                                    activeRange.startPage === r.startPage &&
-                                    activeRange.sura === r.sura
-                            )}
-                        style={{ right: `${start}%`, width: `${width}%` }}
-                    />
-                );
-            })}
-        </div>
-    );
-});
+        return (
+            <div className="SuraHifzChart" onClick={onClickChart}>
+                {pages
+                    ? pageList.map((z, i) => {
+                          const activeClass =
+                              activePage == i + suraInfo.sp - 1
+                                  ? "ActivePage"
+                                  : "";
+                          return (
+                              <div
+                                  key={i}
+                                  page={i}
+                                  className={"PageThumb".appendWord(
+                                      activeClass
+                                  )}
+                                  style={{
+                                      right: `${(100 * i) / suraPages}%`,
+                                      width: pageWidth
+                                  }}
+                              />
+                          );
+                      })
+                    : null}
+                {suraRanges.map((r, i) => {
+                    const rangeStart = r.startPage - suraInfo.sp + 1;
+                    const start = (100 * rangeStart) / suraPages;
+                    const width = (100 * r.pages) / suraPages;
+                    let age,
+                        ageClass = "NoHifz";
+                    if (r.date !== undefined) {
+                        age = Math.floor((Date.now() - r.date) / dayLength);
+                        ageClass =
+                            age <= 7
+                                ? "GoodHifz"
+                                : age <= 14
+                                ? "FairHifz"
+                                : "WeakHifz";
+                    }
+                    return (
+                        <div
+                            key={`${r.startPage}-${r.sura}`}
+                            className={"SuraRange"
+                                .appendWord(ageClass)
+                                .appendWord(
+                                    "active",
+                                    activeRange &&
+                                        activeRange.startPage === r.startPage &&
+                                        activeRange.sura === r.sura
+                                )}
+                            style={{ right: `${start}%`, width: `${width}%` }}
+                        />
+                    );
+                })}
+            </div>
+        );
+    }
+);
 
 const ActivityTooltip = ({ active, payload, label, activity }) => {
     if (active) {
