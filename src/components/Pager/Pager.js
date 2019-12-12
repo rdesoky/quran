@@ -43,6 +43,7 @@ function Pager({ match }) {
         }
         app.offsetPage(-count);
         "object" == typeof e && e.stopPropagation();
+        analytics.logEvent("nav_prev_page");
     };
     const pageDown = e => {
         let count = app.popup && !app.isWide ? 1 : app.pagesCount;
@@ -51,6 +52,7 @@ function Pager({ match }) {
         }
         app.offsetPage(count);
         "object" == typeof e && e.stopPropagation();
+        analytics.logEvent("nav_next_page");
     };
 
     //ComponentDidUpdate
@@ -189,6 +191,7 @@ function Pager({ match }) {
                     } else {
                         offsetSelection(e, 1);
                     }
+                    analytics.logEvent("nav_next_verse", {});
                 }
                 break;
             case "ArrowUp":
@@ -199,11 +202,13 @@ function Pager({ match }) {
                     } else {
                         offsetSelection(e, -1);
                     }
+                    analytics.logEvent("nav_prev_verse", {});
                 }
                 break;
             case "ArrowLeft":
                 analytics.setTrigger("left_key");
-                app.offsetPage(1);
+                // app.offsetPage(1);
+                pageDown(e);
                 break;
             case "PageDown":
                 if (!isTextInput) {
@@ -213,7 +218,8 @@ function Pager({ match }) {
                 break;
             case "ArrowRight":
                 analytics.setTrigger("right_key");
-                app.offsetPage(-1);
+                //app.offsetPage(-1);
+                pageUp(e);
                 break;
             case "PageUp":
                 if (!isTextInput) {

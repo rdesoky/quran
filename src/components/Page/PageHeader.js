@@ -68,12 +68,12 @@ const PageHeader = ({
 
     const onClickNext = e => {
         onIncrement && onIncrement(e);
-        analytics.logEvent("header_next_verse", { trigger: "page_header" });
+        analytics.logEvent("nav_next_verse", { trigger: "page_header" });
     };
 
     const onClickPrevious = e => {
         onDecrement && onDecrement(e);
-        analytics.logEvent("header_prev_verse", { trigger: "page_header" });
+        analytics.logEvent("nav_prev_verse", { trigger: "page_header" });
     };
 
     const showSuraContextPopup = ({ target }) => {
