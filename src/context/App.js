@@ -764,8 +764,10 @@ class AppProvider extends Component {
     }
 
     componentWillUnmount() {
-        this.unregisterAuthObserver();
-        this.onBookmarkUpdate();
+        this.unregisterAuthObserver && this.unregisterAuthObserver();
+        this.bookmarksRef && this.onBookmarkUpdate();
+        this.onHifzUpdate && this.onHifzUpdate();
+        this.onActivityUpdate && this.onActivityUpdate();
     }
 
     dbRef = null;
@@ -892,8 +894,11 @@ class AppProvider extends Component {
 
         this.dbRef = firebase.database().ref();
 
-        const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
-        this.selectAya(ayaId);
+        setTimeout(() => {
+            const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
+            this.selectAya(ayaId);
+        });
+
         window.addEventListener("resize", this.onResize);
         this.updateAppSizes({
             width: window.innerWidth,
