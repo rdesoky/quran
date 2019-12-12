@@ -449,13 +449,15 @@ export const PageNavigator = ({ children, trigger }) => {
     const stopPropagation = e => e.stopPropagation();
 
     const gotoNextPage = e => {
-        analytics.setTrigger(trigger);
+        // analytics.setTrigger(trigger);
         app.gotoPage(pageNumber + 1, true, true);
+        analytics.logEvent("nav_next_page", { trigger });
     };
 
     const gotoPrevPage = e => {
-        analytics.setTrigger(trigger);
+        // analytics.setTrigger(trigger);
         app.gotoPage(pageNumber - 1, true, true);
+        analytics.logEvent("nav_prev_page", { trigger });
     };
 
     return (
