@@ -42,7 +42,7 @@ if (window.location.hostname !== "localhost") {
 }
 
 analytics.setCurrentScreen(window.location.pathname);
-analytics.logEvent("page_view");
+// analytics.logEvent("page_view");
 
 function App({}) {
     //Handles componentDidMount/unmount, props changes

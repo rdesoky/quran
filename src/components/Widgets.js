@@ -54,7 +54,10 @@ export const VerseInfo = ({
     if (navigate) {
         onMoveNext = offset => {
             // analytics.setTrigger(trigger);
-            analytics.logEvent("offset_verse", { trigger });
+            analytics.logEvent(
+                offset > 0 ? "nav_next_verse" : "nav_prev_verse",
+                { trigger }
+            );
             app.gotoAya(verse + offset, { sel: true });
         };
     }
