@@ -65,15 +65,11 @@ const Tafseer = () => {
     return (
         <>
             <div className="Title">
+                {" "}
                 <String id="tafseer" />
                 {app.isNarrow ? (
-                    <>
-                        <PlayerButtons trigger="tafseer_title" />
-                        <CommandButton command="Exercise" />
-                    </>
-                ) : (
-                    ""
-                )}
+                    <PlayerButtons trigger="tafseer_title" />
+                ) : null}
             </div>
             <div
                 className="PopupBody"

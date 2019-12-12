@@ -148,7 +148,6 @@ const Exercise = ({}) => {
         });
         // stopCounter();
         setCurrStep(Step.typing);
-        analytics.logEvent("start_typing", { trigger });
     };
 
     let resultsDefaultButton =
@@ -318,7 +317,7 @@ const Exercise = ({}) => {
         // app.setMaskStart(verse + 2, true);
     };
 
-    const typeNextVerse = () => {
+    const typeNextVerse = e => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
         // app.setMaskStart(verse + 1);
         setWrittenText("");
@@ -367,6 +366,11 @@ const Exercise = ({}) => {
         );
     };
 
+    const onClickType = e => {
+        analytics.logEvent("start_typing", { trigger });
+        startAnswer();
+    };
+
     const renderIntroTitle = () => {
         const narrow = app.isNarrow;
         return (
@@ -383,7 +387,7 @@ const Exercise = ({}) => {
                     />
                     <div className="ButtonsBar">
                         <button
-                            onClick={startAnswer}
+                            onClick={onClickType}
                             ref={ref => {
                                 defaultButton = ref;
                             }}
@@ -474,13 +478,24 @@ const Exercise = ({}) => {
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
         if (quickMode == 2 && wrongWord === -1 && answerWords.length >= 3) {
-            app.logTypedVerse(verse, 3);
+            const typed_chars = app.logTypedVerse(verse, 3);
+            analytics.logEvent("exercise_quick_success", {
+                ...QData.verseLocation(verse),
+                typed_chars,
+                trigger
+            });
             return true;
         }
         const success =
             wrongWord === -1 && correctWords.length === answerWords.length;
+
         if (success) {
-            app.logTypedVerse(verse);
+            const typed_chars = app.logTypedVerse(verse);
+            analytics.logEvent("exercise_success", {
+                ...QData.verseLocation(verse),
+                typed_chars,
+                trigger
+            });
         }
         return success;
     };
