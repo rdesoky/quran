@@ -105,15 +105,15 @@ const commandIcon = (command, app, player) => {
                 //             ".jpg)"
                 //     }}
                 // />
-                <span>
-                    <img
-                        src={`${process.env.PUBLIC_URL}/images/${player.reciter}.jpg`}
-                        className={"ReciterIcon".appendWord(
-                            "blinking",
-                            player.audioState === AudioState.playing
-                        )}
-                    />
-                </span>
+                // <span>
+                <img
+                    src={`${process.env.PUBLIC_URL}/images/${player.reciter}.jpg`}
+                    className={"ReciterIcon".appendWord(
+                        "blinking",
+                        player.audioState === AudioState.playing
+                    )}
+                />
+                // </span>
             );
 
         default:

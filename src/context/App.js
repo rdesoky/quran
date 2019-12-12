@@ -535,18 +535,19 @@ class AppProvider extends Component {
         const today = new Date();
         const activityKey = Utils.dateKey(today);
         const activityCharsRef = this.activityRef.child(activityKey + "/chars");
+        const charsCount = words
+            ? verseText
+                  .split(" ")
+                  .slice(0, words)
+                  .join("").length
+            : verseText.replace(/\s/g, "").length;
         activityCharsRef.once("value", snapshot => {
             let chars = snapshot.val() || 0;
-            if (words) {
-                chars += verseText
-                    .split(" ")
-                    .slice(0, 3)
-                    .join("").length;
-            } else {
-                chars += verseText.replace(/\s/g, "").length;
-            }
+            chars += charsCount;
             activityCharsRef.set(chars);
         });
+
+        return charsCount;
     };
 
     addHifzRange = (startPage, sura, pages) => {
@@ -913,10 +914,11 @@ class AppProvider extends Component {
             })
             .catch(e => {});
 
-        // const { history } = this.props;
-        // history.listen(location => {
-        //     analytics.setCurrentScreen(location.pathname).logEvent("page_view");
-        // });
+        const { history } = this.props;
+        history.listen(location => {
+            analytics.setCurrentScreen(location.pathname);
+            //analytics.logEvent("page_view");
+        });
     }
 
     render() {
