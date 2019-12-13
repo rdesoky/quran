@@ -1,8 +1,8 @@
 import { analytics as firebaseAnalytics } from "firebase";
 
 export const analytics = {
-    devMode: () => window.location.hostname === "localhost",
-    // devMode: () => false,
+    // devMode: () => window.location.hostname === "localhost",
+    devMode: () => false,
     params: { trigger: "session_start", app_size: "two_pages" },
     setTrigger: trigger => {
         return analytics.setParams({ trigger });
@@ -24,6 +24,13 @@ export const analytics = {
         console.log(`SetScreen '${name}'`);
         if (!analytics.devMode()) {
             firebaseAnalytics().setCurrentScreen(name);
+        }
+        return analytics;
+    },
+    setUserProps: props => {
+        console.log(`SetUserProperties: ${JSON.stringify(props)}`);
+        if (!analytics.devMode()) {
+            firebaseAnalytics().setUserProperties(props);
         }
         return analytics;
     }
