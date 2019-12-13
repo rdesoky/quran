@@ -112,30 +112,38 @@ const HifzRange = ({
 
     const playRange = e => {
         player.stop(true);
-        selectRange(e);
+        const { startVerse } = selectRange();
         setTimeout(() => {
             player.play();
         }, 500);
-    };
-
-    const reviewRange = e => {
-        selectRange(e);
-        setTimeout(() => {
-            app.setMaskStart();
-            //app.closePopup();
-            checkClosePopup();
+        analytics.logEvent("play_audio", {
+            trigger,
+            ...QData.verseLocation(startVerse)
         });
     };
 
-    const selectRange = e => {
-        const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
+    const reviewRange = e => {
+        const { startVerse } = selectRange();
+        setTimeout(() => {
+            app.setMaskStart();
+            checkClosePopup();
+        });
+        analytics.logEvent("show_mask", {
+            trigger,
+            ...QData.verseLocation(startVerse)
+        });
+    };
+
+    const selectRange = () => {
+        const [startVerse, endVerse] = QData.rangeVerses(
             range.sura,
             range.startPage,
             range.endPage
         );
-        app.gotoAya(rangeStartVerse, { sel: true });
+        app.gotoAya(startVerse, { sel: true });
         // app.setSelectStart(rangeStartVerse);
-        app.setSelectEnd(rangeEndVerse);
+        app.setSelectEnd(endVerse);
+        return { startVerse, endVerse };
     };
 
     const readRange = e => {
@@ -226,7 +234,8 @@ const HifzRange = ({
                 analytics.logEvent("remove_hifz", {
                     chapter: range.sura,
                     startPage: range.startPage,
-                    pagesCount: range.pages
+                    pagesCount: range.pages,
+                    trigger
                 });
                 app.deleteHifzRange(range);
             },
@@ -328,7 +337,7 @@ const HifzRange = ({
 
 // export const HifzRanges = AppConsumer(({ app, filter }) => {
 
-const HifzRanges = ({ filter }) => {
+const HifzRanges = ({ filter, trigger = "hifz_index" }) => {
     const [activeRange, setActiveRange] = useState(null);
     const app = useContext(AppContext);
     // const suraNames = app.suraNames();
@@ -358,7 +367,7 @@ const HifzRanges = ({ filter }) => {
                         showActions={activeRange === range.id}
                         setActiveRange={setActiveRange}
                         pages={false}
-                        trigger="hifz_index"
+                        trigger={trigger}
                     />
                 );
             })}

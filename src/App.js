@@ -37,7 +37,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-if (window.location.hostname !== "localhost") {
+if (!analytics.devMode()) {
     firebase.analytics();
 }
 

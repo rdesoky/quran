@@ -625,7 +625,7 @@ const Exercise = ({}) => {
 
     const redoTyping = e => {
         setWrittenText("");
-        startAnswer(e);
+        startAnswer();
         analytics.logEvent("redo_typing", { trigger });
     };
 
@@ -664,7 +664,7 @@ const Exercise = ({}) => {
                                 ref={ref => {
                                     defaultButton = ref;
                                 }}
-                                onClick={startAnswer}
+                                onClick={onClickType}
                             >
                                 <String id="correct" />
                             </button>
@@ -790,7 +790,7 @@ const Exercise = ({}) => {
                 </span>
                 <div className="ButtonsBar">
                     <button
-                        onClick={startAnswer}
+                        onClick={onClickType}
                         ref={ref => {
                             defaultButton = ref;
                         }}

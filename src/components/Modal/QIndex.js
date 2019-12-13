@@ -151,11 +151,14 @@ const QIndex = ({ simple }) => {
                 onMouseDown={hideKeyboard}
             >
                 {activeTab == "index" ? (
-                    <SuraList filter={filter} />
+                    <SuraList filter={filter} trigger="indices_chapters" />
                 ) : activeTab == "hifz" ? (
-                    <HifzRanges filter={filter} />
+                    <HifzRanges filter={filter} trigger="indices_hifz" />
                 ) : (
-                    <BookmarksList filter={filter} />
+                    <BookmarksList
+                        filter={filter}
+                        trigger="indices_bookmarks"
+                    />
                 )}
             </div>
         </>
@@ -252,6 +255,7 @@ export const SuraList = memo(
                                 selectSura={setActionsIndex}
                                 selectedSura={actionsIndex}
                                 simple={simple}
+                                trigger={trigger}
                             />
                         );
                     })}
@@ -294,7 +298,14 @@ export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
 };
 
 export const SuraIndexCell = memo(
-    ({ sura, filter, selectedSura, selectSura, simple }) => {
+    ({
+        sura,
+        filter,
+        selectedSura,
+        selectSura,
+        simple,
+        trigger = "chapters_index"
+    }) => {
         const app = useContext(AppContext);
         const player = useContext(PlayerContext);
         const [suraName, setSuraName] = useState("");
@@ -309,7 +320,8 @@ export const SuraIndexCell = memo(
             if (selectedSura === sura) {
                 analytics.logEvent("goto_chapter", {
                     chapter_num: sura + 1,
-                    chapter: QData.suraName(sura)
+                    chapter: QData.suraName(sura),
+                    trigger
                 });
                 app.hideMask();
                 checkClosePopup();
@@ -352,18 +364,6 @@ export const SuraIndexCell = memo(
                 });
                 app.showToast(<String id="sura_memorized" />);
             }
-            // app.setMessageBox({
-            //     title: <String id="add_hifz" />,
-            //     content: <String id="are_you_sure" />,
-            //     onYes: () => {
-            //         const suraInfo = QData.sura_info[sura];
-            //         app.addHifzRange(
-            //             suraInfo.sp - 1,
-            //             sura,
-            //             suraInfo.ep - suraInfo.sp + 1
-            //         );
-            //     }
-            // });
         };
 
         const playSura = e => {
@@ -372,6 +372,10 @@ export const SuraIndexCell = memo(
             setTimeout(() => {
                 player.play();
             }, 500);
+            analytics.logEvent("play_audio", {
+                trigger,
+                ...QData.verseLocation(QData.ayaID(sura, 0))
+            });
         };
 
         // const reviewSura = e => {
@@ -439,7 +443,8 @@ export const BookmarkListItem = ({
     filter,
     selectedVerse,
     selectVerse,
-    showTafseer = false
+    showTafseer = false,
+    trigger = "bookmarks"
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
@@ -480,6 +485,10 @@ export const BookmarkListItem = ({
         }
         app.gotoAya(verse, { sel: true });
         checkClosePopup();
+        analytics.logEvent("goto_verse", {
+            ...QData.verseLocation(verse),
+            trigger
+        });
     };
 
     const removeBookmark = e => {
@@ -488,6 +497,10 @@ export const BookmarkListItem = ({
             content: <String id="delete_bookmark" />,
             onYes: () => {
                 app.removeBookmark(verse);
+                analytics.logEvent("remove_bookmark", {
+                    ...QData.verseLocation(verse),
+                    trigger
+                });
             }
         });
     };
@@ -498,6 +511,10 @@ export const BookmarkListItem = ({
         setTimeout(() => {
             player.play();
         }, 500);
+        analytics.logEvent("play_audio", {
+            ...QData.verseLocation(verse),
+            trigger
+        });
     };
 
     // const reviewVerse = e => {
@@ -527,6 +544,10 @@ export const BookmarkListItem = ({
     };
 
     const toggleTafseer = e => {
+        analytics.logEvent(showTafseerView ? "hide_tafseer" : "show_tafseer", {
+            ...QData.verseLocation(verse),
+            trigger
+        });
         setShowTafseer(!showTafseerView);
     };
 
@@ -581,14 +602,18 @@ export const BookmarkListItem = ({
     );
 };
 
-export const BookmarksList = ({ filter, showTafseer = false }) => {
+export const BookmarksList = ({
+    filter,
+    showTafseer = false,
+    trigger = "bookmarks_index"
+}) => {
     const app = useContext(AppContext);
     const [actionsIndex, setActionsIndex] = useState(-1);
 
     const { bookmarks } = app;
 
     useEffect(() => {
-        analytics.setTrigger("bookmarks_index");
+        analytics.setTrigger(trigger);
     }, []);
 
     if (!bookmarks.length) {
@@ -610,6 +635,7 @@ export const BookmarksList = ({ filter, showTafseer = false }) => {
                         selectedVerse={actionsIndex}
                         selectVerse={setActionsIndex}
                         showTafseer={showTafseer}
+                        trigger={trigger}
                     />
                 );
             })}
