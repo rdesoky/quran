@@ -42,6 +42,7 @@ if (!analytics.devMode()) {
 }
 
 analytics.setCurrentScreen(window.location.pathname);
+analytics.setUserProps({ web_user: "yes" });
 // analytics.logEvent("page_view");
 
 function App({}) {

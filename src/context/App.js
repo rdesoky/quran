@@ -344,6 +344,7 @@ class AppProvider extends Component {
                 history.replace(targetPath);
             } else {
                 history.push(targetPath);
+                // analytics.logEvent("page_view");
             }
             selectPageAya();
         }
@@ -922,7 +923,7 @@ class AppProvider extends Component {
         const { history } = this.props;
         history.listen(location => {
             analytics.setCurrentScreen(location.pathname);
-            //analytics.logEvent("page_view");
+            // analytics.logEvent("page_view");
         });
     }
 
