@@ -163,7 +163,7 @@ class PlayerProvider extends Component {
         if (resetToSelection) {
             this.setPlayingAya(-1);
         }
-        document.title = "";
+        document.title = "Quran Hafiz";
     };
 
     pause = () => {
