@@ -359,6 +359,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
         //align-items: stretch;
         justify-items: center;
         align-items: flex-end;
+        overflow-x: hidden;
 
         > span {
             line-height: 35px;
@@ -381,6 +382,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             background-color: #222;
             border-radius: 10px 10px 0 0;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
             &.active {
