@@ -306,7 +306,7 @@ const CommandButton = ({
             );
             switch (command) {
                 case "Profile":
-                    if (!app.user.isAnonymous) {
+                    if (app.user && !app.user.isAnonymous) {
                         label = app.user.email;
                     }
             }
