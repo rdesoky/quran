@@ -191,7 +191,8 @@ const Search = ({}) => {
                                 tabIndex="0"
                             >
                                 <span className="ResultInfo">
-                                    {app.suraName(ayaInfo.sura)}
+                                    {app.suraName(ayaInfo.sura)} (
+                                    {ayaInfo.aya + 1})
                                 </span>
                                 <span
                                     className="ResultText link"
