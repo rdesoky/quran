@@ -225,6 +225,9 @@ const Exercise = ({}) => {
         if (player.audioState === AudioState.stopped) {
             stopCounter();
             if ([Step.reciting].includes(currStep)) {
+                analytics.logEvent("start_typing", {
+                    trigger: "exercise_audio"
+                });
                 startAnswer();
             }
         }
@@ -367,7 +370,8 @@ const Exercise = ({}) => {
     };
 
     const onClickType = e => {
-        analytics.logEvent("start_typing", { trigger });
+        const trg = e.target.getAttribute("trigger") || trigger;
+        analytics.logEvent("start_typing", { trigger: trg });
         startAnswer();
     };
 
@@ -388,6 +392,7 @@ const Exercise = ({}) => {
                     <div className="ButtonsBar">
                         <button
                             onClick={onClickType}
+                            trigger="exercise_intro"
                             ref={ref => {
                                 defaultButton = ref;
                             }}
@@ -626,7 +631,7 @@ const Exercise = ({}) => {
     const redoTyping = e => {
         setWrittenText("");
         startAnswer();
-        analytics.logEvent("redo_typing", { trigger });
+        analytics.logEvent("start_typing", { trigger: "exercise_redo" });
     };
 
     const renderResultsTitle = () => {
@@ -665,6 +670,7 @@ const Exercise = ({}) => {
                                     defaultButton = ref;
                                 }}
                                 onClick={onClickType}
+                                trigger="exercise_retry"
                             >
                                 <String id="correct" />
                             </button>
@@ -791,6 +797,7 @@ const Exercise = ({}) => {
                 <div className="ButtonsBar">
                     <button
                         onClick={onClickType}
+                        trigger="exercise_reciter"
                         ref={ref => {
                             defaultButton = ref;
                         }}
