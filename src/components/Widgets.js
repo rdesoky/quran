@@ -353,7 +353,10 @@ export const ContextPopup = ({}) => {
         return (
             <div className="ContextPopupBlocker" onClick={closePopup}>
                 <div
-                    className="ContextPopup"
+                    className={"ContextPopup".appendWord(
+                        "DownPointer",
+                        !isBelow
+                    )}
                     ref={ref => {
                         popup = ref;
                     }}
