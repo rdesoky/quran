@@ -280,9 +280,10 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
 
     .ResultsList {
         // margin-top: 20px;
-        direction: rtl;
+        // direction: rtl;
+        cursor: default;
         margin: 0;
-        padding-inline-start: 30px;
+        // padding-inline-start: 30px;
         // overflow: auto;
         .MoreResults {
             width: 100%;
@@ -298,7 +299,7 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
             span {
                 pointer-events: none;
             }
-            text-align: right;
+            // text-align: right;
             font-size: 16px;
             line-height: 25px;
             .hiword {
@@ -499,5 +500,40 @@ $exerciseBgColor: rgba(0, 0, 0, 0.95);
     border-bottom: solid 1px #444;
     &:last-child {
         border-bottom: none;
+    }
+}
+
+.ParaId {
+    display: inline-block;
+    background-color: #444;
+    border-radius: 10px;
+    min-width: 30px;
+    text-align: center;
+    padding: 0 3px;
+    margin: 0 5px 0 0;
+    [dir="rtl"] & {
+        margin: 0 0 0 5px;
+    }
+
+    &.Verse {
+        float: left;
+        border-radius: 4px;
+        background-color: rgb(0, 52, 110);
+        [dir="rtl"] & {
+            float: right;
+        }
+    }
+}
+
+.ResultsGroup {
+    padding: 6px 0;
+
+    border-top: solid 1px #444;
+
+    .ResultsGroupList {
+        display: none;
+        &.Expanded {
+            display: block;
+        }
     }
 }
