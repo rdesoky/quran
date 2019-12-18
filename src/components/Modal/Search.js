@@ -148,6 +148,7 @@ const Search = ({}) => {
                         return (
                             <li key={suraInfo.index}>
                                 <button
+                                    className="VerseLink"
                                     onClick={gotoSura}
                                     sura={suraInfo.index}
                                 >
@@ -160,6 +161,54 @@ const Search = ({}) => {
         );
     };
 
+    const renderResultsTree = () => {
+        const groups = results.reduce((groups, ayaInfo, index) => {
+            const { sura, aya } = QData.ayaIdInfo(ayaInfo.aya);
+            let group = groups.find(g => g.sura === sura);
+            const ayaInfoEx = { ...ayaInfo, ayaNum: aya };
+            if (group) {
+                group.verses.push(ayaInfoEx);
+            } else {
+                groups.push({ sura, verses: [ayaInfoEx] });
+            }
+            return groups;
+        }, []);
+
+        return (
+            <div
+                className="ResultsList"
+                onMouseDown={hideKeyboard}
+                ref={ref => {
+                    resultsDiv = ref;
+                }}
+            >
+                {groups.map(({ sura, verses }, i) => {
+                    return (
+                        <div className="ResultsGroup">
+                            <span className="ParaId Chapter">{sura + 1}</span>{" "}
+                            {app.suraName(sura)} ({verses.length})
+                            <div className="ResultsGroupList">
+                                {verses.map(({ aya, text, ayaNum }) => (
+                                    <div
+                                        className="ResultItem"
+                                        onClick={gotoAya}
+                                        tabIndex="0"
+                                        aya={aya}
+                                    >
+                                        <span className="ParaId Verse">
+                                            {ayaNum}
+                                        </span>
+                                        {text}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     const renderResults = () => {
         // if (!results.length) {
         // 	return;
@@ -169,12 +218,6 @@ const Search = ({}) => {
             <ol
                 className="ResultsList"
                 onMouseDown={hideKeyboard}
-                style={
-                    {
-                        // maxHeight:
-                        // app.pageHeight() - 175 - (app.playerVisible ? 60 : 0)
-                    }
-                }
                 ref={ref => {
                     resultsDiv = ref;
                 }}
@@ -247,7 +290,7 @@ const Search = ({}) => {
     };
 
     const onSubmitSearch = txt => {
-        let firstResult = resultsDiv.querySelector("li");
+        let firstResult = resultsDiv.querySelector(".VerseLink");
         if (firstResult) {
             firstResult.focus();
             addToSearchHistory();
@@ -358,7 +401,7 @@ const Search = ({}) => {
                 }}
             >
                 {renderSuras()}
-                {renderResults()}
+                {renderResultsTree()}
                 {renderKeyboard()}
             </div>
         </>

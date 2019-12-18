@@ -94,12 +94,6 @@ function App({}) {
                                         component={PageRedirect}
                                     />
                                     <Route
-                                        path={
-                                            process.env.PUBLIC_URL + "/exercise"
-                                        }
-                                        component={Exercise}
-                                    />
-                                    <Route
                                         render={() => {
                                             const defUrl =
                                                 process.env.PUBLIC_URL +
