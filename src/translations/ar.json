@@ -28,6 +28,8 @@
     "reading": "قراءة",
     "verse": "آية",
     "verse_num": "آية: {num}",
+    "verse_count": "{count} آية",
+    "found_count": "يوجد {count}",
     "search": "بحث في السور والنصوص",
     "go": "إذهب",
     "goto": "إذهب إلى ...",

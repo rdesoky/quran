@@ -29,6 +29,8 @@
     "reading": "reading",
     "verse": "verse",
     "verse_num": "verse: {num}",
+    "verse_count": "{count} verse",
+    "found_count": "found {count}",
     "search": "Search",
     "go": "Go",
     "goto": "Go to ...",

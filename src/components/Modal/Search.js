@@ -22,6 +22,7 @@ const Search = ({}) => {
     const [results, setResults] = useState([]);
     const [pages, setPages] = useState(1);
     const [keyboard, setkeyboard] = useState(false);
+    const [expandedGroup, setExpandedGroup] = useState(0);
 
     let resultsDiv;
 
@@ -106,6 +107,13 @@ const Search = ({}) => {
         }
     };
 
+    const toggleGroup = ({ currentTarget }) => {
+        const groupId = parseInt(currentTarget.getAttribute("group-index"));
+        if (groupId !== undefined) {
+            setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
+        }
+    };
+
     // const onResultKeyDown = e => {
     // 	if (e.key === "Enter") {
     // 		gotoAya(e);
@@ -165,7 +173,7 @@ const Search = ({}) => {
         const groups = results.reduce((groups, ayaInfo, index) => {
             const { sura, aya } = QData.ayaIdInfo(ayaInfo.aya);
             let group = groups.find(g => g.sura === sura);
-            const ayaInfoEx = { ...ayaInfo, ayaNum: aya };
+            const ayaInfoEx = { ...ayaInfo, ayaNum: aya + 1 };
             if (group) {
                 group.verses.push(ayaInfoEx);
             } else {
@@ -184,23 +192,56 @@ const Search = ({}) => {
             >
                 {groups.map(({ sura, verses }, i) => {
                     return (
-                        <div className="ResultsGroup">
-                            <span className="ParaId Chapter">{sura + 1}</span>{" "}
-                            {app.suraName(sura)} ({verses.length})
+                        <div
+                            className={"ResultsGroup".appendWord(
+                                "Expanded",
+                                i === expandedGroup
+                            )}
+                        >
+                            <button
+                                className="ResultsGroupHeader"
+                                group-index={i}
+                                onClick={toggleGroup}
+                                tabindex="0"
+                            >
+                                <span className="ParaId Chapter">
+                                    {sura + 1}
+                                </span>{" "}
+                                {app.suraName(sura)} (
+                                <String
+                                    id="found_count"
+                                    values={{ count: verses.length }}
+                                />
+                                )
+                            </button>
                             <div className="ResultsGroupList">
-                                {verses.map(({ aya, text, ayaNum }) => (
-                                    <div
-                                        className="ResultItem"
-                                        onClick={gotoAya}
-                                        tabIndex="0"
-                                        aya={aya}
-                                    >
-                                        <span className="ParaId Verse">
-                                            {ayaNum}
-                                        </span>
-                                        {text}
-                                    </div>
-                                ))}
+                                {verses.map(
+                                    ({
+                                        aya,
+                                        ayaNum,
+                                        text: ayaText,
+                                        ntext: normalizedAyaText
+                                    }) => (
+                                        <button
+                                            className="ResultItem"
+                                            onClick={gotoAya}
+                                            tabIndex="0"
+                                            aya={aya}
+                                        >
+                                            <span className="ParaId Verse">
+                                                {ayaNum}
+                                            </span>
+                                            <span
+                                                className="ResultText link"
+                                                dangerouslySetInnerHTML={Utils.hilightSearch(
+                                                    nSearchTerm,
+                                                    ayaText,
+                                                    normalizedAyaText
+                                                )}
+                                            />
+                                        </button>
+                                    )
+                                )}
                             </div>
                         </div>
                     );
@@ -256,6 +297,7 @@ const Search = ({}) => {
 
     useEffect(() => {
         doSearch(searchTerm);
+        setExpandedGroup(0);
     }, [searchTerm]);
 
     const onHistoryButtonClick = e => {
