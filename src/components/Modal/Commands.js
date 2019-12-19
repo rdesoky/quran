@@ -55,6 +55,7 @@ export const CommandIcons = {
     Profile: faUserCircle,
     Theme: faAdjust,
     Favorites: faHeart,
+    update_hifz: faHeart,
     Help: faQuestion,
     Mask: faEyeSlash,
     MaskOn: faEye,
@@ -140,7 +141,7 @@ const Commands = () => {
         "Bookmarks",
         "Copy",
         "Share",
-        "Favorites",
+        "update_hifz",
         "Profile",
         "Settings",
         "Help"
@@ -271,6 +272,7 @@ const CommandButton = ({
                 app.toggleBookmark();
                 return;
             case "Favorites":
+            case "update_hifz":
                 analytics.logEvent("show_update_hifz", {
                     ...QData.verseLocation(app.selectStart),
                     trigger
