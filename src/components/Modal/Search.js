@@ -6,7 +6,12 @@ import { AppConsumer, AppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+    faSearch,
+    faTimes,
+    faTree,
+    faIndent
+} from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "../../context/Theme";
 import { analytics } from "../../services/Analytics";
 
@@ -23,8 +28,16 @@ const Search = ({}) => {
     const [pages, setPages] = useState(1);
     const [keyboard, setkeyboard] = useState(false);
     const [expandedGroup, setExpandedGroup] = useState(0);
+    const [treeView, setTreeView] = useState(false);
 
     let resultsDiv;
+
+    const toggleTreeView = e => {
+        analytics.logEvent("search_toggle_view", {
+            view_mode: treeView ? "list" : "tree"
+        });
+        setTreeView(!treeView);
+    };
 
     const showKeyboard = e => {
         setkeyboard(true);
@@ -191,11 +204,13 @@ const Search = ({}) => {
                 }}
             >
                 {groups.map(({ sura, verses }, i) => {
+                    const expanded = expandedGroup === i;
+
                     return (
                         <div
                             className={"ResultsGroup".appendWord(
                                 "Expanded",
-                                i === expandedGroup
+                                expanded
                             )}
                         >
                             <button
@@ -214,35 +229,37 @@ const Search = ({}) => {
                                 />
                                 )
                             </button>
-                            <div className="ResultsGroupList">
-                                {verses.map(
-                                    ({
-                                        aya,
-                                        ayaNum,
-                                        text: ayaText,
-                                        ntext: normalizedAyaText
-                                    }) => (
-                                        <button
-                                            className="ResultItem"
-                                            onClick={gotoAya}
-                                            tabIndex="0"
-                                            aya={aya}
-                                        >
-                                            <span className="ParaId Verse">
-                                                {ayaNum}
-                                            </span>
-                                            <span
-                                                className="ResultText link"
-                                                dangerouslySetInnerHTML={Utils.hilightSearch(
-                                                    nSearchTerm,
-                                                    ayaText,
-                                                    normalizedAyaText
-                                                )}
-                                            />
-                                        </button>
-                                    )
-                                )}
-                            </div>
+                            {!expanded ? null : (
+                                <div className="ResultsGroupList">
+                                    {verses.map(
+                                        ({
+                                            aya,
+                                            ayaNum,
+                                            text: ayaText,
+                                            ntext: normalizedAyaText
+                                        }) => (
+                                            <button
+                                                className="ResultItem"
+                                                onClick={gotoAya}
+                                                tabIndex="0"
+                                                aya={aya}
+                                            >
+                                                <span className="ParaId Verse">
+                                                    {ayaNum}
+                                                </span>
+                                                <span
+                                                    className="ResultText link"
+                                                    dangerouslySetInnerHTML={Utils.hilightSearch(
+                                                        nSearchTerm,
+                                                        ayaText,
+                                                        normalizedAyaText
+                                                    )}
+                                                />
+                                            </button>
+                                        )
+                                    )}
+                                </div>
+                            )}
                         </div>
                     );
                 })}
@@ -388,7 +405,7 @@ const Search = ({}) => {
     };
 
     const formHeight = 130,
-        resultsInfoHeight = 20;
+        resultsInfoHeight = 30;
 
     return (
         <>
@@ -417,6 +434,13 @@ const Search = ({}) => {
                 })}
             </div>
             <div className="ResultsInfo" style={{ height: resultsInfoHeight }}>
+                <button
+                    id="SearchViewToggler"
+                    className={"TreeToggler".appendWord("active", treeView)}
+                    onClick={toggleTreeView}
+                >
+                    <Icon icon={faIndent} />
+                </button>
                 <String className="SuraTitle" id="results_for">
                     {resultsFor => {
                         if (searchTerm.length) {
@@ -439,11 +463,11 @@ const Search = ({}) => {
                 onTouchStart={hideKeyboard}
                 onMouseDown={hideKeyboard}
                 style={{
-                    height: app.appHeight - formHeight - 26 // footer + padding + formMargins
+                    height: app.appHeight - formHeight - 11 // footer + padding + formMargins
                 }}
             >
                 {renderSuras()}
-                {renderResultsTree()}
+                {treeView ? renderResultsTree() : renderResults()}
                 {renderKeyboard()}
             </div>
         </>

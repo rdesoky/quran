@@ -16,7 +16,7 @@ const initSidebarCommands = [
     "Tafseer",
     "Exercise",
     "Mask",
-    "Favorites",
+    "update_hifz",
     "Bookmarks",
     "Goto",
     "Copy",
