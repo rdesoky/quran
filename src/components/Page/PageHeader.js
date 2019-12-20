@@ -101,10 +101,23 @@ const PageHeader = ({
                         { num: partIndex + 1 }
                     )}
                 />
-                <button onClick={showSuraContextPopup}>
+                <button
+                    onClick={showSuraContextPopup}
+                    title={app.formatMessage(
+                        { id: "sura_num" },
+                        { num: suraIndex + 1 }
+                    )}
+                >
                     {app.suraName(suraIndex)}
                 </button>
-                <button onClick={showPageContextPopup} className="IconButton">
+                <button
+                    onClick={showPageContextPopup}
+                    className="IconButton"
+                    title={app.formatMessage(
+                        { id: "page_num" },
+                        { num: pageIndex + 1 }
+                    )}
+                >
                     <Icon icon={faBookOpen} />
                     {pageIndex + 1}
                 </button>
@@ -126,6 +139,7 @@ const PageHeader = ({
                             showVerseContextPopup(e);
                         }}
                         className="SelectionButton"
+                        title={app.formatMessage({ id: "goto_selection" })}
                     >
                         {selectedAyaInfo.sura +
                             1 +
