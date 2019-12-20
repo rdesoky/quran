@@ -475,6 +475,7 @@ const SuraHifzChart = memo(
                                       className={"PageThumb".appendWord(
                                           activeClass
                                       )}
+                                      title={i + 1}
                                       //   style={{
                                       //       right: `${(100 * i) / suraPages}%`,
                                       //       width: pageWidth
