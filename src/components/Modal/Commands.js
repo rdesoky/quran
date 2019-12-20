@@ -346,6 +346,11 @@ const CommandButton = ({
             style={style}
             disabled={isDisabled(command)}
             className={"CommandButton".appendWord(className)}
+            title={
+                showLabel
+                    ? ""
+                    : app.formatMessage({ id: command.toLowerCase() })
+            }
         >
             {commandIcon(command, app, player)}
             {renderLabel()}
