@@ -96,6 +96,10 @@ const PageHeader = ({
                     display={partIndex + 1}
                     onClick={showPartContextPopup}
                     strokeWidth={3}
+                    title={app.formatMessage(
+                        { id: "part_num" },
+                        { num: partIndex + 1 }
+                    )}
                 />
                 <button onClick={showSuraContextPopup}>
                     {app.suraName(suraIndex)}
