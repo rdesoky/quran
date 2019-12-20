@@ -425,57 +425,65 @@ const SuraHifzChart = memo(
 
         return (
             <div className="SuraHifzChart" onClick={onClickChart}>
-                {pages
-                    ? pageList.map((z, i) => {
-                          const activeClass =
-                              activePage == i + suraInfo.sp - 1
-                                  ? "ActivePage"
-                                  : "";
-                          return (
-                              <div
-                                  key={i}
-                                  page={i}
-                                  className={"PageThumb".appendWord(
-                                      activeClass
-                                  )}
-                                  style={{
-                                      right: `${(100 * i) / suraPages}%`,
-                                      width: pageWidth
-                                  }}
-                              />
-                          );
-                      })
-                    : null}
-                {suraRanges.map((r, i) => {
-                    const rangeStart = r.startPage - suraInfo.sp + 1;
-                    const start = (100 * rangeStart) / suraPages;
-                    const width = (100 * r.pages) / suraPages;
-                    let age,
-                        ageClass = "NoHifz";
-                    if (r.date !== undefined) {
-                        age = Math.floor((Date.now() - r.date) / dayLength);
-                        ageClass =
-                            age <= 7
-                                ? "GoodHifz"
-                                : age <= 14
-                                ? "FairHifz"
-                                : "WeakHifz";
-                    }
-                    return (
-                        <div
-                            key={`${r.startPage}-${r.sura}`}
-                            className={"SuraRange"
-                                .appendWord(ageClass)
-                                .appendWord(
-                                    "active",
-                                    activeRange &&
-                                        activeRange.startPage === r.startPage &&
-                                        activeRange.sura === r.sura
-                                )}
-                            style={{ right: `${start}%`, width: `${width}%` }}
-                        />
-                    );
-                })}
+                <div className="HifzRanges">
+                    {suraRanges.map((r, i) => {
+                        const rangeStart = r.startPage - suraInfo.sp + 1;
+                        const start = (100 * rangeStart) / suraPages;
+                        const width = (100 * r.pages) / suraPages;
+                        let age,
+                            ageClass = "NoHifz";
+                        if (r.date !== undefined) {
+                            age = Math.floor((Date.now() - r.date) / dayLength);
+                            ageClass =
+                                age <= 7
+                                    ? "GoodHifz"
+                                    : age <= 14
+                                    ? "FairHifz"
+                                    : "WeakHifz";
+                        }
+                        return (
+                            <div
+                                key={`${r.startPage}-${r.sura}`}
+                                className={"SuraRange"
+                                    .appendWord(ageClass)
+                                    .appendWord(
+                                        "active",
+                                        activeRange &&
+                                            activeRange.startPage ===
+                                                r.startPage &&
+                                            activeRange.sura === r.sura
+                                    )}
+                                style={{
+                                    right: `${start}%`,
+                                    width: `${width}%`
+                                }}
+                            />
+                        );
+                    })}
+                </div>
+                <div className="PageThumbs">
+                    {pages
+                        ? pageList.map((z, i) => {
+                              const activeClass =
+                                  activePage == i + suraInfo.sp - 1
+                                      ? "ActivePage"
+                                      : "";
+                              return (
+                                  <div
+                                      key={i}
+                                      page={i}
+                                      className={"PageThumb".appendWord(
+                                          activeClass
+                                      )}
+                                      //   style={{
+                                      //       right: `${(100 * i) / suraPages}%`,
+                                      //       width: pageWidth
+                                      //   }}
+                                  />
+                              );
+                          })
+                        : null}
+                </div>
             </div>
         );
     }
