@@ -209,7 +209,8 @@ export const CircleProgress = ({
     progress = 1,
     target = 5,
     display = null,
-    onClick = e => false
+    onClick = e => false,
+    title
 }) => {
     const radius = (sqSize - strokeWidth) / 2;
     // Enclose cicle in a circumscribing square
@@ -256,6 +257,7 @@ export const CircleProgress = ({
             >
                 {`${display || progress}`}
             </text>
+            <title>{title}</title>
         </svg>
     );
 };
