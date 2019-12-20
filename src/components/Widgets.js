@@ -426,7 +426,7 @@ export const PageContextButtons = ({ page }) => {
                 ) : (
                     <CommandButton trigger="page_context" command="Stop" />
                 )}
-                <CommandButton trigger="page_context" command="Favorites" />
+                <CommandButton trigger="page_context" command="update_hifz" />
             </div>
         </PageNavigator>
     );

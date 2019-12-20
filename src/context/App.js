@@ -21,7 +21,6 @@ const initSidebarCommands = [
     "Goto",
     "Copy",
     // "Share",
-    // "Theme",
     "Help"
 ];
 
@@ -88,6 +87,7 @@ class AppProvider extends Component {
             this._messageBoxInfo.pop();
         }
         this.setState({ messageBox: this._messageBoxInfo.length > 0 });
+        this.setContextPopup(null);
     };
 
     setMessageBox = (msgBoxInfo = null) => {
@@ -97,6 +97,7 @@ class AppProvider extends Component {
             this._messageBoxInfo = [];
         }
         this.setState({ messageBox: this._messageBoxInfo.length > 0 });
+        this.setContextPopup(null);
     };
 
     getMessageBox = () => {
