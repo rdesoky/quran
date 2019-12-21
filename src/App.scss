@@ -284,7 +284,9 @@ hr {
 
 .HifzRangeRow {
     margin-bottom: 14px;
-    // border-radius: 5px;
+    border: solid 1px #444;
+    border-radius: 5px;
+
     // border: solid 1px #444;
     // min-width: 280px;
     // width: 100%;
@@ -299,6 +301,7 @@ hr {
 
     > .HifzRangeBody {
         padding: 0 !important;
+        border-radius: 4px;
         width: 100%;
         font-size: 12px;
         text-align: inherit;
@@ -316,6 +319,7 @@ hr {
     .ActionsBar {
         button {
             background-color: #444;
+            border-radius: 5px;
         }
     }
 
