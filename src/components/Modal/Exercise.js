@@ -779,7 +779,7 @@ const Exercise = ({}) => {
                     <>
                         <hr />
                         <h3 className="Correct">
-                            <VerseText />
+                            <VerseText copy={true} trigger="correct_exercise" />
                         </h3>
                     </>
                 )}

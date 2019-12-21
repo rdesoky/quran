@@ -53,7 +53,7 @@ const Bookmarks = () => {
                         />
                     </button>
                 </div>
-                <VerseText showInfo={true} copy={true} />
+                <VerseText showInfo={true} copy={true} trigger="bookmarks_ui" />
                 <hr style={{ clear: "both" }} />
                 <BookmarksList showTafseer={showTafseer} />
             </div>

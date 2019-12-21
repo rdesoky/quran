@@ -253,7 +253,7 @@ const CommandButton = ({
             case "Copy":
                 analytics.logEvent("copy_text", {
                     ...QData.verseLocation(app.selectStart),
-                    to_verse: app.selectEnd,
+                    verses_count: app.selectEnd - app.selectStart + 1,
                     trigger
                 });
                 Utils.copy2Clipboard(app.getSelectedText());

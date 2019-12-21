@@ -112,7 +112,8 @@ export const VerseText = ({
     showInfo,
     navigate = true,
     bookmark = false,
-    copy = false
+    copy = false,
+    trigger = "verse_text"
 }) => {
     const [text, setText] = useState("");
     const app = useContext(AppContext);
@@ -127,6 +128,12 @@ export const VerseText = ({
             `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
         );
         app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+
+        analytics.logEvent("copy_text", {
+            ...QData.verseLocation(verse),
+            verses_count: 1,
+            trigger
+        });
     };
 
     useEffect(() => {
