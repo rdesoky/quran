@@ -266,6 +266,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
 
     .ResultInfo {
+        direction: initial;
         float: left;
         [dir="rtl"] & {
             float: right;
