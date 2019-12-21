@@ -197,6 +197,12 @@ const Search = ({}) => {
         );
         app.showToast(app.intl.formatMessage({ id: "text_copied" }));
         e.stopPropagation();
+
+        analytics.logEvent("copy_text", {
+            ...QData.verseLocation(verse),
+            verses_count: 1,
+            trigger: "search_results"
+        });
     };
 
     const renderResultsTree = () => {
@@ -225,6 +231,7 @@ const Search = ({}) => {
 
                     return (
                         <div
+                            key={i}
                             className={"ResultsGroup".appendWord(
                                 "Expanded",
                                 expanded
@@ -234,7 +241,7 @@ const Search = ({}) => {
                                 className="ResultsGroupHeader"
                                 group-index={i}
                                 onClick={toggleGroup}
-                                tabindex="0"
+                                tabIndex="0"
                             >
                                 <span className="ParaId Chapter">
                                     {verses.length}
@@ -251,6 +258,7 @@ const Search = ({}) => {
                                             ntext: normalizedAyaText
                                         }) => (
                                             <button
+                                                key={aya}
                                                 className="ResultItem"
                                                 onClick={gotoAya}
                                                 tabIndex="0"

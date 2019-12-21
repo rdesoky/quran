@@ -187,7 +187,12 @@ export const TafseerView = ({
                     ""
                 )}
                 <div className="TafseerVerse">
-                    <VerseText verse={verse} bookmark={bookmark} copy={copy} />
+                    <VerseText
+                        verse={verse}
+                        bookmark={bookmark}
+                        copy={copy}
+                        trigger="tafseer_viwe"
+                    />
                 </div>
             </div>
             <div>
