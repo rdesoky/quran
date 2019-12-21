@@ -266,10 +266,11 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
 
     .ResultInfo {
-        direction: initial;
+        direction: ltr;
         float: left;
         [dir="rtl"] & {
             float: right;
+            direction: rtl;
         }
         color: cyan;
         background-color: #444;
