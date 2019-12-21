@@ -10,7 +10,9 @@ import {
     faSearch,
     faTimes,
     faTree,
-    faIndent
+    faIndent,
+    faCocktail,
+    faCopy
 } from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "../../context/Theme";
 import { analytics } from "../../services/Analytics";
@@ -185,6 +187,18 @@ const Search = ({}) => {
         );
     };
 
+    const copyVerse = e => {
+        const { currentTarget } = e;
+        const verse = currentTarget.getAttribute("verse");
+        const verseInfo = QData.ayaIdInfo(verse);
+        const text = app.verseText(verse);
+        Utils.copy2Clipboard(
+            `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
+        );
+        app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+        e.stopPropagation();
+    };
+
     const renderResultsTree = () => {
         const groups = results.reduce((groups, ayaInfo, index) => {
             const { sura, aya } = QData.ayaIdInfo(ayaInfo.aya);
@@ -253,6 +267,11 @@ const Search = ({}) => {
                                                         normalizedAyaText
                                                     )}
                                                 />
+                                                <Icon
+                                                    onClick={copyVerse}
+                                                    icon={faCopy}
+                                                    verse={aya}
+                                                />
                                             </button>
                                         )
                                     )}
@@ -301,6 +320,11 @@ const Search = ({}) => {
                                         ayaText,
                                         normalizedAyaText
                                     )}
+                                />
+                                <Icon
+                                    onClick={copyVerse}
+                                    icon={faCopy}
+                                    verse={aya}
                                 />
                             </button>
                         );
