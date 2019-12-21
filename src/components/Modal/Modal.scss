@@ -325,6 +325,13 @@ $selectionBgColorDark: rgb(38, 93, 138);
             &:hover {
                 background-color: #333;
             }
+            svg {
+                padding: 0 10px;
+                pointer-events: initial;
+                &:hover {
+                    background-color: black !important;
+                }
+            }
         }
     }
 
