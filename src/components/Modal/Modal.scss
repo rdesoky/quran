@@ -266,13 +266,16 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
 
     .ResultInfo {
-        float: right;
+        float: left;
+        [dir="rtl"] & {
+            float: right;
+        }
         color: cyan;
         background-color: #444;
         border-radius: 5px;
         // display: inline-block;
         min-width: 100px;
-        text-align: left;
+        // text-align: left;
         padding: 0 5px;
     }
 
@@ -300,6 +303,10 @@ $selectionBgColorDark: rgb(38, 93, 138);
             }
         }
         .ResultItem {
+            display: block;
+            width: 100%;
+            text-align: initial;
+            direction: rtl;
             span {
                 pointer-events: none;
             }
@@ -513,20 +520,28 @@ $selectionBgColorDark: rgb(38, 93, 138);
 .ParaId {
     display: inline-block;
     background-color: #444;
-    border-radius: 4px;
-    min-width: 30px;
     text-align: center;
-    padding: 0 3px;
+    padding: 0 4px;
     margin: 0 5px 0 0;
     [dir="rtl"] & {
         margin: 0 0 0 5px;
+    }
+
+    &.Chapter {
+        padding: 3px;
+        border-radius: 12px;
+        float: right;
+        min-width: 20px;
+        [dir="rtl"] & {
+            float: left;
+        }
     }
 
     &.Verse {
         float: left;
         min-width: 20px;
         font-size: 13px;
-        border-radius: 12px;
+        border-radius: 4px;
         background-color: $selectionBgColor;
         color: black;
         .DarkTheme & {
