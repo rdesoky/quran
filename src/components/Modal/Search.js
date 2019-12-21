@@ -28,7 +28,9 @@ const Search = ({}) => {
     const [pages, setPages] = useState(1);
     const [keyboard, setkeyboard] = useState(false);
     const [expandedGroup, setExpandedGroup] = useState(0);
-    const [treeView, setTreeView] = useState(false);
+    const [treeView, setTreeView] = useState(
+        localStorage.getItem("searchTreeView") == 1
+    );
 
     let resultsDiv;
 
@@ -36,6 +38,7 @@ const Search = ({}) => {
         analytics.logEvent("search_toggle_view", {
             view_mode: treeView ? "list" : "tree"
         });
+        localStorage.setItem("searchTreeView", !treeView ? "1" : "0");
         setTreeView(!treeView);
     };
 
@@ -220,14 +223,9 @@ const Search = ({}) => {
                                 tabindex="0"
                             >
                                 <span className="ParaId Chapter">
-                                    {sura + 1}
-                                </span>{" "}
-                                {app.suraName(sura)} (
-                                <String
-                                    id="found_count"
-                                    values={{ count: verses.length }}
-                                />
-                                )
+                                    {verses.length}
+                                </span>
+                                {sura + 1}.{app.suraName(sura)}
                             </button>
                             {!expanded ? null : (
                                 <div className="ResultsGroupList">
@@ -273,7 +271,7 @@ const Search = ({}) => {
         // }
         let page = results.slice(0, pages * 20);
         return (
-            <ol
+            <div
                 className="ResultsList"
                 onMouseDown={hideKeyboard}
                 ref={ref => {
@@ -284,7 +282,7 @@ const Search = ({}) => {
                     ({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
                         const ayaInfo = QData.ayaIdInfo(aya);
                         return (
-                            <li
+                            <button
                                 key={aya}
                                 onClick={gotoAya}
                                 aya={aya}
@@ -292,6 +290,7 @@ const Search = ({}) => {
                                 tabIndex="0"
                             >
                                 <span className="ResultInfo">
+                                    {ayaInfo.sura + 1}.
                                     {app.suraName(ayaInfo.sura)} (
                                     {ayaInfo.aya + 1})
                                 </span>
@@ -303,12 +302,12 @@ const Search = ({}) => {
                                         normalizedAyaText
                                     )}
                                 />
-                            </li>
+                            </button>
                         );
                     }
                 )}
                 {renderMore()}
-            </ol>
+            </div>
         );
     };
 
@@ -349,8 +348,9 @@ const Search = ({}) => {
     };
 
     const onSubmitSearch = txt => {
-        let firstResult = resultsDiv.querySelector(".VerseLink");
+        let firstResult = resultsDiv.querySelector(".ResultItem");
         if (firstResult) {
+            //Make sure there is at least one result
             firstResult.focus();
             addToSearchHistory();
         }

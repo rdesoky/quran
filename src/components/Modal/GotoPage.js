@@ -70,8 +70,6 @@ const GotoPage = ({ open, app, player }) => {
     return (
         <>
             <div className="Title">
-                <Icon icon={faBookOpen} />
-                &nbsp;
                 <String id="goto" />
             </div>
             <div className="FieldRow">
