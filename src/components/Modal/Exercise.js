@@ -27,6 +27,7 @@ import QData from "../../services/QData";
 import { CommandButton } from "./Commands";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
+import { ExerciseSettings } from "./Settings";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -363,7 +364,12 @@ const Exercise = ({}) => {
                 <div className="FootNote">
                     <String id="exercise_intro" />
                 </div>
-                <hr style={{ clear: "both" }} />
+                <hr />
+                <div>
+                    <String id="settings" />
+                </div>
+                <ExerciseSettings />
+                <hr />
                 <ActivityChart activity="chars" />
             </div>
         );
@@ -509,16 +515,19 @@ const Exercise = ({}) => {
         // const correct = wrongWord === -1;
         return (
             <div className="TitleButtons">
-                <VerseInfo trigger="exercise_typing_title" />
+                <VerseInfo
+                    trigger="exercise_typing_title"
+                    onClick={onFinishedTyping}
+                />
                 <div className="ButtonsBar">
                     <button onClick={startReciting}>
                         <String id="start" />
                     </button>
-                    {/* <button onClick={typeNextVerse}>
-                        <String id="type_next" />
-                    </button> */}
+                    <button onClick={onFinishedTyping}>
+                        <String id="check" />
+                    </button>
                     <button onClick={showIntro}>
-                        <String id="cancel" />
+                        <String id="home" />
                     </button>
                 </div>
             </div>
@@ -662,6 +671,9 @@ const Exercise = ({}) => {
                             >
                                 <String id="recite_next" />
                             </button>
+                            <button onClick={gotoRandomVerse}>
+                                <String id="new_verse" />
+                            </button>
                         </>
                     ) : (
                         <>
@@ -677,11 +689,11 @@ const Exercise = ({}) => {
                             <button onClick={startReciting}>
                                 <String id="start" />
                             </button>
+                            <button onClick={showIntro}>
+                                <String id="home" />
+                            </button>
                         </>
                     )}
-                    <button onClick={showIntro}>
-                        <String id="cancel" />
-                    </button>
                 </div>
             </div>
         );
@@ -690,6 +702,41 @@ const Exercise = ({}) => {
     const isCorrect = () => wrongWord === -1 && missingWords === 0;
     const isTypingCorrect = () =>
         wrongWord === -1 || wrongWord == writtenText.split(/\s+/).length - 1;
+
+    const renderSuccessResultsReport = () => {
+        return (
+            <>
+                <div className="ButtonsBar">
+                    <button onClick={redoTyping}>
+                        <String id="redo" />
+                    </button>
+                    <button onClick={redoReciting}>
+                        <String id="start" />
+                    </button>
+                    <button onClick={showIntro}>
+                        <String id="home" />
+                    </button>
+
+                    {/* <CommandButton command="Settings" trigger={trigger} /> */}
+                </div>
+                <TafseerView
+                    verse={verse}
+                    showVerse={true}
+                    bookmark={true}
+                    copy={true}
+                    onMoveNext={onMoveNext}
+                    trigger={trigger}
+                />
+                <hr />
+                <div>
+                    <String id="settings" />
+                </div>
+                <ExerciseSettings />
+                <hr />
+                <ActivityChart activity="chars" />
+            </>
+        );
+    };
 
     const renderResults = () => {
         const answerWords = writtenText.trim().split(/\s+/);
@@ -748,33 +795,7 @@ const Exercise = ({}) => {
                     {renderMissingWords()}
                 </h3>
                 {isCorrect() ? (
-                    <>
-                        <div className="ButtonsBar">
-                            <button onClick={redoTyping}>
-                                <String id="redo" />
-                            </button>
-                            <button onClick={redoReciting}>
-                                <String id="start" />
-                            </button>
-                            <button onClick={gotoRandomVerse}>
-                                <String id="new_verse" />
-                            </button>
-                            <CommandButton
-                                command="Settings"
-                                trigger={trigger}
-                            />
-                        </div>
-                        <TafseerView
-                            verse={verse}
-                            showVerse={true}
-                            bookmark={true}
-                            copy={true}
-                            onMoveNext={onMoveNext}
-                            trigger={trigger}
-                        />
-                        <hr />
-                        <ActivityChart activity="chars" />
-                    </>
+                    renderSuccessResultsReport()
                 ) : (
                     <>
                         <hr />
@@ -808,7 +829,7 @@ const Exercise = ({}) => {
                         <String id="new_verse" />
                     </button> */}
                     <button onClick={showIntro}>
-                        <String id="cancel" />
+                        <String id="home" />
                     </button>
                 </div>
             </div>
