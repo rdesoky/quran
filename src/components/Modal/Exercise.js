@@ -729,7 +729,7 @@ const Exercise = ({}) => {
                 />
                 <hr />
                 <div>
-                    <String id="settings" />
+                    <String id="random_exercise" />
                 </div>
                 <ExerciseSettings />
                 <hr />
