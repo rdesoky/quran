@@ -366,7 +366,7 @@ const Exercise = ({}) => {
                 </div>
                 <hr />
                 <div>
-                    <String id="settings" />
+                    <String id="random_exercise" />
                 </div>
                 <ExerciseSettings />
                 <hr />
