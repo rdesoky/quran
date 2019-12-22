@@ -17,10 +17,10 @@ const Settings = () => {
     const player = useContext(PlayerContext);
     const app = useContext(AppContext);
     const theme = useContext(ThemeContext);
-    const settings = useContext(SettingsContext);
-
-    let popupBody;
+    // const settings = useContext(SettingsContext);
     let selectRepeat;
+    let popupBody;
+    // let selectRepeat;
 
     const recitersList = ListReciters("ayaAudio");
     const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
@@ -60,15 +60,6 @@ const Settings = () => {
         const theme_name = checked ? "Dark" : "Default";
         theme.setTheme(theme_name);
         analytics.logEvent("set_theme", { theme_name, trigger: app.popup });
-    };
-
-    const updateExerciseLevel = ({ currentTarget }) => {
-        const exerciseLevel = parseInt(currentTarget.value);
-        settings.setExerciseLevel(exerciseLevel);
-    };
-
-    const updateExerciseMemorized = checked => {
-        settings.setExerciseMemorized(checked);
     };
 
     const updateLang = ({ currentTarget }) => {
@@ -128,47 +119,7 @@ const Settings = () => {
                 <div>
                     <String id="random_exercise" />:
                 </div>
-                <div className="OptionRow">
-                    <label>
-                        <String id="exercise_level" />
-                        <select
-                            onChange={updateExerciseLevel}
-                            value={settings.exerciseLevel}
-                        >
-                            <option value={0}>
-                                {app.intl.formatMessage({
-                                    id: "beginner_level"
-                                })}
-                            </option>
-                            <option value={1}>
-                                {app.intl.formatMessage({
-                                    id: "moderate_level"
-                                })}
-                            </option>
-                            <option value={2}>
-                                {app.intl.formatMessage({ id: "high_level" })}
-                            </option>
-                            <option value={3}>
-                                {app.intl.formatMessage({
-                                    id: "advanced_level"
-                                })}
-                            </option>
-                        </select>
-                    </label>
-                </div>
-                <div className="OptionRow">
-                    <label>
-                        <span>
-                            <String id="exercise_memorized" />
-                        </span>
-                        <Switch
-                            height={22}
-                            width={42}
-                            onChange={updateExerciseMemorized}
-                            checked={settings.exerciseMemorized}
-                        />
-                    </label>
-                </div>
+                <ExerciseSettings />
                 <hr />
                 <div className="OptionRow">
                     <label>
@@ -259,6 +210,66 @@ const Settings = () => {
                         );
                     })}
                 </div>
+            </div>
+        </>
+    );
+};
+
+export const ExerciseSettings = () => {
+    const app = useContext(AppContext);
+    const settings = useContext(SettingsContext);
+
+    const updateExerciseLevel = ({ currentTarget }) => {
+        const exerciseLevel = parseInt(currentTarget.value);
+        settings.setExerciseLevel(exerciseLevel);
+    };
+
+    const updateExerciseMemorized = checked => {
+        settings.setExerciseMemorized(checked);
+    };
+
+    return (
+        <>
+            <div className="OptionRow">
+                <label>
+                    <String id="exercise_level" />
+                    <select
+                        onChange={updateExerciseLevel}
+                        value={settings.exerciseLevel}
+                    >
+                        <option value={0}>
+                            {app.intl.formatMessage({
+                                id: "beginner_level"
+                            })}
+                        </option>
+                        <option value={1}>
+                            {app.intl.formatMessage({
+                                id: "moderate_level"
+                            })}
+                        </option>
+                        <option value={2}>
+                            {app.intl.formatMessage({ id: "high_level" })}
+                        </option>
+                        <option value={3}>
+                            {app.intl.formatMessage({
+                                id: "advanced_level"
+                            })}
+                        </option>
+                    </select>
+                </label>
+            </div>
+            <div className="OptionRow">
+                <label>
+                    <span>
+                        <String id="exercise_memorized" />
+                    </span>
+                    <Switch
+                        height={22}
+                        width={42}
+                        onChange={updateExerciseMemorized}
+                        checked={settings.exerciseMemorized}
+                    />
+                </label>
             </div>
         </>
     );
