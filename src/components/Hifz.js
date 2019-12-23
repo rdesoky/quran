@@ -180,51 +180,65 @@ const HifzRange = ({
         });
     };
 
+    const confirmAddHifz = (startPage, chapter, pagesCount, range) => {
+        if (app.addHifzRange(startPage, chapter, pagesCount)) {
+            analytics.logEvent("add_hifz", {
+                trigger,
+                range,
+                chapter,
+                startPage,
+                pagesCount
+            });
+        } else {
+            app.pushMessageBox({
+                title: <String id="are_you_sure" />,
+                onYes: () => {
+                    analytics.logEvent("add_hifz", {
+                        trigger,
+                        range,
+                        chapter,
+                        startPage,
+                        pagesCount
+                    });
+                    app.addHifzRange(
+                        startPage,
+                        chapter,
+                        pagesCount,
+                        true /*overwrite*/
+                    );
+                },
+                content: <String id="overwrite_exisiting_hifz" />
+            });
+        }
+    };
+
     const addCurrentPage = e => {
-        analytics.logEvent("add_hifz", {
-            trigger,
-            range: "page",
-            chapter: range.sura,
-            startPage: range.startPage,
-            pagesCount: 1
-        });
-        app.addHifzRange(range.startPage, range.sura, 1);
+        confirmAddHifz(range.startPage, range.sura, 1, "page");
     };
 
     const addSura = e => {
         const pagesCount = suraInfo.ep - suraInfo.sp + 1;
-        analytics.logEvent("add_hifz", {
-            trigger,
-            range: "full_sura",
-            chapter: range.sura,
-            startPage: range.startPage,
-            pagesCount
-        });
-        app.addHifzRange(suraInfo.sp - 1, range.sura, pagesCount);
+        confirmAddHifz(suraInfo.sp - 1, range.sura, pagesCount, "full_sura");
     };
 
     const addFromSuraStart = e => {
         const pagesCount = range.startPage - suraInfo.sp + 2;
-        analytics.logEvent("add_hifz", {
-            trigger,
-            range: "from_sura_start",
-            chapter: range.sura,
-            startPage: range.startPage,
-            pagesCount
-        });
-        app.addHifzRange(suraInfo.sp - 1, range.sura, pagesCount);
+        confirmAddHifz(
+            suraInfo.sp - 1,
+            range.sura,
+            pagesCount,
+            "from_sura_start"
+        );
     };
 
     const addToSuraEnd = e => {
         const pagesCount = suraInfo.ep - range.startPage;
-        analytics.logEvent("add_hifz", {
-            trigger,
-            range: "from_sura_start",
-            chapter: range.sura,
-            startPage: range.startPage,
-            pagesCount
-        });
-        app.addHifzRange(range.startPage, range.sura, pagesCount);
+        confirmAddHifz(
+            range.startPage,
+            range.sura,
+            pagesCount,
+            "from_sura_start"
+        );
     };
 
     const deleteHifzRange = e => {
