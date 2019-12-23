@@ -552,8 +552,23 @@ class AppProvider extends Component {
         return charsCount;
     };
 
-    addHifzRange = (startPage, sura, pages) => {
+    includesRanges = (sura, startPage, pages) => {
+        const endPage = startPage + pages;
+        const foundRanges = this.state.hifzRanges.filter(
+            r =>
+                r.sura === sura &&
+                (r.startPage + 1).between(startPage, endPage) &&
+                r.endPage.between(startPage, endPage)
+        );
+        return foundRanges.length;
+    };
+
+    addHifzRange = (startPage, sura, pages, overwrite = false) => {
         //TODO: implement the merging logic in a Firebase function
+        if (!overwrite && this.includesRanges(sura, startPage, pages)) {
+            return false;
+        }
+
         const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
         const newRangeID =
             Utils.num2string(startPage, 3) + Utils.num2string(sura);
@@ -594,7 +609,8 @@ class AppProvider extends Component {
                 newRange.startPage <= r.startPage &&
                 newRange.endPage + 1 >= r.startPage
             ) {
-                //intersecting with tailed range, append its pages (beyond our last page) and revs, and delete it
+                //intersecting with tailed range,
+                //append its pages (beyond our last page) and revs, and delete it
                 newRange.endPage = Math.max(newRange.endPage, r.endPage);
                 //Calcualte partial revs
                 newRange.revs = mergeRangesRevs(newRange, r);
@@ -635,6 +651,7 @@ class AppProvider extends Component {
                 revs: newRange.revs
             });
         }
+        return true;
     };
 
     deleteHifzRange = range => {

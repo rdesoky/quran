@@ -159,5 +159,6 @@
     "language": "Language",
     "revise_confirmation": "Mark this part as revised today",
     "sura_memorized": "The chapter has been marked as memorized",
-    "contact_us": "Contact us on: {email}"
+    "contact_us": "Contact us on: {email}",
+    "overwrite_exisiting_hifz": "This will merge individual pages you marked as Memorized before"
 }
