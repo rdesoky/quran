@@ -1,7 +1,9 @@
 import { analytics as firebaseAnalytics } from "firebase";
 
 export const analytics = {
-    devMode: () => window.location.hostname === "localhost",
+    devMode: () =>
+        window.location.hostname === "localhost" ||
+        localStorage.getItem("dev") == 1,
     //devMode: () => false,
     params: { trigger: "session_start", app_size: "two_pages" },
     setTrigger: trigger => {

@@ -91,7 +91,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                         target: e.target,
                         content: <VerseContextButtons verse={aya_id} />
                     });
-                    e.stopPropagation();
+                    typeof e.stopPropagation === "function" &&
+                        e.stopPropagation(); //prevent browser context menu
                 } else {
                     app.selectAya(aya_id);
                 }
