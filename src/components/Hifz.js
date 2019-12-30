@@ -175,6 +175,7 @@ const HifzRange = ({
                     pagesCount: range.pages
                 });
                 app.setRangeRevised(range);
+                app.showToast(<String id="ack_range_revised"/>)
             },
             content: <String id="revise_confirmation" />
         });
@@ -309,10 +310,10 @@ const HifzRange = ({
             {range.date ? (
                 actions ? (
                     <div className="ActionsBar">
-                        <button onClick={playRange}>
+                        <button onClick={playRange} title={app.formatMessage({id:"play"})}>
                             <Icon icon={faPlayCircle} />
                         </button>
-                        <button onClick={reviewRange}>
+                        <button onClick={reviewRange} title={app.formatMessage({id:"revise"})}>
                             <Icon icon={faEyeSlash} />
                         </button>
                         <button onClick={setRangeRevised}>
@@ -321,7 +322,7 @@ const HifzRange = ({
                         {/* <button onClick={readRange}>
                             <Icon icon={faBookOpen} />
                         </button> */}
-                        <button onClick={deleteHifzRange}>
+                        <button onClick={deleteHifzRange} title={app.formatMessage({id:"remove_hifz"})}>
                             <Icon icon={faTimes} />
                         </button>
                     </div>

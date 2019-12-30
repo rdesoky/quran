@@ -1,61 +1,61 @@
 #AKeyboard {
-    .KeysRow {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 8px;
-        direction: rtl;
-        .KeyButton {
-            display: inline-block;
-            position: relative;
-            border: solid 1px silver;
-            border-radius: 5px;
-            // flex-grow: 1;
-            text-align: center;
-            width: 10%;
-            margin: 1px;
-            height: 35px;
-            line-height: 25px;
-            cursor: default;
-            overflow: hidden;
-            &:hover,
-            &.typed {
-                background: #444;
-                transform: scaleY(1.3) scaleX(1.1);
-                // z-index: 3;
-            }
-            &.Space {
-                flex-grow: 9;
-            }
-            &.Enter {
-                border-color: lime;
-                color: green;
-            }
-            &.Backspace,
-            &.ClearAll,
-            &.ClearWord {
-                svg {
-                    transform: scaleX(-1);
-                }
-            }
-            &.ClearAll {
-                border-color: red;
-                color: red;
-            }
-            &.ClearWord {
-                color: orange;
-                border-color: orange;
-            }
-            &.KeyJ,
-            &.KeyF {
-                border-color: cyan;
-            }
-            .KeyLatinChar {
-                position: absolute;
-                font-size: 9px;
-                left: 3px;
-                bottom: -5px;
-                color: #777;
-            }
-        }
-    }
+	.KeysRow {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 8px;
+		direction: rtl;
+		.KeyButton {
+			display: inline-block;
+			position: relative;
+			border: solid 1px silver;
+			border-radius: 5px;
+			// flex-grow: 1;
+			text-align: center;
+			width: 10%;
+			margin: 1px;
+			height: 35px;
+			line-height: 25px;
+			cursor: default;
+			overflow: hidden;
+			&:hover,
+			&.typed {
+				background: #444;
+				transform: scaleY(1.3) scaleX(1.1);
+				z-index: 3;
+			}
+			&.Space {
+				flex-grow: 9;
+			}
+			&.Enter {
+				border-color: lime;
+				color: green;
+			}
+			&.Backspace,
+			&.ClearAll,
+			&.ClearWord {
+				svg {
+					transform: scaleX(-1);
+				}
+			}
+			&.ClearAll {
+				border-color: red;
+				color: red;
+			}
+			&.ClearWord {
+				color: orange;
+				border-color: orange;
+			}
+			&.KeyJ,
+			&.KeyF {
+				border-color: cyan;
+			}
+			.KeyLatinChar {
+				position: absolute;
+				font-size: 9px;
+				left: 3px;
+				bottom: -5px;
+				color: #777;
+			}
+		}
+	}
 }

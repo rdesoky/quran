@@ -9,56 +9,39 @@ import { faBookmark, faQuran } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 
 const Bookmarks = () => {
-    const [showTafseer, setShowTafseer] = useState(false);
-    const app = useContext(AppContext);
-    const toggleBookmark = e => {
-        if (app.isBookmarked()) {
-            app.pushMessageBox({
-                title: <String id="are_you_sure" />,
-                content: <String id="delete_bookmark" />,
-                onYes: () => {
-                    app.removeBookmark();
-                }
-            });
-        } else {
-            app.addBookmark();
-        }
-    };
+	const app = useContext(AppContext);
+	const toggleBookmark = e => {
+		if (app.isBookmarked()) {
+			app.pushMessageBox({
+				title: <String id="are_you_sure" />,
+				content: <String id="delete_bookmark" />,
+				onYes: () => {
+					app.removeBookmark();
+				}
+			});
+		} else {
+			app.addBookmark();
+		}
+	};
 
-    const toggleTafseer = e => {
-        setShowTafseer(!showTafseer);
-    };
-
-    return (
-        <>
-            <div className="Title">
-                <String id="bookmarks" />
-                <button className="CommandButton" onClick={toggleTafseer}>
-                    <Icon icon={faQuran} />
-                </button>
-                {app.isNarrow ? (
-                    <PlayerButtons trigger="bookmarks_title" />
-                ) : (
-                    ""
-                )}
-            </div>
-            <div
-                className="PopupBody"
-                style={{ maxHeight: app.appHeight - 85 }}
-            >
-                <div className="BigToggler">
-                    <button onClick={toggleBookmark}>
-                        <Icon
-                            icon={app.isBookmarked() ? faBookmark : farBookmark}
-                        />
-                    </button>
-                </div>
-                <VerseText showInfo={true} copy={true} trigger="bookmarks_ui" />
-                <hr style={{ clear: "both" }} />
-                <BookmarksList showTafseer={showTafseer} />
-            </div>
-        </>
-    );
+	return (
+		<>
+			<div className="Title">
+				<String id="bookmarks" />
+				{app.isNarrow ? <PlayerButtons trigger="bookmarks_title" /> : ""}
+			</div>
+			<div className="PopupBody" style={{ maxHeight: app.appHeight - 85 }}>
+				<div className="BigToggler">
+					<button onClick={toggleBookmark}>
+						<Icon icon={app.isBookmarked() ? faBookmark : farBookmark} />
+					</button>
+				</div>
+				<VerseText showInfo={true} copy={true} trigger="bookmarks_ui" />
+				<hr style={{ clear: "both" }} />
+				<BookmarksList />
+			</div>
+		</>
+	);
 };
 
 export default AppConsumer(Bookmarks);
