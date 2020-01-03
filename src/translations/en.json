@@ -161,5 +161,6 @@
 	"sura_memorized": "The chapter has been marked as memorized",
 	"contact_us": "Contact us on: {email}",
 	"overwrite_exisiting_hifz": "This will merge individual pages you marked as Memorized before",
-	"ack_range_revised": "These pages have been marked as you revised them today. May God accept."
+	"ack_range_revised": "These pages have been marked as you revised them today. May God accept.",
+	"guest_msg": "Welcome Guest, please sign in or sign up to be able to sync your data with other computers or Quran Hafiz app on Android or iOS devices"
 }
