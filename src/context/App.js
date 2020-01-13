@@ -911,7 +911,7 @@ class AppProvider extends Component {
                 }
             });
 
-        this.dbRef = firebase.database().ref();
+        this.dbRef = firebase.app().database().ref();
 
         setTimeout(() => {
             const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
