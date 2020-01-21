@@ -21,27 +21,25 @@ const Page = ({
 	const [imageUrl, setImageUrl] = useState(null);
 	const [versesInfo, setVerseInfo] = useState([]);
 
-	const onImageLoaded = (url, pgIndex) => {
-		setTimeout(() => {
-			//TODO: don't update the Url state unless the component is mounted
-			if (pgIndex === pageIndex) {
-				setImageUrl(url);
-			}
-		}, 100); //The delay is to make sure imageLoaded is set after index update event handler
-	};
-
 	let textAlign =
 		app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
 	const pageWidth = app.pageWidth();
-
+	let setImageTimeout;
 	//Handle pageIndex update
 	useEffect(() => {
 		setImageUrl(null);
 		const pgIndex = pageIndex;
 		Utils.downloadPageImage(pgIndex)
 			.then(url => {
-				onImageLoaded(url, pgIndex);
+				setImageTimeout = setTimeout(() => {
+					//don't update the Url state unless the component is mounted
+					if (pgIndex === pageIndex) {
+						setImageUrl(url);
+					}
+				}, 100); //The delay is to make sure imageLoaded is set after index update event handler
+
+				//onImageLoaded(url, pgIndex);
 			})
 			.catch(e => {});
 		setVerseInfo([]);
@@ -71,6 +69,9 @@ const Page = ({
 		return () => {
 			//Cleanup function
 			controller.abort();
+			if (setImageTimeout !== undefined) {
+				clearTimeout(setImageTimeout);
+			}
 		};
 	}, [pageIndex]);
 
