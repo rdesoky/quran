@@ -112,10 +112,10 @@ const Exercise = ({}) => {
         } while (!checkVerseLevel(new_verse));
         app.gotoAya(new_verse, { sel: true, keepMask: true });
         // app.setMaskStart(new_verse + 1, true);
-        setCurrStep(Step.intro);
-        if (currStep === Step.intro && defaultButton) {
-            defaultButton.focus();
-        }
+        // setCurrStep(Step.intro);
+        // if (currStep === Step.intro && defaultButton) {
+        //     defaultButton.focus();
+        // }
         analytics.logEvent("get_random_verse", {
             trigger,
             level: settings.exerciseLevel
