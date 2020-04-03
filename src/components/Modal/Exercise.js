@@ -116,6 +116,10 @@ const Exercise = ({}) => {
         // if (currStep === Step.intro && defaultButton) {
         //     defaultButton.focus();
         // }
+        if(settings.randomAutoRecite){
+            startReciting(e);
+        }
+
         analytics.logEvent("get_random_verse", {
             trigger,
             level: settings.exerciseLevel
