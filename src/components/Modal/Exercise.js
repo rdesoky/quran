@@ -5,7 +5,7 @@ import {
     PlayerConsumer,
     AudioState,
     AudioRepeat,
-    PlayerContext
+    PlayerContext,
 } from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
@@ -17,7 +17,7 @@ import {
     faPlayCircle,
     faRandom,
     faBackward,
-    faBackspace
+    faBackspace,
 } from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
@@ -37,7 +37,7 @@ const Step = {
     intro: 0,
     reciting: 1,
     typing: 2,
-    results: 3
+    results: 3,
 };
 
 const Exercise = ({}) => {
@@ -61,7 +61,7 @@ const Exercise = ({}) => {
         return !(app.isWide || app.isCompact || app.pagesCount > 1);
     };
 
-    const checkVerseLevel = new_verse => {
+    const checkVerseLevel = (new_verse) => {
         const text = app.verseText(new_verse);
         const length = text.length;
         switch (parseInt(settings.exerciseLevel)) {
@@ -91,7 +91,7 @@ const Exercise = ({}) => {
             const page = QData.ayaPage(sura, aya);
             const { hifzRanges } = app;
 
-            const hifzRange = hifzRanges.find(r => {
+            const hifzRange = hifzRanges.find((r) => {
                 return (
                     r.sura === sura && page >= r.startPage && page <= r.endPage
                 );
@@ -103,7 +103,7 @@ const Exercise = ({}) => {
         return true;
     };
 
-    const gotoRandomVerse = e => {
+    const gotoRandomVerse = (e) => {
         player.stop();
         player.setPlayingAya(-1);
         let new_verse;
@@ -116,25 +116,25 @@ const Exercise = ({}) => {
         // if (currStep === Step.intro && defaultButton) {
         //     defaultButton.focus();
         // }
-        if(settings.randomAutoRecite){
+        if (settings.randomAutoRecite) {
             startReciting(e);
         }
 
         analytics.logEvent("get_random_verse", {
             trigger,
-            level: settings.exerciseLevel
+            level: settings.exerciseLevel,
         });
     };
 
-    const startReciting = e => {
+    const startReciting = (e) => {
         setCurrStep(Step.reciting);
         //app.setMaskStart(verse + 1, true);
         analytics.logEvent("exercise_play_audio", {
-            trigger
+            trigger,
         });
     };
 
-    const redoReciting = e => {
+    const redoReciting = (e) => {
         setWrittenText("");
         startReciting(e);
         analytics.logEvent("redo_reciting", { trigger });
@@ -231,7 +231,7 @@ const Exercise = ({}) => {
             stopCounter();
             if ([Step.reciting].includes(currStep)) {
                 analytics.logEvent("start_typing", {
-                    trigger: "exercise_audio"
+                    trigger: "exercise_audio",
                 });
                 startAnswer();
             }
@@ -290,7 +290,7 @@ const Exercise = ({}) => {
                         transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
                         style={{
                             strokeDasharray: dashArray,
-                            strokeDashoffset: dashOffset
+                            strokeDashoffset: dashOffset,
                         }}
                     />
                     <text
@@ -307,7 +307,7 @@ const Exercise = ({}) => {
         }
     };
 
-    const showIntro = e => {
+    const showIntro = (e) => {
         player.stop(true);
         setCurrStep(Step.intro);
         analytics.logEvent("exercise_go_back", { trigger });
@@ -317,7 +317,7 @@ const Exercise = ({}) => {
         app.gotoAya(verse + 1, { sel: true, keepMask: true });
     };
 
-    const reciteNextVerse = e => {
+    const reciteNextVerse = (e) => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         startReciting();
         setTimeout(moveToNextVerse);
@@ -325,7 +325,7 @@ const Exercise = ({}) => {
         // app.setMaskStart(verse + 2, true);
     };
 
-    const typeNextVerse = e => {
+    const typeNextVerse = (e) => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
         // app.setMaskStart(verse + 1);
         setWrittenText("");
@@ -353,7 +353,7 @@ const Exercise = ({}) => {
         }
     };
 
-    const onMoveNext = offset => {
+    const onMoveNext = (offset) => {
         app.gotoAya(verse + offset, { sel: true, keepMask: true });
     };
 
@@ -369,17 +369,26 @@ const Exercise = ({}) => {
                     <String id="exercise_intro" />
                 </div>
                 <hr />
+                <TafseerView
+                    verse={verse}
+                    showVerseText={false}
+                    bookmark={true}
+                    copy={true}
+                    onMoveNext={onMoveNext}
+                    trigger={trigger}
+                />
+                <hr />
                 <div>
                     <String id="random_exercise" />
                 </div>
                 <ExerciseSettings />
-                <hr />
+
                 <ActivityChart activity="chars" />
             </div>
         );
     };
 
-    const onClickType = e => {
+    const onClickType = (e) => {
         const trg = e.target.getAttribute("trigger") || trigger;
         analytics.logEvent("start_typing", { trigger: trg });
         startAnswer();
@@ -403,7 +412,7 @@ const Exercise = ({}) => {
                         <button
                             onClick={onClickType}
                             trigger="exercise_intro"
-                            ref={ref => {
+                            ref={(ref) => {
                                 defaultButton = ref;
                             }}
                         >
@@ -436,7 +445,7 @@ const Exercise = ({}) => {
         );
     };
 
-    const onUpdateText = text => {
+    const onUpdateText = (text) => {
         setWrittenText(text);
         //test written words ( except the last one )
         setWrongWord(-1);
@@ -463,7 +472,7 @@ const Exercise = ({}) => {
         setCurrStep(Step.results);
     };
 
-    const testAnswer = answerText => {
+    const testAnswer = (answerText) => {
         const normVerse = normVerseList[verse].trim();
         const normAnswerText = Utils.normalizeText(answerText).trim();
         const correctWords = normVerse.split(/\s+/);
@@ -497,7 +506,7 @@ const Exercise = ({}) => {
             analytics.logEvent("exercise_quick_success", {
                 ...QData.verseLocation(verse),
                 typed_chars,
-                trigger
+                trigger,
             });
             return true;
         }
@@ -509,7 +518,7 @@ const Exercise = ({}) => {
             analytics.logEvent("exercise_success", {
                 ...QData.verseLocation(verse),
                 typed_chars,
-                trigger
+                trigger,
             });
         }
         return success;
@@ -567,12 +576,12 @@ const Exercise = ({}) => {
                 <div
                     style={{
                         position: "relative",
-                        height: app.appHeight - 248 //keyboard and title heights
+                        height: app.appHeight - 248, //keyboard and title heights
                     }}
                 >
                     <div
                         tabIndex="0"
-                        ref={ref => {
+                        ref={(ref) => {
                             defaultButton = ref;
                         }}
                         className={
@@ -641,7 +650,7 @@ const Exercise = ({}) => {
         );
     };
 
-    const redoTyping = e => {
+    const redoTyping = (e) => {
         setWrittenText("");
         startAnswer();
         analytics.logEvent("start_typing", { trigger: "exercise_redo" });
@@ -656,7 +665,7 @@ const Exercise = ({}) => {
                         //correct answer
                         <>
                             <button
-                                ref={ref => {
+                                ref={(ref) => {
                                     if (resultsDefaultButton === "typeNext") {
                                         defaultButton = ref;
                                     }
@@ -666,7 +675,7 @@ const Exercise = ({}) => {
                                 <String id="type_next" />
                             </button>
                             <button
-                                ref={ref => {
+                                ref={(ref) => {
                                     if (resultsDefaultButton === "reciteNext") {
                                         defaultButton = ref;
                                     }
@@ -682,7 +691,7 @@ const Exercise = ({}) => {
                     ) : (
                         <>
                             <button
-                                ref={ref => {
+                                ref={(ref) => {
                                     defaultButton = ref;
                                 }}
                                 onClick={onClickType}
@@ -725,7 +734,6 @@ const Exercise = ({}) => {
                 </div>
                 <TafseerView
                     verse={verse}
-                    showVerse={true}
                     bookmark={true}
                     copy={true}
                     onMoveNext={onMoveNext}
@@ -806,6 +814,15 @@ const Exercise = ({}) => {
                         <h3 className="Correct">
                             <VerseText copy={true} trigger="correct_exercise" />
                         </h3>
+                        <hr />
+                        <TafseerView
+                            verse={verse}
+                            showVerseText={false}
+                            bookmark={true}
+                            copy={true}
+                            onMoveNext={onMoveNext}
+                            trigger={trigger}
+                        />
                     </>
                 )}
             </div>
@@ -823,7 +840,7 @@ const Exercise = ({}) => {
                     <button
                         onClick={onClickType}
                         trigger="exercise_reciter"
-                        ref={ref => {
+                        ref={(ref) => {
                             defaultButton = ref;
                         }}
                     >
@@ -851,6 +868,15 @@ const Exercise = ({}) => {
                 <div className="FootNote">
                     <String id="exercise_intro" />
                 </div>
+                <hr />
+                <TafseerView
+                    verse={verse}
+                    showVerseText={false}
+                    bookmark={true}
+                    copy={true}
+                    onMoveNext={onMoveNext}
+                    trigger={trigger}
+                />
             </div>
         );
     };
