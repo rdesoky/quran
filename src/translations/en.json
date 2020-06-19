@@ -165,5 +165,5 @@
   "guest_msg": "Welcome Guest, please sign in or sign up to be able to sync your data with other computers or Quran Hafiz app on Android or iOS devices",
   "random_auto_recite": "Auto recite",
   "credits": "Audio is imported from: {link}",
-  "audio_fix": "If audio didn't work, please try using Firefox or open the application from this link : {link}"
+  "audio_fix": "If audio didn't work, please try using Firefox instead of Google Chrome or Microsoft."
 }

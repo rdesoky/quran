@@ -6,5 +6,10 @@
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
-    }
+    },
+    "editor.insertSpaces": false,
+	"prettier.tabWidth": 4,
+	"editor.detectIndentation": false,
+	"editor.renderWhitespace": "all",
+	"editor.useTabStops": false
 }
