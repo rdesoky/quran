@@ -5,6 +5,7 @@ import { AudioState, PlayerContext } from "../../context/Player";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
+    faMask,
     faUserCircle,
     faSearch,
     faPlayCircle,
@@ -12,13 +13,11 @@ import {
     faCog,
     faAdjust,
     faQuestion,
-    faEyeSlash,
     faCopy,
     faShareAlt,
     faQuran,
     faExpand,
     faBookmark,
-    faEye,
     faAngleDoubleDown,
     faAngleDoubleUp,
     faFileDownload,
@@ -28,12 +27,12 @@ import {
     faListAlt,
     faPenNib,
     faPen,
-    faBookOpen
+    faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
     faBookmark as farBookmark,
-    faKeyboard
+    faKeyboard,
 } from "@fortawesome/free-regular-svg-icons";
 
 import Utils from "../../services/utils";
@@ -57,8 +56,8 @@ export const CommandIcons = {
     Favorites: faHeart,
     update_hifz: faHeart,
     Help: faQuestion,
-    Mask: faEyeSlash,
-    MaskOn: faEye,
+    Mask: faMask,
+    MaskOn: faMask,
     Copy: faCopy,
     Share: faShareAlt,
     Tafseer: faQuran,
@@ -69,7 +68,7 @@ export const CommandIcons = {
     ToggleButton: faAngleDoubleDown,
     Downloading: faFileDownload,
     Pause: faPauseCircle,
-    Stop: faStopCircle
+    Stop: faStopCircle,
 };
 
 const getIcon = (commandId, app) => {
@@ -144,7 +143,7 @@ const Commands = () => {
         "update_hifz",
         "Profile",
         "Settings",
-        "Help"
+        "Help",
         // "Fullscreen",
     ];
 
@@ -164,7 +163,7 @@ const Commands = () => {
                 )}
             </div>
             <div className="CommandsList">
-                {list.map(command => (
+                {list.map((command) => (
                     <CommandButton
                         key={command}
                         command={command}
@@ -182,11 +181,11 @@ const CommandButton = ({
     showLabel,
     style,
     className,
-    trigger
+    trigger,
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
-    const runCommand = command => {
+    const runCommand = (command) => {
         app.setExpandedMenu(false);
         Utils.selectTopCommand();
         switch (command) {
@@ -198,7 +197,7 @@ const CommandButton = ({
                 analytics.logEvent("play_audio", {
                     ...QData.verseLocation(app.selectStart),
                     reciter: player.reciter,
-                    trigger
+                    trigger,
                 });
                 app.gotoAya(app.selectStart);
                 player.play();
@@ -207,7 +206,7 @@ const CommandButton = ({
                 analytics.logEvent("pause_audio", {
                     ...QData.verseLocation(player.playingAya),
                     reciter: player.reciter,
-                    trigger
+                    trigger,
                 });
                 if (player.audioState === AudioState.playing) {
                     player.pause();
@@ -219,14 +218,14 @@ const CommandButton = ({
                 analytics.logEvent("stop_audio", {
                     ...QData.verseLocation(player.playingAya),
                     reciter: player.reciter,
-                    trigger
+                    trigger,
                 });
                 player.stop(true);
                 return;
             case "Downloading":
                 analytics.logEvent("retry_stuck_audio", {
                     ...QData.verseLocation(player.playingAya),
-                    reciter: player.reciter
+                    reciter: player.reciter,
                 });
                 player.stop();
                 setTimeout(() => {
@@ -245,7 +244,7 @@ const CommandButton = ({
                     app.maskStart === -1 ? "show_mask" : "hide_mask",
                     {
                         ...QData.verseLocation(app.selectStart),
-                        trigger
+                        trigger,
                     }
                 );
                 app.setMaskStart();
@@ -254,7 +253,7 @@ const CommandButton = ({
                 analytics.logEvent("copy_text", {
                     ...QData.verseLocation(app.selectStart),
                     verses_count: app.selectEnd - app.selectStart + 1,
-                    trigger
+                    trigger,
                 });
                 Utils.copy2Clipboard(app.getSelectedText());
                 app.showToast(app.intl.formatMessage({ id: "text_copied" }));
@@ -267,7 +266,7 @@ const CommandButton = ({
             case "Bookmark":
                 analytics.logEvent("bookmark", {
                     ...QData.verseLocation(app.selectStart),
-                    trigger
+                    trigger,
                 });
                 app.toggleBookmark();
                 return;
@@ -275,11 +274,11 @@ const CommandButton = ({
             case "update_hifz":
                 analytics.logEvent("show_update_hifz", {
                     ...QData.verseLocation(app.selectStart),
-                    trigger
+                    trigger,
                 });
                 app.setMessageBox({
                     title: <String id="update_hifz" />,
-                    content: <AddHifz />
+                    content: <AddHifz />,
                 });
                 break;
             // case "Bookmarks":
@@ -289,7 +288,7 @@ const CommandButton = ({
             //     }
             default:
                 analytics.logEvent(`show_${command.toLowerCase()}`, {
-                    trigger
+                    trigger,
                 });
                 app.setPopup(command); //already calls pushRecentCommand()
                 return;
@@ -316,7 +315,7 @@ const CommandButton = ({
         }
     };
 
-    const isDisabled = command => {
+    const isDisabled = (command) => {
         return false;
         // return (
         //     app.popup === "Exercise" &&
@@ -335,7 +334,7 @@ const CommandButton = ({
     return (
         <button
             id={id}
-            onClick={e => {
+            onClick={(e) => {
                 runCommand(command);
                 switch (command) {
                     case "Commands":
