@@ -7,7 +7,7 @@ import {
     CartesianGrid,
     XAxis,
     YAxis,
-    Tooltip
+    Tooltip,
 } from "recharts";
 import React, { useContext, useState, useEffect, memo } from "react";
 import { FormattedMessage as String } from "react-intl";
@@ -18,9 +18,9 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faPlayCircle,
     faCheck,
-    faEyeSlash,
+    faMask,
     faBookOpen,
-    faTimes
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { VerseText } from "./Widgets";
 import { ThemeContext } from "../context/Theme";
@@ -34,7 +34,7 @@ const HifzRange = ({
     showActions = false,
     pages = true,
     setActiveRange,
-    trigger = "hifz_range"
+    trigger = "hifz_range",
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
@@ -64,7 +64,7 @@ const HifzRange = ({
             page: range.startPage - (suraInfo.sp - 1) + 1,
             start_page: range.startPage - (suraInfo.sp - 1) + 1,
             end_page: range.pages > 1 ? "-" + (range.endPage + 1) : "",
-            pages: rangePagesCount
+            pages: rangePagesCount,
         };
 
         setRangeInfo(app.intl.formatMessage({ id }, values));
@@ -110,7 +110,7 @@ const HifzRange = ({
         }
     };
 
-    const playRange = e => {
+    const playRange = (e) => {
         player.stop(true);
         const { startVerse } = selectRange();
         setTimeout(() => {
@@ -118,11 +118,11 @@ const HifzRange = ({
         }, 500);
         analytics.logEvent("play_audio", {
             trigger,
-            ...QData.verseLocation(startVerse)
+            ...QData.verseLocation(startVerse),
         });
     };
 
-    const reviewRange = e => {
+    const reviewRange = (e) => {
         const { startVerse } = selectRange();
         setTimeout(() => {
             app.setMaskStart();
@@ -130,7 +130,7 @@ const HifzRange = ({
         });
         analytics.logEvent("show_mask", {
             trigger,
-            ...QData.verseLocation(startVerse)
+            ...QData.verseLocation(startVerse),
         });
     };
 
@@ -146,7 +146,7 @@ const HifzRange = ({
         return { startVerse, endVerse };
     };
 
-    const readRange = e => {
+    const readRange = (e) => {
         const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
             range.sura,
             range.startPage,
@@ -164,7 +164,7 @@ const HifzRange = ({
         app.setMessageBox(null);
     };
 
-    const setRangeRevised = e => {
+    const setRangeRevised = (e) => {
         app.pushMessageBox({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -172,12 +172,12 @@ const HifzRange = ({
                     trigger,
                     chapter: range.sura,
                     startPage: range.startPage,
-                    pagesCount: range.pages
+                    pagesCount: range.pages,
                 });
                 app.setRangeRevised(range);
-                app.showToast(<String id="ack_range_revised"/>)
+                app.showToast(<String id="ack_range_revised" />);
             },
-            content: <String id="revise_confirmation" />
+            content: <String id="revise_confirmation" />,
         });
     };
 
@@ -188,7 +188,7 @@ const HifzRange = ({
                 range,
                 chapter,
                 startPage,
-                pagesCount
+                pagesCount,
             });
         } else {
             app.pushMessageBox({
@@ -199,7 +199,7 @@ const HifzRange = ({
                         range,
                         chapter,
                         startPage,
-                        pagesCount
+                        pagesCount,
                     });
                     app.addHifzRange(
                         startPage,
@@ -208,21 +208,21 @@ const HifzRange = ({
                         true /*overwrite*/
                     );
                 },
-                content: <String id="overwrite_exisiting_hifz" />
+                content: <String id="overwrite_exisiting_hifz" />,
             });
         }
     };
 
-    const addCurrentPage = e => {
+    const addCurrentPage = (e) => {
         confirmAddHifz(range.startPage, range.sura, 1, "page");
     };
 
-    const addSura = e => {
+    const addSura = (e) => {
         const pagesCount = suraInfo.ep - suraInfo.sp + 1;
         confirmAddHifz(suraInfo.sp - 1, range.sura, pagesCount, "full_sura");
     };
 
-    const addFromSuraStart = e => {
+    const addFromSuraStart = (e) => {
         const pagesCount = range.startPage - suraInfo.sp + 2;
         confirmAddHifz(
             suraInfo.sp - 1,
@@ -232,7 +232,7 @@ const HifzRange = ({
         );
     };
 
-    const addToSuraEnd = e => {
+    const addToSuraEnd = (e) => {
         const pagesCount = suraInfo.ep - range.startPage;
         confirmAddHifz(
             range.startPage,
@@ -242,7 +242,7 @@ const HifzRange = ({
         );
     };
 
-    const deleteHifzRange = e => {
+    const deleteHifzRange = (e) => {
         app.pushMessageBox({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -250,11 +250,11 @@ const HifzRange = ({
                     chapter: range.sura,
                     startPage: range.startPage,
                     pagesCount: range.pages,
-                    trigger
+                    trigger,
                 });
                 app.deleteHifzRange(range);
             },
-            content: <String id="remove_hifz" />
+            content: <String id="remove_hifz" />,
         });
     };
 
@@ -262,7 +262,7 @@ const HifzRange = ({
         return "";
     }
 
-    const toggleActions = e => {
+    const toggleActions = (e) => {
         if (showActions) {
             readRange(e);
             return;
@@ -282,7 +282,7 @@ const HifzRange = ({
                 tabIndex="0"
                 onClick={toggleActions}
                 style={{
-                    textAlign: "inherit"
+                    textAlign: "inherit",
                 }}
             >
                 <div className="RangeInfo">
@@ -295,7 +295,7 @@ const HifzRange = ({
                     className="RangeText"
                     style={{
                         whiteSpace: "nowrap",
-                        pointerEvents: "none"
+                        pointerEvents: "none",
                     }}
                 >
                     {!actions ? (
@@ -310,11 +310,17 @@ const HifzRange = ({
             {range.date ? (
                 actions ? (
                     <div className="ActionsBar">
-                        <button onClick={playRange} title={app.formatMessage({id:"play"})}>
+                        <button
+                            onClick={playRange}
+                            title={app.formatMessage({ id: "play" })}
+                        >
                             <Icon icon={faPlayCircle} />
                         </button>
-                        <button onClick={reviewRange} title={app.formatMessage({id:"revise"})}>
-                            <Icon icon={faEyeSlash} />
+                        <button
+                            onClick={reviewRange}
+                            title={app.formatMessage({ id: "revise" })}
+                        >
+                            <Icon icon={faMask} />
                         </button>
                         <button onClick={setRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
@@ -322,7 +328,10 @@ const HifzRange = ({
                         {/* <button onClick={readRange}>
                             <Icon icon={faBookOpen} />
                         </button> */}
-                        <button onClick={deleteHifzRange} title={app.formatMessage({id:"remove_hifz"})}>
+                        <button
+                            onClick={deleteHifzRange}
+                            title={app.formatMessage({ id: "remove_hifz" })}
+                        >
                             <Icon icon={faTimes} />
                         </button>
                     </div>
@@ -397,7 +406,7 @@ const SuraHifzChart = memo(
         range,
         pages = true,
         onClickPage,
-        trigger = "header_chapter_index"
+        trigger = "header_chapter_index",
     }) => {
         const app = useContext(AppContext);
         const [suraRanges, setSuraRanges] = useState([]);
@@ -434,7 +443,7 @@ const SuraHifzChart = memo(
                 trigger,
                 page,
                 chapter_num: sura + 1,
-                chapter: QData.suraName(sura)
+                chapter: QData.suraName(sura),
             });
         };
 
@@ -470,7 +479,7 @@ const SuraHifzChart = memo(
                                     )}
                                 style={{
                                     right: `${start}%`,
-                                    width: `${width}%`
+                                    width: `${width}%`,
                                 }}
                             />
                         );
@@ -510,7 +519,7 @@ const ActivityTooltip = ({ active, payload, label, activity }) => {
         const value =
             Array.isArray(payload) && payload.length ? payload[0].value : 0;
 
-        const [month, day] = label.split("-").map(x => parseInt(x));
+        const [month, day] = label.split("-").map((x) => parseInt(x));
         const date = new Date();
         date.setMonth(month - 1);
         date.setDate(day);
@@ -542,9 +551,9 @@ const ActivityChart = ({ activity = "pages" }) => {
             app.daily[activity]
                 .slice(0, 14)
                 .reverse()
-                .map(pgInfo => {
+                .map((pgInfo) => {
                     return Object.assign({}, pgInfo, {
-                        day: pgInfo.day.substring(5)
+                        day: pgInfo.day.substring(5),
                     });
                 })
         );
@@ -566,7 +575,7 @@ const ActivityChart = ({ activity = "pages" }) => {
                     top: 5,
                     right: 0,
                     left: 0,
-                    bottom: 5
+                    bottom: 5,
                 }}
             >
                 <Bar
