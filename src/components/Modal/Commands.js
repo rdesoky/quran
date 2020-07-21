@@ -5,7 +5,7 @@ import { AudioState, PlayerContext } from "../../context/Player";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faMask,
+    faLightbulb,
     faUserCircle,
     faSearch,
     faPlayCircle,
@@ -31,6 +31,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
+    faLightbulb as farLightbulb,
     faBookmark as farBookmark,
     faKeyboard,
 } from "@fortawesome/free-regular-svg-icons";
@@ -56,8 +57,8 @@ export const CommandIcons = {
     Favorites: faHeart,
     update_hifz: faHeart,
     Help: faQuestion,
-    Mask: faMask,
-    MaskOn: faMask,
+    Mask: faLightbulb,
+    MaskOn: farLightbulb,
     Copy: faCopy,
     Share: faShareAlt,
     Tafseer: faQuran,

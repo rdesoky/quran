@@ -18,7 +18,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faPlayCircle,
     faCheck,
-    faMask,
+    faLightbulb,
     faBookOpen,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
@@ -320,7 +320,7 @@ const HifzRange = ({
                             onClick={reviewRange}
                             title={app.formatMessage({ id: "revise" })}
                         >
-                            <Icon icon={faMask} />
+                            <Icon icon={faLightbulb} />
                         </button>
                         <button onClick={setRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
