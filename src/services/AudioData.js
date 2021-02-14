@@ -37,7 +37,7 @@ const RecitersInfo = {
     ali_jaber: {
         on: true,
         ayaAudio: {
-            server: "egylist_vaudio",
+            server: "everyayah",
             rkey: "Ali_Jaber_64kbps",
         },
     },
@@ -51,7 +51,7 @@ const RecitersInfo = {
             actv: "(1114)",
         },
         ayaAudio: {
-            server: "egylist_vaudio",
+            server: "everyayah",
             rkey: "Abdul_Basit_Murattal_64kbps",
         },
 
@@ -152,7 +152,7 @@ const RecitersInfo = {
             actv: "(1114)",
         },
         ayaAudio: {
-            server: "egylist_vaudio",
+            server: "everyayah",
             rkey: "Abdullah_Basfar_32kbps",
         },
         url: "http://egylist.com/quran/abasfar/s%1%.rm",
@@ -239,7 +239,7 @@ const RecitersInfo = {
             actv: "(1114)",
         },
         ayaAudio: {
-            server: "egylist_vaudio",
+            server: "everyayah",
             rkey: "Husary_64kbps",
         },
         url: "http://egylist.com/quran/hosaree/rm/s%1%.rm",
@@ -654,7 +654,7 @@ const AudioServers = {
         download: "http://www.everyayah.com/data/{rkey}/",
     },
 
-    egylist_vaudio: {
+    everyayah: {
         cross_domains: true,
         link: "http://www.egylist.com/quran/vaudio/{rkey}/{sura3}{aya3}.mp3",
         provider: "everyayah.com",
