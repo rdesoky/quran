@@ -654,7 +654,7 @@ const AudioServers = {
         download: "http://www.everyayah.com/data/{rkey}/",
     },
 
-    everyayah: {
+    egylist_vaudio: {
         cross_domains: true,
         link: "http://www.egylist.com/quran/vaudio/{rkey}/{sura3}{aya3}.mp3",
         provider: "everyayah.com",
