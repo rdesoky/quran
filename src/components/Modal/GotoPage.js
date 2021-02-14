@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Utils from "../../services/utils";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
@@ -58,7 +57,7 @@ const GotoPage = ({ open, app, player }) => {
         }
     };
 
-    const gotoPage = e => {
+    const gotoPage = (e) => {
         const { target: form } = e;
         const pageNum = form["PageNumber"].value;
         app.gotoPage(pageNum);
@@ -69,7 +68,7 @@ const GotoPage = ({ open, app, player }) => {
         e.preventDefault();
     };
 
-    const gotoPart = e => {
+    const gotoPart = (e) => {
         const { target: form } = e;
         const part = parseInt(form["PartNumber"].value);
         // const partInfo = QData.parts[part - 1];
@@ -79,7 +78,7 @@ const GotoPage = ({ open, app, player }) => {
         e.preventDefault();
     };
 
-    const gotoSura = e => {
+    const gotoSura = (e) => {
         const { target: form } = e;
         app.gotoSura(suraNumber - 1);
         checkClosePopup();
@@ -87,20 +86,20 @@ const GotoPage = ({ open, app, player }) => {
         e.preventDefault();
     };
 
-    const gotoVerse = e => {
+    const gotoVerse = (e) => {
         app.gotoAya(QData.ayaID(suraNumber - 1, verseNumber - 1), {
-            sel: true
+            sel: true,
         });
         checkClosePopup();
         stopAudio();
         e.preventDefault();
     };
 
-    const updatePage = e => {
+    const updatePage = (e) => {
         updatePageNumber(e.target.value);
     };
 
-    const updateSura = e => {
+    const updateSura = (e) => {
         const suraIndex = e.target.value - 1;
         updateSuraNumber(suraIndex + 1);
         const suraInfo = QData.sura_info[suraIndex];
@@ -108,11 +107,11 @@ const GotoPage = ({ open, app, player }) => {
         updateLastVerseNumber(suraInfo.ac);
     };
 
-    const updatePart = e => {
+    const updatePart = (e) => {
         updatePartNumber(e.target.value);
     };
 
-    const updateVerse = e => {
+    const updateVerse = (e) => {
         updateVerseNumber(e.target.value);
     };
 
@@ -124,7 +123,7 @@ const GotoPage = ({ open, app, player }) => {
             <div className="FieldRow">
                 <form
                     onSubmit={gotoPage}
-                    ref={form => {
+                    ref={(form) => {
                         gotoPageForm = form;
                     }}
                 >
