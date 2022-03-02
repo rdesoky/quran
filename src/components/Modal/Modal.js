@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { AppConsumer } from "../../context/App";
@@ -6,14 +6,14 @@ import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
 const Modal = ({ onClose, children, app, show, name, modeless }) => {
-    const onClickClose = e => {
+    const onClickClose = (e) => {
         if (typeof onClose === "function") {
             onClose(e);
         }
         e.preventDefault();
     };
 
-    const preventClose = e => {
+    const preventClose = (e) => {
         e.stopPropagation();
     };
 
@@ -51,10 +51,10 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
         return 0;
     };
 
-    const isBlockMouse = () => {
-        // return modeless === true || isWide || isCompact || show === false;
-        return pagesCount === 1 && !isCompact;
-    };
+    // const isBlockMouse = () => {
+    //     // return modeless === true || isWide || isCompact || show === false;
+    //     return pagesCount === 1 && !isCompact;
+    // };
 
     return (
         <Transition>
@@ -63,7 +63,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                 className={"ModalOverlay".appendWord("modal", app.modalPopup)}
                 style={{
                     left: app.isNarrow ? 0 : 51,
-                    zIndex: app.isNarrow ? 3 : 1
+                    zIndex: app.isNarrow ? 3 : 1,
                     // pointerEvents: isBlockMouse() ? "fill" : "none"
                 }}
                 // onClick={onClickClose}
@@ -71,7 +71,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
                 <div
                     style={{
                         left: calcLeft(),
-                        right: calcRight()
+                        right: calcRight(),
                         //,zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
                     }}
                     className={

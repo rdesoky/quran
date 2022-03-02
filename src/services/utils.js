@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 import QData from "./QData";
 
 const Utils = {
@@ -8,17 +9,17 @@ const Utils = {
         return padding + ret;
     },
 
-    dateKey: dt => {
+    dateKey: (dt) => {
         return `${dt.getFullYear()}-${Utils.num2string(
             dt.getMonth() + 1,
             2
         )}-${Utils.num2string(dt.getDate(), 2)}`;
     },
 
-    downloadImage: url => {
+    downloadImage: (url) => {
         return new Promise((resolve, reject) => {
             let img = document.createElement("img");
-            img.onload = e => {
+            img.onload = (e) => {
                 resolve(url);
             };
             img.onerror = reject;
@@ -26,7 +27,7 @@ const Utils = {
         });
     },
 
-    downloadPageImage: pageIndex => {
+    downloadPageImage: (pageIndex) => {
         const imageUrl =
             process.env.PUBLIC_URL +
             "/qpages_1260/page" +
@@ -35,7 +36,7 @@ const Utils = {
         return Utils.downloadImage(imageUrl);
     },
 
-    pageFromPath: path => {
+    pageFromPath: (path) => {
         let matchPage = path.match(/\/page\/([0-9]+)/i);
         if (matchPage) {
             return matchPage[1];
@@ -43,7 +44,7 @@ const Utils = {
 
         return "1";
     },
-    partFromPath: path => {
+    partFromPath: (path) => {
         let page = Utils.pageFromPath(path);
         let part = QData.pagePart(page);
         return part;
@@ -103,7 +104,7 @@ const Utils = {
         }, "");
         return { __html: ret };
     },
-    normalizeText: t => {
+    normalizeText: (t) => {
         let ret;
         try {
             ret = t
@@ -117,28 +118,28 @@ const Utils = {
         } catch (e) {}
         return ret;
     },
-    copy2Clipboard: t => {
+    copy2Clipboard: (t) => {
         navigator.clipboard.writeText(t).then(
-            p => {
+            (p) => {
                 console.log(`${t} is successfully copied to clipboard`);
             },
-            e => {
+            (e) => {
                 console.log(e.message);
             }
         );
-    }
+    },
 };
 
 export default Utils;
 
-String.prototype.appendWord = function(word, condition) {
+String.prototype.appendWord = function (word, condition) {
     if (typeof word === "string" && word.length && condition !== false) {
         return this + " " + word;
     }
     return this;
 };
 
-Number.prototype.between = function(a, b) {
+Number.prototype.between = function (a, b) {
     var min = Math.min.apply(Math, [a, b]),
         max = Math.max.apply(Math, [a, b]);
     return this >= min && this <= max;

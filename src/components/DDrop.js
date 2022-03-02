@@ -7,21 +7,21 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
     const [dX, setDX] = useState(0);
     const [dY, setDY] = useState(0);
     let rootElement;
-    const onTouchStart = e => {
+    const onTouchStart = (e) => {
         const { clientX, clientY } = e.targetTouches[0];
         const { target } = e;
         onMouseDown({ clientX, clientY, target });
         // e.preventDefault();
     };
-    const onTouchMove = e => {
+    const onTouchMove = (e) => {
         const { clientX, clientY } = e.targetTouches[0];
         const { target } = e;
         onMouseMove({ clientX, clientY, target });
         e.preventDefault();
     };
-    const onMouseDown = e => {
+    const onMouseDown = (e) => {
         const { target, clientX, clientY, pointerId } = e;
-        if (target.tagName.toLowerCase() == "select") {
+        if (target.tagName.toLowerCase() === "select") {
             return;
         }
         if (pointerId) {
@@ -40,7 +40,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             e.stopPropagation();
         }
     };
-    const onMouseMove = e => {
+    const onMouseMove = (e) => {
         const { clientX, clientY } = e;
         const min = minShift || 10;
         if (captured) {
@@ -55,7 +55,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             e.stopPropagation();
         }
     };
-    const onMouseUp = e => {
+    const onMouseUp = (e) => {
         const { target, pointerId } = e;
         if (pointerId) {
             target.releasePointerCapture(pointerId);
@@ -68,10 +68,10 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
     };
     useEffect(() => {
         rootElement.addEventListener("touchstart", onTouchStart, {
-            passive: false
+            passive: false,
         });
         rootElement.addEventListener("touchmove", onTouchMove, {
-            passive: false
+            passive: false,
         });
         rootElement.addEventListener("touchend", onMouseUp, { passive: false });
         return () => {
@@ -79,11 +79,12 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             rootElement.removeEventListener("touchmove", onTouchMove);
             rootElement.removeEventListener("touchend", onMouseUp);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <div
             className="DDrop"
-            ref={ref => {
+            ref={(ref) => {
                 rootElement = ref;
             }}
             // onTouchStart={onTouchStart}

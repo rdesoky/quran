@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AppConsumer } from "../../context/App";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleRight,
     faAngleLeft,
     faAngleDown,
-    faAngleUp
+    faAngleUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = ({ app, onPageUp, onPageDown, onIncrement, onDecrement }) => {

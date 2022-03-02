@@ -1,5 +1,5 @@
 import { useRouteMatch } from "react-router-dom";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
 import QData from "./../../services/QData";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 export const AddHifz = ({ page }) => {
     const app = useContext(AppContext);
     const match = useRouteMatch({
-        path: process.env.PUBLIC_URL + "/page/:page"
+        path: process.env.PUBLIC_URL + "/page/:page",
     });
     const pageIndex =
         page === undefined ? parseInt(match.params.page) - 1 : page;
@@ -19,8 +19,8 @@ export const AddHifz = ({ page }) => {
 
     return (
         <ul className="FlowingList">
-            {suras.map(sura => {
-                const hifzRange = app.hifzRanges.find(r => {
+            {suras.map((sura) => {
+                const hifzRange = app.hifzRanges.find((r) => {
                     return (
                         r.sura === sura &&
                         pageIndex >= r.startPage &&
@@ -34,7 +34,7 @@ export const AddHifz = ({ page }) => {
                                 sura,
                                 startPage: pageIndex,
                                 endPage: pageIndex,
-                                pages: 1
+                                pages: 1,
                             }
                         }
                         key={pageIndex.toString() + "-" + sura.toString()}
@@ -52,7 +52,6 @@ const Favorites = () => {
     const app = useContext(AppContext);
     const [activeTab, selectTab] = useState("add");
     const pageIndex = app.getCurrentPageIndex();
-    const suras = QData.pageSuras(pageIndex);
 
     const renderBody = () => {
         switch (activeTab) {
@@ -73,28 +72,28 @@ const Favorites = () => {
                 <String id="favorites" />
                 <div className="ButtonsBar">
                     <button
-                        onClick={e => selectTab("add")}
+                        onClick={(e) => selectTab("add")}
                         className={"CommandButton".appendWord(
                             "active",
-                            activeTab == "add"
+                            activeTab === "add"
                         )}
                     >
                         <String id="add" />
                     </button>
                     <button
-                        onClick={e => selectTab("update")}
+                        onClick={(e) => selectTab("update")}
                         className={"CommandButton".appendWord(
                             "active",
-                            activeTab == "update"
+                            activeTab === "update"
                         )}
                     >
                         <String id="browse" />
                     </button>
                     <button
-                        onClick={e => selectTab("graph")}
+                        onClick={(e) => selectTab("graph")}
                         className={"CommandButton".appendWord(
                             "active",
-                            activeTab == "graph"
+                            activeTab === "graph"
                         )}
                     >
                         <Icon icon={faChartLine} />

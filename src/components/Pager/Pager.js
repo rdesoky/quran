@@ -1,8 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Page from "../Page/Page";
-import { AppConsumer, AppContext } from "../../context/App";
-import { PlayerConsumer } from "../../context/Player";
+import { AppContext } from "../../context/App";
 import QData from "../../services/QData";
 import "./Pager.scss";
 import Utils from "../../services/utils";
@@ -36,7 +35,7 @@ function Pager({ match }) {
         pageIndex = parseInt(page) - 1;
     }
 
-    const pageUp = e => {
+    const pageUp = (e) => {
         let count = app.popup && !app.isWide ? 1 : app.pagesCount;
         if (count > 1 && pageIndex % 2 === 0) {
             count = 1; //right page is active
@@ -45,7 +44,7 @@ function Pager({ match }) {
         "object" == typeof e && e.stopPropagation();
         analytics.logEvent("nav_prev_page");
     };
-    const pageDown = e => {
+    const pageDown = (e) => {
         let count = app.popup && !app.isWide ? 1 : app.pagesCount;
         if (count > 1 && pageIndex % 2 === 1) {
             count = 1; //left page is active
@@ -68,21 +67,21 @@ function Pager({ match }) {
         app.maskStart,
         app.modalPopup,
         app.selectStart,
-        app.expandedMenu
+        app.expandedMenu,
     ]);
 
     useEffect(() => {
         //cache next pages
         const pageIndex = match.params.page - 1;
         if (app.pagesCount === 1) {
-            Utils.downloadPageImage(pageIndex + 1).catch(e => {});
+            Utils.downloadPageImage(pageIndex + 1).catch((e) => {});
         } else {
-            Utils.downloadPageImage(pageIndex + 2).catch(e => {});
-            Utils.downloadPageImage(pageIndex + 3).catch(e => {});
+            Utils.downloadPageImage(pageIndex + 2).catch((e) => {});
+            Utils.downloadPageImage(pageIndex + 3).catch((e) => {});
         }
-    }, [match.params.page]);
+    }, [app.pagesCount, match.params.page]);
 
-    const handleWheel = e => {
+    const handleWheel = (e) => {
         if (e.deltaY > 0) {
             analytics.setTrigger("mouse_wheel");
             //scroll down
@@ -105,7 +104,7 @@ function Pager({ match }) {
 
     const inExercise = () => app.popup === "Exercise";
 
-    const handleKeyDown = e => {
+    const handleKeyDown = (e) => {
         const { tagName, type } = document.activeElement;
         const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
         const isTextInput =
@@ -144,7 +143,7 @@ function Pager({ match }) {
                 if (canShowPopup) {
                     app.setMessageBox({
                         title: <String id="update_hifz" />,
-                        content: <AddHifz />
+                        content: <AddHifz />,
                     });
                 }
                 break;
@@ -235,7 +234,7 @@ function Pager({ match }) {
         }
     };
 
-    const decrement = e => {
+    const decrement = (e) => {
         // if (inExercise()) {
         //     offsetSelection(e, -1);
         //     return;
@@ -261,7 +260,7 @@ function Pager({ match }) {
         e.stopPropagation();
     };
 
-    const increment = e => {
+    const increment = (e) => {
         // if (inExercise()) {
         //     offsetSelection(e, 1);
         //     return;
@@ -321,7 +320,7 @@ function Pager({ match }) {
                     .appendWord(activeClass)}
                 style={{
                     height: app.appHeight + "px",
-                    width: 100 / pagesCount + "%"
+                    width: 100 / pagesCount + "%",
                 }}
             >
                 <Page
@@ -373,7 +372,7 @@ function Pager({ match }) {
                         className={"Pager" + (app.isNarrow ? " narrow" : "")}
                         onWheel={handleWheel}
                         style={{
-                            width: app.pagerWidth()
+                            width: app.pagerWidth(),
                         }}
                     >
                         {renderPage(0, firstPageShiftX, firstPageScaleX)}

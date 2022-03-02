@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./AKeyboard.scss";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,7 +6,6 @@ import {
     faCheckCircle,
     faStepBackward,
     faFastBackward,
-    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
 const keyMap = {
@@ -55,7 +54,7 @@ const keyMap = {
     Backspace: [<Icon icon={faBackspace} />, "Bksp"],
     ClearWord: [<Icon icon={faStepBackward} />, "Ctrl+Bksp"],
     ClearAll: [<Icon icon={faFastBackward} />, "Ctrl+x"],
-    Enter: [<Icon icon={faCheckCircle} />, "Enter"]
+    Enter: [<Icon icon={faCheckCircle} />, "Enter"],
 };
 
 const keyRows = [
@@ -70,7 +69,7 @@ const keyRows = [
         "KeyR",
         "KeyE",
         "KeyW",
-        "KeyQ"
+        "KeyQ",
     ],
     [
         "Quote",
@@ -83,7 +82,7 @@ const keyRows = [
         "KeyF",
         "KeyD",
         "KeyS",
-        "KeyA"
+        "KeyA",
     ],
     [
         "BracketRight",
@@ -96,9 +95,9 @@ const keyRows = [
         "KeyV",
         "KeyC",
         "KeyX",
-        "KeyZ"
+        "KeyZ",
     ],
-    ["Backspace", "Enter", "ClearWord", "Space", "ClearAll", "Backquote"]
+    ["Backspace", "Enter", "ClearWord", "Space", "ClearAll", "Backquote"],
 ];
 
 const AKeyboard = ({
@@ -107,80 +106,86 @@ const AKeyboard = ({
     onEnter,
     onCancel,
     style,
-    lang = "ar"
+    lang = "ar",
 }) => {
     const [text, setText] = useState(initText);
     const [typedChar, setTypedChar] = useState("");
 
-    const updateText = newText => {
-        setText(newText);
-        onUpdateText(newText);
-    };
+    const updateText = useCallback(
+        (newText) => {
+            setText(newText);
+            onUpdateText(newText);
+        },
+        [onUpdateText]
+    );
 
     const langIndex = lang === "ar" ? 0 : 1;
     const secondaryLangIndex = lang === "ar" ? 1 : 0;
 
-    const handleKeyDown = e => {
-        const { code, ctrlKey, target } = e;
-        setTypedChar(code);
-        // setTimeout(() => {
-        //     setTypedChar("");
-        // }, 400);
-        if (code === "Space") {
-            //Avoid entring space when user presses a button using space bar
-            if (target && target.tagName.match(/input|button/i)) {
-                return;
-            }
-            if (text.trim().length === 0) {
-                return;
-            }
-        }
-
-        switch (code) {
-            case "Escape":
-                onCancel();
-                break;
-            case "Enter":
-                onEnter(text);
-                break;
-            case "Backspace":
-                if (ctrlKey) {
-                    setTypedChar("ClearWord");
-                    updateText(text.replace(/\S+\s*$/, ""));
-                } else {
-                    updateText(text.substr(0, text.length - 1));
+    const handleKeyDown = useCallback(
+        (e) => {
+            const { code, ctrlKey, target } = e;
+            setTypedChar(code);
+            // setTimeout(() => {
+            //     setTypedChar("");
+            // }, 400);
+            if (code === "Space") {
+                //Avoid entring space when user presses a button using space bar
+                if (target && target.tagName.match(/input|button/i)) {
+                    return;
                 }
-                break;
-            case "ClearAll":
-                updateText("");
-                break;
-            case "ClearWord":
-                updateText(text.replace(/\S+\s*$/, ""));
-                break;
-            case "KeyX":
-                if (ctrlKey) {
-                    setTypedChar("ClearAll");
+                if (text.trim().length === 0) {
+                    return;
+                }
+            }
+
+            switch (code) {
+                case "Escape":
+                    onCancel();
+                    break;
+                case "Enter":
+                    onEnter(text);
+                    break;
+                case "Backspace":
+                    if (ctrlKey) {
+                        setTypedChar("ClearWord");
+                        updateText(text.replace(/\S+\s*$/, ""));
+                    } else {
+                        updateText(text.substr(0, text.length - 1));
+                    }
+                    break;
+                case "ClearAll":
                     updateText("");
                     break;
-                }
-            default:
-                if (keyMap[code]) {
-                    updateText(text.concat(keyMap[code][langIndex]));
+                case "ClearWord":
+                    updateText(text.replace(/\S+\s*$/, ""));
                     break;
-                }
-                return; //not handled
-        }
-        if (e && typeof e.preventDefault === "function") {
-            e.preventDefault();
-        }
-    };
+                case "KeyX":
+                    if (ctrlKey) {
+                        setTypedChar("ClearAll");
+                        updateText("");
+                    }
+                    break;
+                default:
+                    if (keyMap[code]) {
+                        updateText(text.concat(keyMap[code][langIndex]));
+                        break;
+                    }
+                    return; //not handled
+            }
+            if (e && typeof e.preventDefault === "function") {
+                e.preventDefault();
+            }
+        },
+        [langIndex, onCancel, onEnter, text, updateText]
+    );
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [text, onEnter]);
+    }, [text, onEnter, handleKeyDown]);
 
     useEffect(() => {
         setText(initText);
@@ -198,7 +203,7 @@ const AKeyboard = ({
                                 key +
                                 (typedChar === key ? " typed" : "")
                             }
-                            onClick={e => {
+                            onClick={(e) => {
                                 handleKeyDown({ code: key });
                             }}
                         >

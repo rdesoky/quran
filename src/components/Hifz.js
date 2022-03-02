@@ -1,14 +1,4 @@
-import {
-    BarChart,
-    Bar,
-    Line,
-    AreaChart,
-    Area,
-    CartesianGrid,
-    XAxis,
-    YAxis,
-    Tooltip,
-} from "recharts";
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import React, { useContext, useState, useEffect, memo } from "react";
 import { FormattedMessage as String } from "react-intl";
 import QData from "./../services/QData";
@@ -19,7 +9,6 @@ import {
     faPlayCircle,
     faCheck,
     faLightbulb,
-    faBookOpen,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { VerseText } from "./Widgets";
@@ -41,7 +30,7 @@ const HifzRange = ({
     const theme = useContext(ThemeContext);
     const [suraName, setSuraName] = useState("");
     const [rangeInfo, setRangeInfo] = useState("");
-    const [ageClass, setAgeClass] = useState("NoHifz");
+    // const [ageClass, setAgeClass] = useState("NoHifz");
     const [ageInfo, setAgeInfo] = useState("");
     const [actions, setActions] = useState(showActions);
 
@@ -70,7 +59,7 @@ const HifzRange = ({
         setRangeInfo(app.intl.formatMessage({ id }, values));
 
         if (!range.date) {
-            setAgeClass("NoHifz");
+            // setAgeClass("NoHifz");
             setAgeInfo("");
             return;
         }
@@ -85,16 +74,17 @@ const HifzRange = ({
 
         const ageInfo = app.intl.formatMessage({ id }, values);
 
-        let ageClass = "GoodHifz";
-        if (age > 7) {
-            ageClass = "FairHifz";
-        }
-        if (age > 14) {
-            ageClass = "WeakHifz";
-        }
+        // let ageClass = "GoodHifz";
+        // if (age > 7) {
+        //     ageClass = "FairHifz";
+        // }
+        // if (age > 14) {
+        //     ageClass = "WeakHifz";
+        // }
 
-        setAgeClass(ageClass);
+        // setAgeClass(ageClass);
         setAgeInfo(ageInfo);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [range.date, theme.lang]);
 
     useEffect(() => {
@@ -147,7 +137,7 @@ const HifzRange = ({
     };
 
     const readRange = (e) => {
-        const [rangeStartVerse, rangeEndVerse] = QData.rangeVerses(
+        const [rangeStartVerse] = QData.rangeVerses(
             range.sura,
             range.startPage,
             range.endPage
@@ -416,7 +406,7 @@ const SuraHifzChart = memo(
         const suraInfo = QData.sura_info[suraIndex];
         const suraPages = suraInfo.ep - suraInfo.sp + 1;
         const pageList = Array(suraPages).fill(0);
-        const pageWidth = `${100 / suraPages}%`;
+        // const pageWidth = `${100 / suraPages}%`;
 
         useEffect(() => {
             if (sura !== undefined) {
@@ -426,7 +416,7 @@ const SuraHifzChart = memo(
                 setSuraRanges(app.suraRanges(range.sura));
                 setActiveRange(range);
             }
-        }, [app.hifzRanges, range]);
+        }, [app, app.hifzRanges, range, sura]);
 
         const activePage = app.getCurrentPageIndex();
 
@@ -489,7 +479,7 @@ const SuraHifzChart = memo(
                     {pages
                         ? pageList.map((z, i) => {
                               const activeClass =
-                                  activePage == i + suraInfo.sp - 1
+                                  activePage === i + suraInfo.sp - 1
                                       ? "ActivePage"
                                       : "";
                               return (
@@ -557,7 +547,7 @@ const ActivityChart = ({ activity = "pages" }) => {
                     });
                 })
         );
-    }, [app.daily]);
+    }, [activity, app.daily]);
 
     if (!data.length) {
         return null;

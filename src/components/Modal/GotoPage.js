@@ -5,7 +5,7 @@ import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
 
 const GotoPage = ({ open, app, player }) => {
-    const [isOpen, setIsOpen] = useState(true);
+    // const [isOpen, setIsOpen] = useState(true);
     const [pageNumber, updatePageNumber] = useState(
         QData.ayaIdPage(app.selectStart) + 1
     );
@@ -26,9 +26,9 @@ const GotoPage = ({ open, app, player }) => {
 
     let gotoPageForm;
 
-    useEffect(() => {
-        setIsOpen(open); //update internal state to match
-    }, [open]);
+    // useEffect(() => {
+    //     setIsOpen(open); //update internal state to match
+    // }, [open]);
 
     useEffect(() => {
         updatePageNumber(QData.ayaIdPage(app.selectStart) + 1);
@@ -43,6 +43,7 @@ const GotoPage = ({ open, app, player }) => {
         return () => {
             // document.body.focus();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const stopAudio = () => {
@@ -79,7 +80,6 @@ const GotoPage = ({ open, app, player }) => {
     };
 
     const gotoSura = (e) => {
-        const { target: form } = e;
         app.gotoSura(suraNumber - 1);
         checkClosePopup();
         stopAudio();

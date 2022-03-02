@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { analytics } from "./../../services/Analytics";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
@@ -16,7 +16,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth;
 
-    const closeMask = e => {
+    const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
         app.hideMask();
     };
@@ -29,7 +29,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         setHoverVerse(-1);
     };
 
-    const onContextMenu = e => {
+    const onContextMenu = (e) => {
         const { target } = e;
         //Extend selection
         // const aya_id = parseInt(target.getAttribute("aya-id"));
@@ -41,12 +41,12 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         e.preventDefault();
     };
 
-    const isHovered = aya_id => hoverVerse === aya_id;
-    const isSelected = aya_id => {
+    const isHovered = (aya_id) => hoverVerse === aya_id;
+    const isSelected = (aya_id) => {
         const { selectStart, selectEnd } = app;
         return aya_id.between(selectStart, selectEnd);
     };
-    const isMasked = aya_id => {
+    const isMasked = (aya_id) => {
         let { maskStart } = app;
         if (maskStart !== -1 && aya_id >= maskStart) {
             return true;
@@ -54,7 +54,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         return false;
     };
 
-    const onClickMask = e => {
+    const onClickMask = (e) => {
         let nPageIndex = parseInt(e.target.getAttribute("page"));
         let maskStartPage = QData.ayaIdPage(app.maskStart);
         if (maskStartPage === nPageIndex) {
@@ -68,8 +68,8 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         e.stopPropagation();
     };
 
-    const onClickVerse = e => {
-        const { shiftKey, ctrlKey, altKey, target } = e;
+    const onClickVerse = (e) => {
+        const { shiftKey, ctrlKey, target } = e;
         const aya_id = parseInt(target.getAttribute("aya-id"));
         //set selectStart|selectEnd|maskStart
         if (app.maskStart !== -1) {
@@ -79,17 +79,17 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         } else {
             if (shiftKey || ctrlKey) {
                 analytics.logEvent("extend_selection", {
-                    trigger: "keyboard"
+                    trigger: "keyboard",
                 });
                 app.extendSelection(aya_id);
             } else {
                 if (aya_id.between(app.selectStart, app.selectEnd)) {
                     analytics.logEvent("show_verse_context", {
-                        trigger: "selected_verses"
+                        trigger: "selected_verses",
                     });
                     app.setContextPopup({
                         target: e.target,
-                        content: <VerseContextButtons verse={aya_id} />
+                        content: <VerseContextButtons verse={aya_id} />,
                     });
                     typeof e.stopPropagation === "function" &&
                         e.stopPropagation(); //prevent browser context menu
@@ -100,7 +100,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         }
     };
 
-    const ayaClass = aya_id => {
+    const ayaClass = (aya_id) => {
         let className = "";
         let selected = isSelected(aya_id);
 
@@ -144,7 +144,9 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     top: (sline * pageHeight) / 15,
                     right: (spos * lineWidth) / 1000,
                     left:
-                        sline === eline ? ((1000 - epos) * lineWidth) / 1000 : 0
+                        sline === eline
+                            ? ((1000 - epos) * lineWidth) / 1000
+                            : 0,
                 }}
             />
         );
@@ -171,7 +173,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                         height: lineHeight,
                         top: (eline * pageHeight) / 15,
                         right: 0,
-                        left: lineWidth - (epos * lineWidth) / 1000
+                        left: lineWidth - (epos * lineWidth) / 1000,
                     }}
                 />
             );
@@ -188,7 +190,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 lines.push(i);
             }
 
-            return lines.map(line => {
+            return lines.map((line) => {
                 return (
                     <div
                         key={line}
@@ -208,7 +210,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                             height: lineHeight,
                             top: (line * pageHeight) / 15,
                             right: 0,
-                            left: 0
+                            left: 0,
                         }}
                     />
                 );
@@ -217,7 +219,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         return null;
     };
 
-    const VerseStructure = verse => {
+    const VerseStructure = (verse) => {
         return (
             <div className="VerseParts" aya={verse.aya_id} key={verse.aya_id}>
                 {VerseHead(verse)}
@@ -240,7 +242,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
             return;
         }
 
-        const fullPageMask = pageIndex => {
+        const fullPageMask = (pageIndex) => {
             return (
                 <div
                     className="Mask MaskBody"
@@ -250,16 +252,16 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                         top: 0,
                         bottom: 0,
                         left: 0,
-                        right: 0
+                        right: 0,
                     }}
                 />
             );
         };
 
         if (maskStartPage === pageIndex) {
-            let maskStartInfo = versesInfo.find(v => v.aya_id === maskStart);
+            let maskStartInfo = versesInfo.find((v) => v.aya_id === maskStart);
             if (maskStartInfo) {
-                const { sline, spos, eline, epos } = maskStartInfo;
+                const { sline, spos } = maskStartInfo;
                 let right = (spos * lineWidth) / 1000;
                 let closeBtnRight = right - lineHeight / 2;
                 if (closeBtnRight < 0) {
@@ -275,7 +277,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                                 height: lineHeight,
                                 top: (sline * pageHeight) / 15,
                                 right,
-                                left: 0
+                                left: 0,
                             }}
                         />
                         <div
@@ -286,7 +288,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                                 top: ((parseInt(sline) + 1) * pageHeight) / 15,
                                 bottom: 0,
                                 right: 0,
-                                left: 0
+                                left: 0,
                             }}
                         />
                         {/* <VerseStructure {...maskStartInfo} /> */}
@@ -300,7 +302,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                                 height: lineHeight,
                                 top: (sline * pageHeight) / 15,
                                 right: closeBtnRight,
-                                backgroundColor: "#777"
+                                backgroundColor: "#777",
                             }}
                         >
                             <Icon icon={faTimes} />
@@ -315,7 +317,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         }
     }
 
-    const Verses = versesInfo => {
+    const Verses = (versesInfo) => {
         return versesInfo.map((verse, index) => {
             return VerseStructure(verse);
             // return <VerseStructure key={verse.aya_id} {...verse} />;
@@ -330,7 +332,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     direction: "ltr",
                     width: pageWidth,
                     height: app.pageHeight(),
-                    margin: app.pageMargin()
+                    margin: app.pageMargin(),
                 }}
             >
                 {/* <Verses verseInfo={versesInfo} /> */}
@@ -344,7 +346,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     top: 0,
                     width: pageWidth,
                     height: app.pageHeight(),
-                    margin: app.pageMargin()
+                    margin: app.pageMargin(),
                 }}
             >
                 {renderMask()}
@@ -358,7 +360,7 @@ export const HifzSegments = ({ page, versesInfo }) => {
     const pageSuras = QData.pageSuras(page);
     return (
         <div className="HifzSegments">
-            {pageSuras.map(sura => (
+            {pageSuras.map((sura) => (
                 <HifzSegment
                     key={page.toString() + "-" + sura.toString()}
                     sura={sura}
@@ -373,14 +375,14 @@ export const HifzSegments = ({ page, versesInfo }) => {
 
 export const HifzSegment = ({ sura, page, pageHeight, versesInfo }) => {
     const app = useContext(AppContext);
-    const suraVerses = versesInfo.filter(i => i.sura - 1 === sura);
+    const suraVerses = versesInfo.filter((i) => i.sura - 1 === sura);
     if (suraVerses.length === 0) {
         return "";
     }
 
     const { hifzRanges } = app;
 
-    const hifzRange = hifzRanges.find(r => {
+    const hifzRange = hifzRanges.find((r) => {
         return r.sura === sura && page >= r.startPage && page <= r.endPage;
     });
 
