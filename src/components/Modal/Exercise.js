@@ -1,30 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer, AppContext } from "./../../context/App";
-import {
-    PlayerConsumer,
-    AudioState,
-    AudioRepeat,
-    PlayerContext,
-} from "./../../context/Player";
+import { AppContext } from "./../../context/App";
+import { AudioState, AudioRepeat, PlayerContext } from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faThumbsUp,
     faThumbsDown,
-    faPen,
     faPlayCircle,
     faRandom,
-    faBackward,
-    faBackspace,
 } from "@fortawesome/free-solid-svg-icons";
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
 import { SettingsContext } from "../../context/Settings";
 import QData from "../../services/QData";
-import { CommandButton } from "./Commands";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
 import { ExerciseSettings } from "./Settings";
@@ -40,7 +32,7 @@ const Step = {
     results: 3,
 };
 
-const Exercise = ({}) => {
+const Exercise = () => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const settings = useContext(SettingsContext);
@@ -160,7 +152,7 @@ const Exercise = ({}) => {
     let defaultButton = null;
 
     const handleKeyDown = ({ code }) => {
-        if (code == "Escape") {
+        if (code === "Escape") {
             analytics.logEvent("exercise_go_back", { trigger });
             showIntro();
         }
@@ -186,7 +178,7 @@ const Exercise = ({}) => {
     useEffect(() => {
         setVerse(app.selectStart);
         setWrittenText("");
-        if (currStep == Step.results) {
+        if (currStep === Step.results) {
             setCurrStep(Step.intro);
         } else {
             app.setMaskStart(
@@ -220,6 +212,7 @@ const Exercise = ({}) => {
                 break;
             case Step.intro:
                 app.setMaskStart(verse + 1, true);
+            // eslint-disable-next-line no-fallthrough
             default:
                 app.setModalPopup(false); //allow selecting outside
         }
@@ -244,7 +237,7 @@ const Exercise = ({}) => {
             setTimeout(startReciting, 200);
         }
 
-        if (player.audioState == AudioState.playing) {
+        if (player.audioState === AudioState.playing) {
             setDuration(player.trackDuration());
             setRemainingTime(player.trackRemainingTime());
             stopCounter();
@@ -350,6 +343,8 @@ const Exercise = ({}) => {
 
             case Step.reciting:
                 return renderRecitingTitle();
+            default:
+                break;
         }
     };
 
@@ -489,19 +484,19 @@ const Exercise = ({}) => {
             const correctWord = correctWords[index];
             const answerWord =
                 index < answerWords.length ? answerWords[index] : "";
-            if (answerWord != correctWord) {
+            if (answerWord !== correctWord) {
                 wrongWord = index;
                 break;
             }
         }
-        if (wrongWord == -1 && answerWords.length > correctWords.length) {
+        if (wrongWord === -1 && answerWords.length > correctWords.length) {
             //wrote extra words
             wrongWord = correctWords.length;
         }
 
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
-        if (quickMode == 2 && wrongWord === -1 && answerWords.length >= 3) {
+        if (quickMode === 2 && wrongWord === -1 && answerWords.length >= 3) {
             const typed_chars = app.logTypedVerse(verse, 3);
             analytics.logEvent("exercise_quick_success", {
                 ...QData.verseLocation(verse),
@@ -714,7 +709,7 @@ const Exercise = ({}) => {
 
     const isCorrect = () => wrongWord === -1 && missingWords === 0;
     const isTypingCorrect = () =>
-        wrongWord === -1 || wrongWord == writtenText.split(/\s+/).length - 1;
+        wrongWord === -1 || wrongWord === writtenText.split(/\s+/).length - 1;
 
     const renderSuccessResultsReport = () => {
         return (
@@ -796,7 +791,7 @@ const Exercise = ({}) => {
                         <span
                             key={index}
                             className={
-                                wrongWord == -1 || index < wrongWord
+                                wrongWord === -1 || index < wrongWord
                                     ? "Correct"
                                     : "Wrong"
                             }
@@ -891,6 +886,8 @@ const Exercise = ({}) => {
                 return renderTypingConsole();
             case Step.results:
                 return renderResults();
+            default:
+                break;
         }
     };
 

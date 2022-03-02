@@ -1,6 +1,6 @@
-import React, { Component, useContext } from "react";
+import React, { useContext } from "react";
 import "./AudioPlayer.scss";
-import { AppConsumer, AppContext } from "../../context/App";
+import { AppContext } from "../../context/App";
 import { AudioState, PlayerContext } from "../../context/Player";
 import QData from "./../../services/QData";
 import { FormattedMessage as String } from "react-intl";
@@ -9,7 +9,7 @@ import { CommandButton } from "./../Modal/Commands";
 const PlayerButtons = ({
     showReciter,
     showLabels,
-    trigger = "player_buttons"
+    trigger = "player_buttons",
 }) => {
     const player = useContext(PlayerContext);
 
@@ -113,7 +113,7 @@ const PlayerStatus = () => {
             break;
     }
 
-    const gotoPlayingAya = e => {
+    const gotoPlayingAya = (e) => {
         app.gotoAya(ayaId, { sel: true });
     };
 
@@ -122,7 +122,7 @@ const PlayerStatus = () => {
             <String id={stateId} />
             :&nbsp;
             <String id="sura_names">
-                {sura_names => {
+                {(sura_names) => {
                     return sura_names.split(",")[sura] + " (" + (aya + 1) + ")";
                 }}
             </String>

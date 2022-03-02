@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { analytics } from "./../../services/Analytics";
 import { AppContext } from "../../context/App";
 import { AudioState, PlayerContext } from "../../context/Player";
@@ -25,8 +25,6 @@ import {
     faPauseCircle,
     faBars,
     faListAlt,
-    faPenNib,
-    faPen,
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -113,6 +111,7 @@ const commandIcon = (command, app, player) => {
                         "blinking",
                         player.audioState === AudioState.playing
                     )}
+                    alt="recite"
                 />
                 // </span>
             );
@@ -311,6 +310,9 @@ const CommandButton = ({
                     if (app.user && !app.user.isAnonymous) {
                         label = app.user.email;
                     }
+                    break;
+                default:
+                    break;
             }
             return <span className="CommandLabel">{label}</span>;
         }
@@ -340,6 +342,8 @@ const CommandButton = ({
                 switch (command) {
                     case "Commands":
                         e.stopPropagation();
+                        break;
+                    default:
                         break;
                 }
             }}

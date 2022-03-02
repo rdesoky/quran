@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import QData from "./../services/QData";
-import { AppConsumer, AppContext } from "./../context/App";
+import { AppContext } from "./../context/App";
 import { FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,10 +10,8 @@ import {
     faTimes,
     faCopy,
     faBookmark,
-    faForward,
-    faBackward,
     faChevronRight,
-    faChevronLeft
+    faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
@@ -28,7 +27,7 @@ export const VerseInfo = ({
     onClick,
     onMoveNext,
     navigate = false,
-    trigger = "verse_info"
+    trigger = "verse_info",
 }) => {
     const app = useContext(AppContext);
 
@@ -39,7 +38,7 @@ export const VerseInfo = ({
         return "";
     }
 
-    const handleClick = e => {
+    const handleClick = (e) => {
         analytics.setTrigger(trigger);
 
         if (typeof onClick === "function") {
@@ -52,7 +51,7 @@ export const VerseInfo = ({
     const verseInfo = QData.ayaIdInfo(verse);
 
     if (navigate) {
-        onMoveNext = offset => {
+        onMoveNext = (offset) => {
             // analytics.setTrigger(trigger);
             analytics.logEvent(
                 offset > 0 ? "nav_next_verse" : "nav_prev_verse",
@@ -66,7 +65,7 @@ export const VerseInfo = ({
         <div className="VerseInfo">
             {onMoveNext ? (
                 <button
-                    onClick={e => {
+                    onClick={(e) => {
                         analytics.setTrigger(trigger);
                         onMoveNext(-1);
                     }}
@@ -93,7 +92,7 @@ export const VerseInfo = ({
             </button>
             {onMoveNext ? (
                 <button
-                    onClick={e => {
+                    onClick={(e) => {
                         analytics.setTrigger(trigger);
                         onMoveNext(1);
                     }}
@@ -113,16 +112,16 @@ export const VerseText = ({
     navigate = true,
     bookmark = false,
     copy = false,
-    trigger = "verse_text"
+    trigger = "verse_text",
 }) => {
     const [text, setText] = useState("");
     const app = useContext(AppContext);
 
-    const updateText = verseIndex => {
+    const updateText = (verseIndex) => {
         setText(app.verseText(verseIndex));
     };
 
-    const copyVerse = e => {
+    const copyVerse = (e) => {
         const verseInfo = QData.ayaIdInfo(verse);
         Utils.copy2Clipboard(
             `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
@@ -132,7 +131,7 @@ export const VerseText = ({
         analytics.logEvent("copy_text", {
             ...QData.verseLocation(verse),
             verses_count: 1,
-            trigger
+            trigger,
         });
     };
 
@@ -148,7 +147,7 @@ export const VerseText = ({
         }
     }, [app.selectStart]);
 
-    const toggleBookmark = e => {
+    const toggleBookmark = (e) => {
         app.toggleBookmark(verse);
     };
 
@@ -192,7 +191,7 @@ export const ToastMessage = () => {
                 setHiding(false);
             }, 500);
         }
-    }, [app.toastMessage]);
+    }, [app, app.toastMessage, toastMessage]);
 
     // const hideMessage = e => {
     //     app.showToast(null);
@@ -216,8 +215,8 @@ export const CircleProgress = ({
     progress = 1,
     target = 5,
     display = null,
-    onClick = e => false,
-    title
+    onClick = (e) => false,
+    title,
 }) => {
     const radius = (sqSize - strokeWidth) / 2;
     // Enclose cicle in a circumscribing square
@@ -252,7 +251,7 @@ export const CircleProgress = ({
                 transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
                 style={{
                     strokeDasharray: dashArray,
-                    strokeDashoffset: dashOffset
+                    strokeDashoffset: dashOffset,
                 }}
             />
             <text
@@ -274,11 +273,11 @@ export const MessageBox = () => {
 
     const msgBoxInfo = app.getMessageBox();
 
-    const onClose = e => {
+    const onClose = (e) => {
         app.pushMessageBox(null);
     };
 
-    const onYes = e => {
+    const onYes = (e) => {
         if (msgBoxInfo.onYes) {
             setTimeout(() => {
                 msgBoxInfo.onYes();
@@ -287,7 +286,7 @@ export const MessageBox = () => {
         onClose(e);
     };
 
-    const onNo = e => {
+    const onNo = (e) => {
         if (msgBoxInfo.onNo) {
             setTimeout(() => {
                 msgBoxInfo.onNo();
@@ -320,9 +319,9 @@ export const MessageBox = () => {
     return null;
 };
 
-export const ContextPopup = ({}) => {
+export const ContextPopup = () => {
     const app = useContext(AppContext);
-    const closePopup = e => {
+    const closePopup = (e) => {
         app.setContextPopup(null);
     };
     let popup;
@@ -366,7 +365,7 @@ export const ContextPopup = ({}) => {
                         "DownPointer",
                         !isBelow
                     )}
-                    ref={ref => {
+                    ref={(ref) => {
                         popup = ref;
                     }}
                     style={{
@@ -378,7 +377,7 @@ export const ContextPopup = ({}) => {
                         maxHeight:
                             (isBelow
                                 ? app.appHeight - targetRect.bottom
-                                : targetRect.top) - 40
+                                : targetRect.top) - 40,
                     }}
                 >
                     <div className="ContextHeader">{header}</div>
@@ -394,7 +393,7 @@ export const ContextPopup = ({}) => {
                         bottom: !isBelow
                             ? app.appHeight - targetRect.top
                             : undefined,
-                        left: left
+                        left: left,
                     }}
                 ></div>
             </div>
@@ -461,15 +460,15 @@ export const PageNavigator = ({ children, trigger }) => {
     const app = useContext(AppContext);
     const pageNumber = app.getCurrentPageIndex() + 1;
 
-    const stopPropagation = e => e.stopPropagation();
+    const stopPropagation = (e) => e.stopPropagation();
 
-    const gotoNextPage = e => {
+    const gotoNextPage = (e) => {
         // analytics.setTrigger(trigger);
         app.gotoPage(pageNumber + 1, true, true);
         analytics.logEvent("nav_next_page", { trigger });
     };
 
-    const gotoPrevPage = e => {
+    const gotoPrevPage = (e) => {
         // analytics.setTrigger(trigger);
         app.gotoPage(pageNumber - 1, true, true);
         analytics.logEvent("nav_prev_page", { trigger });

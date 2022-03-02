@@ -3,13 +3,13 @@ import { analytics as firebaseAnalytics } from "firebase";
 export const analytics = {
     devMode: () =>
         window.location.hostname === "localhost" ||
-        localStorage.getItem("dev") == 1,
+        localStorage.getItem("dev") === "1",
     //devMode: () => false,
     params: { trigger: "session_start", app_size: "two_pages" },
-    setTrigger: trigger => {
+    setTrigger: (trigger) => {
         return analytics.setParams({ trigger });
     },
-    setParams: params => {
+    setParams: (params) => {
         console.log(`setParams ->${JSON.stringify(params)}`);
         analytics.params = { ...analytics.params, ...params };
         return analytics;
@@ -22,18 +22,18 @@ export const analytics = {
         }
         return analytics;
     },
-    setCurrentScreen: name => {
+    setCurrentScreen: (name) => {
         console.log(`SetScreen '${name}'`);
         if (!analytics.devMode()) {
             firebaseAnalytics().setCurrentScreen(name);
         }
         return analytics;
     },
-    setUserProps: props => {
+    setUserProps: (props) => {
         console.log(`SetUserProperties: ${JSON.stringify(props)}`);
         if (!analytics.devMode()) {
             firebaseAnalytics().setUserProperties(props);
         }
         return analytics;
-    }
+    },
 };

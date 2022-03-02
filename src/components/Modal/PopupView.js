@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppConsumer, AppContext } from "../../context/App";
+import { AppContext } from "../../context/App";
 import GotoPage from "./GotoPage";
 import QIndex from "./QIndex";
 import Commands from "./Commands";
@@ -12,7 +12,6 @@ import Tafseer from "./Tafseer";
 import Favorites from "./Favorites";
 import Bookmarks from "./Bookmarks";
 // import AudioPlayer from "./../../components/AudioPlayer/AudioPlayer";
-import { AudioSettings } from "./../../components/AudioPlayer/AudioPlayer";
 import Modal from "./Modal";
 import User from "./User";
 import Exercise from "./Exercise";
@@ -34,7 +33,7 @@ function PopupView() {
         Favorites,
         Profile: User,
         Bookmarks,
-        Exercise
+        Exercise,
     };
 
     const onClose = () => {

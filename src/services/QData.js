@@ -1,9 +1,10 @@
 const QData = {
-    arSuraNames: "الفاتحة,البقرة,ال عمران,النساء,المائدة,الانعام,الاعراف,الانفال,التوبة,يونس,هود,يوسف,الرعد,ابراهيم,الحجر,النحل,الاسراء,الكهف,مريم,طه,الانبياء,الحج,المؤمنون,النور,الفرقان,الشعراء,النمل,القصص,العنكبوت,الروم,لقمان,السجدة,الاحزاب,سبأ,فاطر,يس,الصافات,ص,الزمر,غافر,فصلت,الشورى,الزخرف,الدخان,الجاثية,الاحقاف,محمد,الفتح,الحجرات,ق,الذاريات,الطور,النجم,القمر,الرحمن,الواقعة,الحديد,المجادلة,الحشر,الممتحنة,الصف,الجمعة,المنافقون,التغابن,الطلاق,التحريم,الملك,القلم,الحاقة,المعارج,نوح,الجن,المزمل,المدثر,القيامة,الانسان,المرسلات,النبا,النازعات,عبس,التكوير,الانفطار,المطففين,الانشقاق,البروج,الطارق,الاعلى,الغاشية,الفجر,البلد,الشمس,الليل,الضحى,الشرح,التين,العلق,القدر,البينة,الزلزلة,العاديات,القارعة,التكاثر,العصر,الهمزة,الفيل,قريش,الماعون,الكوثر,الكافرون,النصر,المسد,الاخلاص,الفلق,الناس".split(
-        ","
-    ),
+    arSuraNames:
+        "الفاتحة,البقرة,ال عمران,النساء,المائدة,الانعام,الاعراف,الانفال,التوبة,يونس,هود,يوسف,الرعد,ابراهيم,الحجر,النحل,الاسراء,الكهف,مريم,طه,الانبياء,الحج,المؤمنون,النور,الفرقان,الشعراء,النمل,القصص,العنكبوت,الروم,لقمان,السجدة,الاحزاب,سبأ,فاطر,يس,الصافات,ص,الزمر,غافر,فصلت,الشورى,الزخرف,الدخان,الجاثية,الاحقاف,محمد,الفتح,الحجرات,ق,الذاريات,الطور,النجم,القمر,الرحمن,الواقعة,الحديد,المجادلة,الحشر,الممتحنة,الصف,الجمعة,المنافقون,التغابن,الطلاق,التحريم,الملك,القلم,الحاقة,المعارج,نوح,الجن,المزمل,المدثر,القيامة,الانسان,المرسلات,النبا,النازعات,عبس,التكوير,الانفطار,المطففين,الانشقاق,البروج,الطارق,الاعلى,الغاشية,الفجر,البلد,الشمس,الليل,الضحى,الشرح,التين,العلق,القدر,البينة,الزلزلة,العاديات,القارعة,التكاثر,العصر,الهمزة,الفيل,قريش,الماعون,الكوثر,الكافرون,النصر,المسد,الاخلاص,الفلق,الناس".split(
+            ","
+        ),
 
-    suraName: index => {
+    suraName: (index) => {
         return index < QData.arSuraNames.length
             ? QData.arSuraNames[index]
             : "(not found)";
@@ -49,7 +50,7 @@ const QData = {
     /**
      * Returns sura and aya indices given AyaId
      */
-    ayaIdInfo: aya_id => {
+    ayaIdInfo: (aya_id) => {
         let id = 0;
         for (var s = 0; s < QData.sura_info.length; s++) {
             let ac = QData.sura_info[s].ac;
@@ -64,19 +65,19 @@ const QData = {
     /**
      * For analytics purpose
      */
-    verseLocation: verse => {
+    verseLocation: (verse) => {
         const info = QData.ayaIdInfo(verse);
         return {
             verse: `${info.sura + 1}:${info.aya + 1}`,
             chapter: QData.suraName(info.sura),
-            chapter_num: info.sura + 1
+            chapter_num: info.sura + 1,
         };
     },
 
     /**
      * Returns page index by aya ID
      */
-    ayaIdPage: aya_id => {
+    ayaIdPage: (aya_id) => {
         let { sura, aya } = QData.ayaIdInfo(aya_id);
         return QData.ayaPage(sura, aya);
     },
@@ -86,14 +87,14 @@ const QData = {
      *
      * @param {number} aya_id absolute verse index
      */
-    ayaIdPart: aya_id => {
+    ayaIdPart: (aya_id) => {
         const { sura: sIndex, aya: aIndex } = QData.ayaIdInfo(aya_id);
         for (let p = 0; p < QData.parts.length; p++) {
             const { s, a } = QData.parts[p];
             const [partSuraIndex, partAyaIndex] = [s - 1, a - 1];
             if (
                 partSuraIndex > sIndex ||
-                (partSuraIndex == sIndex && partAyaIndex > aIndex)
+                (partSuraIndex === sIndex && partAyaIndex > aIndex)
             ) {
                 return p - 1; //passed
             }
@@ -106,7 +107,7 @@ const QData = {
      *
      * @param {number} part_index zero based part index
      */
-    partAyaId: part_index => {
+    partAyaId: (part_index) => {
         const { s: suraNum, a: ayaNum } = QData.parts[part_index];
         return QData.ayaID(suraNum - 1, ayaNum - 1);
     },
@@ -116,7 +117,7 @@ const QData = {
      *
      * @param {number} page_index
      */
-    pageAyaId: page_index => {
+    pageAyaId: (page_index) => {
         let { s: sura, a: aya } = QData.pagesInfo[page_index];
         return QData.ayaID(sura - 1, aya - 1);
     },
@@ -127,11 +128,11 @@ const QData = {
      * @param {number} aya
      */
     //Index based
-    ayaPage: function(sura, aya) {
+    ayaPage: function (sura, aya) {
         var page = QData.sura_info[sura].sp - 1;
         while (page < QData.pagesInfo.length - 1) {
             if (
-                QData.pagesInfo[page + 1].s != sura + 1 ||
+                QData.pagesInfo[page + 1].s !== sura + 1 ||
                 QData.pagesInfo[page + 1].a > aya + 1
             ) {
                 return page;
@@ -141,7 +142,7 @@ const QData = {
         return page;
     },
 
-    nextAya: function(sura, aya) {
+    nextAya: function (sura, aya) {
         var ret = { sura: sura, aya: aya };
         if (aya >= QData.sura_info[sura - 1].ac) {
             if (sura < 114) {
@@ -157,7 +158,7 @@ const QData = {
         return ret;
     },
 
-    prevAya: function(sura, aya) {
+    prevAya: function (sura, aya) {
         var ret = { sura: sura, aya: aya };
         if (aya <= 1) {
             if (sura > 1) {
@@ -173,9 +174,9 @@ const QData = {
         return ret;
     },
 
-    compareVerses: function(infoL, infoR) {
-        if (infoL.sura == infoR.sura) {
-            if (infoL.aya == infoR.aya) {
+    compareVerses: function (infoL, infoR) {
+        if (infoL.sura === infoR.sura) {
+            if (infoL.aya === infoR.aya) {
                 return 0;
             }
             return infoL.aya > infoR.aya ? 1 : -1;
@@ -187,7 +188,7 @@ const QData = {
     /**
      * Returns sura index for a specific page number
      */
-    pageSura: function(nPage, bStart) {
+    pageSura: function (nPage, bStart) {
         for (var i = 0; i < 114; i++) {
             if (QData.sura_info[i].ep >= nPage) {
                 return i;
@@ -210,7 +211,7 @@ const QData = {
         //return count;
     },
 
-    suraStartPage: sura => {
+    suraStartPage: (sura) => {
         return QData.sura_info[sura].sp - 1;
     },
 
@@ -285,10 +286,10 @@ const QData = {
         { s: 51, a: 31, es: 57, ea: 29, p: 522, ep: 541 }, //27
         { s: 58, a: 1, es: 66, ea: 12, p: 542, ep: 561 }, //28
         { s: 67, a: 1, es: 77, ea: 50, p: 562, ep: 581 }, //29
-        { s: 78, a: 1, es: 114, ea: 6, p: 582, ep: 604 } //30
+        { s: 78, a: 1, es: 114, ea: 6, p: 582, ep: 604 }, //30
     ],
 
-    suraInPage: function(suraNum, pageNum) {
+    suraInPage: function (suraNum, pageNum) {
         var nSura = suraNum - 1;
         return (
             QData.sura_info[nSura].sp <= pageNum &&
@@ -411,10 +412,10 @@ const QData = {
         { sp: 603, ep: 603, t: 0, ac: 5 },
         { sp: 604, ep: 604, t: 0, ac: 4 },
         { sp: 604, ep: 604, t: 0, ac: 5 },
-        { sp: 604, ep: 604, t: 0, ac: 6 }
+        { sp: 604, ep: 604, t: 0, ac: 6 },
     ],
 
-    pageSuras: pageIndex => {
+    pageSuras: (pageIndex) => {
         if (pageIndex + 1 === QData.pagesInfo.length) {
             return [111, 112, 113];
         }
@@ -1032,8 +1033,8 @@ const QData = {
         { s: 103, a: 1 },
         { s: 106, a: 1 },
         { s: 109, a: 1 },
-        { s: 112, a: 1 }
-    ]
+        { s: 112, a: 1 },
+    ],
 };
 
 export default QData;

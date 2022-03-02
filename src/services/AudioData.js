@@ -10,8 +10,8 @@ const NumToString = Utils.num2string;
  */
 function GetAudioURL(reciterID, suraNum, ayaNum) {
     var url;
-    if (ayaNum != undefined) {
-        if (RecitersInfo[reciterID].ayaAudio == undefined) {
+    if (ayaNum !== undefined) {
+        if (RecitersInfo[reciterID].ayaAudio === undefined) {
             reciterID = "hozefee";
         }
         url = AudioServers[RecitersInfo[reciterID].ayaAudio.server].link;
@@ -19,7 +19,7 @@ function GetAudioURL(reciterID, suraNum, ayaNum) {
         url = url.replace("{sura}", suraNum.toString());
         url = url.replace("{sura3}", NumToString(suraNum, 3));
         url = url.replace("{aya3}", NumToString(ayaNum, 3));
-    } else if (RecitersInfo[reciterID].suraAudio != undefined) {
+    } else if (RecitersInfo[reciterID].suraAudio !== undefined) {
         url = AudioServers[RecitersInfo[reciterID].suraAudio.server].link;
         url = url.replace("{rkey}", RecitersInfo[reciterID].suraAudio.rkey);
         url = url.replace("{sura}", suraNum.toString());
@@ -633,7 +633,7 @@ const ListReciters = (feature = "ayaAudio") => {
         }
     }
     //If saved_list does not match the available reciters
-    if (availableReciters.length != saved_list.length) {
+    if (availableReciters.length !== saved_list.length) {
         shuffleArray(availableReciters);
         localStorage.setItem(
             "reciters_" + feature,
@@ -684,8 +684,7 @@ const AudioServers = {
         cross_domains: true,
         mtype: 1, //1: mp3, 2:real
         provider: "quranicaudio.com",
-        link:
-            "http://download.quranicaudio.com/quran/{rkey}/complete/{sura3}.mp3",
+        link: "http://download.quranicaudio.com/quran/{rkey}/complete/{sura3}.mp3",
         website: "http://www.quranicaudio.com",
         download: "http://download.quranicaudio.com/quran/{rkey}/complete/",
     },

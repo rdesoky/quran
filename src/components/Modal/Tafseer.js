@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer, AppContext } from "../../context/App";
-import { PlayerConsumer, PlayerContext } from "../../context/Player";
+import { AppContext } from "../../context/App";
+import { PlayerContext } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import {
-    faAngleLeft,
-    faAngleRight,
-    faCopy,
-    faQuran,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import Utils from "../../services/utils";
-import { CommandButton } from "./Commands";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -179,7 +173,7 @@ export const TafseerView = ({
             <div>
                 {showVerse && showVerseText && (
                     <VerseInfo
-                        trigger="tafseer_view"
+                        // trigger="tafseer_view"
                         // onMoveNext={onMoveNext}
                         navigate={true}
                         verse={verse}

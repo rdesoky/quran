@@ -1,21 +1,18 @@
 import React, { useContext } from "react";
 import { analytics } from "./../../services/Analytics";
-import { AppConsumer, AppContext } from "../../context/App";
-import { FormattedMessage as String } from "react-intl";
+import { AppContext } from "../../context/App";
 import QData from "../../services/QData";
-import Utils from "../../services/utils";
-import { PlayerConsumer, AudioState } from "../../context/Player";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
     faAngleUp,
-    faBookOpen
+    faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     CircleProgress,
     VerseContextButtons,
     PageContextButtons,
-    SuraContextHeader
+    SuraContextHeader,
 } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
 
@@ -25,7 +22,7 @@ const PageHeader = ({
     onPageUp,
     onPageDown,
     onIncrement,
-    onDecrement
+    onDecrement,
 }) => {
     const app = useContext(AppContext);
     const partIndex = QData.pagePart(pageIndex + 1) - 1;
@@ -36,7 +33,7 @@ const PageHeader = ({
         analytics.logEvent("show_part_context", { trigger: "page_header" });
         app.setContextPopup({
             target,
-            content: <PartsList part={partIndex} />
+            content: <PartsList part={partIndex} />,
         });
     };
 
@@ -54,7 +51,7 @@ const PageHeader = ({
         app.setContextPopup({
             target,
             // header: <div>Page Header</div>,
-            content: <PageContextButtons page={pageIndex} />
+            content: <PageContextButtons page={pageIndex} />,
         });
     };
 
@@ -62,28 +59,30 @@ const PageHeader = ({
         analytics.logEvent("show_verse_context", { trigger: "page_header" });
         app.setContextPopup({
             target,
-            content: <VerseContextButtons verse={app.selectStart} />
+            content: <VerseContextButtons verse={app.selectStart} />,
         });
     };
 
-    const onClickNext = e => {
+    const onClickNext = (e) => {
         onIncrement && onIncrement(e);
         analytics.logEvent("nav_next_verse", { trigger: "page_header" });
     };
 
-    const onClickPrevious = e => {
+    const onClickPrevious = (e) => {
         onDecrement && onDecrement(e);
         analytics.logEvent("nav_prev_verse", { trigger: "page_header" });
     };
 
     const showSuraContextPopup = ({ target }) => {
         analytics.logEvent("show_chapter_context", {
-            trigger: "page_header"
+            trigger: "page_header",
         });
         app.setContextPopup({
             target,
             header: <SuraContextHeader sura={suraIndex} />,
-            content: <SuraList trigger="header_chapter_context" simple={true} />
+            content: (
+                <SuraList trigger="header_chapter_context" simple={true} />
+            ),
         });
     };
 
@@ -124,7 +123,7 @@ const PageHeader = ({
                 <div
                     className="PageHeaderSection"
                     style={{
-                        display: app.pagesCount === 1 || order ? "" : "none"
+                        display: app.pagesCount === 1 || order ? "" : "none",
                     }}
                 >
                     <button
@@ -134,7 +133,7 @@ const PageHeader = ({
                         <Icon icon={faAngleUp} />
                     </button>
                     <button
-                        onClick={e => {
+                        onClick={(e) => {
                             app.gotoAya(app.selectStart);
                             showVerseContextPopup(e);
                         }}

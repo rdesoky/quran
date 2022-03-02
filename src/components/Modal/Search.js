@@ -33,7 +33,7 @@ export default function Search() {
     const [keyboard, setkeyboard] = useState(false);
     const [expandedGroup, setExpandedGroup] = useState(0);
     const [treeView, setTreeView] = useState(
-        localStorage.getItem("searchTreeView") == 1
+        localStorage.getItem("searchTreeView") === "1"
     );
 
     let resultsDiv;
@@ -52,6 +52,33 @@ export default function Search() {
     const hideKeyboard = (e) => {
         setkeyboard(false);
     };
+
+    const doSearch = useCallback(
+        (searchTerm) => {
+            let sResults = [];
+            let normSearchTerm = Utils.normalizeText(searchTerm);
+
+            if (normSearchTerm.length > 0) {
+                localStorage.setItem("LastSearch", searchTerm);
+            }
+
+            const verseList = app.verseList();
+            if (verseList.length > 0 && normSearchTerm.length > 2) {
+                sResults = app.normVerseList().reduce((results, ntext, aya) => {
+                    if (ntext.includes(normSearchTerm)) {
+                        results.push({
+                            aya,
+                            text: verseList[aya],
+                            ntext: ntext,
+                        });
+                    }
+                    return results;
+                }, []);
+            }
+            setResults(sResults);
+        },
+        [app]
+    );
 
     useEffect(() => {
         analytics.setTrigger("search_ui");
@@ -293,33 +320,6 @@ export default function Search() {
             </div>
         );
     };
-
-    const doSearch = useCallback(
-        (searchTerm) => {
-            let sResults = [];
-            let normSearchTerm = Utils.normalizeText(searchTerm);
-
-            if (normSearchTerm.length > 0) {
-                localStorage.setItem("LastSearch", searchTerm);
-            }
-
-            const verseList = app.verseList();
-            if (verseList.length > 0 && normSearchTerm.length > 2) {
-                sResults = app.normVerseList().reduce((results, ntext, aya) => {
-                    if (ntext.includes(normSearchTerm)) {
-                        results.push({
-                            aya,
-                            text: verseList[aya],
-                            ntext: ntext,
-                        });
-                    }
-                    return results;
-                }, []);
-            }
-            setResults(sResults);
-        },
-        [app]
-    );
 
     const renderResults = () => {
         // if (!results.length) {
