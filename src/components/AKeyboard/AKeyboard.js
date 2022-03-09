@@ -164,8 +164,9 @@ const AKeyboard = ({
                     if (ctrlKey) {
                         setTypedChar("ClearAll");
                         updateText("");
+                        break;
                     }
-                    break;
+                // eslint-disable-next-line no-fallthrough
                 default:
                     if (keyMap[code]) {
                         updateText(text.concat(keyMap[code][langIndex]));
