@@ -275,7 +275,7 @@ class PlayerProvider extends Component {
     onEnded = () => {
         const { audioState } = this.state;
         if (audioState !== AudioState.stopped) {
-            //   const ayaId = this.offsetPlayingAya(1);
+            this.offsetPlayingAya(1);
             this.play();
         }
     };
