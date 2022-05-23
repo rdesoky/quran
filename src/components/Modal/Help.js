@@ -23,8 +23,8 @@ const Help = () => {
                         values={{
                             email: (
                                 <div>
-                                    <a href="mailto:webmaster@muslim-web.com">
-                                        webmaster@muslim-web.com
+                                    <a href="mailto:quran.hafiz.app@gmail.com">
+                                        quran.hafiz.app@gmail.com
                                     </a>
                                 </div>
                             ),
