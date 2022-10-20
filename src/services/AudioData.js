@@ -648,10 +648,10 @@ const AudioServers = {
     everyayah: {
         cross_domains: true,
         mtype: 1,
-        link: "http://www.everyayah.com/data/{rkey}/{sura3}{aya3}.mp3",
+        link: "https://www.everyayah.com/data/{rkey}/{sura3}{aya3}.mp3",
         provider: "everyayah.com",
-        website: "http://www.everyayah.com",
-        download: "http://www.everyayah.com/data/{rkey}/",
+        website: "https://www.everyayah.com",
+        download: "https://www.everyayah.com/data/{rkey}/",
     },
 
     egylist_vaudio: {
