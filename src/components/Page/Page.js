@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import "./Page.scss";
-import Spinner from "../Spinner/Spinner";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/App";
-import VerseLayout, { HifzSegments } from "./VerseLayout";
-import PageHeader from "./PageHeader";
-import Utils from "../../services/utils";
 import QData from "../../services/QData";
+import Utils from "../../services/utils";
+import Spinner from "../Spinner/Spinner";
+import "./Page.scss";
+import PageHeader from "./PageHeader";
+import VerseLayout, { HifzSegments } from "./VerseLayout";
 
 const Page = ({
     index: pageIndex,
@@ -25,9 +25,9 @@ const Page = ({
         app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     const pageWidth = app.pageWidth();
-    let setImageTimeout;
     //Handle pageIndex update
     useEffect(() => {
+        let setImageTimeout;
         setImageUrl(null);
         const pgIndex = pageIndex;
         Utils.downloadPageImage(pgIndex)
