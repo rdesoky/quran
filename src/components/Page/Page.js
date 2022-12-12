@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { AppContext } from "../../context/App";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
+import { selectPagesCount } from "../../store/appSlice";
 import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
 import PageHeader from "./PageHeader";
@@ -20,9 +22,10 @@ const Page = ({
     const app = useContext(AppContext);
     const [imageUrl, setImageUrl] = useState(null);
     const [versesInfo, setVerseInfo] = useState([]);
+    const pagesCount = useSelector(selectPagesCount);
 
     let textAlign =
-        app.pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+        pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     const pageWidth = app.pageWidth();
     //Handle pageIndex update

@@ -1,19 +1,20 @@
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-import React, { useContext, useState, useEffect, memo } from "react";
-import { FormattedMessage as String } from "react-intl";
-import QData from "./../services/QData";
-import { AppContext } from "./../context/App";
-import { PlayerContext } from "./../context/Player";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faPlayCircle,
     faCheck,
     faLightbulb,
+    faPlayCircle,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { VerseText } from "./Widgets";
-import { ThemeContext } from "../context/Theme";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { memo, useContext, useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useSelector } from "react-redux";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import { analytics } from "../services/Analytics";
+import { selectLang, selectPagesCount } from "../store/appSlice";
+import { AppContext } from "./../context/App";
+import { PlayerContext } from "./../context/Player";
+import QData from "./../services/QData";
+import { VerseText } from "./Widgets";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
@@ -27,12 +28,14 @@ const HifzRange = ({
 }) => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
-    const theme = useContext(ThemeContext);
+    // const theme = useContext(ThemeContext);
     const [suraName, setSuraName] = useState("");
     const [rangeInfo, setRangeInfo] = useState("");
     // const [ageClass, setAgeClass] = useState("NoHifz");
     const [ageInfo, setAgeInfo] = useState("");
     const [actions, setActions] = useState(showActions);
+    const pagesCount = useSelector(selectPagesCount);
+    const lang = useSelector(selectLang);
 
     const suraInfo = QData.sura_info[range.sura];
 
@@ -85,7 +88,7 @@ const HifzRange = ({
         // setAgeClass(ageClass);
         setAgeInfo(ageInfo);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [range.date, theme.lang]);
+    }, [range.date, lang]);
 
     useEffect(() => {
         setActions(showActions);
@@ -148,7 +151,7 @@ const HifzRange = ({
     };
 
     const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
+        if (!app.isCompact && pagesCount === 1) {
             app.closePopup();
         }
         app.setMessageBox(null);

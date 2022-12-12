@@ -1,15 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
-import ThemeProvider from "./context/Theme";
 import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
-ReactDOM.render(
-    <ThemeProvider>
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <Provider store={store}>
         <App />
-    </ThemeProvider>,
-    document.getElementById("root")
+    </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change

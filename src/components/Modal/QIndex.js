@@ -21,6 +21,8 @@ import { TafseerView } from "./Tafseer";
 import { ThemeContext } from "../../context/Theme";
 import { AddHifz } from "./Favorites";
 import { analytics } from "../../services/Analytics";
+import { useSelector } from "react-redux";
+import { selectPagesCount } from "../../store/appSlice";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
@@ -305,12 +307,13 @@ export const SuraIndexCell = memo(
         simple,
         trigger = "chapters_index",
     }) => {
+        const pagesCount = useSelector(selectPagesCount);
         const app = useContext(AppContext);
         const player = useContext(PlayerContext);
         const [suraName, setSuraName] = useState("");
 
         const checkClosePopup = () => {
-            if (!app.isCompact && app.pagesCount === 1) {
+            if (!app.isCompact && pagesCount === 1) {
                 app.closePopup();
             }
         };
@@ -462,6 +465,7 @@ export const BookmarkListItem = ({
     trigger = "bookmarks",
 }) => {
     const app = useContext(AppContext);
+    const pagesCount = useSelector(selectPagesCount);
     const player = useContext(PlayerContext);
     const [verseText, setVerseText] = useState("");
     const [bookmarkDesc, setBookmarkDesc] = useState("");
@@ -488,7 +492,7 @@ export const BookmarkListItem = ({
     }, [app, verse]);
 
     const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
+        if (!app.isCompact && pagesCount === 1) {
             app.closePopup();
         }
     };

@@ -286,15 +286,15 @@ const CommandButton = ({
             //         app.toggleBookmark();
             //         break;
             //     }
-            default:
+            default: //already calls pushRecentCommand()
                 analytics.logEvent(`show_${command.toLowerCase()}`, {
                     trigger,
                 });
-                app.setPopup(command); //already calls pushRecentCommand()
+                app.setPopup(command);
                 return;
         }
         app.pushRecentCommand(command);
-        // if (app.pagesCount == 1) {
+        // if (pagesCount == 1) {
         //     app.closePopup();
         // }
         app.setShowMenu(false);

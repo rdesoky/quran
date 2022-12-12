@@ -1,9 +1,11 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { FormattedMessage as String } from "react-intl";
+import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { AppContext } from "../../context/App";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
+import { selectPagesCount } from "../../store/appSlice";
 import { AddHifz } from "../Modal/Favorites";
 import Page from "../Page/Page";
 import { analytics } from "./../../services/Analytics";
@@ -28,6 +30,7 @@ const REPLACE = true;
 
 function Pager({ match }) {
     const app = useContext(AppContext);
+    const pagesCount = useSelector(selectPagesCount);
     let pageIndex = 0;
 
     let { page } = match.params;
@@ -38,7 +41,7 @@ function Pager({ match }) {
 
     const pageUp = useCallback(
         (e) => {
-            let count = app.popup && !app.isWide ? 1 : app.pagesCount;
+            let count = app.popup && !app.isWide ? 1 : pagesCount;
             if (count > 1 && pageIndex % 2 === 0) {
                 count = 1; //right page is active
             }
@@ -46,12 +49,12 @@ function Pager({ match }) {
             "object" == typeof e && e.stopPropagation();
             analytics.logEvent("nav_prev_page");
         },
-        [app, pageIndex]
+        [app, pageIndex, pagesCount]
     );
 
     const pageDown = useCallback(
         (e) => {
-            let count = app.popup && !app.isWide ? 1 : app.pagesCount;
+            let count = app.popup && !app.isWide ? 1 : pagesCount;
             if (count > 1 && pageIndex % 2 === 1) {
                 count = 1; //left page is active
             }
@@ -59,20 +62,20 @@ function Pager({ match }) {
             "object" == typeof e && e.stopPropagation();
             analytics.logEvent("nav_next_page");
         },
-        [app, pageIndex]
+        [app, pageIndex, pagesCount]
     );
 
     //ComponentDidUpdate
     useEffect(() => {
         //cache next pages
         const pageIndex = match.params.page - 1;
-        if (app.pagesCount === 1) {
+        if (pagesCount === 1) {
             Utils.downloadPageImage(pageIndex + 1).catch((e) => {});
         } else {
             Utils.downloadPageImage(pageIndex + 2).catch((e) => {});
             Utils.downloadPageImage(pageIndex + 3).catch((e) => {});
         }
-    }, [app.pagesCount, match.params.page]);
+    }, [pagesCount, match.params.page]);
 
     const handleWheel = (e) => {
         if (e.deltaY > 0) {
@@ -121,7 +124,7 @@ function Pager({ match }) {
                 let maskNewPageNum = QData.ayaIdPage(maskStart + 1) + 1;
                 if (maskNewPageNum !== currPageNum) {
                     //Mask would move to a new page
-                    if (app.pagesCount === 1 || maskNewPageNum % 2 === 1) {
+                    if (pagesCount === 1 || maskNewPageNum % 2 === 1) {
                         return; //Don't change page
                     }
                     app.gotoPage(maskNewPageNum, REPLACE);
@@ -131,7 +134,7 @@ function Pager({ match }) {
             }
             e.stopPropagation();
         },
-        [app, match.params.page, offsetSelection]
+        [app, match.params.page, offsetSelection, pagesCount]
     );
 
     const decrement = useCallback(
@@ -150,7 +153,7 @@ function Pager({ match }) {
                 if (maskNewPageNum !== parseInt(match.params.page)) {
                     //Mask would move to a new page
                     app.gotoPage(maskNewPageNum, REPLACE);
-                    if (app.pagesCount === 1 || maskNewPageNum % 2 === 0) {
+                    if (pagesCount === 1 || maskNewPageNum % 2 === 0) {
                         return; //Don't move mask
                     }
                 }
@@ -160,7 +163,7 @@ function Pager({ match }) {
             }
             e.stopPropagation();
         },
-        [app, match.params.page, offsetSelection]
+        [app, match.params.page, offsetSelection, pagesCount]
     );
 
     const handleKeyDown = useCallback(
@@ -319,8 +322,6 @@ function Pager({ match }) {
         app.expandedMenu,
         handleKeyDown,
     ]);
-
-    const pagesCount = app.pagesCount;
 
     const renderPage = (order, shiftX, scaleX) => {
         if (pagesCount < order + 1) {

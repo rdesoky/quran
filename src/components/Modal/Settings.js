@@ -7,16 +7,25 @@ import { ListReciters } from "./../../services/AudioData";
 import Switch from "react-switch";
 import { VerseInfo } from "./../Widgets";
 import { PlayerButtons } from "./../AudioPlayer/AudioPlayer";
-import { ThemeContext } from "../../context/Theme";
 import { SettingsContext } from "../../context/Settings";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
 import { analytics } from "../../services/Analytics";
+import {
+    selectLang,
+    selectTheme,
+    setLang,
+    setTheme,
+} from "../../store/appSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Settings = () => {
     const player = useContext(PlayerContext);
     const app = useContext(AppContext);
-    const theme = useContext(ThemeContext);
+    const lang = useSelector(selectLang);
+    const theme = useSelector(selectTheme);
+    const dispatch = useDispatch();
+    // const theme = useContext(ThemeContext);
     // const settings = useContext(SettingsContext);
     let popupBody;
     // let selectRepeat;
@@ -57,13 +66,14 @@ const Settings = () => {
 
     const updateTheme = (checked) => {
         const theme_name = checked ? "Dark" : "Default";
-        theme.setTheme(theme_name);
+        dispatch(setTheme(theme_name));
+        localStorage.setItem("theme", theme_name);
         analytics.logEvent("set_theme", { theme_name, trigger: app.popup });
     };
 
     const updateLang = ({ currentTarget }) => {
         const lang = currentTarget.value;
-        theme.setLang(currentTarget.value);
+        dispatch(setLang(lang));
         analytics.logEvent("set_lang", { lang, trigger: app.popup });
     };
 
@@ -94,7 +104,7 @@ const Settings = () => {
                         <span>
                             <Icon icon={faLanguage} />
                         </span>
-                        <select onChange={updateLang} value={theme.lang}>
+                        <select onChange={updateLang} value={lang}>
                             <option value="ar">عربي</option>
                             <option value="en">English</option>
                         </select>
@@ -110,7 +120,7 @@ const Settings = () => {
                             height={22}
                             width={42}
                             onChange={updateTheme}
-                            checked={theme.theme === "Dark"}
+                            checked={theme === "Dark"}
                         />
                     </label>
                 </div>
