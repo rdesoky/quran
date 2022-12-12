@@ -87,7 +87,6 @@ const HifzRange = ({
 
         // setAgeClass(ageClass);
         setAgeInfo(ageInfo);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [range.date, lang]);
 
     useEffect(() => {

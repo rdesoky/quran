@@ -20,12 +20,7 @@ const initSidebarCommands = [
 const initialState = {
     theme: localStorage.getItem("theme") || "Default",
     lang: localStorage.getItem("lang") || "ar",
-    messageBox: false,
-    contextPopup: false,
     user: null,
-    toastMessage: null,
-    expandedMenu: false,
-    modalPopup: false,
     hifzRanges: [],
     bookmarks: [],
     daily: {
@@ -42,9 +37,6 @@ const initialState = {
     displayMode: 0, //0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
     app_size: "two_pages",
     showMenu: false,
-    popup: null,
-    popupParams: {},
-    showPopup: false,
     selectStart: 0,
     selectEnd: 0,
     maskStart: -1,
@@ -66,9 +58,6 @@ const appSlice = createSlice({
             slice.theme = slice.theme === "Default" ? "Dark" : "Default";
         },
 
-        setUser: (slice, action) => {
-            slice.user = action.payload;
-        },
         onResize: (slice, { payload: { width, height } }) => {
             slice.appWidth = width;
             slice.appHeight = height;
@@ -112,5 +101,4 @@ export const selectAppSize = (state) => state[sliceName].app_size;
 export const selectLang = (state) => state[sliceName].lang;
 export const selectTheme = (state) => state[sliceName].theme;
 
-export const { setTheme, setLang, toggleTheme, setUser, onResize } =
-    appSlice.actions;
+export const { setTheme, setLang, toggleTheme, onResize } = appSlice.actions;

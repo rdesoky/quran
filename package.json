@@ -19,7 +19,7 @@
         "react-intl": "^2.9.0",
         "react-redux": "^8.0.5",
         "react-router-dom": "^5.0.1",
-        "react-scripts": "3.0.1",
+        "react-scripts": "^5.0.1",
         "react-switch": "^7.0.0",
         "react-touch": "^0.4.4",
         "recharts": "^2.2.0"
@@ -31,9 +31,6 @@
         "eject": "react-scripts eject",
         "predeploy": "yarn run build",
         "deploy": "gh-pages -d build"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
     },
     "browserslist": {
         "production": [

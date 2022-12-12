@@ -5,7 +5,6 @@ import Utils from "./../services/utils";
 import firebase from "firebase";
 import { analytics } from "./../services/Analytics";
 import { injectIntl } from "react-intl";
-import { ThemeConsumer } from "./Theme";
 
 // const rc = localStorage.getItem("commands");
 // const recentCommands = rc ? JSON.parse(rc) : [];
@@ -893,9 +892,9 @@ class AppProvider extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.themeContext.lang !== this.props.themeContext.lang) {
-            this._suraNames = undefined;
-        }
+        // if (prevProps.themeContext.lang !== this.props.themeContext.lang) {
+        this._suraNames = undefined; //reset names cache
+        // }
     }
 
     componentDidMount() {
@@ -971,5 +970,5 @@ const AppConsumer = (Component) =>
         );
     };
 
-export default injectIntl(withRouter(ThemeConsumer(AppProvider)));
+export default injectIntl(withRouter(AppProvider));
 export { AppContext, AppConsumer };

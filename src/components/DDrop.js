@@ -79,8 +79,8 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             rootElement.removeEventListener("touchmove", onTouchMove);
             rootElement.removeEventListener("touchend", onMouseUp);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <div
             className="DDrop"
