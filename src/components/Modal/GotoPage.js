@@ -47,7 +47,6 @@ const GotoPage = ({ open, app, player }) => {
         return () => {
             // document.body.focus();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const stopAudio = () => {

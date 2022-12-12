@@ -7,7 +7,6 @@ import { ListReciters } from "./../../services/AudioData";
 import Switch from "react-switch";
 import { VerseInfo } from "./../Widgets";
 import { PlayerButtons } from "./../AudioPlayer/AudioPlayer";
-import { SettingsContext } from "../../context/Settings";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
 import { analytics } from "../../services/Analytics";
@@ -18,6 +17,14 @@ import {
     setTheme,
 } from "../../store/appSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+    selectExerciseLevel,
+    selectExerciseMemorized,
+    selectRandomAutoRecite,
+    setExerciseLevel,
+    setExerciseMemorized,
+    setRandomAutoRecite,
+} from "../../store/settingsSlice";
 
 const Settings = () => {
     const player = useContext(PlayerContext);
@@ -25,10 +32,8 @@ const Settings = () => {
     const lang = useSelector(selectLang);
     const theme = useSelector(selectTheme);
     const dispatch = useDispatch();
-    // const theme = useContext(ThemeContext);
-    // const settings = useContext(SettingsContext);
+
     let popupBody;
-    // let selectRepeat;
 
     const recitersList = ListReciters("ayaAudio");
     const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
@@ -227,19 +232,26 @@ const Settings = () => {
 
 export const ExerciseSettings = () => {
     const app = useContext(AppContext);
-    const settings = useContext(SettingsContext);
+    const dispatch = useDispatch();
+    const exerciseLevel = useSelector(selectExerciseLevel);
+    const randomAutoRecite = useSelector(selectRandomAutoRecite);
+    const exerciseMemorized = useSelector(selectExerciseMemorized);
 
     const updateExerciseLevel = ({ currentTarget }) => {
         const exerciseLevel = parseInt(currentTarget.value);
-        settings.setExerciseLevel(exerciseLevel);
+        // settings.setExerciseLevel(exerciseLevel);
+        dispatch(setExerciseLevel(exerciseLevel));
+        localStorage.setItem("exerciseLevel", exerciseLevel);
     };
 
     const updateExerciseMemorized = (checked) => {
-        settings.setExerciseMemorized(checked);
+        dispatch(setExerciseMemorized(checked));
+        localStorage.setItem("exerciseMemorized", checked);
     };
 
     const updateRandomAutoRecite = (checked) => {
-        settings.setRandomAutoRecite(checked);
+        dispatch(setRandomAutoRecite(checked));
+        localStorage.setItem("randomAutoRecite", checked);
     };
 
     return (
@@ -249,7 +261,7 @@ export const ExerciseSettings = () => {
                     <String id="exercise_level" />
                     <select
                         onChange={updateExerciseLevel}
-                        value={settings.exerciseLevel}
+                        value={exerciseLevel}
                     >
                         <option value={0}>
                             {app.intl.formatMessage({
@@ -281,7 +293,7 @@ export const ExerciseSettings = () => {
                         height={22}
                         width={42}
                         onChange={updateExerciseMemorized}
-                        checked={settings.exerciseMemorized}
+                        checked={exerciseMemorized || false}
                     />
                 </label>
             </div>
@@ -294,7 +306,7 @@ export const ExerciseSettings = () => {
                         height={22}
                         width={42}
                         onChange={updateRandomAutoRecite}
-                        checked={settings.randomAutoRecite}
+                        checked={randomAutoRecite || false}
                     />
                 </label>
             </div>

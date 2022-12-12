@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
@@ -15,13 +14,18 @@ import {
 import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
-import { SettingsContext } from "../../context/Settings";
+
 import QData from "../../services/QData";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
 import { ExerciseSettings } from "./Settings";
 import { useSelector } from "react-redux";
 import { selectPagesCount } from "../../store/appSlice";
+import {
+    selectExerciseLevel,
+    selectExerciseMemorized,
+    selectRandomAutoRecite,
+} from "../../store/settingsSlice";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -37,7 +41,11 @@ const Step = {
 const Exercise = () => {
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
-    const settings = useContext(SettingsContext);
+
+    const exerciseLevel = useSelector(selectExerciseLevel);
+    const randomAutoRecite = useSelector(selectRandomAutoRecite);
+    const exerciseMemorized = useSelector(selectExerciseMemorized);
+
     const [currStep, setCurrStep] = useState(Step.unknown);
     const [verse, setVerse] = useState(app.selectStart);
     const [duration, setDuration] = useState(-1);
@@ -59,7 +67,7 @@ const Exercise = () => {
     const checkVerseLevel = (new_verse) => {
         const text = app.verseText(new_verse);
         const length = text.length;
-        switch (parseInt(settings.exerciseLevel)) {
+        switch (parseInt(exerciseLevel)) {
             case 0:
                 if (!length.between(1, 50)) {
                     return false;
@@ -81,7 +89,7 @@ const Exercise = () => {
                 }
         }
         //Length is good, check memorized
-        if (settings.exerciseMemorized === false) {
+        if (exerciseMemorized === false) {
             const { sura, aya } = QData.ayaIdInfo(new_verse);
             const page = QData.ayaPage(sura, aya);
             const { hifzRanges } = app;
@@ -111,13 +119,13 @@ const Exercise = () => {
         // if (currStep === Step.intro && defaultButton) {
         //     defaultButton.focus();
         // }
-        if (settings.randomAutoRecite) {
+        if (randomAutoRecite) {
             startReciting(e);
         }
 
         analytics.logEvent("get_random_verse", {
             trigger,
-            level: settings.exerciseLevel,
+            level: exerciseLevel,
         });
     };
 

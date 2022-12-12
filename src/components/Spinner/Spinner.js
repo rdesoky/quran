@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Spinner.css";
-import { setState } from "expect/build/jestMatchersObject";
 
 function Spinner({ visible }) {
     const [show, setShow] = useState(false);
@@ -12,7 +11,7 @@ function Spinner({ visible }) {
             setShow(visible); //Delay showing the spinner to prevent flickering
             setTimeoutHandle(null);
         }, 300);
-        setState(timeoutHandle);
+        setTimeoutHandle(timeoutHandle);
     }, [visible]);
 
     useEffect(() => {
@@ -21,7 +20,6 @@ function Spinner({ visible }) {
                 clearTimeout(timeoutHandle);
             }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

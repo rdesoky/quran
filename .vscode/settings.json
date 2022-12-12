@@ -8,8 +8,9 @@
         "**/.factorypath": true
     },
     "editor.insertSpaces": false,
-	"prettier.tabWidth": 4,
-	"editor.detectIndentation": false,
-	"editor.renderWhitespace": "all",
-	"editor.useTabStops": false
+    "prettier.tabWidth": 4,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "editor.useTabStops": false,
+    "eslint.alwaysShowStatus": true
 }

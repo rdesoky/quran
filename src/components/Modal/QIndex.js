@@ -1,32 +1,31 @@
-import React, { useState, useEffect, useContext, memo } from "react";
-import QData from "../../services/QData";
-import { FormattedMessage as String } from "react-intl";
-import { AppContext } from "../../context/App";
-import { PlayerContext } from "../../context/Player";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faTimes as faDelete,
     faBookmark,
-    faPlayCircle,
+    faEllipsisH,
+    faFileDownload,
     faHeart,
     faListAlt,
-    faEllipsisH,
-    faTimes,
-    faFileDownload,
+    faPlayCircle,
     faQuran,
+    faTimes as faDelete,
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { memo, useContext, useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useSelector } from "react-redux";
+import { AppContext } from "../../context/App";
+import { PlayerContext } from "../../context/Player";
+import { analytics } from "../../services/Analytics";
+import QData from "../../services/QData";
+import { selectLang, selectPagesCount } from "../../store/appSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
-import { TafseerView } from "./Tafseer";
-import { ThemeContext } from "../../context/Theme";
 import { AddHifz } from "./Favorites";
-import { analytics } from "../../services/Analytics";
-import { useSelector } from "react-redux";
-import { selectPagesCount } from "../../store/appSlice";
+import { TafseerView } from "./Tafseer";
 
 const QIndex = ({ simple }) => {
     const app = useContext(AppContext);
-    const theme = useContext(ThemeContext);
+    const lang = useSelector(selectLang);
     const [keyboard, setKeyboard] = useState(false);
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem("activeTab") || "index"
@@ -139,7 +138,7 @@ const QIndex = ({ simple }) => {
                 onUpdateText={updateFilter}
                 onEnter={hideKeyboard}
                 onCancel={hideKeyboard}
-                lang={theme.lang}
+                lang={lang}
             />
 
             <div
@@ -176,7 +175,6 @@ export const PartCell = ({ part, selected }) => {
         if (selected === part && btn) {
             btn.focus();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected]);
     return (
         <li className="PartIndexCell">
