@@ -15,6 +15,8 @@ import {
     SuraContextHeader,
 } from "../Widgets";
 import { SuraList, PartsList } from "../Modal/QIndex";
+import { useSelector } from "react-redux";
+import { selectPagesCount } from "../../store/appSlice";
 
 const PageHeader = ({
     index: pageIndex,
@@ -28,6 +30,7 @@ const PageHeader = ({
     const partIndex = QData.pagePart(pageIndex + 1) - 1;
     const selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
     const suraIndex = QData.pageSura(pageIndex + 1);
+    const pagesCount = useSelector(selectPagesCount);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         analytics.logEvent("show_part_context", { trigger: "page_header" });
@@ -123,7 +126,7 @@ const PageHeader = ({
                 <div
                     className="PageHeaderSection"
                     style={{
-                        display: app.pagesCount === 1 || order ? "" : "none",
+                        display: pagesCount === 1 || order ? "" : "none",
                     }}
                 >
                     <button

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useDeferredValue } from "react";
 import "./App.scss";
 import Pager, { PageRedirect } from "./components/Pager/Pager";
 import {
@@ -10,16 +10,19 @@ import {
 import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider, addLocaleData } from "react-intl";
 import PopupView from "./components/Modal/PopupView";
-import { ThemeContext } from "./context/Theme";
 import AppProvider from "./context/App";
 import PlayerProvider from "./context/Player";
 import firebase from "firebase";
 import { analytics } from "./services/Analytics";
 import { ToastMessage, ContextPopup, MessageBox } from "./components/Widgets";
 import { SettingsProvider } from "./context/Settings";
-
-//import ar_strings from "./translations/ar.json"
-//import en_strings from "./translations/en.json"
+import { useDispatch, useSelector } from "react-redux";
+import {
+    onResize,
+    selectAppSize,
+    selectLang,
+    selectTheme,
+} from "./store/appSlice";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -46,78 +49,99 @@ analytics.setUserProps({ web_user: "yes" });
 
 function App() {
     //Handles componentDidMount/unmount, props changes
-    const [localeMessages, setLocaleMessages] = useState({});
+    const [localeMessages, setLocaleMessages] = useState();
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+    const deferredWindowSize = useDeferredValue(windowSize);
+    const app_size = useSelector(selectAppSize);
 
-    const themeContext = useContext(ThemeContext);
-    const lang = themeContext.lang;
+    // const themeContext = useContext(ThemeContext);
+    // const lang = themeContext.lang;
+    const dispatch = useDispatch();
+    const lang = useSelector(selectLang);
+    const theme = useSelector(selectTheme);
+
+    useEffect(() => {
+        analytics.setParams({ app_size });
+    }, [app_size]);
+
+    useEffect(() => {
+        dispatch(onResize(deferredWindowSize));
+        console.log("App: onResize", deferredWindowSize);
+    }, [deferredWindowSize, dispatch]);
 
     useEffect(() => {
         window.addEventListener("selectstart", (e) => {
             e.preventDefault();
         });
-    }, []);
-
-    // const localeMessages = require(`./translations/${lang}.json`);
-    //const localeData = require(`react-intl/locale-data/${lang}`);
+        window.addEventListener("resize", (e) => {
+            const { innerWidth: width, innerHeight: height } = e.target;
+            setWindowSize({ width, height });
+        });
+    }, [dispatch]);
 
     useEffect(() => {
         document.body.dir = lang === "en" ? "ltr" : "rtl";
         setLocaleMessages(require(`./translations/${lang}.json`));
-        // setLocaleData(require(`react-intl/locale-data/${lang}`));
         addLocaleData(require(`react-intl/locale-data/${lang}`));
-    }, [themeContext.lang, lang]);
+    }, [lang]);
 
     return (
-        <IntlProvider locale={lang} messages={localeMessages}>
-            <div className={"App " + themeContext.theme + "Theme"}>
-                <Router>
-                    <AppProvider>
-                        <SettingsProvider>
-                            <PlayerProvider>
-                                <Switch>
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL +
-                                            "/page/:page"
-                                        }
-                                        component={Pager}
-                                    />
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL +
-                                            "/sura/:sura/aya/:aya"
-                                        }
-                                        component={Pager}
-                                    />
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL + "/aya/:aya"
-                                        }
-                                        component={PageRedirect}
-                                    />
-                                    <Route
-                                        render={() => {
-                                            const defUrl =
+        localeMessages && (
+            <IntlProvider locale={lang} messages={localeMessages}>
+                <div className={"App " + theme + "Theme"}>
+                    <Router>
+                        <AppProvider>
+                            <SettingsProvider>
+                                <PlayerProvider>
+                                    <Switch>
+                                        <Route
+                                            path={
                                                 process.env.PUBLIC_URL +
-                                                "/page/1";
-                                            console.log(
-                                                `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                            );
-                                            return <Redirect to={defUrl} />;
-                                        }}
-                                    />
-                                </Switch>
-                                <Sidebar />
-                                <PopupView />
-                                <ToastMessage />
-                                <ContextPopup />
-                                <MessageBox />
-                            </PlayerProvider>
-                        </SettingsProvider>
-                    </AppProvider>
-                </Router>
-            </div>
-        </IntlProvider>
+                                                "/page/:page"
+                                            }
+                                            component={Pager}
+                                        />
+                                        <Route
+                                            path={
+                                                process.env.PUBLIC_URL +
+                                                "/sura/:sura/aya/:aya"
+                                            }
+                                            component={Pager}
+                                        />
+                                        <Route
+                                            path={
+                                                process.env.PUBLIC_URL +
+                                                "/aya/:aya"
+                                            }
+                                            component={PageRedirect}
+                                        />
+                                        <Route
+                                            render={() => {
+                                                const defUrl =
+                                                    process.env.PUBLIC_URL +
+                                                    "/page/1";
+                                                console.log(
+                                                    `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+                                                );
+                                                return <Redirect to={defUrl} />;
+                                            }}
+                                        />
+                                    </Switch>
+                                    <Sidebar />
+                                    <PopupView />
+                                    <ToastMessage />
+                                    <ContextPopup />
+                                    <MessageBox />
+                                </PlayerProvider>
+                            </SettingsProvider>
+                        </AppProvider>
+                    </Router>
+                </div>
+            </IntlProvider>
+        )
     );
 }
 

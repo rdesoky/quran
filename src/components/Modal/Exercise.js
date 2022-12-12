@@ -20,6 +20,8 @@ import QData from "../../services/QData";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
 import { ExerciseSettings } from "./Settings";
+import { useSelector } from "react-redux";
+import { selectPagesCount } from "../../store/appSlice";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -47,10 +49,11 @@ const Exercise = () => {
     const verseList = app.verseList();
     const normVerseList = app.normVerseList();
     const [quickMode, setQuickMode] = useState(0);
+    const pagesCount = useSelector(selectPagesCount);
     const trigger = "exercise";
 
     const isNarrowLayout = () => {
-        return !(app.isWide || app.isCompact || app.pagesCount > 1);
+        return !(app.isWide || app.isCompact || pagesCount > 1);
     };
 
     const checkVerseLevel = (new_verse) => {

@@ -3,9 +3,13 @@ import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppConsumer } from "./../../context/App";
 import { PlayerConsumer, AudioState } from "../../context/Player";
+import { useSelector } from "react-redux";
+import { selectPagesCount } from "../../store/appSlice";
 
 const GotoPage = ({ open, app, player }) => {
     // const [isOpen, setIsOpen] = useState(true);
+    const pagesCount = useSelector(selectPagesCount);
+
     const [pageNumber, updatePageNumber] = useState(
         QData.ayaIdPage(app.selectStart) + 1
     );
@@ -53,7 +57,7 @@ const GotoPage = ({ open, app, player }) => {
     };
 
     const checkClosePopup = () => {
-        if (!app.isCompact && app.pagesCount === 1) {
+        if (!app.isCompact && pagesCount === 1) {
             app.closePopup();
         }
     };

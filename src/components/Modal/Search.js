@@ -18,9 +18,12 @@ import {
     faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { analytics } from "../../services/Analytics";
+import { useSelector } from "react-redux";
+import { selectPagesCount } from "../../store/appSlice";
 
 export default function Search() {
     const app = useContext(AppContext);
+    const pagesCount = useSelector(selectPagesCount);
     const input = useRef(null);
     const [searchTerm, setSearchTerm] = useState(
         localStorage.getItem("LastSearch") || ""
@@ -119,7 +122,7 @@ export default function Search() {
         setkeyboard(false);
         let index = parseInt(target.getAttribute("sura"));
         app.gotoSura(index);
-        if (!app.isCompact && app.pagesCount === 1) {
+        if (!app.isCompact && pagesCount === 1) {
             app.closePopup();
         }
     };
@@ -131,7 +134,7 @@ export default function Search() {
             ...QData.verseLocation(aya),
         });
 
-        if (!app.isCompact && app.pagesCount === 1) {
+        if (!app.isCompact && pagesCount === 1) {
             app.closePopup();
         }
         setkeyboard(false);

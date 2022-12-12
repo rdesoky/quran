@@ -799,7 +799,7 @@ class AppProvider extends Component {
     onActivityUpdate = null;
     onHifzUpdate = null;
 
-    readFireData() {
+    readFireData(user) {
         //unregister previous listener if exists
         if (this.bookmarksRef && this.onBookmarkUpdate) {
             this.bookmarksRef.off("value", this.onBookmarkUpdate);
@@ -812,7 +812,7 @@ class AppProvider extends Component {
             this.hifzRef.off("value", this.onActivityUpdate);
         }
 
-        this.userRef = this.dbRef.child(`data/${this.state.user.uid}`);
+        this.userRef = this.dbRef.child(`data/${user.uid}`);
         //Create new references
         this.hifzRef = this.userRef.child(`hifz`);
         this.bookmarksRef = this.userRef.child(`aya_marks`);
@@ -907,7 +907,7 @@ class AppProvider extends Component {
                     //sign in anonymously
                     firebase.auth().signInAnonymously();
                 } else {
-                    this.readFireData();
+                    this.readFireData(user);
                     // console.log(`Logged in userId ${JSON.stringify(user)}`);
                 }
             });
