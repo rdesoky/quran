@@ -6,25 +6,31 @@ import React, {
   useCallback,
 } from "react";
 import QData from "../../services/QData";
-import {FormattedMessage as String} from "react-intl";
-import {AppContext} from "./../../context/App";
+import { FormattedMessage as String } from "react-intl";
+import { AppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faTimes,
   faIndent,
   faCopy,
 } from "@fortawesome/free-solid-svg-icons";
-import {analytics} from "../../services/Analytics";
-import {useSelector} from "react-redux";
-import {selectPagesCount, selectPopupWidth} from "../../store/appSlice";
-import {quranNormalizedText, quranText} from "../../App";
+import { analytics } from "../../services/Analytics";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAppHeight,
+  selectIsCompact,
+  selectPagesCount,
+  selectPopupWidth,
+} from "../../store/appSlice";
+import { quranNormalizedText, quranText } from "../../App";
+import { closePopup } from "../../store/uiSlice";
 
 export default function Search() {
   const app = useContext(AppContext);
-  const popupWidth = useSelector(selectPopupWidth)
+  const popupWidth = useSelector(selectPopupWidth);
   const pagesCount = useSelector(selectPagesCount);
   const input = useRef(null);
   const [searchTerm, setSearchTerm] = useState(
@@ -35,11 +41,14 @@ export default function Search() {
   );
   const [results, setResults] = useState([]);
   const [pages, setPages] = useState(1);
-  const [keyboard, setkeyboard] = useState(false);
+  const [keyboard, setKeyboard] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(0);
   const [treeView, setTreeView] = useState(
     localStorage.getItem("searchTreeView") === "1"
   );
+  const appHeight = useSelector(selectAppHeight);
+  const isCompact = useSelector(selectIsCompact);
+  const dispatch = useDispatch();
 
   let resultsDiv;
 
@@ -52,10 +61,10 @@ export default function Search() {
   };
 
   const showKeyboard = (e) => {
-    setkeyboard(true);
+    setKeyboard(true);
   };
   const hideKeyboard = (e) => {
-    setkeyboard(false);
+    setKeyboard(false);
   };
 
   const doSearch = useCallback(
@@ -119,13 +128,13 @@ export default function Search() {
   };
 
   //TODO: duplicate code with QIndex
-  const gotoSura = ({target}) => {
+  const gotoSura = ({ target }) => {
     app.hideMask();
-    setkeyboard(false);
+    setKeyboard(false);
     let index = parseInt(target.getAttribute("sura"));
     app.gotoSura(index);
-    if (!app.isCompact && pagesCount === 1) {
-      app.closePopup();
+    if (!isCompact && pagesCount === 1) {
+      dispatch(closePopup());
     }
   };
 
@@ -136,11 +145,11 @@ export default function Search() {
       ...QData.verseLocation(aya),
     });
 
-    if (!app.isCompact && pagesCount === 1) {
-      app.closePopup();
+    if (!isCompact && pagesCount === 1) {
+      dispatch(closePopup());
     }
-    setkeyboard(false);
-    app.gotoAya(parseInt(aya), {sel: true});
+    setKeyboard(false);
+    app.gotoAya(parseInt(aya), { sel: true });
     addToSearchHistory();
     e.preventDefault();
   };
@@ -148,18 +157,15 @@ export default function Search() {
   const renderMore = () => {
     if (results.length > pages * 20) {
       return (
-        <button
-          className="MoreResults"
-          onClick={(e) => setPages(pages + 1)}
-        >
-          <String id="more"/>
+        <button className="MoreResults" onClick={(e) => setPages(pages + 1)}>
+          <String id="more" />
           ...
         </button>
       );
     }
   };
 
-  const toggleGroup = ({currentTarget}) => {
+  const toggleGroup = ({ currentTarget }) => {
     const groupId = parseInt(currentTarget.getAttribute("group-index"));
     if (groupId !== undefined) {
       setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
@@ -179,9 +185,9 @@ export default function Search() {
       return null;
     }
 
-    const nSuraNames = Utils.normalizeText(
-      QData.arSuraNames.join(",")
-    ).split(",");
+    const nSuraNames = Utils.normalizeText(QData.arSuraNames.join(",")).split(
+      ","
+    );
 
     return (
       <ul
@@ -193,13 +199,12 @@ export default function Search() {
       >
         {QData.arSuraNames
           .map((suraName, index) => {
-            return {name: suraName, index: index};
+            return { name: suraName, index: index };
           })
           .filter(
             (suraInfo) =>
-              nSuraNames[suraInfo.index].match(
-                new RegExp(nSearchTerm, "i")
-              ) !== null
+              nSuraNames[suraInfo.index].match(new RegExp(nSearchTerm, "i")) !==
+              null
             // nSuraNames[suraInfo.index].indexOf(
             //     nSearchTerm
             // ) !== -1
@@ -222,14 +227,14 @@ export default function Search() {
   };
 
   const copyVerse = (e) => {
-    const {currentTarget} = e;
+    const { currentTarget } = e;
     const verse = currentTarget.getAttribute("verse");
     const verseInfo = QData.ayaIdInfo(verse);
     const text = quranText?.[verse];
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
-    app.showToast(app.intl.formatMessage({id: "text_copied"}));
+    app.showToast(app.intl.formatMessage({ id: "text_copied" }));
     e.stopPropagation();
 
     analytics.logEvent("copy_text", {
@@ -241,13 +246,13 @@ export default function Search() {
 
   const renderResultsTree = () => {
     const groups = results.reduce((groups, ayaInfo, index) => {
-      const {sura, aya} = QData.ayaIdInfo(ayaInfo.aya);
+      const { sura, aya } = QData.ayaIdInfo(ayaInfo.aya);
       let group = groups.find((g) => g.sura === sura);
-      const ayaInfoEx = {...ayaInfo, ayaNum: aya + 1};
+      const ayaInfoEx = { ...ayaInfo, ayaNum: aya + 1 };
       if (group) {
         group.verses.push(ayaInfoEx);
       } else {
-        groups.push({sura, verses: [ayaInfoEx]});
+        groups.push({ sura, verses: [ayaInfoEx] });
       }
       return groups;
     }, []);
@@ -260,16 +265,13 @@ export default function Search() {
           resultsDiv = ref;
         }}
       >
-        {groups.map(({sura, verses}, i) => {
+        {groups.map(({ sura, verses }, i) => {
           const expanded = expandedGroup === i;
 
           return (
             <div
               key={i}
-              className={"ResultsGroup".appendWord(
-                "Expanded",
-                expanded
-              )}
+              className={"ResultsGroup".appendWord("Expanded", expanded)}
             >
               <button
                 className="ResultsGroupHeader"
@@ -277,20 +279,18 @@ export default function Search() {
                 onClick={toggleGroup}
                 tabIndex="0"
               >
-                                <span className="ParaId Chapter">
-                                    {verses.length}
-                                </span>
+                <span className="ParaId Chapter">{verses.length}</span>
                 {sura + 1}.{app.suraName(sura)}
               </button>
               {!expanded ? null : (
                 <div className="ResultsGroupList">
                   {verses.map(
                     ({
-                       aya,
-                       ayaNum,
-                       text: ayaText,
-                       ntext: normalizedAyaText,
-                     }) => (
+                      aya,
+                      ayaNum,
+                      text: ayaText,
+                      ntext: normalizedAyaText,
+                    }) => (
                       <button
                         key={aya}
                         className="ResultItem"
@@ -298,9 +298,7 @@ export default function Search() {
                         tabIndex="0"
                         aya={aya}
                       >
-                                                <span className="ParaId Verse">
-                                                    {ayaNum}
-                                                </span>
+                        <span className="ParaId Verse">{ayaNum}</span>
                         <span
                           className="ResultText link"
                           dangerouslySetInnerHTML={Utils.hilightSearch(
@@ -309,11 +307,7 @@ export default function Search() {
                             normalizedAyaText
                           )}
                         />
-                        <Icon
-                          onClick={copyVerse}
-                          icon={faCopy}
-                          verse={aya}
-                        />
+                        <Icon onClick={copyVerse} icon={faCopy} verse={aya} />
                       </button>
                     )
                   )}
@@ -339,39 +333,32 @@ export default function Search() {
           resultsDiv = ref;
         }}
       >
-        {page.map(
-          ({aya, text: ayaText, ntext: normalizedAyaText}, i) => {
-            const ayaInfo = QData.ayaIdInfo(aya);
-            return (
-              <button
-                key={aya}
-                onClick={gotoAya}
-                aya={aya}
-                className="ResultItem"
-                tabIndex="0"
-              >
-                                <span className="ResultInfo">
-                                    {ayaInfo.sura + 1}.
-                                  {app.suraName(ayaInfo.sura)} (
-                                  {ayaInfo.aya + 1})
-                                </span>
-                <span
-                  className="ResultText link"
-                  dangerouslySetInnerHTML={Utils.hilightSearch(
-                    nSearchTerm,
-                    ayaText,
-                    normalizedAyaText
-                  )}
-                />
-                <Icon
-                  onClick={copyVerse}
-                  icon={faCopy}
-                  verse={aya}
-                />
-              </button>
-            );
-          }
-        )}
+        {page.map(({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
+          const ayaInfo = QData.ayaIdInfo(aya);
+          return (
+            <button
+              key={aya}
+              onClick={gotoAya}
+              aya={aya}
+              className="ResultItem"
+              tabIndex="0"
+            >
+              <span className="ResultInfo">
+                {ayaInfo.sura + 1}.{app.suraName(ayaInfo.sura)} (
+                {ayaInfo.aya + 1})
+              </span>
+              <span
+                className="ResultText link"
+                dangerouslySetInnerHTML={Utils.hilightSearch(
+                  nSearchTerm,
+                  ayaText,
+                  normalizedAyaText
+                )}
+              />
+              <Icon onClick={copyVerse} icon={faCopy} verse={aya} />
+            </button>
+          );
+        })}
         {renderMore()}
       </div>
     );
@@ -379,7 +366,7 @@ export default function Search() {
 
   const onHistoryButtonClick = (e) => {
     const searchTerm = e.target.textContent;
-    setkeyboard(false);
+    setKeyboard(false);
     setSearchTerm(searchTerm);
     doSearch(searchTerm);
     analytics.logEvent("search_text", {
@@ -390,7 +377,7 @@ export default function Search() {
 
   useEffect(() => {
     doSearch(searchTerm);
-    setExpandedGroup(0);
+    // setExpandedGroup(0);
   }, [doSearch, searchTerm]);
 
   const onSubmitSearch = (txt) => {
@@ -400,7 +387,7 @@ export default function Search() {
       firstResult.focus();
       addToSearchHistory();
     }
-    setkeyboard(false);
+    setKeyboard(false);
   };
 
   const renderKeyboard = () => {
@@ -437,14 +424,14 @@ export default function Search() {
 
   const renderTypedText = () => {
     if (!searchTerm) {
-      return <String id="search_prompt"/>;
+      return <String id="search_prompt" />;
     }
     return (
       <>
         {searchTerm}
         {renderCursor()}
         <div className="ClearButton" onClick={clearSearch}>
-          <Icon icon={faTimes}/>
+          <Icon icon={faTimes} />
         </div>
       </>
     );
@@ -458,16 +445,14 @@ export default function Search() {
       <div className="Title">
         <div
           ref={input}
-          className={
-            "TypingConsole" + (!searchTerm.length ? " empty" : "")
-          }
+          className={"TypingConsole" + (!searchTerm.length ? " empty" : "")}
           tabIndex="0"
           onClick={showKeyboard}
         >
           {renderTypedText()}
         </div>
         <button className="CommandButton" onClick={onSubmitSearch}>
-          <Icon icon={faSearch}/>
+          <Icon icon={faSearch} />
         </button>
       </div>
       <div id="SearchHistory">
@@ -479,27 +464,21 @@ export default function Search() {
           );
         })}
       </div>
-      <div className="ResultsInfo" style={{height: resultsInfoHeight}}>
+      <div className="ResultsInfo" style={{ height: resultsInfoHeight }}>
         {results.length ? (
           <button
             id="SearchViewToggler"
             className={"TreeToggler".appendWord("active", treeView)}
             onClick={toggleTreeView}
           >
-            <Icon icon={faIndent}/>
+            <Icon icon={faIndent} />
           </button>
         ) : null}
         <String className="SuraTitle" id="results_for">
           {(resultsFor) => {
             if (searchTerm.length) {
               return (
-                <>
-                  {results.length +
-                    " " +
-                    resultsFor +
-                    " " +
-                    searchTerm}
-                </>
+                <>{results.length + " " + resultsFor + " " + searchTerm}</>
               );
             }
             return null;
@@ -511,7 +490,7 @@ export default function Search() {
         onTouchStart={hideKeyboard}
         onMouseDown={hideKeyboard}
         style={{
-          height: app.appHeight - formHeight - 11, // footer + padding + formMargins
+          height: appHeight - formHeight - 11, // footer + padding + formMargins
         }}
       >
         {renderSuras()}

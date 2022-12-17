@@ -1,29 +1,35 @@
 import React from "react";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import {AppConsumer} from "../../context/App";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { AppConsumer } from "../../context/App";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectActiveSide,
   selectAppWidth,
   selectIsCompact,
+  selectIsNarrow,
   selectIsWide,
   selectPagerWidth,
-  selectPagesCount
+  selectPagesCount,
 } from "../../store/appSlice";
-import {useLocation} from "react-router-dom";
-import {getCurrentPageNumber} from "../../services/utils";
+import { useLocation } from "react-router-dom";
+import { getCurrentPageNumber } from "../../services/utils";
+import { selectSidebarWidth } from "../../store/uiSlice";
 
-const Modal = ({onClose, children, app, show, name, modeless}) => {
+const Modal = ({ onClose, children, app, show, name, modeless }) => {
   const pagerWidth = useSelector(selectPagerWidth);
   const location = useLocation();
-  const activeSide = useSelector(selectActiveSide(getCurrentPageNumber(location)));
+  const activeSide = useSelector(
+    selectActiveSide(getCurrentPageNumber(location))
+  );
   const isCompact = useSelector(selectIsCompact);
   const isWide = useSelector(selectIsWide);
   const appWidth = useSelector(selectAppWidth);
   const pagesCount = useSelector(selectPagesCount);
+  const isNarrow = useSelector(selectIsNarrow);
+  const sidebarWidth = useSelector(selectSidebarWidth);
 
   const onClickClose = (e) => {
     if (typeof onClose === "function") {
@@ -52,7 +58,6 @@ const Modal = ({onClose, children, app, show, name, modeless}) => {
   //     };
   // }, []);
 
-  const sideBarWidth = app.sideBarWidth();
   // const {isCompact, isWide, appWidth, pagesCount} = app;
 
   const calcLeft = () => {
@@ -64,7 +69,7 @@ const Modal = ({onClose, children, app, show, name, modeless}) => {
       return pagerWidth;
     }
     if (pagesCount === 2 && activeSide === 0) {
-      return appWidth - pagerWidth / 2 - sideBarWidth;
+      return appWidth - pagerWidth / 2 - sidebarWidth;
     }
     return 0;
   };
@@ -80,8 +85,8 @@ const Modal = ({onClose, children, app, show, name, modeless}) => {
         id={`${name}Popup`}
         className={"ModalOverlay".appendWord("modal", app.modalPopup)}
         style={{
-          left: app.isNarrow ? 0 : 51,
-          zIndex: app.isNarrow ? 3 : 1,
+          left: isNarrow ? 0 : 51,
+          zIndex: isNarrow ? 3 : 1,
           // pointerEvents: isBlockMouse() ? "fill" : "none"
         }}
         // onClick={onClickClose}
@@ -92,9 +97,7 @@ const Modal = ({onClose, children, app, show, name, modeless}) => {
             right: calcRight(),
             //,zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
           }}
-          className={
-            "ModalContent" + (show === false ? " HiddenPopup" : "")
-          }
+          className={"ModalContent" + (show === false ? " HiddenPopup" : "")}
           onClick={preventClose}
         >
           {children}
@@ -103,7 +106,7 @@ const Modal = ({onClose, children, app, show, name, modeless}) => {
             onClick={onClickClose}
             // style={{ right: calcRight() }}
           >
-            <Icon icon={faTimes}/>
+            <Icon icon={faTimes} />
           </button>
         </div>
         {/* <button

@@ -1,5 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {analytics} from "../services/Analytics";
+import { createSlice } from "@reduxjs/toolkit";
+import { analytics } from "../services/Analytics";
 
 const sliceName = "app";
 
@@ -41,14 +41,14 @@ const appSlice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    onResize: (slice, {payload: {width, height}}) => {
+    onResize: (slice, { payload: { width, height } }) => {
       slice.appWidth = width;
       slice.appHeight = height;
       slice.pageHeight = height - 50;
 
-      let pageWidth = height * 0.61; //aspect ratio
+      let pageWidth = slice.pageHeight * 0.61; //aspect ratio
       if (pageWidth > width) {
-        pageWidth = width;
+        pageWidth = slice.appWidth;
       }
       slice.pageWidth = pageWidth;
 
@@ -57,8 +57,7 @@ const appSlice = createSlice({
       const isNarrow = width / height < 0.7;
       slice.pageMargin = isNarrow ? "0" : "0 20px";
       const isWide = width / height > 1.8;
-      const isCompact =
-        !isWide && pagesCount === 1 && width / height > 1.2;
+      const isCompact = !isWide && pagesCount === 1 && width / height > 1.2;
       const isScrollable = width / height > 2.7;
 
       const app_size =
@@ -69,10 +68,10 @@ const appSlice = createSlice({
               : "wide_two_pages"
             : "two_pages"
           : isCompact
-            ? "wide_one_page"
-            : isNarrow
-              ? "narrow_one_page"
-              : "one_page";
+          ? "wide_one_page"
+          : isNarrow
+          ? "narrow_one_page"
+          : "one_page";
 
       slice.pagesCount = pagesCount;
       slice.isNarrow = isNarrow;
@@ -84,7 +83,6 @@ const appSlice = createSlice({
     },
   },
 });
-
 
 export const selectUser = (state) => state[sliceName].user;
 export const selectPagesCount = (state) => state[sliceName].pagesCount;
@@ -103,17 +101,10 @@ export const selectPageHeight = (state) => state[sliceName].pageHeight;
 export const selectActiveSide = (pageIndex) => (state) =>
   state[sliceName].pagesCount === 1 ? 0 : pageIndex % 2;
 
-
 export const selectPagerWidth = (state) => {
-  const {
-    popup,
-    isWide,
-    appWidth,
-    appHeight,
-    isCompact,
-    isNarrow,
-    isScrollable,
-  } = state[sliceName];
+  const { popup } = state.ui;
+  const { isWide, appWidth, appHeight, isCompact, isNarrow, isScrollable } =
+    state[sliceName];
 
   if (popup) {
     if (isScrollable) {
@@ -128,7 +119,7 @@ export const selectPagerWidth = (state) => {
   }
 
   return appWidth - (isNarrow ? 0 : 50);
-}
+};
 
 export const selectPopupWidth = (state) => {
   const {
@@ -156,14 +147,15 @@ export const selectPopupWidth = (state) => {
 
   //popup shown on top of pages
   return appWidth / pagesCount - (isNarrow ? 0 : 50);
-}
+};
 
-export const {onResize} = appSlice.actions;
+export const { onResize } = appSlice.actions;
 
+export const updateAppSize =
+  ({ width, height }) =>
+  (dispatch) => {
+    dispatch(onResize({ width, height }));
+    // analytics.setParams({app_size});
+  };
 
-export const updateAppSize = ({width, height}) => (dispatch) => {
-  dispatch(onResize({width, height}));
-  // analytics.setParams({app_size});
-}
-
-export default {[sliceName]: appSlice.reducer};
+export default { [sliceName]: appSlice.reducer };
