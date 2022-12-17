@@ -1,20 +1,33 @@
-import React, {useCallback, useContext, useEffect} from "react";
-import {FormattedMessage as String} from "react-intl";
-import {useDispatch, useSelector} from "react-redux";
-import {Redirect} from "react-router-dom";
-import {AppContext} from "../../context/App";
-import QData, {ayatCount} from "../../services/QData";
+import React, { useCallback, useContext, useEffect } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { AppContext } from "../../context/App";
+import QData, { ayatCount } from "../../services/QData";
 import Utils from "../../services/utils";
-import {selectAppHeight, selectIsWide, selectPagerWidth, selectPagesCount, selectPageWidth} from "../../store/appSlice";
-import {AddHifz} from "../Modal/Favorites";
+import {
+  selectAppHeight,
+  selectIsNarrow,
+  selectIsWide,
+  selectPagerWidth,
+  selectPagesCount,
+  selectPageWidth,
+} from "../../store/appSlice";
+import { AddHifz } from "../Modal/Favorites";
 import Page from "../Page/Page";
-import {analytics} from "./../../services/Analytics";
+import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
 import "./Pager.scss";
-import {showMenu, showPopup} from "../../store/uiSlice";
+import {
+  closePopup,
+  selectPopup,
+  selectShowMenu,
+  showMenu,
+  showPopup,
+} from "../../store/uiSlice";
 
-export function PageRedirect({match}) {
-  let {aya} = match.params;
+export function PageRedirect({ match }) {
+  let { aya } = match.params;
   let pageNum = 1;
   const app = useContext(AppContext);
 
@@ -24,23 +37,26 @@ export function PageRedirect({match}) {
     }, 10);
     pageNum = QData.ayaIdPage(aya) + 1;
   }
-  return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum}/>;
+  return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
 }
 
 const REPLACE = true;
 
-function Pager({match}) {
+function Pager({ match }) {
   const app = useContext(AppContext);
   const pagesCount = useSelector(selectPagesCount);
-  const isWide = useSelector(selectIsWide)
+  const isWide = useSelector(selectIsWide);
   const appHeight = useSelector(selectAppHeight);
   const pageWidth = useSelector(selectPageWidth);
   const pagerWidth = useSelector(selectPagerWidth);
   const dispatch = useDispatch();
+  const isNarrow = useSelector(selectIsNarrow);
+  const expandedMenu = useSelector(selectShowMenu);
+  const popup = useSelector(selectPopup);
 
   let pageIndex = 0;
 
-  let {page} = match.params;
+  let { page } = match.params;
 
   if (page !== undefined) {
     pageIndex = parseInt(page) - 1;
@@ -48,7 +64,7 @@ function Pager({match}) {
 
   const pageUp = useCallback(
     (e) => {
-      let count = app.popup && !isWide ? 1 : pagesCount;
+      let count = popup && !isWide ? 1 : pagesCount;
       if (count > 1 && pageIndex % 2 === 0) {
         count = 1; //right page is active
       }
@@ -61,7 +77,7 @@ function Pager({match}) {
 
   const pageDown = useCallback(
     (e) => {
-      let count = app.popup && !isWide ? 1 : pagesCount;
+      let count = popup && !isWide ? 1 : pagesCount;
       if (count > 1 && pageIndex % 2 === 1) {
         count = 1; //left page is active
       }
@@ -77,13 +93,10 @@ function Pager({match}) {
     //cache next pages
     const pageIndex = match.params.page - 1;
     if (pagesCount === 1) {
-      Utils.downloadPageImage(pageIndex + 1).catch((e) => {
-      });
+      Utils.downloadPageImage(pageIndex + 1).catch((e) => {});
     } else {
-      Utils.downloadPageImage(pageIndex + 2).catch((e) => {
-      });
-      Utils.downloadPageImage(pageIndex + 3).catch((e) => {
-      });
+      Utils.downloadPageImage(pageIndex + 2).catch((e) => {});
+      Utils.downloadPageImage(pageIndex + 3).catch((e) => {});
     }
   }, [pagesCount, match.params.page]);
 
@@ -99,7 +112,7 @@ function Pager({match}) {
   };
 
   const offsetSelection = useCallback(
-    ({shiftKey}, offset) => {
+    ({ shiftKey }, offset) => {
       let selectedAyaId;
       if (shiftKey) {
         selectedAyaId = app.extendSelection(app.selectStart + offset);
@@ -111,14 +124,14 @@ function Pager({match}) {
     [app]
   );
 
-  const inExercise = useCallback(() => app.popup === "Exercise", [app.popup]);
+  const inExercise = useCallback(() => popup === "Exercise", [popup]);
   const increment = useCallback(
     (e) => {
       // if (inExercise()) {
       //     offsetSelection(e, 1);
       //     return;
       // }
-      let {maskStart} = app;
+      let { maskStart } = app;
       if (maskStart !== -1) {
         //Mask is active
         if (maskStart >= ayatCount) {
@@ -153,7 +166,7 @@ function Pager({match}) {
       //     offsetSelection(e, -1);
       //     return;
       // }
-      let {maskStart} = app;
+      let { maskStart } = app;
       if (maskStart !== -1) {
         //Mask is active
         if (maskStart <= 0) {
@@ -178,14 +191,14 @@ function Pager({match}) {
 
   const handleKeyDown = useCallback(
     (e) => {
-      const {tagName, type} = document.activeElement;
+      const { tagName, type } = document.activeElement;
       const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
       const isTextInput =
         isInput && ["text", "number", "textarea"].includes(type);
 
-      const vEditorOn = ["Search", "Index"].includes(app.popup);
+      const vEditorOn = ["Search", "Index"].includes(popup);
 
-      const canShowPopup = app.popup === null && isTextInput === false;
+      const canShowPopup = popup === null && isTextInput === false;
 
       if (app.modalPopup) {
         return;
@@ -199,10 +212,10 @@ function Pager({match}) {
         case "Escape":
           if (app.getMessageBox()) {
             app.pushMessageBox(null);
-          } else if (app.popup !== null) {
-            app.closePopup();
-          } else if (app.expandedMenu) {
-            dispatch(showMenu(false))
+          } else if (popup !== null) {
+            dispatch(closePopup());
+          } else if (expandedMenu) {
+            dispatch(showMenu(false));
             // app.setExpandedMenu(false);
           } else if (app.maskStart !== -1) {
             app.hideMask();
@@ -210,52 +223,45 @@ function Pager({match}) {
           break;
         case "KeyI":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Indices"}))
-            // app.setPopup("Indices");
+            dispatch(showPopup("Indices"));
           }
           break;
         case "KeyF":
           if (canShowPopup) {
             app.setMessageBox({
-              title: <String id="update_hifz"/>,
-              content: <AddHifz/>,
+              title: <String id="update_hifz" />,
+              content: <AddHifz />,
             });
           }
           break;
         case "KeyG":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Goto"}))
-            // app.setPopup("Goto");
+            dispatch(showPopup("Goto"));
           }
           break;
         case "KeyX":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Exercise"}))
-            // app.setPopup("Exercise");
+            dispatch(showPopup("Exercise"));
           }
           break;
         case "KeyB":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Bookmarks"}))
-            // app.setPopup("Bookmarks");
+            dispatch(showPopup("Bookmarks"));
           }
           break;
         case "KeyO":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Settings"}))
-            // app.setPopup("Settings");
+            dispatch(showPopup("Settings"));
           }
           break;
         case "KeyS":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Search"}))
-            // app.setPopup("Search");
+            dispatch(showPopup("Search"));
           }
           break;
         case "KeyT":
           if (canShowPopup) {
-            dispatch(showPopup({popup: "Tafseer"}))
-            // app.setPopup("Tafseer");
+            dispatch(showPopup("Tafseer"));
           }
           break;
         case "KeyM":
@@ -314,15 +320,7 @@ function Pager({match}) {
         e.preventDefault();
       }
     },
-    [
-      app,
-      decrement,
-      inExercise,
-      increment,
-      offsetSelection,
-      pageDown,
-      pageUp,
-    ]
+    [app, decrement, inExercise, increment, offsetSelection, pageDown, pageUp]
   );
 
   useEffect(() => {
@@ -333,11 +331,11 @@ function Pager({match}) {
     };
   }, [
     match.params.page,
-    app.popup,
+    popup,
     app.maskStart,
     app.modalPopup,
     app.selectStart,
-    app.expandedMenu,
+    expandedMenu,
     handleKeyDown,
   ]);
 
@@ -362,9 +360,7 @@ function Pager({match}) {
     return (
       <div
         onClick={selectPage}
-        className={"PageSide"
-          .appendWord(pageClass)
-          .appendWord(activeClass)}
+        className={"PageSide".appendWord(pageClass).appendWord(activeClass)}
         style={{
           height: appHeight + "px",
           width: 100 / pagesCount + "%",
@@ -384,12 +380,10 @@ function Pager({match}) {
     );
   };
 
-  // const pageWidth = app.pageWidth();
-
   return (
     <DDrop
       maxShift={200}
-      onDrop={({dX, dY}) => {
+      onDrop={({ dX, dY }) => {
         if (dX > 50) {
           analytics.setTrigger("dragging");
           pageDown(2);
@@ -400,7 +394,7 @@ function Pager({match}) {
         }
       }}
     >
-      {({dX, dY}) => {
+      {({ dX, dY }) => {
         //Shrink the width using the scaling
         const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
         const shiftX = dX * scaleX;
@@ -416,7 +410,7 @@ function Pager({match}) {
 
         return (
           <div
-            className={"Pager" + (app.isNarrow ? " narrow" : "")}
+            className={"Pager" + (isNarrow ? " narrow" : "")}
             onWheel={handleWheel}
             style={{
               width: pagerWidth,

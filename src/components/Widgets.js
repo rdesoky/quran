@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import QData from "./../services/QData";
-import {AppContext} from "./../context/App";
-import {FormattedMessage as String} from "react-intl";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
+import { AppContext } from "./../context/App";
+import { FormattedMessage as String } from "react-intl";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faChevronUp,
   faChevronDown,
@@ -12,23 +12,25 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import {faBookmark as farBookmark} from "@fortawesome/free-regular-svg-icons";
-import {CommandButton} from "./Modal/Commands";
-import {PlayerContext, AudioState} from "../context/Player";
+import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
+import { CommandButton } from "./Modal/Commands";
+import { PlayerContext, AudioState } from "../context/Player";
 import Utils from "../services/utils";
-import {SuraHifzChart} from "./Hifz";
-import {analytics} from "../services/Analytics";
-import {quranText} from "../App";
+import { SuraHifzChart } from "./Hifz";
+import { analytics } from "../services/Analytics";
+import { quranText } from "../App";
+import { useSelector } from "react-redux";
+import { selectAppHeight } from "../store/appSlice";
 
 export const VerseInfo = ({
-                            verse,
-                            show,
-                            children,
-                            onClick,
-                            onMoveNext,
-                            navigate = false,
-                            trigger = "verse_info",
-                          }) => {
+  verse,
+  show,
+  children,
+  onClick,
+  onMoveNext,
+  navigate = false,
+  trigger = "verse_info",
+}) => {
   const app = useContext(AppContext);
 
   if (verse === undefined || verse === -1) {
@@ -44,7 +46,7 @@ export const VerseInfo = ({
     if (typeof onClick === "function") {
       onClick(verse);
     } else {
-      app.gotoAya(verse, {sel: true});
+      app.gotoAya(verse, { sel: true });
     }
   };
 
@@ -53,11 +55,10 @@ export const VerseInfo = ({
   if (navigate) {
     onMoveNext = (offset) => {
       // analytics.setTrigger(trigger);
-      analytics.logEvent(
-        offset > 0 ? "nav_next_verse" : "nav_prev_verse",
-        {trigger}
-      );
-      app.gotoAya(verse + offset, {sel: true});
+      analytics.logEvent(offset > 0 ? "nav_next_verse" : "nav_prev_verse", {
+        trigger,
+      });
+      app.gotoAya(verse + offset, { sel: true });
     };
   }
 
@@ -70,7 +71,7 @@ export const VerseInfo = ({
             onMoveNext(-1);
           }}
         >
-          <Icon icon={faChevronUp}/>
+          <Icon icon={faChevronUp} />
         </button>
       ) : (
         ""
@@ -79,15 +80,10 @@ export const VerseInfo = ({
         <div className="VerseInfoList">
           <div>{app.suraName(verseInfo.sura)}</div>
           <div>
-            <String
-              id="verse_num"
-              values={{num: verseInfo.aya + 1}}
-            />
+            <String id="verse_num" values={{ num: verseInfo.aya + 1 }} />
           </div>
 
-          {typeof children === "function"
-            ? children(verse)
-            : children}
+          {typeof children === "function" ? children(verse) : children}
         </div>
       </button>
       {onMoveNext ? (
@@ -97,7 +93,7 @@ export const VerseInfo = ({
             onMoveNext(1);
           }}
         >
-          <Icon icon={faChevronDown}/>
+          <Icon icon={faChevronDown} />
         </button>
       ) : (
         ""
@@ -107,13 +103,13 @@ export const VerseInfo = ({
 };
 
 export const VerseText = ({
-                            verse,
-                            showInfo,
-                            navigate = true,
-                            bookmark = false,
-                            copy = false,
-                            trigger = "verse_text",
-                          }) => {
+  verse,
+  showInfo,
+  navigate = true,
+  bookmark = false,
+  copy = false,
+  trigger = "verse_text",
+}) => {
   const [text, setText] = useState("");
   const app = useContext(AppContext);
 
@@ -126,7 +122,7 @@ export const VerseText = ({
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
-    app.showToast(app.intl.formatMessage({id: "text_copied"}));
+    app.showToast(app.intl.formatMessage({ id: "text_copied" }));
 
     analytics.logEvent("copy_text", {
       ...QData.verseLocation(verse),
@@ -153,20 +149,16 @@ export const VerseText = ({
 
   return (
     <div className="VerseText">
-      {showInfo ? <VerseInfo navigate={navigate}/> : ""}
+      {showInfo ? <VerseInfo navigate={navigate} /> : ""}
       {bookmark ? (
         <button onClick={toggleBookmark}>
-          <Icon
-            icon={
-              app.isBookmarked(verse) ? faBookmark : farBookmark
-            }
-          />
+          <Icon icon={app.isBookmarked(verse) ? faBookmark : farBookmark} />
         </button>
       ) : null}
       {text}
       {copy ? (
         <button onClick={copyVerse}>
-          <Icon icon={faCopy}/>
+          <Icon icon={faCopy} />
         </button>
       ) : null}
     </div>
@@ -210,14 +202,14 @@ export const ToastMessage = () => {
 };
 
 export const CircleProgress = ({
-                                 sqSize = 25,
-                                 strokeWidth = 2,
-                                 progress = 1,
-                                 target = 5,
-                                 display = null,
-                                 onClick = (e) => false,
-                                 title,
-                               }) => {
+  sqSize = 25,
+  strokeWidth = 2,
+  progress = 1,
+  target = 5,
+  display = null,
+  onClick = (e) => false,
+  title,
+}) => {
   const radius = (sqSize - strokeWidth) / 2;
   // Enclose cicle in a circumscribing square
   // const viewBox = `0 0 ${sqSize} ${sqSize}`;
@@ -300,16 +292,16 @@ export const MessageBox = () => {
       <div className="MessageBox">
         <div className="MessageBoxTitle">{msgBoxInfo.title}</div>
         <button className="CloseButton" onClick={onClose}>
-          <Icon icon={faTimes}/>
+          <Icon icon={faTimes} />
         </button>
         <div className="MessageBoxContent">{msgBoxInfo.content}</div>
         {msgBoxInfo.onYes ? (
           <div className="ButtonsBar">
             <button onClick={onYes}>
-              <String id="yes"/>
+              <String id="yes" />
             </button>
             <button onClick={onNo}>
-              <String id="no"/>
+              <String id="no" />
             </button>
           </div>
         ) : null}
@@ -321,6 +313,7 @@ export const MessageBox = () => {
 
 export const ContextPopup = () => {
   const app = useContext(AppContext);
+  const appHeight = useSelector(selectAppHeight);
   const closePopup = (e) => {
     app.setContextPopup(null);
   };
@@ -341,8 +334,7 @@ export const ContextPopup = () => {
           shift = popupRect.left;
         }
         popup.style.left =
-          (popupRect.width / 2 + popupRect.left - shift).toString() +
-          "px";
+          (popupRect.width / 2 + popupRect.left - shift).toString() + "px";
       }
     }
   }, [app.contextPopup]);
@@ -351,48 +343,36 @@ export const ContextPopup = () => {
   //     e.stopPropagation();
   // };
   if (app.contextPopup) {
-    const {target, content, header} = app.getContextPopup();
+    const { target, content, header } = app.getContextPopup();
     const targetRect = target.getBoundingClientRect();
     if (!targetRect.width) {
       return null;
     }
     const left = targetRect.left + targetRect.width / 2;
-    const isBelow = app.appHeight - targetRect.bottom > targetRect.top;
+    const isBelow = appHeight - targetRect.bottom > targetRect.top;
     return (
       <div className="ContextPopupBlocker" onClick={closePopup}>
         <div
-          className={"ContextPopup".appendWord(
-            "DownPointer",
-            !isBelow
-          )}
+          className={"ContextPopup".appendWord("DownPointer", !isBelow)}
           ref={(ref) => {
             popup = ref;
           }}
           style={{
             top: isBelow ? targetRect.bottom + 15 : undefined,
-            bottom: !isBelow
-              ? app.appHeight - targetRect.top + 15
-              : undefined,
+            bottom: !isBelow ? appHeight - targetRect.top + 15 : undefined,
             left: left,
             maxHeight:
-              (isBelow
-                ? app.appHeight - targetRect.bottom
-                : targetRect.top) - 40,
+              (isBelow ? appHeight - targetRect.bottom : targetRect.top) - 40,
           }}
         >
           <div className="ContextHeader">{header}</div>
           <div className="ContextBody">{content}</div>
         </div>
         <div
-          className={"PopupPointer".appendWord(
-            "DownPointer",
-            !isBelow
-          )}
+          className={"PopupPointer".appendWord("DownPointer", !isBelow)}
           style={{
             top: isBelow ? targetRect.bottom : undefined,
-            bottom: !isBelow
-              ? app.appHeight - targetRect.top
-              : undefined,
+            bottom: !isBelow ? appHeight - targetRect.top : undefined,
             left: left,
           }}
         ></div>
@@ -402,45 +382,45 @@ export const ContextPopup = () => {
   return null;
 };
 
-export const VerseContextButtons = ({verse}) => {
+export const VerseContextButtons = ({ verse }) => {
   const player = useContext(PlayerContext);
   const app = useContext(AppContext);
   return (
     <div className="IconsBar">
       {player.audioState === AudioState.stopped ? (
-        <CommandButton trigger="verse_context" command="Play"/>
+        <CommandButton trigger="verse_context" command="Play" />
       ) : (
-        <CommandButton trigger="verse_context" command="Stop"/>
+        <CommandButton trigger="verse_context" command="Stop" />
       )}
       {app.popup !== "Tafseer" ? (
-        <CommandButton trigger="verse_context" command="Tafseer"/>
+        <CommandButton trigger="verse_context" command="Tafseer" />
       ) : null}
-      <CommandButton trigger="verse_context" command="Mask"/>
-      <CommandButton trigger="verse_context" command="Copy"/>
-      <CommandButton trigger="verse_context" command="Bookmark"/>
+      <CommandButton trigger="verse_context" command="Mask" />
+      <CommandButton trigger="verse_context" command="Copy" />
+      <CommandButton trigger="verse_context" command="Bookmark" />
     </div>
   );
 };
 
-export const PageContextButtons = ({page}) => {
+export const PageContextButtons = ({ page }) => {
   const player = useContext(PlayerContext);
   return (
     <PageNavigator trigger="page_context">
       <div className="IconsBar">
         {/* <CommandButton trigger="page_context" command="Mask" /> */}
-        <CommandButton trigger="page_context" command="Goto"/>
+        <CommandButton trigger="page_context" command="Goto" />
         {player.audioState === AudioState.stopped ? (
-          <CommandButton trigger="page_context" command="Play"/>
+          <CommandButton trigger="page_context" command="Play" />
         ) : (
-          <CommandButton trigger="page_context" command="Stop"/>
+          <CommandButton trigger="page_context" command="Stop" />
         )}
-        <CommandButton trigger="page_context" command="update_hifz"/>
+        <CommandButton trigger="page_context" command="update_hifz" />
       </div>
     </PageNavigator>
   );
 };
 
-export const SuraContextHeader = ({sura}) => {
+export const SuraContextHeader = ({ sura }) => {
   // const app = useContext(AppContext);
   // const [suraIndex, setSura] = useState(sura || 0);
   // useEffect(() => {
@@ -450,13 +430,13 @@ export const SuraContextHeader = ({sura}) => {
 
   return (
     <div className="SuraContextHeader">
-      <SuraHifzChart sura={sura}/>
+      <SuraHifzChart sura={sura} />
       {/* <SuraNavigator sura={suraIndex} /> */}
     </div>
   );
 };
 
-export const PageNavigator = ({children, trigger}) => {
+export const PageNavigator = ({ children, trigger }) => {
   const app = useContext(AppContext);
   const pageNumber = app.getCurrentPageIndex() + 1;
 
@@ -465,26 +445,26 @@ export const PageNavigator = ({children, trigger}) => {
   const gotoNextPage = (e) => {
     // analytics.setTrigger(trigger);
     app.gotoPage(pageNumber + 1, true, true);
-    analytics.logEvent("nav_next_page", {trigger});
+    analytics.logEvent("nav_next_page", { trigger });
   };
 
   const gotoPrevPage = (e) => {
     // analytics.setTrigger(trigger);
     app.gotoPage(pageNumber - 1, true, true);
-    analytics.logEvent("nav_prev_page", {trigger});
+    analytics.logEvent("nav_prev_page", { trigger });
   };
 
   return (
     <div className="SuraNavigator" onClick={stopPropagation}>
       {pageNumber > 1 ? (
         <button className="CommandButton" onClick={gotoPrevPage}>
-          <Icon icon={faChevronRight}/>
+          <Icon icon={faChevronRight} />
         </button>
       ) : null}
       {children}
       {pageNumber < QData.pages_count ? (
         <button className="CommandButton" onClick={gotoNextPage}>
-          <Icon icon={faChevronLeft}/>
+          <Icon icon={faChevronLeft} />
         </button>
       ) : null}
     </div>

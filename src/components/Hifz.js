@@ -4,29 +4,34 @@ import {
   faPlayCircle,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import React, {memo, useContext, useEffect, useState} from "react";
-import {FormattedMessage as String} from "react-intl";
-import {useSelector} from "react-redux";
-import {Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis} from "recharts";
-import {analytics} from "../services/Analytics";
-import {selectPagesCount, selectPopupWidth} from "../store/appSlice";
-import {AppContext} from "./../context/App";
-import {PlayerContext} from "./../context/Player";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { memo, useContext, useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
+import { analytics } from "../services/Analytics";
+import {
+  selectIsCompact,
+  selectPagesCount,
+  selectPopupWidth,
+} from "../store/appSlice";
+import { AppContext } from "./../context/App";
+import { PlayerContext } from "./../context/Player";
 import QData from "./../services/QData";
-import {VerseText} from "./Widgets";
-import {selectLang} from "../store/settingsSlice";
+import { VerseText } from "./Widgets";
+import { selectLang } from "../store/settingsSlice";
+import { closePopup } from "../store/uiSlice";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
 const HifzRange = ({
-                     range,
-                     filter,
-                     showActions = false,
-                     pages = true,
-                     setActiveRange,
-                     trigger = "hifz_range",
-                   }) => {
+  range,
+  filter,
+  showActions = false,
+  pages = true,
+  setActiveRange,
+  trigger = "hifz_range",
+}) => {
   const app = useContext(AppContext);
   const player = useContext(PlayerContext);
   // const theme = useContext(ThemeContext);
@@ -37,6 +42,8 @@ const HifzRange = ({
   const [actions, setActions] = useState(showActions);
   const pagesCount = useSelector(selectPagesCount);
   const lang = useSelector(selectLang);
+  const isCompact = useSelector(selectIsCompact);
+  const dispatch = useDispatch();
 
   const suraInfo = QData.sura_info[range.sura];
 
@@ -60,7 +67,7 @@ const HifzRange = ({
       pages: rangePagesCount,
     };
 
-    setRangeInfo(app.intl.formatMessage({id}, values));
+    setRangeInfo(app.intl.formatMessage({ id }, values));
 
     if (!range.date) {
       // setAgeClass("NoHifz");
@@ -74,9 +81,9 @@ const HifzRange = ({
           ? "last_revised_today"
           : "last_revised_since"
         : "not_revised";
-    values = {days: age};
+    values = { days: age };
 
-    const ageInfo = app.intl.formatMessage({id}, values);
+    const ageInfo = app.intl.formatMessage({ id }, values);
 
     // let ageClass = "GoodHifz";
     // if (age > 7) {
@@ -105,7 +112,7 @@ const HifzRange = ({
 
   const playRange = (e) => {
     player.stop(true);
-    const {startVerse} = selectRange();
+    const { startVerse } = selectRange();
     setTimeout(() => {
       player.play();
     }, 500);
@@ -116,7 +123,7 @@ const HifzRange = ({
   };
 
   const reviewRange = (e) => {
-    const {startVerse} = selectRange();
+    const { startVerse } = selectRange();
     setTimeout(() => {
       app.setMaskStart();
       checkClosePopup();
@@ -133,10 +140,10 @@ const HifzRange = ({
       range.startPage,
       range.endPage
     );
-    app.gotoAya(startVerse, {sel: true});
+    app.gotoAya(startVerse, { sel: true });
     // app.setSelectStart(rangeStartVerse);
     app.setSelectEnd(endVerse);
-    return {startVerse, endVerse};
+    return { startVerse, endVerse };
   };
 
   const readRange = (e) => {
@@ -145,21 +152,21 @@ const HifzRange = ({
       range.startPage,
       range.endPage
     );
-    app.gotoAya(rangeStartVerse, {sel: true});
+    app.gotoAya(rangeStartVerse, { sel: true });
     //app.closePopup();
     checkClosePopup();
   };
 
   const checkClosePopup = () => {
-    if (!app.isCompact && pagesCount === 1) {
-      app.closePopup();
+    if (!isCompact && pagesCount === 1) {
+      dispatch(closePopup());
     }
     app.setMessageBox(null);
   };
 
   const setRangeRevised = (e) => {
     app.pushMessageBox({
-      title: <String id="are_you_sure"/>,
+      title: <String id="are_you_sure" />,
       onYes: () => {
         analytics.logEvent("revised_today", {
           trigger,
@@ -168,9 +175,9 @@ const HifzRange = ({
           pagesCount: range.pages,
         });
         app.setRangeRevised(range);
-        app.showToast(<String id="ack_range_revised"/>);
+        app.showToast(<String id="ack_range_revised" />);
       },
-      content: <String id="revise_confirmation"/>,
+      content: <String id="revise_confirmation" />,
     });
   };
 
@@ -185,7 +192,7 @@ const HifzRange = ({
       });
     } else {
       app.pushMessageBox({
-        title: <String id="are_you_sure"/>,
+        title: <String id="are_you_sure" />,
         onYes: () => {
           analytics.logEvent("add_hifz", {
             trigger,
@@ -194,14 +201,9 @@ const HifzRange = ({
             startPage,
             pagesCount,
           });
-          app.addHifzRange(
-            startPage,
-            chapter,
-            pagesCount,
-            true /*overwrite*/
-          );
+          app.addHifzRange(startPage, chapter, pagesCount, true /*overwrite*/);
         },
-        content: <String id="overwrite_exisiting_hifz"/>,
+        content: <String id="overwrite_exisiting_hifz" />,
       });
     }
   };
@@ -217,27 +219,17 @@ const HifzRange = ({
 
   const addFromSuraStart = (e) => {
     const pagesCount = range.startPage - suraInfo.sp + 2;
-    confirmAddHifz(
-      suraInfo.sp - 1,
-      range.sura,
-      pagesCount,
-      "from_sura_start"
-    );
+    confirmAddHifz(suraInfo.sp - 1, range.sura, pagesCount, "from_sura_start");
   };
 
   const addToSuraEnd = (e) => {
     const pagesCount = suraInfo.ep - range.startPage;
-    confirmAddHifz(
-      range.startPage,
-      range.sura,
-      pagesCount,
-      "from_sura_start"
-    );
+    confirmAddHifz(range.startPage, range.sura, pagesCount, "from_sura_start");
   };
 
   const deleteHifzRange = (e) => {
     app.pushMessageBox({
-      title: <String id="are_you_sure"/>,
+      title: <String id="are_you_sure" />,
       onYes: () => {
         analytics.logEvent("remove_hifz", {
           chapter: range.sura,
@@ -247,7 +239,7 @@ const HifzRange = ({
         });
         app.deleteHifzRange(range);
       },
-      content: <String id="remove_hifz"/>,
+      content: <String id="remove_hifz" />,
     });
   };
 
@@ -265,11 +257,7 @@ const HifzRange = ({
 
   return (
     <li className={"HifzRangeRow"}>
-      <SuraHifzChart
-        pages={pages}
-        range={range}
-        trigger="update_hifz_popup"
-      />
+      <SuraHifzChart pages={pages} range={range} trigger="update_hifz_popup" />
       <div
         className="HifzRangeBody"
         tabIndex="0"
@@ -292,9 +280,7 @@ const HifzRange = ({
           }}
         >
           {!actions ? (
-            <VerseText
-              verse={rangeStartAya(range.sura, range.startPage)}
-            />
+            <VerseText verse={rangeStartAya(range.sura, range.startPage)} />
           ) : (
             ""
           )}
@@ -305,27 +291,27 @@ const HifzRange = ({
           <div className="ActionsBar">
             <button
               onClick={playRange}
-              title={app.formatMessage({id: "play"})}
+              title={app.formatMessage({ id: "play" })}
             >
-              <Icon icon={faPlayCircle}/>
+              <Icon icon={faPlayCircle} />
             </button>
             <button
               onClick={reviewRange}
-              title={app.formatMessage({id: "revise"})}
+              title={app.formatMessage({ id: "revise" })}
             >
-              <Icon icon={faLightbulb}/>
+              <Icon icon={faLightbulb} />
             </button>
             <button onClick={setRangeRevised}>
-              <Icon icon={faCheck}/> <String id="revised"/>
+              <Icon icon={faCheck} /> <String id="revised" />
             </button>
             {/* <button onClick={readRange}>
                             <Icon icon={faBookOpen} />
                         </button> */}
             <button
               onClick={deleteHifzRange}
-              title={app.formatMessage({id: "remove_hifz"})}
+              title={app.formatMessage({ id: "remove_hifz" })}
             >
-              <Icon icon={faTimes}/>
+              <Icon icon={faTimes} />
             </button>
           </div>
         ) : (
@@ -333,18 +319,18 @@ const HifzRange = ({
         )
       ) : (
         <div className="ActionsBar">
-          <String id="add"/>
+          <String id="add" />
           <button onClick={addCurrentPage}>
-            <String id="the_page"/>
+            <String id="the_page" />
           </button>
           <button onClick={addSura}>
-            <String id="the_sura"/>
+            <String id="the_sura" />
           </button>
           <button onClick={addFromSuraStart}>
-            <String id="from_start"/>
+            <String id="from_start" />
           </button>
           <button onClick={addToSuraEnd}>
-            <String id="to_end"/>
+            <String id="to_end" />
           </button>
         </div>
       )}
@@ -354,12 +340,12 @@ const HifzRange = ({
 
 // export const HifzRanges = AppConsumer(({ app, filter }) => {
 
-const HifzRanges = ({filter, trigger = "hifz_index"}) => {
+const HifzRanges = ({ filter, trigger = "hifz_index" }) => {
   const [activeRange, setActiveRange] = useState(null);
   const app = useContext(AppContext);
   // const suraNames = app.suraNames();
 
-  const {hifzRanges} = app;
+  const { hifzRanges } = app;
 
   useEffect(() => {
     analytics.setTrigger("hifz_index");
@@ -368,7 +354,7 @@ const HifzRanges = ({filter, trigger = "hifz_index"}) => {
   if (!hifzRanges.length) {
     return (
       <div>
-        <String id="no_hifz"/>
+        <String id="no_hifz" />
       </div>
     );
   }
@@ -395,12 +381,12 @@ const HifzRanges = ({filter, trigger = "hifz_index"}) => {
 
 const SuraHifzChart = memo(
   ({
-     sura,
-     range,
-     pages = true,
-     onClickPage,
-     trigger = "header_chapter_index",
-   }) => {
+    sura,
+    range,
+    pages = true,
+    onClickPage,
+    trigger = "header_chapter_index",
+  }) => {
     const app = useContext(AppContext);
     const [suraRanges, setSuraRanges] = useState([]);
     const [activeRange, setActiveRange] = useState(null);
@@ -425,7 +411,7 @@ const SuraHifzChart = memo(
 
     const suraStartPage = suraInfo.sp;
 
-    const onClickChart = ({target}) => {
+    const onClickChart = ({ target }) => {
       const page = parseInt(target.getAttribute("page"));
       if (onClickPage) {
         onClickPage(suraStartPage + page);
@@ -452,11 +438,7 @@ const SuraHifzChart = memo(
             if (r.date !== undefined) {
               age = Math.floor((Date.now() - r.date) / dayLength);
               ageClass =
-                age <= 7
-                  ? "GoodHifz"
-                  : age <= 14
-                    ? "FairHifz"
-                    : "WeakHifz";
+                age <= 7 ? "GoodHifz" : age <= 14 ? "FairHifz" : "WeakHifz";
             }
             return (
               <div
@@ -466,9 +448,8 @@ const SuraHifzChart = memo(
                   .appendWord(
                     "active",
                     activeRange &&
-                    activeRange.startPage ===
-                    r.startPage &&
-                    activeRange.sura === r.sura
+                      activeRange.startPage === r.startPage &&
+                      activeRange.sura === r.sura
                   )}
                 style={{
                   right: `${start}%`,
@@ -481,25 +462,21 @@ const SuraHifzChart = memo(
         <div className="PageThumbs">
           {pages
             ? pageList.map((z, i) => {
-              const activeClass =
-                activePage === i + suraInfo.sp - 1
-                  ? "ActivePage"
-                  : "";
-              return (
-                <div
-                  key={i}
-                  page={i}
-                  className={"PageThumb".appendWord(
-                    activeClass
-                  )}
-                  title={i + 1}
-                  //   style={{
-                  //       right: `${(100 * i) / suraPages}%`,
-                  //       width: pageWidth
-                  //   }}
-                />
-              );
-            })
+                const activeClass =
+                  activePage === i + suraInfo.sp - 1 ? "ActivePage" : "";
+                return (
+                  <div
+                    key={i}
+                    page={i}
+                    className={"PageThumb".appendWord(activeClass)}
+                    title={i + 1}
+                    //   style={{
+                    //       right: `${(100 * i) / suraPages}%`,
+                    //       width: pageWidth
+                    //   }}
+                  />
+                );
+              })
             : null}
         </div>
       </div>
@@ -507,7 +484,7 @@ const SuraHifzChart = memo(
   }
 );
 
-const ActivityTooltip = ({active, payload, label, activity}) => {
+const ActivityTooltip = ({ active, payload, label, activity }) => {
   if (active) {
     const value =
       Array.isArray(payload) && payload.length ? payload[0].value : 0;
@@ -522,11 +499,8 @@ const ActivityTooltip = ({active, payload, label, activity}) => {
       <div className="custom-tooltip">
         <p className="label">
           {dateStr}
-          <br/>
-          <String
-            id={`activity_${activity}`}
-            values={{value: value}}
-          />
+          <br />
+          <String id={`activity_${activity}`} values={{ value: value }} />
         </p>
       </div>
     );
@@ -535,10 +509,10 @@ const ActivityTooltip = ({active, payload, label, activity}) => {
   return null;
 };
 
-const ActivityChart = ({activity = "pages"}) => {
+const ActivityChart = ({ activity = "pages" }) => {
   const [data, setData] = useState([]);
   const app = useContext(AppContext);
-  const popupWidth = useSelector(selectPopupWidth)
+  const popupWidth = useSelector(selectPopupWidth);
 
   useEffect(() => {
     setData(
@@ -560,7 +534,7 @@ const ActivityChart = ({activity = "pages"}) => {
   const chartWidth = popupWidth - 60;
   return (
     <>
-      <String id={`${activity}_daily_graph`}/>
+      <String id={`${activity}_daily_graph`} />
       <BarChart
         width={chartWidth}
         height={240}
@@ -572,21 +546,17 @@ const ActivityChart = ({activity = "pages"}) => {
           bottom: 5,
         }}
       >
-        <Bar
-          dataKey={activity}
-          stroke="green"
-          fill="rgba(0, 128, 0, 0.3)"
-        />
-        <CartesianGrid stroke="#444" strokeDasharray="3 3"/>
-        <XAxis dataKey="day"/>
-        <YAxis/>
+        <Bar dataKey={activity} stroke="green" fill="rgba(0, 128, 0, 0.3)" />
+        <CartesianGrid stroke="#444" strokeDasharray="3 3" />
+        <XAxis dataKey="day" />
+        <YAxis />
         <Tooltip
-          content={<ActivityTooltip activity={activity}/>}
-          cursor={{fill: "#eeeeee20"}}
+          content={<ActivityTooltip activity={activity} />}
+          cursor={{ fill: "#eeeeee20" }}
         />
       </BarChart>
     </>
   );
 };
 
-export {SuraHifzChart, HifzRange, HifzRanges, ActivityChart};
+export { SuraHifzChart, HifzRange, HifzRanges, ActivityChart };

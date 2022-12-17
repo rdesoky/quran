@@ -1,32 +1,38 @@
-import React, {useEffect, useState, useContext} from "react";
-import {FormattedMessage as String} from "react-intl";
-import {AppContext} from "./../../context/App";
-import {AudioState, AudioRepeat, PlayerContext} from "./../../context/Player";
+import React, { useEffect, useState, useContext } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { AppContext } from "./../../context/App";
+import { AudioState, AudioRepeat, PlayerContext } from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import Utils from "./../../services/utils";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp,
   faThumbsDown,
   faPlayCircle,
   faRandom,
 } from "@fortawesome/free-solid-svg-icons";
-import {TafseerView} from "./Tafseer";
-import {VerseInfo, VerseText} from "./../Widgets";
-import {ActivityChart} from "../Hifz";
+import { TafseerView } from "./Tafseer";
+import { VerseInfo, VerseText } from "./../Widgets";
+import { ActivityChart } from "../Hifz";
 
 import QData from "../../services/QData";
-import {faKeyboard} from "@fortawesome/free-regular-svg-icons";
-import {analytics} from "../../services/Analytics";
-import {ExerciseSettings} from "./Settings";
-import {useSelector} from "react-redux";
-import {selectIsWide, selectPagesCount} from "../../store/appSlice";
+import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
+import { analytics } from "../../services/Analytics";
+import { ExerciseSettings } from "./Settings";
+import { useSelector } from "react-redux";
+import {
+  selectAppHeight,
+  selectIsCompact,
+  selectIsNarrow,
+  selectIsWide,
+  selectPagesCount,
+} from "../../store/appSlice";
 import {
   selectExerciseLevel,
   selectExerciseMemorized,
   selectRandomAutoRecite,
 } from "../../store/settingsSlice";
-import {quranNormalizedText, quranText} from "../../App";
+import { quranNormalizedText, quranText } from "../../App";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -42,6 +48,8 @@ const Step = {
 const Exercise = () => {
   const app = useContext(AppContext);
   const player = useContext(PlayerContext);
+  const appHeight = useSelector(selectAppHeight);
+  const isNarrow = useSelector(selectIsNarrow);
 
   const exerciseLevel = useSelector(selectExerciseLevel);
   const randomAutoRecite = useSelector(selectRandomAutoRecite);
@@ -60,10 +68,11 @@ const Exercise = () => {
   const [quickMode, setQuickMode] = useState(0);
   const pagesCount = useSelector(selectPagesCount);
   const isWide = useSelector(selectIsWide);
+  const isCompact = useSelector(selectIsCompact);
   const trigger = "exercise";
 
   const isNarrowLayout = () => {
-    return !(isWide || app.isCompact || pagesCount > 1);
+    return !(isWide || isCompact || pagesCount > 1);
   };
 
   const checkVerseLevel = (new_verse) => {
@@ -92,14 +101,12 @@ const Exercise = () => {
     }
     //Length is good, check memorized
     if (exerciseMemorized === false) {
-      const {sura, aya} = QData.ayaIdInfo(new_verse);
+      const { sura, aya } = QData.ayaIdInfo(new_verse);
       const page = QData.ayaPage(sura, aya);
-      const {hifzRanges} = app;
+      const { hifzRanges } = app;
 
       const hifzRange = hifzRanges.find((r) => {
-        return (
-          r.sura === sura && page >= r.startPage && page <= r.endPage
-        );
+        return r.sura === sura && page >= r.startPage && page <= r.endPage;
       });
       if (hifzRange) {
         return false; //verse is memorized,
@@ -115,7 +122,7 @@ const Exercise = () => {
     do {
       new_verse = Math.floor(Math.random() * verseList.length);
     } while (!checkVerseLevel(new_verse));
-    app.gotoAya(new_verse, {sel: true, keepMask: true});
+    app.gotoAya(new_verse, { sel: true, keepMask: true });
     // app.setMaskStart(new_verse + 1, true);
     // setCurrStep(Step.intro);
     // if (currStep === Step.intro && defaultButton) {
@@ -142,7 +149,7 @@ const Exercise = () => {
   const redoReciting = (e) => {
     setWrittenText("");
     startReciting(e);
-    analytics.logEvent("redo_reciting", {trigger});
+    analytics.logEvent("redo_reciting", { trigger });
   };
 
   const stopCounter = () => {
@@ -164,9 +171,9 @@ const Exercise = () => {
     localStorage.getItem("resultsDefaultButton") || "typeNext";
   let defaultButton = null;
 
-  const handleKeyDown = ({code}) => {
+  const handleKeyDown = ({ code }) => {
     if (code === "Escape") {
-      analytics.logEvent("exercise_go_back", {trigger});
+      analytics.logEvent("exercise_go_back", { trigger });
       showIntro();
     }
   };
@@ -246,7 +253,7 @@ const Exercise = () => {
       [Step.typing, Step.intro, Step.results].includes(currStep) &&
       player.audioState === AudioState.playing
     ) {
-      app.gotoAya(player.playingAya, {sel: true});
+      app.gotoAya(player.playingAya, { sel: true });
       setTimeout(startReciting, 200);
     }
 
@@ -274,11 +281,7 @@ const Exercise = () => {
       const percentage = progress / target;
       const dashOffset = dashArray - dashArray * percentage;
       return (
-        <svg
-          width={sqSize}
-          height={sqSize}
-          viewBox={`0 0 ${sqSize} ${sqSize}`}
-        >
+        <svg width={sqSize} height={sqSize} viewBox={`0 0 ${sqSize} ${sqSize}`}>
           <circle
             className="circle-background"
             cx={sqSize / 2}
@@ -316,18 +319,18 @@ const Exercise = () => {
   const showIntro = (e) => {
     player.stop(true);
     setCurrStep(Step.intro);
-    analytics.logEvent("exercise_go_back", {trigger});
+    analytics.logEvent("exercise_go_back", { trigger });
   };
 
   const moveToNextVerse = () => {
-    app.gotoAya(verse + 1, {sel: true, keepMask: true});
+    app.gotoAya(verse + 1, { sel: true, keepMask: true });
   };
 
   const reciteNextVerse = (e) => {
     localStorage.setItem("resultsDefaultButton", "reciteNext");
     startReciting();
     setTimeout(moveToNextVerse);
-    analytics.logEvent("recite_next_verse", {trigger});
+    analytics.logEvent("recite_next_verse", { trigger });
     // app.setMaskStart(verse + 2, true);
   };
 
@@ -340,7 +343,7 @@ const Exercise = () => {
     // if (defaultButton) {
     //     defaultButton.focus();
     // }
-    analytics.logEvent("type_next_verse", {trigger});
+    analytics.logEvent("type_next_verse", { trigger });
   };
 
   const renderTitle = () => {
@@ -362,7 +365,7 @@ const Exercise = () => {
   };
 
   const onMoveNext = (offset) => {
-    app.gotoAya(verse + offset, {sel: true, keepMask: true});
+    app.gotoAya(verse + offset, { sel: true, keepMask: true });
   };
 
   const renderIntro = () => {
@@ -371,12 +374,12 @@ const Exercise = () => {
     }
     return (
       <div className="ContentFrame">
-        <VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext}/>
-        <VerseText copy={true} bookmark={true}/>
+        <VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
+        <VerseText copy={true} bookmark={true} />
         <div className="FootNote">
-          <String id="exercise_intro"/>
+          <String id="exercise_intro" />
         </div>
-        <hr/>
+        <hr />
         <TafseerView
           verse={verse}
           showVerseText={false}
@@ -385,37 +388,34 @@ const Exercise = () => {
           onMoveNext={onMoveNext}
           trigger={trigger}
         />
-        <hr/>
+        <hr />
         <div>
-          <String id="random_exercise"/>
+          <String id="random_exercise" />
         </div>
-        <ExerciseSettings/>
+        <ExerciseSettings />
 
-        <ActivityChart activity="chars"/>
+        <ActivityChart activity="chars" />
       </div>
     );
   };
 
   const onClickType = (e) => {
     const trg = e.target.getAttribute("trigger") || trigger;
-    analytics.logEvent("start_typing", {trigger: trg});
+    analytics.logEvent("start_typing", { trigger: trg });
     startAnswer();
   };
 
   const renderIntroTitle = () => {
-    const narrow = app.isNarrow;
+    const narrow = isNarrow;
     return (
       <>
         {isNarrowLayout() ? (
           <div className="TitleNote">
-            <String id="exercise_intro"/>
+            <String id="exercise_intro" />
           </div>
         ) : null}
         <div className="TitleButtons">
-          <VerseInfo
-            trigger="exercise_intro_title"
-            show={isNarrowLayout()}
-          />
+          <VerseInfo trigger="exercise_intro_title" show={isNarrowLayout()} />
           <div className="ButtonsBar">
             <button
               onClick={onClickType}
@@ -424,28 +424,16 @@ const Exercise = () => {
                 defaultButton = ref;
               }}
             >
-              {narrow ? (
-                <Icon icon={faKeyboard}/>
-              ) : (
-                <String id="answer"/>
-              )}
+              {narrow ? <Icon icon={faKeyboard} /> : <String id="answer" />}
             </button>
             <button onClick={startReciting}>
-              {narrow ? (
-                <Icon icon={faPlayCircle}/>
-              ) : (
-                <String id="start"/>
-              )}
+              {narrow ? <Icon icon={faPlayCircle} /> : <String id="start" />}
             </button>
             <button onClick={typeNextVerse}>
-              <String id="type_next"/>
+              <String id="type_next" />
             </button>
             <button onClick={gotoRandomVerse}>
-              {narrow ? (
-                <Icon icon={faRandom}/>
-              ) : (
-                <String id="new_verse"/>
-              )}
+              {narrow ? <Icon icon={faRandom} /> : <String id="new_verse" />}
             </button>
           </div>
         </div>
@@ -461,9 +449,7 @@ const Exercise = () => {
     if (testAnswer(text)) {
       setTimeout(() => {
         if (quickMode > 0) {
-          app.showToast(
-            app.intl.formatMessage({id: "success_write_next"})
-          );
+          app.showToast(app.intl.formatMessage({ id: "success_write_next" }));
           typeNextVerse();
           return;
         }
@@ -495,8 +481,7 @@ const Exercise = () => {
 
     for (index = 0; index < answerWords.length; index++) {
       const correctWord = correctWords[index];
-      const answerWord =
-        index < answerWords.length ? answerWords[index] : "";
+      const answerWord = index < answerWords.length ? answerWords[index] : "";
       if (answerWord !== correctWord) {
         wrongWord = index;
         break;
@@ -536,19 +521,16 @@ const Exercise = () => {
     // const correct = wrongWord === -1;
     return (
       <div className="TitleButtons">
-        <VerseInfo
-          trigger="exercise_typing_title"
-          onClick={onFinishedTyping}
-        />
+        <VerseInfo trigger="exercise_typing_title" onClick={onFinishedTyping} />
         <div className="ButtonsBar">
           <button onClick={startReciting}>
-            <String id="start"/>
+            <String id="start" />
           </button>
           <button onClick={onFinishedTyping}>
-            <String id="check"/>
+            <String id="check" />
           </button>
           <button onClick={showIntro}>
-            <String id="home"/>
+            <String id="home" />
           </button>
         </div>
       </div>
@@ -561,7 +543,7 @@ const Exercise = () => {
 
   const renderText = () => {
     if (!writtenText) {
-      return <String id="writing_prompt"/>;
+      return <String id="writing_prompt" />;
     }
     return (
       <>
@@ -571,7 +553,7 @@ const Exercise = () => {
     );
   };
 
-  const onUpdateQuickMode = ({target}) => {
+  const onUpdateQuickMode = ({ target }) => {
     //setQuickMode(target.checked);
     setQuickMode(parseInt(target.value));
     defaultButton.focus();
@@ -584,7 +566,7 @@ const Exercise = () => {
         <div
           style={{
             position: "relative",
-            height: app.appHeight - 248, //keyboard and title heights
+            height: appHeight - 248, //keyboard and title heights
           }}
         >
           <div
@@ -594,11 +576,7 @@ const Exercise = () => {
             }}
             className={
               "TypingConsole" +
-              (!writtenText.length
-                ? " empty"
-                : correct
-                  ? " Correct"
-                  : " Wrong")
+              (!writtenText.length ? " empty" : correct ? " Correct" : " Wrong")
             }
           >
             {renderText()}
@@ -614,8 +592,8 @@ const Exercise = () => {
                   onChange={onUpdateQuickMode}
                 />
                 <span>
-                                    <String id="quick_mode_0"/>
-                                </span>
+                  <String id="quick_mode_0" />
+                </span>
               </label>
             </div>
             <div>
@@ -628,8 +606,8 @@ const Exercise = () => {
                   onChange={onUpdateQuickMode}
                 />
                 <span>
-                                    <String id="quick_mode_1"/>
-                                </span>
+                  <String id="quick_mode_1" />
+                </span>
               </label>
             </div>
             <div>
@@ -642,8 +620,8 @@ const Exercise = () => {
                   onChange={onUpdateQuickMode}
                 />
                 <span>
-                                    <String id="quick_mode_2"/>
-                                </span>
+                  <String id="quick_mode_2" />
+                </span>
               </label>
             </div>
           </div>
@@ -661,13 +639,13 @@ const Exercise = () => {
   const redoTyping = (e) => {
     setWrittenText("");
     startAnswer();
-    analytics.logEvent("start_typing", {trigger: "exercise_redo"});
+    analytics.logEvent("start_typing", { trigger: "exercise_redo" });
   };
 
   const renderResultsTitle = () => {
     return (
       <div className="TitleButtons">
-        <VerseInfo trigger="exercise_result_title"/>
+        <VerseInfo trigger="exercise_result_title" />
         <div className="ButtonsBar">
           {isCorrect() ? (
             //correct answer
@@ -680,7 +658,7 @@ const Exercise = () => {
                 }}
                 onClick={typeNextVerse}
               >
-                <String id="type_next"/>
+                <String id="type_next" />
               </button>
               <button
                 ref={(ref) => {
@@ -690,10 +668,10 @@ const Exercise = () => {
                 }}
                 onClick={reciteNextVerse}
               >
-                <String id="recite_next"/>
+                <String id="recite_next" />
               </button>
               <button onClick={gotoRandomVerse}>
-                <String id="new_verse"/>
+                <String id="new_verse" />
               </button>
             </>
           ) : (
@@ -705,13 +683,13 @@ const Exercise = () => {
                 onClick={onClickType}
                 trigger="exercise_retry"
               >
-                <String id="correct"/>
+                <String id="correct" />
               </button>
               <button onClick={startReciting}>
-                <String id="start"/>
+                <String id="start" />
               </button>
               <button onClick={showIntro}>
-                <String id="home"/>
+                <String id="home" />
               </button>
             </>
           )}
@@ -729,13 +707,13 @@ const Exercise = () => {
       <>
         <div className="ButtonsBar">
           <button onClick={redoTyping}>
-            <String id="redo"/>
+            <String id="redo" />
           </button>
           <button onClick={redoReciting}>
-            <String id="start"/>
+            <String id="start" />
           </button>
           <button onClick={showIntro}>
-            <String id="home"/>
+            <String id="home" />
           </button>
 
           {/* <CommandButton command="Settings" trigger={trigger} /> */}
@@ -747,13 +725,13 @@ const Exercise = () => {
           onMoveNext={onMoveNext}
           trigger={trigger}
         />
-        <hr/>
+        <hr />
         <div>
-          <String id="random_exercise"/>
+          <String id="random_exercise" />
         </div>
-        <ExerciseSettings/>
-        <hr/>
-        <ActivityChart activity="chars"/>
+        <ExerciseSettings />
+        <hr />
+        <ActivityChart activity="chars" />
       </>
     );
   };
@@ -765,19 +743,19 @@ const Exercise = () => {
       if (isCorrect()) {
         return (
           <div>
-                        <span className="Correct">
-                            <Icon icon={faThumbsUp}/>
-                        </span>{" "}
-            <String id="correct_answer"/>
+            <span className="Correct">
+              <Icon icon={faThumbsUp} />
+            </span>{" "}
+            <String id="correct_answer" />
           </div>
         );
       }
       return (
         <div>
-                    <span className="Wrong">
-                        <Icon icon={faThumbsDown}/>
-                    </span>{" "}
-          <String id="wrong_answer"/>
+          <span className="Wrong">
+            <Icon icon={faThumbsDown} />
+          </span>{" "}
+          <String id="wrong_answer" />
         </div>
       );
     };
@@ -791,8 +769,8 @@ const Exercise = () => {
         .split("")
         .map((x, index) => (
           <span key={index} className="Wrong">
-                        {" ? "}
-                    </span>
+            {" ? "}
+          </span>
         ));
     };
 
@@ -804,13 +782,11 @@ const Exercise = () => {
             <span
               key={index}
               className={
-                wrongWord === -1 || index < wrongWord
-                  ? "Correct"
-                  : "Wrong"
+                wrongWord === -1 || index < wrongWord ? "Correct" : "Wrong"
               }
             >
-                            {word}{" "}
-                        </span>
+              {word}{" "}
+            </span>
           ))}
           {renderMissingWords()}
         </h3>
@@ -818,11 +794,11 @@ const Exercise = () => {
           renderSuccessResultsReport()
         ) : (
           <>
-            <hr/>
+            <hr />
             <h3 className="Correct">
-              <VerseText copy={true} trigger="correct_exercise"/>
+              <VerseText copy={true} trigger="correct_exercise" />
             </h3>
-            <hr/>
+            <hr />
             <TafseerView
               verse={verse}
               showVerseText={false}
@@ -840,10 +816,10 @@ const Exercise = () => {
   const renderRecitingTitle = () => {
     return (
       <div className="TitleButtons">
-        <VerseInfo trigger="reciting_title" show={isNarrowLayout()}/>
+        <VerseInfo trigger="reciting_title" show={isNarrowLayout()} />
         <span className="TrackDuration">
-                    {renderCounter(32, 3, Math.floor(remainingTime), duration)}
-                </span>
+          {renderCounter(32, 3, Math.floor(remainingTime), duration)}
+        </span>
         <div className="ButtonsBar">
           <button
             onClick={onClickType}
@@ -852,13 +828,13 @@ const Exercise = () => {
               defaultButton = ref;
             }}
           >
-            <String id="answer"/>
+            <String id="answer" />
           </button>
           {/* <button onClick={gotoRandomVerse}>
                         <String id="new_verse" />
                     </button> */}
           <button onClick={showIntro}>
-            <String id="home"/>
+            <String id="home" />
           </button>
         </div>
       </div>
@@ -871,12 +847,12 @@ const Exercise = () => {
     }
     return (
       <div className="ContentFrame">
-        <VerseInfo trigger="exercise_reciting"/>
-        <VerseText/>
+        <VerseInfo trigger="exercise_reciting" />
+        <VerseText />
         <div className="FootNote">
-          <String id="exercise_intro"/>
+          <String id="exercise_intro" />
         </div>
-        <hr/>
+        <hr />
         <TafseerView
           verse={verse}
           showVerseText={false}
@@ -907,10 +883,7 @@ const Exercise = () => {
   return (
     <>
       <div className="Title">{renderTitle()}</div>
-      <div
-        className="PopupBody"
-        style={{maxHeight: app.appHeight - 50}}
-      >
+      <div className="PopupBody" style={{ maxHeight: appHeight - 50 }}>
         {renderContent()}
       </div>
     </>

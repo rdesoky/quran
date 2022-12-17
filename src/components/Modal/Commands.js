@@ -297,7 +297,7 @@ const CommandButton = ({
         analytics.logEvent(`show_${command.toLowerCase()}`, {
           trigger,
         });
-        dispatch(showPopup({ popup: command }));
+        dispatch(showPopup(command));
         // app.setPopup(command);
         dispatch(hideMenu());
         return;

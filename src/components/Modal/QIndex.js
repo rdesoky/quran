@@ -9,23 +9,29 @@ import {
   faTimes as faDelete,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import React, {memo, useContext, useEffect, useState} from "react";
-import {FormattedMessage as String} from "react-intl";
-import {useSelector} from "react-redux";
-import {AppContext} from "../../context/App";
-import {PlayerContext} from "../../context/Player";
-import {analytics} from "../../services/Analytics";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { memo, useContext, useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { AppContext } from "../../context/App";
+import { PlayerContext } from "../../context/Player";
+import { analytics } from "../../services/Analytics";
 import QData from "../../services/QData";
-import {selectAppHeight, selectPagesCount, selectPopupWidth} from "../../store/appSlice";
+import {
+  selectAppHeight,
+  selectIsCompact,
+  selectPagesCount,
+  selectPopupWidth,
+} from "../../store/appSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
-import {HifzRanges, SuraHifzChart} from "../Hifz";
-import {AddHifz} from "./Favorites";
-import {TafseerView} from "./Tafseer";
-import {selectLang} from "../../store/settingsSlice";
-import {quranText} from "../../App";
+import { HifzRanges, SuraHifzChart } from "../Hifz";
+import { AddHifz } from "./Favorites";
+import { TafseerView } from "./Tafseer";
+import { selectLang } from "../../store/settingsSlice";
+import { quranText } from "../../App";
+import { closePopup } from "../../store/uiSlice";
 
-const QIndex = ({simple}) => {
+const QIndex = ({ simple }) => {
   const app = useContext(AppContext);
   const lang = useSelector(selectLang);
   const [keyboard, setKeyboard] = useState(false);
@@ -34,7 +40,6 @@ const QIndex = ({simple}) => {
   );
   const [filter, setFilter] = useState("");
   const appHeight = useSelector(selectAppHeight);
-
 
   const selectTab = (tabId) => {
     localStorage.setItem("activeTab", tabId);
@@ -76,7 +81,7 @@ const QIndex = ({simple}) => {
             height: appHeight - 80,
           }}
         >
-          <SuraList simple={simple}/>
+          <SuraList simple={simple} />
         </div>
       </>
     );
@@ -93,8 +98,8 @@ const QIndex = ({simple}) => {
               activeTab === "index"
             )}
           >
-            <Icon icon={faListAlt}/>
-            <String id="index"/>
+            <Icon icon={faListAlt} />
+            <String id="index" />
           </button>
           <button
             onClick={(e) => selectTab("hifz")}
@@ -103,8 +108,8 @@ const QIndex = ({simple}) => {
               activeTab === "hifz"
             )}
           >
-            <Icon icon={faHeart}/>
-            <String id="favorites"/>
+            <Icon icon={faHeart} />
+            <String id="favorites" />
           </button>
           <button
             onClick={(e) => selectTab("bookmarks")}
@@ -113,8 +118,8 @@ const QIndex = ({simple}) => {
               activeTab === "bookmarks"
             )}
           >
-            <Icon icon={faBookmark}/>
-            <String id="bookmarks"/>
+            <Icon icon={faBookmark} />
+            <String id="bookmarks" />
           </button>
         </div>
       </div>
@@ -126,10 +131,10 @@ const QIndex = ({simple}) => {
         tabIndex="0"
         onClick={showKeyboard}
       >
-        {filter || <String id="find_sura"/>}
+        {filter || <String id="find_sura" />}
         {filter ? (
           <div className="ClearButton" onClick={clearFilter}>
-            <Icon icon={faTimes}/>
+            <Icon icon={faTimes} />
           </div>
         ) : (
           ""
@@ -137,7 +142,7 @@ const QIndex = ({simple}) => {
       </div>
 
       <AKeyboard
-        style={{display: keyboard ? "block" : "none"}}
+        style={{ display: keyboard ? "block" : "none" }}
         initText={filter}
         onUpdateText={updateFilter}
         onEnter={hideKeyboard}
@@ -154,25 +159,22 @@ const QIndex = ({simple}) => {
         onMouseDown={hideKeyboard}
       >
         {activeTab === "index" ? (
-          <SuraList filter={filter} trigger="indices_chapters"/>
+          <SuraList filter={filter} trigger="indices_chapters" />
         ) : activeTab === "hifz" ? (
-          <HifzRanges filter={filter} trigger="indices_hifz"/>
+          <HifzRanges filter={filter} trigger="indices_hifz" />
         ) : (
-          <BookmarksList
-            filter={filter}
-            trigger="indices_bookmarks"
-          />
+          <BookmarksList filter={filter} trigger="indices_bookmarks" />
         )}
       </div>
     </>
   );
 };
 
-export const PartCell = ({part, selected}) => {
+export const PartCell = ({ part, selected }) => {
   const app = useContext(AppContext);
   let btn;
   const gotoPart = (e) => {
-    analytics.logEvent("goto_part", {part});
+    analytics.logEvent("goto_part", { part });
     app.gotoPart(part);
   };
   useEffect(() => {
@@ -189,13 +191,13 @@ export const PartCell = ({part, selected}) => {
         }}
         className={part === selected ? "active" : null}
       >
-        <String id="part_num" values={{num: part + 1}}/>
+        <String id="part_num" values={{ num: part + 1 }} />
       </button>
     </li>
   );
 };
 
-export const PartsList = ({part}) => {
+export const PartsList = ({ part }) => {
   const [listWidth, setListWidth] = useState(0);
   let list;
   useEffect(() => {
@@ -217,14 +219,14 @@ export const PartsList = ({part}) => {
       {Array(30)
         .fill(0)
         .map((zero, index) => (
-          <PartCell part={index} selected={part} key={index}/>
+          <PartCell part={index} selected={part} key={index} />
         ))}
     </ul>
   );
 };
 
 export const SuraList = memo(
-  ({filter, simple, trigger = "chapters_index"}) => {
+  ({ filter, simple, trigger = "chapters_index" }) => {
     const app = useContext(AppContext);
     const popupWidth = useSelector(selectPopupWidth);
     const [actionsIndex, setActionsIndex] = useState(0);
@@ -234,7 +236,7 @@ export const SuraList = memo(
     }, [trigger]);
 
     useEffect(() => {
-      const {selectStart} = app;
+      const { selectStart } = app;
       const currentSura = QData.ayaIdInfo(selectStart).sura;
       setActionsIndex(currentSura);
     }, [app]);
@@ -268,7 +270,7 @@ export const SuraList = memo(
   }
 );
 
-export const SimpleSuraIndexCell = ({sura, selectedSura}) => {
+export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
   const app = useContext(AppContext);
   let btn;
   const gotoSura = (e) => {
@@ -303,21 +305,23 @@ export const SimpleSuraIndexCell = ({sura, selectedSura}) => {
 
 export const SuraIndexCell = memo(
   ({
-     sura,
-     filter,
-     selectedSura,
-     selectSura,
-     simple,
-     trigger = "chapters_index",
-   }) => {
+    sura,
+    filter,
+    selectedSura,
+    selectSura,
+    simple,
+    trigger = "chapters_index",
+  }) => {
     const pagesCount = useSelector(selectPagesCount);
     const app = useContext(AppContext);
     const player = useContext(PlayerContext);
     const [suraName, setSuraName] = useState("");
+    const isCompact = useSelector(selectIsCompact);
+    const dispatch = useDispatch();
 
     const checkClosePopup = () => {
-      if (!app.isCompact && pagesCount === 1) {
-        app.closePopup();
+      if (!isCompact && pagesCount === 1) {
+        dispatch(closePopup());
       }
     };
 
@@ -346,8 +350,8 @@ export const SuraIndexCell = memo(
         checkClosePopup();
         app.gotoSura(sura);
         app.setMessageBox({
-          title: <String id="update_hifz"/>,
-          content: <AddHifz/>,
+          title: <String id="update_hifz" />,
+          content: <AddHifz />,
         });
         analytics.logEvent("show_update_hifz", {
           ...QData.verseLocation(app.selectStart),
@@ -356,11 +360,7 @@ export const SuraIndexCell = memo(
       } else {
         const startPage = suraInfo.sp - 1;
         const pagesCount = suraInfo.ep - suraInfo.sp + 1;
-        app.addHifzRange(
-          startPage,
-          sura,
-          suraInfo.ep - suraInfo.sp + 1
-        );
+        app.addHifzRange(startPage, sura, suraInfo.ep - suraInfo.sp + 1);
         analytics.logEvent("add_hifz", {
           trigger,
           range: "full_sura",
@@ -368,7 +368,7 @@ export const SuraIndexCell = memo(
           startPage,
           pagesCount,
         });
-        app.showToast(<String id="sura_memorized"/>);
+        app.showToast(<String id="sura_memorized" />);
       }
     };
 
@@ -413,7 +413,7 @@ export const SuraIndexCell = memo(
 
     return (
       <li className="SuraIndexCell">
-        {simple ? "" : <SuraHifzChart pages={false} sura={sura}/>}
+        {simple ? "" : <SuraHifzChart pages={false} sura={sura} />}
         <button
           onClick={gotoSura}
           // eslint-disable-next-line eqeqeq
@@ -432,9 +432,9 @@ export const SuraIndexCell = memo(
                 <button
                   sura={sura}
                   onClick={playSura}
-                  title={app.formatMessage({id: "play"})}
+                  title={app.formatMessage({ id: "play" })}
                 >
-                  <Icon icon={faPlayCircle}/>
+                  <Icon icon={faPlayCircle} />
                 </button>
                 <button
                   sura={sura}
@@ -443,14 +443,14 @@ export const SuraIndexCell = memo(
                     id: "update_hifz",
                   })}
                 >
-                  <Icon icon={faHeart}/>
+                  <Icon icon={faHeart} />
                 </button>
                 {/* <button sura={sura} onClick={reviewSura}>
                                 <Icon icon={faEyeSlash} />
                             </button> */}
               </>
             ) : (
-              <Icon icon={faEllipsisH}/>
+              <Icon icon={faEllipsisH} />
             )
           }
         </div>
@@ -460,13 +460,13 @@ export const SuraIndexCell = memo(
 );
 
 export const BookmarkListItem = ({
-                                   verse,
-                                   filter,
-                                   selectedVerse,
-                                   selectVerse,
-                                   showTafseer = false,
-                                   trigger = "bookmarks",
-                                 }) => {
+  verse,
+  filter,
+  selectedVerse,
+  selectVerse,
+  showTafseer = false,
+  trigger = "bookmarks",
+}) => {
   const app = useContext(AppContext);
   const pagesCount = useSelector(selectPagesCount);
   const player = useContext(PlayerContext);
@@ -474,6 +474,8 @@ export const BookmarkListItem = ({
   const [bookmarkDesc, setBookmarkDesc] = useState("");
   const [suraName, setSuraName] = useState("");
   const [showTafseerView, setShowTafseer] = useState(showTafseer);
+  const isCompact = useSelector(selectIsCompact);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const sura = QData.ayaIdInfo(verse).sura;
@@ -484,7 +486,7 @@ export const BookmarkListItem = ({
     setVerseText(quranText[verse]);
 
     const bookmarkDesc = app.intl.formatMessage(
-      {id: "bookmark_desc"},
+      { id: "bookmark_desc" },
       {
         sura: suraName,
         verse: QData.ayaIdInfo(verse).aya + 1,
@@ -495,8 +497,8 @@ export const BookmarkListItem = ({
   }, [app, verse]);
 
   const checkClosePopup = () => {
-    if (!app.isCompact && pagesCount === 1) {
-      app.closePopup();
+    if (!isCompact && pagesCount === 1) {
+      dispatch(closePopup());
     }
   };
 
@@ -505,7 +507,7 @@ export const BookmarkListItem = ({
       selectVerse(verse);
       return;
     }
-    app.gotoAya(verse, {sel: true});
+    app.gotoAya(verse, { sel: true });
     checkClosePopup();
     analytics.logEvent("goto_verse", {
       ...QData.verseLocation(verse),
@@ -515,8 +517,8 @@ export const BookmarkListItem = ({
 
   const removeBookmark = (e) => {
     app.pushMessageBox({
-      title: <String id="are_you_sure"/>,
-      content: <String id="delete_bookmark"/>,
+      title: <String id="are_you_sure" />,
+      content: <String id="delete_bookmark" />,
       onYes: () => {
         app.removeBookmark(verse);
         analytics.logEvent("remove_bookmark", {
@@ -529,7 +531,7 @@ export const BookmarkListItem = ({
 
   const playVerse = (e) => {
     player.stop(true);
-    app.gotoAya(verse, {sel: true});
+    app.gotoAya(verse, { sel: true });
     setTimeout(() => {
       player.play();
     }, 500);
@@ -559,8 +561,8 @@ export const BookmarkListItem = ({
 
   const download = (e) => {
     app.setMessageBox({
-      title: <String id="download_verse_audio"/>,
-      content: <String id="download_guide"/>,
+      title: <String id="download_verse_audio" />,
+      content: <String id="download_guide" />,
     });
     e.preventDefault();
   };
@@ -582,15 +584,15 @@ export const BookmarkListItem = ({
             <>
               <button
                 onClick={playVerse}
-                title={app.formatMessage({id: "play"})}
+                title={app.formatMessage({ id: "play" })}
               >
-                <Icon icon={faPlayCircle}/>
+                <Icon icon={faPlayCircle} />
               </button>
               <button
                 onClick={toggleTafseer}
-                title={app.formatMessage({id: "tafseer"})}
+                title={app.formatMessage({ id: "tafseer" })}
               >
-                <Icon icon={faQuran}/>
+                <Icon icon={faQuran} />
               </button>
               <div
                 className="LinkButton"
@@ -598,27 +600,24 @@ export const BookmarkListItem = ({
                   id: "download_verse_audio",
                 })}
               >
-                <a
-                  href={player.audioSource(verse)}
-                  onClick={download}
-                >
-                  <Icon icon={faFileDownload}/>
+                <a href={player.audioSource(verse)} onClick={download}>
+                  <Icon icon={faFileDownload} />
                 </a>
               </div>
               <button
                 onClick={removeBookmark}
-                title={app.formatMessage({id: "unbookmark"})}
+                title={app.formatMessage({ id: "unbookmark" })}
               >
-                <Icon icon={faDelete}/>
+                <Icon icon={faDelete} />
               </button>
             </>
           ) : (
-            <Icon icon={faEllipsisH}/>
+            <Icon icon={faEllipsisH} />
           )
         }
       </div>
       <button onClick={gotoVerse}>
-        <Icon icon={faBookmark}/>
+        <Icon icon={faBookmark} />
         &nbsp;
         {bookmarkDesc}
         {showTafseerView ? null : (
@@ -635,20 +634,20 @@ export const BookmarkListItem = ({
         )}
       </button>
       {showTafseerView ? (
-        <TafseerView verse={verse} showVerse={false} copy={true}/>
+        <TafseerView verse={verse} showVerse={false} copy={true} />
       ) : null}
     </li>
   );
 };
 
-export const BookmarksList = ({filter, trigger = "bookmarks_index"}) => {
+export const BookmarksList = ({ filter, trigger = "bookmarks_index" }) => {
   const app = useContext(AppContext);
   const [actionsIndex, setActionsIndex] = useState(-1);
   const [showTafseer, setShowTafseer] = useState(false);
 
-  const {bookmarks} = app;
+  const { bookmarks } = app;
 
-  const handleShowTafseerChange = ({currentTarget}) => {
+  const handleShowTafseerChange = ({ currentTarget }) => {
     const showTafseer = currentTarget.checked;
     setShowTafseer(showTafseer);
   };
@@ -660,7 +659,7 @@ export const BookmarksList = ({filter, trigger = "bookmarks_index"}) => {
   if (!bookmarks.length) {
     return (
       <div>
-        <String id="no_bookmarks"/>
+        <String id="no_bookmarks" />
       </div>
     );
   }
@@ -674,7 +673,7 @@ export const BookmarksList = ({filter, trigger = "bookmarks_index"}) => {
           id="toggleTafseer"
         />
         <label htmlFor="toggleTafseer">
-          <String id="tafseer"/>
+          <String id="tafseer" />
         </label>
       </div>
       <ul className="FlowingList">
