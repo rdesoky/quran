@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {ListReciters} from "../services/AudioData";
 
 const sliceName = "settings";
 
@@ -10,6 +11,11 @@ const initialState = {
     randomAutoRecite: JSON.parse(
         localStorage.getItem("randomAutoRecite") || false
     ),
+    followPlayer: JSON.parse(localStorage.getItem("followPlayer") || "true"),
+    repeat: parseInt(localStorage.getItem("repeat") || "0"),
+    reciter: localStorage.getItem("reciter") || ListReciters()[0],
+    theme: localStorage.getItem("theme") || "Default",
+    lang: localStorage.getItem("lang") || "ar",
 };
 
 const settingsSlice = createSlice({
@@ -25,12 +31,20 @@ const settingsSlice = createSlice({
         setRandomAutoRecite: (slice, { payload: val }) => {
             slice.randomAutoRecite = val;
         },
-    },
+        setTheme: (slice, { payload: theme }) => {
+            slice.theme = theme;
+        },
+        setLang: (slice, { payload: lang }) => {
+            slice.lang = lang;
+            localStorage.setItem("lang", lang);
+        },
+        toggleTheme: (slice) => {
+            slice.theme = slice.theme === "Default" ? "Dark" : "Default";
+        },    },
 });
 
-export default settingsSlice;
 
-export const { setExerciseLevel, setExerciseMemorized, setRandomAutoRecite } =
+export const { setLang, setTheme, setExerciseLevel, setExerciseMemorized, setRandomAutoRecite } =
     settingsSlice.actions;
 
 export const selectExerciseLevel = (state) => state[sliceName].exerciseLevel;
@@ -38,3 +52,8 @@ export const selectExerciseMemorized = (state) =>
     state[sliceName].exerciseMemorized;
 export const selectRandomAutoRecite = (state) =>
     state[sliceName].randomAutoRecite;
+
+export const selectLang = (state) => state[sliceName].lang;
+export const selectTheme = (state) => state[sliceName].theme;
+
+export default {[sliceName]: settingsSlice.reducer };

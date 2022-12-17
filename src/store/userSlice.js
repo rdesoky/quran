@@ -38,6 +38,7 @@ const userSlice = createSlice({
         },
     },
 });
-export default userSlice;
 export const { setUserId, setActivities, setBookmarks, setHifzRanges } =
     userSlice.actions;
+
+export default { [sliceName]: userSlice.reducer };
