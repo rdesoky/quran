@@ -1,5 +1,4 @@
 import React from "react";
-import { AppConsumer } from "../../context/App";
 import { FormattedMessage as String } from "react-intl";
 import { selectPagesCount } from "../../store/app";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,8 +6,8 @@ import { selectPageWidth } from "../../store/layoutSlice";
 import { useLocation } from "react-router-dom";
 import { showPopup } from "../../store/uiSlice";
 
-const PageFooter = ({ index: pageIndex, app, order }) => {
-  const location = useLocation();
+const PageFooter = ({ index: pageIndex, order }) => {
+  // const location = useLocation();
   const pagesCount = useSelector(selectPagesCount);
   const pageWidth = useSelector(selectPageWidth);
   const dispatch = useDispatch();
@@ -40,4 +39,4 @@ const PageFooter = ({ index: pageIndex, app, order }) => {
   );
 };
 
-export default AppConsumer(PageFooter);
+export default PageFooter;

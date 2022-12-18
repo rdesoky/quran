@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {AppConsumer} from "./App";
-import QData, {ayatCount} from "./../services/QData";
+import React, { Component } from "react";
+import { AppConsumer } from "./App";
+import QData, { ayatCount } from "./../services/QData";
 // import Utils from "./../services/utils";
-import {GetAudioURL, ListReciters} from "./../services/AudioData";
+import { GetAudioURL, ListReciters } from "./../services/AudioData";
 
 const AudioState = {
   stopped: 0,
@@ -46,12 +46,12 @@ class PlayerProvider extends Component {
   };
 
   setPlayingAya = (playingAya) => {
-    this.setState({playingAya});
+    this.setState({ playingAya });
     return playingAya;
   };
 
   setAudioState = (audioState) => {
-    this.setState({audioState});
+    this.setState({ audioState });
     return audioState;
   };
 
@@ -108,13 +108,13 @@ class PlayerProvider extends Component {
     }
 
     if (playingAya < QData.ayatCount()) {
-      this.setState({playingAya});
+      this.setState({ playingAya });
     }
     return playingAya;
   };
 
   audioSource = (ayaId) => {
-    const {sura, aya} = QData.ayaIdInfo(
+    const { sura, aya } = QData.ayaIdInfo(
       ayaId !== undefined ? ayaId : this.state.playingAya
     );
     return GetAudioURL(this.state.reciter, sura + 1, aya + 1);
@@ -125,7 +125,7 @@ class PlayerProvider extends Component {
   };
 
   play = () => {
-    const {app} = this.props;
+    const { app } = this.props;
     const playingAya =
       this.state.playingAya === -1
         ? this.setPlayingAya(app.selectedRange().start)
@@ -143,10 +143,7 @@ class PlayerProvider extends Component {
       });
     }
 
-    if (
-      this.state.repeat === AudioRepeat.verse &&
-      app.popup !== "Exercise"
-    ) {
+    if (this.state.repeat === AudioRepeat.verse && app.popup !== "Exercise") {
       this.setRepeat(AudioRepeat.noStop);
     }
 
@@ -185,8 +182,8 @@ class PlayerProvider extends Component {
 
   changeReciter = (reciter) => {
     localStorage.setItem("reciter", reciter);
-    this.setState({reciter});
-    const {state} = this;
+    this.setState({ reciter });
+    const { state } = this;
     switch (state.audioState) {
       case AudioState.paused:
         this.stop();
@@ -205,20 +202,17 @@ class PlayerProvider extends Component {
     );
 
     updated_reciters.splice(0, 0, reciter);
-    localStorage.setItem(
-      "reciters_ayaAudio",
-      JSON.stringify(updated_reciters)
-    );
+    localStorage.setItem("reciters_ayaAudio", JSON.stringify(updated_reciters));
   };
 
   setFollowPlayer = (followPlayer) => {
-    this.setState({followPlayer});
+    this.setState({ followPlayer });
     localStorage.setItem("followPlayer", JSON.stringify(followPlayer));
     return this.state.followPlayer;
   };
 
   setRepeat = (repeat) => {
-    this.setState({repeat});
+    this.setState({ repeat });
     localStorage.setItem("repeat", repeat.toString());
     return this.state.repeat;
   };
@@ -273,7 +267,7 @@ class PlayerProvider extends Component {
   }
 
   onEnded = () => {
-    const {audioState} = this.state;
+    const { audioState } = this.state;
     if (audioState !== AudioState.stopped) {
       this.offsetPlayingAya(1);
       this.play();
@@ -316,14 +310,6 @@ class PlayerProvider extends Component {
 }
 
 //define consumers generator function
-const PlayerConsumer = (Component) =>
-  function PlayerConsumerGen(props) {
-    return (
-      <PlayerContext.Consumer>
-        {(state) => <Component {...props} player={state}/>}
-      </PlayerContext.Consumer>
-    );
-  };
 
 export default AppConsumer(PlayerProvider);
-export {PlayerContext, PlayerConsumer, AudioState, AudioRepeat};
+export { PlayerContext, AudioState, AudioRepeat };

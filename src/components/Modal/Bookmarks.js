@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer, AppContext } from "../../context/App";
+import { AppContext } from "../../context/App";
 import { VerseText } from "./../Widgets";
 import { BookmarksList } from "./QIndex";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
@@ -50,4 +50,4 @@ const Bookmarks = () => {
   );
 };
 
-export default AppConsumer(Bookmarks);
+export default Bookmarks;

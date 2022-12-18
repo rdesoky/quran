@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import QData from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppConsumer } from "./../../context/App";
-import { PlayerConsumer, AudioState } from "../../context/Player";
+import { AudioState, PlayerContext } from "../../context/Player";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsCompact, selectPagesCount } from "../../store/layoutSlice";
 import { closePopup } from "../../store/uiSlice";
+import { AppContext } from "../../context/App";
 
-const GotoPage = ({ open, app, player }) => {
+const GotoPage = ({ open }) => {
+  const player = useContext(PlayerContext);
+  const app = useContext(AppContext);
   const isCompact = useSelector(selectIsCompact);
   const dispatch = useDispatch();
 
@@ -66,6 +68,7 @@ const GotoPage = ({ open, app, player }) => {
   };
 
   const gotoPage = (e) => {
+    e.preventDefault();
     const { target: form } = e;
     const pageNum = form["PageNumber"].value;
     app.gotoPage(pageNum);
@@ -73,7 +76,6 @@ const GotoPage = ({ open, app, player }) => {
     app.selectAya(ayaId);
     checkClosePopup();
     stopAudio();
-    e.preventDefault();
   };
 
   const gotoPart = (e) => {
@@ -236,4 +238,4 @@ const GotoPage = ({ open, app, player }) => {
   );
 };
 
-export default AppConsumer(PlayerConsumer(GotoPage));
+export default GotoPage;
