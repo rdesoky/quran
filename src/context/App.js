@@ -1,11 +1,11 @@
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
-import QData, {ayatCount} from "../services/QData";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import QData, { ayatCount } from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
-import {analytics} from "../services/Analytics";
-import {injectIntl} from "react-intl";
-import {quranNormalizedText, quranText} from "../App";
+import { analytics } from "../services/Analytics";
+import { injectIntl } from "react-intl";
+import { quranNormalizedText, quranText } from "../App";
 
 // const rc = localStorage.getItem("commands");
 // const recentCommands = rc ? JSON.parse(rc) : [];
@@ -29,7 +29,7 @@ const AppState = {
   messageBox: false,
   contextPopup: false,
   user: null,
-  toastMessage: null,
+  // toastMessage: null,
   expandedMenu: false,
   modalPopup: false,
   hifzRanges: [],
@@ -68,47 +68,47 @@ class AppProvider extends Component {
   // _verseList = [];
   // _normVerseList = [];
   _suraNames = undefined;
-  _contextPopupInfo = null;
-  _messageBoxInfo = [];
+  // _contextPopupInfo = null;
+  // _messageBoxInfo = [];
+  //
+  // setContextPopup = (contextPopupInfo = null) => {
+  //   this._contextPopupInfo = contextPopupInfo;
+  //   this.setState({ contextPopup: contextPopupInfo !== null });
+  // };
 
-  setContextPopup = (contextPopupInfo = null) => {
-    this._contextPopupInfo = contextPopupInfo;
-    this.setState({contextPopup: contextPopupInfo !== null});
-  };
+  // getContextPopup = () => {
+  //   return this._contextPopupInfo;
+  // };
+  //
+  // pushMessageBox = (msgBoxInfo = null) => {
+  //   if (msgBoxInfo) {
+  //     this._messageBoxInfo.push(msgBoxInfo);
+  //   } else {
+  //     this._messageBoxInfo.pop();
+  //   }
+  //   this.setState({ messageBox: this._messageBoxInfo.length > 0 });
+  //   this.setContextPopup(null);
+  // };
+  //
+  // setMessageBox = (msgBoxInfo = null) => {
+  //   if (msgBoxInfo) {
+  //     this._messageBoxInfo = [msgBoxInfo];
+  //   } else {
+  //     this._messageBoxInfo = [];
+  //   }
+  //   this.setState({ messageBox: this._messageBoxInfo.length > 0 });
+  //   this.setContextPopup(null);
+  // };
+  //
+  // getMessageBox = () => {
+  //   const msgsCount = this._messageBoxInfo.length;
+  //   return msgsCount ? this._messageBoxInfo[msgsCount - 1] : null;
+  // };
 
-  getContextPopup = () => {
-    return this._contextPopupInfo;
-  };
-
-  pushMessageBox = (msgBoxInfo = null) => {
-    if (msgBoxInfo) {
-      this._messageBoxInfo.push(msgBoxInfo);
-    } else {
-      this._messageBoxInfo.pop();
-    }
-    this.setState({messageBox: this._messageBoxInfo.length > 0});
-    this.setContextPopup(null);
-  };
-
-  setMessageBox = (msgBoxInfo = null) => {
-    if (msgBoxInfo) {
-      this._messageBoxInfo = [msgBoxInfo];
-    } else {
-      this._messageBoxInfo = [];
-    }
-    this.setState({messageBox: this._messageBoxInfo.length > 0});
-    this.setContextPopup(null);
-  };
-
-  getMessageBox = () => {
-    const msgsCount = this._messageBoxInfo.length;
-    return msgsCount ? this._messageBoxInfo[msgsCount - 1] : null;
-  };
-
-  setTheme = (theme) => {
-    this.setState({theme});
-    localStorage.setItem("theme", theme);
-  };
+  // setTheme = (theme) => {
+  //   this.setState({ theme });
+  //   localStorage.setItem("theme", theme);
+  // };
 
   selectAya = (ayaId) => {
     if (ayaId === undefined) {
@@ -116,7 +116,7 @@ class AppProvider extends Component {
       this.hideMask();
     }
     if (ayaId >= 0 && ayaId < ayatCount) {
-      this.setState({selectStart: ayaId, selectEnd: ayaId});
+      this.setState({ selectStart: ayaId, selectEnd: ayaId });
       return ayaId;
     }
   };
@@ -128,9 +128,7 @@ class AppProvider extends Component {
 
   suraNames = () => {
     if (!this._suraNames || this._suraNames.length < 114) {
-      this._suraNames = this.formatMessage({id: "sura_names"}).split(
-        ","
-      );
+      this._suraNames = this.formatMessage({ id: "sura_names" }).split(",");
     }
     return this._suraNames;
   };
@@ -177,7 +175,7 @@ class AppProvider extends Component {
     if (ayaId === this.state.selectStart) {
       this.selectAya(ayaId);
     } else {
-      this.setState({selectStart: ayaId});
+      this.setState({ selectStart: ayaId });
     }
     return ayaId;
   };
@@ -190,12 +188,12 @@ class AppProvider extends Component {
   };
 
   setSelectStart = (selectStart) => {
-    this.setState({selectStart});
+    this.setState({ selectStart });
   };
 
   setMaskStart = (maskStart, keepSelection = false) => {
     if (maskStart === undefined) {
-      let {selectStart, selectEnd} = this.state;
+      let { selectStart, selectEnd } = this.state;
       if (this.state.maskStart !== -1) {
         this.hideMask();
         return;
@@ -205,7 +203,7 @@ class AppProvider extends Component {
     }
 
     if (keepSelection) {
-      this.setState({maskStart});
+      this.setState({ maskStart });
     } else {
       this.setState({
         maskStart,
@@ -216,11 +214,11 @@ class AppProvider extends Component {
   };
 
   hideMask = () => {
-    this.setState({maskStart: -1});
+    this.setState({ maskStart: -1 });
   };
 
   setSelectEnd = (selectEnd) => {
-    this.setState({selectEnd});
+    this.setState({ selectEnd });
   };
 
   offsetMask = (offset) => {
@@ -237,47 +235,47 @@ class AppProvider extends Component {
     }
   };
 
-  setShowMenu = (showMenu) => {
-    this.setState({showMenu});
-    // if (showMenu) {
-    //     this.setState({ showPopup: false });
-    // }
-    // if (!showMenu) {
-    //     this.setState({ expandedMenu: false });
-    // }
-  };
+  // setShowMenu = (showMenu) => {
+  //   this.setState({ showMenu });
+  // if (showMenu) {
+  //     this.setState({ showPopup: false });
+  // }
+  // if (!showMenu) {
+  //     this.setState({ expandedMenu: false });
+  // }
+  // };
 
-  toggleShowMenu = () => {
-    this.setShowMenu(!this.state.showMenu);
-  };
+  // toggleShowMenu = () => {
+  //   this.setShowMenu(!this.state.showMenu);
+  // };
 
-  setPopup = (popup, popupParams = {}) => {
-    if (this.state.popup) {
-      const newPopup = this.state.popup === popup ? null : popup;
-      this.closePopup(newPopup);//Toggling active popup
-    } else {
-      this.setState({
-        popup,
-        popupParams,
-        showMenu: null,
-        showPopup: true,
-        contextPopup: null,
-      });
-      this.setMessageBox(null);
-    }
-    if (popup !== null) {
-      // this.pushRecentCommand(popup);
-      // firebase.analytics().logEvent("show_ui", { ui_name: popup });
-    }
-  };
+  // setPopup = (popup, popupParams = {}) => {
+  //   if (this.state.popup) {
+  //     const newPopup = this.state.popup === popup ? null : popup;
+  //     this.closePopup(newPopup); //Toggling active popup
+  //   } else {
+  //     this.setState({
+  //       popup,
+  //       popupParams,
+  //       showMenu: null,
+  //       showPopup: true,
+  //       contextPopup: null,
+  //     });
+  //     this.setMessageBox(null);
+  //   }
+  //   if (popup !== null) {
+  //     // this.pushRecentCommand(popup);
+  //     // firebase.analytics().logEvent("show_ui", { ui_name: popup });
+  //   }
+  // };
 
-  closePopup = (newPopup = null) => {
-    this.setState({showPopup: false, contextPopup: null});
-    setTimeout(() => {
-      this.setState({popup: newPopup, showPopup: newPopup !== null});
-      Utils.selectTopCommand();
-    }, 500);
-  };
+  // closePopup = (newPopup = null) => {
+  //   this.setState({showPopup: false, contextPopup: null});
+  //   setTimeout(() => {
+  //     this.setState({popup: newPopup, showPopup: newPopup !== null});
+  //     Utils.selectTopCommand();
+  //   }, 500);
+  // };
 
   nextPage = () => {
     this.offsetPage(1);
@@ -287,24 +285,8 @@ class AppProvider extends Component {
     this.offsetPage(-1);
   };
 
-  pageWidth = () => {
-    let width = this.pageHeight() * 0.61; //aspect ratio
-    if (width > this.state.appWidth) {
-      return this.state.appWidth;
-    }
-    return width;
-  };
-
-  pageHeight = () => {
-    return this.state.appHeight - 50;
-  };
-
-  pageMargin = () => {
-    return this.state.isNarrow ? "0" : "0 20px";
-  };
-
   getCurrentPageNumber = () => {
-    const {location} = this.props;
+    const { location } = this.props;
     let match = location.pathname.match(/page\/(.+)/);
     let pageNumber = match ? match[1] : undefined;
     return parseInt(pageNumber);
@@ -338,10 +320,9 @@ class AppProvider extends Component {
       selectPageAya();
       return;
     }
-    const {history} = this.props;
+    const { history } = this.props;
     if (pageNum <= 604 && pageNum >= 1) {
-      let targetPath =
-        `${process.env.PUBLIC_URL}/page/` + pageNum.toString();
+      let targetPath = `${process.env.PUBLIC_URL}/page/` + pageNum.toString();
       if (replace) {
         history.replace(targetPath);
       } else {
@@ -376,7 +357,7 @@ class AppProvider extends Component {
   };
 
   gotoAya = (ayaId, opt = {}) => {
-    const {sel = false, replace = true, keepMask = false} = opt;
+    const { sel = false, replace = true, keepMask = false } = opt;
     if (ayaId === undefined) {
       ayaId = this.state.selectStart;
     }
@@ -397,15 +378,14 @@ class AppProvider extends Component {
   // };
 
   getSelectedText = () => {
-    let {selectStart, selectEnd} = this.state;
+    let { selectStart, selectEnd } = this.state;
     if (selectStart > selectEnd) {
       [selectStart, selectEnd] = [selectEnd, selectStart];
     }
-    const verses = quranText.slice(selectStart, selectEnd + 1)
-      .map((t, i) => {
-        const {sura, aya} = QData.ayaIdInfo(selectStart + i);
-        return `${t} (${sura + 1}:${aya + 1})`;
-      });
+    const verses = quranText.slice(selectStart, selectEnd + 1).map((t, i) => {
+      const { sura, aya } = QData.ayaIdInfo(selectStart + i);
+      return `${t} (${sura + 1}:${aya + 1})`;
+    });
 
     return verses.join(" ");
   };
@@ -469,7 +449,7 @@ class AppProvider extends Component {
   };
 
   selectedRange = () => {
-    const {selectStart, selectEnd} = this.state;
+    const { selectStart, selectEnd } = this.state;
     return {
       start: Math.min(selectStart, selectEnd),
       end: Math.max(selectStart, selectEnd),
@@ -492,7 +472,7 @@ class AppProvider extends Component {
       verse = this.selectedRange().start;
     }
     this.bookmarksRef.child(verse).set(-new Date().getTime());
-    this.showToast(this.formatMessage({id: "bookmark_added"}));
+    this.showToast(this.formatMessage({ id: "bookmark_added" }));
   };
 
   removeBookmark = (verse) => {
@@ -503,7 +483,7 @@ class AppProvider extends Component {
       verse = this.state.selectStart;
     }
     this.bookmarksRef.child(verse).set(null);
-    this.showToast(this.formatMessage({id: "bookmark_deleted"}));
+    this.showToast(this.formatMessage({ id: "bookmark_deleted" }));
   };
 
   setRangeRevised = (range) => {
@@ -519,9 +499,7 @@ class AppProvider extends Component {
         //Record new activity
         const today = new Date();
         const activityKey = Utils.dateKey(today);
-        const activityPagesRef = this.activityRef.child(
-          activityKey + "/pages"
-        );
+        const activityPagesRef = this.activityRef.child(activityKey + "/pages");
         activityPagesRef.once("value", (snapshot) => {
           let pages = snapshot.val() || 0;
           pages += range.pages;
@@ -567,8 +545,7 @@ class AppProvider extends Component {
     }
 
     const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
-    const newRangeID =
-      Utils.num2string(startPage, 3) + Utils.num2string(sura);
+    const newRangeID = Utils.num2string(startPage, 3) + Utils.num2string(sura);
     let newRange = {
       revs: 0,
       startPage,
@@ -593,10 +570,7 @@ class AppProvider extends Component {
 
     //check tailed ranges first
     suraRanges.forEach((r) => {
-      if (
-        newRange.startPage === r.startPage &&
-        newRange.pages === r.pages
-      ) {
+      if (newRange.startPage === r.startPage && newRange.pages === r.pages) {
         //found exact range, skip it
         addNew = false;
         return;
@@ -656,11 +630,11 @@ class AppProvider extends Component {
   };
 
   setModalPopup = (modalPopup = true) => {
-    this.setState({modalPopup});
+    this.setState({ modalPopup });
   };
 
   setExpandedMenu = (expandedMenu = true) => {
-    this.setState({expandedMenu});
+    this.setState({ expandedMenu });
   };
 
   isBookmarked = (verse) => {
@@ -676,9 +650,9 @@ class AppProvider extends Component {
     );
   };
 
-  showToast = (toastMessage) => {
-    this.setState({toastMessage});
-  };
+  // showToast = (toastMessage) => {
+  //   this.setState({ toastMessage });
+  // };
 
   suraRanges = (sura) =>
     this.state.hifzRanges
@@ -687,12 +661,12 @@ class AppProvider extends Component {
 
   methods = {
     suraRanges: this.suraRanges,
-    pushMessageBox: this.pushMessageBox,
-    setMessageBox: this.setMessageBox,
-    getMessageBox: this.getMessageBox,
-    setContextPopup: this.setContextPopup,
-    getContextPopup: this.getContextPopup,
-    showToast: this.showToast,
+    // pushMessageBox: this.pushMessageBox,
+    // setMessageBox: this.setMessageBox,
+    // getMessageBox: this.getMessageBox,
+    // setContextPopup: this.setContextPopup,
+    // getContextPopup: this.getContextPopup,
+    // showToast: this.showToast,
     deleteHifzRange: this.deleteHifzRange,
     addHifzRange: this.addHifzRange,
     setRangeRevised: this.setRangeRevised,
@@ -705,9 +679,9 @@ class AppProvider extends Component {
     suraNames: this.suraNames,
     selectedRange: this.selectedRange,
     // popupWidth: this.popupWidth,
-    setShowMenu: this.setShowMenu,
-    toggleShowMenu: this.toggleShowMenu,
-    setPopup: this.setPopup,
+    // setShowMenu: this.setShowMenu,
+    // toggleShowMenu: this.toggleShowMenu,
+    // setPopup: this.setPopup,
     nextPage: this.nextPage,
     prevPage: this.prevPage,
     offsetPage: this.offsetPage,
@@ -715,15 +689,15 @@ class AppProvider extends Component {
     gotoPage: this.gotoPage,
     gotoSura: this.gotoSura,
     gotoPart: this.gotoPart,
-    pageWidth: this.pageWidth,
-    pageHeight: this.pageHeight,
+    // pageWidth: this.pageWidth,
+    // pageHeight: this.pageHeight,
     setSelectStart: this.setSelectStart,
     setSelectEnd: this.setSelectEnd,
     setMaskStart: this.setMaskStart,
     hideMask: this.hideMask,
     offsetMask: this.offsetMask,
-    pageMargin: this.pageMargin,
-    setTheme: this.setTheme,
+    // pageMargin: this.pageMargin,
+    // setTheme: this.setTheme,
     offsetSelection: this.offsetSelection,
     selectAya: this.selectAya,
     extendSelection: this.extendSelection,
@@ -731,16 +705,16 @@ class AppProvider extends Component {
     // verseList: this.verseList,
     // verseText: this.verseText,
     // normVerseList: this.normVerseList,
-    closePopup: this.closePopup,
+    // closePopup: this.closePopup,
     // getActiveSide: this.getActiveSide,
     getCurrentPageIndex: this.getCurrentPageIndex,
     getSelectedText: this.getSelectedText,
-    pagerWidth: this.pagerWidth,
-    sideBarWidth: this.sideBarWidth,
+    // pagerWidth: this.pagerWidth,
+    // sideBarWidth: this.sideBarWidth,
     addBookmark: this.addBookmark,
     removeBookmark: this.removeBookmark,
     toggleBookmark: this.toggleBookmark,
-    setModalPopup: this.setModalPopup,
+    // setModalPopup: this.setModalPopup,
   };
 
   // onResize = (e) => {
@@ -827,11 +801,9 @@ class AppProvider extends Component {
       const bookmarks = !snapshot_val
         ? []
         : Object.keys(snapshot_val)
-          .sort((k1, k2) =>
-            snapshot_val[k1] < snapshot_val[k2] ? -1 : 1
-          )
-          .map((k) => ({aya: k, ts: snapshot_val[k]}));
-      this.setState({bookmarks});
+            .sort((k1, k2) => (snapshot_val[k1] < snapshot_val[k2] ? -1 : 1))
+            .map((k) => ({ aya: k, ts: snapshot_val[k] }));
+      this.setState({ bookmarks });
     });
 
     this.onHifzUpdate = this.hifzRef.on("value", (snapshot) => {
@@ -841,27 +813,27 @@ class AppProvider extends Component {
       const snapshot_val = snapshot?.val();
       const hifzRanges = snapshot_val
         ? Object.keys(snapshot_val)
-          .sort((k1, k2) =>
-            snapshot_val[k1].ts < snapshot_val[k2].ts ? -1 : 1
-          )
-          .map((k) => {
-            const sura = parseInt(k.substr(3, 3));
-            const startPage = parseInt(k.substr(0, 3));
-            const hifzInfo = snapshot_val[k];
-            const pages = hifzInfo.pages;
-            const endPage = startPage + pages - 1;
-            return {
-              id: k,
-              sura,
-              startPage,
-              pages,
-              endPage,
-              date: hifzInfo.ts,
-              revs: hifzInfo.revs,
-            };
-          })
+            .sort((k1, k2) =>
+              snapshot_val[k1].ts < snapshot_val[k2].ts ? -1 : 1
+            )
+            .map((k) => {
+              const sura = parseInt(k.substr(3, 3));
+              const startPage = parseInt(k.substr(0, 3));
+              const hifzInfo = snapshot_val[k];
+              const pages = hifzInfo.pages;
+              const endPage = startPage + pages - 1;
+              return {
+                id: k,
+                sura,
+                startPage,
+                pages,
+                endPage,
+                date: hifzInfo.ts,
+                revs: hifzInfo.revs,
+              };
+            })
         : [];
-      this.setState({hifzRanges});
+      this.setState({ hifzRanges });
     });
 
     this.onActivityUpdate = this.activityRef.on("value", (snapshot) => {
@@ -871,20 +843,20 @@ class AppProvider extends Component {
       const snapshot_val = snapshot.val();
       const pages = snapshot_val
         ? Object.keys(snapshot_val)
-          .sort((k1, k2) => (k1 < k2 ? 1 : -1))
-          .map((k) => {
-            return {day: k, pages: snapshot_val[k].pages};
-          })
+            .sort((k1, k2) => (k1 < k2 ? 1 : -1))
+            .map((k) => {
+              return { day: k, pages: snapshot_val[k].pages };
+            })
         : [];
       const chars = snapshot_val
         ? Object.keys(snapshot_val)
-          .sort((k1, k2) => (k1 < k2 ? 1 : -1))
-          .map((k) => {
-            return {day: k, chars: snapshot_val[k].chars};
-          })
+            .sort((k1, k2) => (k1 < k2 ? 1 : -1))
+            .map((k) => {
+              return { day: k, chars: snapshot_val[k].chars };
+            })
         : [];
       this.setState({
-        daily: {chars, pages},
+        daily: { chars, pages },
       });
     });
   }
@@ -904,18 +876,16 @@ class AppProvider extends Component {
   }
 
   componentDidMount() {
-    this.unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged((user) => {
-        this.setState({user});
-        if (user == null) {
-          //sign in anonymously
-          firebase.auth().signInAnonymously();
-        } else {
-          this.readFireData(user);
-          // console.log(`Logged in userId ${JSON.stringify(user)}`);
-        }
-      });
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
+      this.setState({ user });
+      if (user == null) {
+        //sign in anonymously
+        firebase.auth().signInAnonymously();
+      } else {
+        this.readFireData(user);
+        // console.log(`Logged in userId ${JSON.stringify(user)}`);
+      }
+    });
 
     this.dbRef = firebase.app().database().ref();
 
@@ -946,7 +916,7 @@ class AppProvider extends Component {
     //   .catch((e) => {
     //   });
 
-    const {history} = this.props;
+    const { history } = this.props;
     history.listen((location) => {
       analytics.setCurrentScreen(location.pathname);
       // analytics.logEvent("page_view");
@@ -973,10 +943,10 @@ const AppConsumer = (Component) =>
   function AppConsumerGen(props) {
     return (
       <AppContext.Consumer>
-        {(state) => <Component {...props} app={state}/>}
+        {(state) => <Component {...props} app={state} />}
       </AppContext.Consumer>
     );
   };
 
 export default injectIntl(withRouter(AppProvider));
-export {AppContext, AppConsumer};
+export { AppContext, AppConsumer };

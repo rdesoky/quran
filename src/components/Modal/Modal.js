@@ -11,9 +11,10 @@ import {
   selectIsCompact,
   selectIsNarrow,
   selectIsWide,
+  selectModalPopup,
   selectPagerWidth,
   selectPagesCount,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
 import { useLocation } from "react-router-dom";
 import { getCurrentPageNumber } from "../../services/utils";
 import { selectSidebarWidth } from "../../store/uiSlice";
@@ -30,6 +31,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
   const pagesCount = useSelector(selectPagesCount);
   const isNarrow = useSelector(selectIsNarrow);
   const sidebarWidth = useSelector(selectSidebarWidth);
+  const modalPopup = useSelector(selectModalPopup);
 
   const onClickClose = (e) => {
     if (typeof onClose === "function") {
@@ -83,7 +85,7 @@ const Modal = ({ onClose, children, app, show, name, modeless }) => {
     <Transition>
       <div
         id={`${name}Popup`}
-        className={"ModalOverlay".appendWord("modal", app.modalPopup)}
+        className={"ModalOverlay".appendWord("modal", modalPopup)}
         style={{
           left: isNarrow ? 0 : 51,
           zIndex: isNarrow ? 3 : 1,

@@ -3,24 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 const sliceName = "ui";
 
 const initialState = {
-  toastMessage: null,
+  modalPopup: false,
   showMenu: false,
 
-  modalPopup: false,
-  messageBox: false,
-  contextPopup: false,
+  toastMessage: null,
 
   showPopup: false, //show/hide flag ( used for transitioning purpose )
   popup: null, //modal popup component
   popupParams: {},
-
-  messageBoxInfo: [],
 };
 
-const uiSlice = createSlice({
+const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
+    showToast: (slice, { payload }) => {
+      slice.toastMessage = payload;
+    },
     setShowPopup: (slice, action) => {
       slice.showPopup = action.payload;
     },
@@ -50,7 +49,8 @@ export const {
   setPopup,
   setPopupParams,
   setShowPopup,
-} = uiSlice.actions;
+  showToast,
+} = slice.actions;
 
 export const selectMessageBox = (state) =>
   state[sliceName].messageBox?.[state[sliceName].messageBox.length];
@@ -58,6 +58,7 @@ export const selectShowMenu = (state) => state[sliceName].showMenu;
 export const selectShowPopup = (state) => state[sliceName].showPopup;
 export const selectPopup = (state) => state[sliceName].popup;
 export const selectPopupParams = (state) => state[sliceName].popupParams;
+export const selectToastMessage = (state) => state[sliceName].toastMessage;
 
 export const selectSidebarWidth = (state) =>
   state[sliceName].isNarrow ? 0 : 50;
@@ -93,4 +94,4 @@ export const closePopup = () => (dispatch) => {
   }, 500);
 };
 
-export default { [sliceName]: uiSlice.reducer };
+export default { [sliceName]: slice.reducer };

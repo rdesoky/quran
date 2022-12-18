@@ -1,25 +1,30 @@
-import React, {useContext, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppContext} from "../../context/App";
+import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppContext } from "../../context/App";
 import QData from "../../services/QData";
 import Utils from "../../services/utils";
-import {selectPageHeight, selectPageMargin, selectPagesCount, selectPageWidth} from "../../store/appSlice";
+import {
+  selectPageHeight,
+  selectPageMargin,
+  selectPagesCount,
+  selectPageWidth,
+} from "../../store/layoutSlice";
 import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
 import PageHeader from "./PageHeader";
-import VerseLayout, {HifzSegments} from "./VerseLayout";
-import {hideMenu} from "../../store/uiSlice";
+import VerseLayout, { HifzSegments } from "./VerseLayout";
+import { hideMenu } from "../../store/uiSlice";
 
 const Page = ({
-                index: pageIndex,
-                order,
-                onIncrement,
-                onDecrement,
-                onPageUp,
-                onPageDown,
-                scaleX,
-                shiftX,
-              }) => {
+  index: pageIndex,
+  order,
+  onIncrement,
+  onDecrement,
+  onPageUp,
+  onPageDown,
+  scaleX,
+  shiftX,
+}) => {
   const app = useContext(AppContext);
   const [imageUrl, setImageUrl] = useState(null);
   const [versesInfo, setVerseInfo] = useState([]);
@@ -29,8 +34,7 @@ const Page = ({
   const pageHeight = useSelector(selectPageHeight);
   const pageWidth = useSelector(selectPageWidth);
 
-  let textAlign =
-    pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+  let textAlign = pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
   //Handle pageIndex update
   useEffect(() => {
@@ -48,8 +52,7 @@ const Page = ({
 
         //onImageLoaded(url, pgIndex);
       })
-      .catch((e) => {
-      });
+      .catch((e) => {});
     setVerseInfo([]);
     let pageNumber = parseInt(pageIndex) + 1;
     let controller = new AbortController();
@@ -58,7 +61,7 @@ const Page = ({
       signal: controller.signal,
     })
       .then((response) => response.json())
-      .then(({child_list}) => {
+      .then(({ child_list }) => {
         setVerseInfo(
           child_list.map((c) => {
             const aya_id = QData.ayaID(c.sura, c.aya);
@@ -66,12 +69,12 @@ const Page = ({
             if (epos > 980) {
               epos = 1000;
             }
-            return {...c, epos, aya_id};
+            return { ...c, epos, aya_id };
           })
         );
       })
       .catch((e) => {
-        const {name, message} = e;
+        const { name, message } = e;
         console.info(`${name}: ${message}\n${url}`);
       });
     return () => {
@@ -93,7 +96,7 @@ const Page = ({
         onPageUp={onPageUp}
         onPageDown={onPageDown}
       />
-      <Spinner visible={imageUrl === null}/>
+      <Spinner visible={imageUrl === null} />
       <div
         onClick={(e) => {
           // app.setShowMenu(false);
@@ -106,17 +109,13 @@ const Page = ({
         }}
       >
         <div
-          className={
-            "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
-          }
+          className={"PageImageFrame" + (imageUrl ? " AnimatePage" : "")}
           style={{
-            transform: `translateX(${shiftX || 0}px) scaleX(${
-              scaleX || 1
-            })`,
+            transform: `translateX(${shiftX || 0}px) scaleX(${scaleX || 1})`,
             // transform: `translateX(${shiftX || 0}px) scaleX(1)`
           }}
         >
-          <HifzSegments page={pageIndex} versesInfo={versesInfo}/>
+          <HifzSegments page={pageIndex} versesInfo={versesInfo} />
           <VerseLayout
             page={pageIndex}
             pageWidth={pageWidth}

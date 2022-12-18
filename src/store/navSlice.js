@@ -1,7 +1,6 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const sliceName = "nav";
-
 
 const initialState = {
   selectStart: 0,
@@ -9,13 +8,12 @@ const initialState = {
   maskStart: -1,
 };
 
-const navSlice = createSlice({
+const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
 });
 
+export const {} = slice.actions;
 
-export const {onResize} = navSlice.actions;
-
-export default {[sliceName]: navSlice.reducer};
+export default { [sliceName]: slice.reducer };

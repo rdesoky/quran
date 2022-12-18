@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { memo, useContext, useEffect, useState } from "react";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import { analytics } from "../services/Analytics";
@@ -14,13 +14,14 @@ import {
   selectIsCompact,
   selectPagesCount,
   selectPopupWidth,
-} from "../store/appSlice";
+} from "../store/layoutSlice";
 import { AppContext } from "./../context/App";
 import { PlayerContext } from "./../context/Player";
 import QData from "./../services/QData";
 import { VerseText } from "./Widgets";
 import { selectLang } from "../store/settingsSlice";
-import { closePopup } from "../store/uiSlice";
+import { closePopup, showToast } from "../store/uiSlice";
+import { pushMessageBox, setMessageBox } from "./MessageBox";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
@@ -44,6 +45,7 @@ const HifzRange = ({
   const lang = useSelector(selectLang);
   const isCompact = useSelector(selectIsCompact);
   const dispatch = useDispatch();
+  const intl = useIntl();
 
   const suraInfo = QData.sura_info[range.sura];
 
@@ -67,7 +69,7 @@ const HifzRange = ({
       pages: rangePagesCount,
     };
 
-    setRangeInfo(app.intl.formatMessage({ id }, values));
+    setRangeInfo(intl.formatMessage({ id }, values));
 
     if (!range.date) {
       // setAgeClass("NoHifz");
@@ -83,7 +85,7 @@ const HifzRange = ({
         : "not_revised";
     values = { days: age };
 
-    const ageInfo = app.intl.formatMessage({ id }, values);
+    const ageInfo = intl.formatMessage({ id }, values);
 
     // let ageClass = "GoodHifz";
     // if (age > 7) {
@@ -161,11 +163,11 @@ const HifzRange = ({
     if (!isCompact && pagesCount === 1) {
       dispatch(closePopup());
     }
-    app.setMessageBox(null);
+    setMessageBox(null);
   };
 
   const setRangeRevised = (e) => {
-    app.pushMessageBox({
+    pushMessageBox({
       title: <String id="are_you_sure" />,
       onYes: () => {
         analytics.logEvent("revised_today", {
@@ -175,7 +177,7 @@ const HifzRange = ({
           pagesCount: range.pages,
         });
         app.setRangeRevised(range);
-        app.showToast(<String id="ack_range_revised" />);
+        dispatch(showToast("ack_range_revised"));
       },
       content: <String id="revise_confirmation" />,
     });
@@ -191,7 +193,7 @@ const HifzRange = ({
         pagesCount,
       });
     } else {
-      app.pushMessageBox({
+      pushMessageBox({
         title: <String id="are_you_sure" />,
         onYes: () => {
           analytics.logEvent("add_hifz", {
@@ -228,7 +230,7 @@ const HifzRange = ({
   };
 
   const deleteHifzRange = (e) => {
-    app.pushMessageBox({
+    pushMessageBox({
       title: <String id="are_you_sure" />,
       onYes: () => {
         analytics.logEvent("remove_hifz", {
@@ -291,13 +293,13 @@ const HifzRange = ({
           <div className="ActionsBar">
             <button
               onClick={playRange}
-              title={app.formatMessage({ id: "play" })}
+              title={intl.formatMessage({ id: "play" })}
             >
               <Icon icon={faPlayCircle} />
             </button>
             <button
               onClick={reviewRange}
-              title={app.formatMessage({ id: "revise" })}
+              title={intl.formatMessage({ id: "revise" })}
             >
               <Icon icon={faLightbulb} />
             </button>
@@ -309,7 +311,7 @@ const HifzRange = ({
                         </button> */}
             <button
               onClick={deleteHifzRange}
-              title={app.formatMessage({ id: "remove_hifz" })}
+              title={intl.formatMessage({ id: "remove_hifz" })}
             >
               <Icon icon={faTimes} />
             </button>

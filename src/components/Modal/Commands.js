@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { analytics } from "./../../services/Analytics";
 import { AppContext } from "../../context/App";
 import { AudioState, PlayerContext } from "../../context/Player";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as String, useIntl } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faLightbulb,
@@ -45,10 +45,12 @@ import {
   selectShowMenu,
   showMenu,
   showPopup,
+  showToast,
   toggleMenu,
 } from "../../store/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsNarrow } from "../../store/appSlice";
+import { selectIsNarrow } from "../../store/layoutSlice";
+import { setMessageBox } from "../MessageBox";
 
 export const CommandIcons = {
   Commands: faBars,
@@ -192,6 +194,7 @@ const CommandButton = ({
   const player = useContext(PlayerContext);
   const dispatch = useDispatch();
   const menuExpanded = useSelector(selectShowMenu);
+  const intl = useIntl();
 
   const runCommand = (command) => {
     // app.setExpandedMenu(false);
@@ -263,7 +266,8 @@ const CommandButton = ({
           trigger,
         });
         Utils.copy2Clipboard(app.getSelectedText());
-        app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+        dispatch(showToast("text_copied"));
+        // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
         break;
       case "Share":
         break;
@@ -283,7 +287,7 @@ const CommandButton = ({
           ...QData.verseLocation(app.selectStart),
           trigger,
         });
-        app.setMessageBox({
+        setMessageBox({
           title: <String id="update_hifz" />,
           content: <AddHifz />,
         });
@@ -360,7 +364,7 @@ const CommandButton = ({
       style={style}
       disabled={isDisabled(command)}
       className={"CommandButton".appendWord(className)}
-      title={showLabel ? "" : app.formatMessage({ id: command.toLowerCase() })}
+      title={showLabel ? "" : intl.formatMessage({ id: command.toLowerCase() })}
     >
       <CommandIcon {...{ command, app, player }} />
       {renderLabel()}

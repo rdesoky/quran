@@ -8,7 +8,8 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { useSelector } from "react-redux";
-import { selectAppHeight, selectIsNarrow } from "../../store/appSlice";
+import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
+import { pushMessageBox } from "../MessageBox";
 
 const Bookmarks = () => {
   const app = useContext(AppContext);
@@ -17,7 +18,7 @@ const Bookmarks = () => {
 
   const toggleBookmark = (e) => {
     if (app.isBookmarked()) {
-      app.pushMessageBox({
+      pushMessageBox({
         title: <String id="are_you_sure" />,
         content: <String id="delete_bookmark" />,
         onYes: () => {

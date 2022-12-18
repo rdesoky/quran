@@ -24,9 +24,9 @@ import {
   selectIsCompact,
   selectPagesCount,
   selectPopupWidth,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
 import { quranNormalizedText, quranText } from "../../App";
-import { closePopup } from "../../store/uiSlice";
+import { closePopup, showToast } from "../../store/uiSlice";
 
 export default function Search() {
   const app = useContext(AppContext);
@@ -234,7 +234,7 @@ export default function Search() {
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
-    app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+    dispatch(showToast("text_copied"));
     e.stopPropagation();
 
     analytics.logEvent("copy_text", {

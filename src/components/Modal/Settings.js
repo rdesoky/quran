@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as String, useIntl } from "react-intl";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
 import ReciterName from "./../AudioPlayer/ReciterName";
@@ -29,7 +29,7 @@ import {
   selectAppHeight,
   selectIsNarrow,
   selectPopupWidth,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
 import { selectPopup } from "../../store/uiSlice";
 
 const Settings = () => {
@@ -232,6 +232,7 @@ export const ExerciseSettings = () => {
   const exerciseLevel = useSelector(selectExerciseLevel);
   const randomAutoRecite = useSelector(selectRandomAutoRecite);
   const exerciseMemorized = useSelector(selectExerciseMemorized);
+  const intl = useIntl();
 
   const updateExerciseLevel = ({ currentTarget }) => {
     const exerciseLevel = parseInt(currentTarget.value);
@@ -257,20 +258,20 @@ export const ExerciseSettings = () => {
           <String id="exercise_level" />
           <select onChange={updateExerciseLevel} value={exerciseLevel}>
             <option value={0}>
-              {app.intl.formatMessage({
+              {intl.formatMessage({
                 id: "beginner_level",
               })}
             </option>
             <option value={1}>
-              {app.intl.formatMessage({
+              {intl.formatMessage({
                 id: "moderate_level",
               })}
             </option>
             <option value={2}>
-              {app.intl.formatMessage({ id: "high_level" })}
+              {intl.formatMessage({ id: "high_level" })}
             </option>
             <option value={3}>
-              {app.intl.formatMessage({
+              {intl.formatMessage({
                 id: "advanced_level",
               })}
             </option>

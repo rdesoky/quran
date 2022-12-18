@@ -11,7 +11,7 @@ import {
   showMenu,
 } from "../../store/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsNarrow } from "../../store/appSlice";
+import { selectIsNarrow } from "../../store/layoutSlice";
 
 function Sidebar() {
   const dispatch = useDispatch();

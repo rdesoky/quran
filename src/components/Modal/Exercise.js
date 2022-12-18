@@ -19,20 +19,22 @@ import QData from "../../services/QData";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
 import { ExerciseSettings } from "./Settings";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   selectAppHeight,
   selectIsCompact,
   selectIsNarrow,
   selectIsWide,
   selectPagesCount,
-} from "../../store/appSlice";
+  setModalPopup,
+} from "../../store/layoutSlice";
 import {
   selectExerciseLevel,
   selectExerciseMemorized,
   selectRandomAutoRecite,
 } from "../../store/settingsSlice";
 import { quranNormalizedText, quranText } from "../../App";
+import { showToast } from "../../store/uiSlice";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -69,6 +71,7 @@ const Exercise = () => {
   const pagesCount = useSelector(selectPagesCount);
   const isWide = useSelector(selectIsWide);
   const isCompact = useSelector(selectIsCompact);
+  const dispatch = useDispatch();
   const trigger = "exercise";
 
   const isNarrowLayout = () => {
@@ -189,11 +192,11 @@ const Exercise = () => {
       player.setRepeat(savedRepeat);
       player.setFollowPlayer(savedFollowPlayer);
       player.stop(true);
-      app.setModalPopup(false);
+      dispatch(setModalPopup(false));
       app.hideMask();
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     setVerse(app.selectStart);
@@ -215,26 +218,26 @@ const Exercise = () => {
     switch (currStep) {
       case Step.typing:
         app.setMaskStart(verse);
-        app.setModalPopup(); //block outside selection
+        dispatch(setModalPopup(true)); //block outside selection
         app.setMaskStart(app.selectStart, true);
         break;
       case Step.reciting:
         setTimeout(() => {
           player.play();
         }, 100);
-        app.setModalPopup(); //block outside selection
+        dispatch(setModalPopup(true)); //block outside selection
         app.setMaskStart(app.selectStart + 1, true);
         break;
       case Step.results:
         //if correct answer, save number of verse letters in Firebase
         app.setMaskStart(app.selectStart + 1, true);
-        app.setModalPopup(false);
+        dispatch(setModalPopup(false));
         break;
       case Step.intro:
         app.setMaskStart(verse + 1, true);
       // eslint-disable-next-line no-fallthrough
       default:
-        app.setModalPopup(false); //allow selecting outside
+        dispatch(setModalPopup(false)); //allow selecting outside
     }
   }, [currStep]);
 
@@ -449,7 +452,7 @@ const Exercise = () => {
     if (testAnswer(text)) {
       setTimeout(() => {
         if (quickMode > 0) {
-          app.showToast(app.intl.formatMessage({ id: "success_write_next" }));
+          dispatch(showToast("success_write_next"));
           typeNextVerse();
           return;
         }
