@@ -9,10 +9,11 @@ import {
   selectAppHeight,
   selectIsNarrow,
   selectIsWide,
+  selectModalPopup,
   selectPagerWidth,
   selectPagesCount,
   selectPageWidth,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
 import { AddHifz } from "../Modal/Favorites";
 import Page from "../Page/Page";
 import { analytics } from "./../../services/Analytics";
@@ -25,6 +26,8 @@ import {
   showMenu,
   showPopup,
 } from "../../store/uiSlice";
+import { popMessageBox, shownMessageBoxes } from "../MessageBox";
+import { closeContextPopup, contextPopupInfo } from "../ContextPopup";
 
 export function PageRedirect({ match }) {
   let { aya } = match.params;
@@ -53,6 +56,7 @@ function Pager({ match }) {
   const isNarrow = useSelector(selectIsNarrow);
   const expandedMenu = useSelector(selectShowMenu);
   const popup = useSelector(selectPopup);
+  const modalPopup = useSelector(selectModalPopup);
 
   let pageIndex = 0;
 
@@ -200,7 +204,7 @@ function Pager({ match }) {
 
       const canShowPopup = popup === null && isTextInput === false;
 
-      if (app.modalPopup) {
+      if (modalPopup) {
         return;
       }
 
@@ -210,8 +214,10 @@ function Pager({ match }) {
           app.pushRecentCommand("Copy");
           break;
         case "Escape":
-          if (app.getMessageBox()) {
-            app.pushMessageBox(null);
+          if (contextPopupInfo.context) {
+            closeContextPopup();
+          } else if (shownMessageBoxes.length > 0) {
+            popMessageBox();
           } else if (popup !== null) {
             dispatch(closePopup());
           } else if (expandedMenu) {
@@ -228,10 +234,10 @@ function Pager({ match }) {
           break;
         case "KeyF":
           if (canShowPopup) {
-            app.setMessageBox({
-              title: <String id="update_hifz" />,
-              content: <AddHifz />,
-            });
+            // app.setMessageBox({
+            //   title: <String id="update_hifz" />,
+            //   content: <AddHifz />,
+            // });
           }
           break;
         case "KeyG":
@@ -320,7 +326,16 @@ function Pager({ match }) {
         e.preventDefault();
       }
     },
-    [app, decrement, inExercise, increment, offsetSelection, pageDown, pageUp]
+    [
+      app,
+      modalPopup,
+      decrement,
+      inExercise,
+      increment,
+      offsetSelection,
+      pageDown,
+      pageUp,
+    ]
   );
 
   useEffect(() => {
@@ -333,7 +348,6 @@ function Pager({ match }) {
     match.params.page,
     popup,
     app.maskStart,
-    app.modalPopup,
     app.selectStart,
     expandedMenu,
     handleKeyDown,

@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { memo, useContext, useEffect, useState } from "react";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
@@ -22,14 +22,15 @@ import {
   selectIsCompact,
   selectPagesCount,
   selectPopupWidth,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 import { AddHifz } from "./Favorites";
 import { TafseerView } from "./Tafseer";
 import { selectLang } from "../../store/settingsSlice";
 import { quranText } from "../../App";
-import { closePopup } from "../../store/uiSlice";
+import { closePopup, showToast } from "../../store/uiSlice";
+import { pushMessageBox, setMessageBox } from "../MessageBox";
 
 const QIndex = ({ simple }) => {
   const app = useContext(AppContext);
@@ -318,6 +319,7 @@ export const SuraIndexCell = memo(
     const [suraName, setSuraName] = useState("");
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
+    const intl = useIntl();
 
     const checkClosePopup = () => {
       if (!isCompact && pagesCount === 1) {
@@ -349,7 +351,7 @@ export const SuraIndexCell = memo(
       if (suraRanges.length) {
         checkClosePopup();
         app.gotoSura(sura);
-        app.setMessageBox({
+        setMessageBox({
           title: <String id="update_hifz" />,
           content: <AddHifz />,
         });
@@ -368,7 +370,8 @@ export const SuraIndexCell = memo(
           startPage,
           pagesCount,
         });
-        app.showToast(<String id="sura_memorized" />);
+        dispatch(showToast("sura_memorized"));
+        // app.showToast(<String id="sura_memorized" />);
       }
     };
 
@@ -432,14 +435,14 @@ export const SuraIndexCell = memo(
                 <button
                   sura={sura}
                   onClick={playSura}
-                  title={app.formatMessage({ id: "play" })}
+                  title={intl.formatMessage({ id: "play" })}
                 >
                   <Icon icon={faPlayCircle} />
                 </button>
                 <button
                   sura={sura}
                   onClick={addUpdateHifz}
-                  title={app.formatMessage({
+                  title={intl.formatMessage({
                     id: "update_hifz",
                   })}
                 >
@@ -476,6 +479,7 @@ export const BookmarkListItem = ({
   const [showTafseerView, setShowTafseer] = useState(showTafseer);
   const isCompact = useSelector(selectIsCompact);
   const dispatch = useDispatch();
+  const intl = useIntl();
 
   useEffect(() => {
     const sura = QData.ayaIdInfo(verse).sura;
@@ -485,7 +489,7 @@ export const BookmarkListItem = ({
 
     setVerseText(quranText[verse]);
 
-    const bookmarkDesc = app.intl.formatMessage(
+    const bookmarkDesc = intl.formatMessage(
       { id: "bookmark_desc" },
       {
         sura: suraName,
@@ -516,7 +520,7 @@ export const BookmarkListItem = ({
   };
 
   const removeBookmark = (e) => {
-    app.pushMessageBox({
+    pushMessageBox({
       title: <String id="are_you_sure" />,
       content: <String id="delete_bookmark" />,
       onYes: () => {
@@ -560,7 +564,7 @@ export const BookmarkListItem = ({
   }
 
   const download = (e) => {
-    app.setMessageBox({
+    setMessageBox({
       title: <String id="download_verse_audio" />,
       content: <String id="download_guide" />,
     });
@@ -584,19 +588,19 @@ export const BookmarkListItem = ({
             <>
               <button
                 onClick={playVerse}
-                title={app.formatMessage({ id: "play" })}
+                title={intl.formatMessage({ id: "play" })}
               >
                 <Icon icon={faPlayCircle} />
               </button>
               <button
                 onClick={toggleTafseer}
-                title={app.formatMessage({ id: "tafseer" })}
+                title={intl.formatMessage({ id: "tafseer" })}
               >
                 <Icon icon={faQuran} />
               </button>
               <div
                 className="LinkButton"
-                title={app.formatMessage({
+                title={intl.formatMessage({
                   id: "download_verse_audio",
                 })}
               >
@@ -606,7 +610,7 @@ export const BookmarkListItem = ({
               </div>
               <button
                 onClick={removeBookmark}
-                title={app.formatMessage({ id: "unbookmark" })}
+                title={intl.formatMessage({ id: "unbookmark" })}
               >
                 <Icon icon={faDelete} />
               </button>

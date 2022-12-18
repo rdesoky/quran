@@ -3,7 +3,7 @@ import { AppConsumer } from "../../context/App";
 import { FormattedMessage as String } from "react-intl";
 import { selectPagesCount } from "../../store/app";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPageWidth } from "../../store/appSlice";
+import { selectPageWidth } from "../../store/layoutSlice";
 import { useLocation } from "react-router-dom";
 import { showPopup } from "../../store/uiSlice";
 

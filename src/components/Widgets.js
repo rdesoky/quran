@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import QData from "./../services/QData";
 import { AppContext } from "./../context/App";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faChevronUp,
@@ -19,8 +19,16 @@ import Utils from "../services/utils";
 import { SuraHifzChart } from "./Hifz";
 import { analytics } from "../services/Analytics";
 import { quranText } from "../App";
-import { useSelector } from "react-redux";
-import { selectAppHeight } from "../store/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAppHeight, selectAppWidth } from "../store/layoutSlice";
+import {
+  selectContextPopup,
+  selectContextPopupParams,
+  selectToastMessage,
+  setContextPopup,
+  showContextPopup,
+  showToast,
+} from "../store/uiSlice";
 
 export const VerseInfo = ({
   verse,
@@ -112,6 +120,7 @@ export const VerseText = ({
 }) => {
   const [text, setText] = useState("");
   const app = useContext(AppContext);
+  const dispatch = useDispatch();
 
   const updateText = (verseIndex) => {
     setText(quranText?.[verseIndex]);
@@ -122,7 +131,8 @@ export const VerseText = ({
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
-    app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+    // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+    dispatch(showToast("text_copied"));
 
     analytics.logEvent("copy_text", {
       ...QData.verseLocation(verse),
@@ -167,23 +177,25 @@ export const VerseText = ({
 
 export const ToastMessage = () => {
   const app = useContext(AppContext);
-  const [toastMessage, setToastMessage] = useState(null);
+  // const [toastMessage, setToastMessage] = useState(null);
   const [hiding, setHiding] = useState(false);
+  const dispatch = useDispatch();
+  const toastMessage = useSelector(selectToastMessage);
 
   useEffect(() => {
-    if (app.toastMessage) {
-      setToastMessage(app.toastMessage);
+    if (toastMessage) {
       setTimeout(() => {
-        app.showToast(null);
+        // app.showToast(null);
+
+        dispatch(showToast(null));
       }, 2000);
     } else if (toastMessage) {
       setHiding(true);
       setTimeout(() => {
-        setToastMessage(null);
         setHiding(false);
       }, 500);
     }
-  }, [app, app.toastMessage, toastMessage]);
+  }, [toastMessage]);
 
   // const hideMessage = e => {
   //     app.showToast(null);
@@ -196,7 +208,7 @@ export const ToastMessage = () => {
         .appendWord("HideToast", hiding)}
       // onClick={hideMessage}
     >
-      {toastMessage}
+      {toastMessage && <FormattedMessage id={toastMessage} />}
     </div>
   );
 };
@@ -258,128 +270,6 @@ export const CircleProgress = ({
       <title>{title}</title>
     </svg>
   );
-};
-
-export const MessageBox = () => {
-  const app = useContext(AppContext);
-
-  const msgBoxInfo = app.getMessageBox();
-
-  const onClose = (e) => {
-    app.pushMessageBox(null);
-  };
-
-  const onYes = (e) => {
-    if (msgBoxInfo.onYes) {
-      setTimeout(() => {
-        msgBoxInfo.onYes();
-      });
-    }
-    onClose(e);
-  };
-
-  const onNo = (e) => {
-    if (msgBoxInfo.onNo) {
-      setTimeout(() => {
-        msgBoxInfo.onNo();
-      });
-    }
-    onClose(e);
-  };
-
-  if (msgBoxInfo !== null) {
-    return (
-      <div className="MessageBox">
-        <div className="MessageBoxTitle">{msgBoxInfo.title}</div>
-        <button className="CloseButton" onClick={onClose}>
-          <Icon icon={faTimes} />
-        </button>
-        <div className="MessageBoxContent">{msgBoxInfo.content}</div>
-        {msgBoxInfo.onYes ? (
-          <div className="ButtonsBar">
-            <button onClick={onYes}>
-              <String id="yes" />
-            </button>
-            <button onClick={onNo}>
-              <String id="no" />
-            </button>
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-  return null;
-};
-
-export const ContextPopup = () => {
-  const app = useContext(AppContext);
-  const appHeight = useSelector(selectAppHeight);
-  const closePopup = (e) => {
-    app.setContextPopup(null);
-  };
-  let popup;
-
-  useEffect(() => {
-    app.setContextPopup(null);
-  }, [app.appWidth]);
-
-  useEffect(() => {
-    if (popup) {
-      const popupRect = popup.getBoundingClientRect();
-      if (popupRect.left < 0) {
-        popup.style.left = popupRect.width / 2 + "px";
-      } else if (popupRect.right > app.appWidth) {
-        let shift = popupRect.right - app.appWidth;
-        if (shift > popupRect.left) {
-          shift = popupRect.left;
-        }
-        popup.style.left =
-          (popupRect.width / 2 + popupRect.left - shift).toString() + "px";
-      }
-    }
-  }, [app.contextPopup]);
-
-  // const stopPropagation = e => {
-  //     e.stopPropagation();
-  // };
-  if (app.contextPopup) {
-    const { target, content, header } = app.getContextPopup();
-    const targetRect = target.getBoundingClientRect();
-    if (!targetRect.width) {
-      return null;
-    }
-    const left = targetRect.left + targetRect.width / 2;
-    const isBelow = appHeight - targetRect.bottom > targetRect.top;
-    return (
-      <div className="ContextPopupBlocker" onClick={closePopup}>
-        <div
-          className={"ContextPopup".appendWord("DownPointer", !isBelow)}
-          ref={(ref) => {
-            popup = ref;
-          }}
-          style={{
-            top: isBelow ? targetRect.bottom + 15 : undefined,
-            bottom: !isBelow ? appHeight - targetRect.top + 15 : undefined,
-            left: left,
-            maxHeight:
-              (isBelow ? appHeight - targetRect.bottom : targetRect.top) - 40,
-          }}
-        >
-          <div className="ContextHeader">{header}</div>
-          <div className="ContextBody">{content}</div>
-        </div>
-        <div
-          className={"PopupPointer".appendWord("DownPointer", !isBelow)}
-          style={{
-            top: isBelow ? targetRect.bottom : undefined,
-            bottom: !isBelow ? appHeight - targetRect.top : undefined,
-            left: left,
-          }}
-        ></div>
-      </div>
-    );
-  }
-  return null;
 };
 
 export const VerseContextButtons = ({ verse }) => {

@@ -34,10 +34,11 @@ const initialState = {
   selectStart: 0,
   selectEnd: 0,
   maskStart: -1,
-  recentCommands: initSidebarCommands,
+  modalPopup: false, //used to block user interaction outside the active popup
+  // recentCommands: initSidebarCommands,
 };
 
-const appSlice = createSlice({
+const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
@@ -81,10 +82,13 @@ const appSlice = createSlice({
       slice.app_size = app_size;
       // analytics.setParams({ app_size });
     },
+    setModalPopup: (slice, action) => {
+      slice.modalPopup = action.payload;
+    },
   },
 });
 
-export const selectUser = (state) => state[sliceName].user;
+export const selectModalPopup = (state) => state[sliceName].modalPopup;
 export const selectPagesCount = (state) => state[sliceName].pagesCount;
 export const selectAppSize = (state) => state[sliceName].app_size;
 export const selectIsWide = (state) => state[sliceName].isWide;
@@ -149,7 +153,7 @@ export const selectPopupWidth = (state) => {
   return appWidth / pagesCount - (isNarrow ? 0 : 50);
 };
 
-export const { onResize } = appSlice.actions;
+export const { onResize, setModalPopup } = slice.actions;
 
 export const updateAppSize =
   ({ width, height }) =>
@@ -158,4 +162,4 @@ export const updateAppSize =
     // analytics.setParams({app_size});
   };
 
-export default { [sliceName]: appSlice.reducer };
+export default { [sliceName]: slice.reducer };

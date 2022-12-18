@@ -11,7 +11,8 @@ import {
   selectAppHeight,
   selectPageHeight,
   selectPageMargin,
-} from "../../store/appSlice";
+} from "../../store/layoutSlice";
+import { showContextPopup } from "../ContextPopup";
 
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
   const app = useContext(AppContext);
@@ -95,7 +96,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
           analytics.logEvent("show_verse_context", {
             trigger: "selected_verses",
           });
-          app.setContextPopup({
+          showContextPopup({
             target: e.target,
             content: <VerseContextButtons verse={aya_id} />,
           });

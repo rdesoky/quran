@@ -8,7 +8,7 @@ import { ActivityChart } from "../Hifz";
 import { faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
-import { selectAppHeight } from "../../store/appSlice";
+import { selectAppHeight } from "../../store/layoutSlice";
 
 export const AddHifz = ({ page }) => {
   const app = useContext(AppContext);

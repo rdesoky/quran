@@ -7,7 +7,7 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Utils from "./../../services/utils";
 import { ActivityChart } from "../Hifz";
 import { useSelector } from "react-redux";
-import { selectAppHeight } from "../../store/appSlice";
+import { selectAppHeight } from "../../store/layoutSlice";
 
 const User = () => {
   const app = useContext(AppContext);

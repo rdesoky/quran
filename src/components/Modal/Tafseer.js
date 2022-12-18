@@ -8,8 +8,9 @@ import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import Utils from "../../services/utils";
-import { useSelector } from "react-redux";
-import { selectAppHeight, selectIsNarrow } from "../../store/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
+import { showToast } from "../../store/uiSlice";
 
 const TafseerList = [
   { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -92,6 +93,7 @@ export const TafseerView = ({
     localStorage.getItem("tafseer") || "muyassar"
   );
   const [tafseerData, setTafseerData] = useState([]);
+  const dispatch = useDispatch();
 
   const app = useContext(AppContext);
 
@@ -131,7 +133,8 @@ export const TafseerView = ({
     Utils.copy2Clipboard(
       `${tafseerName()}:\n ${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
-    app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+    // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
+    dispatch(showToast("text_copied"));
   };
 
   const onSelectTafseer = (e) => {
