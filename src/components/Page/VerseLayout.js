@@ -2,7 +2,11 @@ import React, { useState, useContext } from "react";
 import { analytics } from "./../../services/Analytics";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
-import QData from "../../services/QData";
+import {
+  ayaIdPage,
+  getPageFirstAyaId,
+  getPageSuras,
+} from "../../services/QData";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { VerseContextButtons } from "../Widgets";
@@ -65,12 +69,12 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
 
   const onClickMask = (e) => {
     let nPageIndex = parseInt(e.target.getAttribute("page"));
-    let maskStartPage = QData.ayaIdPage(app.maskStart);
+    let maskStartPage = ayaIdPage(app.maskStart);
     if (maskStartPage === nPageIndex) {
       //same page
       app.offsetMask(1);
     } else {
-      let clickedPageFirstAyaId = QData.pageAyaId(nPageIndex);
+      let clickedPageFirstAyaId = getPageFirstAyaId(nPageIndex);
 
       app.setMaskStart(clickedPageFirstAyaId);
     }
@@ -239,7 +243,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     if (maskStart === -1) {
       return;
     }
-    const maskStartPage = QData.ayaIdPage(maskStart);
+    const maskStartPage = ayaIdPage(maskStart);
     if (maskStartPage > pageIndex) {
       return;
     }
@@ -359,10 +363,10 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
 
 export const HifzSegments = ({ page, versesInfo }) => {
   const pageHeight = useSelector(selectPageHeight);
-  const pageSuras = QData.pageSuras(page);
+  const page_suras = getPageSuras(page);
   return (
     <div className="HifzSegments">
-      {pageSuras.map((sura) => (
+      {page_suras.map((sura) => (
         <HifzSegment
           key={page.toString() + "-" + sura.toString()}
           sura={sura}

@@ -17,11 +17,19 @@ import {
 } from "../store/layoutSlice";
 import { AppContext } from "./../context/App";
 import { PlayerContext } from "./../context/Player";
-import QData from "./../services/QData";
+import {
+  ayaID,
+  getPageFirstAyaId,
+  getRangeVerses,
+  sura_info,
+  getArSuraName,
+  verseLocation,
+} from "./../services/QData";
 import { VerseText } from "./Widgets";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import { pushMessageBox, setMessageBox } from "./MessageBox";
+import useSuraName from "../hooks/useSuraName";
 
 const dayLength = 24 * 60 * 60 * 1000;
 
@@ -36,7 +44,7 @@ const HifzRange = ({
   const app = useContext(AppContext);
   const player = useContext(PlayerContext);
   // const theme = useContext(ThemeContext);
-  const [suraName, setSuraName] = useState("");
+  const suraName = useSuraName(range.sura);
   const [rangeInfo, setRangeInfo] = useState("");
   // const [ageClass, setAgeClass] = useState("NoHifz");
   const [ageInfo, setAgeInfo] = useState("");
@@ -47,11 +55,11 @@ const HifzRange = ({
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const suraInfo = QData.sura_info[range.sura];
+  const suraInfo = sura_info[range.sura];
 
   useEffect(() => {
-    const suraName = app.suraName(range.sura);
-    setSuraName(suraName);
+    // const suraName = app.suraName(range.sura);
+    // setSuraName(suraName);
 
     const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
     const rangePagesCount = range.endPage - range.startPage + 1;
@@ -106,9 +114,9 @@ const HifzRange = ({
   const rangeStartAya = (sura, page) => {
     const suraStartPage = suraInfo.sp - 1;
     if (suraStartPage === page) {
-      return QData.ayaID(sura, 0);
+      return ayaID(sura, 0);
     } else {
-      return QData.pageAyaId(page);
+      return getPageFirstAyaId(page);
     }
   };
 
@@ -120,7 +128,7 @@ const HifzRange = ({
     }, 500);
     analytics.logEvent("play_audio", {
       trigger,
-      ...QData.verseLocation(startVerse),
+      ...verseLocation(startVerse),
     });
   };
 
@@ -132,12 +140,12 @@ const HifzRange = ({
     });
     analytics.logEvent("show_mask", {
       trigger,
-      ...QData.verseLocation(startVerse),
+      ...verseLocation(startVerse),
     });
   };
 
   const selectRange = () => {
-    const [startVerse, endVerse] = QData.rangeVerses(
+    const [startVerse, endVerse] = getRangeVerses(
       range.sura,
       range.startPage,
       range.endPage
@@ -149,7 +157,7 @@ const HifzRange = ({
   };
 
   const readRange = (e) => {
-    const [rangeStartVerse] = QData.rangeVerses(
+    const [rangeStartVerse] = getRangeVerses(
       range.sura,
       range.startPage,
       range.endPage
@@ -394,7 +402,7 @@ const SuraHifzChart = memo(
     const [activeRange, setActiveRange] = useState(null);
 
     const suraIndex = sura !== undefined ? sura : range.sura;
-    const suraInfo = QData.sura_info[suraIndex];
+    const suraInfo = sura_info[suraIndex];
     const suraPages = suraInfo.ep - suraInfo.sp + 1;
     const pageList = Array(suraPages).fill(0);
     // const pageWidth = `${100 / suraPages}%`;
@@ -424,7 +432,7 @@ const SuraHifzChart = memo(
         trigger,
         page,
         chapter_num: sura + 1,
-        chapter: QData.suraName(sura),
+        chapter: getArSuraName(sura),
       });
     };
 

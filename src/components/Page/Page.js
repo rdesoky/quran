@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../../context/App";
-import QData from "../../services/QData";
+import { ayaID } from "../../services/QData";
 import Utils from "../../services/utils";
 import {
   selectPageHeight,
@@ -64,7 +64,7 @@ const Page = ({
       .then(({ child_list }) => {
         setVerseInfo(
           child_list.map((c) => {
-            const aya_id = QData.ayaID(c.sura, c.aya);
+            const aya_id = ayaID(c.sura, c.aya);
             let epos = c.epos;
             if (epos > 980) {
               epos = 1000;

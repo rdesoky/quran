@@ -1,6 +1,4 @@
 //Managing the active side modeless popup ( Index, Tafseer, Settings, etc )
-import React, {useContext} from "react";
-import {AppContext} from "../../context/App";
 import GotoPage from "./GotoPage";
 import QIndex from "./QIndex";
 import Commands from "./Commands";

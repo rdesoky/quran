@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import QData, { ayatCount } from "../services/QData";
+import {
+  ayaID,
+  ayaIdInfo,
+  ayaIdPage,
+  getPageFirstAyaId,
+  parts,
+  sura_info,
+  TOTAL_VERSES,
+} from "../services/QData";
 import Utils from "./../services/utils";
 import firebase from "firebase";
 import { analytics } from "../services/Analytics";
@@ -25,31 +33,14 @@ const initSidebarCommands = [
 ];
 
 //Default context values
-const AppState = {
-  messageBox: false,
-  contextPopup: false,
+const initialState = {
   user: null,
-  // toastMessage: null,
-  expandedMenu: false,
-  modalPopup: false,
   hifzRanges: [],
   bookmarks: [],
   daily: {
     pages: [], //{date:'??',pages:123}
     chars: [], //{date:'??',chars:123}
   },
-  // isNarrow: false, //hidden sidebar and streched single page width
-  // isCompact: false, //single page with extra margin for popup
-  // isWide: false, //two pages with extra margin for popup
-  // isScrollable: false, // too wide
-  // pagesCount: 1,
-  // appWidth: 800,
-  // appHeight: 600,
-  // displayMode: 0, //0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
-  showMenu: false,
-  popup: null,
-  popupParams: {},
-  showPopup: false,
   selectStart: 0,
   selectEnd: 0,
   maskStart: -1,
@@ -60,94 +51,21 @@ const AppState = {
   //         : initSidebarCommands
 };
 
-const AppContext = React.createContext(AppState);
+export const AppContext = React.createContext(initialState);
 
 class AppProvider extends Component {
-  state = AppState;
-
-  // _verseList = [];
-  // _normVerseList = [];
-  _suraNames = undefined;
-  // _contextPopupInfo = null;
-  // _messageBoxInfo = [];
-  //
-  // setContextPopup = (contextPopupInfo = null) => {
-  //   this._contextPopupInfo = contextPopupInfo;
-  //   this.setState({ contextPopup: contextPopupInfo !== null });
-  // };
-
-  // getContextPopup = () => {
-  //   return this._contextPopupInfo;
-  // };
-  //
-  // pushMessageBox = (msgBoxInfo = null) => {
-  //   if (msgBoxInfo) {
-  //     this._messageBoxInfo.push(msgBoxInfo);
-  //   } else {
-  //     this._messageBoxInfo.pop();
-  //   }
-  //   this.setState({ messageBox: this._messageBoxInfo.length > 0 });
-  //   this.setContextPopup(null);
-  // };
-  //
-  // setMessageBox = (msgBoxInfo = null) => {
-  //   if (msgBoxInfo) {
-  //     this._messageBoxInfo = [msgBoxInfo];
-  //   } else {
-  //     this._messageBoxInfo = [];
-  //   }
-  //   this.setState({ messageBox: this._messageBoxInfo.length > 0 });
-  //   this.setContextPopup(null);
-  // };
-  //
-  // getMessageBox = () => {
-  //   const msgsCount = this._messageBoxInfo.length;
-  //   return msgsCount ? this._messageBoxInfo[msgsCount - 1] : null;
-  // };
-
-  // setTheme = (theme) => {
-  //   this.setState({ theme });
-  //   localStorage.setItem("theme", theme);
-  // };
+  state = initialState;
 
   selectAya = (ayaId) => {
     if (ayaId === undefined) {
       ayaId = this.state.selectStart;
       this.hideMask();
     }
-    if (ayaId >= 0 && ayaId < ayatCount) {
+    if (ayaId >= 0 && ayaId < TOTAL_VERSES) {
       this.setState({ selectStart: ayaId, selectEnd: ayaId });
       return ayaId;
     }
   };
-
-  formatMessage = (options, values) => {
-    const message = this.props.intl.formatMessage(options, values);
-    return message;
-  };
-
-  suraNames = () => {
-    if (!this._suraNames || this._suraNames.length < 114) {
-      this._suraNames = this.formatMessage({ id: "sura_names" }).split(",");
-    }
-    return this._suraNames;
-  };
-
-  suraName = (index) => {
-    return index < 114 ? this.suraNames()[index] : "";
-  };
-
-  // verseText = (verse) => {
-  //   return verse < QData.ayatCount() ? quranText[verse] : "";
-  // };
-
-  // verseList = () => {
-  //   return this._verseList;
-  // };
-
-  // normVerseList = () => {
-  //   return this._normVerseList;
-  // };
 
   pushRecentCommand = (command) => {
     // if (
@@ -169,7 +87,7 @@ class AppProvider extends Component {
   };
 
   extendSelection = (ayaId) => {
-    if (ayaId < 0 || ayaId >= QData.ayatCount()) {
+    if (ayaId < 0 || ayaId >= TOTAL_VERSES) {
       return this.state.selectStart;
     }
     if (ayaId === this.state.selectStart) {
@@ -229,53 +147,11 @@ class AppProvider extends Component {
     let ms = parseInt(this.state.maskStart);
     if (ms !== -1) {
       let maskStart = ms + offset;
-      if (maskStart >= 0 && maskStart < QData.ayatCount()) {
+      if (maskStart >= 0 && maskStart < TOTAL_VERSES) {
         this.setMaskStart(maskStart);
       }
     }
   };
-
-  // setShowMenu = (showMenu) => {
-  //   this.setState({ showMenu });
-  // if (showMenu) {
-  //     this.setState({ showPopup: false });
-  // }
-  // if (!showMenu) {
-  //     this.setState({ expandedMenu: false });
-  // }
-  // };
-
-  // toggleShowMenu = () => {
-  //   this.setShowMenu(!this.state.showMenu);
-  // };
-
-  // setPopup = (popup, popupParams = {}) => {
-  //   if (this.state.popup) {
-  //     const newPopup = this.state.popup === popup ? null : popup;
-  //     this.closePopup(newPopup); //Toggling active popup
-  //   } else {
-  //     this.setState({
-  //       popup,
-  //       popupParams,
-  //       showMenu: null,
-  //       showPopup: true,
-  //       contextPopup: null,
-  //     });
-  //     this.setMessageBox(null);
-  //   }
-  //   if (popup !== null) {
-  //     // this.pushRecentCommand(popup);
-  //     // firebase.analytics().logEvent("show_ui", { ui_name: popup });
-  //   }
-  // };
-
-  // closePopup = (newPopup = null) => {
-  //   this.setState({showPopup: false, contextPopup: null});
-  //   setTimeout(() => {
-  //     this.setState({popup: newPopup, showPopup: newPopup !== null});
-  //     Utils.selectTopCommand();
-  //   }, 500);
-  // };
 
   nextPage = () => {
     this.offsetPage(1);
@@ -312,7 +188,7 @@ class AppProvider extends Component {
     const selectPageAya = () => {
       if (select) {
         this.hideMask();
-        const verse = QData.pageAyaId(pageNum - 1);
+        const verse = getPageFirstAyaId(pageNum - 1);
         this.selectAya(verse);
       }
     };
@@ -337,22 +213,22 @@ class AppProvider extends Component {
    * Navigate to sura Index
    */
   gotoSura = (index) => {
-    const suraInfo = QData.sura_info[index];
+    const suraInfo = sura_info[index];
     if (!suraInfo) {
       return 0;
     }
     const page = suraInfo.sp;
     this.gotoPage(page);
-    const ayaId = QData.ayaID(parseInt(index), 0);
+    const ayaId = ayaID(parseInt(index), 0);
     this.selectAya(ayaId);
     return ayaId;
   };
 
   gotoPart = (index) => {
-    const partInfo = QData.parts[index];
+    const partInfo = parts[index];
     const page = partInfo.p;
     this.gotoPage(page);
-    const ayaId = QData.ayaID(partInfo.s - 1, partInfo.a - 1);
+    const ayaId = ayaID(partInfo.s - 1, partInfo.a - 1);
     this.selectAya(ayaId);
   };
 
@@ -367,15 +243,9 @@ class AppProvider extends Component {
         this.hideMask();
       }
     }
-    const pageIndex = QData.ayaIdPage(ayaId);
+    const pageIndex = ayaIdPage(ayaId);
     this.gotoPage(pageIndex + 1, replace);
   };
-
-  // getActiveSide = () => {
-  //   let activePage = this.getCurrentPageIndex();
-  //   let side = this.state.pagesCount === 1 ? 0 : activePage % 2;
-  //   return side;
-  // };
 
   getSelectedText = () => {
     let { selectStart, selectEnd } = this.state;
@@ -383,69 +253,11 @@ class AppProvider extends Component {
       [selectStart, selectEnd] = [selectEnd, selectStart];
     }
     const verses = quranText.slice(selectStart, selectEnd + 1).map((t, i) => {
-      const { sura, aya } = QData.ayaIdInfo(selectStart + i);
+      const { sura, aya } = ayaIdInfo(selectStart + i);
       return `${t} (${sura + 1}:${aya + 1})`;
     });
 
     return verses.join(" ");
-  };
-
-  pagerWidth = () => {
-    const {
-      popup,
-      isWide,
-      appWidth,
-      appHeight,
-      isCompact,
-      isNarrow,
-      isScrollable,
-    } = this.state;
-
-    if (popup) {
-      if (isScrollable) {
-        return appWidth - appWidth / 3;
-      }
-      if (isWide) {
-        return appHeight * 1.25;
-      }
-      if (isCompact) {
-        return appHeight * 0.65;
-      }
-    }
-
-    return appWidth - (isNarrow ? 0 : 50);
-  };
-
-  sideBarWidth = () => {
-    return this.state.isNarrow ? 0 : 50;
-  };
-
-  popupWidth = () => {
-    const {
-      isWide,
-      appWidth,
-      appHeight,
-      pagesCount,
-      isCompact,
-      isScrollable,
-      isNarrow,
-    } = this.state;
-
-    if (isScrollable) {
-      return appWidth / 3;
-    }
-
-    if (isWide) {
-      //popup fills up the margin of two pages view
-      return appWidth - appHeight * 1.25 - 50;
-    }
-    if (isCompact) {
-      //popup fills up the margin of one page view
-      return appWidth - appHeight * 0.65 - 50;
-    }
-
-    //popup shown on top of pages
-    return appWidth / pagesCount - (isNarrow ? 0 : 50);
   };
 
   selectedRange = () => {
@@ -458,32 +270,31 @@ class AppProvider extends Component {
 
   toggleBookmark = (verse) => {
     if (this.isBookmarked(verse)) {
-      this.removeBookmark(verse);
-    } else {
-      this.addBookmark(verse);
+      return this.removeBookmark(verse);
     }
+    return this.addBookmark(verse);
   };
 
   addBookmark = (verse) => {
     if (!this.bookmarksRef) {
-      return;
+      return 0;
     }
     if (verse === undefined) {
       verse = this.selectedRange().start;
     }
     this.bookmarksRef.child(verse).set(-new Date().getTime());
-    this.showToast(this.formatMessage({ id: "bookmark_added" }));
+    return 1;
   };
 
   removeBookmark = (verse) => {
     if (!this.bookmarksRef) {
-      return;
+      return 0;
     }
     if (verse === undefined) {
       verse = this.state.selectStart;
     }
     this.bookmarksRef.child(verse).set(null);
-    this.showToast(this.formatMessage({ id: "bookmark_deleted" }));
+    return -1;
   };
 
   setRangeRevised = (range) => {
@@ -650,10 +461,6 @@ class AppProvider extends Component {
     );
   };
 
-  // showToast = (toastMessage) => {
-  //   this.setState({ toastMessage });
-  // };
-
   suraRanges = (sura) =>
     this.state.hifzRanges
       .filter((r) => r.sura === sura)
@@ -661,27 +468,14 @@ class AppProvider extends Component {
 
   methods = {
     suraRanges: this.suraRanges,
-    // pushMessageBox: this.pushMessageBox,
-    // setMessageBox: this.setMessageBox,
-    // getMessageBox: this.getMessageBox,
-    // setContextPopup: this.setContextPopup,
-    // getContextPopup: this.getContextPopup,
-    // showToast: this.showToast,
     deleteHifzRange: this.deleteHifzRange,
     addHifzRange: this.addHifzRange,
     setRangeRevised: this.setRangeRevised,
     logTypedVerse: this.logTypedVerse,
-    formatMessage: this.formatMessage,
     isBookmarked: this.isBookmarked,
     setExpandedMenu: this.setExpandedMenu,
     signOut: this.signOut,
-    suraName: this.suraName,
-    suraNames: this.suraNames,
     selectedRange: this.selectedRange,
-    // popupWidth: this.popupWidth,
-    // setShowMenu: this.setShowMenu,
-    // toggleShowMenu: this.toggleShowMenu,
-    // setPopup: this.setPopup,
     nextPage: this.nextPage,
     prevPage: this.prevPage,
     offsetPage: this.offsetPage,
@@ -689,72 +483,21 @@ class AppProvider extends Component {
     gotoPage: this.gotoPage,
     gotoSura: this.gotoSura,
     gotoPart: this.gotoPart,
-    // pageWidth: this.pageWidth,
-    // pageHeight: this.pageHeight,
     setSelectStart: this.setSelectStart,
     setSelectEnd: this.setSelectEnd,
     setMaskStart: this.setMaskStart,
     hideMask: this.hideMask,
     offsetMask: this.offsetMask,
-    // pageMargin: this.pageMargin,
-    // setTheme: this.setTheme,
     offsetSelection: this.offsetSelection,
     selectAya: this.selectAya,
     extendSelection: this.extendSelection,
     pushRecentCommand: this.pushRecentCommand,
-    // verseList: this.verseList,
-    // verseText: this.verseText,
-    // normVerseList: this.normVerseList,
-    // closePopup: this.closePopup,
-    // getActiveSide: this.getActiveSide,
     getCurrentPageIndex: this.getCurrentPageIndex,
     getSelectedText: this.getSelectedText,
-    // pagerWidth: this.pagerWidth,
-    // sideBarWidth: this.sideBarWidth,
     addBookmark: this.addBookmark,
     removeBookmark: this.removeBookmark,
     toggleBookmark: this.toggleBookmark,
-    // setModalPopup: this.setModalPopup,
   };
-
-  // onResize = (e) => {
-  //   const {innerWidth, innerHeight} = e.target;
-  //   const newSize = {width: innerWidth, height: innerHeight};
-  //   this.updateAppSizes(newSize);
-  // };
-  //
-  // updateAppSizes({width, height}) {
-  //   this.setState({appWidth: width, appHeight: height});
-  //   const pagesCount = this.calcPagesCount({width, height});
-  //   const isNarrow = width / height < 0.7;
-  //   const isWide = width / height > 1.8;
-  //   const isCompact = !isWide && pagesCount === 1 && width / height > 1.2;
-  //   const isScrollable = width / height > 2.7;
-  //   this.setState({
-  //     pagesCount,
-  //     isNarrow,
-  //     isWide,
-  //     isCompact,
-  //     isScrollable,
-  //   });
-  //   const app_size =
-  //     pagesCount > 1
-  //       ? isWide
-  //         ? isScrollable
-  //           ? "extra_wide"
-  //           : "wide_two_pages"
-  //         : "two_pages"
-  //       : isCompact
-  //         ? "wide_one_page"
-  //         : isNarrow
-  //           ? "narrow_one_page"
-  //           : "one_page";
-  //   analytics.setParams({app_size});
-  // }
-
-  // calcPagesCount({width, height}) {
-  //   return width > height * 1.35 ? 2 : 1;
-  // }
 
   componentWillUnmount() {
     this.unregisterAuthObserver && this.unregisterAuthObserver();
@@ -869,11 +612,8 @@ class AppProvider extends Component {
     // });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // if (prevProps.themeContext.lang !== this.props.themeContext.lang) {
-    this._suraNames = undefined; //reset names cache
-    // }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  // }
 
   componentDidMount() {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
@@ -890,31 +630,9 @@ class AppProvider extends Component {
     this.dbRef = firebase.app().database().ref();
 
     setTimeout(() => {
-      const ayaId = QData.pageAyaId(this.getCurrentPageIndex());
+      const ayaId = getPageFirstAyaId(this.getCurrentPageIndex());
       this.selectAya(ayaId);
     });
-
-    // window.addEventListener("resize", this.onResize);
-    // this.updateAppSizes({
-    //   width: window.innerWidth,
-    //   height: window.innerHeight,
-    // });
-
-    // fetch(`${process.env.PUBLIC_URL}/quran.txt`)
-    //   .then((results) => results.text())
-    //   .then((text) => {
-    //     this._verseList = text.split("\n");
-    //   })
-    //   .catch((e) => {
-    //   });
-
-    // fetch(`${process.env.PUBLIC_URL}/normalized_quran.txt`)
-    //   .then((results) => results.text())
-    //   .then((text) => {
-    //     this._normVerseList = text.split("\n");
-    //   })
-    //   .catch((e) => {
-    //   });
 
     const { history } = this.props;
     history.listen((location) => {
@@ -939,7 +657,7 @@ class AppProvider extends Component {
 }
 
 //Create the context consumer generator function
-const AppConsumer = (Component) =>
+export const AppConsumer = (Component) =>
   function AppConsumerGen(props) {
     return (
       <AppContext.Consumer>
@@ -949,4 +667,3 @@ const AppConsumer = (Component) =>
   };
 
 export default injectIntl(withRouter(AppProvider));
-export { AppContext, AppConsumer };

@@ -7,14 +7,16 @@ import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { pushMessageBox } from "../MessageBox";
+import { showToast } from "../../store/uiSlice";
 
 const Bookmarks = () => {
   const app = useContext(AppContext);
   const appHeight = useSelector(selectAppHeight);
   const isNarrow = useSelector(selectIsNarrow);
+  const dispatch = useDispatch();
 
   const toggleBookmark = (e) => {
     if (app.isBookmarked()) {
@@ -22,11 +24,15 @@ const Bookmarks = () => {
         title: <String id="are_you_sure" />,
         content: <String id="delete_bookmark" />,
         onYes: () => {
-          app.removeBookmark();
+          if (app.removeBookmark() === -1) {
+            dispatch(showToast("bookmark_deleted"));
+          }
         },
       });
     } else {
-      app.addBookmark();
+      if (app.addBookmark() === 1) {
+        dispatch(showToast("bookmark_added"));
+      }
     }
   };
 

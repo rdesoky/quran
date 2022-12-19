@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import { AppConsumer } from "./App";
-import QData, { ayatCount } from "./../services/QData";
+import {
+  ayaID,
+  ayaIdInfo,
+  ayaIdPage,
+  getPartIndexByAyaId,
+  getPageFirstAyaId,
+  getPartFirstAyaId,
+  TOTAL_VERSES,
+} from "./../services/QData";
 // import Utils from "./../services/utils";
 import { GetAudioURL, ListReciters } from "./../services/AudioData";
 
@@ -57,7 +65,7 @@ class PlayerProvider extends Component {
 
   offsetPlayingAya = (offset) => {
     let playingAya = this.state.playingAya;
-    if (playingAya + offset >= ayatCount) {
+    if (playingAya + offset >= TOTAL_VERSES) {
       return;
     }
 
@@ -76,28 +84,28 @@ class PlayerProvider extends Component {
         }
         break;
       case AudioRepeat.page: //page
-        const currPage = QData.ayaIdPage(playingAya);
-        const nextPage = QData.ayaIdPage(playingAya + offset);
+        const currPage = ayaIdPage(playingAya);
+        const nextPage = ayaIdPage(playingAya + offset);
         if (nextPage !== currPage) {
-          playingAya = QData.pageAyaId(currPage);
+          playingAya = getPageFirstAyaId(currPage);
         } else {
           playingAya += offset;
         }
         break;
       case AudioRepeat.sura: //sura
-        const currSura = QData.ayaIdInfo(playingAya).sura;
-        const nextSura = QData.ayaIdInfo(playingAya + offset).sura;
+        const currSura = ayaIdInfo(playingAya).sura;
+        const nextSura = ayaIdInfo(playingAya + offset).sura;
         if (currSura !== nextSura) {
-          playingAya = QData.ayaID(currSura, 0);
+          playingAya = ayaID(currSura, 0);
         } else {
           playingAya += offset;
         }
         break;
       case AudioRepeat.part: //part
-        const currPart = QData.ayaIdPart(playingAya);
-        const nextPart = QData.ayaIdPart(playingAya + offset);
+        const currPart = getPartIndexByAyaId(playingAya);
+        const nextPart = getPartIndexByAyaId(playingAya + offset);
         if (currPart !== nextPart) {
-          playingAya = QData.partAyaId(currPart);
+          playingAya = getPartFirstAyaId(currPart);
         } else {
           playingAya += offset;
         }
@@ -107,14 +115,14 @@ class PlayerProvider extends Component {
         playingAya += offset;
     }
 
-    if (playingAya < QData.ayatCount()) {
+    if (playingAya < TOTAL_VERSES) {
       this.setState({ playingAya });
     }
     return playingAya;
   };
 
   audioSource = (ayaId) => {
-    const { sura, aya } = QData.ayaIdInfo(
+    const { sura, aya } = ayaIdInfo(
       ayaId !== undefined ? ayaId : this.state.playingAya
     );
     return GetAudioURL(this.state.reciter, sura + 1, aya + 1);

@@ -2,7 +2,7 @@ import { useRouteMatch } from "react-router-dom";
 import React, { useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
-import QData from "./../../services/QData";
+import { getPageSuras } from "./../../services/QData";
 import { HifzRanges, HifzRange } from "../Hifz";
 import { ActivityChart } from "../Hifz";
 import { faChartLine } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,7 @@ export const AddHifz = ({ page }) => {
     path: process.env.PUBLIC_URL + "/page/:page",
   });
   const pageIndex = page === undefined ? parseInt(match.params.page) - 1 : page;
-  const suras = QData.pageSuras(pageIndex);
+  const suras = getPageSuras(pageIndex);
 
   return (
     <ul className="FlowingList">

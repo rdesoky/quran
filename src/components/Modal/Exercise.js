@@ -15,7 +15,7 @@ import { TafseerView } from "./Tafseer";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { ActivityChart } from "../Hifz";
 
-import QData from "../../services/QData";
+import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { analytics } from "../../services/Analytics";
 import { ExerciseSettings } from "./Settings";
@@ -104,8 +104,8 @@ const Exercise = () => {
     }
     //Length is good, check memorized
     if (exerciseMemorized === false) {
-      const { sura, aya } = QData.ayaIdInfo(new_verse);
-      const page = QData.ayaPage(sura, aya);
+      const { sura, aya } = ayaIdInfo(new_verse);
+      const page = getPageIndex(sura, aya);
       const { hifzRanges } = app;
 
       const hifzRange = hifzRanges.find((r) => {
@@ -500,7 +500,7 @@ const Exercise = () => {
     if (quickMode === 2 && wrongWord === -1 && answerWords.length >= 3) {
       const typed_chars = app.logTypedVerse(verse, 3);
       analytics.logEvent("exercise_quick_success", {
-        ...QData.verseLocation(verse),
+        ...verseLocation(verse),
         typed_chars,
         trigger,
       });
@@ -512,7 +512,7 @@ const Exercise = () => {
     if (success) {
       const typed_chars = app.logTypedVerse(verse);
       analytics.logEvent("exercise_success", {
-        ...QData.verseLocation(verse),
+        ...verseLocation(verse),
         typed_chars,
         trigger,
       });
