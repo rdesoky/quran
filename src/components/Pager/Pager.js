@@ -3,7 +3,7 @@ import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { AppContext } from "../../context/App";
-import QData, { ayatCount } from "../../services/QData";
+import { ayaIdPage, TOTAL_VERSES } from "../../services/QData";
 import Utils from "../../services/utils";
 import {
   selectAppHeight,
@@ -38,7 +38,7 @@ export function PageRedirect({ match }) {
     setTimeout(() => {
       app.selectAya(parseInt(aya));
     }, 10);
-    pageNum = QData.ayaIdPage(aya) + 1;
+    pageNum = ayaIdPage(aya) + 1;
   }
   return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
 }
@@ -138,17 +138,17 @@ function Pager({ match }) {
       let { maskStart } = app;
       if (maskStart !== -1) {
         //Mask is active
-        if (maskStart >= ayatCount) {
+        if (maskStart >= TOTAL_VERSES) {
           return;
         }
         let currPageNum = parseInt(match.params.page);
-        let maskPageNum = QData.ayaIdPage(maskStart) + 1;
+        let maskPageNum = ayaIdPage(maskStart) + 1;
         if (maskPageNum !== currPageNum) {
           app.gotoPage(maskPageNum, REPLACE);
           return;
         }
         app.offsetMask(1);
-        let maskNewPageNum = QData.ayaIdPage(maskStart + 1) + 1;
+        let maskNewPageNum = ayaIdPage(maskStart + 1) + 1;
         if (maskNewPageNum !== currPageNum) {
           //Mask would move to a new page
           if (pagesCount === 1 || maskNewPageNum % 2 === 1) {
@@ -176,7 +176,7 @@ function Pager({ match }) {
         if (maskStart <= 0) {
           return;
         }
-        let maskNewPageNum = QData.ayaIdPage(maskStart - 1) + 1;
+        let maskNewPageNum = ayaIdPage(maskStart - 1) + 1;
         if (maskNewPageNum !== parseInt(match.params.page)) {
           //Mask would move to a new page
           app.gotoPage(maskNewPageNum, REPLACE);

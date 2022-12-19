@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import QData from "../../services/QData";
+import { ayaIdInfo } from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
@@ -128,7 +128,7 @@ export const TafseerView = ({
     TafseerList.find((item) => item.id === tafseer).name;
 
   const copyTafseer = (e) => {
-    const verseInfo = QData.ayaIdInfo(verse);
+    const verseInfo = ayaIdInfo(verse);
     const text = tafseerData[verse];
     Utils.copy2Clipboard(
       `${tafseerName()}:\n ${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`

@@ -1,7 +1,12 @@
 import React, { useContext } from "react";
 import { analytics } from "./../../services/Analytics";
 import { AppContext } from "../../context/App";
-import QData from "../../services/QData";
+import {
+  ayaIdInfo,
+  getPagePartNumber,
+  TOTAL_PAGES,
+  getPageSuraIndex,
+} from "../../services/QData";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
@@ -19,6 +24,7 @@ import { useSelector } from "react-redux";
 import { selectPagesCount } from "../../store/layoutSlice";
 import { useIntl } from "react-intl";
 import { showContextPopup } from "../ContextPopup";
+import SuraName from "../SuraName";
 
 const PageHeader = ({
   index: pageIndex,
@@ -29,9 +35,9 @@ const PageHeader = ({
   onDecrement,
 }) => {
   const app = useContext(AppContext);
-  const partIndex = QData.pagePart(pageIndex + 1) - 1;
-  const selectedAyaInfo = QData.ayaIdInfo(app.selectStart);
-  const suraIndex = QData.pageSura(pageIndex + 1);
+  const partIndex = getPagePartNumber(pageIndex + 1) - 1;
+  const selectedAyaInfo = ayaIdInfo(app.selectStart);
+  const suraIndex = getPageSuraIndex(pageIndex + 1);
   const pagesCount = useSelector(selectPagesCount);
   const intl = useIntl();
 
@@ -94,7 +100,7 @@ const PageHeader = ({
     <div className="PageHeader">
       <div className="PageHeaderContent">
         <CircleProgress
-          target={QData.pages_count}
+          target={TOTAL_PAGES}
           progress={pageIndex + 1}
           display={partIndex + 1}
           onClick={showPartContextPopup}
@@ -105,7 +111,7 @@ const PageHeader = ({
           onClick={showSuraContextPopup}
           title={intl.formatMessage({ id: "sura_num" }, { num: suraIndex + 1 })}
         >
-          {app.suraName(suraIndex)}
+          <SuraName index={suraIndex} />
         </button>
         <button
           onClick={showPageContextPopup}

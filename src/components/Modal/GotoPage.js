@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import QData from "../../services/QData";
+import {
+  ayaID,
+  ayaIdInfo,
+  ayaIdPage,
+  getPartIndexByAyaId,
+  getPageFirstAyaId,
+  sura_info,
+} from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AudioState, PlayerContext } from "../../context/Player";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,21 +24,21 @@ const GotoPage = ({ open }) => {
   const pagesCount = useSelector(selectPagesCount);
 
   const [pageNumber, updatePageNumber] = useState(
-    QData.ayaIdPage(app.selectStart) + 1
+    ayaIdPage(app.selectStart) + 1
   );
   const [partNumber, updatePartNumber] = useState(
-    QData.ayaIdPart(app.selectStart) + 1
+    getPartIndexByAyaId(app.selectStart) + 1
   );
 
   const [suraNumber, updateSuraNumber] = useState(
-    QData.ayaIdInfo(app.selectStart).sura + 1
+    ayaIdInfo(app.selectStart).sura + 1
   );
   const [verseNumber, updateVerseNumber] = useState(
-    QData.ayaIdInfo(app.selectStart).aya + 1
+    ayaIdInfo(app.selectStart).aya + 1
   );
 
   const [lastVerseNumber, updateLastVerseNumber] = useState(
-    QData.sura_info[suraNumber - 1].ac
+    sura_info[suraNumber - 1].ac
   );
 
   let gotoPageForm;
@@ -41,10 +48,10 @@ const GotoPage = ({ open }) => {
   // }, [open]);
 
   useEffect(() => {
-    updatePageNumber(QData.ayaIdPage(app.selectStart) + 1);
-    updatePartNumber(QData.ayaIdPart(app.selectStart) + 1);
-    updateSuraNumber(QData.ayaIdInfo(app.selectStart).sura + 1);
-    updateVerseNumber(QData.ayaIdInfo(app.selectStart).aya + 1);
+    updatePageNumber(ayaIdPage(app.selectStart) + 1);
+    updatePartNumber(getPartIndexByAyaId(app.selectStart) + 1);
+    updateSuraNumber(ayaIdInfo(app.selectStart).sura + 1);
+    updateVerseNumber(ayaIdInfo(app.selectStart).aya + 1);
   }, [app.selectStart]);
 
   useEffect(() => {
@@ -72,7 +79,7 @@ const GotoPage = ({ open }) => {
     const { target: form } = e;
     const pageNum = form["PageNumber"].value;
     app.gotoPage(pageNum);
-    let ayaId = QData.pageAyaId(pageNum - 1);
+    let ayaId = getPageFirstAyaId(pageNum - 1);
     app.selectAya(ayaId);
     checkClosePopup();
     stopAudio();
@@ -81,7 +88,7 @@ const GotoPage = ({ open }) => {
   const gotoPart = (e) => {
     const { target: form } = e;
     const part = parseInt(form["PartNumber"].value);
-    // const partInfo = QData.parts[part - 1];
+    // const partInfo = parts[part - 1];
     app.gotoPart(part - 1);
     checkClosePopup();
     stopAudio();
@@ -96,7 +103,7 @@ const GotoPage = ({ open }) => {
   };
 
   const gotoVerse = (e) => {
-    app.gotoAya(QData.ayaID(suraNumber - 1, verseNumber - 1), {
+    app.gotoAya(ayaID(suraNumber - 1, verseNumber - 1), {
       sel: true,
     });
     checkClosePopup();
@@ -111,7 +118,7 @@ const GotoPage = ({ open }) => {
   const updateSura = (e) => {
     const suraIndex = e.target.value - 1;
     updateSuraNumber(suraIndex + 1);
-    const suraInfo = QData.sura_info[suraIndex];
+    const suraInfo = sura_info[suraIndex];
     updateVerseNumber(1);
     updateLastVerseNumber(suraInfo.ac);
   };

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import QData from "./../services/QData";
+import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "./../services/QData";
 import { AppContext } from "./../context/App";
-import { FormattedMessage, FormattedMessage as String } from "react-intl";
+import {
+  FormattedMessage,
+  FormattedMessage as String,
+  useIntl,
+} from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faChevronUp,
@@ -29,6 +33,7 @@ import {
   showContextPopup,
   showToast,
 } from "../store/uiSlice";
+import SuraName from "./SuraName";
 
 export const VerseInfo = ({
   verse,
@@ -58,7 +63,7 @@ export const VerseInfo = ({
     }
   };
 
-  const verseInfo = QData.ayaIdInfo(verse);
+  const verseInfo = ayaIdInfo(verse);
 
   if (navigate) {
     onMoveNext = (offset) => {
@@ -86,7 +91,9 @@ export const VerseInfo = ({
       )}
       <button onClick={handleClick}>
         <div className="VerseInfoList">
-          <div>{app.suraName(verseInfo.sura)}</div>
+          <div>
+            <SuraName index={verseInfo.sura} />
+          </div>
           <div>
             <String id="verse_num" values={{ num: verseInfo.aya + 1 }} />
           </div>
@@ -127,7 +134,7 @@ export const VerseText = ({
   };
 
   const copyVerse = (e) => {
-    const verseInfo = QData.ayaIdInfo(verse);
+    const verseInfo = ayaIdInfo(verse);
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
@@ -135,7 +142,7 @@ export const VerseText = ({
     dispatch(showToast("text_copied"));
 
     analytics.logEvent("copy_text", {
-      ...QData.verseLocation(verse),
+      ...verseLocation(verse),
       verses_count: 1,
       trigger,
     });
@@ -154,7 +161,14 @@ export const VerseText = ({
   }, [app.selectStart]);
 
   const toggleBookmark = (e) => {
-    app.toggleBookmark(verse);
+    switch (app.toggleBookmark(verse)) {
+      case 1:
+        dispatch(showToast("bookmark_added"));
+        break;
+      case -1:
+        dispatch(showToast("bookmark_deleted"));
+        break;
+    }
   };
 
   return (
@@ -314,7 +328,7 @@ export const SuraContextHeader = ({ sura }) => {
   // const app = useContext(AppContext);
   // const [suraIndex, setSura] = useState(sura || 0);
   // useEffect(() => {
-  //     const ayaInfo = QData.ayaIdInfo(app.selectStart);
+  //     const ayaInfo = ayaIdInfo(app.selectStart);
   //     setSura(ayaInfo.sura);
   // }, [app.selectStart]);
 
@@ -352,7 +366,7 @@ export const PageNavigator = ({ children, trigger }) => {
         </button>
       ) : null}
       {children}
-      {pageNumber < QData.pages_count ? (
+      {pageNumber < TOTAL_PAGES ? (
         <button className="CommandButton" onClick={gotoNextPage}>
           <Icon icon={faChevronLeft} />
         </button>

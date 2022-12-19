@@ -39,7 +39,7 @@ import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { UserImage } from "./User";
 import { AddHifz } from "./Favorites";
-import QData from "./../../services/QData";
+import { verseLocation } from "./../../services/QData";
 import {
   hideMenu,
   selectShowMenu,
@@ -207,7 +207,7 @@ const CommandButton = ({
       case "Play":
         //TODO: first navigate to the current selection
         analytics.logEvent("play_audio", {
-          ...QData.verseLocation(app.selectStart),
+          ...verseLocation(app.selectStart),
           reciter: player.reciter,
           trigger,
         });
@@ -216,7 +216,7 @@ const CommandButton = ({
         return;
       case "Pause":
         analytics.logEvent("pause_audio", {
-          ...QData.verseLocation(player.playingAya),
+          ...verseLocation(player.playingAya),
           reciter: player.reciter,
           trigger,
         });
@@ -228,7 +228,7 @@ const CommandButton = ({
         return;
       case "Stop":
         analytics.logEvent("stop_audio", {
-          ...QData.verseLocation(player.playingAya),
+          ...verseLocation(player.playingAya),
           reciter: player.reciter,
           trigger,
         });
@@ -236,7 +236,7 @@ const CommandButton = ({
         return;
       case "Downloading":
         analytics.logEvent("retry_stuck_audio", {
-          ...QData.verseLocation(player.playingAya),
+          ...verseLocation(player.playingAya),
           reciter: player.reciter,
         });
         player.stop();
@@ -254,14 +254,14 @@ const CommandButton = ({
         return;
       case "Mask":
         analytics.logEvent(app.maskStart === -1 ? "show_mask" : "hide_mask", {
-          ...QData.verseLocation(app.selectStart),
+          ...verseLocation(app.selectStart),
           trigger,
         });
         app.setMaskStart();
         break;
       case "Copy":
         analytics.logEvent("copy_text", {
-          ...QData.verseLocation(app.selectStart),
+          ...verseLocation(app.selectStart),
           verses_count: app.selectEnd - app.selectStart + 1,
           trigger,
         });
@@ -276,15 +276,22 @@ const CommandButton = ({
         break;
       case "Bookmark":
         analytics.logEvent("bookmark", {
-          ...QData.verseLocation(app.selectStart),
+          ...verseLocation(app.selectStart),
           trigger,
         });
-        app.toggleBookmark();
+        switch (app.toggleBookmark()) {
+          case 1:
+            dispatch(showToast("bookmark_added"));
+            break;
+          case -1:
+            dispatch(showToast("bookmark_deleted"));
+            break;
+        }
         return;
       case "Favorites":
       case "update_hifz":
         analytics.logEvent("show_update_hifz", {
-          ...QData.verseLocation(app.selectStart),
+          ...verseLocation(app.selectStart),
           trigger,
         });
         setMessageBox({

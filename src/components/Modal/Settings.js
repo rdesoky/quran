@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { FormattedMessage as String, useIntl } from "react-intl";
+import { FormattedMessage as Message, useIntl } from "react-intl";
 import { AppContext } from "../../context/App";
 import { PlayerContext } from "../../context/Player";
 import ReciterName from "./../AudioPlayer/ReciterName";
@@ -122,7 +122,7 @@ const Settings = () => {
         <div className="OptionRow">
           <label>
             <span>
-              <String id="dark_mode" />
+              <Message id="dark_mode" />
             </span>
             <Switch
               height={22}
@@ -134,14 +134,14 @@ const Settings = () => {
         </div>
         <hr />
         <div>
-          <String id="random_exercise" />:
+          <Message id="random_exercise" />:
         </div>
         <ExerciseSettings />
         <hr />
         <div className="OptionRow">
           <label>
             <span>
-              <String id="followPlayer" />
+              <Message id="followPlayer" />
             </span>
             <Switch
               height={22}
@@ -154,7 +154,7 @@ const Settings = () => {
         </div>
         <div className="OptionRow">
           <label>
-            <String id="repeat" />
+            <Message id="repeat" />
             <select
               // ref={(ref) => {
               //     selectRepeat = ref;
@@ -162,21 +162,21 @@ const Settings = () => {
               onChange={onChangeRepeat}
               value={player.repeat}
             >
-              <String id="no_repeat">
+              <Message id="no_repeat">
                 {(label) => <option value={0}>{label}</option>}
-              </String>
-              <String id="selection">
+              </Message>
+              <Message id="selection">
                 {(label) => <option value={1}>{label}</option>}
-              </String>
-              <String id="page">
+              </Message>
+              <Message id="page">
                 {(label) => <option value={2}>{label}</option>}
-              </String>
-              <String id="sura">
+              </Message>
+              <Message id="sura">
                 {(label) => <option value={3}>{label}</option>}
-              </String>
-              <String id="part">
+              </Message>
+              <Message id="part">
                 {(label) => <option value={4}>{label}</option>}
-              </String>
+              </Message>
             </select>
           </label>
         </div>
@@ -255,7 +255,7 @@ export const ExerciseSettings = () => {
     <>
       <div className="OptionRow">
         <label>
-          <String id="exercise_level" />
+          <Message id="exercise_level" />
           <select onChange={updateExerciseLevel} value={exerciseLevel}>
             <option value={0}>
               {intl.formatMessage({
@@ -281,7 +281,7 @@ export const ExerciseSettings = () => {
       <div className="OptionRow">
         <label>
           <span>
-            <String id="exercise_memorized" />
+            <Message id="exercise_memorized" />
           </span>
           <Switch
             height={22}
@@ -294,7 +294,7 @@ export const ExerciseSettings = () => {
       <div className="OptionRow">
         <label>
           <span>
-            <String id="random_auto_recite" />
+            <Message id="random_auto_recite" />
           </span>
           <Switch
             height={22}

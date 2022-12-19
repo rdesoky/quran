@@ -1,5 +1,5 @@
 /* eslint-disable no-extend-native */
-import QData from "./QData";
+import { getPagePartNumber } from "./QData";
 
 const Utils = {
   num2string: (num, length = 3) => {
@@ -46,7 +46,7 @@ const Utils = {
   },
   partFromPath: (path) => {
     let page = Utils.pageFromPath(path);
-    let part = QData.pagePart(page);
+    let part = getPagePartNumber(page);
     return part;
   },
   requestFullScreen: () => {
@@ -102,7 +102,7 @@ const Utils = {
       }
       return result + " " + word;
     }, "");
-    return {__html: ret};
+    return { __html: ret };
   },
   normalizeText: (t) => {
     let ret;
@@ -115,8 +115,7 @@ const Utils = {
         .replace(/[ئي]/g, "ى");
 
       ret = ret.replace(new RegExp("\\p{M}", "gu"), ""); //Not supported by some browsers
-    } catch (e) {
-    }
+    } catch (e) {}
     return ret;
   },
   copy2Clipboard: (t) => {
@@ -150,4 +149,4 @@ export const getCurrentPageNumber = (location) => {
   let match = location.pathname.match(/page\/(.+)/);
   let pageNumber = match ? match[1] : undefined;
   return parseInt(pageNumber);
-}
+};

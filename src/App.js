@@ -53,7 +53,7 @@ analytics.setUserProps({ web_user: "yes" });
 
 // analytics.logEvent("page_view");
 
-function App() {
+export default function App() {
   //Handles componentDidMount/unmount, props changes
   const [localeMessages, setLocaleMessages] = useState();
   const [windowSize, setWindowSize] = useState({
@@ -138,8 +138,6 @@ function App() {
     )
   );
 }
-
-export default App;
 
 function useInitApp() {
   const dispatch = useDispatch();

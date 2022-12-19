@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import QData from "../../services/QData";
+import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
 import Utils from "./../../services/utils";
@@ -27,6 +27,7 @@ import {
 } from "../../store/layoutSlice";
 import { quranNormalizedText, quranText } from "../../App";
 import { closePopup, showToast } from "../../store/uiSlice";
+import SuraName from "../SuraName";
 
 export default function Search() {
   const app = useContext(AppContext);
@@ -142,7 +143,7 @@ export default function Search() {
     const aya = e.target.getAttribute("aya");
 
     analytics.logEvent("click_search_result", {
-      ...QData.verseLocation(aya),
+      ...verseLocation(aya),
     });
 
     if (!isCompact && pagesCount === 1) {
@@ -185,9 +186,7 @@ export default function Search() {
       return null;
     }
 
-    const nSuraNames = Utils.normalizeText(QData.arSuraNames.join(",")).split(
-      ","
-    );
+    const nSuraNames = Utils.normalizeText(arSuraNames.join(",")).split(",");
 
     return (
       <ul
@@ -197,7 +196,7 @@ export default function Search() {
           columnCount: Math.floor((popupWidth - 50) / 120), //-50px margin
         }}
       >
-        {QData.arSuraNames
+        {arSuraNames
           .map((suraName, index) => {
             return { name: suraName, index: index };
           })
@@ -229,7 +228,7 @@ export default function Search() {
   const copyVerse = (e) => {
     const { currentTarget } = e;
     const verse = currentTarget.getAttribute("verse");
-    const verseInfo = QData.ayaIdInfo(verse);
+    const verseInfo = ayaIdInfo(verse);
     const text = quranText?.[verse];
     Utils.copy2Clipboard(
       `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
@@ -238,7 +237,7 @@ export default function Search() {
     e.stopPropagation();
 
     analytics.logEvent("copy_text", {
-      ...QData.verseLocation(verse),
+      ...verseLocation(verse),
       verses_count: 1,
       trigger: "search_results",
     });
@@ -246,7 +245,7 @@ export default function Search() {
 
   const renderResultsTree = () => {
     const groups = results.reduce((groups, ayaInfo, index) => {
-      const { sura, aya } = QData.ayaIdInfo(ayaInfo.aya);
+      const { sura, aya } = ayaIdInfo(ayaInfo.aya);
       let group = groups.find((g) => g.sura === sura);
       const ayaInfoEx = { ...ayaInfo, ayaNum: aya + 1 };
       if (group) {
@@ -280,7 +279,7 @@ export default function Search() {
                 tabIndex="0"
               >
                 <span className="ParaId Chapter">{verses.length}</span>
-                {sura + 1}.{app.suraName(sura)}
+                {sura + 1}.<SuraName index={sura} />
               </button>
               {!expanded ? null : (
                 <div className="ResultsGroupList">
@@ -334,7 +333,7 @@ export default function Search() {
         }}
       >
         {page.map(({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
-          const ayaInfo = QData.ayaIdInfo(aya);
+          const ayaInfo = ayaIdInfo(aya);
           return (
             <button
               key={aya}
@@ -344,7 +343,7 @@ export default function Search() {
               tabIndex="0"
             >
               <span className="ResultInfo">
-                {ayaInfo.sura + 1}.{app.suraName(ayaInfo.sura)} (
+                {ayaInfo.sura + 1}.<SuraName index={ayaInfo.sura} /> (
                 {ayaInfo.aya + 1})
               </span>
               <span
