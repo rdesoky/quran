@@ -56,7 +56,7 @@ const Modal = ({ onClose, children, show, name, modeless }) => {
   //     // }
   //     return () => {
   //         //Upon exit, select the most recent command to avoid hidden focus
-  //         Utils.selectTopCommand();
+  //         selectTopCommand();
   //     };
   // }, []);
 

@@ -3,7 +3,7 @@ import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
 import { AudioState, AudioRepeat, PlayerContext } from "./../../context/Player";
 import AKeyboard from "../AKeyboard/AKeyboard";
-import Utils from "./../../services/utils";
+import { normalizeText } from "./../../services/utils";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp,
@@ -471,7 +471,7 @@ const Exercise = () => {
 
   const testAnswer = (answerText) => {
     const normVerse = normVerseList[verse].trim();
-    const normAnswerText = Utils.normalizeText(answerText).trim();
+    const normAnswerText = normalizeText(answerText).trim();
     const correctWords = normVerse.split(/\s+/);
     if (!answerText.trim().length) {
       setMissingWords(correctWords.length);

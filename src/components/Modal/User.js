@@ -4,7 +4,7 @@ import { FormattedMessage as String } from "react-intl";
 import Login from "./../Login";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Utils from "./../../services/utils";
+import { downloadImage } from "../../services/utils";
 import { ActivityChart } from "../Hifz";
 import { useSelector } from "react-redux";
 import { selectAppHeight } from "../../store/layoutSlice";
@@ -62,7 +62,7 @@ export const UserImage = () => {
   useEffect(() => {
     if (app.user) {
       const url = app.user.photoURL;
-      Utils.downloadImage(url)
+      downloadImage(url)
         .then(() => {
           setImageUrl(url);
         })

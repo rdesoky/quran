@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../../context/App";
 import { ayaID } from "../../services/QData";
-import Utils from "../../services/utils";
+import { downloadPageImage } from "../../services/utils";
 import {
   selectPageHeight,
   selectPageMargin,
@@ -41,7 +41,7 @@ const Page = ({
     let setImageTimeout;
     setImageUrl(null);
     const pgIndex = pageIndex;
-    Utils.downloadPageImage(pgIndex)
+    downloadPageImage(pgIndex)
       .then((url) => {
         setImageTimeout = setTimeout(() => {
           //don't update the Url state unless the component is mounted
