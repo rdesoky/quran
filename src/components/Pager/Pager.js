@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { AppContext } from "../../context/App";
 import { ayaIdPage, TOTAL_VERSES } from "../../services/QData";
-import Utils from "../../services/utils";
+import { copy2Clipboard, downloadPageImage } from "../../services/utils";
 import {
   selectAppHeight,
   selectIsNarrow,
@@ -97,10 +97,10 @@ function Pager({ match }) {
     //cache next pages
     const pageIndex = match.params.page - 1;
     if (pagesCount === 1) {
-      Utils.downloadPageImage(pageIndex + 1).catch((e) => {});
+      downloadPageImage(pageIndex + 1).catch((e) => {});
     } else {
-      Utils.downloadPageImage(pageIndex + 2).catch((e) => {});
-      Utils.downloadPageImage(pageIndex + 3).catch((e) => {});
+      downloadPageImage(pageIndex + 2).catch((e) => {});
+      downloadPageImage(pageIndex + 3).catch((e) => {});
     }
   }, [pagesCount, match.params.page]);
 
@@ -210,7 +210,7 @@ function Pager({ match }) {
 
       switch (e.code) {
         case "Insert":
-          Utils.copy2Clipboard(app.getSelectedText());
+          copy2Clipboard(app.getSelectedText());
           app.pushRecentCommand("Copy");
           break;
         case "Escape":

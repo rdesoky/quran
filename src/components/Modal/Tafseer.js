@@ -7,7 +7,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { VerseInfo, VerseText } from "../Widgets";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import Utils from "../../services/utils";
+import { copy2Clipboard } from "../../services/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { showToast } from "../../store/uiSlice";
@@ -130,7 +130,7 @@ export const TafseerView = ({
   const copyTafseer = (e) => {
     const verseInfo = ayaIdInfo(verse);
     const text = tafseerData[verse];
-    Utils.copy2Clipboard(
+    copy2Clipboard(
       `${tafseerName()}:\n ${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
     );
     // app.showToast(app.intl.formatMessage({ id: "text_copied" }));

@@ -3,7 +3,7 @@ import "./Sidebar.scss";
 import { AppContext } from "../../context/App";
 import { CommandButton } from "./../Modal/Commands";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import Utils from "../../services/utils";
+import { selectTopCommand } from "../../services/utils";
 import {
   hideMenu,
   selectPopup,
@@ -29,7 +29,7 @@ function Sidebar() {
 
   useEffect(() => {
     if (popup === null) {
-      Utils.selectTopCommand();
+      selectTopCommand();
     }
   }, [popup]);
 

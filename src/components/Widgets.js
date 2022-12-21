@@ -1,38 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "./../services/QData";
-import { AppContext } from "./../context/App";
-import {
-  FormattedMessage,
-  FormattedMessage as String,
-  useIntl,
-} from "react-intl";
+import React, { useContext, useEffect, useState } from "react";
+import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "../services/QData";
+import { AppContext } from "../context/App";
+import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-  faChevronUp,
-  faChevronDown,
-  faTimes,
-  faCopy,
   faBookmark,
-  faChevronRight,
+  faChevronDown,
   faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { CommandButton } from "./Modal/Commands";
-import { PlayerContext, AudioState } from "../context/Player";
-import Utils from "../services/utils";
+import { AudioState, PlayerContext } from "../context/Player";
+import { copy2Clipboard } from "../services/utils";
 import { SuraHifzChart } from "./Hifz";
 import { analytics } from "../services/Analytics";
 import { quranText } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAppHeight, selectAppWidth } from "../store/layoutSlice";
-import {
-  selectContextPopup,
-  selectContextPopupParams,
-  selectToastMessage,
-  setContextPopup,
-  showContextPopup,
-  showToast,
-} from "../store/uiSlice";
+import { selectToastMessage, showToast } from "../store/uiSlice";
 import SuraName from "./SuraName";
 
 export const VerseInfo = ({
@@ -135,9 +122,7 @@ export const VerseText = ({
 
   const copyVerse = (e) => {
     const verseInfo = ayaIdInfo(verse);
-    Utils.copy2Clipboard(
-      `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
-    );
+    copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
     // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
     dispatch(showToast("text_copied"));
 

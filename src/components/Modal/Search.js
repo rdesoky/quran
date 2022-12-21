@@ -7,8 +7,12 @@ import React, {
 } from "react";
 import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { AppContext } from "./../../context/App";
-import Utils from "./../../services/utils";
+import { AppContext } from "../../context/App";
+import {
+  copy2Clipboard,
+  highlightSearch,
+  normalizeText,
+} from "../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
@@ -71,7 +75,7 @@ export default function Search() {
   const doSearch = useCallback(
     (searchTerm) => {
       let sResults = [];
-      let normSearchTerm = Utils.normalizeText(searchTerm);
+      let normSearchTerm = normalizeText(searchTerm);
 
       if (normSearchTerm.length > 0) {
         localStorage.setItem("LastSearch", searchTerm);
@@ -179,14 +183,14 @@ export default function Search() {
   // 	}
   // };
 
-  const nSearchTerm = Utils.normalizeText(searchTerm);
+  const nSearchTerm = normalizeText(searchTerm);
 
   const renderSuras = () => {
     if (nSearchTerm.length < 1) {
       return null;
     }
 
-    const nSuraNames = Utils.normalizeText(arSuraNames.join(",")).split(",");
+    const nSuraNames = normalizeText(arSuraNames.join(",")).split(",");
 
     return (
       <ul
@@ -230,9 +234,7 @@ export default function Search() {
     const verse = currentTarget.getAttribute("verse");
     const verseInfo = ayaIdInfo(verse);
     const text = quranText?.[verse];
-    Utils.copy2Clipboard(
-      `${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`
-    );
+    copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
     dispatch(showToast("text_copied"));
     e.stopPropagation();
 
@@ -300,7 +302,7 @@ export default function Search() {
                         <span className="ParaId Verse">{ayaNum}</span>
                         <span
                           className="ResultText link"
-                          dangerouslySetInnerHTML={Utils.hilightSearch(
+                          dangerouslySetInnerHTML={highlightSearch(
                             nSearchTerm,
                             ayaText,
                             normalizedAyaText
@@ -348,7 +350,7 @@ export default function Search() {
               </span>
               <span
                 className="ResultText link"
-                dangerouslySetInnerHTML={Utils.hilightSearch(
+                dangerouslySetInnerHTML={highlightSearch(
                   nSearchTerm,
                   ayaText,
                   normalizedAyaText

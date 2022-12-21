@@ -14,6 +14,14 @@ const slice = createSlice({
   reducers: {},
 });
 
-export const {} = slice.actions;
+// export const {} = slice.actions;
 
 export default { [sliceName]: slice.reducer };
+export const selectRange = (state) => ({
+  start: state[sliceName].selectStart,
+  end: state[sliceName].selectEnd,
+});
+
+export const selectStart = (state) => state[sliceName].selectStart;
+export const selectEnd = (state) => state[sliceName].selectEnd;
+export const selectMaskStart = (state) => state[sliceName].maskStart;

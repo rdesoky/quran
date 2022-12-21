@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { createContext, Component } from "react";
 import { withRouter } from "react-router-dom";
 import {
   ayaID,
@@ -9,7 +9,7 @@ import {
   sura_info,
   TOTAL_VERSES,
 } from "../services/QData";
-import Utils from "./../services/utils";
+import { dateKey, num2string } from "./../services/utils";
 import firebase from "firebase";
 import { analytics } from "../services/Analytics";
 import { injectIntl } from "react-intl";
@@ -51,7 +51,7 @@ const initialState = {
   //         : initSidebarCommands
 };
 
-export const AppContext = React.createContext(initialState);
+export const AppContext = createContext(initialState);
 
 class AppProvider extends Component {
   state = initialState;
@@ -309,7 +309,7 @@ class AppProvider extends Component {
         curr_range.revs++;
         //Record new activity
         const today = new Date();
-        const activityKey = Utils.dateKey(today);
+        const activityKey = dateKey(today);
         const activityPagesRef = this.activityRef.child(activityKey + "/pages");
         activityPagesRef.once("value", (snapshot) => {
           let pages = snapshot.val() || 0;
@@ -324,7 +324,7 @@ class AppProvider extends Component {
   logTypedVerse = (verseId, words) => {
     const verseText = quranNormalizedText[verseId];
     const today = new Date();
-    const activityKey = Utils.dateKey(today);
+    const activityKey = dateKey(today);
     const activityCharsRef = this.activityRef.child(activityKey + "/chars");
     const charsCount = words
       ? verseText.split(" ").slice(0, words).join("").length
@@ -356,7 +356,7 @@ class AppProvider extends Component {
     }
 
     const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
-    const newRangeID = Utils.num2string(startPage, 3) + Utils.num2string(sura);
+    const newRangeID = num2string(startPage, 3) + num2string(sura);
     let newRange = {
       revs: 0,
       startPage,

@@ -285,7 +285,7 @@ export const SuraList = memo(
   }
 );
 
-export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
+export const SimpleSuraIndexCell = memo(({ sura, selectedSura }) => {
   const app = useContext(AppContext);
   let btn;
   const gotoSura = (e) => {
@@ -316,163 +316,165 @@ export const SimpleSuraIndexCell = ({ sura, selectedSura }) => {
       </button>
     </li>
   );
-};
+});
 
-export const SuraIndexCell = ({
-  sura,
-  filter,
-  selectedSura,
-  selectSura,
-  simple,
-  trigger = "chapters_index",
-}) => {
-  const pagesCount = useSelector(selectPagesCount);
-  const app = useContext(AppContext);
-  const player = useContext(PlayerContext);
-  const suraName = useSuraName(sura);
-  const isCompact = useSelector(selectIsCompact);
-  const dispatch = useDispatch();
-  const intl = useIntl();
+export const SuraIndexCell = memo(
+  ({
+    sura,
+    filter,
+    selectedSura,
+    selectSura,
+    simple,
+    trigger = "chapters_index",
+  }) => {
+    const pagesCount = useSelector(selectPagesCount);
+    const app = useContext(AppContext);
+    const player = useContext(PlayerContext);
+    const suraName = useSuraName(sura);
+    const isCompact = useSelector(selectIsCompact);
+    const dispatch = useDispatch();
+    const intl = useIntl();
 
-  const checkClosePopup = () => {
-    if (!isCompact && pagesCount === 1) {
-      dispatch(closePopup());
-    }
-  };
+    const checkClosePopup = () => {
+      if (!isCompact && pagesCount === 1) {
+        dispatch(closePopup());
+      }
+    };
 
-  const gotoSura = (e) => {
-    // eslint-disable-next-line eqeqeq
-    if (selectedSura == sura) {
-      analytics.logEvent("goto_chapter", {
-        chapter_num: sura + 1,
-        chapter: getArSuraName(sura),
+    const gotoSura = (e) => {
+      // eslint-disable-next-line eqeqeq
+      if (selectedSura == sura) {
+        analytics.logEvent("goto_chapter", {
+          chapter_num: sura + 1,
+          chapter: getArSuraName(sura),
+          trigger,
+        });
+        app.hideMask();
+        checkClosePopup();
+        return app.gotoSura(sura);
+      } else {
+        selectSura && selectSura(sura);
+      }
+    };
+    const addUpdateHifz = (e) => {
+      //TODO: check if sura has old ranges, then confirmation is required
+      const suraInfo = sura_info[sura];
+      const suraRanges = app.suraRanges(sura);
+      const trigger = "chapters_index";
+
+      if (suraRanges.length) {
+        checkClosePopup();
+        app.gotoSura(sura);
+        setMessageBox({
+          title: <Message id="update_hifz" />,
+          content: <AddHifz />,
+        });
+        analytics.logEvent("show_update_hifz", {
+          ...verseLocation(app.selectStart),
+          trigger,
+        });
+      } else {
+        const startPage = suraInfo.sp - 1;
+        const pagesCount = suraInfo.ep - suraInfo.sp + 1;
+        app.addHifzRange(startPage, sura, suraInfo.ep - suraInfo.sp + 1);
+        analytics.logEvent("add_hifz", {
+          trigger,
+          range: "full_sura",
+          chapter: sura,
+          startPage,
+          pagesCount,
+        });
+        dispatch(showToast("sura_memorized"));
+        // app.showToast(<String id="sura_memorized" />);
+      }
+    };
+
+    const playSura = (e) => {
+      player.stop(true);
+      gotoSura(e);
+      setTimeout(() => {
+        player.play();
+      }, 500);
+      analytics.logEvent("play_audio", {
         trigger,
+        ...verseLocation(ayaID(sura, 0)),
       });
-      app.hideMask();
-      checkClosePopup();
-      return app.gotoSura(sura);
-    } else {
-      selectSura && selectSura(sura);
+    };
+
+    // const reviewSura = e => {
+    //     const verse = gotoSura(e);
+    //     setTimeout(() => {
+    //         app.setMaskStart(verse, { sel: true });
+    //         //app.closePopup();
+    //         checkClosePopup();
+    //     });
+    //     app.pushRecentCommand("Mask");
+    // };
+
+    // useEffect(() => {
+    //   setSura_name(app.suraName(sura));
+    // }, [app, sura]);
+
+    let btn;
+
+    useEffect(() => {
+      // eslint-disable-next-line eqeqeq
+      if (btn && sura == selectedSura) {
+        btn.focus();
+      }
+    }, [btn, selectedSura, sura]);
+
+    if (filter && suraName.match(new RegExp(filter, "i")) === null) {
+      return "";
     }
-  };
-  const addUpdateHifz = (e) => {
-    //TODO: check if sura has old ranges, then confirmation is required
-    const suraInfo = sura_info[sura];
-    const suraRanges = app.suraRanges(sura);
-    const trigger = "chapters_index";
 
-    if (suraRanges.length) {
-      checkClosePopup();
-      app.gotoSura(sura);
-      setMessageBox({
-        title: <Message id="update_hifz" />,
-        content: <AddHifz />,
-      });
-      analytics.logEvent("show_update_hifz", {
-        ...verseLocation(app.selectStart),
-        trigger,
-      });
-    } else {
-      const startPage = suraInfo.sp - 1;
-      const pagesCount = suraInfo.ep - suraInfo.sp + 1;
-      app.addHifzRange(startPage, sura, suraInfo.ep - suraInfo.sp + 1);
-      analytics.logEvent("add_hifz", {
-        trigger,
-        range: "full_sura",
-        chapter: sura,
-        startPage,
-        pagesCount,
-      });
-      dispatch(showToast("sura_memorized"));
-      // app.showToast(<String id="sura_memorized" />);
-    }
-  };
-
-  const playSura = (e) => {
-    player.stop(true);
-    gotoSura(e);
-    setTimeout(() => {
-      player.play();
-    }, 500);
-    analytics.logEvent("play_audio", {
-      trigger,
-      ...verseLocation(ayaID(sura, 0)),
-    });
-  };
-
-  // const reviewSura = e => {
-  //     const verse = gotoSura(e);
-  //     setTimeout(() => {
-  //         app.setMaskStart(verse, { sel: true });
-  //         //app.closePopup();
-  //         checkClosePopup();
-  //     });
-  //     app.pushRecentCommand("Mask");
-  // };
-
-  // useEffect(() => {
-  //   setSura_name(app.suraName(sura));
-  // }, [app, sura]);
-
-  let btn;
-
-  useEffect(() => {
-    // eslint-disable-next-line eqeqeq
-    if (btn && sura == selectedSura) {
-      btn.focus();
-    }
-  }, [btn, selectedSura, sura]);
-
-  if (filter && suraName.match(new RegExp(filter, "i")) === null) {
-    return "";
-  }
-
-  return (
-    <li className="SuraIndexCell">
-      {simple ? "" : <SuraHifzChart pages={false} sura={sura} />}
-      <button
-        onClick={gotoSura}
-        // eslint-disable-next-line eqeqeq
-        className={sura == selectedSura ? "active" : ""}
-        ref={(ref) => {
-          btn = ref;
-        }}
-      >
-        {sura + 1 + ". " + suraName}
-      </button>
-      <div className="actions">
-        {
+    return (
+      <li className="SuraIndexCell">
+        {simple ? "" : <SuraHifzChart pages={false} sura={sura} />}
+        <button
+          onClick={gotoSura}
           // eslint-disable-next-line eqeqeq
-          selectedSura == sura ? (
-            <>
-              <button
-                sura={sura}
-                onClick={playSura}
-                title={intl.formatMessage({ id: "play" })}
-              >
-                <Icon icon={faPlayCircle} />
-              </button>
-              <button
-                sura={sura}
-                onClick={addUpdateHifz}
-                title={intl.formatMessage({
-                  id: "update_hifz",
-                })}
-              >
-                <Icon icon={faHeart} />
-              </button>
-              {/* <button sura={sura} onClick={reviewSura}>
+          className={sura == selectedSura ? "active" : ""}
+          ref={(ref) => {
+            btn = ref;
+          }}
+        >
+          {sura + 1 + ". " + suraName}
+        </button>
+        <div className="actions">
+          {
+            // eslint-disable-next-line eqeqeq
+            selectedSura == sura ? (
+              <>
+                <button
+                  sura={sura}
+                  onClick={playSura}
+                  title={intl.formatMessage({ id: "play" })}
+                >
+                  <Icon icon={faPlayCircle} />
+                </button>
+                <button
+                  sura={sura}
+                  onClick={addUpdateHifz}
+                  title={intl.formatMessage({
+                    id: "update_hifz",
+                  })}
+                >
+                  <Icon icon={faHeart} />
+                </button>
+                {/* <button sura={sura} onClick={reviewSura}>
                                 <Icon icon={faEyeSlash} />
                             </button> */}
-            </>
-          ) : (
-            <Icon icon={faEllipsisH} />
-          )
-        }
-      </div>
-    </li>
-  );
-};
+              </>
+            ) : (
+              <Icon icon={faEllipsisH} />
+            )
+          }
+        </div>
+      </li>
+    );
+  }
+);
 
 export const BookmarkListItem = ({
   verse,

@@ -8,9 +8,9 @@ import {
   getPageFirstAyaId,
   getPartFirstAyaId,
   TOTAL_VERSES,
-} from "./../services/QData";
-// import Utils from "./../services/utils";
-import { GetAudioURL, ListReciters } from "./../services/AudioData";
+} from "../services/QData";
+
+import { GetAudioURL, ListReciters } from "../services/AudioData";
 
 const AudioState = {
   stopped: 0,
@@ -48,10 +48,10 @@ const PlayerContext = React.createContext(PlayerContextState);
 class PlayerProvider extends Component {
   state = PlayerContextState;
 
-  show = (show) => {
-    //this.setState({ visible: show !== false });
-    this.props.app.setPopup("AudioPlayer");
-  };
+  // show = (show) => {
+  //   //this.setState({ visible: show !== false });
+  //   this.props.app.setPopup("AudioPlayer");
+  // };
 
   setPlayingAya = (playingAya) => {
     this.setState({ playingAya });
@@ -63,6 +63,7 @@ class PlayerProvider extends Component {
     return audioState;
   };
 
+  // migrated
   offsetPlayingAya = (offset) => {
     let playingAya = this.state.playingAya;
     if (playingAya + offset >= TOTAL_VERSES) {
@@ -121,17 +122,19 @@ class PlayerProvider extends Component {
     return playingAya;
   };
 
+  //Migrated
   audioSource = (ayaId) => {
     const { sura, aya } = ayaIdInfo(
       ayaId !== undefined ? ayaId : this.state.playingAya
     );
     return GetAudioURL(this.state.reciter, sura + 1, aya + 1);
     // const fileName =
-    //     Utils.num2string(sura + 1, 3) + Utils.num2string(aya + 1, 3);
+    //     num2string(sura + 1, 3) + num2string(aya + 1, 3);
 
     // return `http://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/${fileName}.mp3`;
   };
 
+  //Migrated
   play = () => {
     const { app } = this.props;
     const playingAya =
@@ -188,6 +191,7 @@ class PlayerProvider extends Component {
     return this.audio.duration - this.audio.currentTime;
   };
 
+  //Migrated
   changeReciter = (reciter) => {
     localStorage.setItem("reciter", reciter);
     this.setState({ reciter });
@@ -227,7 +231,7 @@ class PlayerProvider extends Component {
 
   methods = {
     audioSource: this.audioSource,
-    show: this.show,
+    // show: this.show,
     setAudioState: this.setAudioState,
     setPlayingAya: this.setPlayingAya,
     offsetPlayingAya: this.offsetPlayingAya,

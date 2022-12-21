@@ -34,7 +34,11 @@ import {
   faKeyboard,
 } from "@fortawesome/free-regular-svg-icons";
 
-import Utils from "../../services/utils";
+import {
+  copy2Clipboard,
+  requestFullScreen,
+  selectTopCommand,
+} from "../../services/utils";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { UserImage } from "./User";
@@ -198,7 +202,7 @@ const CommandButton = ({
 
   const runCommand = (command) => {
     // app.setExpandedMenu(false);
-    Utils.selectTopCommand();
+    selectTopCommand();
     switch (command) {
       case "Commands":
         // app.setExpandedMenu(!app.expandedMenu);
@@ -265,14 +269,14 @@ const CommandButton = ({
           verses_count: app.selectEnd - app.selectStart + 1,
           trigger,
         });
-        Utils.copy2Clipboard(app.getSelectedText());
+        copy2Clipboard(app.getSelectedText());
         dispatch(showToast("text_copied"));
         // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
         break;
       case "Share":
         break;
       case "Fullscreen":
-        Utils.requestFullScreen();
+        requestFullScreen();
         break;
       case "Bookmark":
         analytics.logEvent("bookmark", {
