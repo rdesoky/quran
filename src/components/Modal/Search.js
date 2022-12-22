@@ -23,7 +23,7 @@ import {
     selectPagesCount,
     selectPopupWidth,
 } from "../../store/layoutSlice";
-import { gotoSura, hideMask } from "../../store/navSlice";
+import { gotoAya, gotoSura, hideMask } from "../../store/navSlice";
 import { closePopup, showToast } from "../../store/uiSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import SuraName from "../SuraName";
@@ -136,7 +136,7 @@ export default function Search() {
         }
     };
 
-    const gotoAya = (e) => {
+    const onClickAya = (e) => {
         const aya = e.target.getAttribute("aya");
 
         analytics.logEvent("click_search_result", {
@@ -297,7 +297,7 @@ export default function Search() {
                                             <button
                                                 key={aya}
                                                 className="ResultItem"
-                                                onClick={gotoAya}
+                                                onClick={onClickAya}
                                                 tabIndex="0"
                                                 aya={aya}
                                             >
@@ -348,7 +348,7 @@ export default function Search() {
                         return (
                             <button
                                 key={aya}
-                                onClick={gotoAya}
+                                onClick={onClickAya}
                                 aya={aya}
                                 className="ResultItem"
                                 tabIndex="0"

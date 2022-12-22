@@ -44,7 +44,6 @@ const TafseerList = [
 const Tafseer = () => {
     const app = useContext(AppContext);
     const appHeight = useSelector(selectAppHeight);
-    // const player = useContext(PlayerContext);
     const [verse, setVerse] = useState(app.selectStart);
     const isNarrow = useSelector(selectIsNarrow);
     const dispatch = useDispatch();

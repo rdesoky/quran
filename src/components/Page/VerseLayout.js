@@ -1,23 +1,19 @@
-import React, { useState, useContext } from "react";
-import { analytics } from "./../../services/Analytics";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
-import { PlayerContext } from "../../context/Player";
 import {
     ayaIdPage,
     getPageFirstAyaId,
     getPageSuras,
 } from "../../services/QData";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { VerseContextButtons } from "../Widgets";
-import { useDispatch, useSelector } from "react-redux";
 import {
     selectAppHeight,
     selectPageHeight,
     selectPageMargin,
 } from "../../store/layoutSlice";
-import { showContextPopup } from "../ContextPopup";
-import { selectPlayingAya } from "../../store/playerSlice";
 import {
     extendSelection,
     gotoAya,
@@ -28,11 +24,13 @@ import {
     selectStartSelection,
     setMaskStart,
 } from "../../store/navSlice";
-import { useHistory } from "react-router-dom";
+import { selectPlayingAya } from "../../store/playerSlice";
+import { showContextPopup } from "../ContextPopup";
+import { VerseContextButtons } from "../Widgets";
+import { analytics } from "./../../services/Analytics";
 
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const app = useContext(AppContext);
-    // const player = useContext(PlayerContext);
     const playingAya = useSelector(selectPlayingAya);
     const [hoverVerse, setHoverVerse] = useState(-1);
     const appHeight = useSelector(selectAppHeight);

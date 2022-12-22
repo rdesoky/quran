@@ -1,16 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { FormattedMessage } from "react-intl";
-import { PlayerContext } from "../../context/Player";
+import { useSelector } from "react-redux";
+import { selectReciter } from "../../store/settingsSlice";
 
 const ReciterName = ({ id }) => {
-  const player = useContext(PlayerContext);
-  const reciter_id = id || player.reciter;
+    const reciter_id = useSelector(selectReciter);
 
-  // const changeReciter = event => {
-  //     player.changeReciter(reciter_id);
-  // };
-
-  return <FormattedMessage id={"r." + reciter_id} />;
+    return <FormattedMessage id={"r." + reciter_id} />;
 };
 
 export default ReciterName;

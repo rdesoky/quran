@@ -27,7 +27,6 @@ import {
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import { AppContext } from "./../context/App";
-import { PlayerContext } from "./../context/Player";
 import {
     ayaID,
     getArSuraName,
@@ -50,7 +49,7 @@ const HifzRange = ({
     trigger = "hifz_range",
 }) => {
     const app = useContext(AppContext);
-    const player = useContext(PlayerContext);
+    const audio = useContext(AudioContext);
     // const theme = useContext(ThemeContext);
     const suraName = useSuraName(range.sura);
     const [rangeInfo, setRangeInfo] = useState("");
@@ -140,10 +139,10 @@ const HifzRange = ({
     };
 
     const playRange = (e) => {
-        player.stop(true);
+        audio.stop(true);
         const { startVerse } = selectRange();
         setTimeout(() => {
-            player.play();
+            audio.play();
         }, 500);
         analytics.logEvent("play_audio", {
             trigger,

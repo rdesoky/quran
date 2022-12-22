@@ -1,26 +1,24 @@
 import React, { useContext } from "react";
-import "./AudioPlayer.scss";
-import { AppContext } from "../../context/App";
-import { AudioState, PlayerContext } from "../../context/Player";
-import { ayaIdInfo } from "./../../services/QData";
 import { FormattedMessage as String } from "react-intl";
-import { CommandButton } from "./../Modal/Commands";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { AudioState } from "../../context/Player";
 import { gotoAya, selectStartSelection } from "../../store/navSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
+import { selectAudioState, selectPlayingAya } from "../../store/playerSlice";
+import { ayaIdInfo } from "./../../services/QData";
+import { CommandButton } from "./../Modal/Commands";
+import "./AudioPlayer.scss";
 
 const PlayerButtons = ({
     showReciter,
     showLabels,
     trigger = "player_buttons",
 }) => {
-    const player = useContext(PlayerContext);
+    const audioState = useSelector(selectAudioState);
 
     let playButton = null,
         stopBtn = null;
 
-    if (player.audioState !== AudioState.stopped) {
+    if (audioState !== AudioState.stopped) {
         stopBtn = (
             <CommandButton
                 trigger={trigger}
@@ -30,7 +28,7 @@ const PlayerButtons = ({
         );
     }
 
-    switch (player.audioState) {
+    switch (audioState) {
         case AudioState.paused:
             playButton = (
                 <CommandButton
@@ -71,7 +69,7 @@ const PlayerButtons = ({
     }
 
     const reciterButton =
-        showReciter === false || player.audioState === AudioState.stopped ? (
+        showReciter === false || audioState === AudioState.stopped ? (
             ""
         ) : (
             <CommandButton
@@ -90,12 +88,10 @@ const PlayerButtons = ({
 };
 
 const PlayerStatus = () => {
-    const app = useContext(AppContext);
-    const player = useContext(PlayerContext);
     const dispatch = useDispatch();
-    const history = useHistory();
-    const selectStart = useSelector(selectStart);
+    const selectStart = useSelector(selectStartSelection);
     const playingAya = useSelector(selectPlayingAya);
+    const audioState = useSelector(selectAudioState);
 
     // const { selectStart } = app;
     // const { playingAya, audioState } = player;
