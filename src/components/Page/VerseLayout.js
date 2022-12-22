@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdPage,
     getPageFirstAyaId,
@@ -19,11 +19,11 @@ import {
     extendSelection,
     gotoAya,
     hideMask,
-    offsetMask,
+    offsetSelection,
     selectEndSelection,
     selectMaskStart,
     selectStartSelection,
-    setMaskStart,
+    showMask,
 } from "../../store/navSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
 import { VerseContextButtons } from "../Widgets";
@@ -40,7 +40,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const dispatch = useDispatch();
     const maskStart = useSelector(selectMaskStart);
     const history = useHistory();
-    const contextPopup = useContext(Refs).get("contextPopup");
+    const contextPopup = useContext(AppRefs).get("contextPopup");
 
     const pageHeight = appHeight - 50;
     const lineHeight = pageHeight / 15;
@@ -77,7 +77,6 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         return aya_id.between(selectStart, selectEnd);
     };
     const isMasked = (aya_id) => {
-        let { maskStart } = app;
         if (maskStart !== -1 && aya_id >= maskStart) {
             return true;
         }
@@ -88,14 +87,12 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         let nPageIndex = parseInt(e.target.getAttribute("page"));
         let maskStartPage = ayaIdPage(maskStart);
         if (maskStartPage === nPageIndex) {
+            dispatch(offsetSelection(1));
             //same page
-            dispatch(offsetMask(1));
             // app.offsetMask(1);
         } else {
             let clickedPageFirstAyaId = getPageFirstAyaId(nPageIndex);
-
-            // app.setMaskStart(clickedPageFirstAyaId);
-            dispatch(setMaskStart(clickedPageFirstAyaId));
+            dispatch(gotoAya(clickedPageFirstAyaId));
         }
         e.stopPropagation();
     };
@@ -104,35 +101,35 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
         const { shiftKey, ctrlKey, target } = e;
         const aya_id = parseInt(target.getAttribute("aya-id"));
         //set selectStart|selectEnd|maskStart
-        if (maskStart !== -1) {
-            if (maskStart > aya_id) {
-                // app.setMaskStart(aya_id);
-                dispatch(setMaskStart(aya_id));
-            }
+        // if (maskStart !== -1) {
+        //     if (maskStart > aya_id) {
+        //         // app.setMaskStart(aya_id);
+        //         dispatch(setMaskStart(aya_id));
+        //     }
+        // } else
+        // {
+        if (shiftKey || ctrlKey) {
+            analytics.logEvent("extend_selection", {
+                trigger: "keyboard",
+            });
+            dispatch(extendSelection(aya_id));
+            // app.extendSelection(aya_id);
         } else {
-            if (shiftKey || ctrlKey) {
-                analytics.logEvent("extend_selection", {
-                    trigger: "keyboard",
+            if (aya_id.between(selectStart, selectEnd)) {
+                analytics.logEvent("show_verse_context", {
+                    trigger: "selected_verses",
                 });
-                dispatch(extendSelection(aya_id));
-                // app.extendSelection(aya_id);
+                contextPopup.show({
+                    target: e.target,
+                    content: <VerseContextButtons verse={aya_id} />,
+                });
+                typeof e.stopPropagation === "function" && e.stopPropagation(); //prevent browser context menu
             } else {
-                if (aya_id.between(selectStart, selectEnd)) {
-                    analytics.logEvent("show_verse_context", {
-                        trigger: "selected_verses",
-                    });
-                    contextPopup.show({
-                        target: e.target,
-                        content: <VerseContextButtons verse={aya_id} />,
-                    });
-                    typeof e.stopPropagation === "function" &&
-                        e.stopPropagation(); //prevent browser context menu
-                } else {
-                    dispatch(gotoAya(history, aya_id, { sel: true }));
-                    // app.selectAya(aya_id);
-                }
+                dispatch(gotoAya(history, aya_id, { sel: true }));
+                // app.selectAya(aya_id);
             }
         }
+        // }
     };
 
     const ayaClass = (aya_id) => {
@@ -265,7 +262,6 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     };
 
     function renderMask() {
-        const { maskStart } = app;
         if (maskStart === -1) {
             return;
         }

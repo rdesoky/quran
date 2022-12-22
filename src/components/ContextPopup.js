@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 import { selectAppHeight, selectAppWidth } from "../store/layoutSlice";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Refs } from "../RefsProvider";
+import { AppRefs } from "../RefsProvider";
 
 export const ContextPopup = () => {
-    const refs = useContext(Refs);
+    const refs = useContext(AppRefs);
     const [contextPopup, setContextPopup] = useState();
     const appHeight = useSelector(selectAppHeight);
     const appWidth = useSelector(selectAppWidth);

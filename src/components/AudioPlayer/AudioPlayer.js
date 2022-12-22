@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { AudioState } from "../../context/Player";
 import { gotoAya, selectStartSelection } from "../../store/navSlice";
-import { selectAudioState, selectPlayingAya } from "../../store/playerSlice";
+import {
+    AudioState,
+    selectAudioState,
+    selectPlayingAya,
+} from "../../store/playerSlice";
 import { ayaIdInfo } from "./../../services/QData";
 import { CommandButton } from "./../Modal/Commands";
 import "./AudioPlayer.scss";

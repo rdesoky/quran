@@ -11,15 +11,15 @@ import {
     TOTAL_SURAS,
     TOTAL_VERSES,
 } from "../services/QData";
-import { getCurrentPageNumber } from "../services/utils";
-import { selectPopup } from "./uiSlice";
+import { getCurrentPageNumber, greaterOf, lesserOf } from "../services/utils";
 
 const sliceName = "nav";
 
 const initialState = {
     selectStart: 0,
     selectEnd: 0,
-    maskStart: -1,
+    maskOn: false,
+    maskShift: 0,
 };
 
 const slice = createSlice({
@@ -32,30 +32,46 @@ const slice = createSlice({
         setSelectEnd: (slice, action) => {
             slice.selectEnd = action.payload;
         },
-        setMask: (slice, action) => {
-            slice.maskStart = action.payload;
+        showMask: (slice) => {
+            slice.maskOn = true;
+            slice.maskShift = 0;
         },
         hideMask: (slice) => {
-            slice.maskStart = -1;
+            slice.maskOn = false;
+            slice.maskShift = 0;
+        },
+        setMaskShift: (slice, action) => {
+            slice.maskShift = action.payload;
         },
     },
 });
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };
 
-export const { setSelectStart, setSelectEnd, setMask, hideMask } =
-    slice.actions;
+export const {
+    setSelectStart,
+    setSelectEnd,
+    showMask,
+    hideMask,
+    setMaskShift,
+} = slice.actions;
 
 //selectors
 export const selectSelectedRange = (state) => ({
-    start: state[sliceName].selectStart,
-    end: state[sliceName].selectEnd,
+    start: lesserOf(state[sliceName].selectStart, state[sliceName].selectEnd),
+    end: greaterOf(state[sliceName].selectEnd, state[sliceName].selectStart),
 });
 
 export const selectStartSelection = (state) => state[sliceName].selectStart;
 export const selectEndSelection = (state) => state[sliceName].selectEnd;
-export const selectMaskStart = (state) => state[sliceName].maskStart;
+export const selectMaskStart = (state) =>
+    state[sliceName].maskOn
+        ? lesserOf(state[sliceName].selectStart, state[sliceName].selectEnd) +
+          state[sliceName].maskShift
+        : -1;
 export const selectSelectedText = (state) => {
+    //TODO: slow selector
     let { selectStart, selectEnd } = state[sliceName];
     if (selectStart > selectEnd) {
         [selectStart, selectEnd] = [selectEnd, selectStart]; //reverse
@@ -72,7 +88,7 @@ export const selectSelectedText = (state) => {
 export const gotoAya =
     (history, ayaId, options = {}) =>
     (dispatch, getState) => {
-        const { sel = false, replace = true, keepMask = false } = options;
+        const { sel = true, replace = true } = options;
         const state = getState();
         if (ayaId === undefined) {
             ayaId = selectStartSelection(state);
@@ -80,16 +96,13 @@ export const gotoAya =
         if (sel) {
             dispatch(setSelectStart(ayaId));
             dispatch(setSelectEnd(ayaId));
-            if (keepMask !== true) {
-                dispatch(hideMask());
-            }
         }
         const pageIndex = ayaIdPage(ayaId);
         dispatch(gotoPage(history, { index: pageIndex, replace, sel: false }));
     };
 
 export const gotoPage =
-    (history, { index: pageIndex, sel: select = true, replace = true }) =>
+    (history, { index: pageIndex, sel: select = false, replace = true }) =>
     (dispatch) => {
         const selectPageAya = () => {
             if (select) {
@@ -97,7 +110,7 @@ export const gotoPage =
                 dispatch(selectAya(verse));
             }
         };
-        if (getCurrentPageNumber() === pageIndex + 1) {
+        if (getCurrentPageNumber(history.location) === pageIndex + 1) {
             //already on that page
             selectPageAya();
             return;
@@ -115,7 +128,7 @@ export const gotoPage =
     };
 
 export const offsetPage = (history, offset) => (dispatch, getState) => {
-    const pageIndex = getCurrentPageNumber() - 1;
+    const pageIndex = getCurrentPageNumber(history.location) - 1;
     if (pageIndex !== undefined) {
         const nextPageIndex = pageIndex + offset;
         dispatch(gotoPage(history, { index: nextPageIndex }));
@@ -168,51 +181,57 @@ export const extendSelection = (ayaId) => (dispatch, getState) => {
 };
 
 export const selectAya = (ayaId) => (dispatch, getState) => {
-    const targetAya = ayaId || selectStartSelection(getState());
-    if (targetAya < TOTAL_VERSES) {
-        dispatch(setSelectStart(targetAya));
-        dispatch(setSelectEnd(targetAya));
-        dispatch(hideMask());
-        return targetAya;
+    let targetAya =
+        ayaId !== undefined ? ayaId : selectStartSelection(getState());
+
+    if (targetAya < 0) {
+        targetAya = TOTAL_VERSES - 1;
     }
-    return ayaId;
+    if (targetAya >= TOTAL_VERSES) {
+        targetAya = 0;
+    }
+
+    dispatch(setSelectStart(targetAya));
+    dispatch(setSelectEnd(targetAya));
+
+    return targetAya;
 };
 
-export const setMaskStart =
-    (ayaId, keepSelection = false) =>
-    (dispatch, getState) => {
-        if (ayaId === undefined) {
-            const state = getState();
-            const selectStart = selectStartSelection(state);
-            const selectEnd = selectEndSelection(state);
-            const maskStart = selectMaskStart(state);
-            if (maskStart !== -1) {
-                dispatch(hideMask());
-                return;
-            }
+// export const setMaskStart =
+//     (ayaId, keepSelection = false) =>
+//     (dispatch, getState) => {
+//         if (ayaId === undefined) {
+//             const state = getState();
+//             const selectStart = selectStartSelection(state);
+//             const selectEnd = selectEndSelection(state);
+//             const maskStart = selectMaskStart(state);
+//             if (maskStart !== -1) {
+//                 dispatch(hideMask());
+//                 return;
+//             }
 
-            ayaId = selectStart < selectEnd ? selectStart : selectEnd;
-        }
+//             ayaId = selectStart < selectEnd ? selectStart : selectEnd;
+//         }
 
-        dispatch(setMask(ayaId));
-        if (!keepSelection) {
-            dispatch(setSelectStart(ayaId));
-            dispatch(setSelectEnd(ayaId));
-        }
-    };
+//         dispatch(showMask(ayaId));
+//         if (!keepSelection) {
+//             dispatch(setSelectStart(ayaId));
+//             dispatch(setSelectEnd(ayaId));
+//         }
+//     };
 
-export const offsetMask = (offset) => (dispatch, getState) => {
-    const state = getState();
-    const popup = selectPopup(state);
-    if (popup === "Exercise") {
-        dispatch(offsetSelection(offset));
-        return;
-    }
-    const ms = selectMaskStart(state);
-    if (ms !== -1) {
-        const maskStart = ms + offset;
-        if (maskStart >= 0 && maskStart < TOTAL_VERSES) {
-            dispatch(setMaskStart(maskStart));
-        }
-    }
-};
+// export const offsetMask = (offset) => (dispatch, getState) => {
+//     const state = getState();
+//     const popup = selectPopup(state);
+//     if (popup === "Exercise") {
+//         dispatch(offsetSelection(offset));
+//         return;
+//     }
+//     const ms = selectMaskStart(state);
+//     if (ms !== -1) {
+//         const maskStart = ms + offset;
+//         if (maskStart >= 0 && maskStart < TOTAL_VERSES) {
+//             dispatch(setMaskStart(maskStart));
+//         }
+//     }
+// };

@@ -152,3 +152,15 @@ export const getCurrentPageNumber = (location) => {
     let pageNumber = match ? match[1] : undefined;
     return parseInt(pageNumber);
 };
+
+export const greaterOf = (...numbers) => {
+    return numbers.reduce((a, b) => {
+        return a > b ? a : b;
+    }, numbers[0]);
+};
+
+export const lesserOf = (...numbers) => {
+    return numbers.reduce((a, b) => {
+        return a < b ? a : b;
+    }, numbers[0]);
+};

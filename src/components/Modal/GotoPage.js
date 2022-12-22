@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AudioState } from "../../context/Player";
 import {
     ayaID,
     ayaIdInfo,
@@ -18,16 +17,16 @@ import {
     gotoSura,
     selectStartSelection,
 } from "../../store/navSlice";
-import { selectAudioState } from "../../store/playerSlice";
+import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { closePopup } from "../../store/uiSlice";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 
 const GotoPage = ({ open }) => {
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
-    const audio = useContext(Refs).get("audio");
+    const audio = useContext(AppRefs).get("audio");
     const audioState = useSelector(selectAudioState);
 
     // const [isOpen, setIsOpen] = useState(true);
@@ -68,7 +67,7 @@ const GotoPage = ({ open }) => {
         return () => {
             // document.body.focus();
         };
-    }, [gotoPageForm.PageNumber]);
+    }, [gotoPageForm?.PageNumber]);
 
     const stopAudio = () => {
         if (audioState !== AudioState.stopped) {
@@ -85,8 +84,8 @@ const GotoPage = ({ open }) => {
     const onGotoPage = (e) => {
         e.preventDefault();
         const { target: form } = e;
-        const pageNum = form["PageNumber"].value;
-        dispatch(gotoPage(history, pageNum - 1, { sel: true }));
+        const pageNum = parseInt(form["PageNumber"].value);
+        dispatch(gotoPage(history, { index: pageNum - 1, sel: true }));
         // app.gotoPage(pageNum);
         // let ayaId = getPageFirstAyaId(pageNum - 1);
         // app.selectAya(ayaId);

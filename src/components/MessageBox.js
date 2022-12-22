@@ -2,13 +2,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage as String } from "react-intl";
 import { useContext, useEffect, useState } from "react";
-import { Refs } from "../RefsProvider";
+import { AppRefs } from "../RefsProvider";
 
 export const shownMessageBoxes = [];
 
 export const MessageBox = () => {
     const [messages, setMessages] = useState([]);
-    const refs = useContext(Refs);
+    const refs = useContext(AppRefs);
 
     useEffect(() => {
         shownMessageBoxes.length = 0;
@@ -30,7 +30,13 @@ export const MessageBox = () => {
                 ]),
             pop: () => setMessages((messages) => messages.slice(0, -1)),
             set: (msg) =>
-                setMessages((messages) => [{ ...msg, key: Date.now() }]),
+                setMessages((messages) => {
+                    if (msg) {
+                        return [{ ...msg, key: Date.now() }];
+                    } else {
+                        return []; //clear all messages
+                    }
+                }),
         });
     }, [refs]);
 

@@ -9,7 +9,7 @@ import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdInfo,
     getPagePartNumber,
@@ -45,7 +45,7 @@ const PageHeader = ({
     const selectStart = useSelector(selectStartSelection);
     const selectedAyaInfo = ayaIdInfo(selectStart);
     const dispatch = useDispatch();
-    const contextPopup = useContext(Refs).get("contextPopup");
+    const contextPopup = useContext(AppRefs).get("contextPopup");
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         analytics.logEvent("show_part_context", { trigger: "page_header" });
@@ -68,7 +68,7 @@ const PageHeader = ({
         analytics.logEvent("show_verse_context", { trigger: "page_header" });
         contextPopup.show({
             target,
-            content: <VerseContextButtons verse={app.selectStart} />,
+            content: <VerseContextButtons verse={selectStart} />,
         });
     };
 
@@ -143,7 +143,6 @@ const PageHeader = ({
                     </button>
                     <button
                         onClick={(e) => {
-                            // app.gotoAya(app.selectStart);
                             dispatch(gotoAya(history, selectStart));
                             showVerseContextPopup(e);
                         }}

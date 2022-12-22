@@ -10,7 +10,6 @@ import { FormattedMessage as String } from "react-intl";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { ActivityChart } from "../Hifz";
 import { AppContext } from "./../../context/App";
-import { AudioRepeat, AudioState } from "./../../context/Player";
 import { normalizeText } from "./../../services/utils";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { TafseerView } from "./Tafseer";
@@ -19,6 +18,7 @@ import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranNormalizedText, quranText } from "../../App";
+import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
 import {
@@ -33,15 +33,18 @@ import {
     gotoAya,
     hideMask,
     selectStartSelection,
-    setMaskStart,
+    setMaskShift,
+    showMask,
 } from "../../store/navSlice";
 import {
+    AudioState,
     selectAudioState,
     selectPlayingAya,
+    selectRemainingTime,
     selectTrackDuration,
-    stop,
 } from "../../store/playerSlice";
 import {
+    AudioRepeat,
     selectExerciseLevel,
     selectExerciseMemorized,
     selectFollowPlayer,
@@ -52,17 +55,16 @@ import {
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "./Settings";
-import { Refs } from "../../RefsProvider";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
 
 const Step = {
-    unknown: -1,
-    intro: 0,
-    reciting: 1,
-    typing: 2,
-    results: 3,
+    unknown: "unknown",
+    intro: "intro",
+    reciting: "reciting",
+    typing: "typing",
+    results: "results",
 };
 
 const Exercise = () => {
@@ -74,12 +76,9 @@ const Exercise = () => {
     const randomAutoRecite = useSelector(selectRandomAutoRecite);
     const exerciseMemorized = useSelector(selectExerciseMemorized);
 
-    const [currStep, setCurrStep] = useState(Step.unknown);
+    const [currStep, setCurrentStep] = useState(Step.intro);
     const selectStart = useSelector(selectStartSelection);
     const [verse, setVerse] = useState(selectStart);
-    const [duration, setDuration] = useState(-1);
-    const [remainingTime, setRemainingTime] = useState(-1);
-    const [counterInterval, setCounterInterval] = useState(null);
     const [writtenText, setWrittenText] = useState("");
     const [wrongWord, setWrongWord] = useState(-1);
     const [missingWords, setMissingWords] = useState(0);
@@ -91,33 +90,47 @@ const Exercise = () => {
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
-    const audio = useContext(Refs).get("audio");
-    const playingAya = useSelector(selectPlayingAya);
+    const audio = useContext(AppRefs).get("audio");
     const repeat = useSelector(selectRepeat);
     const followPlayer = useSelector(selectFollowPlayer);
-    const trackDuration = useSelector(selectTrackDuration);
+    const duration = useSelector(selectTrackDuration);
+    const remainingTime = useSelector(selectRemainingTime);
     const trigger = "exercise";
     const audioState = useSelector(selectAudioState);
+    const [savedRepeat, setSavedRepeat] = useState();
+    const [savedFollowPlayer, setSavedFollowPlayer] = useState();
+
+    const setCurrStep = (step) => {
+        setCurrentStep(step);
+    };
 
     useEffect(() => {
-        let saveRepeat, saveFollowPlayer;
+        return () => {
+            dispatch(hideMask());
+        };
+    }, [dispatch]);
+
+    useEffect(() => {
         if (repeat !== AudioRepeat.verse) {
-            saveRepeat = selectRepeat;
+            setSavedRepeat(repeat);
             dispatch(setRepeat(AudioRepeat.verse));
         }
         if (followPlayer !== true) {
-            saveFollowPlayer = followPlayer;
+            setSavedFollowPlayer(followPlayer);
             dispatch(setFollowPlayer(true));
         }
+    }, [repeat, followPlayer, dispatch]);
+
+    useEffect(() => {
         return () => {
-            if (saveRepeat !== undefined) {
-                dispatch(setRepeat(saveRepeat));
+            if (savedRepeat !== undefined) {
+                dispatch(setRepeat(savedRepeat));
             }
-            if (saveFollowPlayer !== undefined) {
-                dispatch(setFollowPlayer(saveFollowPlayer));
+            if (savedFollowPlayer !== undefined) {
+                dispatch(setFollowPlayer(savedFollowPlayer));
             }
         };
-    }, [repeat, followPlayer, dispatch]);
+    }, [dispatch, savedFollowPlayer, savedRepeat]);
 
     const isNarrowLayout = () => {
         return !(isWide || isCompact || pagesCount > 1);
@@ -166,14 +179,13 @@ const Exercise = () => {
     };
 
     const gotoRandomVerse = (e) => {
-        dispatch(stop());
-        // player.stop();
-        // player.setPlayingAya(-1);
+        // dispatch(stop(audio));
+        audio.stop();
         let new_verse;
         do {
             new_verse = Math.floor(Math.random() * verseList.length);
         } while (!checkVerseLevel(new_verse));
-        dispatch(gotoAya(history, new_verse, { sel: true, keepMask: true }));
+        dispatch(gotoAya(history, new_verse));
         // app.gotoAya(new_verse, { sel: true, keepMask: true });
         // app.setMaskStart(new_verse + 1, true);
         // setCurrStep(Step.intro);
@@ -191,7 +203,8 @@ const Exercise = () => {
     };
 
     const startReciting = (e) => {
-        setCurrStep(Step.reciting);
+        // setCurrStep(Step.reciting);
+        audio.play();
         //app.setMaskStart(verse + 1, true);
         analytics.logEvent("exercise_play_audio", {
             trigger,
@@ -204,25 +217,25 @@ const Exercise = () => {
         analytics.logEvent("redo_reciting", { trigger });
     };
 
-    const stopCounter = useCallback(() => {
-        if (counterInterval) {
-            clearInterval(counterInterval);
-            setCounterInterval(null);
-        }
-    }, [counterInterval]);
+    // const stopCounter = useCallback(() => {
+    //     if (counterInterval) {
+    //         clearInterval(counterInterval);
+    //         setCounterInterval(null);
+    //     }
+    // }, [counterInterval]);
 
     const startAnswer = useCallback(() => {
-        setTimeout(() => {
-            audio.stop(true);
-        });
+        // setTimeout(() => {
+        audio.stop();
+        // });
         // stopCounter();
         setCurrStep(Step.typing);
     }, [audio]);
 
     const showIntro = useCallback(
         (e) => {
-            audio.stop(true);
-            setCurrStep(Step.intro);
+            audio.stop();
+            setTimeout(() => setCurrStep(Step.intro));
             analytics.logEvent("exercise_go_back", { trigger });
         },
         [audio]
@@ -233,8 +246,8 @@ const Exercise = () => {
     let defaultButton = null;
 
     useEffect(() => {
-        audio.stop(true);
-        setCurrStep(Step.intro);
+        // audio.stop(true);
+        // setCurrStep(Step.intro);
         const handleKeyDown = ({ code }) => {
             if (code === "Escape") {
                 analytics.logEvent("exercise_go_back", { trigger });
@@ -243,29 +256,29 @@ const Exercise = () => {
         };
 
         document.addEventListener("keydown", handleKeyDown);
-        dispatch(gotoAya(history));
+        // dispatch(gotoAya(history));
         return () => {
-            audio.stop(true);
+            // audio.stop(true);
             dispatch(setModalPopup(false));
             // app.hideMask();
-            dispatch(hideMask());
+            // dispatch(hideMask());
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [audio, dispatch, history, showIntro]);
+    }, [dispatch, showIntro]);
 
+    //selected aya has changed
     useEffect(() => {
         setVerse(selectStart);
         setWrittenText("");
-        if (currStep === Step.results) {
-            setCurrStep(Step.intro);
-        } else {
-            dispatch(setMaskStart(selectStart + 1, true));
-            // app.setMaskStart(
-            //     app.selectStart + (currStep === Step.typing ? 0 : 1),
-            //     true
-            // );
+        dispatch(showMask());
+        if (currStep !== Step.typing) {
+            dispatch(setMaskShift(1));
         }
     }, [currStep, dispatch, selectStart]);
+
+    useEffect(() => {
+        setCurrStep(Step.intro);
+    }, [selectStart]);
 
     useEffect(() => {
         if (defaultButton) {
@@ -273,81 +286,60 @@ const Exercise = () => {
         }
         switch (currStep) {
             case Step.typing:
-                // app.setMaskStart(verse);
                 // dispatch(setMaskStart(verse));
                 dispatch(setModalPopup(true)); //block outside selection
-                // app.setMaskStart(app.selectStart, true);
-                dispatch(setMaskStart(selectStart, true));
+                dispatch(setMaskShift(0));
                 break;
             case Step.reciting:
-                setTimeout(() => {
-                    audio.play();
-                }, 100);
+                // setTimeout(() => {
+                //     audio.play();
+                // }, 100);
                 dispatch(setModalPopup(true)); //block outside selection
-                // app.setMaskStart(app.selectStart + 1, true);
-                dispatch(setMaskStart(selectStart + 1, true));
+                dispatch(setMaskShift(1));
                 break;
             case Step.results:
                 //if correct answer, save number of verse letters in Firebase
-                // app.setMaskStart(app.selectStart + 1, true);
-                dispatch(setMaskStart(selectStart + 1, true));
+                dispatch(setMaskShift(1));
                 dispatch(setModalPopup(false));
                 break;
             case Step.intro:
                 // app.setMaskStart(verse + 1, true);
-                dispatch(setMaskStart(verse + 1, true));
+                dispatch(setMaskShift(1));
             // eslint-disable-next-line no-fallthrough
             default:
                 dispatch(setModalPopup(false)); //allow selecting outside
         }
-    }, [audio, currStep, defaultButton, dispatch, selectStart, verse]);
+    }, [currStep, defaultButton, dispatch]);
 
     //monitor player to start answer upon player ends
     useEffect(() => {
-        if (audioState === AudioState.stopped) {
-            stopCounter();
-            if ([Step.reciting].includes(currStep)) {
-                analytics.logEvent("start_typing", {
-                    trigger: "exercise_audio",
-                });
-                startAnswer();
+        setCurrStep((currStep) => {
+            switch (audioState) {
+                case AudioState.stopped:
+                    if (currStep === Step.reciting) {
+                        return Step.typing;
+                    }
+                    break;
+                case AudioState.playing:
+                case AudioState.buffering:
+                    return Step.reciting;
+                default:
             }
-        }
-        if (
-            [Step.typing, Step.intro, Step.results].includes(currStep) &&
-            audioState === AudioState.playing
-        ) {
-            // app.gotoAya(player.playingAya, { sel: true });
-            dispatch(gotoAya(history, playingAya, { sel: true }));
-            setTimeout(startReciting, 200);
-        }
-
-        if (audioState === AudioState.playing) {
-            // setDuration(audio.trackDuration());
-            setRemainingTime(audio.trackRemainingTime());
-            stopCounter();
-            setCounterInterval(
-                setInterval(() => {
-                    setRemainingTime(audio.trackRemainingTime());
-                }, 1000)
-            );
-        }
-    }, [
-        audio,
-        audioState,
-        currStep,
-        dispatch,
-        history,
-        playingAya,
-        startAnswer,
-        stopCounter,
-    ]);
+            return currStep; //no change
+        });
+    }, [audioState]);
 
     const renderCounter = (sqSize, strokeWidth, progress, target) => {
-        if (counterInterval) {
+        if (
+            [
+                AudioState.playing,
+                AudioState.buffering,
+                AudioState.paused,
+            ].includes(audioState)
+        ) {
             // SVG centers the stroke width on the radius, subtract out so circle fits in square
             const radius = (sqSize - strokeWidth) / 2;
-            // Enclose cicle in a circumscribing square
+            // Enclose circle in a circumscribing square
             // const viewBox = `0 0 ${sqSize} ${sqSize}`;
             // Arc length at 100% coverage is the circle circumference
             const dashArray = radius * Math.PI * 2;
@@ -401,8 +393,8 @@ const Exercise = () => {
 
     const reciteNextVerse = (e) => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
-        startReciting();
-        setTimeout(moveToNextVerse);
+        moveToNextVerse();
+        audio.play(verse + 1);
         analytics.logEvent("recite_next_verse", { trigger });
         // app.setMaskStart(verse + 2, true);
     };
@@ -412,7 +404,8 @@ const Exercise = () => {
         // app.setMaskStart(verse + 1);
         setWrittenText("");
         startAnswer();
-        setTimeout(moveToNextVerse);
+        moveToNextVerse();
+        setTimeout(() => setCurrStep(Step.typing));
         // if (defaultButton) {
         //     defaultButton.focus();
         // }
@@ -439,9 +432,7 @@ const Exercise = () => {
 
     const onMoveNext = (offset) => {
         // app.gotoAya(verse + offset, { sel: true, keepMask: true });
-        dispatch(
-            gotoAya(history, verse + offset, { sel: true, keepMask: true })
-        );
+        dispatch(gotoAya(history, verse + offset, { sel: true }));
     };
 
     const renderIntro = () => {
@@ -919,7 +910,12 @@ const Exercise = () => {
             <div className="TitleButtons">
                 <VerseInfo trigger="reciting_title" show={isNarrowLayout()} />
                 <span className="TrackDuration">
-                    {renderCounter(32, 3, Math.floor(remainingTime), duration)}
+                    {renderCounter(
+                        32,
+                        3,
+                        Math.floor(remainingTime || 0),
+                        duration
+                    )}
                 </span>
                 <div className="ButtonsBar">
                     <button

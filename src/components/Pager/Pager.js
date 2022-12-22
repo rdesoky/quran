@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import { ayaIdPage, TOTAL_VERSES } from "../../services/QData";
 import { copy2Clipboard, downloadPageImage } from "../../services/utils";
 import {
@@ -19,13 +19,12 @@ import {
     gotoAya,
     gotoPage,
     hideMask,
-    offsetMask,
     offsetPage,
     offsetSelection,
     selectAya,
     selectMaskStart,
     selectStartSelection,
-    setMaskStart,
+    showMask,
 } from "../../store/navSlice";
 import {
     closePopup,
@@ -70,8 +69,8 @@ export default function Pager({ match }) {
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
     const maskStart = useSelector(selectMaskStart);
-    const contextPopup = useContext(Refs).get("contextPopup");
-    const msgBox = useContext(Refs).get("msgBox");
+    const contextPopup = useContext(AppRefs).get("contextPopup");
+    const msgBox = useContext(AppRefs).get("msgBox");
 
     let pageIndex = 0;
 
@@ -156,53 +155,45 @@ export default function Pager({ match }) {
             //     offsetSelection(e, 1);
             //     return;
             // }
-            let { maskStart } = app;
-            if (maskStart !== -1) {
-                //Mask is active
-                if (maskStart >= TOTAL_VERSES) {
-                    return;
-                }
-                let currPageNum = parseInt(match.params.page);
-                let maskPageIndex = ayaIdPage(maskStart);
-                if (maskPageIndex + 1 !== currPageNum) {
-                    // app.gotoPage(maskPageNum, REPLACE);
-                    dispatch(
-                        gotoPage(history, {
-                            index: maskPageIndex,
-                            replace: true,
-                        })
-                    );
-                    return;
-                }
-                // app.offsetMask(1);
-                dispatch(offsetMask(1));
-                let maskNewPageIndex = ayaIdPage(maskStart + 1);
-                if (maskNewPageIndex !== currPageNum - 1) {
-                    //Mask would move to a new page
-                    if (pagesCount === 1 || maskNewPageIndex % 2 === 0) {
-                        return; //Don't change page
-                    }
-                    //app.gotoPage(maskNewPageIndex, REPLACE);
-                    dispatch(
-                        gotoPage(history, {
-                            index: maskNewPageIndex,
-                            replace: true,
-                        })
-                    );
-                }
-            } else {
-                onOffsetSelection(e, 1);
-            }
+            // if (maskStart !== -1) {
+            //     //Mask is active
+            //     if (maskStart >= TOTAL_VERSES) {
+            //         return;
+            //     }
+            //     let currPageNum = parseInt(match.params.page);
+            //     let maskPageIndex = ayaIdPage(maskStart);
+            //     if (maskPageIndex + 1 !== currPageNum) {
+            //         // app.gotoPage(maskPageNum, REPLACE);
+            //         dispatch(
+            //             gotoPage(history, {
+            //                 index: maskPageIndex,
+            //                 replace: true,
+            //             })
+            //         );
+            //         return;
+            //     }
+            //     // app.offsetMask(1);
+            //     dispatch(offsetSelection(1));
+            //     let maskNewPageIndex = ayaIdPage(maskStart + 1);
+            //     if (maskNewPageIndex !== currPageNum - 1) {
+            //         //Mask would move to a new page
+            //         if (pagesCount === 1 || maskNewPageIndex % 2 === 0) {
+            //             return; //Don't change page
+            //         }
+            //         //app.gotoPage(maskNewPageIndex, REPLACE);
+            //         dispatch(
+            //             gotoPage(history, {
+            //                 index: maskNewPageIndex,
+            //                 replace: true,
+            //             })
+            //         );
+            //     }
+            // } else {
+            onOffsetSelection(e, 1);
+            // }
             e.stopPropagation();
         },
-        [
-            app,
-            dispatch,
-            history,
-            match.params.page,
-            onOffsetSelection,
-            pagesCount,
-        ]
+        [onOffsetSelection]
     );
 
     const decrement = useCallback(
@@ -211,41 +202,33 @@ export default function Pager({ match }) {
             //     offsetSelection(e, -1);
             //     return;
             // }
-            let { maskStart } = app;
-            if (maskStart !== -1) {
-                //Mask is active
-                if (maskStart <= 0) {
-                    return;
-                }
-                let maskNewPageNum = ayaIdPage(maskStart - 1) + 1;
-                if (maskNewPageNum !== parseInt(match.params.page)) {
-                    //Mask would move to a new page
-                    // app.gotoPage(maskNewPageNum, REPLACE);
-                    dispatch(
-                        gotoPage(history, {
-                            index: maskNewPageNum - 1,
-                            replace: true,
-                        })
-                    );
-                    if (pagesCount === 1 || maskNewPageNum % 2 === 0) {
-                        return; //Don't move mask
-                    }
-                }
-                dispatch(offsetMask(-1));
-                // app.offsetMask(-1);
-            } else {
-                onOffsetSelection(e, -1);
-            }
+            // if (maskStart !== -1) {
+            //     //Mask is active
+            //     if (maskStart <= 0) {
+            //         return;
+            //     }
+            //     let maskNewPageNum = ayaIdPage(maskStart - 1) + 1;
+            //     if (maskNewPageNum !== parseInt(match.params.page)) {
+            //         //Mask would move to a new page
+            //         // app.gotoPage(maskNewPageNum, REPLACE);
+            //         dispatch(
+            //             gotoPage(history, {
+            //                 index: maskNewPageNum - 1,
+            //                 replace: true,
+            //             })
+            //         );
+            //         if (pagesCount === 1 || maskNewPageNum % 2 === 0) {
+            //             return; //Don't move mask
+            //         }
+            //     }
+            //     dispatch(offsetMask(-1));
+            //     // app.offsetMask(-1);
+            // } else {
+            onOffsetSelection(e, -1);
+            // }
             e.stopPropagation();
         },
-        [
-            app,
-            dispatch,
-            history,
-            match.params.page,
-            onOffsetSelection,
-            pagesCount,
-        ]
+        [onOffsetSelection]
     );
 
     const handleKeyDown = useCallback(
@@ -328,7 +311,7 @@ export default function Pager({ match }) {
                     break;
                 case "KeyM":
                     if (!vEditorOn) {
-                        dispatch(setMaskStart());
+                        dispatch(showMask());
                         // app.setMaskStart();
                     }
                     break;
@@ -384,12 +367,14 @@ export default function Pager({ match }) {
         [
             activePopup,
             app,
+            contextPopup,
             decrement,
             dispatch,
             expandedMenu,
             inExercise,
             maskStart,
             modalPopup,
+            msgBox,
             onIncrement,
             onOffsetSelection,
             pageDown,
@@ -417,19 +402,19 @@ export default function Pager({ match }) {
             return; //skip second page
         }
 
-        let thisPage =
+        let thisPageIndex =
             pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
 
         function selectPage(e) {
-            if (pageIndex !== thisPage) {
+            if (pageIndex !== thisPageIndex) {
                 // app.gotoPage(thisPage + 1);
-                dispatch(gotoPage(history, { index: thisPage }));
-                console.log(`Set active page: ${thisPage + 1}`);
+                dispatch(gotoPage(history, { index: thisPageIndex }));
+                console.log(`Set active page: ${thisPageIndex + 1}`);
             }
         }
 
-        let pageClass = thisPage % 2 === 0 ? "RightPage" : "LeftPage";
-        let activeClass = pageIndex === thisPage ? "Active" : "";
+        let pageClass = thisPageIndex % 2 === 0 ? "RightPage" : "LeftPage";
+        let activeClass = pageIndex === thisPageIndex ? "Active" : "";
 
         return (
             <div
@@ -443,7 +428,7 @@ export default function Pager({ match }) {
                 }}
             >
                 <Page
-                    index={thisPage}
+                    index={thisPageIndex}
                     order={order}
                     onPageUp={pageUp}
                     onPageDown={pageDown}

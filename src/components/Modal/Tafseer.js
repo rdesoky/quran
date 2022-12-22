@@ -1,10 +1,9 @@
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "../../context/App";
 import { ayaIdInfo } from "../../services/QData";
 import { copy2Clipboard } from "../../services/utils";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
@@ -42,14 +41,13 @@ const TafseerList = [
 ];
 
 const Tafseer = () => {
-    const app = useContext(AppContext);
     const appHeight = useSelector(selectAppHeight);
-    const [verse, setVerse] = useState(app.selectStart);
+    const selectStart = useSelector(selectStartSelection);
+    const [verse, setVerse] = useState(selectStart);
     const isNarrow = useSelector(selectIsNarrow);
     const dispatch = useDispatch();
     const history = useHistory();
     const maskStart = useSelector(selectMaskStart);
-    const startSelection = useSelector(selectStartSelection);
     const playingAya = useSelector(selectPlayingAya);
 
     const offsetSelection = (offset) => {
@@ -62,9 +60,9 @@ const Tafseer = () => {
         if (maskStart !== -1) {
             setVerse(maskStart - 1);
         } else {
-            setVerse(startSelection);
+            setVerse(selectStart);
         }
-    }, [startSelection, maskStart]);
+    }, [selectStart, maskStart]);
 
     useEffect(() => {
         if (playingAya !== -1) {

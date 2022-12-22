@@ -11,15 +11,14 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { quranText } from "../App";
 import { AppContext } from "../context/App";
-import { AudioState } from "../context/Player";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "../services/QData";
 import { copy2Clipboard, getCurrentPageNumber } from "../services/utils";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
-import { selectAudioState } from "../store/playerSlice";
+import { AudioState, selectAudioState } from "../store/playerSlice";
 import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
 import { SuraHifzChart } from "./Hifz";
 import { CommandButton } from "./Modal/Commands";
@@ -34,12 +33,12 @@ export const VerseInfo = ({
     navigate = false,
     trigger = "verse_info",
 }) => {
-    const app = useContext(AppContext);
     const history = useHistory();
     const dispatch = useDispatch();
+    const selectStart = useSelector(selectStartSelection);
 
     if (verse === undefined || verse === -1) {
-        verse = app.selectStart;
+        verse = selectStart;
     }
     if (show === false) {
         return "";
@@ -333,12 +332,11 @@ export const PageContextButtons = ({ page }) => {
 };
 
 export const SuraContextHeader = ({ sura }) => {
-    // const app = useContext(AppContext);
     // const [suraIndex, setSura] = useState(sura || 0);
     // useEffect(() => {
-    //     const ayaInfo = ayaIdInfo(app.selectStart);
+    //     const ayaInfo = ayaIdInfo(selectStart);
     //     setSura(ayaInfo.sura);
-    // }, [app.selectStart]);
+    // }, [selectStart]);
 
     return (
         <div className="SuraContextHeader">
@@ -350,7 +348,8 @@ export const SuraContextHeader = ({ sura }) => {
 
 export const PageNavigator = ({ children, trigger }) => {
     // const app = useContext(AppContext);
-    const pageIndex = getCurrentPageNumber() - 1;
+    const location = useLocation();
+    const pageIndex = getCurrentPageNumber(location) - 1;
     const dispatch = useDispatch();
     const history = useHistory();
 

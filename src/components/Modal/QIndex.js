@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import { quranText } from "../../App";
 import { AppContext } from "../../context/App";
 import useSuraName from "../../hooks/useSuraName";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import {
     ayaID,
@@ -36,8 +36,8 @@ import {
     gotoAya,
     gotoPart,
     gotoSura,
+    hideMask,
     selectStartSelection,
-    setMask,
 } from "../../store/navSlice";
 import { selectAudioSource } from "../../store/playerSlice";
 import { selectLang } from "../../store/settingsSlice";
@@ -348,8 +348,8 @@ export const SuraIndexCell = memo(
         const dispatch = useDispatch();
         const intl = useIntl();
         const history = useHistory();
-        const audio = useContext(Refs).get("audio");
-        const msgBox = useContext(Refs).get("msgBox");
+        const audio = useContext(AppRefs).get("audio");
+        const msgBox = useContext(AppRefs).get("msgBox");
         const selectStart = useSelector(selectStartSelection);
 
         const checkClosePopup = () => {
@@ -367,7 +367,7 @@ export const SuraIndexCell = memo(
                     trigger,
                 });
                 // app.hideMask();
-                dispatch(setMask(-1));
+                dispatch(hideMask());
                 checkClosePopup();
                 return dispatch(gotoSura(history, suraIndex));
             } else {
@@ -517,8 +517,8 @@ export const BookmarkListItem = ({
     const dispatch = useDispatch();
     const intl = useIntl();
     const history = useHistory();
-    const audio = useContext(Refs).get("audio");
-    const msgBox = useContext(Refs).get("msgBox");
+    const audio = useContext(AppRefs).get("audio");
+    const msgBox = useContext(AppRefs).get("msgBox");
     const audioSource = useSelector(selectAudioSource(verse));
 
     useEffect(() => {
