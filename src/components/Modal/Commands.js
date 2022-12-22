@@ -25,7 +25,6 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { AppContext } from "../../context/App";
-import { AudioState } from "../../context/Player";
 import { analytics } from "./../../services/Analytics";
 
 import {
@@ -36,7 +35,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import {
     copy2Clipboard,
     requestFullScreen,
@@ -49,9 +48,10 @@ import {
     selectMaskStart,
     selectSelectedText,
     selectStartSelection,
-    setMaskStart,
+    showMask,
 } from "../../store/navSlice";
 import {
+    AudioState,
     play,
     selectAudioState,
     selectPlayingAya,
@@ -162,7 +162,6 @@ const CommandIcon = ({ command, app }) => {
 const Commands = () => {
     // const app = useContext(AppContext);
     const isNarrow = useSelector(selectIsNarrow);
-    const dispatch = useDispatch();
 
     const list = [
         "Index",
@@ -220,8 +219,8 @@ const CommandButton = ({
     trigger,
 }) => {
     const app = useContext(AppContext);
-    const audio = useContext(Refs).get("audio");
-    const msgBox = useContext(Refs).get("msgBox");
+    const audio = useContext(AppRefs).get("audio");
+    const msgBox = useContext(AppRefs).get("msgBox");
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectShowMenu);
     const intl = useIntl();
@@ -249,9 +248,8 @@ const CommandButton = ({
                     reciter,
                     trigger,
                 });
-                // app.gotoAya(app.selectStart);
                 dispatch(gotoAya(history, selectStart));
-                dispatch(play(audio));
+                audio.play();
                 // player.play();
                 return;
             case "Pause":
@@ -263,7 +261,7 @@ const CommandButton = ({
                 if (audioState === AudioState.playing) {
                     audio.pause();
                 } else {
-                    audio.play();
+                    audio.resume();
                 }
                 return;
             case "Stop":
@@ -301,7 +299,7 @@ const CommandButton = ({
                     }
                 );
                 // app.setMaskStart();
-                dispatch(setMaskStart());
+                dispatch(showMask());
                 break;
             case "Copy":
                 analytics.logEvent("copy_text", {

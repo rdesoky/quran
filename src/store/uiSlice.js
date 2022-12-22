@@ -57,6 +57,8 @@ export const selectMessageBox = (state) =>
 export const selectShowMenu = (state) => state[sliceName].showMenu;
 export const selectShowPopup = (state) => state[sliceName].showPopup;
 export const selectPopup = (state) => state[sliceName].popup;
+export const selectIsExercisePopupOn = (state) =>
+    state[sliceName].popup === "Exercise";
 export const selectPopupParams = (state) => state[sliceName].popupParams;
 export const selectToastMessage = (state) => state[sliceName].toastMessage;
 
@@ -94,4 +96,5 @@ export const closePopup = () => (dispatch) => {
     }, 500);
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };

@@ -2,27 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 import { GetAudioURL } from "../services/AudioData";
 
 import { ayaIdInfo } from "../services/QData";
-import { selectStartSelection } from "./navSlice";
-import { changeReciter, selectReciter } from "./settingsSlice";
+import { selectSelectedRange } from "./navSlice";
+import { selectReciter } from "./settingsSlice";
 
 const sliceName = "player";
 
 export const AudioState = {
-    stopped: 0,
-    playing: 1,
-    paused: 2,
-    buffering: 3,
-    error: 4,
-};
-
-export const AudioRepeat = {
-    noRepeat: 0,
-    noStop: 0,
-    selection: 1,
-    page: 2,
-    sura: 3,
-    part: 4,
-    verse: 5,
+    stopped: "stopped",
+    playing: "playing",
+    paused: "paused",
+    buffering: "buffering",
+    error: "error",
 };
 
 const initialState = {
@@ -44,9 +34,13 @@ const slice = createSlice({
         },
         setAudioState: (slice, { payload: audioState }) => {
             slice.audioState = audioState;
+            if (audioState === AudioState.stopped) {
+                slice.remainingTime = 0;
+            }
         },
         setTrackDuration: (slice, { payload: trackDuration }) => {
             slice.trackDuration = trackDuration;
+            slice.remainingTime = trackDuration;
         },
         setRemainingTime: (slice, { payload: remainingTime }) => {
             slice.remainingTime = remainingTime;
@@ -73,7 +67,7 @@ export const selectAudioSource = (ayaId) => (state) => {
         targetAya = selectPlayingAya(state);
     }
     if (targetAya === -1) {
-        targetAya = selectStartSelection(state);
+        targetAya = selectSelectedRange(state).start;
     }
     if (targetAya === -1) {
         return null; //no audio source
@@ -83,38 +77,39 @@ export const selectAudioSource = (ayaId) => (state) => {
 };
 
 export const selectTrackDuration = (state) => state[sliceName].trackDuration;
+export const selectRemainingTime = (state) => state[sliceName].remainingTime;
 
 //thunks
-export const play = (audio, ayaId) => (dispatch, getState) => {
-    const state = getState();
-    const audioState = selectAudioState(state);
-    const playingAya = selectPlayingAya(state);
-    const targetAya = ayaId !== undefined ? ayaId : selectStartSelection(state);
-    if (audioState === AudioState.playing && playingAya === targetAya) {
-        return;
-    }
-    audio.play(targetAya);
-};
+// export const play = (audio, ayaId) => (dispatch, getState) => {
+//     const state = getState();
+//     const audioState = selectAudioState(state);
+//     const playingAya = selectPlayingAya(state);
+//     const targetAya = ayaId !== undefined ? ayaId : selectStartSelection(state);
+//     if (audioState === AudioState.playing && playingAya === targetAya) {
+//         return;
+//     }
+//     audio.play(targetAya);
+// };
 
-export const stop = (player) => (dispatch) => {
-    // dispatch(setAudioState(AudioState.stopped));
-    dispatch(setPlayingAya(-1));
-    player.stop();
-};
+// export const stop = (audio) => (dispatch) => {
+//     // dispatch(setAudioState(AudioState.stopped));
+//     dispatch(setPlayingAya(-1));
+//     audio.stop();
+// };
 
-export const playerChangeReciter = (reciter) => (dispatch, getState) => {
-    if (!dispatch(changeReciter(reciter))) {
-        return; //same reciter
-    }
-    const audioState = selectAudioState(getState());
-    switch (audioState) {
-        case AudioState.paused:
-            dispatch(stop());
-            break;
-        case AudioState.playing:
-            dispatch(play()); //TODO: check if timeout is required
-            break;
-        default:
-            break;
-    }
-};
+// export const playerChangeReciter = (reciter) => (dispatch, getState) => {
+//     if (!dispatch(changeReciter(reciter))) {
+//         return; //same reciter
+//     }
+//     const audioState = selectAudioState(getState());
+//     switch (audioState) {
+//         case AudioState.paused:
+//             dispatch(stop());
+//             break;
+//         case AudioState.playing:
+//             dispatch(play()); //TODO: check if timeout is required
+//             break;
+//         default:
+//             break;
+//     }
+// };

@@ -8,7 +8,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { memo, useContext, useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import useSuraName from "../hooks/useSuraName";
 import { analytics } from "../services/Analytics";
@@ -18,15 +18,10 @@ import {
     selectPagesCount,
     selectPopupWidth,
 } from "../store/layoutSlice";
-import {
-    gotoAya,
-    gotoPage,
-    setMaskStart,
-    setSelectEnd,
-} from "../store/navSlice";
+import { gotoAya, gotoPage, setSelectEnd, showMask } from "../store/navSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
-import { Refs } from "../RefsProvider";
+import { AppRefs } from "../RefsProvider";
 import { AppContext } from "./../context/App";
 import {
     ayaID,
@@ -49,8 +44,8 @@ const HifzRange = ({
     trigger = "hifz_range",
 }) => {
     const app = useContext(AppContext);
-    const audio = useContext(Refs).get("audio");
-    const msgBox = useContext(Refs).get("msgBox");
+    const audio = useContext(AppRefs).get("audio");
+    const msgBox = useContext(AppRefs).get("msgBox");
     // const theme = useContext(ThemeContext);
     const suraName = useSuraName(range.sura);
     const [rangeInfo, setRangeInfo] = useState("");
@@ -155,7 +150,7 @@ const HifzRange = ({
         const { startVerse } = selectRange();
         setTimeout(() => {
             // app.setMaskStart();
-            dispatch(setMaskStart());
+            dispatch(showMask());
             checkClosePopup();
         });
         analytics.logEvent("show_mask", {
@@ -452,6 +447,7 @@ const SuraHifzChart = memo(
         const pageList = Array(suraPages).fill(0);
         const dispatch = useDispatch();
         const history = useHistory();
+        const location = useLocation();
         // const pageWidth = `${100 / suraPages}%`;
 
         useEffect(() => {
@@ -464,7 +460,7 @@ const SuraHifzChart = memo(
             }
         }, [app, app.hifzRanges, range, sura]);
 
-        const activePage = getCurrentPageNumber() - 1;
+        const activePage = getCurrentPageNumber(location) - 1;
 
         const suraStartPage = suraInfo.sp;
 

@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
-import { AppContext } from "../../context/App";
+import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ListReciters } from "../../services/AudioData";
 import {
@@ -12,13 +12,19 @@ import {
     selectIsNarrow,
     selectPopupWidth,
 } from "../../store/layoutSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
 import {
+    AudioState,
+    selectAudioState,
+    selectPlayingAya,
+} from "../../store/playerSlice";
+import {
+    changeReciter,
     selectExerciseLevel,
     selectExerciseMemorized,
     selectFollowPlayer,
     selectLang,
     selectRandomAutoRecite,
+    selectReciter,
     selectRepeat,
     selectTheme,
     setExerciseLevel,
@@ -26,12 +32,11 @@ import {
     setFollowPlayer,
     setLang,
     setRandomAutoRecite,
-    setReciter,
     setRepeat,
     setTheme,
 } from "../../store/settingsSlice";
 import { selectPopup } from "../../store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons, PlayerStatus } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import ReciterName from "./../AudioPlayer/ReciterName";
 
@@ -46,10 +51,14 @@ const Settings = () => {
     const playingAya = useSelector(selectPlayingAya);
     const repeat = useSelector(selectRepeat);
     const followPlayer = useSelector(selectFollowPlayer);
+    const activeReciter = useSelector(selectReciter);
+    const audioState = useSelector(selectAudioState);
+    const audio = useContext(AppRefs).get("audio");
 
     let popupBody;
 
     const recitersList = ListReciters("ayaAudio");
+    // const recitersList = useSelector(selectReciter);
     const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
     const recitersListWidth = popupWidth - outerMargin - scrollBarWidth;
     const recitersPerRow = Math.floor(recitersListWidth / buttonWidth);
@@ -76,15 +85,21 @@ const Settings = () => {
         );
     };
 
-    const selectReciter = ({ currentTarget }) => {
+    const onSelectReciter = ({ currentTarget }) => {
         const reciter = currentTarget.getAttribute("reciter");
 
-        dispatch(setReciter(reciter));
+        dispatch(changeReciter(reciter));
         popupBody.scrollTop = 0;
         analytics.logEvent("set_reciter", { reciter, trigger: popup });
+        if (playingAya) {
+            audio.stop();
+            if (audioState === AudioState.playing) {
+                setTimeout(() => audio.play(playingAya));
+            }
+        }
     };
 
-    const updateTheme = (checked) => {
+    const onUpdateTheme = (checked) => {
         const theme_name = checked ? "Dark" : "Default";
         dispatch(setTheme(theme_name));
         localStorage.setItem("theme", theme_name);
@@ -104,7 +119,7 @@ const Settings = () => {
                 {isNarrow ? (
                     <PlayerButtons
                         trigger="settings_title"
-                        showReciter={false}
+                        showReciter={true}
                     />
                 ) : (
                     ""
@@ -139,7 +154,7 @@ const Settings = () => {
                         <Switch
                             height={22}
                             width={42}
-                            onChange={updateTheme}
+                            onChange={onUpdateTheme}
                             checked={theme === "Dark"}
                         />
                     </label>
@@ -213,9 +228,11 @@ const Settings = () => {
                                 key={reciter}
                                 className={
                                     "ReciterButton" +
-                                    (reciter === reciter ? " Selected" : "")
+                                    (reciter === activeReciter
+                                        ? " Selected"
+                                        : "")
                                 }
-                                onClick={selectReciter}
+                                onClick={onSelectReciter}
                                 style={{
                                     top,
                                     left,
@@ -244,7 +261,6 @@ const Settings = () => {
 };
 
 export const ExerciseSettings = () => {
-    const app = useContext(AppContext);
     const dispatch = useDispatch();
     const exerciseLevel = useSelector(selectExerciseLevel);
     const randomAutoRecite = useSelector(selectRandomAutoRecite);

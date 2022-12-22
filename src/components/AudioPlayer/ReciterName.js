@@ -1,12 +1,8 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
-import { selectReciter } from "../../store/settingsSlice";
 
 const ReciterName = ({ id }) => {
-    const reciter_id = useSelector(selectReciter);
-
-    return <FormattedMessage id={"r." + reciter_id} />;
+    return <FormattedMessage id={"r." + id} />;
 };
 
 export default ReciterName;

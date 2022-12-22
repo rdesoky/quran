@@ -1,4 +1,4 @@
-import { useRouteMatch } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import React, { useState, useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppContext } from "./../../context/App";
@@ -52,10 +52,10 @@ export const AddHifz = ({ page }) => {
 };
 
 const Favorites = () => {
-    const app = useContext(AppContext);
     const appHeight = useSelector(selectAppHeight);
     const [activeTab, selectTab] = useState("add");
-    const pageIndex = getCurrentPageNumber() - 1;
+    const location = useLocation();
+    const pageIndex = getCurrentPageNumber(location) - 1;
 
     const renderBody = () => {
         switch (activeTab) {

@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../../context/App";
-import { Refs } from "../../RefsProvider";
+import { AppRefs } from "../../RefsProvider";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { showToast } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
@@ -17,7 +17,7 @@ const Bookmarks = () => {
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
     const dispatch = useDispatch();
-    const msgBox = useContext(Refs).get("msgBox");
+    const msgBox = useContext(AppRefs).get("msgBox");
 
     const toggleBookmark = (e) => {
         if (app.isBookmarked()) {

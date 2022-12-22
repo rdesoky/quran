@@ -1,6 +1,6 @@
 import { createContext, useCallback, useRef } from "react";
 
-export const Refs = createContext();
+export const AppRefs = createContext();
 
 export default function RefsProvider({ children }) {
     const refs = useRef({});
@@ -14,8 +14,8 @@ export default function RefsProvider({ children }) {
     }, []);
 
     return (
-        <Refs.Provider value={{ add: addRef, get: getRef }}>
+        <AppRefs.Provider value={{ add: addRef, get: getRef }}>
             {children}
-        </Refs.Provider>
+        </AppRefs.Provider>
     );
 }
