@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
+import { Refs } from "../../RefsProvider";
 import { ayaIdPage, TOTAL_VERSES } from "../../services/QData";
 import { copy2Clipboard, downloadPageImage } from "../../services/utils";
 import {
@@ -33,8 +34,7 @@ import {
     showMenu,
     showPopup,
 } from "../../store/uiSlice";
-import { closeContextPopup, contextPopupInfo } from "../ContextPopup";
-import { popMessageBox, shownMessageBoxes } from "../MessageBox";
+import { shownMessageBoxes } from "../MessageBox";
 import Page from "../Page/Page";
 import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
@@ -70,6 +70,8 @@ export default function Pager({ match }) {
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
     const maskStart = useSelector(selectMaskStart);
+    const contextPopup = useContext(Refs).get("contextPopup");
+    const msgBox = useContext(Refs).get("msgBox");
 
     let pageIndex = 0;
 
@@ -267,10 +269,10 @@ export default function Pager({ match }) {
                     app.pushRecentCommand("Copy");
                     break;
                 case "Escape":
-                    if (contextPopupInfo.context) {
-                        closeContextPopup();
+                    if (contextPopup.info) {
+                        contextPopup.close();
                     } else if (shownMessageBoxes.length > 0) {
-                        popMessageBox();
+                        msgBox.pop();
                     } else if (activePopup !== null) {
                         dispatch(closePopup());
                     } else if (expandedMenu) {

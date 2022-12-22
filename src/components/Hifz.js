@@ -36,7 +36,6 @@ import {
     sura_info,
     verseLocation,
 } from "./../services/QData";
-import { pushMessageBox, setMessageBox } from "./MessageBox";
 import { VerseText } from "./Widgets";
 
 const dayLength = 24 * 60 * 60 * 1000;
@@ -51,6 +50,7 @@ const HifzRange = ({
 }) => {
     const app = useContext(AppContext);
     const audio = useContext(Refs).get("audio");
+    const msgBox = useContext(Refs).get("msgBox");
     // const theme = useContext(ThemeContext);
     const suraName = useSuraName(range.sura);
     const [rangeInfo, setRangeInfo] = useState("");
@@ -195,11 +195,11 @@ const HifzRange = ({
         if (!isCompact && pagesCount === 1) {
             dispatch(closePopup());
         }
-        setMessageBox(null);
+        msgBox.set(null);
     };
 
     const setRangeRevised = (e) => {
-        pushMessageBox({
+        msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
                 analytics.logEvent("revised_today", {
@@ -225,7 +225,7 @@ const HifzRange = ({
                 pagesCount,
             });
         } else {
-            pushMessageBox({
+            msgBox.push({
                 title: <String id="are_you_sure" />,
                 onYes: () => {
                     analytics.logEvent("add_hifz", {
@@ -277,7 +277,7 @@ const HifzRange = ({
     };
 
     const deleteHifzRange = (e) => {
-        pushMessageBox({
+        msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
                 analytics.logEvent("remove_hifz", {
