@@ -26,6 +26,7 @@ import {
 } from "../store/navSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
+import { Refs } from "../RefsProvider";
 import { AppContext } from "./../context/App";
 import {
     ayaID,
@@ -49,7 +50,7 @@ const HifzRange = ({
     trigger = "hifz_range",
 }) => {
     const app = useContext(AppContext);
-    const audio = useContext(AudioContext);
+    const audio = useContext(Refs).get("audio");
     // const theme = useContext(ThemeContext);
     const suraName = useSuraName(range.sura);
     const [rangeInfo, setRangeInfo] = useState("");

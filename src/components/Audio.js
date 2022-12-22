@@ -1,4 +1,10 @@
-import { createContext, useEffect, useRef } from "react";
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+} from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AudioRepeat } from "../context/Player";
@@ -23,10 +29,10 @@ import {
     setTrackDuration,
 } from "../store/playerSlice";
 import { selectFollowPlayer, selectRepeat } from "../store/settingsSlice";
-
-export const AudioContext = createContext({});
+import { Refs } from "../RefsProvider";
 
 export function Audio({ children }) {
+    const refs = useContext(Refs);
     const audioRef = useRef();
     const dispatch = useDispatch();
     const audioState = useSelector(selectAudioState);
@@ -131,46 +137,52 @@ export function Audio({ children }) {
         }
     };
 
-    const play = (ayaId) => {
-        const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
-        audio.setAttribute("src", selectAudioSource(ayaId)(store.getState()));
-        audio.play();
-        dispatch(setPlayingAya(playedAya));
-        if (followPlayer) {
-            dispatch(gotoAya(history, playedAya, { sel: true }));
-        }
-    };
+    const play = useCallback(
+        (ayaId) => {
+            const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
+            audioRef.current.setAttribute(
+                "src",
+                selectAudioSource(ayaId)(store.getState())
+            );
+            audioRef.current.play();
+            dispatch(setPlayingAya(playedAya));
+            if (followPlayer) {
+                dispatch(gotoAya(history, playedAya, { sel: true }));
+            }
+        },
+        [dispatch, followPlayer, history, selectedRange.start, store]
+    );
 
-    const pause = () => {
-        audio?.pause();
-    };
+    const pause = useCallback(() => {
+        audioRef.current?.pause();
+    }, []);
 
-    const stop = () => {
-        audio?.pause();
+    const stop = useCallback(() => {
+        audioRef.current?.pause();
         dispatch(setPlayingAya(-1));
         dispatch(setAudioState(AudioState.stopped));
-    };
+    }, [dispatch]);
 
-    const trackRemainingTime = () => {
-        return audio?.duration - audio?.currentTime;
-    };
+    useEffect(() => {
+        refs.add("audio", {
+            play,
+            stop,
+            pause,
+        });
+    }, [pause, play, stop, refs]);
+
     const onDurationChange = (e) => {
         dispatch(setTrackDuration(audio.duration));
     };
 
     return (
-        <AudioContext.Provider
-            value={{ play, pause, stop, trackRemainingTime }}
-        >
-            <audio
-                ref={audioRef}
-                onPlaying={onPlaying}
-                onEnded={onEnded}
-                onPause={onPause}
-                onWaiting={onWaiting}
-                onDurationChange={onDurationChange}
-            />
-            {children}
-        </AudioContext.Provider>
+        <audio
+            ref={audioRef}
+            onPlaying={onPlaying}
+            onEnded={onEnded}
+            onPause={onPause}
+            onWaiting={onWaiting}
+            onDurationChange={onDurationChange}
+        />
     );
 }

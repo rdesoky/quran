@@ -41,6 +41,7 @@ import {
 import { selectAudioSource } from "../../store/playerSlice";
 import { selectLang } from "../../store/settingsSlice";
 import { closePopup, showToast } from "../../store/uiSlice";
+import { Refs } from "../../RefsProvider";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
 import { pushMessageBox, setMessageBox } from "../MessageBox";
@@ -348,7 +349,7 @@ export const SuraIndexCell = memo(
         const dispatch = useDispatch();
         const intl = useIntl();
         const history = useHistory();
-        const audio = useContext(AudioContext);
+        const audio = useContext(Refs).get("audio");
         const selectStart = useSelector(selectStartSelection);
 
         const checkClosePopup = () => {
@@ -516,7 +517,7 @@ export const BookmarkListItem = ({
     const dispatch = useDispatch();
     const intl = useIntl();
     const history = useHistory();
-    const audio = useContext(AudioContext);
+    const audio = useContext(Refs).get("audio");
     const audioSource = useSelector(selectAudioSource(verse));
 
     useEffect(() => {

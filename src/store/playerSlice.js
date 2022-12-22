@@ -54,6 +54,7 @@ const slice = createSlice({
     },
 });
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };
 
 export const {
@@ -67,11 +68,17 @@ export const selectPlayingAya = (state) => state[sliceName].playingAya;
 export const selectAudioState = (state) => state[sliceName].audioState;
 export const selectAudioSource = (ayaId) => (state) => {
     const reciter = selectReciter(state);
-    const playingAya = selectPlayingAya(state);
-    if (playingAya === -1) {
+    let targetAya = ayaId;
+    if (ayaId !== undefined) {
+        targetAya = selectPlayingAya(state);
+    }
+    if (targetAya === -1) {
+        targetAya = selectStartSelection(state);
+    }
+    if (targetAya === -1) {
         return null; //no audio source
     }
-    const { sura, aya } = ayaIdInfo(ayaId !== undefined ? ayaId : playingAya);
+    const { sura, aya } = ayaIdInfo(targetAya);
     return GetAudioURL(reciter, sura + 1, aya + 1);
 };
 

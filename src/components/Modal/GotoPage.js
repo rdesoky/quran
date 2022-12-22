@@ -20,13 +20,14 @@ import {
 } from "../../store/navSlice";
 import { selectAudioState } from "../../store/playerSlice";
 import { closePopup } from "../../store/uiSlice";
+import { Refs } from "../../RefsProvider";
 
 const GotoPage = ({ open }) => {
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
-    const audio = useContext(AudioContext);
+    const audio = useContext(Refs).get("audio");
     const audioState = useSelector(selectAudioState);
 
     // const [isOpen, setIsOpen] = useState(true);

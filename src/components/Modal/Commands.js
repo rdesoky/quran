@@ -63,13 +63,13 @@ import {
     showToast,
     toggleMenu,
 } from "../../store/uiSlice";
-import { AudioContext } from "../Audio";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { setMessageBox } from "../MessageBox";
 import { VerseInfo } from "../Widgets";
 import { verseLocation } from "./../../services/QData";
 import { AddHifz } from "./Favorites";
 import { UserImage } from "./User";
+import { Refs } from "../../RefsProvider";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -221,7 +221,7 @@ const CommandButton = ({
     trigger,
 }) => {
     const app = useContext(AppContext);
-    const audio = useContext(AudioContext);
+    const audio = useContext(Refs).get("audio");
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectShowMenu);
     const intl = useIntl();
