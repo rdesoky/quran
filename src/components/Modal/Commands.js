@@ -1,61 +1,47 @@
-import React, { useContext } from "react";
-import { analytics } from "./../../services/Analytics";
-import { AppContext } from "../../context/App";
-import { AudioState, PlayerContext } from "../../context/Player";
-import { FormattedMessage as String, useIntl } from "react-intl";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
-    faLightbulb,
-    faUserCircle,
-    faSearch,
-    faPlayCircle,
-    faHeart,
-    faCog,
     faAdjust,
-    faQuestion,
-    faCopy,
-    faShareAlt,
-    faQuran,
-    faExpand,
-    faBookmark,
     faAngleDoubleDown,
     faAngleDoubleUp,
-    faFileDownload,
-    faStopCircle,
-    faPauseCircle,
     faBars,
-    faListAlt,
+    faBookmark,
     faBookOpen,
+    faCog,
+    faCopy,
+    faExpand,
+    faFileDownload,
+    faHeart,
+    faLightbulb,
+    faListAlt,
+    faPauseCircle,
+    faPlayCircle,
+    faQuestion,
+    faQuran,
+    faSearch,
+    faShareAlt,
+    faStopCircle,
+    faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useContext } from "react";
+import { FormattedMessage as String, useIntl } from "react-intl";
+import { AppContext } from "../../context/App";
+import { AudioState } from "../../context/Player";
+import { analytics } from "./../../services/Analytics";
 
 import {
-    faLightbulb as farLightbulb,
     faBookmark as farBookmark,
     faKeyboard,
+    faLightbulb as farLightbulb,
 } from "@fortawesome/free-regular-svg-icons";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
     copy2Clipboard,
     requestFullScreen,
     selectTopCommand,
 } from "../../services/utils";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import { VerseInfo } from "../Widgets";
-import { UserImage } from "./User";
-import { AddHifz } from "./Favorites";
-import { verseLocation } from "./../../services/QData";
-import {
-    hideMenu,
-    selectShowMenu,
-    showMenu,
-    showPopup,
-    showToast,
-    toggleMenu,
-} from "../../store/uiSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { selectIsNarrow } from "../../store/layoutSlice";
-import { setMessageBox } from "../MessageBox";
-import { useHistory } from "react-router-dom";
 import {
     gotoAya,
     selectEndSelection,
@@ -69,8 +55,21 @@ import {
     selectAudioState,
     selectPlayingAya,
 } from "../../store/playerSlice";
-import { AudioContext } from "../Audio";
 import { selectReciter } from "../../store/settingsSlice";
+import {
+    hideMenu,
+    selectShowMenu,
+    showPopup,
+    showToast,
+    toggleMenu,
+} from "../../store/uiSlice";
+import { AudioContext } from "../Audio";
+import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { setMessageBox } from "../MessageBox";
+import { VerseInfo } from "../Widgets";
+import { verseLocation } from "./../../services/QData";
+import { AddHifz } from "./Favorites";
+import { UserImage } from "./User";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -222,7 +221,6 @@ const CommandButton = ({
     trigger,
 }) => {
     const app = useContext(AppContext);
-    // const player = useContext(PlayerContext);
     const audio = useContext(AudioContext);
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectShowMenu);
@@ -265,7 +263,7 @@ const CommandButton = ({
                 if (audioState === AudioState.playing) {
                     audio.pause();
                 } else {
-                    audio.resume();
+                    audio.play();
                 }
                 return;
             case "Stop":

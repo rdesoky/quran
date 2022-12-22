@@ -1,19 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { AudioState } from "../../context/Player";
 import {
     ayaID,
     ayaIdInfo,
     ayaIdPage,
     getPartIndexByAyaId,
-    getPageFirstAyaId,
     sura_info,
 } from "../../services/QData";
-import { FormattedMessage as String } from "react-intl";
-import { AudioState, PlayerContext } from "../../context/Player";
-import { useDispatch, useSelector } from "react-redux";
 import { selectIsCompact, selectPagesCount } from "../../store/layoutSlice";
-import { closePopup } from "../../store/uiSlice";
-import { AppContext } from "../../context/App";
-import { useHistory } from "react-router-dom";
 import {
     gotoAya,
     gotoPage,
@@ -21,14 +18,16 @@ import {
     gotoSura,
     selectStartSelection,
 } from "../../store/navSlice";
+import { selectAudioState } from "../../store/playerSlice";
+import { closePopup } from "../../store/uiSlice";
 
 const GotoPage = ({ open }) => {
-    const player = useContext(PlayerContext);
-    const app = useContext(AppContext);
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
+    const audio = useContext(AudioContext);
+    const audioState = useSelector(selectAudioState);
 
     // const [isOpen, setIsOpen] = useState(true);
     const pagesCount = useSelector(selectPagesCount);
@@ -71,8 +70,8 @@ const GotoPage = ({ open }) => {
     }, [gotoPageForm.PageNumber]);
 
     const stopAudio = () => {
-        if (player.audioState !== AudioState.stopped) {
-            player.stop();
+        if (audioState !== AudioState.stopped) {
+            audio.stop();
         }
     };
 

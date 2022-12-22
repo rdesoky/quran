@@ -79,6 +79,7 @@ export const selectRepeat = (state) => state[sliceName].repeat;
 
 export const selectReciter = (state) => state[sliceName].reciter;
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: settingsSlice.reducer };
 
 export const changeReciter = (reciter) => (dispatch, getState) => {

@@ -1,40 +1,41 @@
+import { faLanguage } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
-import { AppContext } from "../../context/App";
-import { PlayerContext } from "../../context/Player";
-import ReciterName from "./../AudioPlayer/ReciterName";
-import { ListReciters } from "../../services/AudioData";
-import Switch from "react-switch";
-import { VerseInfo } from "../Widgets";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faLanguage } from "@fortawesome/free-solid-svg-icons";
-import { analytics } from "../../services/Analytics";
-import {
-    selectLang,
-    selectTheme,
-    setLang,
-    setTheme,
-} from "../../store/settingsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    selectExerciseLevel,
-    selectExerciseMemorized,
-    selectRandomAutoRecite,
-    setExerciseLevel,
-    setExerciseMemorized,
-    setRandomAutoRecite,
-} from "../../store/settingsSlice";
+import Switch from "react-switch";
+import { AppContext } from "../../context/App";
+import { analytics } from "../../services/Analytics";
+import { ListReciters } from "../../services/AudioData";
 import {
     selectAppHeight,
     selectIsNarrow,
     selectPopupWidth,
 } from "../../store/layoutSlice";
+import { selectPlayingAya } from "../../store/playerSlice";
+import {
+    selectExerciseLevel,
+    selectExerciseMemorized,
+    selectFollowPlayer,
+    selectLang,
+    selectRandomAutoRecite,
+    selectRepeat,
+    selectTheme,
+    setExerciseLevel,
+    setExerciseMemorized,
+    setFollowPlayer,
+    setLang,
+    setRandomAutoRecite,
+    setReciter,
+    setRepeat,
+    setTheme,
+} from "../../store/settingsSlice";
 import { selectPopup } from "../../store/uiSlice";
+import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { VerseInfo } from "../Widgets";
+import ReciterName from "./../AudioPlayer/ReciterName";
 
 const Settings = () => {
-    const player = useContext(PlayerContext);
-    const app = useContext(AppContext);
     const lang = useSelector(selectLang);
     const theme = useSelector(selectTheme);
     const dispatch = useDispatch();
@@ -42,6 +43,9 @@ const Settings = () => {
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
     const popup = useSelector(selectPopup);
+    const playingAya = useSelector(selectPlayingAya);
+    const repeat = useSelector(selectRepeat);
+    const followPlayer = useSelector(selectFollowPlayer);
 
     let popupBody;
 
@@ -58,12 +62,12 @@ const Settings = () => {
 
     const onChangeRepeat = ({ currentTarget }) => {
         const repeat = currentTarget.value;
-        player.setRepeat(parseInt(repeat));
+        dispatch(setRepeat(parseInt(repeat)));
         analytics.logEvent("set_repeat", { repeat, trigger: popup });
     };
 
     const updateFollowPlayer = (checked) => {
-        player.setFollowPlayer(checked);
+        dispatch(setFollowPlayer(checked));
         analytics.logEvent(
             checked ? "set_follow_player" : "set_unfollow_player",
             {
@@ -74,7 +78,8 @@ const Settings = () => {
 
     const selectReciter = ({ currentTarget }) => {
         const reciter = currentTarget.getAttribute("reciter");
-        player.changeReciter(reciter);
+
+        dispatch(setReciter(reciter));
         popupBody.scrollTop = 0;
         analytics.logEvent("set_reciter", { reciter, trigger: popup });
     };
@@ -95,7 +100,7 @@ const Settings = () => {
     return (
         <>
             <div className="Title">
-                <VerseInfo trigger="settings_title" verse={player.playingAya} />
+                <VerseInfo trigger="settings_title" verse={playingAya} />
                 {isNarrow ? (
                     <PlayerButtons
                         trigger="settings_title"
@@ -154,7 +159,7 @@ const Settings = () => {
                             height={22}
                             width={42}
                             onChange={updateFollowPlayer}
-                            checked={player.followPlayer}
+                            checked={followPlayer}
                             // disabled={player.repeat == 1}
                         />
                     </label>
@@ -167,7 +172,7 @@ const Settings = () => {
                             //     selectRepeat = ref;
                             // }}
                             onChange={onChangeRepeat}
-                            value={player.repeat}
+                            value={repeat}
                         >
                             <Message id="no_repeat">
                                 {(label) => <option value={0}>{label}</option>}
@@ -208,9 +213,7 @@ const Settings = () => {
                                 key={reciter}
                                 className={
                                     "ReciterButton" +
-                                    (player.reciter === reciter
-                                        ? " Selected"
-                                        : "")
+                                    (reciter === reciter ? " Selected" : "")
                                 }
                                 onClick={selectReciter}
                                 style={{

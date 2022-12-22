@@ -14,12 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranText } from "../App";
 import { AppContext } from "../context/App";
-import { AudioState, PlayerContext } from "../context/Player";
+import { AudioState } from "../context/Player";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "../services/QData";
 import { copy2Clipboard, getCurrentPageNumber } from "../services/utils";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
-import { selectToastMessage, showToast } from "../store/uiSlice";
+import { selectAudioState } from "../store/playerSlice";
+import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
 import { SuraHifzChart } from "./Hifz";
 import { CommandButton } from "./Modal/Commands";
 import SuraName from "./SuraName";
@@ -293,16 +294,17 @@ export const CircleProgress = ({
 };
 
 export const VerseContextButtons = ({ verse }) => {
-    const player = useContext(PlayerContext);
-    const app = useContext(AppContext);
+    const audioState = useSelector(selectAudioState);
+    const popup = useSelector(selectPopup);
+
     return (
         <div className="IconsBar">
-            {player.audioState === AudioState.stopped ? (
+            {audioState === AudioState.stopped ? (
                 <CommandButton trigger="verse_context" command="Play" />
             ) : (
                 <CommandButton trigger="verse_context" command="Stop" />
             )}
-            {app.popup !== "Tafseer" ? (
+            {popup !== "Tafseer" ? (
                 <CommandButton trigger="verse_context" command="Tafseer" />
             ) : null}
             <CommandButton trigger="verse_context" command="Mask" />
@@ -313,13 +315,13 @@ export const VerseContextButtons = ({ verse }) => {
 };
 
 export const PageContextButtons = ({ page }) => {
-    const player = useContext(PlayerContext);
+    const audioState = useSelector(selectAudioState);
     return (
         <PageNavigator trigger="page_context">
             <div className="IconsBar">
                 {/* <CommandButton trigger="page_context" command="Mask" /> */}
                 <CommandButton trigger="page_context" command="Goto" />
-                {player.audioState === AudioState.stopped ? (
+                {audioState === AudioState.stopped ? (
                     <CommandButton trigger="page_context" command="Play" />
                 ) : (
                     <CommandButton trigger="page_context" command="Stop" />

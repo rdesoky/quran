@@ -66,7 +66,6 @@ const Step = {
 
 const Exercise = () => {
     const app = useContext(AppContext);
-    // const player = useContext(PlayerContext);
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
 

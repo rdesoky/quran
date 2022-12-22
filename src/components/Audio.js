@@ -146,7 +146,9 @@ export function Audio({ children }) {
     };
 
     const stop = () => {
-        audio?.stop();
+        audio?.pause();
+        dispatch(setPlayingAya(-1));
+        dispatch(setAudioState(AudioState.stopped));
     };
 
     const trackRemainingTime = () => {
