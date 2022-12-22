@@ -36,6 +36,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { Refs } from "../../RefsProvider";
 import {
     copy2Clipboard,
     requestFullScreen,
@@ -64,12 +65,10 @@ import {
     toggleMenu,
 } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import { setMessageBox } from "../MessageBox";
 import { VerseInfo } from "../Widgets";
 import { verseLocation } from "./../../services/QData";
 import { AddHifz } from "./Favorites";
 import { UserImage } from "./User";
-import { Refs } from "../../RefsProvider";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -222,6 +221,7 @@ const CommandButton = ({
 }) => {
     const app = useContext(AppContext);
     const audio = useContext(Refs).get("audio");
+    const msgBox = useContext(Refs).get("msgBox");
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectShowMenu);
     const intl = useIntl();
@@ -340,7 +340,7 @@ const CommandButton = ({
                     ...verseLocation(selectStart),
                     trigger,
                 });
-                setMessageBox({
+                msgBox.set({
                     title: <String id="update_hifz" />,
                     content: <AddHifz />,
                 });

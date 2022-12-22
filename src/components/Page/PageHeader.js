@@ -1,32 +1,32 @@
-import React, { useContext } from "react";
-import { analytics } from "./../../services/Analytics";
-import { AppContext } from "../../context/App";
-import {
-    ayaIdInfo,
-    getPagePartNumber,
-    TOTAL_PAGES,
-    getPageSuraIndex,
-} from "../../services/QData";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
     faAngleUp,
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useContext } from "react";
+import { useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { AppContext } from "../../context/App";
+import { Refs } from "../../RefsProvider";
+import {
+    ayaIdInfo,
+    getPagePartNumber,
+    getPageSuraIndex,
+    TOTAL_PAGES,
+} from "../../services/QData";
+import { selectPagesCount } from "../../store/layoutSlice";
+import { gotoAya, selectStartSelection } from "../../store/navSlice";
+import { PartsList, SuraList } from "../Modal/QIndex";
+import SuraName from "../SuraName";
 import {
     CircleProgress,
-    VerseContextButtons,
     PageContextButtons,
     SuraContextHeader,
+    VerseContextButtons,
 } from "../Widgets";
-import { SuraList, PartsList } from "../Modal/QIndex";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPagesCount } from "../../store/layoutSlice";
-import { useIntl } from "react-intl";
-import { showContextPopup } from "../ContextPopup";
-import SuraName from "../SuraName";
-import { useHistory } from "react-router-dom";
-import { gotoAya, selectStartSelection } from "../../store/navSlice";
+import { analytics } from "./../../services/Analytics";
 
 const PageHeader = ({
     index: pageIndex,
@@ -45,27 +45,19 @@ const PageHeader = ({
     const selectStart = useSelector(selectStartSelection);
     const selectedAyaInfo = ayaIdInfo(selectStart);
     const dispatch = useDispatch();
+    const contextPopup = useContext(Refs).get("contextPopup");
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         analytics.logEvent("show_part_context", { trigger: "page_header" });
-        showContextPopup({
+        contextPopup.show({
             target,
             content: <PartsList part={partIndex} />,
         });
     };
 
     const showPageContextPopup = ({ target }) => {
-        // const openGoto = e => {
-        //     app.setPopup("Goto");
-        // };
-        // const addToHifz = e => {
-        //     app.setMessageBox({
-        //         title: <String id="update_hifz" />,
-        //         content: <AddHifz />
-        //     });
-        // };
         analytics.logEvent("show_page_context", { trigger: "page_header" });
-        showContextPopup({
+        contextPopup.show({
             target,
             // header: <div>Page Header</div>,
             content: <PageContextButtons page={pageIndex} />,
@@ -74,7 +66,7 @@ const PageHeader = ({
 
     const showVerseContextPopup = ({ target }) => {
         analytics.logEvent("show_verse_context", { trigger: "page_header" });
-        showContextPopup({
+        contextPopup.show({
             target,
             content: <VerseContextButtons verse={app.selectStart} />,
         });
@@ -94,7 +86,7 @@ const PageHeader = ({
         analytics.logEvent("show_chapter_context", {
             trigger: "page_header",
         });
-        showContextPopup({
+        contextPopup.show({
             target,
             header: <SuraContextHeader sura={suraIndex} />,
             content: (

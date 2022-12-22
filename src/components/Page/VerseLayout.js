@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/App";
+import { Refs } from "../../RefsProvider";
 import {
     ayaIdPage,
     getPageFirstAyaId,
@@ -25,7 +26,6 @@ import {
     setMaskStart,
 } from "../../store/navSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
-import { showContextPopup } from "../ContextPopup";
 import { VerseContextButtons } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
@@ -40,6 +40,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const dispatch = useDispatch();
     const maskStart = useSelector(selectMaskStart);
     const history = useHistory();
+    const contextPopup = useContext(Refs).get("contextPopup");
 
     const pageHeight = appHeight - 50;
     const lineHeight = pageHeight / 15;
@@ -120,7 +121,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     analytics.logEvent("show_verse_context", {
                         trigger: "selected_verses",
                     });
-                    showContextPopup({
+                    contextPopup.show({
                         target: e.target,
                         content: <VerseContextButtons verse={aya_id} />,
                     });

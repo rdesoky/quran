@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import { quranText } from "../../App";
 import { AppContext } from "../../context/App";
 import useSuraName from "../../hooks/useSuraName";
+import { Refs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import {
     ayaID,
@@ -41,10 +42,8 @@ import {
 import { selectAudioSource } from "../../store/playerSlice";
 import { selectLang } from "../../store/settingsSlice";
 import { closePopup, showToast } from "../../store/uiSlice";
-import { Refs } from "../../RefsProvider";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { HifzRanges, SuraHifzChart } from "../Hifz";
-import { pushMessageBox, setMessageBox } from "../MessageBox";
 import SuraName from "../SuraName";
 import { AddHifz } from "./Favorites";
 import { TafseerView } from "./Tafseer";
@@ -350,6 +349,7 @@ export const SuraIndexCell = memo(
         const intl = useIntl();
         const history = useHistory();
         const audio = useContext(Refs).get("audio");
+        const msgBox = useContext(Refs).get("msgBox");
         const selectStart = useSelector(selectStartSelection);
 
         const checkClosePopup = () => {
@@ -384,7 +384,7 @@ export const SuraIndexCell = memo(
                 checkClosePopup();
                 // app.gotoSura(suraIndex);
                 dispatch(gotoSura(history, suraIndex));
-                setMessageBox({
+                msgBox.set({
                     title: <Message id="update_hifz" />,
                     content: <AddHifz />,
                 });
@@ -518,6 +518,7 @@ export const BookmarkListItem = ({
     const intl = useIntl();
     const history = useHistory();
     const audio = useContext(Refs).get("audio");
+    const msgBox = useContext(Refs).get("msgBox");
     const audioSource = useSelector(selectAudioSource(verse));
 
     useEffect(() => {
@@ -555,7 +556,7 @@ export const BookmarkListItem = ({
     };
 
     const removeBookmark = (e) => {
-        pushMessageBox({
+        msgBox.push({
             title: <Message id="are_you_sure" />,
             content: <Message id="delete_bookmark" />,
             onYes: () => {
@@ -604,7 +605,7 @@ export const BookmarkListItem = ({
     }
 
     const download = (e) => {
-        setMessageBox({
+        msgBox.set({
             title: <Message id="download_verse_audio" />,
             content: <Message id="download_guide" />,
         });
