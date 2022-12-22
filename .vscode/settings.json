@@ -10,7 +10,8 @@
     "editor.insertSpaces": false,
     "prettier.tabWidth": 4,
     "editor.detectIndentation": false,
-    "editor.renderWhitespace": "all",
+    "editor.renderWhitespace": "none",
     "editor.useTabStops": false,
-    "eslint.alwaysShowStatus": true
+    "eslint.alwaysShowStatus": true,
+    "editor.tabSize": 2
 }

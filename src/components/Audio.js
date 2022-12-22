@@ -1,14 +1,6 @@
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import {
-    AudioState,
-    selectAudioSource,
-    selectAudioState,
-    selectPlayingAya,
-    setAudioState,
-    setPlayingAya,
-} from "../store/playerSlice";
-import { selectFollowPlayer, selectRepeat } from "../store/settingsSlice";
+import { useHistory } from "react-router-dom";
 import { AudioRepeat } from "../context/Player";
 import {
     ayaID,
@@ -19,7 +11,18 @@ import {
     getPartIndexByAyaId,
     TOTAL_VERSES,
 } from "../services/QData";
-import { selectRange } from "../store/navSlice";
+import { gotoAya, selectSelectedRange } from "../store/navSlice";
+import {
+    AudioState,
+    selectAudioSource,
+    selectAudioState,
+    selectPlayingAya,
+    setAudioState,
+    setPlayingAya,
+    setRemainingTime,
+    setTrackDuration,
+} from "../store/playerSlice";
+import { selectFollowPlayer, selectRepeat } from "../store/settingsSlice";
 
 export const AudioContext = createContext({});
 
@@ -32,9 +35,28 @@ export function Audio({ children }) {
     const followPlayer = useSelector(selectFollowPlayer);
     const repeat = useSelector(selectRepeat);
     const store = useStore();
-    const selectedRange = useSelector(selectRange);
+    const selectedRange = useSelector(selectSelectedRange);
+    const history = useHistory();
+    let audio = audioRef.current;
 
-    let player = audioRef.current;
+    useEffect(() => {
+        let updateRemainingTimeInterval;
+        const updateRemainingTime = () => {
+            dispatch(setRemainingTime(audio?.duration - audio?.currentTime));
+        };
+        if (audioState === AudioState.playing) {
+            updateRemainingTimeInterval = setInterval(
+                updateRemainingTime,
+                1000
+            );
+        }
+        return () => {
+            if (updateRemainingTimeInterval) {
+                clearInterval(updateRemainingTimeInterval);
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [audioState, dispatch]);
 
     const offsetPlayingAya = (offset) => {
         let nextAya = playingAya;
@@ -90,20 +112,20 @@ export function Audio({ children }) {
     };
 
     const onPlaying = () => {
-        dispatch(setPlayingState(AudioState.playing));
+        dispatch(setAudioState(AudioState.playing));
     };
     const onWaiting = () => {
-        dispatch(setPlayingState(AudioState.buffering));
+        dispatch(setAudioState(AudioState.buffering));
     };
     const onPause = () => {
-        dispatch(setPlayingState(AudioState.paused));
+        dispatch(setAudioState(AudioState.paused));
     };
 
     const onEnded = () => {
         const nextAya = offsetPlayingAya(1);
         dispatch(setPlayingAya(nextAya));
         if (nextAya === -1) {
-            dispatch(setPlayingState(AudioState.stopped));
+            dispatch(setAudioState(AudioState.stopped));
         } else {
             play(nextAya);
         }
@@ -111,30 +133,40 @@ export function Audio({ children }) {
 
     const play = (ayaId) => {
         const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
-        player.setAttribute("src", selectAudioSource(ayaId)(store.getState()));
-        player.play();
+        audio.setAttribute("src", selectAudioSource(ayaId)(store.getState()));
+        audio.play();
         dispatch(setPlayingAya(playedAya));
         if (followPlayer) {
-            //dispatch(setc)
+            dispatch(gotoAya(history, playedAya, { sel: true }));
         }
     };
 
     const pause = () => {
-        player?.pause();
+        audio?.pause();
     };
 
     const stop = () => {
-        player?.stop();
+        audio?.stop();
+    };
+
+    const trackRemainingTime = () => {
+        return audio?.duration - audio?.currentTime;
+    };
+    const onDurationChange = (e) => {
+        dispatch(setTrackDuration(audio.duration));
     };
 
     return (
-        <AudioContext.Provider value={{ play, pause, stop }}>
+        <AudioContext.Provider
+            value={{ play, pause, stop, trackRemainingTime }}
+        >
             <audio
                 ref={audioRef}
                 onPlaying={onPlaying}
                 onEnded={onEnded}
                 onPause={onPause}
                 onWaiting={onWaiting}
+                onDurationChange={onDurationChange}
             />
             {children}
         </AudioContext.Provider>

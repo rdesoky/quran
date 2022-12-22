@@ -281,7 +281,7 @@ function useInitApp() {
             offHifzUpdate?.();
             offActivityUpdate?.();
         };
-    }, [user]);
+    }, [dispatch, user]);
 }
 
 export const quranText = [];
