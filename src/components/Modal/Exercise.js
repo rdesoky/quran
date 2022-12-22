@@ -52,6 +52,7 @@ import {
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "./Settings";
+import { Refs } from "../../RefsProvider";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -90,7 +91,7 @@ const Exercise = () => {
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
-    const audio = useContext(AudioContext);
+    const audio = useContext(Refs).get("audio");
     const playingAya = useSelector(selectPlayingAya);
     const repeat = useSelector(selectRepeat);
     const followPlayer = useSelector(selectFollowPlayer);
