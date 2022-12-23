@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { AudioState, selectAudioState } from "../store/playerSlice";
 import { selectPopup } from "../store/uiSlice";
-import { CommandButton } from "./Modal/Commands";
+import { CommandButton } from "./CommandButton";
 
 export const VerseContextButtons = ({ verse }) => {
     const audioState = useSelector(selectAudioState);

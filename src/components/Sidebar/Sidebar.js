@@ -9,7 +9,7 @@ import {
     selectMenuExpanded,
 } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
-import { CommandButton } from "./../Modal/Commands";
+import { CommandButton } from "../CommandButton";
 import "./Sidebar.scss";
 
 function Sidebar() {

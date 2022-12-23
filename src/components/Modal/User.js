@@ -1,12 +1,10 @@
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { downloadImage } from "../../services/utils";
 import { selectUser, signOut } from "../../store/dbSlice";
 import { selectAppHeight } from "../../store/layoutSlice";
 import { ActivityChart } from "../Hifz";
+import { UserImage } from "../UserImage";
 import Login from "./../Login";
 
 const User = () => {
@@ -51,34 +49,6 @@ const User = () => {
                 <ActivityChart activity="chars" />
             </div>
         </>
-    );
-};
-
-export const UserImage = () => {
-    const [imageUrl, setImageUrl] = useState(null);
-    const user = useSelector(selectUser);
-
-    useEffect(() => {
-        if (user) {
-            const url = user.photoURL;
-            downloadImage(url)
-                .then(() => {
-                    setImageUrl(url);
-                })
-                .catch((e) => {});
-        } else {
-            setImageUrl(null);
-        }
-    }, [user, user?.photoURL]);
-
-    return imageUrl ? (
-        <span>
-            <img className="UserImage" src={imageUrl} alt="User" />
-        </span>
-    ) : (
-        <span className="UserIcon">
-            <Icon icon={faUserCircle} />
-        </span>
     );
 };
 

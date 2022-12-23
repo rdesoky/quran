@@ -34,6 +34,7 @@ import {
     selectStartSelection,
     setSelectStart,
     showMask,
+    startMask,
 } from "../../store/navSlice";
 import {
     closePopup,
@@ -274,7 +275,7 @@ export default function Pager() {
                     break;
                 case "KeyM":
                     if (!vEditorOn) {
-                        dispatch(showMask());
+                        dispatch(startMask(history));
                         // app.setMaskStart();
                     }
                     break;

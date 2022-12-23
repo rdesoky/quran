@@ -7,8 +7,8 @@ import {
     selectAudioState,
     selectPlayingAya,
 } from "../../store/playerSlice";
+import { CommandButton } from "../CommandButton";
 import { ayaIdInfo } from "./../../services/QData";
-import { CommandButton } from "./../Modal/Commands";
 import "./AudioPlayer.scss";
 
 const PlayerButtons = ({
