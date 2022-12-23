@@ -22,6 +22,7 @@ import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
 import "./App.scss";
 import PageRedirect from "./components/Pager/PageRedirect";
+import SuraNames from "./providers/SuraNames";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -127,12 +128,13 @@ export default function App() {
                             </Switch>
                             <Sidebar />
                             <PopupView />
-                            <ToastMessage />
                             <ContextPopup />
                             <MessageBox />
-                            <Audio />
                         </Router>
                     </div>
+                    <ToastMessage />
+                    <Audio />
+                    <SuraNames />
                 </RefsProvider>
             </IntlProvider>
         )

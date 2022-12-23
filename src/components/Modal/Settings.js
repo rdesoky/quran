@@ -53,7 +53,6 @@ const Settings = () => {
     let popupBody;
 
     const recitersList = ListReciters("ayaAudio");
-    // const recitersList = useSelector(selectReciter);
     const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
     const recitersListWidth = popupWidth - outerMargin - scrollBarWidth;
     const recitersPerRow = Math.floor(recitersListWidth / buttonWidth);
