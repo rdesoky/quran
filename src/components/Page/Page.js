@@ -9,10 +9,11 @@ import {
     selectPageWidth,
 } from "../../store/layoutSlice";
 import { hideMenu } from "../../store/uiSlice";
+import { HifzSegments } from "../HifzSegments";
 import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
 import PageHeader from "./PageHeader";
-import VerseLayout, { HifzSegments } from "./VerseLayout";
+import VerseLayout from "./VerseLayout";
 
 const Page = ({
     index: pageIndex,

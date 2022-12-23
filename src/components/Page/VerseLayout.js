@@ -4,17 +4,8 @@ import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
-import {
-    ayaIdPage,
-    getPageFirstAyaId,
-    getPageSuras,
-} from "../../services/QData";
-import { selectHifzRanges } from "../../store/dbSlice";
-import {
-    selectAppHeight,
-    selectPageHeight,
-    selectPageMargin,
-} from "../../store/layoutSlice";
+import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
+import { selectAppHeight, selectPageMargin } from "../../store/layoutSlice";
 import {
     extendSelection,
     gotoAya,
@@ -378,61 +369,6 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 {renderMask()}
             </div>
         </>
-    );
-};
-
-export const HifzSegments = ({ page, versesInfo }) => {
-    const pageHeight = useSelector(selectPageHeight);
-    const page_suras = getPageSuras(page);
-    return (
-        <div className="HifzSegments">
-            {page_suras.map((sura) => (
-                <HifzSegment
-                    key={page.toString() + "-" + sura.toString()}
-                    sura={sura}
-                    page={page}
-                    pageHeight={pageHeight}
-                    versesInfo={versesInfo}
-                />
-            ))}
-        </div>
-    );
-};
-
-export const HifzSegment = ({ sura, page, pageHeight, versesInfo }) => {
-    const hifzRanges = useSelector(selectHifzRanges);
-    const suraVerses = versesInfo.filter((i) => i.sura - 1 === sura);
-    if (suraVerses.length === 0) {
-        return "";
-    }
-
-    // const { hifzRanges } = app;
-
-    const hifzRange = hifzRanges?.find((r) => {
-        return r.sura === sura && page >= r.startPage && page <= r.endPage;
-    });
-
-    if (hifzRange === undefined) {
-        return "";
-    }
-
-    const dayLength = 24 * 60 * 60 * 1000;
-    const age = Math.floor((Date.now() - hifzRange.date) / dayLength);
-    const firstVerse = suraVerses[0];
-    const lastVerse = suraVerses[suraVerses.length - 1];
-    const sline = parseInt(firstVerse.sline);
-    const top = (pageHeight * sline) / 15;
-    const eline = parseInt(lastVerse.eline);
-    const bottom = (pageHeight * (eline + 1)) / 15;
-    const height = bottom - top;
-    const ageClass =
-        age <= 7 ? "GoodHifz" : age <= 14 ? "FairHifz" : "WeakHifz";
-
-    return (
-        <div
-            className={`HifzSegment ${ageClass}`}
-            style={{ top, height }}
-        ></div>
     );
 };
 

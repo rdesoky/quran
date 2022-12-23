@@ -12,7 +12,7 @@ import { Audio } from "./components/Audio";
 import { ContextPopup } from "./components/ContextPopup";
 import { MessageBox } from "./components/MessageBox";
 import PopupView from "./components/Modal/PopupView";
-import Pager, { PageRedirect } from "./components/Pager/Pager";
+import Pager from "./components/Pager/Pager";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { ToastMessage } from "./components/Widgets";
 import RefsProvider from "./RefsProvider";
@@ -21,6 +21,7 @@ import { onResize, selectAppSize } from "./store/layoutSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
 import "./App.scss";
+import PageRedirect from "./components/Pager/PageRedirect";
 
 // Firebase configuration
 const firebaseConfig = {

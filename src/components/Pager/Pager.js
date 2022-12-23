@@ -48,22 +48,6 @@ import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
 import "./Pager.scss";
 
-export function PageRedirect() {
-    const params = useParams();
-    const dispatch = useDispatch();
-    let { aya } = params;
-    let pageNum = 1;
-
-    if (aya !== undefined) {
-        setTimeout(() => {
-            // app.selectAya(parseInt(aya));
-            dispatch(selectAya(parseInt(aya)));
-        }, 10);
-        pageNum = ayaIdPage(aya) + 1;
-    }
-    return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
-}
-
 export default function Pager() {
     const pagesCount = useSelector(selectPagesCount);
     const isWide = useSelector(selectIsWide);
