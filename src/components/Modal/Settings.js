@@ -93,7 +93,7 @@ const Settings = () => {
             if (
                 [AudioState.playing, AudioState.buffering].includes(audioState)
             ) {
-                audio.play(playingAya); //restart playing aya
+                audio.play(playingAya, false); //restart playing aya, don't setup the repeat range
             } else if ([AudioState.paused].includes(audioState)) {
                 audio.stop(); //change pause to stop
             }
