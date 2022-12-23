@@ -62,7 +62,7 @@ import {
 import { selectReciter } from "../../store/settingsSlice";
 import {
     hideMenu,
-    selectShowMenu,
+    selectMenuExpanded,
     showPopup,
     showToast,
     toggleMenu,
@@ -118,7 +118,7 @@ const getIcon = (commandId, isBookmarked, showMenu, maskStart) => {
 };
 
 const CommandIcon = ({ command }) => {
-    const showMenu = useSelector(selectShowMenu);
+    const showMenu = useSelector(selectMenuExpanded);
     const maskStart = useSelector(selectMaskStart);
     const reciter = useSelector(selectReciter);
     const audioState = useSelector(selectAudioState);
@@ -233,7 +233,7 @@ const CommandButton = ({
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
     const dispatch = useDispatch();
-    const menuExpanded = useSelector(selectShowMenu);
+    const menuExpanded = useSelector(selectMenuExpanded);
     const intl = useIntl();
     const selectStart = useSelector(selectStartSelection);
     const selectEnd = useSelector(selectEndSelection);
@@ -360,7 +360,9 @@ const CommandButton = ({
                     trigger,
                 });
                 dispatch(showPopup(command));
-                dispatch(hideMenu());
+                if (menuExpanded) {
+                    dispatch(hideMenu());
+                }
                 return;
         }
         // app.pushRecentCommand(command);
@@ -368,7 +370,9 @@ const CommandButton = ({
         //     app.closePopup();
         // }
         // app.setShowMenu(false);
-        dispatch(hideMenu());
+        if (menuExpanded) {
+            dispatch(hideMenu());
+        }
     };
 
     const renderLabel = () => {

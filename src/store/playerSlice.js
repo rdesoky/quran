@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GetAudioURL } from "../services/AudioData";
 
-import { ayaIdInfo } from "../services/QData";
+import { ayaIdInfo, TOTAL_VERSES } from "../services/QData";
 import { selectSelectedRange } from "./navSlice";
 import { selectReciter } from "./settingsSlice";
 
-const sliceName = "player";
+const sliceName = "audio";
 
 export const AudioState = {
     stopped: "stopped",
@@ -16,12 +16,12 @@ export const AudioState = {
 };
 
 const initialState = {
-    visible: false,
     audioState: AudioState.stopped,
     playingAya: -1,
-    rangeStart: -1,
-    rangeEnd: -1,
-    rangeType: 0,
+    repeat: {
+        start: 0,
+        end: TOTAL_VERSES,
+    },
     trackDuration: 0,
 };
 
@@ -45,6 +45,10 @@ const slice = createSlice({
         setRemainingTime: (slice, { payload: remainingTime }) => {
             slice.remainingTime = remainingTime;
         },
+        setRepeatRange: (slice, { payload: { start, end } }) => {
+            slice.repeat.start = start;
+            slice.repeat.end = end;
+        },
     },
 });
 
@@ -56,14 +60,16 @@ export const {
     setPlayingAya,
     setTrackDuration,
     setRemainingTime,
+    setRepeatRange,
 } = slice.actions;
 
+export const selectRepeatRange = (state) => state[sliceName].repeat;
 export const selectPlayingAya = (state) => state[sliceName].playingAya;
 export const selectAudioState = (state) => state[sliceName].audioState;
 export const selectAudioSource = (ayaId) => (state) => {
     const reciter = selectReciter(state);
     let targetAya = ayaId;
-    if (ayaId !== undefined) {
+    if (ayaId === undefined) {
         targetAya = selectPlayingAya(state);
     }
     if (targetAya === -1) {
@@ -79,7 +85,6 @@ export const selectAudioSource = (ayaId) => (state) => {
 export const selectTrackDuration = (state) => state[sliceName].trackDuration;
 export const selectRemainingTime = (state) => state[sliceName].remainingTime;
 
-//thunks
 // export const play = (audio, ayaId) => (dispatch, getState) => {
 //     const state = getState();
 //     const audioState = selectAudioState(state);

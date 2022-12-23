@@ -60,11 +60,11 @@ export const ayaIdInfo = (aya_id) => {
     for (let s = 0; s < sura_info.length; s++) {
         let ac = sura_info[s].ac;
         if (id + ac > aya_id) {
-            return { sura: s, aya: aya_id - id };
+            return { sura: s, aya: aya_id - id, ac };
         }
         id += ac;
     }
-    return { sura: 0, aya: 0 };
+    return { sura: 0, aya: 0, ac: 5 };
 };
 
 /**

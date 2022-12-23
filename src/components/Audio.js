@@ -8,20 +8,25 @@ import {
     ayaIdInfo,
     ayaIdPage,
     getPageFirstAyaId,
+    getPageLastAyaId,
     getPartFirstAyaId,
     getPartIndexByAyaId,
+    TOTAL_PARTS,
     TOTAL_VERSES,
 } from "../services/QData";
 import { getSuraName } from "../services/utils";
+import { selectActivePage } from "../store/layoutSlice";
 import { gotoPage, selectSelectedRange } from "../store/navSlice";
 import {
     AudioState,
     selectAudioSource,
     selectAudioState,
     selectPlayingAya,
+    selectRepeatRange,
     setAudioState,
     setPlayingAya,
     setRemainingTime,
+    setRepeatRange,
     setTrackDuration,
 } from "../store/playerSlice";
 import {
@@ -42,6 +47,8 @@ export function Audio() {
     const selectedRange = useSelector(selectSelectedRange);
     const history = useHistory();
     const intl = useIntl();
+    const repeatRange = useSelector(selectRepeatRange);
+    const activePageIndex = useSelector(selectActivePage);
     let audio = audioRef.current;
 
     useEffect(() => {
@@ -76,60 +83,25 @@ export function Audio() {
     }, [audioState, dispatch]);
 
     const offsetPlayingAya = (offset) => {
-        let nextAya = playingAya;
-
-        switch (repeat) {
-            case AudioRepeat.verse: //single aya
-                return -1;
-            case AudioRepeat.selection: //selection
-                nextAya += offset;
-                if (
-                    nextAya > selectedRange.end ||
-                    nextAya < selectedRange.start
-                ) {
-                    nextAya = selectedRange.start;
-                }
-                break;
-            case AudioRepeat.page: //page
-                const currPage = ayaIdPage(nextAya);
-                const nextPage = ayaIdPage(nextAya + offset);
-                if (nextPage !== currPage) {
-                    nextAya = getPageFirstAyaId(currPage);
-                } else {
-                    nextAya += offset;
-                }
-                break;
-            case AudioRepeat.sura: //sura
-                const currSura = ayaIdInfo(playingAya).sura;
-                const nextSura = ayaIdInfo(playingAya + offset).sura;
-                if (currSura !== nextSura) {
-                    nextAya = ayaID(currSura, 0);
-                } else {
-                    nextAya += offset;
-                }
-                break;
-            case AudioRepeat.part: //part
-                const currPart = getPartIndexByAyaId(playingAya);
-                const nextPart = getPartIndexByAyaId(playingAya + offset);
-                if (currPart !== nextPart) {
-                    nextAya = getPartFirstAyaId(currPart);
-                } else {
-                    nextAya += offset;
-                }
-                break;
-            default:
-                //.noStop
-                nextAya += offset;
+        if (repeatRange.end === -1) {
+            return -1; //no repeat
         }
 
-        if (nextAya < TOTAL_VERSES) {
+        let nextAya = playingAya + offset;
+        if (nextAya <= repeatRange.end) {
             return nextAya;
         }
-        return -1;
+        return repeatRange.start;
     };
 
     const onPlaying = () => {
         dispatch(setAudioState(AudioState.playing));
+        if (followPlayer) {
+            const playingPage = ayaIdPage(playingAya);
+            if (activePageIndex !== playingPage) {
+                dispatch(gotoPage(history, playingPage, { sel: false }));
+            }
+        }
     };
     const onWaiting = () => {
         dispatch(setAudioState(AudioState.buffering));
@@ -140,29 +112,74 @@ export function Audio() {
 
     const onEnded = () => {
         const nextAya = offsetPlayingAya(1);
-        dispatch(setPlayingAya(nextAya));
         if (nextAya === -1) {
             dispatch(setAudioState(AudioState.stopped));
-        } else {
-            play(nextAya);
+            return;
         }
+        play(nextAya, false);
     };
 
+    const setupRepeatRange = useCallback(
+        (playedAya, repeat) => {
+            let start, end;
+            switch (repeat) {
+                case AudioRepeat.selection:
+                    start = selectedRange.start;
+                    end = selectedRange.end;
+                    break;
+                case AudioRepeat.page:
+                    const page = ayaIdPage(playedAya);
+                    start = getPageFirstAyaId(page);
+                    end = getPageLastAyaId(page);
+                    break;
+                case AudioRepeat.sura:
+                    const ayaInfo = ayaIdInfo(playedAya);
+                    start = ayaID(ayaInfo.sura, 0);
+                    end = start + ayaInfo.ac - 1;
+                    break;
+                case AudioRepeat.part:
+                    const currPart = getPartIndexByAyaId(playedAya);
+                    start = getPartFirstAyaId(currPart);
+                    end =
+                        currPart + 1 < TOTAL_PARTS
+                            ? getPartFirstAyaId(currPart + 1) - 1
+                            : TOTAL_VERSES - 1;
+                    break;
+                case AudioRepeat.noStop:
+                    start = 0;
+                    end = TOTAL_VERSES - 1;
+                    break;
+                case AudioRepeat.noRepeat: //no repeat
+                // eslint-disable-next-line no-fallthrough
+                default:
+                    start = playedAya;
+                    end = -1;
+            }
+            dispatch(setRepeatRange({ start, end }));
+        },
+        [dispatch, selectedRange.end, selectedRange.start]
+    );
+
     const play = useCallback(
-        (ayaId) => {
+        (ayaId, setupRepeat = true) => {
             const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
             const audioSource = selectAudioSource(playedAya)(store.getState());
             audioRef.current.setAttribute("src", audioSource);
             audioRef.current.play();
-            dispatch(setPlayingAya(playedAya));
-            if (followPlayer) {
-                // dispatch(gotoAya(history, playedAya, { sel: true }));
-                dispatch(
-                    gotoPage(history, ayaIdPage(playedAya), { sel: false })
-                );
+            if (ayaId !== undefined) {
+                dispatch(setPlayingAya(playedAya));
+            }
+            switch (setupRepeat) {
+                case false: //no setup
+                    break;
+                case true: //auto setup
+                    setupRepeatRange(playedAya, repeat);
+                    break;
+                default: //setup with given repeat
+                    setupRepeatRange(playedAya, setupRepeat);
             }
         },
-        [dispatch, followPlayer, history, selectedRange.start, store]
+        [selectedRange.start, repeat, store, dispatch, setupRepeatRange]
     );
 
     const pause = useCallback(() => {
@@ -186,8 +203,9 @@ export function Audio() {
             stop,
             pause,
             resume,
+            setupRepeatRange,
         });
-    }, [pause, play, stop, refs, resume]);
+    }, [pause, play, refs, resume, setupRepeatRange, stop]);
 
     const onDurationChange = (e) => {
         dispatch(setTrackDuration(audio.duration));

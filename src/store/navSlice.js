@@ -27,6 +27,9 @@ const slice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
+        setSelectedAya: (slice, action) => {
+            slice.selectStart = slice.selectEnd = action.payload;
+        },
         setSelectStart: (slice, action) => {
             slice.selectStart = action.payload;
         },
@@ -67,6 +70,7 @@ export const {
     showMask,
     hideMask,
     setMaskShift,
+    setSelectedAya,
 } = slice.actions;
 
 //selectors
@@ -107,8 +111,7 @@ export const gotoAya =
             ayaId = selectStartSelection(state);
         }
         if (sel) {
-            dispatch(setSelectStart(ayaId));
-            dispatch(setSelectEnd(ayaId));
+            dispatch(setSelectedAya(ayaId));
         }
         const pageIndex = ayaIdPage(ayaId);
         dispatch(gotoPage(history, { index: pageIndex, replace, sel: false }));

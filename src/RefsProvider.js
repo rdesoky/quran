@@ -6,10 +6,16 @@ export default function RefsProvider({ children }) {
     const refs = useRef({});
 
     const addRef = useCallback((id, ref) => {
-        refs.current[id] = ref;
+        if (refs.current[id] !== undefined) {
+            Object.assign(refs.current[id], ref);
+        } else {
+            refs.current[id] = ref;
+        }
+        // console.log(`RefsProvider/${id} add`);
     }, []);
 
     const getRef = useCallback((id) => {
+        // console.log(`RefsProvider/${id} get`);
         return refs.current[id];
     }, []);
 

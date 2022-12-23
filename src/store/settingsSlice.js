@@ -107,5 +107,5 @@ export const AudioRepeat = {
     page: 2,
     sura: 3,
     part: 4,
-    verse: 5,
+    noRepeat: 5,
 };

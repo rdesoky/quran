@@ -26,6 +26,7 @@ import {
     selectEndSelection,
     selectStartSelection,
 } from "../store/navSlice";
+import { AudioRepeat } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import { AddHifz } from "./AddHifz";
 import { SuraHifzChart } from "./Hifz";
@@ -111,10 +112,7 @@ export const SuraIndexCell = ({
     const onClickPlay = (e) => {
         audio.stop();
         onClickSura(e);
-        // setTimeout(() => {
-        //     audio.play();
-        // }, 500);
-        audio.play(lesserOf(selectStart, selectEnd));
+        audio.play(ayaID(suraIndex, 0), AudioRepeat.sura);
         analytics.logEvent("play_audio", {
             trigger,
             ...verseLocation(ayaID(suraIndex, 0)),

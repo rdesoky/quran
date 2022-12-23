@@ -109,27 +109,27 @@ const Exercise = () => {
         };
     }, [dispatch]);
 
-    useEffect(() => {
-        if (repeat !== AudioRepeat.verse) {
-            setSavedRepeat(repeat);
-            dispatch(setRepeat(AudioRepeat.verse));
-        }
-        if (followPlayer !== true) {
-            setSavedFollowPlayer(followPlayer);
-            dispatch(setFollowPlayer(true));
-        }
-    }, [repeat, followPlayer, dispatch]);
+    // useEffect(() => {
+    //     if (repeat !== AudioRepeat.noRepeat) {
+    //         setSavedRepeat(repeat);
+    //         dispatch(setRepeat(AudioRepeat.noRepeat));
+    //     }
+    //     if (followPlayer !== true) {
+    //         setSavedFollowPlayer(followPlayer);
+    //         dispatch(setFollowPlayer(true));
+    //     }
+    // }, [repeat, followPlayer, dispatch]);
 
-    useEffect(() => {
-        return () => {
-            if (savedRepeat !== undefined) {
-                dispatch(setRepeat(savedRepeat));
-            }
-            if (savedFollowPlayer !== undefined) {
-                dispatch(setFollowPlayer(savedFollowPlayer));
-            }
-        };
-    }, [dispatch, savedFollowPlayer, savedRepeat]);
+    // useEffect(() => {
+    //     return () => {
+    //         if (savedRepeat !== undefined) {
+    //             dispatch(setRepeat(savedRepeat));
+    //         }
+    //         if (savedFollowPlayer !== undefined) {
+    //             dispatch(setFollowPlayer(savedFollowPlayer));
+    //         }
+    //     };
+    // }, [dispatch, savedFollowPlayer, savedRepeat]);
 
     const isNarrowLayout = () => {
         return !(isWide || isCompact || pagesCount > 1);
@@ -203,7 +203,7 @@ const Exercise = () => {
 
     const startReciting = (e) => {
         // setCurrStep(Step.reciting);
-        audio.play(verse);
+        audio.play(verse, AudioRepeat.noRepeat);
         //app.setMaskStart(verse + 1, true);
         analytics.logEvent("exercise_play_audio", {
             trigger,
@@ -396,7 +396,7 @@ const Exercise = () => {
     const reciteNextVerse = (e) => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         moveToNextVerse();
-        audio.play(verse + 1);
+        audio.play(verse + 1, AudioRepeat.noRepeat);
         analytics.logEvent("recite_next_verse", { trigger });
         // app.setMaskStart(verse + 2, true);
     };

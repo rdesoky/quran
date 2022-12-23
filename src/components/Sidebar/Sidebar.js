@@ -6,7 +6,7 @@ import {
     hideMenu,
     selectPopup,
     selectRecentCommands,
-    selectShowMenu,
+    selectMenuExpanded,
 } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { CommandButton } from "./../Modal/Commands";
@@ -15,9 +15,10 @@ import "./Sidebar.scss";
 function Sidebar() {
     const dispatch = useDispatch();
     const popup = useSelector(selectPopup);
-    const isShowMenu = useSelector(selectShowMenu);
+    const isShowMenu = useSelector(selectMenuExpanded);
     const isNarrow = useSelector(selectIsNarrow);
     const recentCommands = useSelector(selectRecentCommands);
+    const menuExpanded = useSelector(selectMenuExpanded);
     // let recentDiv = null;
 
     // useEffect(() => {
@@ -38,7 +39,9 @@ function Sidebar() {
             style={{ pointerEvents: isShowMenu ? "fill" : "none" }}
             onClick={(e) => {
                 // app.setExpandedMenu(false);
-                dispatch(hideMenu());
+                if (menuExpanded) {
+                    dispatch(hideMenu());
+                }
             }}
         >
             <CommandButton

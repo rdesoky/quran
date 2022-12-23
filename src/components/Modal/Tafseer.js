@@ -64,11 +64,11 @@ const Tafseer = () => {
         }
     }, [selectStart, maskStart]);
 
-    useEffect(() => {
-        if (playingAya !== -1) {
-            setVerse(playingAya);
-        }
-    }, [playingAya]);
+    // useEffect(() => {
+    //     if (playingAya !== -1) {
+    //         setVerse(playingAya);
+    //     }
+    // }, [playingAya]);
 
     return (
         <>
