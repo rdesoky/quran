@@ -2,8 +2,6 @@ import firebase from "firebase";
 import { Component, createContext } from "react";
 import { injectIntl } from "react-intl";
 import { withRouter } from "react-router-dom";
-import { quranNormalizedText } from "../App";
-import { dateKey, num2string } from "./../services/utils";
 
 // const rc = localStorage.getItem("commands");
 // const recentCommands = rc ? JSON.parse(rc) : [];
@@ -199,7 +197,7 @@ class AppProvider extends Component {
     //             //intersecting with tailed range,
     //             //append its pages (beyond our last page) and revs, and delete it
     //             newRange.endPage = Math.max(newRange.endPage, r.endPage);
-    //             //Calcualte partial revs
+    //             //calculate partial revs
     //             newRange.revs = mergeRangesRevs(newRange, r);
     //             newRange.pages = newRange.endPage - newRange.startPage + 1;
     //             //delete merged range
@@ -210,7 +208,7 @@ class AppProvider extends Component {
     //             newRange.startPage > r.startPage &&
     //             newRange.startPage <= r.endPage + 1
     //         ) {
-    //             //inersecting with prior range, add additional pages to it, don't add new one
+    //             //intersecting with prior range, add additional pages to it, don't add new one
     //             if (newRange.endPage > r.endPage) {
     //                 //Not completely inside an old range
     //                 let oldRange = Object.assign({}, r);

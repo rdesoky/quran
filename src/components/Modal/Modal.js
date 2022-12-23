@@ -16,7 +16,7 @@ import { selectSidebarWidth } from "../../store/uiSlice";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
-const Modal = ({ onClose, children, show, name, modeless }) => {
+const Modal = ({ onClose, children, show, name }) => {
     const pagerWidth = useSelector(selectPagerWidth);
     const activeSide = useSelector(selectActiveSide);
     const isCompact = useSelector(selectIsCompact);
@@ -69,11 +69,6 @@ const Modal = ({ onClose, children, show, name, modeless }) => {
         }
         return 0;
     };
-
-    // const isBlockMouse = () => {
-    //     // return modeless === true || isWide || isCompact || show === false;
-    //     return pagesCount === 1 && !isCompact;
-    // };
 
     return (
         <Transition>

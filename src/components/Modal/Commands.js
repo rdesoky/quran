@@ -33,7 +33,6 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import {
     copy2Clipboard,
@@ -49,7 +48,6 @@ import {
 } from "../../store/dbSlice";
 import { selectIsNarrow } from "../../store/layoutSlice";
 import {
-    gotoAya,
     selectEndSelection,
     selectMaskStart,
     selectSelectedText,
@@ -236,7 +234,6 @@ const CommandButton = ({
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectShowMenu);
     const intl = useIntl();
-    const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
     const selectEnd = useSelector(selectEndSelection);
     const maskStart = useSelector(selectMaskStart);
@@ -274,7 +271,7 @@ const CommandButton = ({
                     reciter,
                     trigger,
                 });
-                dispatch(gotoAya(history, selectStart));
+                // dispatch(gotoAya(history, selectStart));
                 audio.play(lesserOf(selectStart, selectEnd));
                 // player.play();
                 return;

@@ -198,7 +198,7 @@ export const addHifzRange =
                 //intersecting with tailed range,
                 //append its pages (beyond our last page) and revs, and delete it
                 newRange.endPage = Math.max(newRange.endPage, r.endPage);
-                //Calcualte partial revs
+                //Calculate partial revs
                 newRange.revs = mergeRangesRevs(newRange, r);
                 newRange.pages = newRange.endPage - newRange.startPage + 1;
                 //delete merged range

@@ -72,6 +72,7 @@ const Settings = () => {
     const onChangeRepeat = ({ currentTarget }) => {
         const repeat = currentTarget.value;
         dispatch(setRepeat(parseInt(repeat)));
+        localStorage.setItem("repeat", repeat);
         analytics.logEvent("set_repeat", { repeat, trigger: popup });
     };
 
@@ -92,9 +93,12 @@ const Settings = () => {
         popupBody.scrollTop = 0;
         analytics.logEvent("set_reciter", { reciter, trigger: popup });
         if (playingAya) {
-            audio.stop();
-            if (audioState === AudioState.playing) {
-                setTimeout(() => audio.play(playingAya));
+            if (
+                [AudioState.playing, AudioState.buffering].includes(audioState)
+            ) {
+                audio.play(playingAya); //restart playing aya
+            } else if ([AudioState.paused].includes(audioState)) {
+                audio.stop(); //change pause to stop
             }
         }
     };

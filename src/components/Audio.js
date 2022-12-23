@@ -13,7 +13,7 @@ import {
     TOTAL_VERSES,
 } from "../services/QData";
 import { getSuraName } from "../services/utils";
-import { gotoAya, selectSelectedRange } from "../store/navSlice";
+import { gotoPage, selectSelectedRange } from "../store/navSlice";
 import {
     AudioState,
     selectAudioSource,
@@ -156,7 +156,10 @@ export function Audio() {
             audioRef.current.play();
             dispatch(setPlayingAya(playedAya));
             if (followPlayer) {
-                dispatch(gotoAya(history, playedAya, { sel: true }));
+                // dispatch(gotoAya(history, playedAya, { sel: true }));
+                dispatch(
+                    gotoPage(history, ayaIdPage(playedAya), { sel: false })
+                );
             }
         },
         [dispatch, followPlayer, history, selectedRange.start, store]

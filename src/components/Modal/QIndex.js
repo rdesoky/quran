@@ -568,8 +568,8 @@ export const BookmarkListItem = ({
 
     const playVerse = (e) => {
         // player.stop(true);
-        audio.stop(true);
-        dispatch(gotoAya(verse, { sel: true }));
+        audio.stop();
+        dispatch(gotoAya(history, verse, { sel: true }));
         audio.play(verse);
         analytics.logEvent("play_audio", {
             ...verseLocation(verse),

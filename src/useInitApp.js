@@ -1,7 +1,6 @@
 import firebase from "firebase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { onResize } from "./store/layoutSlice";
 import {
     selectUser,
     setActivities,
@@ -9,6 +8,7 @@ import {
     setHifzRanges,
     setUser,
 } from "./store/dbSlice";
+import { onResize } from "./store/layoutSlice";
 
 export default function useInitApp() {
     const dispatch = useDispatch();
