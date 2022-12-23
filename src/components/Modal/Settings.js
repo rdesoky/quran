@@ -65,10 +65,13 @@ const Settings = () => {
         (recitersListWidth - recitersPerRow * buttonWidth) / 2;
 
     const onChangeRepeat = ({ currentTarget }) => {
-        const repeat = currentTarget.value;
-        dispatch(setRepeat(parseInt(repeat)));
+        const repeat = parseInt(currentTarget.value);
+        dispatch(setRepeat(repeat));
         localStorage.setItem("repeat", repeat);
         analytics.logEvent("set_repeat", { repeat, trigger: popup });
+        if (playingAya) {
+            audio.setupRepeatRange(playingAya, repeat);
+        }
     };
 
     const updateFollowPlayer = (checked) => {

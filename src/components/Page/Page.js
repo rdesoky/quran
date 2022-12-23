@@ -8,7 +8,7 @@ import {
     selectPagesCount,
     selectPageWidth,
 } from "../../store/layoutSlice";
-import { hideMenu } from "../../store/uiSlice";
+import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
 import { HifzSegments } from "../HifzSegments";
 import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
@@ -32,6 +32,7 @@ const Page = ({
     const pageMargin = useSelector(selectPageMargin);
     const pageHeight = useSelector(selectPageHeight);
     const pageWidth = useSelector(selectPageWidth);
+    const menuExpanded = useSelector(selectMenuExpanded);
 
     let textAlign =
         pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
@@ -99,8 +100,9 @@ const Page = ({
             <Spinner visible={imageUrl === null} />
             <div
                 onClick={(e) => {
-                    // app.setShowMenu(false);
-                    dispatch(hideMenu());
+                    if (menuExpanded) {
+                        dispatch(hideMenu());
+                    }
                 }}
                 className="PageFrame"
                 style={{

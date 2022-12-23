@@ -19,7 +19,7 @@ const initSidebarCommands = [
 
 const initialState = {
     modalPopup: false,
-    showMenu: false,
+    menuExpanded: false,
 
     toastMessage: null,
 
@@ -48,13 +48,13 @@ const slice = createSlice({
         },
 
         showMenu: (slice) => {
-            slice.showMenu = true;
+            slice.menuExpanded = true;
         },
         hideMenu: (slice) => {
-            slice.showMenu = false;
+            slice.menuExpanded = false;
         },
         toggleMenu: (slice) => {
-            slice.showMenu = !slice.showMenu;
+            slice.menuExpanded = !slice.menuExpanded;
         },
         addRecentCommand: (slice, { payload }) => {
             slice.recentCommands = [payload, ...slice.recentCommands];
@@ -75,7 +75,7 @@ export const {
 export const selectRecentCommands = (state) => state[sliceName].recentCommands;
 export const selectMessageBox = (state) =>
     state[sliceName].messageBox?.[state[sliceName].messageBox.length];
-export const selectShowMenu = (state) => state[sliceName].showMenu;
+export const selectMenuExpanded = (state) => state[sliceName].menuExpanded;
 export const selectShowPopup = (state) => state[sliceName].showPopup;
 export const selectPopup = (state) => state[sliceName].popup;
 export const selectIsExercisePopupOn = (state) =>

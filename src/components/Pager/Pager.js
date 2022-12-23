@@ -38,7 +38,7 @@ import {
 import {
     closePopup,
     selectPopup,
-    selectShowMenu,
+    selectMenuExpanded,
     showMenu,
     showPopup,
 } from "../../store/uiSlice";
@@ -56,7 +56,7 @@ export default function Pager() {
     const pagerWidth = useSelector(selectPagerWidth);
     const dispatch = useDispatch();
     const isNarrow = useSelector(selectIsNarrow);
-    const expandedMenu = useSelector(selectShowMenu);
+    const expandedMenu = useSelector(selectMenuExpanded);
     const activePopup = useSelector(selectPopup);
     const modalPopup = useSelector(selectModalPopup);
     const history = useHistory();
