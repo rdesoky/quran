@@ -24,7 +24,6 @@ const Page = ({
     scaleX,
     shiftX,
 }) => {
-    // const app = useContext(AppContext);
     const [imageUrl, setImageUrl] = useState(null);
     const [versesInfo, setVerseInfo] = useState([]);
     const pagesCount = useSelector(selectPagesCount);

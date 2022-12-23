@@ -1,26 +1,30 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppContext } from "../../context/App";
 import { selectTopCommand } from "../../services/utils";
 import { selectIsNarrow } from "../../store/layoutSlice";
-import { hideMenu, selectPopup, selectShowMenu } from "../../store/uiSlice";
+import {
+    hideMenu,
+    selectPopup,
+    selectRecentCommands,
+    selectShowMenu,
+} from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { CommandButton } from "./../Modal/Commands";
 import "./Sidebar.scss";
 
 function Sidebar() {
     const dispatch = useDispatch();
-    const app = useContext(AppContext);
     const popup = useSelector(selectPopup);
     const isShowMenu = useSelector(selectShowMenu);
     const isNarrow = useSelector(selectIsNarrow);
-    let recentDiv = null;
+    const recentCommands = useSelector(selectRecentCommands);
+    // let recentDiv = null;
 
-    useEffect(() => {
-        if (recentDiv) {
-            recentDiv.scrollTop = 0;
-        }
-    }, [app.recentCommands, recentDiv]);
+    // useEffect(() => {
+    //     if (recentDiv) {
+    //         recentDiv.scrollTop = 0;
+    //     }
+    // }, [recentDiv]);
 
     useEffect(() => {
         if (popup === null) {
@@ -70,13 +74,10 @@ function Sidebar() {
                     </div>
                     <div
                         id="RecentCommands"
-                        ref={(ref) => {
-                            recentDiv = ref;
-                        }}
                         className="SidebarSection HiddenScroller"
                     >
-                        <div style={{ height: app.recentCommands.length * 50 }}>
-                            {app.recentCommands
+                        <div style={{ height: recentCommands.length * 50 }}>
+                            {recentCommands
                                 .filter((c) => c != null)
                                 .map((command, index) => (
                                     <CommandButton

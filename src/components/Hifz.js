@@ -5,7 +5,7 @@ import {
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -30,7 +30,6 @@ import {
 import { gotoAya, gotoPage, setSelectEnd, showMask } from "../store/navSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
-import { AppContext } from "./../context/App";
 import {
     ayaID,
     getArSuraName,
@@ -51,7 +50,6 @@ const HifzRange = ({
     setActiveRange,
     trigger = "hifz_range",
 }) => {
-    const app = useContext(AppContext);
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
     const suraName = useSuraName(range.sura);
@@ -68,9 +66,6 @@ const HifzRange = ({
     const suraInfo = sura_info[range.sura];
 
     useEffect(() => {
-        // const suraName = app.suraName(range.sura);
-        // setSuraName(suraName);
-
         const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
         const rangePagesCount = range.endPage - range.startPage + 1;
         let id = range.date
@@ -155,7 +150,6 @@ const HifzRange = ({
     const reviewRange = (e) => {
         const { startVerse } = selectRange();
         setTimeout(() => {
-            // app.setMaskStart();
             dispatch(showMask());
             checkClosePopup();
         });
@@ -396,10 +390,6 @@ const HifzRange = ({
 
 const HifzRanges = ({ filter, trigger = "hifz_index" }) => {
     const [activeRange, setActiveRange] = useState(null);
-    // const app = useContext(AppContext);
-    // const suraNames = app.suraNames();
-
-    // const { hifzRanges } = app;
     const hifzRanges = useSelector(selectHifzRanges);
 
     useEffect(() => {
@@ -577,7 +567,6 @@ const ActivityTooltip = ({ active, payload, label, activity }) => {
 
 const ActivityChart = ({ activity = "pages" }) => {
     const [data, setData] = useState([]);
-    const app = useContext(AppContext);
     const popupWidth = useSelector(selectPopupWidth);
     const dailyActivities = useSelector(selectDailyActivities);
 

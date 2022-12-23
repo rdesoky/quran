@@ -9,7 +9,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { ActivityChart } from "../Hifz";
-import { AppContext } from "./../../context/App";
 import { normalizeText } from "./../../services/utils";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { TafseerView } from "./Tafseer";
@@ -21,6 +20,7 @@ import { quranNormalizedText, quranText } from "../../App";
 import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
+import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
 import {
     selectAppHeight,
     selectIsCompact,
@@ -54,7 +54,6 @@ import {
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "./Settings";
-import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -68,7 +67,6 @@ const Step = {
 };
 
 const Exercise = () => {
-    const app = useContext(AppContext);
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
 
@@ -271,6 +269,9 @@ const Exercise = () => {
     useEffect(() => {
         setVerse(selectStart);
         setWrittenText("");
+    }, [selectStart]);
+
+    useEffect(() => {
         dispatch(showMask());
         if (currStep !== Step.typing) {
             dispatch(setMaskShift(1));

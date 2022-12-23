@@ -10,12 +10,11 @@ import {
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranText } from "../../App";
-import { AppContext } from "../../context/App";
 import useSuraName from "../../hooks/useSuraName";
 import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
@@ -259,8 +258,8 @@ export const PartsList = ({ part }) => {
 };
 
 export const SuraList = ({ filter, simple, trigger = "chapters_index" }) => {
-    const app = useContext(AppContext);
     const popupWidth = useSelector(selectPopupWidth);
+    const selectStart = useSelector(selectStartSelection);
     const [actionsIndex, setActionsIndex] = useState(0);
 
     useEffect(() => {
@@ -268,10 +267,9 @@ export const SuraList = ({ filter, simple, trigger = "chapters_index" }) => {
     }, [trigger]);
 
     useEffect(() => {
-        const { selectStart } = app;
         const currentSura = ayaIdInfo(selectStart).sura;
         setActionsIndex(currentSura);
-    }, [app]);
+    }, [selectStart]);
 
     const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
 
@@ -302,7 +300,6 @@ export const SuraList = ({ filter, simple, trigger = "chapters_index" }) => {
 };
 
 export const SimpleSuraIndexCell = ({ sura: suraIndex, selectedSura }) => {
-    // const app = useContext(AppContext);
     const history = useHistory();
     const dispatch = useDispatch();
     let btn;

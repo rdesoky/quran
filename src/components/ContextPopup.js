@@ -14,7 +14,6 @@ export const ContextPopup = () => {
     const popupRef = useRef();
 
     useEffect(() => {
-        // app.setContextPopup(null);
         setContextPopup(null);
     }, [appWidth]);
 

@@ -13,51 +13,55 @@ import Bookmarks from "./Bookmarks";
 import Modal from "./Modal";
 import User from "./User";
 import Exercise from "./Exercise";
-import {useDispatch, useSelector} from "react-redux";
-import {closePopup, selectPopup, selectPopupParams, selectShowPopup} from "../../store/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    closePopup,
+    selectPopup,
+    selectPopupParams,
+    selectShowPopup,
+} from "../../store/uiSlice";
 
 function PopupView() {
-  // const app = useContext(AppContext);
-  const dispatch = useDispatch();
-  const componentMap = {
-    Commands,
-    Goto: GotoPage,
-    Index: QIndex,
-    Indices: QIndex,
-    Search,
-    Play,
-    Hifz,
-    Help,
-    Settings,
-    Tafseer,
-    AudioPlayer: Settings,
-    Favorites,
-    Profile: User,
-    Bookmarks,
-    Exercise,
-  };
+    const dispatch = useDispatch();
+    const componentMap = {
+        Commands,
+        Goto: GotoPage,
+        Index: QIndex,
+        Indices: QIndex,
+        Search,
+        Play,
+        Hifz,
+        Help,
+        Settings,
+        Tafseer,
+        AudioPlayer: Settings,
+        Favorites,
+        Profile: User,
+        Bookmarks,
+        Exercise,
+    };
 
-  const onClose = () => {
-    // app.closePopup();
-    dispatch(closePopup())
-  };
+    const onClose = () => {
+        // app.closePopup();
+        dispatch(closePopup());
+    };
 
-  // const { popup, showPopup, popupParams } = app;
-  const popup = useSelector(selectPopup);
-  const showPopup = useSelector(selectShowPopup)
-  const popupParams = useSelector(selectPopupParams);
+    // const { popup, showPopup, popupParams } = app;
+    const popup = useSelector(selectPopup);
+    const showPopup = useSelector(selectShowPopup);
+    const popupParams = useSelector(selectPopupParams);
 
-  const Component = componentMap[popup];
+    const Component = componentMap[popup];
 
-  if (Component !== undefined) {
-    return (
-      <Modal onClose={onClose} show={showPopup} name={popup}>
-        <Component {...popupParams} />
-      </Modal>
-    );
-  }
+    if (Component !== undefined) {
+        return (
+            <Modal onClose={onClose} show={showPopup} name={popup}>
+                <Component {...popupParams} />
+            </Modal>
+        );
+    }
 
-  return null;
+    return null;
 }
 
 export default PopupView;

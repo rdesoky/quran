@@ -17,7 +17,6 @@ import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
 const Modal = ({ onClose, children, show, name, modeless }) => {
-    // const app = useContext(AppContext)
     const pagerWidth = useSelector(selectPagerWidth);
     const activeSide = useSelector(selectActiveSide);
     const isCompact = useSelector(selectIsCompact);
@@ -92,7 +91,6 @@ const Modal = ({ onClose, children, show, name, modeless }) => {
                     style={{
                         left: calcLeft(),
                         right: calcRight(),
-                        //,zoom: app.appHeight > 600 ? 1 : app.appHeight / 600
                     }}
                     className={
                         "ModalContent" + (show === false ? " HiddenPopup" : "")
