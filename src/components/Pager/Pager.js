@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { Redirect, useHistory, useLocation, useParams } from "react-router-dom";
 import { AppContext } from "../../context/App";
 import { AppRefs } from "../../RefsProvider";
 import {
@@ -10,6 +10,7 @@ import {
 } from "../../services/QData";
 import { copy2Clipboard, downloadPageImage } from "../../services/utils";
 import {
+    selectActivePage,
     selectAppHeight,
     selectIsNarrow,
     selectIsWide,
@@ -85,20 +86,18 @@ export default function Pager() {
     const maskShift = useSelector(selectMaskShift);
     const params = useParams();
     const shownPages = useSelector(selectShownPages);
-
-    let pageIndex = 0;
-
-    let { page } = params;
-
-    if (page !== undefined) {
-        pageIndex = parseInt(page) - 1;
-    }
+    const pageIndex = useSelector(selectActivePage);
+    const location = useLocation();
 
     useEffect(() => {
         if (params?.page >= 1) {
             dispatch(setActivePageIndex(params?.page - 1));
         }
     }, [dispatch, params?.page]);
+
+    useEffect(() => {
+        analytics.setCurrentScreen(location.pathname);
+    }, [location]);
 
     const pageUp = useCallback(
         (e) => {
@@ -127,14 +126,13 @@ export default function Pager() {
     //ComponentDidUpdate
     useEffect(() => {
         //cache next pages
-        const pageIndex = params.page - 1;
         if (pagesCount === 1) {
             downloadPageImage(pageIndex + 1).catch((e) => {});
         } else {
             downloadPageImage(pageIndex + 2).catch((e) => {});
             downloadPageImage(pageIndex + 3).catch((e) => {});
         }
-    }, [pagesCount, params.page]);
+    }, [pagesCount, pageIndex]);
 
     const handleWheel = (e) => {
         if (e.deltaY > 0) {
@@ -232,7 +230,7 @@ export default function Pager() {
             switch (e.code) {
                 case "Insert":
                     copy2Clipboard(selectedText);
-                    app.pushRecentCommand("Copy");
+                    // app.pushRecentCommand("Copy");
                     break;
                 case "Escape":
                     if (contextPopup.info) {

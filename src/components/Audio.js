@@ -1,6 +1,8 @@
 import { useCallback, useContext, useEffect, useRef } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { AppRefs } from "../RefsProvider";
 import {
     ayaID,
     ayaIdInfo,
@@ -10,6 +12,7 @@ import {
     getPartIndexByAyaId,
     TOTAL_VERSES,
 } from "../services/QData";
+import { getSuraName } from "../services/utils";
 import { gotoAya, selectSelectedRange } from "../store/navSlice";
 import {
     AudioState,
@@ -26,7 +29,6 @@ import {
     selectFollowPlayer,
     selectRepeat,
 } from "../store/settingsSlice";
-import { AppRefs } from "../RefsProvider";
 
 export function Audio() {
     const refs = useContext(AppRefs);
@@ -39,7 +41,20 @@ export function Audio() {
     const store = useStore();
     const selectedRange = useSelector(selectSelectedRange);
     const history = useHistory();
+    const intl = useIntl();
     let audio = audioRef.current;
+
+    useEffect(() => {
+        let docTitle = intl.formatMessage({ id: "app_name" });
+        if (playingAya !== -1) {
+            const ayaInfo = ayaIdInfo(playingAya);
+            docTitle = `${intl.formatMessage({ id: "play" })}: ${getSuraName(
+                intl,
+                ayaInfo.sura
+            )} (${ayaInfo.aya + 1}) - ${docTitle}`;
+        }
+        document.title = docTitle;
+    }, [playingAya, audioState, intl]);
 
     useEffect(() => {
         let updateRemainingTimeInterval;

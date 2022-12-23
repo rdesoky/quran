@@ -21,6 +21,11 @@ import { selectActivePage } from "../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
 import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
+import {
+    addBookmark,
+    deleteBookmark,
+    selectIsBookmarked,
+} from "../store/dbSlice";
 import { SuraHifzChart } from "./Hifz";
 import { CommandButton } from "./Modal/Commands";
 import SuraName from "./SuraName";
@@ -128,9 +133,9 @@ export const VerseText = ({
     trigger = "verse_text",
 }) => {
     const [text, setText] = useState("");
-    const app = useContext(AppContext);
     const dispatch = useDispatch();
     const selectStart = useSelector(selectStartSelection);
+    const isBookmarked = useSelector(selectIsBookmarked(verse));
 
     const updateText = (verseIndex) => {
         setText(quranText?.[verseIndex]);
@@ -162,15 +167,10 @@ export const VerseText = ({
     }, [selectStart, verse]);
 
     const toggleBookmark = (e) => {
-        switch (app.toggleBookmark(verse)) {
-            case 1:
-                dispatch(showToast("bookmark_added"));
-                break;
-            case -1:
-                dispatch(showToast("bookmark_deleted"));
-                break;
-            default:
-                break;
+        if (isBookmarked) {
+            dispatch(addBookmark(verse));
+        } else {
+            dispatch(deleteBookmark(verse));
         }
     };
 
@@ -179,11 +179,7 @@ export const VerseText = ({
             {showInfo ? <VerseInfo navigate={navigate} /> : ""}
             {bookmark ? (
                 <button onClick={toggleBookmark}>
-                    <Icon
-                        icon={
-                            app.isBookmarked(verse) ? faBookmark : farBookmark
-                        }
-                    />
+                    <Icon icon={isBookmarked ? faBookmark : farBookmark} />
                 </button>
             ) : null}
             {text}
@@ -197,7 +193,6 @@ export const VerseText = ({
 };
 
 export const ToastMessage = () => {
-    // const app = useContext(AppContext);
     // const [toastMessage, setToastMessage] = useState(null);
     const [hiding, setHiding] = useState(false);
     const dispatch = useDispatch();
@@ -348,7 +343,6 @@ export const SuraContextHeader = ({ sura }) => {
 };
 
 export const PageNavigator = ({ children, trigger }) => {
-    // const app = useContext(AppContext);
     const pageIndex = useSelector(selectActivePage);
     const dispatch = useDispatch();
     const history = useHistory();

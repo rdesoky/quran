@@ -54,6 +54,7 @@ import {
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "./Settings";
+import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];
@@ -98,6 +99,7 @@ const Exercise = () => {
     const audioState = useSelector(selectAudioState);
     const [savedRepeat, setSavedRepeat] = useState();
     const [savedFollowPlayer, setSavedFollowPlayer] = useState();
+    const hifzRanges = useSelector(selectHifzRanges);
 
     const setCurrStep = (step) => {
         setCurrentStep(step);
@@ -163,7 +165,7 @@ const Exercise = () => {
         if (exerciseMemorized === false) {
             const { sura, aya } = ayaIdInfo(new_verse);
             const page = getPageIndex(sura, aya);
-            const { hifzRanges } = app;
+            // const { hifzRanges } = app;
 
             const hifzRange = hifzRanges.find((r) => {
                 return (
@@ -203,7 +205,7 @@ const Exercise = () => {
 
     const startReciting = (e) => {
         // setCurrStep(Step.reciting);
-        audio.play();
+        audio.play(verse);
         //app.setMaskStart(verse + 1, true);
         analytics.logEvent("exercise_play_audio", {
             trigger,
@@ -577,7 +579,7 @@ const Exercise = () => {
         setWrongWord(wrongWord);
         setMissingWords(correctWords.length - answerWords.length);
         if (quickMode === 2 && wrongWord === -1 && answerWords.length >= 3) {
-            const typed_chars = app.logTypedVerse(verse, 3);
+            const typed_chars = dispatch(logTypedVerse(verse, 3));
             analytics.logEvent("exercise_quick_success", {
                 ...verseLocation(verse),
                 typed_chars,
@@ -589,7 +591,7 @@ const Exercise = () => {
             wrongWord === -1 && correctWords.length === answerWords.length;
 
         if (success) {
-            const typed_chars = app.logTypedVerse(verse);
+            const typed_chars = dispatch(logTypedVerse(verse));
             analytics.logEvent("exercise_success", {
                 ...verseLocation(verse),
                 typed_chars,

@@ -38,6 +38,7 @@ import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import {
     copy2Clipboard,
+    lesserOf,
     requestFullScreen,
     selectTopCommand,
 } from "../../services/utils";
@@ -68,6 +69,7 @@ import { VerseInfo } from "../Widgets";
 import { verseLocation } from "./../../services/QData";
 import { AddHifz } from "./Favorites";
 import { UserImage } from "./User";
+import { selectIsBookmarked } from "../../store/dbSlice";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -98,7 +100,7 @@ export const CommandIcons = {
     Stop: faStopCircle,
 };
 
-const getIcon = (commandId, app, showMenu, maskStart) => {
+const getIcon = (commandId, isBookmarked, showMenu, maskStart) => {
     switch (commandId) {
         case "Mask":
             return CommandIcons[maskStart === -1 ? "Mask" : "MaskOn"];
@@ -106,7 +108,7 @@ const getIcon = (commandId, app, showMenu, maskStart) => {
             return showMenu ? faAngleDoubleUp : faAngleDoubleDown;
         case "Bookmarks":
         case "Bookmark":
-            return app.isBookmarked() ? faBookmark : farBookmark;
+            return isBookmarked ? faBookmark : farBookmark;
         default:
             return CommandIcons[commandId];
     }
@@ -117,6 +119,8 @@ const CommandIcon = ({ command, app }) => {
     const maskStart = useSelector(selectMaskStart);
     const reciter = useSelector(selectReciter);
     const audioState = useSelector(selectAudioState);
+    const selectStart = useSelector(selectStartSelection);
+    const isBookmarked = useSelector(selectIsBookmarked(selectStart));
 
     switch (command) {
         case "Profile":
@@ -152,7 +156,14 @@ const CommandIcon = ({ command, app }) => {
         default:
             return (
                 <span>
-                    <Icon icon={getIcon(command, app, showMenu, maskStart)} />
+                    <Icon
+                        icon={getIcon(
+                            command,
+                            isBookmarked,
+                            showMenu,
+                            maskStart
+                        )}
+                    />
                 </span>
             );
     }
@@ -248,7 +259,7 @@ const CommandButton = ({
                     trigger,
                 });
                 dispatch(gotoAya(history, selectStart));
-                audio.play();
+                audio.play(lesserOf(selectStart, selectEnd));
                 // player.play();
                 return;
             case "Pause":
@@ -320,7 +331,7 @@ const CommandButton = ({
                     ...verseLocation(selectStart),
                     trigger,
                 });
-                switch (app.toggleBookmark()) {
+                switch (app.toggleBookmark(selectStart)) {
                     case 1:
                         dispatch(showToast("bookmark_added"));
                         break;
@@ -356,7 +367,7 @@ const CommandButton = ({
                 dispatch(hideMenu());
                 return;
         }
-        app.pushRecentCommand(command);
+        // app.pushRecentCommand(command);
         // if (pagesCount == 1) {
         //     app.closePopup();
         // }
