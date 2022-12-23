@@ -21,6 +21,7 @@ import { gotoAya } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
 import { closePopup } from "../store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
+
 export const BookmarkListItem = ({
     verse,
     filter,
