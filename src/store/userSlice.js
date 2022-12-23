@@ -41,4 +41,5 @@ const userSlice = createSlice({
 export const { setUserId, setActivities, setBookmarks, setHifzRanges } =
     userSlice.actions;
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: userSlice.reducer };

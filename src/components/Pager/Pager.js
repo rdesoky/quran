@@ -1,9 +1,13 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, useParams } from "react-router-dom";
 import { AppContext } from "../../context/App";
 import { AppRefs } from "../../RefsProvider";
-import { ayaIdPage, TOTAL_VERSES } from "../../services/QData";
+import {
+    ayaIdPage,
+    getPageFirstAyaId,
+    TOTAL_VERSES,
+} from "../../services/QData";
 import { copy2Clipboard, downloadPageImage } from "../../services/utils";
 import {
     selectAppHeight,
@@ -13,6 +17,8 @@ import {
     selectPagerWidth,
     selectPagesCount,
     selectPageWidth,
+    selectShownPages,
+    setActivePageIndex,
 } from "../../store/layoutSlice";
 import {
     extendSelection,
@@ -22,8 +28,11 @@ import {
     offsetPage,
     offsetSelection,
     selectAya,
+    selectMaskShift,
     selectMaskStart,
+    selectSelectedText,
     selectStartSelection,
+    setSelectStart,
     showMask,
 } from "../../store/navSlice";
 import {
@@ -39,9 +48,10 @@ import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
 import "./Pager.scss";
 
-export function PageRedirect({ match }) {
+export function PageRedirect() {
+    const params = useParams();
     const dispatch = useDispatch();
-    let { aya } = match.params;
+    let { aya } = params;
     let pageNum = 1;
 
     if (aya !== undefined) {
@@ -54,7 +64,7 @@ export function PageRedirect({ match }) {
     return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
 }
 
-export default function Pager({ match }) {
+export default function Pager() {
     const app = useContext(AppContext);
     const pagesCount = useSelector(selectPagesCount);
     const isWide = useSelector(selectIsWide);
@@ -71,14 +81,24 @@ export default function Pager({ match }) {
     const maskStart = useSelector(selectMaskStart);
     const contextPopup = useContext(AppRefs).get("contextPopup");
     const msgBox = useContext(AppRefs).get("msgBox");
+    const selectedText = useSelector(selectSelectedText);
+    const maskShift = useSelector(selectMaskShift);
+    const params = useParams();
+    const shownPages = useSelector(selectShownPages);
 
     let pageIndex = 0;
 
-    let { page } = match.params;
+    let { page } = params;
 
     if (page !== undefined) {
         pageIndex = parseInt(page) - 1;
     }
+
+    useEffect(() => {
+        if (params?.page >= 1) {
+            dispatch(setActivePageIndex(params?.page - 1));
+        }
+    }, [dispatch, params?.page]);
 
     const pageUp = useCallback(
         (e) => {
@@ -87,7 +107,6 @@ export default function Pager({ match }) {
                 count = 1; //right page is active
             }
             dispatch(offsetPage(history, -count));
-            "object" == typeof e && e.stopPropagation();
             analytics.logEvent("nav_prev_page");
         },
         [activePopup, dispatch, history, isWide, pageIndex, pagesCount]
@@ -100,7 +119,6 @@ export default function Pager({ match }) {
                 count = 1; //left page is active
             }
             dispatch(offsetPage(history, count));
-            "object" == typeof e && e.stopPropagation();
             analytics.logEvent("nav_next_page");
         },
         [activePopup, dispatch, history, isWide, pageIndex, pagesCount]
@@ -109,14 +127,14 @@ export default function Pager({ match }) {
     //ComponentDidUpdate
     useEffect(() => {
         //cache next pages
-        const pageIndex = match.params.page - 1;
+        const pageIndex = params.page - 1;
         if (pagesCount === 1) {
             downloadPageImage(pageIndex + 1).catch((e) => {});
         } else {
             downloadPageImage(pageIndex + 2).catch((e) => {});
             downloadPageImage(pageIndex + 3).catch((e) => {});
         }
-    }, [pagesCount, match.params.page]);
+    }, [pagesCount, params.page]);
 
     const handleWheel = (e) => {
         if (e.deltaY > 0) {
@@ -133,102 +151,66 @@ export default function Pager({ match }) {
         ({ shiftKey }, offset) => {
             let selectedAyaId;
             if (shiftKey) {
-                // selectedAyaId = app.extendSelection(selectStart + offset);
                 selectedAyaId = dispatch(extendSelection(selectStart + offset));
             } else {
                 selectedAyaId = dispatch(offsetSelection(offset));
             }
-            // app.gotoAya(selectedAyaId);
-            dispatch(gotoAya(history, selectedAyaId));
+            // dispatch(gotoAya(history, selectedAyaId));
+            dispatch(setSelectStart(selectedAyaId));
+            // const page = ayaIdPage(selectedAyaId);
+            // if (maskStart !== -1 && getPageFirstAyaId(page) === selectedAyaId) {
+            //     return;
+            // }
+            dispatch(gotoPage(history, { index: ayaIdPage(selectedAyaId) }));
         },
         [dispatch, history, selectStart]
     );
 
-    const inExercise = useCallback(
-        () => activePopup === "Exercise",
-        [activePopup]
+    const incrementMask = useCallback(
+        (e) => {
+            const incrementedMask = maskStart + 1;
+            if (incrementedMask >= TOTAL_VERSES) {
+                dispatch(hideMask());
+                return;
+            }
+            const incrementedMaskPage = ayaIdPage(incrementedMask);
+            if (shownPages.includes(incrementedMaskPage)) {
+                dispatch(gotoAya(history, dispatch(offsetSelection(1))));
+                return;
+            } else {
+                const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
+                if (maskStart === pageFirstAya) {
+                    dispatch(
+                        gotoPage(history, {
+                            index: incrementedMaskPage,
+                            select: true,
+                        })
+                    );
+                    return; //mask head page is not visible
+                }
+            }
+            dispatch(setSelectStart(dispatch(offsetSelection(1))));
+        },
+        [dispatch, history, maskStart, shownPages]
     );
 
-    const onIncrement = useCallback(
+    const decrementMask = useCallback(
         (e) => {
-            // if (inExercise()) {
-            //     offsetSelection(e, 1);
-            //     return;
-            // }
-            // if (maskStart !== -1) {
-            //     //Mask is active
-            //     if (maskStart >= TOTAL_VERSES) {
-            //         return;
-            //     }
-            //     let currPageNum = parseInt(match.params.page);
-            //     let maskPageIndex = ayaIdPage(maskStart);
-            //     if (maskPageIndex + 1 !== currPageNum) {
-            //         // app.gotoPage(maskPageNum, REPLACE);
-            //         dispatch(
-            //             gotoPage(history, {
-            //                 index: maskPageIndex,
-            //                 replace: true,
-            //             })
-            //         );
-            //         return;
-            //     }
-            //     // app.offsetMask(1);
-            //     dispatch(offsetSelection(1));
-            //     let maskNewPageIndex = ayaIdPage(maskStart + 1);
-            //     if (maskNewPageIndex !== currPageNum - 1) {
-            //         //Mask would move to a new page
-            //         if (pagesCount === 1 || maskNewPageIndex % 2 === 0) {
-            //             return; //Don't change page
-            //         }
-            //         //app.gotoPage(maskNewPageIndex, REPLACE);
-            //         dispatch(
-            //             gotoPage(history, {
-            //                 index: maskNewPageIndex,
-            //                 replace: true,
-            //             })
-            //         );
-            //     }
-            // } else {
-            onOffsetSelection(e, 1);
-            // }
-            e.stopPropagation();
+            if (maskStart > 0) {
+                const maskPage = ayaIdPage(maskStart - 1);
+                if (shownPages.includes(maskPage)) {
+                    dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
+                    return;
+                } else {
+                    dispatch(
+                        gotoPage(history, { index: maskPage, select: true })
+                    );
+                    return; //mask head page is not visible
+                }
+            }
+            dispatch(setSelectStart(dispatch(offsetSelection(-1)))); //soft selection
         },
-        [onOffsetSelection]
-    );
-
-    const decrement = useCallback(
-        (e) => {
-            // if (inExercise()) {
-            //     offsetSelection(e, -1);
-            //     return;
-            // }
-            // if (maskStart !== -1) {
-            //     //Mask is active
-            //     if (maskStart <= 0) {
-            //         return;
-            //     }
-            //     let maskNewPageNum = ayaIdPage(maskStart - 1) + 1;
-            //     if (maskNewPageNum !== parseInt(match.params.page)) {
-            //         //Mask would move to a new page
-            //         // app.gotoPage(maskNewPageNum, REPLACE);
-            //         dispatch(
-            //             gotoPage(history, {
-            //                 index: maskNewPageNum - 1,
-            //                 replace: true,
-            //             })
-            //         );
-            //         if (pagesCount === 1 || maskNewPageNum % 2 === 0) {
-            //             return; //Don't move mask
-            //         }
-            //     }
-            //     dispatch(offsetMask(-1));
-            //     // app.offsetMask(-1);
-            // } else {
-            onOffsetSelection(e, -1);
-            // }
-            e.stopPropagation();
-        },
-        [onOffsetSelection]
+        [dispatch, history, maskStart, shownPages]
     );
 
     const handleKeyDown = useCallback(
@@ -245,10 +227,11 @@ export default function Pager({ match }) {
             if (modalPopup) {
                 return;
             }
+            e.stopPropagation();
 
             switch (e.code) {
                 case "Insert":
-                    copy2Clipboard(app.getSelectedText());
+                    copy2Clipboard(selectedText);
                     app.pushRecentCommand("Copy");
                     break;
                 case "Escape":
@@ -318,8 +301,8 @@ export default function Pager({ match }) {
                 case "ArrowDown":
                     if (!isTextInput) {
                         analytics.setTrigger("down_key");
-                        if (maskStart !== -1) {
-                            onIncrement(e);
+                        if (!maskShift && maskStart !== -1) {
+                            incrementMask(e);
                         } else {
                             onOffsetSelection(e, 1);
                         }
@@ -329,8 +312,8 @@ export default function Pager({ match }) {
                 case "ArrowUp":
                     if (!isTextInput) {
                         analytics.setTrigger("up_key");
-                        if (maskStart !== -1 && !inExercise()) {
-                            decrement(e);
+                        if (maskStart !== -1 && !maskShift) {
+                            decrementMask(e);
                         } else {
                             onOffsetSelection(e, -1);
                         }
@@ -368,17 +351,18 @@ export default function Pager({ match }) {
             activePopup,
             app,
             contextPopup,
-            decrement,
+            decrementMask,
             dispatch,
             expandedMenu,
-            inExercise,
+            maskShift,
             maskStart,
             modalPopup,
             msgBox,
-            onIncrement,
+            incrementMask,
             onOffsetSelection,
             pageDown,
             pageUp,
+            selectedText,
         ]
     );
 
@@ -389,7 +373,7 @@ export default function Pager({ match }) {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [
-        match.params.page,
+        params.page,
         activePopup,
         maskStart,
         selectStart,
@@ -432,8 +416,8 @@ export default function Pager({ match }) {
                     order={order}
                     onPageUp={pageUp}
                     onPageDown={pageDown}
-                    onIncrement={onIncrement}
-                    onDecrement={decrement}
+                    onIncrement={incrementMask}
+                    onDecrement={decrementMask}
                     scaleX={scaleX}
                     shiftX={shiftX}
                 />

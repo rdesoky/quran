@@ -2,20 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const sliceName = "app";
 
-const initSidebarCommands = [
-    // "AudioPlayer",
-    "Indices",
-    "Search",
-    "Exercise",
-    "Mask",
-    "update_hifz",
-    "Tafseer",
-    "Bookmarks",
-    "Goto",
-    "Copy",
-    // "Share",
-    "Help",
-];
+// const initSidebarCommands = [
+//     // "AudioPlayer",
+//     "Indices",
+//     "Search",
+//     "Exercise",
+//     "Mask",
+//     "update_hifz",
+//     "Tafseer",
+//     "Bookmarks",
+//     "Goto",
+//     "Copy",
+//     // "Share",
+//     "Help",
+// ];
 
 const initialState = {
     isNarrow: false, //hidden sidebar and stretched single page width
@@ -34,7 +34,19 @@ const initialState = {
     selectEnd: 0,
     maskStart: -1,
     modalPopup: false, //used to block user interaction outside the active popup
-    // recentCommands: initSidebarCommands,
+    activePageIndex: 0,
+    shownPages: [],
+};
+
+const calcShownPages = (slice) => {
+    const pageIndex = slice.activePageIndex;
+    if (slice.pagesCount === 1) {
+        slice.shownPages = [pageIndex];
+    } else {
+        const firstPage = pageIndex - (pageIndex % 2);
+        const secondePage = firstPage + 1;
+        slice.shownPages = [firstPage, secondePage];
+    }
 };
 
 const slice = createSlice({
@@ -80,10 +92,15 @@ const slice = createSlice({
             slice.isCompact = isCompact;
             slice.isScrollable = isScrollable;
             slice.app_size = app_size;
+            calcShownPages(slice);
             // analytics.setParams({ app_size });
         },
         setModalPopup: (slice, action) => {
             slice.modalPopup = action.payload;
+        },
+        setActivePageIndex: (slice, action) => {
+            slice.activePageIndex = action.payload;
+            calcShownPages(slice);
         },
     },
 });
@@ -102,8 +119,10 @@ export const selectPageWidth = (state) => state[sliceName].pageWidth;
 export const selectPageMargin = (state) => state[sliceName].pageMargin;
 export const selectPageHeight = (state) => state[sliceName].pageHeight;
 
-export const selectActiveSide = (pageIndex) => (state) =>
-    state[sliceName].pagesCount === 1 ? 0 : pageIndex % 2;
+export const selectActiveSide = (state) =>
+    state[sliceName].pagesCount === 1
+        ? 0
+        : state[sliceName].activePageIndex % 2;
 
 export const selectPagerWidth = (state) => {
     const { popup } = state.ui;
@@ -124,6 +143,9 @@ export const selectPagerWidth = (state) => {
 
     return appWidth - (isNarrow ? 0 : 50);
 };
+
+export const selectActivePage = (state) => state[sliceName].activePageIndex;
+export const selectShownPages = (state) => state[sliceName].shownPages;
 
 export const selectPopupWidth = (state) => {
     const {
@@ -153,7 +175,7 @@ export const selectPopupWidth = (state) => {
     return appWidth / pagesCount - (isNarrow ? 0 : 50);
 };
 
-export const { onResize, setModalPopup } = slice.actions;
+export const { onResize, setModalPopup, setActivePageIndex } = slice.actions;
 
 export const updateAppSize =
     ({ width, height }) =>
@@ -162,4 +184,5 @@ export const updateAppSize =
         // analytics.setParams({app_size});
     };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };

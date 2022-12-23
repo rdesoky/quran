@@ -11,12 +11,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { quranText } from "../App";
 import { AppContext } from "../context/App";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "../services/QData";
-import { copy2Clipboard, getCurrentPageNumber } from "../services/utils";
+import { copy2Clipboard } from "../services/utils";
+import { selectActivePage } from "../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
 import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
@@ -348,8 +349,7 @@ export const SuraContextHeader = ({ sura }) => {
 
 export const PageNavigator = ({ children, trigger }) => {
     // const app = useContext(AppContext);
-    const location = useLocation();
-    const pageIndex = getCurrentPageNumber(location) - 1;
+    const pageIndex = useSelector(selectActivePage);
     const dispatch = useDispatch();
     const history = useHistory();
 

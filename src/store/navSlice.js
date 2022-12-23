@@ -11,7 +11,8 @@ import {
     TOTAL_SURAS,
     TOTAL_VERSES,
 } from "../services/QData";
-import { getCurrentPageNumber, greaterOf, lesserOf } from "../services/utils";
+import { greaterOf, lesserOf } from "../services/utils";
+import { selectActivePage } from "./layoutSlice";
 
 const sliceName = "nav";
 
@@ -70,6 +71,7 @@ export const selectMaskStart = (state) =>
         ? lesserOf(state[sliceName].selectStart, state[sliceName].selectEnd) +
           state[sliceName].maskShift
         : -1;
+export const selectMaskShift = (state) => state[sliceName].maskShift;
 export const selectSelectedText = (state) => {
     //TODO: slow selector
     let { selectStart, selectEnd } = state[sliceName];
@@ -103,14 +105,14 @@ export const gotoAya =
 
 export const gotoPage =
     (history, { index: pageIndex, sel: select = false, replace = true }) =>
-    (dispatch) => {
+    (dispatch, getState) => {
         const selectPageAya = () => {
             if (select) {
                 const verse = getPageFirstAyaId(pageIndex);
                 dispatch(selectAya(verse));
             }
         };
-        if (getCurrentPageNumber(history.location) === pageIndex + 1) {
+        if (selectActivePage(getState()) === pageIndex) {
             //already on that page
             selectPageAya();
             return;
@@ -128,7 +130,7 @@ export const gotoPage =
     };
 
 export const offsetPage = (history, offset) => (dispatch, getState) => {
-    const pageIndex = getCurrentPageNumber(history.location) - 1;
+    const pageIndex = selectActivePage(getState());
     if (pageIndex !== undefined) {
         const nextPageIndex = pageIndex + offset;
         dispatch(gotoPage(history, { index: nextPageIndex }));
@@ -173,9 +175,9 @@ export const extendSelection = (ayaId) => (dispatch, getState) => {
         return selectStart;
     }
     if (ayaId === selectStart) {
-        dispatch(selectAya(ayaId)); //select backwards
+        dispatch(selectAya(ayaId)); //reset start and end selection
     } else {
-        dispatch(setSelectStart(ayaId));
+        dispatch(setSelectStart(ayaId)); //set start selection and keep end selection as is
     }
     return ayaId;
 };

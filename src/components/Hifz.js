@@ -8,12 +8,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { memo, useContext, useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import useSuraName from "../hooks/useSuraName";
+import { AppRefs } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
-import { getCurrentPageNumber } from "../services/utils";
 import {
+    selectActivePage,
     selectIsCompact,
     selectPagesCount,
     selectPopupWidth,
@@ -21,7 +22,6 @@ import {
 import { gotoAya, gotoPage, setSelectEnd, showMask } from "../store/navSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
-import { AppRefs } from "../RefsProvider";
 import { AppContext } from "./../context/App";
 import {
     ayaID,
@@ -447,7 +447,7 @@ const SuraHifzChart = memo(
         const pageList = Array(suraPages).fill(0);
         const dispatch = useDispatch();
         const history = useHistory();
-        const location = useLocation();
+        const activePage = useSelector(selectActivePage);
         // const pageWidth = `${100 / suraPages}%`;
 
         useEffect(() => {
@@ -459,8 +459,6 @@ const SuraHifzChart = memo(
                 setActiveRange(range);
             }
         }, [app, app.hifzRanges, range, sura]);
-
-        const activePage = getCurrentPageNumber(location) - 1;
 
         const suraStartPage = suraInfo.sp;
 

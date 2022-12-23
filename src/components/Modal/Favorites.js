@@ -1,15 +1,13 @@
-import { useLocation, useRouteMatch } from "react-router-dom";
-import React, { useState, useContext } from "react";
-import { FormattedMessage as String } from "react-intl";
-import { AppContext } from "./../../context/App";
-import { getPageSuras } from "./../../services/QData";
-import { HifzRanges, HifzRange } from "../Hifz";
-import { ActivityChart } from "../Hifz";
 import { faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useContext, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
-import { selectAppHeight } from "../../store/layoutSlice";
-import { getCurrentPageNumber } from "../../services/utils";
+import { useRouteMatch } from "react-router-dom";
+import { selectActivePage, selectAppHeight } from "../../store/layoutSlice";
+import { ActivityChart, HifzRange, HifzRanges } from "../Hifz";
+import { AppContext } from "./../../context/App";
+import { getPageSuras } from "./../../services/QData";
 
 export const AddHifz = ({ page }) => {
     const app = useContext(AppContext);
@@ -54,8 +52,7 @@ export const AddHifz = ({ page }) => {
 const Favorites = () => {
     const appHeight = useSelector(selectAppHeight);
     const [activeTab, selectTab] = useState("add");
-    const location = useLocation();
-    const pageIndex = getCurrentPageNumber(location) - 1;
+    const pageIndex = useSelector(selectActivePage);
 
     const renderBody = () => {
         switch (activeTab) {

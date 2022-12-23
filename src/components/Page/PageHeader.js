@@ -8,7 +8,6 @@ import React, { useContext } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "../../context/App";
 import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdInfo,
@@ -31,12 +30,11 @@ import { analytics } from "./../../services/Analytics";
 const PageHeader = ({
     index: pageIndex,
     order,
-    onPageUp,
-    onPageDown,
+    // onPageUp,
+    // onPageDown,
     onIncrement,
     onDecrement,
 }) => {
-    const app = useContext(AppContext);
     const partIndex = getPagePartNumber(pageIndex + 1) - 1;
     const suraIndex = getPageSuraIndex(pageIndex + 1);
     const pagesCount = useSelector(selectPagesCount);
