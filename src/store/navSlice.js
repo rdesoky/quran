@@ -12,13 +12,13 @@ import {
     TOTAL_VERSES,
 } from "../services/QData";
 import { greaterOf, lesserOf } from "../services/utils";
-import { selectActivePage } from "./layoutSlice";
+import { selectActivePage, sliceName as layoutSliceName } from "./layoutSlice";
 
 const sliceName = "nav";
 
 const initialState = {
-    selectStart: 0,
-    selectEnd: 0,
+    selectStart: -1,
+    selectEnd: -1,
     maskOn: false,
     maskShift: 0,
 };
@@ -44,6 +44,17 @@ const slice = createSlice({
         setMaskShift: (slice, action) => {
             slice.maskShift = action.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(
+            `${layoutSliceName}/setActivePageIndex`,
+            (slice, action) => {
+                if (slice.selectStart === -1) {
+                    slice.selectStart = getPageFirstAyaId(action.payload);
+                    slice.selectEnd = slice.selectStart;
+                }
+            }
+        );
     },
 });
 
