@@ -1,21 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const sliceName = "app";
-
-// const initSidebarCommands = [
-//     // "AudioPlayer",
-//     "Indices",
-//     "Search",
-//     "Exercise",
-//     "Mask",
-//     "update_hifz",
-//     "Tafseer",
-//     "Bookmarks",
-//     "Goto",
-//     "Copy",
-//     // "Share",
-//     "Help",
-// ];
+const sliceName = "layout";
 
 const initialState = {
     isNarrow: false, //hidden sidebar and stretched single page width
@@ -34,12 +19,16 @@ const initialState = {
     selectEnd: 0,
     maskStart: -1,
     modalPopup: false, //used to block user interaction outside the active popup
-    activePageIndex: 0,
+    activePageIndex: -1,
     shownPages: [],
 };
 
 const calcShownPages = (slice) => {
     const pageIndex = slice.activePageIndex;
+    if (pageIndex === -1) {
+        slice.shownPages = [];
+        return; //
+    }
     if (slice.pagesCount === 1) {
         slice.shownPages = [pageIndex];
     } else {
