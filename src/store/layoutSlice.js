@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const sliceName = "layout";
+export const sliceName = "layout";
 
 const initialState = {
     isNarrow: false, //hidden sidebar and stretched single page width
