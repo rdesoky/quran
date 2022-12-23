@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { AudioState, selectAudioState } from "../store/playerSlice";
-import { CommandButton } from "./Modal/Commands";
+import { CommandButton } from "./CommandButton";
 import { PageNavigator } from "./PageNavigator";
 
 export const PageContextButtons = ({ page }) => {

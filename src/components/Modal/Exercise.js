@@ -49,8 +49,6 @@ import {
     selectFollowPlayer,
     selectRandomAutoRecite,
     selectRepeat,
-    setFollowPlayer,
-    setRepeat,
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "../ExerciseSettings";
@@ -807,8 +805,6 @@ const Exercise = () => {
                     <button onClick={showIntro}>
                         <String id="home" />
                     </button>
-
-                    {/* <CommandButton command="Settings" trigger={trigger} /> */}
                 </div>
                 <TafseerView
                     verse={verse}

@@ -12,7 +12,11 @@ import {
     TOTAL_VERSES,
 } from "../services/QData";
 import { greaterOf, lesserOf } from "../services/utils";
-import { selectActivePage, sliceName as layoutSliceName } from "./layoutSlice";
+import {
+    selectActivePage,
+    selectShownPages,
+    sliceName as layoutSliceName,
+} from "./layoutSlice";
 
 const sliceName = "nav";
 
@@ -102,6 +106,20 @@ export const selectSelectedText = (state) => {
 };
 
 //thunks
+export const startMask = (history) => (dispatch, getState) => {
+    const state = getState();
+    const shownPages = selectShownPages(state);
+    const selectedAya = selectStartSelection(state);
+    const selectedAyaPage = ayaIdPage(selectedAya);
+    if (!shownPages.includes(selectedAyaPage)) {
+        const firstVisibleAya = getPageFirstAyaId(shownPages[0]);
+        dispatch(
+            gotoAya(history, firstVisibleAya, { sel: true, replace: false })
+        );
+    }
+    dispatch(showMask());
+};
+
 export const gotoAya =
     (history, ayaId, options = {}) =>
     (dispatch, getState) => {
