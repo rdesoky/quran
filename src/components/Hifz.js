@@ -14,6 +14,14 @@ import useSuraName from "../hooks/useSuraName";
 import { AppRefs } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
 import {
+    addHifzRange,
+    deleteHifzRange,
+    selectDailyActivities,
+    selectHifzRanges,
+    selectSuraRanges,
+    setRangeRevised,
+} from "../store/dbSlice";
+import {
     selectActivePage,
     selectIsCompact,
     selectPagesCount,
@@ -46,10 +54,8 @@ const HifzRange = ({
     const app = useContext(AppContext);
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
-    // const theme = useContext(ThemeContext);
     const suraName = useSuraName(range.sura);
     const [rangeInfo, setRangeInfo] = useState("");
-    // const [ageClass, setAgeClass] = useState("NoHifz");
     const [ageInfo, setAgeInfo] = useState("");
     const [actions, setActions] = useState(showActions);
     const pagesCount = useSelector(selectPagesCount);
@@ -138,7 +144,7 @@ const HifzRange = ({
         audio.stop(true);
         const { startVerse } = selectRange();
         setTimeout(() => {
-            audio.play();
+            audio.play(startVerse);
         }, 500);
         analytics.logEvent("play_audio", {
             trigger,
@@ -166,9 +172,6 @@ const HifzRange = ({
             range.endPage
         );
         dispatch(gotoAya(history, startVerse, { sel: true }));
-        // app.gotoAya(startVerse, { sel: true });
-        // app.setSelectStart(rangeStartVerse);
-        // app.setSelectEnd(endVerse);
         dispatch(setSelectEnd(endVerse)); //extend selection
         return { startVerse, endVerse };
     };
@@ -179,10 +182,8 @@ const HifzRange = ({
             range.startPage,
             range.endPage
         );
-        // app.gotoAya(rangeStartVerse, { sel: true });
         dispatch(gotoAya(history, rangeStartVerse, { sel: true }));
 
-        //app.closePopup();
         checkClosePopup();
     };
 
@@ -193,7 +194,7 @@ const HifzRange = ({
         msgBox.set(null);
     };
 
-    const setRangeRevised = (e) => {
+    const onSetRangeRevised = (e) => {
         msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -203,7 +204,7 @@ const HifzRange = ({
                     startPage: range.startPage,
                     pagesCount: range.pages,
                 });
-                app.setRangeRevised(range);
+                dispatch(setRangeRevised(range));
                 dispatch(showToast("ack_range_revised"));
             },
             content: <String id="revise_confirmation" />,
@@ -211,7 +212,7 @@ const HifzRange = ({
     };
 
     const confirmAddHifz = (startPage, chapter, pagesCount, range) => {
-        if (app.addHifzRange(startPage, chapter, pagesCount)) {
+        if (dispatch(addHifzRange(startPage, chapter, pagesCount))) {
             analytics.logEvent("add_hifz", {
                 trigger,
                 range,
@@ -230,11 +231,13 @@ const HifzRange = ({
                         startPage,
                         pagesCount,
                     });
-                    app.addHifzRange(
-                        startPage,
-                        chapter,
-                        pagesCount,
-                        true /*overwrite*/
+                    dispatch(
+                        addHifzRange(
+                            startPage,
+                            chapter,
+                            pagesCount,
+                            true /*overwrite*/
+                        )
                     );
                 },
                 content: <String id="overwrite_exisiting_hifz" />,
@@ -271,7 +274,7 @@ const HifzRange = ({
         );
     };
 
-    const deleteHifzRange = (e) => {
+    const onDeleteHifzRange = (e) => {
         msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -281,7 +284,7 @@ const HifzRange = ({
                     pagesCount: range.pages,
                     trigger,
                 });
-                app.deleteHifzRange(range);
+                dispatch(deleteHifzRange(range));
             },
             content: <String id="remove_hifz" />,
         });
@@ -302,6 +305,7 @@ const HifzRange = ({
     return (
         <li className={"HifzRangeRow"}>
             <SuraHifzChart
+                sura={range.sura}
                 pages={pages}
                 range={range}
                 trigger="update_hifz_popup"
@@ -351,14 +355,14 @@ const HifzRange = ({
                         >
                             <Icon icon={faLightbulb} />
                         </button>
-                        <button onClick={setRangeRevised}>
+                        <button onClick={onSetRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
                         </button>
                         {/* <button onClick={readRange}>
                             <Icon icon={faBookOpen} />
                         </button> */}
                         <button
-                            onClick={deleteHifzRange}
+                            onClick={onDeleteHifzRange}
                             title={intl.formatMessage({ id: "remove_hifz" })}
                         >
                             <Icon icon={faTimes} />
@@ -392,10 +396,11 @@ const HifzRange = ({
 
 const HifzRanges = ({ filter, trigger = "hifz_index" }) => {
     const [activeRange, setActiveRange] = useState(null);
-    const app = useContext(AppContext);
+    // const app = useContext(AppContext);
     // const suraNames = app.suraNames();
 
-    const { hifzRanges } = app;
+    // const { hifzRanges } = app;
+    const hifzRanges = useSelector(selectHifzRanges);
 
     useEffect(() => {
         analytics.setTrigger("hifz_index");
@@ -429,126 +434,118 @@ const HifzRanges = ({ filter, trigger = "hifz_index" }) => {
 };
 //});
 
-const SuraHifzChart = memo(
-    ({
-        sura,
-        range,
-        pages = true,
-        onClickPage,
-        trigger = "header_chapter_index",
-    }) => {
-        const app = useContext(AppContext);
-        const [suraRanges, setSuraRanges] = useState([]);
-        const [activeRange, setActiveRange] = useState(null);
+const SuraHifzChart = ({
+    sura,
+    range,
+    pages = true,
+    onClickPage,
+    trigger = "header_chapter_index",
+}) => {
+    const suraRanges = useSelector(selectSuraRanges(sura));
+    const [activeRange, setActiveRange] = useState(null);
 
-        const suraIndex = sura !== undefined ? sura : range.sura;
-        const suraInfo = sura_info[suraIndex];
-        const suraPages = suraInfo.ep - suraInfo.sp + 1;
-        const pageList = Array(suraPages).fill(0);
-        const dispatch = useDispatch();
-        const history = useHistory();
-        const activePage = useSelector(selectActivePage);
-        // const pageWidth = `${100 / suraPages}%`;
+    const suraIndex = sura !== undefined ? sura : range.sura;
+    const suraInfo = sura_info[suraIndex];
+    const suraPages = suraInfo.ep - suraInfo.sp + 1;
+    const pageList = Array(suraPages).fill(0);
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const activePage = useSelector(selectActivePage);
+    // const pageWidth = `${100 / suraPages}%`;
 
-        useEffect(() => {
-            if (sura !== undefined) {
-                setSuraRanges(app.suraRanges(sura));
-            }
-            if (range) {
-                setSuraRanges(app.suraRanges(range.sura));
-                setActiveRange(range);
-            }
-        }, [app, app.hifzRanges, range, sura]);
+    useEffect(() => {
+        if (range) {
+            setActiveRange(range);
+        }
+    }, [range]);
 
-        const suraStartPage = suraInfo.sp;
+    const suraStartPage = suraInfo.sp;
 
-        const onClickChart = ({ target }) => {
-            const page = parseInt(target.getAttribute("page"));
-            if (onClickPage) {
-                onClickPage(suraStartPage + page);
-            } else {
-                dispatch(
-                    gotoPage(history, {
-                        index: suraStartPage + page,
-                        replace: false,
-                        sel: true,
-                    })
-                );
-            }
-            analytics.logEvent("chart_page_click", {
-                trigger,
-                page,
-                chapter_num: sura + 1,
-                chapter: getArSuraName(sura),
-            });
-        };
+    const onClickChart = ({ target }) => {
+        const page = parseInt(target.getAttribute("page"));
+        if (onClickPage) {
+            onClickPage(suraStartPage + page);
+        } else {
+            dispatch(
+                gotoPage(history, {
+                    index: suraStartPage + page - 1,
+                    replace: false,
+                    sel: true,
+                })
+            );
+        }
+        analytics.logEvent("chart_page_click", {
+            trigger,
+            page,
+            chapter_num: sura + 1,
+            chapter: getArSuraName(sura),
+        });
+    };
 
-        return (
-            <div className="SuraHifzChart" onClick={onClickChart}>
-                <div className="HifzRanges">
-                    {suraRanges.map((r, i) => {
-                        const rangeStart = r.startPage - suraInfo.sp + 1;
-                        const start = (100 * rangeStart) / suraPages;
-                        const width = (100 * r.pages) / suraPages;
-                        let age,
-                            ageClass = "NoHifz";
-                        if (r.date !== undefined) {
-                            age = Math.floor((Date.now() - r.date) / dayLength);
-                            ageClass =
-                                age <= 7
-                                    ? "GoodHifz"
-                                    : age <= 14
-                                    ? "FairHifz"
-                                    : "WeakHifz";
-                        }
-                        return (
-                            <div
-                                key={`${r.startPage}-${r.sura}`}
-                                className={"SuraRange"
-                                    .appendWord(ageClass)
-                                    .appendWord(
-                                        "active",
-                                        activeRange &&
-                                            activeRange.startPage ===
-                                                r.startPage &&
-                                            activeRange.sura === r.sura
-                                    )}
-                                style={{
-                                    right: `${start}%`,
-                                    width: `${width}%`,
-                                }}
-                            />
-                        );
-                    })}
-                </div>
-                <div className="PageThumbs">
-                    {pages
-                        ? pageList.map((z, i) => {
-                              const activeClass =
-                                  activePage === i + suraInfo.sp - 1
-                                      ? "ActivePage"
-                                      : "";
-                              return (
-                                  <div
-                                      key={i}
-                                      page={i}
-                                      className={"PageThumb".appendWord(
-                                          activeClass
-                                      )}
-                                      title={i + 1}
-                                      //   style={{
-                                      //       right: `${(100 * i) / suraPages}%`,
-                                      //       width: pageWidth
-                                      //   }}
-                                  />
-                              );
-                          })
-                        : null}
-                </div>
+    return (
+        <div className="SuraHifzChart" onClick={onClickChart}>
+            <div className="HifzRanges">
+                {suraRanges.map((r, i) => {
+                    const rangeStart = r.startPage - suraInfo.sp + 1;
+                    const start = (100 * rangeStart) / suraPages;
+                    const width = (100 * r.pages) / suraPages;
+                    let age,
+                        ageClass = "NoHifz";
+                    if (r.date !== undefined) {
+                        age = Math.floor((Date.now() - r.date) / dayLength);
+                        ageClass =
+                            age <= 7
+                                ? "GoodHifz"
+                                : age <= 14
+                                ? "FairHifz"
+                                : "WeakHifz";
+                    }
+                    return (
+                        <div
+                            key={`${r.startPage}-${r.sura}`}
+                            className={"SuraRange"
+                                .appendWord(ageClass)
+                                .appendWord(
+                                    "active",
+                                    activeRange &&
+                                        activeRange.startPage === r.startPage &&
+                                        activeRange.sura === r.sura
+                                )}
+                            style={{
+                                right: `${start}%`,
+                                width: `${width}%`,
+                            }}
+                        />
+                    );
+                })}
             </div>
-        );
-    }
-);
+            <div className="PageThumbs">
+                {pages
+                    ? pageList.map((z, i) => {
+                          const activeClass =
+                              activePage === i + suraInfo.sp - 1
+                                  ? "ActivePage"
+                                  : "";
+                          return (
+                              <div
+                                  key={i}
+                                  page={i}
+                                  className={"PageThumb".appendWord(
+                                      activeClass
+                                  )}
+                                  title={i + 1}
+                                  //   style={{
+                                  //       right: `${(100 * i) / suraPages}%`,
+                                  //       width: pageWidth
+                                  //   }}
+                              />
+                          );
+                      })
+                    : null}
+            </div>
+        </div>
+    );
+};
 
 const ActivityTooltip = ({ active, payload, label, activity }) => {
     if (active) {
@@ -582,10 +579,11 @@ const ActivityChart = ({ activity = "pages" }) => {
     const [data, setData] = useState([]);
     const app = useContext(AppContext);
     const popupWidth = useSelector(selectPopupWidth);
+    const dailyActivities = useSelector(selectDailyActivities);
 
     useEffect(() => {
         setData(
-            app.daily[activity]
+            dailyActivities[activity]
                 .slice(0, 14)
                 .reverse()
                 .map((pgInfo) => {
@@ -594,7 +592,7 @@ const ActivityChart = ({ activity = "pages" }) => {
                     });
                 })
         );
-    }, [activity, app.daily]);
+    }, [activity, dailyActivities]);
 
     if (!data.length) {
         return null;

@@ -16,7 +16,6 @@ import PopupView from "./components/Modal/PopupView";
 import Pager, { PageRedirect } from "./components/Pager/Pager";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { ToastMessage } from "./components/Widgets";
-import AppProvider from "./context/App";
 import RefsProvider from "./RefsProvider";
 import { analytics } from "./services/Analytics";
 import { onResize, selectAppSize } from "./store/layoutSlice";
@@ -96,47 +95,41 @@ export default function App() {
                 <RefsProvider>
                     <div className={"App " + theme + "Theme"}>
                         <Router>
-                            <AppProvider>
-                                <Switch>
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL +
-                                            "/page/:page"
-                                        }
-                                        component={Pager}
-                                    />
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL +
-                                            "/sura/:sura/aya/:aya"
-                                        }
-                                        component={Pager}
-                                    />
-                                    <Route
-                                        path={
-                                            process.env.PUBLIC_URL + "/aya/:aya"
-                                        }
-                                        component={PageRedirect}
-                                    />
-                                    <Route
-                                        render={() => {
-                                            const defUrl =
-                                                process.env.PUBLIC_URL +
-                                                "/page/1";
-                                            console.log(
-                                                `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                            );
-                                            return <Redirect to={defUrl} />;
-                                        }}
-                                    />
-                                </Switch>
-                                <Sidebar />
-                                <PopupView />
-                                <ToastMessage />
-                                <ContextPopup />
-                                <MessageBox />
-                                <Audio />
-                            </AppProvider>
+                            <Switch>
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL + "/page/:page"
+                                    }
+                                    component={Pager}
+                                />
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        "/sura/:sura/aya/:aya"
+                                    }
+                                    component={Pager}
+                                />
+                                <Route
+                                    path={process.env.PUBLIC_URL + "/aya/:aya"}
+                                    component={PageRedirect}
+                                />
+                                <Route
+                                    render={() => {
+                                        const defUrl =
+                                            process.env.PUBLIC_URL + "/page/1";
+                                        console.log(
+                                            `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+                                        );
+                                        return <Redirect to={defUrl} />;
+                                    }}
+                                />
+                            </Switch>
+                            <Sidebar />
+                            <PopupView />
+                            <ToastMessage />
+                            <ContextPopup />
+                            <MessageBox />
+                            <Audio />
                         </Router>
                     </div>
                 </RefsProvider>

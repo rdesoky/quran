@@ -3,13 +3,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "../../context/App";
 import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdPage,
     getPageFirstAyaId,
     getPageSuras,
 } from "../../services/QData";
+import { selectHifzRanges } from "../../store/dbSlice";
 import {
     selectAppHeight,
     selectPageHeight,
@@ -90,7 +90,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
             // app.offsetMask(1);
         } else {
             let clickedPageFirstAyaId = getPageFirstAyaId(nPageIndex);
-            dispatch(gotoAya(clickedPageFirstAyaId));
+            dispatch(gotoAya(history, clickedPageFirstAyaId));
         }
         e.stopPropagation();
     };
@@ -400,15 +400,15 @@ export const HifzSegments = ({ page, versesInfo }) => {
 };
 
 export const HifzSegment = ({ sura, page, pageHeight, versesInfo }) => {
-    const app = useContext(AppContext);
+    const hifzRanges = useSelector(selectHifzRanges);
     const suraVerses = versesInfo.filter((i) => i.sura - 1 === sura);
     if (suraVerses.length === 0) {
         return "";
     }
 
-    const { hifzRanges } = app;
+    // const { hifzRanges } = app;
 
-    const hifzRange = hifzRanges.find((r) => {
+    const hifzRange = hifzRanges?.find((r) => {
         return r.sura === sura && page >= r.startPage && page <= r.endPage;
     });
 

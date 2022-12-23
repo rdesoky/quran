@@ -1,27 +1,23 @@
 import { faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
-import { useRouteMatch } from "react-router-dom";
+import { selectHifzRanges } from "../../store/dbSlice";
 import { selectActivePage, selectAppHeight } from "../../store/layoutSlice";
 import { ActivityChart, HifzRange, HifzRanges } from "../Hifz";
-import { AppContext } from "./../../context/App";
 import { getPageSuras } from "./../../services/QData";
 
 export const AddHifz = ({ page }) => {
-    const app = useContext(AppContext);
-    const match = useRouteMatch({
-        path: process.env.PUBLIC_URL + "/page/:page",
-    });
-    const pageIndex =
-        page === undefined ? parseInt(match.params.page) - 1 : page;
+    const pageIndex = useSelector(selectActivePage);
+    const hifzRanges = useSelector(selectHifzRanges);
+
     const suras = getPageSuras(pageIndex);
 
     return (
         <ul className="FlowingList">
             {suras.map((sura) => {
-                const hifzRange = app.hifzRanges.find((r) => {
+                const hifzRange = hifzRanges.find((r) => {
                     return (
                         r.sura === sura &&
                         pageIndex >= r.startPage &&

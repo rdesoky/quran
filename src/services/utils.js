@@ -164,3 +164,8 @@ export const lesserOf = (...numbers) => {
         return a < b ? a : b;
     }, numbers[0]);
 };
+
+export const getSuraName = (intl, index) => {
+    const suraNames = intl.formatMessage({ id: "sura_names" }).split(",");
+    return suraNames?.[index];
+};

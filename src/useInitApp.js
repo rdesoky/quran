@@ -1,17 +1,18 @@
 import firebase from "firebase";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { onResize } from "./store/layoutSlice";
 import {
+    selectUser,
     setActivities,
     setBookmarks,
     setHifzRanges,
-    setUserId,
-} from "./store/userSlice";
+    setUser,
+} from "./store/dbSlice";
 
 export default function useInitApp() {
     const dispatch = useDispatch();
-    const [user, setUser] = useState(null);
+    const user = useSelector(selectUser);
 
     useEffect(() => {
         dispatch(
@@ -36,7 +37,17 @@ export default function useInitApp() {
                     firebase.auth().signInAnonymously();
                 } else {
                     //signed in
-                    setUser(user);
+                    const { uid, email, displayName, photoURL, isAnonymous } =
+                        user;
+                    dispatch(
+                        setUser({
+                            uid,
+                            email,
+                            displayName,
+                            photoURL,
+                            isAnonymous,
+                        })
+                    );
                     // dispatch(
                     //     readUserData(user, firebase.app().database().ref())
                     // );
@@ -53,7 +64,6 @@ export default function useInitApp() {
         if (!user) {
             return;
         }
-        dispatch(setUserId(user.uid));
         const dbRef = firebase.app().database().ref();
         const userRef = dbRef.child(`data/${user.uid}`);
         const offBookmarksUpdate = userRef
