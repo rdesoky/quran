@@ -8,24 +8,23 @@ import {
     faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranText } from "../App";
-import { AppContext } from "../context/App";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, TOTAL_PAGES, verseLocation } from "../services/QData";
 import { copy2Clipboard } from "../services/utils";
-import { selectActivePage } from "../store/layoutSlice";
-import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
-import { AudioState, selectAudioState } from "../store/playerSlice";
-import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
 import {
     addBookmark,
     deleteBookmark,
     selectIsBookmarked,
 } from "../store/dbSlice";
+import { selectActivePage } from "../store/layoutSlice";
+import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
+import { AudioState, selectAudioState } from "../store/playerSlice";
+import { selectPopup, selectToastMessage, showToast } from "../store/uiSlice";
 import { SuraHifzChart } from "./Hifz";
 import { CommandButton } from "./Modal/Commands";
 import SuraName from "./SuraName";
@@ -56,7 +55,6 @@ export const VerseInfo = ({
         if (typeof onClick === "function") {
             onClick(verse);
         } else {
-            // app.gotoAya(verse, { sel: true });
             dispatch(gotoAya(history, verse, { sel: true }));
         }
     };
@@ -72,7 +70,6 @@ export const VerseInfo = ({
                     trigger,
                 }
             );
-            // app.gotoAya(verse + offset, { sel: true });
             dispatch(gotoAya(history, verse + offset, { sel: true }));
         };
     }
@@ -144,7 +141,6 @@ export const VerseText = ({
     const copyVerse = (e) => {
         const verseInfo = ayaIdInfo(verse);
         copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
-        // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
         dispatch(showToast("text_copied"));
 
         analytics.logEvent("copy_text", {
@@ -201,8 +197,6 @@ export const ToastMessage = () => {
     useEffect(() => {
         if (toastMessage) {
             setTimeout(() => {
-                // app.showToast(null);
-
                 dispatch(showToast(null));
             }, 2000);
         } else if (toastMessage) {
@@ -212,10 +206,6 @@ export const ToastMessage = () => {
             }, 500);
         }
     }, [dispatch, toastMessage]);
-
-    // const hideMessage = e => {
-    //     app.showToast(null);
-    // };
 
     return (
         <div
@@ -350,16 +340,12 @@ export const PageNavigator = ({ children, trigger }) => {
     const stopPropagation = (e) => e.stopPropagation();
 
     const gotoNextPage = (e) => {
-        // analytics.setTrigger(trigger);
-        // app.gotoPage(pageNumber + 1, true, true);
         dispatch(gotoPage(history, { index: pageIndex + 1 }));
         analytics.logEvent("nav_next_page", { trigger });
     };
 
     const gotoPrevPage = (e) => {
-        // analytics.setTrigger(trigger);
         dispatch(gotoPage(history, { index: pageIndex - 1 }));
-        // app.gotoPage(pageIndex - 1, true, true);
         analytics.logEvent("nav_prev_page", { trigger });
     };
 

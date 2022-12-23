@@ -122,7 +122,6 @@ const PlayerStatus = () => {
     }
 
     const gotoPlayingAya = (e) => {
-        // app.gotoAya(ayaId, { sel: true });
         dispatch(gotoAya(ayaId, { sel: true }));
     };
 

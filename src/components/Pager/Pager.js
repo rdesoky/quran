@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, useLocation, useParams } from "react-router-dom";
-import { AppContext } from "../../context/App";
 import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdPage,
@@ -66,7 +65,6 @@ export function PageRedirect() {
 }
 
 export default function Pager() {
-    const app = useContext(AppContext);
     const pagesCount = useSelector(selectPagesCount);
     const isWide = useSelector(selectIsWide);
     const appHeight = useSelector(selectAppHeight);
@@ -347,7 +345,6 @@ export default function Pager() {
         },
         [
             activePopup,
-            app,
             contextPopup,
             decrementMask,
             dispatch,

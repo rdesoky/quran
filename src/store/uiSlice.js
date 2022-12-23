@@ -2,6 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const sliceName = "ui";
 
+const initSidebarCommands = [
+    // "AudioPlayer",
+    "Indices",
+    "Search",
+    "Exercise",
+    "Mask",
+    "update_hifz",
+    "Tafseer",
+    "Bookmarks",
+    "Goto",
+    "Copy",
+    // "Share",
+    "Help",
+];
+
 const initialState = {
     modalPopup: false,
     showMenu: false,
@@ -11,6 +26,8 @@ const initialState = {
     showPopup: false, //show/hide flag ( used for transitioning purpose )
     popup: null, //modal popup component
     popupParams: {},
+
+    recentCommands: initSidebarCommands,
 };
 
 const slice = createSlice({
@@ -39,6 +56,9 @@ const slice = createSlice({
         toggleMenu: (slice) => {
             slice.showMenu = !slice.showMenu;
         },
+        addRecentCommand: (slice, { payload }) => {
+            slice.recentCommands = [payload, ...slice.recentCommands];
+        },
     },
 });
 
@@ -52,6 +72,7 @@ export const {
     showToast,
 } = slice.actions;
 
+export const selectRecentCommands = (state) => state[sliceName].recentCommands;
 export const selectMessageBox = (state) =>
     state[sliceName].messageBox?.[state[sliceName].messageBox.length];
 export const selectShowMenu = (state) => state[sliceName].showMenu;

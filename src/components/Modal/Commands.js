@@ -24,7 +24,6 @@ import {
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
-import { AppContext } from "../../context/App";
 import { analytics } from "./../../services/Analytics";
 
 import {
@@ -42,6 +41,12 @@ import {
     requestFullScreen,
     selectTopCommand,
 } from "../../services/utils";
+import {
+    addBookmark,
+    deleteBookmark,
+    selectIsBookmarked,
+    selectUser,
+} from "../../store/dbSlice";
 import { selectIsNarrow } from "../../store/layoutSlice";
 import {
     gotoAya,
@@ -69,7 +74,6 @@ import { VerseInfo } from "../Widgets";
 import { verseLocation } from "./../../services/QData";
 import { AddHifz } from "./Favorites";
 import { UserImage } from "./User";
-import { selectIsBookmarked } from "../../store/dbSlice";
 
 export const CommandIcons = {
     Commands: faBars,
@@ -114,7 +118,7 @@ const getIcon = (commandId, isBookmarked, showMenu, maskStart) => {
     }
 };
 
-const CommandIcon = ({ command, app }) => {
+const CommandIcon = ({ command }) => {
     const showMenu = useSelector(selectShowMenu);
     const maskStart = useSelector(selectMaskStart);
     const reciter = useSelector(selectReciter);
@@ -170,7 +174,6 @@ const CommandIcon = ({ command, app }) => {
 };
 
 const Commands = () => {
-    // const app = useContext(AppContext);
     const isNarrow = useSelector(selectIsNarrow);
 
     const list = [
@@ -228,7 +231,6 @@ const CommandButton = ({
     className,
     trigger,
 }) => {
-    const app = useContext(AppContext);
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
     const dispatch = useDispatch();
@@ -242,13 +244,27 @@ const CommandButton = ({
     const playingAya = useSelector(selectPlayingAya);
     const audioState = useSelector(selectAudioState);
     const selectedText = useSelector(selectSelectedText);
+    const isBookmarked = useSelector(selectIsBookmarked(selectStart));
+    const user = useSelector(selectUser);
+
+    const toggleBookmark = (e) => {
+        if (isBookmarked) {
+            msgBox.push({
+                title: <String id="are_you_sure" />,
+                content: <String id="delete_bookmark" />,
+                onYes: () => {
+                    dispatch(deleteBookmark(selectStart));
+                },
+            });
+        } else {
+            dispatch(addBookmark(selectStart));
+        }
+    };
 
     const runCommand = (command) => {
-        // app.setExpandedMenu(false);
         selectTopCommand();
         switch (command) {
             case "Commands":
-                // app.setExpandedMenu(!app.expandedMenu);
                 dispatch(toggleMenu());
                 return;
             case "Play":
@@ -297,7 +313,6 @@ const CommandButton = ({
                     menuExpanded ? "collapse_menu" : "expand_menu",
                     trigger
                 );
-                // app.toggleShowMenu();
                 dispatch(toggleMenu());
                 return;
             case "Mask":
@@ -308,7 +323,6 @@ const CommandButton = ({
                         trigger,
                     }
                 );
-                // app.setMaskStart();
                 dispatch(showMask());
                 break;
             case "Copy":
@@ -319,7 +333,6 @@ const CommandButton = ({
                 });
                 copy2Clipboard(selectedText);
                 dispatch(showToast("text_copied"));
-                // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
                 break;
             case "Share":
                 break;
@@ -331,16 +344,7 @@ const CommandButton = ({
                     ...verseLocation(selectStart),
                     trigger,
                 });
-                switch (app.toggleBookmark(selectStart)) {
-                    case 1:
-                        dispatch(showToast("bookmark_added"));
-                        break;
-                    case -1:
-                        dispatch(showToast("bookmark_deleted"));
-                        break;
-                    default:
-                        break;
-                }
+                toggleBookmark();
                 return;
             case "Favorites":
             case "update_hifz":
@@ -353,17 +357,11 @@ const CommandButton = ({
                     content: <AddHifz />,
                 });
                 break;
-            // case "Bookmarks":
-            //     if (app.popup === "Exercise") {
-            //         app.toggleBookmark();
-            //         break;
-            //     }
             default: //already calls pushRecentCommand()
                 analytics.logEvent(`show_${command.toLowerCase()}`, {
                     trigger,
                 });
                 dispatch(showPopup(command));
-                // app.setPopup(command);
                 dispatch(hideMenu());
                 return;
         }
@@ -382,8 +380,8 @@ const CommandButton = ({
             );
             switch (command) {
                 case "Profile":
-                    if (app.user && !app.user.isAnonymous) {
-                        label = app.user.email;
+                    if (user && !user.isAnonymous) {
+                        label = user.email;
                     }
                     break;
                 default:
@@ -395,18 +393,6 @@ const CommandButton = ({
 
     const isDisabled = (command) => {
         return false;
-        // return (
-        //     app.popup === "Exercise" &&
-        //     ![
-        //         "Commands",
-        //         "Play",
-        //         "Pause",
-        //         "Exercise",
-        //         "Stop",
-        //         "Bookmarks",
-        //         "Copy"
-        //     ].includes(command)
-        // );
     };
 
     return (
@@ -431,7 +417,7 @@ const CommandButton = ({
                     : intl.formatMessage({ id: command.toLowerCase() })
             }
         >
-            <CommandIcon {...{ command, app }} />
+            <CommandIcon {...{ command }} />
             {renderLabel()}
         </button>
     );

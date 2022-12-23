@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
-import { AppContext } from "../../context/App";
-import { FormattedMessage as String } from "react-intl";
-import Login from "./../Login";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { downloadImage } from "../../services/utils";
-import { ActivityChart } from "../Hifz";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAppHeight } from "../../store/layoutSlice";
+import { downloadImage } from "../../services/utils";
 import { selectUser, signOut } from "../../store/dbSlice";
+import { selectAppHeight } from "../../store/layoutSlice";
+import { ActivityChart } from "../Hifz";
+import Login from "./../Login";
 
 const User = () => {
     const appHeight = useSelector(selectAppHeight);
@@ -56,12 +55,12 @@ const User = () => {
 };
 
 export const UserImage = () => {
-    const app = useContext(AppContext);
     const [imageUrl, setImageUrl] = useState(null);
+    const user = useSelector(selectUser);
 
     useEffect(() => {
-        if (app.user) {
-            const url = app.user.photoURL;
+        if (user) {
+            const url = user.photoURL;
             downloadImage(url)
                 .then(() => {
                     setImageUrl(url);
@@ -70,7 +69,7 @@ export const UserImage = () => {
         } else {
             setImageUrl(null);
         }
-    }, [app.user]);
+    }, [user, user?.photoURL]);
 
     return imageUrl ? (
         <span>

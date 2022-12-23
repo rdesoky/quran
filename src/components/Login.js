@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { AppContext } from "./../context/App";
 import firebase from "firebase";
+import React from "react";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { useSelector } from "react-redux";
 import { analytics } from "../services/Analytics";
+import { selectUser } from "../store/dbSlice";
 
 export default function Login({ onClose }) {
-    const app = useContext(AppContext);
-    const { user } = app;
+    const user = useSelector(selectUser);
 
     const handleClose = () => {
         analytics.logEvent("user_signed_in");
