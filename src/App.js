@@ -8,7 +8,6 @@ import {
     Route,
     Switch,
 } from "react-router-dom";
-import "./App.scss";
 import { Audio } from "./components/Audio";
 import { ContextPopup } from "./components/ContextPopup";
 import { MessageBox } from "./components/MessageBox";
@@ -21,6 +20,7 @@ import { analytics } from "./services/Analytics";
 import { onResize, selectAppSize } from "./store/layoutSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
+import "./App.scss";
 
 // Firebase configuration
 const firebaseConfig = {
