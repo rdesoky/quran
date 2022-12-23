@@ -16,6 +16,7 @@ import useSuraName from "../hooks/useSuraName";
 import { AppRefs } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, verseLocation } from "../services/QData";
+import { deleteBookmark } from "../store/dbSlice";
 import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
 import { gotoAya } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
@@ -76,12 +77,12 @@ export const BookmarkListItem = ({
         });
     };
 
-    const removeBookmark = (e) => {
+    const onRemoveBookmark = (e) => {
         msgBox.push({
             title: <Message id="are_you_sure" />,
             content: <Message id="delete_bookmark" />,
             onYes: () => {
-                dispatch(removeBookmark(verse));
+                dispatch(deleteBookmark(verse));
                 analytics.logEvent("remove_bookmark", {
                     ...verseLocation(verse),
                     trigger,
@@ -165,7 +166,7 @@ export const BookmarkListItem = ({
                                 </a>
                             </div>
                             <button
-                                onClick={removeBookmark}
+                                onClick={onRemoveBookmark}
                                 title={intl.formatMessage({ id: "unbookmark" })}
                             >
                                 <Icon icon={faDelete} />
