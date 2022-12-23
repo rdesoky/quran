@@ -3,47 +3,9 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
-import { selectHifzRanges } from "../../store/dbSlice";
 import { selectActivePage, selectAppHeight } from "../../store/layoutSlice";
-import { ActivityChart, HifzRange, HifzRanges } from "../Hifz";
-import { getPageSuras } from "./../../services/QData";
-
-export const AddHifz = ({ page }) => {
-    const pageIndex = useSelector(selectActivePage);
-    const hifzRanges = useSelector(selectHifzRanges);
-
-    const suras = getPageSuras(pageIndex);
-
-    return (
-        <ul className="FlowingList">
-            {suras.map((sura) => {
-                const hifzRange = hifzRanges.find((r) => {
-                    return (
-                        r.sura === sura &&
-                        pageIndex >= r.startPage &&
-                        pageIndex <= r.endPage
-                    );
-                });
-                return (
-                    <HifzRange
-                        range={
-                            hifzRange || {
-                                sura,
-                                startPage: pageIndex,
-                                endPage: pageIndex,
-                                pages: 1,
-                            }
-                        }
-                        key={pageIndex.toString() + "-" + sura.toString()}
-                        showActions={true}
-                        pages={true}
-                        trigger="update_hifz_popup"
-                    />
-                );
-            })}
-        </ul>
-    );
-};
+import { AddHifz } from "../AddHifz";
+import { ActivityChart, HifzRanges } from "../Hifz";
 
 const Favorites = () => {
     const appHeight = useSelector(selectAppHeight);

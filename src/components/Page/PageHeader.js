@@ -17,7 +17,8 @@ import {
 } from "../../services/QData";
 import { selectPagesCount } from "../../store/layoutSlice";
 import { gotoAya, selectStartSelection } from "../../store/navSlice";
-import { PartsList, SuraList } from "../Modal/QIndex";
+import { PartsList } from "../PartsList";
+import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
 import {
     CircleProgress,
