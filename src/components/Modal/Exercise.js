@@ -53,7 +53,7 @@ import {
     setRepeat,
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
-import { ExerciseSettings } from "./Settings";
+import { ExerciseSettings } from "../ExerciseSettings";
 
 // const useForceUpdate = useCallback(() => updateState({}), []);
 // const useForceUpdate = () => useState()[1];

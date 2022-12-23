@@ -70,8 +70,9 @@ import {
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo } from "../Widgets";
 import { verseLocation } from "./../../services/QData";
-import { AddHifz } from "./Favorites";
+
 import { UserImage } from "./User";
+import { AddHifz } from "../AddHifz";
 
 export const CommandIcons = {
     Commands: faBars,

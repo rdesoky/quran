@@ -13,8 +13,8 @@ import {
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { selectStartSelection } from "../../store/navSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { BookmarksList } from "../BookmarksList";
 import { VerseText } from "./../Widgets";
-import { BookmarksList } from "./QIndex";
 
 const Bookmarks = () => {
     const appHeight = useSelector(selectAppHeight);
