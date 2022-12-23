@@ -76,7 +76,7 @@ export default function Login({ onClose }) {
                             .remove();
                     })
                     .then(() => {
-                        // Delete anonymnous user.
+                        // Delete anonymous user.
                         return anonymousUser.delete();
                     })
                     .then(() => {

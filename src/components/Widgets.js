@@ -229,7 +229,7 @@ export const CircleProgress = ({
     title,
 }) => {
     const radius = (sqSize - strokeWidth) / 2;
-    // Enclose cicle in a circumscribing square
+    // Enclose circle in a circumscribing square
     // const viewBox = `0 0 ${sqSize} ${sqSize}`;
     // Arc length at 100% coverage is the circle circumference
     const dashArray = radius * Math.PI * 2;
