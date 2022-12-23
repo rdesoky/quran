@@ -1,8 +1,6 @@
-import React from "react";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import Transition from "./../../services/Transition";
-import "./Modal.scss";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import { useSelector } from "react-redux";
 import {
     selectActiveSide,
@@ -14,17 +12,14 @@ import {
     selectPagerWidth,
     selectPagesCount,
 } from "../../store/layoutSlice";
-import { useLocation } from "react-router-dom";
-import { getCurrentPageNumber } from "../../services/utils";
 import { selectSidebarWidth } from "../../store/uiSlice";
+import Transition from "./../../services/Transition";
+import "./Modal.scss";
 
 const Modal = ({ onClose, children, show, name, modeless }) => {
     // const app = useContext(AppContext)
     const pagerWidth = useSelector(selectPagerWidth);
-    const location = useLocation();
-    const activeSide = useSelector(
-        selectActiveSide(getCurrentPageNumber(location) - 1)
-    );
+    const activeSide = useSelector(selectActiveSide);
     const isCompact = useSelector(selectIsCompact);
     const isWide = useSelector(selectIsWide);
     const appWidth = useSelector(selectAppWidth);

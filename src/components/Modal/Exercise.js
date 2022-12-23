@@ -39,7 +39,6 @@ import {
 import {
     AudioState,
     selectAudioState,
-    selectPlayingAya,
     selectRemainingTime,
     selectTrackDuration,
 } from "../../store/playerSlice";

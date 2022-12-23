@@ -52,7 +52,6 @@ import {
 } from "../../store/navSlice";
 import {
     AudioState,
-    play,
     selectAudioState,
     selectPlayingAya,
 } from "../../store/playerSlice";

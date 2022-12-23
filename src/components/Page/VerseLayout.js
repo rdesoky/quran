@@ -23,14 +23,12 @@ import {
     selectEndSelection,
     selectMaskStart,
     selectStartSelection,
-    showMask,
 } from "../../store/navSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
 import { VerseContextButtons } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
-    const app = useContext(AppContext);
     const playingAya = useSelector(selectPlayingAya);
     const [hoverVerse, setHoverVerse] = useState(-1);
     const appHeight = useSelector(selectAppHeight);

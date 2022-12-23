@@ -1,33 +1,27 @@
+import firebase from "firebase";
 import React, { useDeferredValue, useEffect, useState } from "react";
-import "./App.scss";
-import Pager, { PageRedirect } from "./components/Pager/Pager";
-import Sidebar from "./components/Sidebar/Sidebar";
 import { IntlProvider } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
     Redirect,
     Route,
     Switch,
-    useHistory,
 } from "react-router-dom";
-import PopupView from "./components/Modal/PopupView";
-import AppProvider from "./context/App";
-import firebase from "firebase";
-import { analytics } from "./services/Analytics";
-import { ToastMessage } from "./components/Widgets";
-import { useDispatch, useSelector } from "react-redux";
-import { onResize, selectAppSize } from "./store/layoutSlice";
-import {
-    setActivities,
-    setBookmarks,
-    setHifzRanges,
-    setUserId,
-} from "./store/userSlice";
-import { selectLang, selectTheme } from "./store/settingsSlice";
-import { MessageBox } from "./components/MessageBox";
-import { ContextPopup } from "./components/ContextPopup";
+import "./App.scss";
 import { Audio } from "./components/Audio";
+import { ContextPopup } from "./components/ContextPopup";
+import { MessageBox } from "./components/MessageBox";
+import PopupView from "./components/Modal/PopupView";
+import Pager, { PageRedirect } from "./components/Pager/Pager";
+import Sidebar from "./components/Sidebar/Sidebar";
+import { ToastMessage } from "./components/Widgets";
+import AppProvider from "./context/App";
 import RefsProvider from "./RefsProvider";
+import { analytics } from "./services/Analytics";
+import { onResize, selectAppSize } from "./store/layoutSlice";
+import { selectLang, selectTheme } from "./store/settingsSlice";
+import useInitApp from "./useInitApp";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -149,137 +143,6 @@ export default function App() {
             </IntlProvider>
         )
     );
-}
-
-function useInitApp() {
-    const dispatch = useDispatch();
-    const [user, setUser] = useState(null);
-    const history = useHistory();
-
-    useEffect(() => {
-        dispatch(
-            onResize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            })
-        );
-    }, [dispatch]);
-
-    useEffect(() => {
-        console.log(`history changed: ${history?.location?.pathname}`);
-    }, [history?.location]);
-
-    useEffect(() => {
-        const onStateChangeObserver = firebase
-            .auth()
-            .onAuthStateChanged((user) => {
-                // this.setState({ user });
-                if (user == null) {
-                    //No user yet, signing in anonymously
-                    firebase.auth().signInAnonymously();
-                } else {
-                    //signed in
-                    setUser(user);
-                    // dispatch(
-                    //     readUserData(user, firebase.app().database().ref())
-                    // );
-                    // this.readFireData(user);
-                    // console.log(`Logged in userId ${JSON.stringify(user)}`);
-                }
-            });
-        return () => {
-            onStateChangeObserver();
-        };
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (!user) {
-            return;
-        }
-        dispatch(setUserId(user.uid));
-        const dbRef = firebase.app().database().ref();
-        const userRef = dbRef.child(`data/${user.uid}`);
-        const offBookmarksUpdate = userRef
-            .child(`aya_marks`)
-            ?.on("value", (snapshot) => {
-                if (snapshot == null) {
-                    return;
-                }
-                const snapshot_val = snapshot.val();
-                const bookmarks = !snapshot_val
-                    ? []
-                    : Object.keys(snapshot_val)
-                          .sort((k1, k2) =>
-                              snapshot_val[k1] < snapshot_val[k2] ? -1 : 1
-                          )
-                          .map((k) => ({ aya: k, ts: snapshot_val[k] }));
-                dispatch(setBookmarks({ bookmarks }));
-            });
-
-        const offHifzUpdate = userRef.child(`hifz`)?.on("value", (snapshot) => {
-            if (!snapshot) {
-                return;
-            }
-            const snapshot_val = snapshot.val();
-            const hifzRanges = snapshot_val
-                ? Object.keys(snapshot_val)
-                      .sort((k1, k2) =>
-                          snapshot_val[k1].ts < snapshot_val[k2].ts ? -1 : 1
-                      )
-                      .map((k) => {
-                          const sura = parseInt(k.substr(3, 3));
-                          const startPage = parseInt(k.substr(0, 3));
-                          const hifzInfo = snapshot_val[k];
-                          const pages = hifzInfo.pages;
-                          const endPage = startPage + pages - 1;
-                          return {
-                              id: k,
-                              sura,
-                              startPage,
-                              pages,
-                              endPage,
-                              date: hifzInfo.ts,
-                              revs: hifzInfo.revs,
-                          };
-                      })
-                : [];
-            dispatch(setHifzRanges({ hifzRanges }));
-        });
-
-        const offActivityUpdate = userRef
-            .child(`activity`)
-            ?.on("value", (snapshot) => {
-                if (!snapshot) {
-                    return;
-                }
-                const snapshot_val = snapshot.val();
-                const pages = snapshot_val
-                    ? Object.keys(snapshot_val)
-                          .sort((k1, k2) => (k1 < k2 ? 1 : -1))
-                          .map((k) => {
-                              return { day: k, pages: snapshot_val[k].pages };
-                          })
-                    : [];
-                const chars = snapshot_val
-                    ? Object.keys(snapshot_val)
-                          .sort((k1, k2) => (k1 < k2 ? 1 : -1))
-                          .map((k) => {
-                              return { day: k, chars: snapshot_val[k].chars };
-                          })
-                    : [];
-                dispatch(
-                    setActivities({
-                        daily: { chars, pages },
-                    })
-                );
-            });
-
-        return () => {
-            offBookmarksUpdate?.();
-            offHifzUpdate?.();
-            offActivityUpdate?.();
-        };
-    }, [dispatch, user]);
 }
 
 export const quranText = [];
