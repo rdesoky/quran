@@ -377,16 +377,16 @@ export default function Pager() {
     ]);
 
     const renderPage = (order, shiftX, scaleX) => {
-        if (pagesCount < order + 1) {
-            return; //skip second page
+        if (order + 1 > shownPages.length) {
+            return; //not enough pages
         }
 
-        let thisPageIndex =
-            pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
+        // let thisPageIndex =
+        //     pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
+        let thisPageIndex = shownPages?.[order];
 
         function selectPage(e) {
             if (pageIndex !== thisPageIndex) {
-                // app.gotoPage(thisPage + 1);
                 dispatch(gotoPage(history, { index: thisPageIndex }));
                 console.log(`Set active page: ${thisPageIndex + 1}`);
             }

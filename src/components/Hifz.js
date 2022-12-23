@@ -234,7 +234,7 @@ const HifzRange = ({
                         )
                     );
                 },
-                content: <String id="overwrite_exisiting_hifz" />,
+                content: <String id="overwrite_existing_hifz" />,
             });
         }
     };
