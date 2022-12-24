@@ -63,6 +63,9 @@ const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
             if (pointerId) {
                 target.releasePointerCapture(pointerId);
             }
+            if (!captured) {
+                return;
+            }
             if (dropShift <= Math.abs(dX) || dropShift <= Math.abs(dY)) {
                 onDrop({ dX, dY });
                 setTimeout(() => {
@@ -74,10 +77,10 @@ const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
                 setDX(0);
                 setDY(0);
             }
-            // e?.stopPropagation();
+            e?.stopPropagation();
             setCaptured(false);
         },
-        [dX, dY, onDrop]
+        [captured, dX, dY, dropShift, onDrop]
     );
     useEffect(() => {
         const rootElement = rootRef.current;
