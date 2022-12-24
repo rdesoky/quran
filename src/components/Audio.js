@@ -111,8 +111,8 @@ export function Audio() {
     }, [dispatch]);
 
     const onPause = useCallback(() => {
-        dispatch(setAudioState(AudioState.paused));
-    }, [dispatch]);
+        // dispatch(setAudioState(AudioState.paused));
+    }, []);
 
     const setupRepeatRange = useCallback(
         (playedAya, repeat) => {
