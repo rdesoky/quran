@@ -15,7 +15,7 @@ import {
     TOTAL_VERSES,
 } from "../services/QData";
 import { getSuraName } from "../services/utils";
-import { selectActivePage } from "../store/layoutSlice";
+import { selectActivePage, selectShownPages } from "../store/layoutSlice";
 import { gotoPage, selectSelectedRange } from "../store/navSlice";
 import {
     AudioState,
@@ -49,6 +49,8 @@ export function Audio() {
     const intl = useIntl();
     const repeatRange = useSelector(selectRepeatRange);
     const activePageIndex = useSelector(selectActivePage);
+    const shownPages = useSelector(selectShownPages);
+
     let audio = audioRef.current;
 
     useEffect(() => {
@@ -94,7 +96,7 @@ export function Audio() {
         return repeatRange.start;
     };
 
-    const onPlaying = () => {
+    const onPlaying = useCallback(() => {
         dispatch(setAudioState(AudioState.playing));
         if (followPlayer) {
             const playingPage = ayaIdPage(playingAya);
@@ -102,22 +104,15 @@ export function Audio() {
                 dispatch(gotoPage(history, playingPage, { sel: false }));
             }
         }
-    };
-    const onWaiting = () => {
-        dispatch(setAudioState(AudioState.buffering));
-    };
-    const onPause = () => {
-        // dispatch(setAudioState(AudioState.paused));
-    };
+    }, [activePageIndex, dispatch, followPlayer, history, playingAya]);
 
-    const onEnded = () => {
-        const nextAya = offsetPlayingAya(1);
-        if (nextAya === -1) {
-            dispatch(setAudioState(AudioState.stopped));
-            return;
-        }
-        play(nextAya, false);
-    };
+    const onWaiting = useCallback(() => {
+        dispatch(setAudioState(AudioState.buffering));
+    }, [dispatch]);
+
+    const onPause = useCallback(() => {
+        dispatch(setAudioState(AudioState.paused));
+    }, [dispatch]);
 
     const setupRepeatRange = useCallback(
         (playedAya, repeat) => {
@@ -169,6 +164,12 @@ export function Audio() {
             if (ayaId !== undefined) {
                 dispatch(setPlayingAya(playedAya));
             }
+            if (followPlayer) {
+                const ayaPage = ayaIdPage(playedAya);
+                if (!shownPages.includes(ayaPage)) {
+                    dispatch(gotoPage(history, { index: ayaPage, sel: false }));
+                }
+            }
             switch (setupRepeat) {
                 case false: //no setup
                     break;
@@ -179,8 +180,27 @@ export function Audio() {
                     setupRepeatRange(playedAya, setupRepeat);
             }
         },
-        [selectedRange.start, repeat, store, dispatch, setupRepeatRange]
+        [
+            selectedRange.start,
+            store,
+            followPlayer,
+            dispatch,
+            shownPages,
+            history,
+            setupRepeatRange,
+            repeat,
+        ]
     );
+
+    const onEnded = () => {
+        const nextAya = offsetPlayingAya(1);
+        if (nextAya === -1) {
+            dispatch(setAudioState(AudioState.stopped));
+            return;
+        }
+
+        play(nextAya, false);
+    };
 
     const pause = useCallback(() => {
         audioRef.current?.pause();

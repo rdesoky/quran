@@ -130,10 +130,10 @@ export default function App() {
                             <PopupView />
                             <ContextPopup />
                             <MessageBox />
+                            <Audio />
                         </Router>
                     </div>
                     <ToastMessage />
-                    <Audio />
                     <SuraNames />
                 </RefsProvider>
             </IntlProvider>
