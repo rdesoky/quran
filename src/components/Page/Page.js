@@ -18,8 +18,7 @@ import VerseLayout from "./VerseLayout";
 const Page = ({
     index: pageIndex,
     order,
-    onIncrement,
-    onDecrement,
+    onArrowKey,
     onPageUp,
     onPageDown,
     scaleX,
@@ -92,8 +91,10 @@ const Page = ({
             <PageHeader
                 index={pageIndex}
                 order={order}
-                onIncrement={onIncrement}
-                onDecrement={onDecrement}
+                // onIncrement={onIncrement}
+                // onDecrement={onDecrement}
+                // offsetSelection={offsetSelection}
+                onArrowKey={onArrowKey}
                 onPageUp={onPageUp}
                 onPageDown={onPageDown}
             />

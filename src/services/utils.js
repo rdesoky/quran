@@ -169,3 +169,12 @@ export const getSuraName = (intl, index) => {
     const suraNames = intl.formatMessage({ id: "sura_names" }).split(",");
     return suraNames?.[index];
 };
+
+export const checkActiveInput = () => {
+    const { tagName, type } = document.activeElement;
+    const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
+    const isTextInput =
+        isInput && ["text", "number", "textarea"].includes(type);
+
+    return { isInput, isTextInput };
+};

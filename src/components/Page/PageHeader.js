@@ -28,14 +28,7 @@ import {
 } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
-const PageHeader = ({
-    index: pageIndex,
-    order,
-    // onPageUp,
-    // onPageDown,
-    onIncrement,
-    onDecrement,
-}) => {
+const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     const partIndex = getPagePartNumber(pageIndex + 1) - 1;
     const suraIndex = getPageSuraIndex(pageIndex + 1);
     const pagesCount = useSelector(selectPagesCount);
@@ -72,13 +65,15 @@ const PageHeader = ({
     };
 
     const onClickNext = (e) => {
-        onIncrement && onIncrement(e);
+        onArrowKey?.(e, "down");
         analytics.logEvent("nav_next_verse", { trigger: "page_header" });
+        e.stopPropagation();
     };
 
     const onClickPrevious = (e) => {
-        onDecrement && onDecrement(e);
+        onArrowKey?.(e, "up");
         analytics.logEvent("nav_prev_verse", { trigger: "page_header" });
+        e.stopPropagation();
     };
 
     const showSuraContextPopup = ({ target }) => {
