@@ -112,8 +112,7 @@ const Page = ({
             >
                 <div
                     className={
-                        "PageImageFrame" +
-                        (imageUrl && pagesCount > 1 ? " AnimatePage" : "")
+                        "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
                     }
                     style={{
                         transform: `translateX(${shiftX || 0}px) scaleX(${
