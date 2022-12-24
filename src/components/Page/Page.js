@@ -112,13 +112,14 @@ const Page = ({
             >
                 <div
                     className={
-                        "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
+                        "PageImageFrame" +
+                        (imageUrl && pagesCount > 1 ? " AnimatePage" : "")
                     }
                     style={{
                         transform: `translateX(${shiftX || 0}px) scaleX(${
                             scaleX || 1
                         })`,
-                        // transform: `translateX(${shiftX || 0}px) scaleX(1)`
+                        // transform: `translateX(${shiftX || 0}px) scaleX(1)`,
                     }}
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />

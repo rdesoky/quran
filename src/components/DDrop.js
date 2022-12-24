@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
-const DDrop = ({ children, onDrop, maxShift, minShift }) => {
+const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
     const [captured, setCaptured] = useState(false);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
@@ -54,13 +54,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
         setStartY(clientY);
         setDX(0);
         setDY(0);
-        if (
-            typeof e === "object" &&
-            e !== null &&
-            typeof e.stopPropagation === "function"
-        ) {
-            e.stopPropagation();
-        }
+        e?.stopPropagation();
     };
 
     const onMouseUp = useCallback(
@@ -69,10 +63,18 @@ const DDrop = ({ children, onDrop, maxShift, minShift }) => {
             if (pointerId) {
                 target.releasePointerCapture(pointerId);
             }
-            onDrop({ dX, dY });
-            setDX(0);
-            setDY(0);
-            e.stopPropagation();
+            if (dropShift <= Math.abs(dX) || dropShift <= Math.abs(dY)) {
+                onDrop({ dX, dY });
+                setTimeout(() => {
+                    setDX(0);
+                    setDY(0);
+                }, 200);
+                e?.preventDefault();
+            } else {
+                setDX(0);
+                setDY(0);
+            }
+            // e?.stopPropagation();
             setCaptured(false);
         },
         [dX, dY, onDrop]

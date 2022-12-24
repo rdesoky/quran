@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import {
     ayaIdPage,
@@ -27,19 +27,17 @@ import {
     hideMask,
     offsetPage,
     offsetSelection,
-    selectAya,
     selectMaskShift,
     selectMaskStart,
     selectSelectedText,
     selectStartSelection,
     setSelectStart,
-    showMask,
     startMask,
 } from "../../store/navSlice";
 import {
     closePopup,
-    selectPopup,
     selectMenuExpanded,
+    selectPopup,
     showMenu,
     showPopup,
 } from "../../store/uiSlice";
@@ -330,19 +328,20 @@ export default function Pager() {
         },
         [
             activePopup,
-            contextPopup,
-            decrementMask,
-            dispatch,
-            expandedMenu,
-            maskShift,
-            maskStart,
             modalPopup,
-            msgBox,
-            incrementMask,
-            onOffsetSelection,
+            selectedText,
+            contextPopup,
+            expandedMenu,
+            maskStart,
             pageDown,
             pageUp,
-            selectedText,
+            msgBox,
+            dispatch,
+            history,
+            maskShift,
+            incrementMask,
+            onOffsetSelection,
+            decrementMask,
         ]
     );
 
@@ -408,6 +407,7 @@ export default function Pager() {
     return (
         <DDrop
             maxShift={200}
+            dropShift={50}
             onDrop={({ dX, dY }) => {
                 if (dX > 50) {
                     analytics.setTrigger("dragging");
