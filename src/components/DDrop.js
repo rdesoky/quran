@@ -26,7 +26,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
                 if (shiftY > min && shiftY < maxShift) {
                     setDY(clientY - startY);
                 }
-                e.stopPropagation();
+                e?.stopPropagation?.();
             }
         },
         [captured, maxShift, minShift, startX, startY]
@@ -54,7 +54,7 @@ const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
         setStartY(clientY);
         setDX(0);
         setDY(0);
-        e?.stopPropagation();
+        e?.stopPropagation?.();
     };
 
     const onMouseUp = useCallback(
