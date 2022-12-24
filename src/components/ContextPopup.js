@@ -19,8 +19,12 @@ export const ContextPopup = () => {
 
     useEffect(() => {
         refs.add("contextPopup", {
-            show: (info) => setContextPopup(info),
-            close: () => setContextPopup(null),
+            show: (info) => {
+                setContextPopup(info);
+            },
+            close: () => {
+                setContextPopup(null);
+            },
             info: contextPopup,
         });
     }, [refs, contextPopup]);

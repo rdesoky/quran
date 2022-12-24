@@ -22,7 +22,6 @@ import {
     selectMaskStart,
     selectSelectedText,
     selectStartSelection,
-    showMask,
     startMask,
 } from "../store/navSlice";
 import {
@@ -40,9 +39,9 @@ import {
 } from "../store/uiSlice";
 import { verseLocation } from "./../services/QData";
 
+import { useHistory } from "react-router-dom";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";
-import { useHistory } from "react-router-dom";
 
 export const CommandButton = ({
     id,
@@ -54,6 +53,7 @@ export const CommandButton = ({
 }) => {
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
+    const contextPopup = useContext(AppRefs).get("contextPopup");
     const dispatch = useDispatch();
     const menuExpanded = useSelector(selectMenuExpanded);
     const intl = useIntl();
@@ -183,10 +183,6 @@ export const CommandButton = ({
                     trigger,
                 });
                 dispatch(showPopup(command));
-                if (menuExpanded) {
-                    dispatch(hideMenu());
-                }
-                return;
         }
         // app.pushRecentCommand(command);
         // if (pagesCount == 1) {
@@ -195,6 +191,9 @@ export const CommandButton = ({
         // app.setShowMenu(false);
         if (menuExpanded) {
             dispatch(hideMenu());
+        }
+        if (contextPopup.info) {
+            contextPopup.close();
         }
     };
 
