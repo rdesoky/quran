@@ -7,7 +7,11 @@ import {
     getPageFirstAyaId,
     TOTAL_VERSES,
 } from "../../services/QData";
-import { copy2Clipboard, downloadPageImage } from "../../services/utils";
+import {
+    checkActiveInput,
+    copy2Clipboard,
+    downloadPageImage,
+} from "../../services/utils";
 import {
     selectActivePage,
     selectAppHeight,
@@ -191,13 +195,36 @@ export default function Pager() {
         },
         [dispatch, history, maskStart, shownPages]
     );
+    const onArrowKey = useCallback(
+        (e, direction) => {
+            const { isTextInput } = checkActiveInput();
+
+            if (!isTextInput) {
+                if (direction === "down") {
+                    analytics.setTrigger("down_key");
+                    if (!maskShift && maskStart !== -1) {
+                        incrementMask(e);
+                    } else {
+                        onOffsetSelection(e, 1);
+                    }
+                    analytics.logEvent("nav_next_verse", {});
+                } else {
+                    analytics.setTrigger("up_key");
+                    if (maskStart !== -1 && !maskShift) {
+                        decrementMask(e);
+                    } else {
+                        onOffsetSelection(e, -1);
+                    }
+                    analytics.logEvent("nav_prev_verse", {});
+                }
+            }
+        },
+        [decrementMask, incrementMask, maskShift, maskStart, onOffsetSelection]
+    );
 
     const handleKeyDown = useCallback(
         (e) => {
-            const { tagName, type } = document.activeElement;
-            const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
-            const isTextInput =
-                isInput && ["text", "number", "textarea"].includes(type);
+            const { isTextInput } = checkActiveInput();
 
             const vEditorOn = ["Search", "Index"].includes(activePopup);
 
@@ -278,26 +305,10 @@ export default function Pager() {
                     }
                     break;
                 case "ArrowDown":
-                    if (!isTextInput) {
-                        analytics.setTrigger("down_key");
-                        if (!maskShift && maskStart !== -1) {
-                            incrementMask(e);
-                        } else {
-                            onOffsetSelection(e, 1);
-                        }
-                        analytics.logEvent("nav_next_verse", {});
-                    }
+                    onArrowKey(e, "down");
                     break;
                 case "ArrowUp":
-                    if (!isTextInput) {
-                        analytics.setTrigger("up_key");
-                        if (maskStart !== -1 && !maskShift) {
-                            decrementMask(e);
-                        } else {
-                            onOffsetSelection(e, -1);
-                        }
-                        analytics.logEvent("nav_prev_verse", {});
-                    }
+                    onArrowKey(e, "up");
                     break;
                 case "ArrowLeft":
                     analytics.setTrigger("left_key");
@@ -333,15 +344,12 @@ export default function Pager() {
             contextPopup,
             expandedMenu,
             maskStart,
+            onArrowKey,
             pageDown,
             pageUp,
             msgBox,
             dispatch,
             history,
-            maskShift,
-            incrementMask,
-            onOffsetSelection,
-            decrementMask,
         ]
     );
 
@@ -395,8 +403,7 @@ export default function Pager() {
                     order={order}
                     onPageUp={pageUp}
                     onPageDown={pageDown}
-                    onIncrement={incrementMask}
-                    onDecrement={decrementMask}
+                    onArrowKey={onArrowKey}
                     scaleX={scaleX}
                     shiftX={shiftX}
                 />
@@ -411,11 +418,11 @@ export default function Pager() {
             onDrop={({ dX, dY }) => {
                 if (dX > 50) {
                     analytics.setTrigger("dragging");
-                    pageDown(2);
+                    pageDown();
                 }
                 if (dX < -50) {
                     analytics.setTrigger("dragging");
-                    pageUp(2);
+                    pageUp();
                 }
             }}
         >
