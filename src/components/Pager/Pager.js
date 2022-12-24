@@ -397,6 +397,7 @@ export default function Pager() {
                     height: appHeight + "px",
                     width: 100 / pagesCount + "%",
                 }}
+                key={thisPageIndex}
             >
                 <Page
                     index={thisPageIndex}

@@ -23,6 +23,7 @@ const initialState = {
         end: TOTAL_VERSES,
     },
     trackDuration: 0,
+    remainingTime: 0,
 };
 
 const slice = createSlice({
