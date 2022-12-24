@@ -1,87 +1,128 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
-const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
-    const [captured, setCaptured] = useState(false);
+const DDrop = ({
+    children,
+    onDrop,
+    minShift = 10, //shift before drop is triggered
+    dropShift = 50,
+    maxShift = 200, //shift before drop is triggered
+}) => {
+    const [pointerCaptured, setPointerCaptured] = useState(false);
+    const [pointerDown, setPointerDown] = useState(false);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
     const [dX, setDX] = useState(0);
     const [dY, setDY] = useState(0);
     const rootRef = useRef();
-    const onTouchStart = useCallback((e) => {
-        const { clientX, clientY } = e.targetTouches[0];
-        const { target } = e;
-        onMouseDown({ clientX, clientY, target });
-        // e.preventDefault();
-    }, []);
-    const onMouseMove = useCallback(
-        (e) => {
-            const { clientX, clientY } = e;
-            const min = minShift || 10;
-            if (captured) {
-                const shiftX = Math.abs(clientX - startX);
-                const shiftY = Math.abs(clientY - startY);
-                if (shiftX > min && shiftX < maxShift) {
-                    setDX(clientX - startX);
-                }
-                if (shiftY > min && shiftY < maxShift) {
-                    setDY(clientY - startY);
-                }
-                e?.stopPropagation?.();
-            }
-        },
-        [captured, maxShift, minShift, startX, startY]
-    );
-    const onTouchMove = useCallback(
-        (e) => {
-            const { clientX, clientY } = e.targetTouches[0];
-            const { target } = e;
-            onMouseMove({ clientX, clientY, target });
-            e.preventDefault();
-        },
-        [onMouseMove]
-    );
 
-    const onMouseDown = (e) => {
-        const { target, clientX, clientY, pointerId } = e;
+    const onPointerDown = useCallback((e) => {
+        const { target, clientX, clientY } = e;
+        // e.pointerId && console.log(`~~onPointerDown ${e.pointerId}`);
+
         if (target.tagName.toLowerCase() === "select") {
             return;
         }
-        if (pointerId) {
-            target.setPointerCapture(pointerId);
-        }
-        setCaptured(true);
+        setPointerDown(true);
         setStartX(clientX);
         setStartY(clientY);
         setDX(0);
         setDY(0);
-        e?.stopPropagation?.();
-    };
+    }, []);
 
-    const onMouseUp = useCallback(
+    const onPointerMove = useCallback(
         (e) => {
-            const { target, pointerId } = e;
-            if (pointerId) {
-                target.releasePointerCapture(pointerId);
-            }
-            if (!captured) {
+            if (!pointerDown) {
                 return;
             }
-            if (dropShift <= Math.abs(dX) || dropShift <= Math.abs(dY)) {
-                onDrop({ dX, dY });
-                setTimeout(() => {
+            const { clientX, clientY, pointerId, currentTarget } = e;
+            const shiftX = Math.abs(clientX - startX);
+            const shiftY = Math.abs(clientY - startY);
+            let isCaptured = pointerCaptured;
+            if (!pointerCaptured && (shiftX > minShift || shiftY > minShift)) {
+                if (pointerId) {
+                    // console.log(`~~setPointerCapture ${pointerId}`);
+                    currentTarget.setPointerCapture(pointerId);
+                }
+                setPointerCaptured(true);
+                isCaptured = true;
+            }
+            if (isCaptured) {
+                // pointerId && console.log(`~~onPointerMove ${pointerId}`);
+                if (shiftX > minShift && shiftX < maxShift) {
+                    setDX(clientX - startX);
+                }
+                if (shiftY > minShift && shiftY < maxShift) {
+                    setDY(clientY - startY);
+                }
+            }
+        },
+        [pointerDown, startX, startY, pointerCaptured, minShift, maxShift]
+    );
+
+    const checkDrop = useCallback(
+        (e) => {
+            const { pointerId, currentTarget } = e;
+            setPointerDown(false);
+            setPointerCaptured(false);
+            if (pointerCaptured) {
+                if (pointerId) {
+                    currentTarget.releasePointerCapture(pointerId);
+                    // console.log(`~~releasePointerCapture ${pointerId}`);
+                }
+                if (dropShift <= Math.abs(dX) || dropShift <= Math.abs(dY)) {
+                    onDrop({ dX, dY });
+                    setTimeout(() => {
+                        setDX(0);
+                        setDY(0);
+                    }, 200);
+                    e?.preventDefault();
+                } else {
                     setDX(0);
                     setDY(0);
-                }, 200);
-                e?.preventDefault();
-            } else {
-                setDX(0);
-                setDY(0);
+                }
             }
-            e?.stopPropagation();
-            setCaptured(false);
         },
-        [captured, dX, dY, dropShift, onDrop]
+        [pointerCaptured, dX, dY, dropShift, onDrop]
     );
+
+    const onTouchEnd = useCallback(
+        (e) => {
+            // console.log(`~~onTouchEnd`);
+            checkDrop(e);
+        },
+        [checkDrop]
+    );
+
+    const onPointerEnd = useCallback(
+        (e) => {
+            // console.log(`~~onPointerEnd ${e.pointerId}`);
+            checkDrop(e);
+        },
+        [checkDrop]
+    );
+
+    const onTouchStart = useCallback(
+        (e) => {
+            const { target } = e;
+            // console.log(`~~onTouchStart`);
+            const { clientX, clientY } = e.targetTouches[0];
+            onPointerDown({ clientX, clientY, target });
+            // e.preventDefault();
+        },
+        [onPointerDown]
+    );
+
+    const onTouchMove = useCallback(
+        (e) => {
+            const { clientX, clientY } = e.targetTouches[0]; //read first finger positions only
+            const { currentTarget, pointerId } = e;
+            // console.log(`~~onTouchMove`);
+            onPointerMove({ clientX, clientY, currentTarget, pointerId });
+            // e.preventDefault();
+        },
+        [onPointerMove]
+    );
+
     useEffect(() => {
         const rootElement = rootRef.current;
         rootElement?.addEventListener("touchstart", onTouchStart, {
@@ -90,26 +131,23 @@ const DDrop = ({ children, onDrop, maxShift, minShift, dropShift }) => {
         rootElement?.addEventListener("touchmove", onTouchMove, {
             passive: false,
         });
-        rootElement?.addEventListener("touchend", onMouseUp, {
+        rootElement?.addEventListener("touchend", onTouchEnd, {
             passive: false,
         });
         return () => {
             rootElement?.removeEventListener("touchstart", onTouchStart);
             rootElement?.removeEventListener("touchmove", onTouchMove);
-            rootElement?.removeEventListener("touchend", onMouseUp);
+            rootElement?.removeEventListener("touchend", onTouchEnd);
         };
-    }, [onMouseUp, onTouchMove, onTouchStart]);
+    }, [onTouchEnd, onTouchMove, onTouchStart]);
 
     return (
         <div
             className="DDrop"
             ref={rootRef}
-            // onTouchStart={onTouchStart}
-            // onTouchMove={onMouseMove}
-            // onTouchEnd={onMouseUp}
-            onPointerDown={onMouseDown}
-            onPointerMove={onMouseMove}
-            onPointerUp={onMouseUp}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerEnd}
         >
             {children({ dX, dY })}
         </div>
