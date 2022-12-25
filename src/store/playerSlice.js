@@ -85,37 +85,3 @@ export const selectAudioSource = (ayaId) => (state) => {
 
 export const selectTrackDuration = (state) => state[sliceName].trackDuration;
 export const selectRemainingTime = (state) => state[sliceName].remainingTime;
-
-// export const play = (audio, ayaId) => (dispatch, getState) => {
-//     const state = getState();
-//     const audioState = selectAudioState(state);
-//     const playingAya = selectPlayingAya(state);
-//     const targetAya = ayaId !== undefined ? ayaId : selectStartSelection(state);
-//     if (audioState === AudioState.playing && playingAya === targetAya) {
-//         return;
-//     }
-//     audio.play(targetAya);
-// };
-
-// export const stop = (audio) => (dispatch) => {
-//     // dispatch(setAudioState(AudioState.stopped));
-//     dispatch(setPlayingAya(-1));
-//     audio.stop();
-// };
-
-// export const playerChangeReciter = (reciter) => (dispatch, getState) => {
-//     if (!dispatch(changeReciter(reciter))) {
-//         return; //same reciter
-//     }
-//     const audioState = selectAudioState(getState());
-//     switch (audioState) {
-//         case AudioState.paused:
-//             dispatch(stop());
-//             break;
-//         case AudioState.playing:
-//             dispatch(play()); //TODO: check if timeout is required
-//             break;
-//         default:
-//             break;
-//     }
-// };

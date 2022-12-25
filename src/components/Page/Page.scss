@@ -246,7 +246,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 display: inline-block;
                 white-space: nowrap;
                 background-color: #333;
-                border-radius: 5px;
+                border-radius: 3px;
+                margin: 0 5px;
                 height: 25px;
                 > * {
                     height: 100%;

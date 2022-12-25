@@ -44,18 +44,6 @@ function Sidebar() {
                 }
             }}
         >
-            <CommandButton
-                id="SideMenuExpander"
-                command="Commands"
-                trigger="side_bar"
-                style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    height: 50,
-                    backgroundColor: "#000",
-                }}
-            />
             <div
                 className={"Sidebar".appendWord("narrow", isNarrow)}
                 style={{
@@ -109,6 +97,18 @@ function Sidebar() {
                     </div>
                 </div>
             </div>
+            <CommandButton
+                id="SideMenuExpander"
+                command="Commands"
+                trigger="side_bar"
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    height: 50,
+                    backgroundColor: "#000",
+                }}
+            />
         </div>
     );
 }

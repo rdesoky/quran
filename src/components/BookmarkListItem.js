@@ -15,10 +15,10 @@ import { quranText } from "../App";
 import useSuraName from "../hooks/useSuraName";
 import { AppRefs } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
-import { ayaIdInfo, verseLocation } from "../services/QData";
+import { ayaIdInfo, ayaIdPage, verseLocation } from "../services/QData";
 import { deleteBookmark } from "../store/dbSlice";
 import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
-import { gotoAya } from "../store/navSlice";
+import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
 import { closePopup } from "../store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
@@ -43,6 +43,7 @@ export const BookmarkListItem = ({
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
     const audioSource = useSelector(selectAudioSource(verse));
+    const maskOn = useSelector(selectMaskOn);
 
     useEffect(() => {
         setVerseText(quranText[verse]);
@@ -92,10 +93,13 @@ export const BookmarkListItem = ({
     };
 
     const playVerse = (e) => {
-        // player.stop(true);
-        audio.stop();
-        dispatch(gotoAya(history, verse, { sel: true }));
+        // audio.stop();
+        if (maskOn) {
+            dispatch(hideMask());
+        }
+        dispatch(gotoPage(history, ayaIdPage(verse)));
         audio.play(verse);
+        checkClosePopup();
         analytics.logEvent("play_audio", {
             ...verseLocation(verse),
             trigger,

@@ -17,12 +17,15 @@ import {
     deleteHifzRange,
     setRangeRevised,
 } from "../store/dbSlice";
+import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
 import {
-    selectAppSize,
-    selectIsCompact,
-    selectPagesCount,
-} from "../store/layoutSlice";
-import { gotoAya, gotoPage, setSelectEnd, showMask } from "../store/navSlice";
+    gotoAya,
+    gotoPage,
+    hideMask,
+    selectMaskOn,
+    setSelectEnd,
+    showMask,
+} from "../store/navSlice";
 import { setRepeatRange } from "../store/playerSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
@@ -59,7 +62,8 @@ export const HifzRange = ({
     const dispatch = useDispatch();
     const intl = useIntl();
     const history = useHistory();
-    const appSize = useSelector(selectAppSize);
+    const maskOn = useSelector(selectMaskOn);
+    // const appSize = useSelector(selectAppSize);
 
     const suraInfo = sura_info[range.sura];
 
@@ -134,18 +138,19 @@ export const HifzRange = ({
     };
 
     const playRange = (e) => {
-        audio.stop(true);
+        // audio.stop();
         const [start, end] = getRangeVerses(
             range.sura,
             range.startPage,
             range.endPage
         );
+        if (maskOn) {
+            dispatch(hideMask());
+        }
         dispatch(setRepeatRange({ start, end }));
         audio.play(start, false);
         dispatch(gotoPage(history, ayaIdPage(start)));
-        if (appSize === "one_page") {
-            dispatch(closePopup());
-        }
+        checkClosePopup();
         analytics.logEvent("play_audio", {
             trigger,
             ...verseLocation(start),
@@ -187,6 +192,7 @@ export const HifzRange = ({
     };
 
     const checkClosePopup = () => {
+        // 	if (appSize === "one_page") {
         if (!isCompact && pagesCount === 1) {
             dispatch(closePopup());
         }

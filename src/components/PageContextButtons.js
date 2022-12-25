@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AppRefs } from "../RefsProvider";
 import { getPageFirstAyaId } from "../services/QData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";

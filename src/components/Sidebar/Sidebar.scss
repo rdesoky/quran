@@ -11,8 +11,8 @@
     position: fixed;
     pointer-events: fill;
     left: 0;
-    top: 50px;
-    bottom: 0;
+    top: 0;
+    bottom: 50px;
     overflow: auto;
     // display: inline-block;
     vertical-align: top;
@@ -97,7 +97,7 @@
 
     .SidebarSection {
         border-color: #444;
-        border-width: 1px 0 0 0;
+        border-width: 0 0 1px 0;
         border-style: solid;
     }
 }
