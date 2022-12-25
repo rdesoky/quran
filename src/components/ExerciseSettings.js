@@ -39,7 +39,9 @@ export const ExerciseSettings = () => {
         <>
             <div className="OptionRow">
                 <label>
-                    <Message id="exercise_level" />
+                    <span>
+                        <Message id="exercise_level" />
+                    </span>
                     <select
                         onChange={updateExerciseLevel}
                         value={exerciseLevel}

@@ -10,7 +10,6 @@ import { CommandButton } from "./CommandButton";
 
 export const PageContextButtons = ({ page }) => {
     const audioState = useSelector(selectAudioState);
-    const audio = useContext(AppRefs).get("audio");
     const dispatch = useDispatch();
     const isMaskOn = useSelector(selectMaskOn);
     const history = useHistory();
@@ -20,18 +19,13 @@ export const PageContextButtons = ({ page }) => {
     return (
         <div className="IconsBar">
             <CommandButton
-                trigger="page_context"
-                command={audioState === AudioState.stopped ? "Play" : "Stop"}
-                onClick={
-                    audioState === AudioState.stopped
-                        ? () => {
-                              audio.play(
-                                  getPageFirstAyaId(page),
-                                  AudioRepeat.page
-                              );
-                          }
-                        : null
-                }
+                {...{
+                    trigger,
+                    command:
+                        audioState === AudioState.stopped ? "Play" : "Stop",
+                    audioRepeat: AudioRepeat.page,
+                    playAya: getPageFirstAyaId(page),
+                }}
             />
             <CommandButton {...{ trigger, command: "update_hifz" }} />
             {!isMaskOn && (

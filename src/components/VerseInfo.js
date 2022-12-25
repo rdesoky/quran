@@ -5,9 +5,9 @@ import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/Analytics";
-import { ayaIdInfo } from "../services/QData";
+import { ayaIdInfo, ayaIdPage } from "../services/QData";
 import { selectPagesCount } from "../store/layoutSlice";
-import { gotoAya, selectStartSelection } from "../store/navSlice";
+import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
 import { closePopup, selectPopup } from "../store/uiSlice";
 import SuraName from "./SuraName";
 
@@ -39,7 +39,7 @@ export const VerseInfo = ({
         if (typeof onClick === "function") {
             onClick(verse);
         } else {
-            dispatch(gotoAya(history, verse, { sel: true }));
+            dispatch(gotoPage(history, ayaIdPage(verse)));
             if (pagesCount === 1 && popup) {
                 dispatch(closePopup());
             }

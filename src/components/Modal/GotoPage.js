@@ -85,7 +85,7 @@ const GotoPage = ({ open }) => {
         e.preventDefault();
         const { target: form } = e;
         const pageNum = parseInt(form["PageNumber"].value);
-        dispatch(gotoPage(history, { index: pageNum - 1, sel: true }));
+        dispatch(gotoPage(history, pageNum - 1, { sel: true }));
         // app.gotoPage(pageNum);
         // let ayaId = getPageFirstAyaId(pageNum - 1);
         // app.selectAya(ayaId);

@@ -144,7 +144,7 @@ export default function Pager() {
             // if (maskStart !== -1 && getPageFirstAyaId(page) === selectedAyaId) {
             //     return;
             // }
-            dispatch(gotoPage(history, { index: ayaIdPage(selectedAyaId) }));
+            dispatch(gotoPage(history, ayaIdPage(selectedAyaId)));
         },
         [dispatch, history, selectStart]
     );
@@ -164,8 +164,7 @@ export default function Pager() {
                 const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
                 if (maskStart === pageFirstAya) {
                     dispatch(
-                        gotoPage(history, {
-                            index: incrementedMaskPage,
+                        gotoPage(history, incrementedMaskPage, {
                             select: true,
                         })
                     );
@@ -185,9 +184,7 @@ export default function Pager() {
                     dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
                     return;
                 } else {
-                    dispatch(
-                        gotoPage(history, { index: maskPage, select: true })
-                    );
+                    dispatch(gotoPage(history, maskPage, { select: true }));
                     return; //mask head page is not visible
                 }
             }
@@ -379,7 +376,7 @@ export default function Pager() {
 
         function selectPage(e) {
             if (pageIndex !== thisPageIndex) {
-                dispatch(gotoPage(history, { index: thisPageIndex }));
+                dispatch(gotoPage(history, thisPageIndex));
                 console.log(`Set active page: ${thisPageIndex + 1}`);
             }
         }

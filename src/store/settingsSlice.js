@@ -1,21 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ListReciters } from "../services/AudioData";
+import { getStorageItem } from "../services/utils";
 
 const sliceName = "settings";
 
 const initialState = {
-    exerciseLevel: JSON.parse(localStorage.getItem("exerciseLevel") || 0) || 0,
-    exerciseMemorized: JSON.parse(
-        localStorage.getItem("exerciseMemorized") || false
-    ),
-    randomAutoRecite: JSON.parse(
-        localStorage.getItem("randomAutoRecite") || false
-    ),
-    followPlayer: JSON.parse(localStorage.getItem("followPlayer") || "true"),
-    repeat: parseInt(localStorage.getItem("repeat") || "0"),
-    reciter: localStorage.getItem("reciter") || ListReciters()[0],
-    theme: localStorage.getItem("theme") || "Default",
-    lang: localStorage.getItem("lang") || "ar",
+    exerciseLevel: getStorageItem("exerciseLevel", 0),
+    exerciseMemorized: getStorageItem("exerciseMemorized", false),
+    randomAutoRecite: getStorageItem("randomAutoRecite", false),
+    followPlayer: getStorageItem("followPlayer", true),
+    repeat: getStorageItem("repeat", 0),
+    reciter: getStorageItem("reciter", ListReciters()[0]),
+    theme: getStorageItem("theme", "Default"),
+    lang: getStorageItem("lang", "ar"),
 };
 
 const settingsSlice = createSlice({

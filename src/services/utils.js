@@ -178,3 +178,20 @@ export const checkActiveInput = () => {
 
     return { isInput, isTextInput };
 };
+
+export const getStorageItem = (key, defaultValue = false) => {
+    const val = localStorage.getItem(key);
+    if (val !== null) {
+        switch (typeof defaultValue) {
+            case "string":
+                return val;
+            default:
+                try {
+                    return JSON.parse(val);
+                } catch (e) {
+                    console.error("invalid json", val);
+                }
+        }
+    }
+    return defaultValue;
+};
