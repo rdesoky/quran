@@ -8,7 +8,7 @@ const initialState = {
     exerciseLevel: getStorageItem("exerciseLevel", 0),
     exerciseMemorized: getStorageItem("exerciseMemorized", false),
     randomAutoRecite: getStorageItem("randomAutoRecite", false),
-    followPlayer: getStorageItem("followPlayer", true),
+    followPlayer: getStorageItem("followPlayer", false),
     repeat: getStorageItem("repeat", 0),
     reciter: getStorageItem("reciter", ListReciters()[0]),
     theme: getStorageItem("theme", "Default"),

@@ -17,13 +17,18 @@ import {
     deleteHifzRange,
     setRangeRevised,
 } from "../store/dbSlice";
-import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
-import { gotoAya, setSelectEnd, showMask } from "../store/navSlice";
+import {
+    selectAppSize,
+    selectIsCompact,
+    selectPagesCount,
+} from "../store/layoutSlice";
+import { gotoAya, gotoPage, setSelectEnd, showMask } from "../store/navSlice";
 import { setRepeatRange } from "../store/playerSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import {
     ayaID,
+    ayaIdPage,
     getPageFirstAyaId,
     getRangeVerses,
     sura_info,
@@ -54,6 +59,7 @@ export const HifzRange = ({
     const dispatch = useDispatch();
     const intl = useIntl();
     const history = useHistory();
+    const appSize = useSelector(selectAppSize);
 
     const suraInfo = sura_info[range.sura];
 
@@ -136,6 +142,10 @@ export const HifzRange = ({
         );
         dispatch(setRepeatRange({ start, end }));
         audio.play(start, false);
+        dispatch(gotoPage(history, ayaIdPage(start)));
+        if (appSize === "one_page") {
+            dispatch(closePopup());
+        }
         analytics.logEvent("play_audio", {
             trigger,
             ...verseLocation(start),
