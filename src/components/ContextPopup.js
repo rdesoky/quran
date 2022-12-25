@@ -77,8 +77,8 @@ export const ContextPopup = () => {
                             : targetRect.top) - 40,
                 }}
             >
-                <div className="ContextBody">{content}</div>
-                <div className="ContextHeader">{header}</div>
+                {content && <div className="ContextBody">{content}</div>}
+                {header && <div className="ContextHeader">{header}</div>}
             </div>
             <div
                 className={"PopupPointer".appendWord("DownPointer", !isBelow)}
