@@ -50,6 +50,7 @@ export const CommandButton = ({
     style,
     className,
     trigger,
+    onClick,
 }) => {
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
@@ -223,7 +224,11 @@ export const CommandButton = ({
         <button
             id={id}
             onClick={(e) => {
-                runCommand(command);
+                if (onClick) {
+                    onClick(e);
+                } else {
+                    runCommand(command);
+                }
                 switch (command) {
                     case "Commands":
                         e.stopPropagation();

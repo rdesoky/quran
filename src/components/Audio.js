@@ -36,7 +36,7 @@ import {
 } from "../store/settingsSlice";
 
 export function Audio() {
-    const refs = useContext(AppRefs);
+    const appRefs = useContext(AppRefs);
     const audioRef = useRef();
     const dispatch = useDispatch();
     const audioState = useSelector(selectAudioState);
@@ -218,14 +218,14 @@ export function Audio() {
     }, [dispatch]);
 
     useEffect(() => {
-        refs.add("audio", {
+        appRefs.add("audio", {
             play,
             stop,
             pause,
             resume,
             setupRepeatRange,
         });
-    }, [pause, play, refs, resume, setupRepeatRange, stop]);
+    }, [pause, play, appRefs, resume, setupRepeatRange, stop]);
 
     const onDurationChange = (e) => {
         dispatch(setTrackDuration(audio.duration));

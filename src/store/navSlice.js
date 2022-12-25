@@ -85,6 +85,7 @@ export const selectSelectedRange = (state) => ({
 
 export const selectStartSelection = (state) => state[sliceName].selectStart;
 export const selectEndSelection = (state) => state[sliceName].selectEnd;
+export const selectMaskOn = (state) => state[sliceName].maskOn;
 export const selectMaskStart = (state) =>
     state[sliceName].maskOn
         ? lesserOf(state[sliceName].selectStart, state[sliceName].selectEnd) +

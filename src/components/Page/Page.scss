@@ -190,7 +190,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     .PageHeader {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 50px;
         min-width: 240px;
         color: #bbb;
@@ -215,7 +215,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
             padding-left: 50px;
         }
         .PageHeaderContent {
-            text-align: center;
+            // text-align: center;
             [dir="rtl"] & {
                 direction: rtl;
             }

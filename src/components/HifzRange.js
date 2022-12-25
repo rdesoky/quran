@@ -19,6 +19,7 @@ import {
 } from "../store/dbSlice";
 import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
 import { gotoAya, setSelectEnd, showMask } from "../store/navSlice";
+import { setRepeatRange } from "../store/playerSlice";
 import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import {
@@ -128,13 +129,16 @@ export const HifzRange = ({
 
     const playRange = (e) => {
         audio.stop(true);
-        const { startVerse } = selectRange();
-        setTimeout(() => {
-            audio.play(startVerse);
-        }, 500);
+        const [start, end] = getRangeVerses(
+            range.sura,
+            range.startPage,
+            range.endPage
+        );
+        dispatch(setRepeatRange({ start, end }));
+        audio.play(start, false);
         analytics.logEvent("play_audio", {
             trigger,
-            ...verseLocation(startVerse),
+            ...verseLocation(start),
         });
     };
 

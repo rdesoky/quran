@@ -15,8 +15,8 @@ import {
     getPageSuraIndex,
     TOTAL_PAGES,
 } from "../../services/QData";
-import { selectPagesCount } from "../../store/layoutSlice";
-import { gotoAya, selectStartSelection } from "../../store/navSlice";
+import { selectPagesCount, selectShownPages } from "../../store/layoutSlice";
+import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
 import { PartsList } from "../PartsList";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
@@ -36,11 +36,13 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
     const selectedAyaInfo = ayaIdInfo(selectStart);
+    const shownPages = useSelector(selectShownPages);
     const dispatch = useDispatch();
     const contextPopup = useContext(AppRefs).get("contextPopup");
+    const trigger = "page_header";
 
     const showPartContextPopup = ({ currentTarget: target }) => {
-        analytics.logEvent("show_part_context", { trigger: "page_header" });
+        analytics.logEvent("show_part_context", { trigger });
         contextPopup.show({
             target,
             content: <PartsList part={partIndex} />,
@@ -48,7 +50,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     };
 
     const showPageContextPopup = ({ target }) => {
-        analytics.logEvent("show_page_context", { trigger: "page_header" });
+        analytics.logEvent("show_page_context", { trigger });
         contextPopup.show({
             target,
             // header: <div>Page Header</div>,
@@ -57,7 +59,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     };
 
     const showVerseContextPopup = ({ target }) => {
-        analytics.logEvent("show_verse_context", { trigger: "page_header" });
+        analytics.logEvent("show_verse_context", { trigger });
         contextPopup.show({
             target,
             content: <VerseContextButtons verse={selectStart} />,
@@ -66,19 +68,19 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
 
     const onClickNext = (e) => {
         onArrowKey?.(e, "down");
-        analytics.logEvent("nav_next_verse", { trigger: "page_header" });
+        analytics.logEvent("nav_next_verse", { trigger });
         e.stopPropagation();
     };
 
     const onClickPrevious = (e) => {
         onArrowKey?.(e, "up");
-        analytics.logEvent("nav_prev_verse", { trigger: "page_header" });
+        analytics.logEvent("nav_prev_verse", { trigger });
         e.stopPropagation();
     };
 
     const showSuraContextPopup = ({ target }) => {
         analytics.logEvent("show_chapter_context", {
-            trigger: "page_header",
+            trigger,
         });
         contextPopup.show({
             target,
@@ -89,9 +91,44 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
         });
     };
 
+    const gotoNextPage = (e) => {
+        dispatch(gotoPage(history, { index: pageIndex + shownPages.length }));
+        analytics.logEvent("nav_prev_page", { trigger });
+    };
+    const gotoPrevPage = (e) => {
+        dispatch(gotoPage(history, { index: pageIndex - shownPages.length }));
+        analytics.logEvent("nav_prev_page", { trigger });
+    };
+
     return (
         <div className="PageHeader">
             <div className="PageHeaderContent">
+                <div className="PageHeaderSection">
+                    <button
+                        className="NavButton NavBackward"
+                        onClick={gotoPrevPage}
+                    >
+                        <Icon icon={faAngleUp} />
+                    </button>
+                    <button
+                        onClick={showPageContextPopup}
+                        className="IconButton"
+                        title={intl.formatMessage(
+                            { id: "page_num" },
+                            { num: pageIndex + 1 }
+                        )}
+                        style={{ minWidth: 50 }}
+                    >
+                        <Icon icon={faBookOpen} />
+                        {pageIndex + 1}
+                    </button>
+                    <button
+                        onClick={gotoNextPage}
+                        className="NavButton NavForward"
+                    >
+                        <Icon icon={faAngleDown} />
+                    </button>
+                </div>
                 <CircleProgress
                     target={TOTAL_PAGES}
                     progress={pageIndex + 1}
@@ -103,26 +140,6 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         { num: partIndex + 1 }
                     )}
                 />
-                <button
-                    onClick={showSuraContextPopup}
-                    title={intl.formatMessage(
-                        { id: "sura_num" },
-                        { num: suraIndex + 1 }
-                    )}
-                >
-                    <SuraName index={suraIndex} />
-                </button>
-                <button
-                    onClick={showPageContextPopup}
-                    className="IconButton"
-                    title={intl.formatMessage(
-                        { id: "page_num" },
-                        { num: pageIndex + 1 }
-                    )}
-                >
-                    <Icon icon={faBookOpen} />
-                    {pageIndex + 1}
-                </button>
                 <div
                     className="PageHeaderSection"
                     style={{
@@ -142,6 +159,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         }}
                         className="SelectionButton"
                         title={intl.formatMessage({ id: "goto_selection" })}
+                        style={{ minWidth: 60 }}
                     >
                         {selectedAyaInfo.sura +
                             1 +
@@ -155,6 +173,15 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         <Icon icon={faAngleDown} />
                     </button>
                 </div>
+                <button
+                    onClick={showSuraContextPopup}
+                    title={intl.formatMessage(
+                        { id: "sura_num" },
+                        { num: suraIndex + 1 }
+                    )}
+                >
+                    <SuraName index={suraIndex} />
+                </button>
             </div>
         </div>
     );
