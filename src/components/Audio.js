@@ -167,7 +167,7 @@ export function Audio() {
             if (followPlayer) {
                 const ayaPage = ayaIdPage(playedAya);
                 if (!shownPages.includes(ayaPage)) {
-                    dispatch(gotoPage(history, { index: ayaPage, sel: false }));
+                    dispatch(gotoPage(history, ayaPage, { sel: false }));
                 }
             }
             switch (setupRepeat) {

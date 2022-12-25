@@ -75,6 +75,7 @@ const Settings = () => {
 
     const updateFollowPlayer = (checked) => {
         dispatch(setFollowPlayer(checked));
+        localStorage.setItem("followPlayer", checked);
         analytics.logEvent(
             checked ? "set_follow_player" : "set_unfollow_player",
             {
@@ -182,7 +183,9 @@ const Settings = () => {
                 </div>
                 <div className="OptionRow">
                     <label>
-                        <Message id="repeat" />
+                        <span>
+                            <Message id="repeat" />
+                        </span>
                         <select
                             // ref={(ref) => {
                             //     selectRepeat = ref;

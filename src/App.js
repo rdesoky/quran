@@ -72,7 +72,7 @@ export default function App() {
 
     useEffect(() => {
         dispatch(onResize(deferredWindowSize));
-        console.log("App: onResize", deferredWindowSize);
+        // console.log("App: onResize", deferredWindowSize);
     }, [deferredWindowSize, dispatch]);
 
     useEffect(() => {

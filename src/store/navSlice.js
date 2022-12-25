@@ -133,11 +133,11 @@ export const gotoAya =
             dispatch(setSelectedAya(ayaId));
         }
         const pageIndex = ayaIdPage(ayaId);
-        dispatch(gotoPage(history, { index: pageIndex, replace, sel: false }));
+        dispatch(gotoPage(history, pageIndex, { replace, sel: false }));
     };
 
 export const gotoPage =
-    (history, { index: pageIndex, sel: select = false, replace = true }) =>
+    (history, pageIndex, { sel: select = false, replace = true } = {}) =>
     (dispatch, getState) => {
         const selectPageAya = () => {
             if (select) {
@@ -166,7 +166,7 @@ export const offsetPage = (history, offset) => (dispatch, getState) => {
     const pageIndex = selectActivePage(getState());
     if (pageIndex !== undefined) {
         const nextPageIndex = pageIndex + offset;
-        dispatch(gotoPage(history, { index: nextPageIndex }));
+        dispatch(gotoPage(history, nextPageIndex));
     }
 };
 

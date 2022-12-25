@@ -42,8 +42,7 @@ export const SuraHifzChart = ({
             onClickPage(suraStartPage + page);
         } else {
             dispatch(
-                gotoPage(history, {
-                    index: suraStartPage + page - 1,
+                gotoPage(history, suraStartPage + page - 1, {
                     replace: false,
                     sel: true,
                 })

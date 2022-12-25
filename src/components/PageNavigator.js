@@ -20,12 +20,12 @@ export const PageNavigator = ({ children, trigger }) => {
     const stopPropagation = (e) => e.stopPropagation();
 
     const gotoNextPage = (e) => {
-        dispatch(gotoPage(history, { index: pageIndex + 1 }));
+        dispatch(gotoPage(history, pageIndex + 1));
         analytics.logEvent("nav_next_page", { trigger });
     };
 
     const gotoPrevPage = (e) => {
-        dispatch(gotoPage(history, { index: pageIndex - 1 }));
+        dispatch(gotoPage(history, pageIndex - 1));
         analytics.logEvent("nav_prev_page", { trigger });
     };
 

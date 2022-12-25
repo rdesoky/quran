@@ -92,11 +92,11 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     };
 
     const gotoNextPage = (e) => {
-        dispatch(gotoPage(history, { index: pageIndex + shownPages.length }));
+        dispatch(gotoPage(history, pageIndex + shownPages.length));
         analytics.logEvent("nav_prev_page", { trigger });
     };
     const gotoPrevPage = (e) => {
-        dispatch(gotoPage(history, { index: pageIndex - shownPages.length }));
+        dispatch(gotoPage(history, pageIndex - shownPages.length));
         analytics.logEvent("nav_prev_page", { trigger });
     };
 
@@ -117,7 +117,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                             { id: "page_num" },
                             { num: pageIndex + 1 }
                         )}
-                        style={{ minWidth: 50 }}
+                        style={{ minWidth: 30, padding: 0 }}
                     >
                         <Icon icon={faBookOpen} />
                         {pageIndex + 1}
@@ -159,7 +159,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         }}
                         className="SelectionButton"
                         title={intl.formatMessage({ id: "goto_selection" })}
-                        style={{ minWidth: 60 }}
+                        style={{ minWidth: 50, padding: 0 }}
                     >
                         {selectedAyaInfo.sura +
                             1 +

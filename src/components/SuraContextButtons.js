@@ -10,7 +10,6 @@ import { CommandButton } from "./CommandButton";
 
 export const SuraContextButtons = ({ sura }) => {
     const audioState = useSelector(selectAudioState);
-    const audio = useContext(AppRefs).get("audio");
     const dispatch = useDispatch();
     const history = useHistory();
     const trigger = "sura_context";
@@ -23,12 +22,8 @@ export const SuraContextButtons = ({ sura }) => {
                     trigger,
                     command:
                         audioState === AudioState.stopped ? "Play" : "Stop",
-                    onClick:
-                        audioState === AudioState.stopped
-                            ? () => {
-                                  audio.play(ayaID(sura, 0), AudioRepeat.sura);
-                              }
-                            : null,
+                    audioRepeat: AudioRepeat.sura,
+                    playAya: ayaID(sura, 0),
                 }}
             />
             <CommandButton {...{ trigger, command: "update_hifz" }} />

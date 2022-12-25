@@ -17,9 +17,12 @@ import {
     selectUser,
 } from "../store/dbSlice";
 import {
+    gotoAya,
+    gotoPage,
     hideMask,
     selectEndSelection,
     selectMaskStart,
+    selectSelectedRange,
     selectSelectedText,
     selectStartSelection,
     startMask,
@@ -31,17 +34,20 @@ import {
 } from "../store/playerSlice";
 import { selectReciter } from "../store/settingsSlice";
 import {
+    closePopup,
     hideMenu,
     selectMenuExpanded,
+    selectPopup,
     showPopup,
     showToast,
     toggleMenu,
 } from "../store/uiSlice";
-import { verseLocation } from "./../services/QData";
+import { ayaIdPage, verseLocation } from "./../services/QData";
 
 import { useHistory } from "react-router-dom";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";
+import { selectPagesCount } from "../store/layoutSlice";
 
 export const CommandButton = ({
     id,
@@ -51,6 +57,8 @@ export const CommandButton = ({
     className,
     trigger,
     onClick,
+    playAya,
+    audioRepeat = true,
 }) => {
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
@@ -68,6 +76,9 @@ export const CommandButton = ({
     const isBookmarked = useSelector(selectIsBookmarked(selectStart));
     const user = useSelector(selectUser);
     const history = useHistory();
+    const pagesCount = useSelector(selectPagesCount);
+    const popup = useSelector(selectPopup);
+    const selectedRange = useSelector(selectSelectedRange);
 
     const toggleBookmark = (e) => {
         if (isBookmarked) {
@@ -90,15 +101,14 @@ export const CommandButton = ({
                 dispatch(toggleMenu());
                 return;
             case "Play":
-                //TODO: first navigate to the current selection
                 analytics.logEvent("play_audio", {
                     ...verseLocation(selectStart),
                     reciter,
                     trigger,
                 });
-                // dispatch(gotoAya(history, selectStart));
-                audio.play(lesserOf(selectStart, selectEnd));
-                // player.play();
+                const playStart = playAya ? playAya : selectedRange.start;
+                dispatch(gotoPage(history, ayaIdPage(playStart)));
+                audio.play(playStart, audioRepeat);
                 return;
             case "Pause":
                 analytics.logEvent("pause_audio", {
@@ -146,6 +156,9 @@ export const CommandButton = ({
                     }
                 );
                 dispatch(maskStart === -1 ? startMask(history) : hideMask());
+                if (popup && pagesCount === 1) {
+                    dispatch(closePopup());
+                }
                 break;
             case "Copy":
                 analytics.logEvent("copy_text", {
@@ -178,6 +191,9 @@ export const CommandButton = ({
                     title: <String id="update_hifz" />,
                     content: <AddHifz />,
                 });
+                if (popup && pagesCount === 1) {
+                    dispatch(closePopup());
+                }
                 break;
             default: //already calls pushRecentCommand()
                 analytics.logEvent(`show_${command.toLowerCase()}`, {
@@ -186,10 +202,7 @@ export const CommandButton = ({
                 dispatch(showPopup(command));
         }
         // app.pushRecentCommand(command);
-        // if (pagesCount == 1) {
-        //     app.closePopup();
-        // }
-        // app.setShowMenu(false);
+
         if (menuExpanded) {
             dispatch(hideMenu());
         }
@@ -231,6 +244,7 @@ export const CommandButton = ({
                 }
                 switch (command) {
                     case "Commands":
+                    case "Stop":
                         e.stopPropagation();
                         break;
                     default:
