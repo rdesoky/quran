@@ -103,7 +103,7 @@ export const SuraIndexCell = ({
     };
 
     const onClickPlay = (e) => {
-        audio.stop();
+        // audio.stop();
         onClickSura(e);
         audio.play(ayaID(suraIndex, 0), AudioRepeat.sura);
         analytics.logEvent("play_audio", {

@@ -88,24 +88,14 @@ const Page = ({
 
     return (
         <div className="Page">
-            <PageHeader
-                index={pageIndex}
-                order={order}
-                // onIncrement={onIncrement}
-                // onDecrement={onDecrement}
-                // offsetSelection={offsetSelection}
-                onArrowKey={onArrowKey}
-                onPageUp={onPageUp}
-                onPageDown={onPageDown}
-            />
             <Spinner visible={imageUrl === null} />
             <div
+                className="PageFrame"
                 onClick={(e) => {
                     if (menuExpanded) {
                         dispatch(hideMenu());
                     }
                 }}
-                className="PageFrame"
                 style={{
                     textAlign,
                     visibility: imageUrl ? "visible" : "hidden",
@@ -142,6 +132,16 @@ const Page = ({
                     </VerseLayout>
                 </div>
             </div>
+            <PageHeader
+                index={pageIndex}
+                order={order}
+                // onIncrement={onIncrement}
+                // onDecrement={onDecrement}
+                // offsetSelection={offsetSelection}
+                onArrowKey={onArrowKey}
+                onPageUp={onPageUp}
+                onPageDown={onPageDown}
+            />
         </div>
     );
 };

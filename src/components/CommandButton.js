@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppRefs } from "../RefsProvider";
 import {
     copy2Clipboard,
-    lesserOf,
     requestFullScreen,
     selectTopCommand,
 } from "../services/utils";
@@ -17,7 +16,6 @@ import {
     selectUser,
 } from "../store/dbSlice";
 import {
-    gotoAya,
     gotoPage,
     hideMask,
     selectEndSelection,
@@ -45,9 +43,9 @@ import {
 import { ayaIdPage, verseLocation } from "./../services/QData";
 
 import { useHistory } from "react-router-dom";
+import { selectPagesCount } from "../store/layoutSlice";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";
-import { selectPagesCount } from "../store/layoutSlice";
 
 export const CommandButton = ({
     id,
