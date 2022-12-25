@@ -17,15 +17,9 @@ import {
     sura_info,
     verseLocation,
 } from "../services/QData";
-import { lesserOf } from "../services/utils";
 import { addHifzRange, selectSuraRanges } from "../store/dbSlice";
 import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
-import {
-    gotoSura,
-    hideMask,
-    selectEndSelection,
-    selectStartSelection,
-} from "../store/navSlice";
+import { gotoSura, hideMask, selectStartSelection } from "../store/navSlice";
 import { AudioRepeat } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import { AddHifz } from "./AddHifz";
@@ -48,7 +42,6 @@ export const SuraIndexCell = ({
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
     const selectStart = useSelector(selectStartSelection);
-    const selectEnd = useSelector(selectEndSelection);
     const suraRanges = useSelector(selectSuraRanges(suraIndex));
 
     const checkClosePopup = () => {

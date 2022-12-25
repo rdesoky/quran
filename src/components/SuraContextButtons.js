@@ -2,36 +2,34 @@ import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../RefsProvider";
-import { getPageFirstAyaId } from "../services/QData";
+import { ayaID } from "../services/QData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
 import { AudioRepeat } from "../store/settingsSlice";
 import { CommandButton } from "./CommandButton";
 
-export const PageContextButtons = ({ page }) => {
+export const SuraContextButtons = ({ sura }) => {
     const audioState = useSelector(selectAudioState);
     const audio = useContext(AppRefs).get("audio");
     const dispatch = useDispatch();
-    const isMaskOn = useSelector(selectMaskOn);
     const history = useHistory();
-
-    const trigger = "page_context";
+    const trigger = "sura_context";
+    const isMaskOn = useSelector(selectMaskOn);
 
     return (
         <div className="IconsBar">
             <CommandButton
-                trigger="page_context"
-                command={audioState === AudioState.stopped ? "Play" : "Stop"}
-                onClick={
-                    audioState === AudioState.stopped
-                        ? () => {
-                              audio.play(
-                                  getPageFirstAyaId(page),
-                                  AudioRepeat.page
-                              );
-                          }
-                        : null
-                }
+                {...{
+                    trigger,
+                    command:
+                        audioState === AudioState.stopped ? "Play" : "Stop",
+                    onClick:
+                        audioState === AudioState.stopped
+                            ? () => {
+                                  audio.play(ayaID(sura, 0), AudioRepeat.sura);
+                              }
+                            : null,
+                }}
             />
             <CommandButton {...{ trigger, command: "update_hifz" }} />
             {!isMaskOn && (
@@ -41,16 +39,13 @@ export const PageContextButtons = ({ page }) => {
                         command: "Mask",
                         onClick: () => {
                             dispatch(
-                                gotoAya(history, getPageFirstAyaId(page), {
-                                    sel: true,
-                                })
+                                gotoAya(history, ayaID(sura, 0), { sel: true })
                             );
                             dispatch(showMask());
                         },
                     }}
                 />
             )}
-            <CommandButton {...{ trigger, command: "Goto" }} />
         </div>
     );
 };
