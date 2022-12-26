@@ -8,12 +8,14 @@ export const ContextPopup = () => {
     const [contextPopup, setContextPopup] = useState();
     const appHeight = useSelector(selectAppHeight);
     const appWidth = useSelector(selectAppWidth);
+    const popupRef = useRef();
+
     const closePopup = (e) => {
         setContextPopup(null);
     };
-    const popupRef = useRef();
 
     useEffect(() => {
+        //hide the context popup when the app width changes
         setContextPopup(null);
     }, [appWidth]);
 
@@ -47,9 +49,6 @@ export const ContextPopup = () => {
         }
     }, [appWidth, contextPopup]);
 
-    // const stopPropagation = e => {
-    //     e.stopPropagation();
-    // };
     if (!contextPopup) {
         return null;
     }
@@ -60,6 +59,7 @@ export const ContextPopup = () => {
     }
     const left = targetRect.left + targetRect.width / 2;
     const isBelow = appHeight - targetRect.bottom > targetRect.top;
+
     return (
         <div className="ContextPopupBlocker" onClick={closePopup}>
             <div
@@ -70,7 +70,7 @@ export const ContextPopup = () => {
                     bottom: !isBelow
                         ? appHeight - targetRect.top + 15
                         : undefined,
-                    left: left,
+                    left,
                     maxHeight:
                         (isBelow
                             ? appHeight - targetRect.bottom
@@ -85,7 +85,7 @@ export const ContextPopup = () => {
                 style={{
                     top: isBelow ? targetRect.bottom : undefined,
                     bottom: !isBelow ? appHeight - targetRect.top : undefined,
-                    left: left,
+                    left,
                 }}
             ></div>
         </div>

@@ -18,6 +18,7 @@ import {
 import { selectPagesCount, selectShownPages } from "../../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
 import { PartsList } from "../PartsList";
+import PartsPie from "../PartsPie";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
 import {
@@ -45,7 +46,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
         analytics.logEvent("show_part_context", { trigger });
         contextPopup.show({
             target,
-            content: <PartsList part={partIndex} />,
+            content: <PartsPie />, //<PartsList part={partIndex} />,
         });
     };
 
