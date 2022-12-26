@@ -577,10 +577,10 @@ hr {
         border-color: #aaa;
         border-width: 1px 0 0 1px;
         background-color: #333;
-        transform: rotate(45deg) translateY(50%);
+        transform: translateY(33%) translateX(-50%) rotate(45deg);
         animation: FadeIn 0.5s;
         &.DownPointer {
-            transform: rotate(45deg) translateY(-50%);
+            transform: translateY(-36%) translateX(-55%) rotate(45deg);
             border-width: 0 1px 1px 0;
         }
         .DarkTheme & {
