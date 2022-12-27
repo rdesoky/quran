@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { gotoPart } from "../store/navSlice";
 import { useHistory } from "react-router-dom";
 import { selectActivePage } from "../store/layoutSlice";
-import { getPagePartNumber } from "../services/QData";
+import { getPagePartNumber, TOTAL_PARTS } from "../services/QData";
 
 export default function PartsPie() {
     const history = useHistory();
@@ -12,9 +12,7 @@ export default function PartsPie() {
 
     const boxSize = 300;
     const radius = boxSize / 2;
-    const parts = new Array(30).fill(0).map((i, index) => {
-        return `rgba(12, 82, 12, ${(index + 15) / 60})`;
-    });
+    const parts = new Array(TOTAL_PARTS).fill(0);
     const center = { x: radius, y: radius };
     const arcStrokeWidth = 50;
     const arcRadius = radius - arcStrokeWidth / 2;
@@ -36,13 +34,14 @@ export default function PartsPie() {
                     stroke="white"
                     fill="none"
                 />
-                {parts.map((color, index) => {
-                    const strokeArray = [
-                        0, //draw nothing
-                        partDashLength * index, //shifting the drawing offset
+                {parts.map((p, index) => {
+                    const strokeDashoffset =
+                        dashBorderLength / 4 - partDashLength * index;
+
+                    const strokeDasharray = [
                         partDashLength, //drawing pie length
-                        10000, //skip the rest of the circle
-                    ];
+                        dashBorderLength - partDashLength, //skip the rest of the circle
+                    ].join(" ");
                     const partAngel =
                         (index * 360) / parts.length + textAngleShift;
                     const xTextShift =
@@ -51,7 +50,7 @@ export default function PartsPie() {
                     const angel3 = 180 - 90 - angel2;
                     const yTextShift =
                         xTextShift * Math.tan((angel3 * Math.PI) / 180);
-                    const textSize = { w: 0, h: 55 };
+                    const textSize = { w: 0, h: arcStrokeWidth };
                     return (
                         <>
                             <circle
@@ -62,14 +61,15 @@ export default function PartsPie() {
                                 r={radius - arcStrokeWidth / 2}
                                 cx={center.x}
                                 cy={center.y}
-                                strokeDasharray={strokeArray.join(" ")}
-                                transform={`rotate(-90) translate(-${boxSize})`}
+                                style={{ strokeDasharray, strokeDashoffset }}
+                                // transform={`rotate(-90) translate(-${boxSize})`}
+                                // transform={`rotate(-90 ${boxSize/1} ${boxSize/2}) translate(-${boxSize})`}
                             />
                             <text
-                                x={textSize.w / 2 + center.x + xTextShift}
+                                x={center.x + textSize.w / 2 + xTextShift}
                                 y={textSize.h / 2 + yTextShift}
                                 textAnchor="middle"
-                                alignment-baseline="middle"
+                                alignment-baseline="central"
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
                                     dispatch(gotoPart(history, index))
@@ -85,13 +85,13 @@ export default function PartsPie() {
                     cy={center.y}
                     r={30}
                     strokeWidth={0}
-                    fill="gray"
+                    fill="#aaa"
                 />
                 <text
                     x={center.x}
                     y={center.y}
                     textAnchor="middle"
-                    alignment-baseline="middle"
+                    alignment-baseline="central"
                     style={{ cursor: "pointer" }}
                     onClick={() => dispatch(gotoPart(history, partIndex))}
                 >
