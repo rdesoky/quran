@@ -74,8 +74,8 @@ const Page = ({
                 );
             })
             .catch((e) => {
-                const { name, message } = e;
-                console.info(`${name}: ${message}\n${url}`);
+                // const { name, message } = e;
+                // console.info(`${name}: ${message}\n${url}`);
             });
         return () => {
             //Cleanup function
