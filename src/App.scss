@@ -464,7 +464,8 @@ hr {
 .SuraIndexCell,
 .PartIndexCell {
     margin: 2px 0;
-    button {
+    display: flex;
+    > * {
         border-radius: 5px;
         height: $chartHeight;
     }
@@ -684,6 +685,7 @@ hr {
 
 .IconsBar {
     display: flex;
+    justify-content: center;
 }
 
 .BigToggler {

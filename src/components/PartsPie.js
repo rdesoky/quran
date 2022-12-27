@@ -54,7 +54,7 @@ export default function PartsPie() {
                     return (
                         <>
                             <circle
-                                key={index}
+                                key={`circle-${index}`}
                                 strokeWidth={arcStrokeWidth}
                                 stroke={["#aaa", "#888"][index % 2]}
                                 fill="none"
@@ -66,10 +66,11 @@ export default function PartsPie() {
                                 // transform={`rotate(-90 ${boxSize/1} ${boxSize/2}) translate(-${boxSize})`}
                             />
                             <text
+                                key={`text-${index}`}
                                 x={center.x + textSize.w / 2 + xTextShift}
                                 y={textSize.h / 2 + yTextShift}
                                 textAnchor="middle"
-                                alignment-baseline="central"
+                                alignmentBaseline="central"
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
                                     dispatch(gotoPart(history, index))
@@ -91,7 +92,7 @@ export default function PartsPie() {
                     x={center.x}
                     y={center.y}
                     textAnchor="middle"
-                    alignment-baseline="central"
+                    alignmentBaseline="central"
                     style={{ cursor: "pointer" }}
                     onClick={() => dispatch(gotoPart(history, partIndex))}
                 >
