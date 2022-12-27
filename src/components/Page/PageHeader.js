@@ -147,7 +147,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         )}
                         style={{ minWidth: 30, padding: 0 }}
                     >
-                        <Icon icon={faBookOpen} />
+                        <Icon icon={faBookOpen} color="black" />
                         {pageIndex + 1}
                     </button>
                     <button

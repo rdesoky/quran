@@ -8,6 +8,9 @@ import {
     ayaIdPage,
     getPartIndexByAyaId,
     sura_info,
+    TOTAL_PAGES,
+    TOTAL_PARTS,
+    TOTAL_SURAS,
 } from "../../services/QData";
 import { selectIsCompact, selectPagesCount } from "../../store/layoutSlice";
 import {
@@ -32,20 +35,22 @@ const GotoPage = ({ open }) => {
     // const [isOpen, setIsOpen] = useState(true);
     const pagesCount = useSelector(selectPagesCount);
 
-    const [pageNumber, updatePageNumber] = useState(ayaIdPage(selectStart) + 1);
+    const [pageNumber, updatePageNumber] = useState(
+        () => ayaIdPage(selectStart) + 1
+    );
     const [partNumber, updatePartNumber] = useState(
-        getPartIndexByAyaId(selectStart) + 1
+        () => getPartIndexByAyaId(selectStart) + 1
     );
 
     const [suraNumber, updateSuraNumber] = useState(
-        ayaIdInfo(selectStart).sura + 1
+        () => ayaIdInfo(selectStart).sura + 1
     );
     const [verseNumber, updateVerseNumber] = useState(
-        ayaIdInfo(selectStart).aya + 1
+        () => ayaIdInfo(selectStart).aya + 1
     );
 
     const [lastVerseNumber, updateLastVerseNumber] = useState(
-        sura_info[suraNumber - 1].ac
+        () => sura_info[suraNumber - 1].ac
     );
 
     let gotoPageForm;
@@ -90,7 +95,7 @@ const GotoPage = ({ open }) => {
         // let ayaId = getPageFirstAyaId(pageNum - 1);
         // app.selectAya(ayaId);
         checkClosePopup();
-        stopAudio();
+        // stopAudio();
     };
 
     const onGotoPart = (e) => {
@@ -101,7 +106,7 @@ const GotoPage = ({ open }) => {
         dispatch(gotoPart(history, part - 1, { sel: true }));
         // app.gotoPart(part - 1);
         checkClosePopup();
-        stopAudio();
+        // stopAudio();
     };
 
     const onGotoSura = (e) => {
@@ -109,7 +114,7 @@ const GotoPage = ({ open }) => {
         // app.gotoSura(suraNumber - 1);
         dispatch(gotoSura(history, suraNumber - 1, { sel: true }));
         checkClosePopup();
-        stopAudio();
+        // stopAudio();
     };
 
     const onGotoAya = (e) => {
@@ -131,7 +136,11 @@ const GotoPage = ({ open }) => {
     };
 
     const updateSura = (e) => {
-        const suraIndex = e.target.value - 1;
+        if (e.target.value === "") {
+            updateSuraNumber("");
+            return;
+        }
+        const suraIndex = parseInt(e.target.value || "1") - 1;
         updateSuraNumber(suraIndex + 1);
         const suraInfo = sura_info[suraIndex];
         updateVerseNumber(1);
@@ -167,8 +176,8 @@ const GotoPage = ({ open }) => {
                         <input
                             type="Number"
                             name="PageNumber"
-                            min="1"
-                            max="604"
+                            min={1}
+                            max={TOTAL_PAGES}
                             id="PageNumber"
                             value={pageNumber}
                             onChange={updatePage}
@@ -192,8 +201,8 @@ const GotoPage = ({ open }) => {
                         <input
                             type="Number"
                             name="PartNumber"
-                            min="1"
-                            max="30"
+                            min={1}
+                            max={TOTAL_PARTS}
                             id="PartNumber"
                             value={partNumber}
                             onChange={updatePart}
@@ -217,8 +226,8 @@ const GotoPage = ({ open }) => {
                         <input
                             type="Number"
                             name="SuraNumber"
-                            min="1"
-                            max="114"
+                            min={1}
+                            max={TOTAL_SURAS}
                             id="SuraNumber"
                             value={suraNumber}
                             onChange={updateSura}
@@ -242,7 +251,7 @@ const GotoPage = ({ open }) => {
                         <input
                             type="Number"
                             name="VerseNumber"
-                            min="1"
+                            min={1}
                             max={lastVerseNumber}
                             id="VerseNumber"
                             value={verseNumber}
