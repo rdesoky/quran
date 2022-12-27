@@ -9,15 +9,21 @@ import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
+import { analytics } from "../../services/Analytics";
 import {
+    ayaID,
     ayaIdInfo,
+    ayaIdPage,
     getPagePartNumber,
     getPageSuraIndex,
     TOTAL_PAGES,
+    verseLocation,
 } from "../../services/QData";
 import { selectPagesCount, selectShownPages } from "../../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
-import { PartsList } from "../PartsList";
+import { selectPlayingAya } from "../../store/playerSlice";
+import { AudioRepeat } from "../../store/settingsSlice";
+import { CommandIcon } from "../CommandIcon";
 import PartsPie from "../PartsPie";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
@@ -27,12 +33,8 @@ import {
     SuraContextHeader,
     VerseContextButtons,
 } from "../Widgets";
-import { analytics } from "./../../services/Analytics";
 
 const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
-    const partIndex = getPagePartNumber(pageIndex + 1) - 1;
-    const suraIndex = getPageSuraIndex(pageIndex + 1);
-    const pagesCount = useSelector(selectPagesCount);
     const intl = useIntl();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
@@ -40,7 +42,18 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     const shownPages = useSelector(selectShownPages);
     const dispatch = useDispatch();
     const contextPopup = useContext(AppRefs).get("contextPopup");
+    const audio = useContext(AppRefs).get("audio");
+    const playingAya = useSelector(selectPlayingAya);
+
     const trigger = "page_header";
+    const partIndex = getPagePartNumber(pageIndex + 1) - 1;
+    let suraIndex = getPageSuraIndex(pageIndex + 1);
+    const selectedAyaPage = ayaIdPage(
+        ayaID(selectedAyaInfo.sura, selectedAyaInfo.aya)
+    );
+    suraIndex =
+        selectedAyaPage === pageIndex ? selectedAyaInfo.sura : suraIndex;
+    const pagesCount = useSelector(selectPagesCount);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         analytics.logEvent("show_part_context", { trigger });
@@ -101,6 +114,20 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
         analytics.logEvent("nav_prev_page", { trigger });
     };
 
+    const onTogglePlay = (e) => {
+        const aya = ayaID(suraIndex, 0);
+        if (playingAya === -1) {
+            audio.play(aya, AudioRepeat.sura);
+            dispatch(gotoAya(history, aya));
+            analytics.logEvent("play_audio", {
+                trigger,
+                ...verseLocation(aya),
+            });
+        } else {
+            audio.stop();
+        }
+    };
+
     return (
         <div className="PageHeader">
             <div className="PageHeaderContent">
@@ -140,6 +167,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         { id: "part_num" },
                         { num: partIndex + 1 }
                     )}
+                    style={{ marginRight: 7 }}
                 />
                 <div
                     className="PageHeaderSection"
@@ -174,15 +202,28 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         <Icon icon={faAngleDown} />
                     </button>
                 </div>
-                <button
-                    onClick={showSuraContextPopup}
-                    title={intl.formatMessage(
-                        { id: "sura_num" },
-                        { num: suraIndex + 1 }
-                    )}
-                >
-                    <SuraName index={suraIndex} />
-                </button>
+                <div className="PageHeaderSection">
+                    <button
+                        sura={suraIndex}
+                        onClick={onTogglePlay}
+                        title={intl.formatMessage({
+                            id: playingAya === -1 ? "play" : "stop",
+                        })}
+                    >
+                        <CommandIcon
+                            command={playingAya === -1 ? "Play" : "Stop"}
+                        />
+                    </button>
+                    <button
+                        onClick={showSuraContextPopup}
+                        title={intl.formatMessage(
+                            { id: "sura_num" },
+                            { num: suraIndex + 1 }
+                        )}
+                    >
+                        <SuraName index={suraIndex} />
+                    </button>
+                </div>
             </div>
         </div>
     );

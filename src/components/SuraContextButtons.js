@@ -8,7 +8,7 @@ import { AudioRepeat } from "../store/settingsSlice";
 import { CommandButton } from "./CommandButton";
 
 export const SuraContextButtons = ({ sura }) => {
-    const audioState = useSelector(selectAudioState);
+    // const audioState = useSelector(selectAudioState);
     const dispatch = useDispatch();
     const history = useHistory();
     const trigger = "sura_context";
@@ -16,7 +16,7 @@ export const SuraContextButtons = ({ sura }) => {
 
     return (
         <div className="IconsBar">
-            <CommandButton
+            {/* <CommandButton
                 {...{
                     trigger,
                     command:
@@ -24,7 +24,7 @@ export const SuraContextButtons = ({ sura }) => {
                     audioRepeat: AudioRepeat.sura,
                     playAya: ayaID(sura, 0),
                 }}
-            />
+            /> */}
             <CommandButton {...{ trigger, command: "update_hifz" }} />
             {!isMaskOn && (
                 <CommandButton

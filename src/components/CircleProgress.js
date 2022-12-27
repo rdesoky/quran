@@ -8,6 +8,7 @@ export const CircleProgress = ({
     display = null,
     onClick = (e) => false,
     title,
+    style,
 }) => {
     const radius = (sqSize - strokeWidth) / 2;
     // Enclose circle in a circumscribing square
@@ -24,6 +25,7 @@ export const CircleProgress = ({
             height={sqSize}
             viewBox={`0 0 ${sqSize} ${sqSize}`}
             onClick={onClick}
+            style={style}
         >
             <circle
                 className="circle-background"
