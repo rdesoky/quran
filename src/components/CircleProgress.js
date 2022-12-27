@@ -50,7 +50,7 @@ export const CircleProgress = ({
                 x="50%"
                 y="50%"
                 textAnchor="middle"
-                alignment-baseline="central"
+                alignmentBaseline="central"
             >
                 {`${display || progress}`}
             </text>

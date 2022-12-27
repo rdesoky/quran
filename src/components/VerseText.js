@@ -58,9 +58,9 @@ export const VerseText = ({
 
     const toggleBookmark = (e) => {
         if (isBookmarked) {
-            dispatch(addBookmark(verse));
-        } else {
             dispatch(deleteBookmark(verse));
+        } else {
+            dispatch(addBookmark(verse));
         }
     };
 

@@ -53,10 +53,10 @@ export const selectUser = (state) => state[sliceName].user;
 export const selectBookmarks = (state) => state[sliceName].bookmarks;
 export const selectIsBookmarked = (ayaId) => (state) => {
     const { bookmarks } = state[sliceName];
-    return bookmarks?.find(
-        // eslint-disable-next-line eqeqeq
-        (bookmarkInfo) => bookmarkInfo.aya == ayaId
+    const bookMarkInfo = bookmarks?.find(
+        (bookmarkInfo) => parseInt(bookmarkInfo.aya) === ayaId
     );
+    return bookMarkInfo === undefined ? false : true;
 };
 export const selectHifzRanges = (state) => state[sliceName].hifzRanges;
 export const selectDailyActivities = (state) => state[sliceName].daily;
