@@ -10,8 +10,9 @@
 .Sidebar {
     position: fixed;
     pointer-events: fill;
+    box-shadow: 5px 0px 10px 0px rgba(0, 0, 0, 0.35);
     left: 0;
-    top: 0;
+    top: 1px;
     bottom: 50px;
     overflow: auto;
     // display: inline-block;

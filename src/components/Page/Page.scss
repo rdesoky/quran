@@ -79,7 +79,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
 
     .PageFrame {
         position: relative;
-        height: calc(100% - 50px);
+        height: calc(100% - 51px);
         // padding: 0 20px;
         .PageImageFrame {
             // position: absolute;
@@ -196,7 +196,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
         color: #bbb;
         position: relative;
         background-color: #444;
-        box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.35);
+        box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
+        transition: background-color 0.5s;
         .circle-background {
             stroke: #555;
         }
@@ -288,6 +289,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
     .PageImageFrame {
         border-left: solid 1px silver;
+        box-shadow: -3px 0px 3px 0px rgba(0, 0, 0, 0.15);
     }
 }
 .RightPage {
@@ -296,6 +298,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
     .PageImageFrame {
         border-right: solid 1px silver;
+        box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.15);
     }
 }
 

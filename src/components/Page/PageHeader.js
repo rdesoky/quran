@@ -59,7 +59,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
         analytics.logEvent("show_part_context", { trigger });
         contextPopup.show({
             target,
-            content: <PartsPie />, //<PartsList part={partIndex} />,
+            content: <PartsPie size={280} />, //<PartsList part={partIndex} />,
         });
     };
 

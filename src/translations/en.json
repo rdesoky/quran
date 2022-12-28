@@ -167,5 +167,7 @@
     "random_auto_recite": "Auto recite",
     "credits": "Audio is imported from: {link}",
     "audio_fix": "If audio didn't work, please use this link {link}.",
-    "add_to_home": "Andriod and iPhone users better use this page as an app. Open web browser menu and select 'Add to Home Screen'."
+    "add_to_home": "Andriod and iPhone users better use this page as an app. Open web browser menu and select 'Add to Home Screen'.",
+    "sw_update": "New content is available and will be used when all tabs for this page are closed. See https://bit.ly/CRA-PWA.",
+    "sw_success": "New content is successfully cached for offline use."
 }
