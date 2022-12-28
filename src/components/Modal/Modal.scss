@@ -49,6 +49,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     position: absolute;
     right: 0;
     padding: 0 15px 0 15px;
+    box-shadow: 0 0px 15px 0px rgba(0, 0, 0, 0.35);
     background-color: $popupBgColor;
     #ExercisePopup & {
         background-color: $exerciseBgColor;
@@ -60,7 +61,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     .trans-end & {
         transition: opacity 0.5s, top 0.5s, bottom 0.5s, left 0.2s, right 0.2s;
         opacity: 1;
-        top: 0;
+        top: 1px;
         &.HiddenPopup {
             top: -20px;
             opacity: 0;

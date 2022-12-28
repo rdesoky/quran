@@ -127,7 +127,7 @@ const GotoPage = ({ open }) => {
         //     sel: true,
         // });
         checkClosePopup();
-        stopAudio();
+        // stopAudio();
         e.preventDefault();
     };
 
