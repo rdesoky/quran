@@ -141,7 +141,7 @@ export const TafseerView = ({
             })`
         );
         // app.showToast(app.intl.formatMessage({ id: "text_copied" }));
-        dispatch(showToast("text_copied"));
+        dispatch(showToast({ id: "text_copied" }));
     };
 
     const onSelectTafseer = (e) => {

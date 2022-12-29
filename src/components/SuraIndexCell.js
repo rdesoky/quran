@@ -98,7 +98,7 @@ export const SuraIndexCell = ({
                 startPage,
                 pagesCount,
             });
-            dispatch(showToast("sura_memorized"));
+            dispatch(showToast({ id: "sura_memorized" }));
         }
     };
 

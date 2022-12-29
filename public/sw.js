@@ -1,21 +1,27 @@
 /* eslint-disable no-restricted-globals */
 
-//%timestamp%
 const cacheId = "v1";
 
 const cachedRoots = [location.origin, "https://www.everyayah.com/data"];
+const cachedExcludes = ["browser-sync"]; //
 
 const addResourcesToCache = async () => {
     const cache = await caches.open(cacheId);
-    const resManifest = await fetch("asset-manifest.json").then((res) =>
+    const assetManifest = await fetch("asset-manifest.json").then((res) =>
         res.json()
     );
-    const files = Object.values(resManifest.files);
-    const resources = [...files].map((path) => location.origin + path);
+    const assetFiles = Object.values(assetManifest.files).filter(
+        (file) => !file.includes(".map")
+    );
+    const publicManifest = await fetch("public-manifest.json").then((res) =>
+        res.json()
+    );
+    const publicAssetsFiles = publicManifest.files;
+
+    const resources = [...assetFiles, ...publicAssetsFiles].map(
+        (path) => location.origin + path
+    );
     await cache.addAll(resources);
-    // await new Promise((resolve, reject) => {
-    //     setTimeout(resolve, 5000);
-    // });
 };
 
 const putInCache = async (request, response) => {
@@ -23,6 +29,9 @@ const putInCache = async (request, response) => {
         request.method !== "GET" ||
         !cachedRoots.some((cacheBase) => request.url.startsWith(cacheBase))
     ) {
+        return;
+    }
+    if (cachedExcludes.some((exclude) => request.url.includes(exclude))) {
         return;
     }
     const cache = await caches.open(cacheId);
@@ -79,7 +88,11 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("install", (event) => {
-    event.waitUntil(addResourcesToCache());
+    const cacheResources = addResourcesToCache();
+    event.waitUntil(cacheResources);
+    cacheResources.then(() => {
+        self.skipWaiting();
+    });
 });
 
 self.addEventListener("fetch", (event) => {
@@ -95,8 +108,4 @@ self.addEventListener("fetch", (event) => {
             // fallbackUrl: "/images/offline.png",
         })
     );
-});
-
-self.addEventListener("skipWait", () => {
-    self.skipWaiting();
 });

@@ -20,14 +20,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 registerSW({
     onUpdate: (installingWorker) => {
-        store.dispatch(showToast("sw_update"));
-        // installingWorker.postMessage("skipWait");
-        // navigator.serviceWorker.controller.postMessage("skipWait");
-        // setTimeout(() => {
-        //     document.location.reload();
-        // }, 5000);
+        store.dispatch(showToast({ id: "sw_update", time: 10000 }));
     },
     onSuccess: () => {
-        store.dispatch(showToast("sw_success"));
+        store.dispatch(showToast({ id: "sw_success", time: 5000 }));
     },
 });

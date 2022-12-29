@@ -22,6 +22,7 @@ const initialState = {
     menuExpanded: false,
 
     toastMessage: null,
+    toastTime: 2000,
 
     showPopup: false, //show/hide flag ( used for transitioning purpose )
     popup: null, //modal popup component
@@ -34,8 +35,9 @@ const slice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
-        showToast: (slice, { payload }) => {
-            slice.toastMessage = payload;
+        showToast: (slice, { payload: { id, time = 2000 } }) => {
+            slice.toastMessage = id;
+            slice.toastTime = time;
         },
         setShowPopup: (slice, action) => {
             slice.showPopup = action.payload;
@@ -81,7 +83,10 @@ export const selectPopup = (state) => state[sliceName].popup;
 export const selectIsExercisePopupOn = (state) =>
     state[sliceName].popup === "Exercise";
 export const selectPopupParams = (state) => state[sliceName].popupParams;
-export const selectToastMessage = (state) => state[sliceName].toastMessage;
+export const selectToastMessage = (state) => ({
+    id: state[sliceName].toastMessage,
+    time: state[sliceName].toastTime,
+});
 
 export const selectSidebarWidth = (state) =>
     state[sliceName].isNarrow ? 0 : 50;

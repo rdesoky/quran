@@ -165,7 +165,7 @@ export const CommandButton = ({
                     trigger,
                 });
                 copy2Clipboard(selectedText);
-                dispatch(showToast("text_copied"));
+                dispatch(showToast({ id: "text_copied" }));
                 break;
             case "Share":
                 break;

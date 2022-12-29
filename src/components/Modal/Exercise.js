@@ -531,7 +531,7 @@ const Exercise = () => {
         if (testAnswer(text)) {
             setTimeout(() => {
                 if (quickMode > 0) {
-                    dispatch(showToast("success_write_next"));
+                    dispatch(showToast({ id: "success_write_next" }));
                     typeNextVerse();
                     return;
                 }
