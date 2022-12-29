@@ -7,15 +7,21 @@ const cachedExcludes = ["browser-sync"];
 
 const addResourcesToCache = async () => {
     const cache = await caches.open(cacheId);
-    const resManifest = await fetch("asset-manifest.json").then((res) =>
+    const assetManifest = await fetch("asset-manifest.json").then((res) =>
         res.json()
     );
-    const files = Object.values(resManifest.files);
-    const resources = [...files].map((path) => location.origin + path);
+    const assetFiles = Object.values(assetManifest.files).filter(
+        (file) => !file.includes(".map")
+    );
+    const publicManifest = await fetch("public-manifest.json").then((res) =>
+        res.json()
+    );
+    const publicAssetsFiles = publicManifest.files;
+
+    const resources = [...assetFiles, ...publicAssetsFiles].map(
+        (path) => location.origin + path
+    );
     await cache.addAll(resources);
-    // await new Promise((resolve, reject) => {
-    //     setTimeout(resolve, 5000);
-    // });
 };
 
 const putInCache = async (request, response) => {
@@ -103,7 +109,3 @@ self.addEventListener("fetch", (event) => {
         })
     );
 });
-
-// self.addEventListener("skipWait", () => {
-//     self.skipWaiting();
-// });
