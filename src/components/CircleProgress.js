@@ -1,7 +1,7 @@
 import React from "react";
 
 export const CircleProgress = ({
-    sqSize = 25,
+    sqSize = 24,
     strokeWidth = 2,
     progress = 1,
     target = 5,

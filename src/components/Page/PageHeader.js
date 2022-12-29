@@ -131,6 +131,18 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     return (
         <div className="PageHeader">
             <div className="PageHeaderContent">
+                <CircleProgress
+                    target={TOTAL_PAGES}
+                    progress={pageIndex + 1}
+                    display={partIndex + 1}
+                    onClick={showPartContextPopup}
+                    strokeWidth={3}
+                    title={intl.formatMessage(
+                        { id: "part_num" },
+                        { num: partIndex + 1 }
+                    )}
+                    style={{ marginRight: 5 }}
+                />{" "}
                 <div className="PageHeaderSection">
                     <button
                         className="NavButton NavBackward"
@@ -145,7 +157,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                             { id: "page_num" },
                             { num: pageIndex + 1 }
                         )}
-                        style={{ minWidth: 30, padding: 0 }}
+                        style={{ minWidth: 25, padding: 0 }}
                     >
                         <Icon icon={faBookOpen} color="black" />
                         {pageIndex + 1}
@@ -157,18 +169,6 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         <Icon icon={faAngleDown} />
                     </button>
                 </div>
-                <CircleProgress
-                    target={TOTAL_PAGES}
-                    progress={pageIndex + 1}
-                    display={partIndex + 1}
-                    onClick={showPartContextPopup}
-                    strokeWidth={3}
-                    title={intl.formatMessage(
-                        { id: "part_num" },
-                        { num: partIndex + 1 }
-                    )}
-                    style={{ marginRight: 7 }}
-                />
                 <div
                     className="PageHeaderSection"
                     style={{
@@ -188,7 +188,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         }}
                         className="SelectionButton"
                         title={intl.formatMessage({ id: "goto_selection" })}
-                        style={{ minWidth: 50, padding: 0 }}
+                        style={{ minWidth: 40, padding: 0 }}
                     >
                         {selectedAyaInfo.sura +
                             1 +
