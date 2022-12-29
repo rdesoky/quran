@@ -377,7 +377,7 @@ export default function Pager() {
         function selectPage(e) {
             if (pageIndex !== thisPageIndex) {
                 dispatch(gotoPage(history, thisPageIndex));
-                console.log(`Set active page: ${thisPageIndex + 1}`);
+                // console.log(`Set active page: ${thisPageIndex + 1}`);
             }
         }
 

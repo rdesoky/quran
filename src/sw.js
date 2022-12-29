@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-globals */
 
-//%timestamp%
 const cacheId = "v1";
 
 const cachedRoots = [location.origin, "https://www.everyayah.com/data"];
+const cachedExcludes = ["browser-sync"];
 
 const addResourcesToCache = async () => {
     const cache = await caches.open(cacheId);
@@ -23,6 +23,9 @@ const putInCache = async (request, response) => {
         request.method !== "GET" ||
         !cachedRoots.some((cacheBase) => request.url.startsWith(cacheBase))
     ) {
+        return;
+    }
+    if (cachedExcludes.some((exclude) => request.url.includes(exclude))) {
         return;
     }
     const cache = await caches.open(cacheId);
@@ -79,7 +82,11 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("install", (event) => {
-    event.waitUntil(addResourcesToCache());
+    const cacheResources = addResourcesToCache();
+    event.waitUntil(cacheResources);
+    cacheResources.then(() => {
+        self.skipWaiting();
+    });
 });
 
 self.addEventListener("fetch", (event) => {
@@ -97,6 +104,6 @@ self.addEventListener("fetch", (event) => {
     );
 });
 
-self.addEventListener("skipWait", () => {
-    self.skipWaiting();
-});
+// self.addEventListener("skipWait", () => {
+//     self.skipWaiting();
+// });

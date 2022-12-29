@@ -143,7 +143,7 @@ export default function App() {
 
 export const quranText = [];
 
-fetch(`${process.env.PUBLIC_URL}/quran.txt`)
+fetch(`${process.env.PUBLIC_URL}/db/quran.txt`)
     .then((results) => results.text())
     .then((text) => {
         quranText.push(...text.split("\n"));
@@ -152,7 +152,7 @@ fetch(`${process.env.PUBLIC_URL}/quran.txt`)
 
 export const quranNormalizedText = [];
 
-fetch(`${process.env.PUBLIC_URL}/normalized_quran.txt`)
+fetch(`${process.env.PUBLIC_URL}/db/normalized_quran.txt`)
     .then((results) => results.text())
     .then((text) => {
         quranNormalizedText.push(...text.split("\n"));
