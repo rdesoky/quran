@@ -210,7 +210,7 @@ export const HifzRange = ({
                     pagesCount: range.pages,
                 });
                 dispatch(setRangeRevised(range));
-                dispatch(showToast("ack_range_revised"));
+                dispatch(showToast({ id: "ack_range_revised" }));
             },
             content: <String id="revise_confirmation" />,
         });

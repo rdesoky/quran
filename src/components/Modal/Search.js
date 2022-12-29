@@ -232,7 +232,7 @@ export default function Search() {
         const verseInfo = ayaIdInfo(verse);
         const text = quranText?.[verse];
         copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
-        dispatch(showToast("text_copied"));
+        dispatch(showToast({ id: "text_copied" }));
         e.stopPropagation();
 
         analytics.logEvent("copy_text", {

@@ -75,7 +75,7 @@ export const addBookmark = (ayaId) => (dispatch, getState) => {
         return;
     }
     bookmarksRef(user).child(ayaId).set(-new Date().getTime());
-    dispatch(showToast("bookmark_added"));
+    dispatch(showToast({ id: "bookmark_added" }));
 };
 
 export const deleteBookmark = (ayaId) => (dispatch, getState) => {
@@ -84,7 +84,7 @@ export const deleteBookmark = (ayaId) => (dispatch, getState) => {
         return;
     }
     bookmarksRef(user).child(ayaId).set(null);
-    dispatch(showToast("bookmark_deleted"));
+    dispatch(showToast({ id: "bookmark_deleted" }));
 };
 
 export const logTypedVerse = (verseId, words) => (dispatch, getState) => {

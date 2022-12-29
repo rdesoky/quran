@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const swSrcPath = path.join("src", "sw.js");
+const swSrcPath = path.join("public", "sw.js");
 const swContent = fs.readFileSync(swSrcPath, { encoding: "utf8" });
 const swBuildPath = path.join("build", "sw.js");
 //Injecting timestamp into the service worker file

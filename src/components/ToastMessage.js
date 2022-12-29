@@ -6,27 +6,26 @@ import { selectToastMessage, showToast } from "../store/uiSlice";
 export const ToastMessage = () => {
     const [hiding, setHiding] = useState(false);
     const dispatch = useDispatch();
-    const toastMessage = useSelector(selectToastMessage);
+    const { id: toastMessage, time } = useSelector(selectToastMessage);
 
     useEffect(() => {
         if (toastMessage) {
             setTimeout(() => {
-                dispatch(showToast(null));
-            }, 2000);
-        } else if (toastMessage) {
-            setHiding(true);
-            setTimeout(() => {
                 setHiding(false);
-            }, 500);
+                dispatch(showToast({ id: null }));
+            }, time);
+
+            setTimeout(() => {
+                setHiding(true);
+            }, time - 500);
         }
-    }, [dispatch, toastMessage]);
+    }, [dispatch, toastMessage, time]);
 
     return (
         <div
             className={"ToastMessage"
                 .appendWord("ShowToast", toastMessage !== null)
                 .appendWord("HideToast", hiding)}
-            // onClick={hideMessage}
         >
             {toastMessage && <FormattedMessage id={toastMessage} />}
         </div>

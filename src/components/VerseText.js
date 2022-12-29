@@ -35,7 +35,7 @@ export const VerseText = ({
     const copyVerse = (e) => {
         const verseInfo = ayaIdInfo(verse);
         copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
-        dispatch(showToast("text_copied"));
+        dispatch(showToast({ id: "text_copied" }));
 
         analytics.logEvent("copy_text", {
             ...verseLocation(verse),
