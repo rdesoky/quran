@@ -1,17 +1,21 @@
 /* eslint-disable no-restricted-globals */
 
-const version = "%VERSION%";
+//%timestamp%
 const cacheId = "v1";
 
 const cachedRoots = [location.origin, "https://www.everyayah.com/data"];
-const prefetchResources = ["/index.html"];
 
-const addResourcesToCache = async (resources) => {
+const addResourcesToCache = async () => {
     const cache = await caches.open(cacheId);
+    const resManifest = await fetch("asset-manifest.json").then((res) =>
+        res.json()
+    );
+    const files = Object.values(resManifest.files);
+    const resources = [...files].map((path) => location.origin + path);
     await cache.addAll(resources);
-    await new Promise((resolve, reject) => {
-        setTimeout(resolve, 5000);
-    });
+    // await new Promise((resolve, reject) => {
+    //     setTimeout(resolve, 5000);
+    // });
 };
 
 const putInCache = async (request, response) => {
@@ -75,11 +79,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("install", (event) => {
-    event.waitUntil(
-        addResourcesToCache(
-            prefetchResources.map((path) => location.origin + path)
-        )
-    );
+    event.waitUntil(addResourcesToCache());
 });
 
 self.addEventListener("fetch", (event) => {

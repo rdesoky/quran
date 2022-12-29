@@ -51,7 +51,7 @@ export const CircleProgress = ({
                 className="circle-text"
                 x="50%"
                 y="50%"
-                dy=".4em"
+                dy=".3em"
                 textAnchor="middle"
                 // alignmentBaseline="central"
             >

@@ -12,7 +12,6 @@ import {
     selectMaskStart,
     selectStartSelection,
 } from "../../store/navSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
 import { showToast } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
 import { VerseInfo, VerseText } from "../Widgets";
@@ -48,7 +47,6 @@ const Tafseer = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const maskStart = useSelector(selectMaskStart);
-    const playingAya = useSelector(selectPlayingAya);
 
     const offsetSelection = (offset) => {
         // setVerse(verse + offset);
@@ -107,7 +105,7 @@ export const TafseerView = ({
     useEffect(() => {
         let fileName = TafseerList.find((i) => i.id === tafseer).file;
         let controller = new AbortController();
-        let url = `${process.env.PUBLIC_URL}/${fileName}`;
+        let url = `${process.env.PUBLIC_URL}/translation/${fileName}`;
         fetch(url, { signal: controller.signal })
             .then((r) => r.text())
             .then((txt) => {

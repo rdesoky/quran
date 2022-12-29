@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
-import { register as registerSW } from "./sw-setup";
+import { register as registerSW } from "./sw-registration";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { showToast } from "./store/uiSlice";
