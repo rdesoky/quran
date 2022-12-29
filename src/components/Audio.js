@@ -54,7 +54,13 @@ export function Audio() {
     let audio = audioRef.current;
 
     useEffect(() => {
-        let docTitle = intl.formatMessage({ id: "app_name" });
+        let docTitle =
+            intl.formatMessage({ id: "app_name" }) +
+            " - " +
+            intl.formatMessage(
+                { id: "page_num" },
+                { num: activePageIndex + 1 }
+            );
         if (playingAya !== -1) {
             const ayaInfo = ayaIdInfo(playingAya);
             docTitle = `${intl.formatMessage({ id: "play" })}: ${getSuraName(
@@ -63,7 +69,7 @@ export function Audio() {
             )} (${ayaInfo.aya + 1}) - ${docTitle}`;
         }
         document.title = docTitle;
-    }, [playingAya, audioState, intl]);
+    }, [playingAya, audioState, intl, activePageIndex]);
 
     useEffect(() => {
         let updateRemainingTimeInterval;

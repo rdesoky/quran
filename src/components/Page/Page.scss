@@ -192,7 +192,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         align-items: center;
         justify-content: flex-start;
         height: 50px;
-        min-width: 240px;
+        min-width: 200px; //to prevent 3 lines and header vertical overflow
         color: #bbb;
         position: relative;
         background-color: #444;
@@ -226,21 +226,10 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 cursor: default;
             }
 
-            // position: relative;
-            // text-align: center;
-            > * {
-                margin: 0 2px;
-            }
             button {
                 padding: 0 10px;
-                // color: inherit;
-                // height: 100%;
                 line-height: 24px;
                 border-radius: 3px;
-                // margin: 0 1px;
-                // &:hover {
-                //     background-color: #444;
-                // }
             }
 
             .PageHeaderSection {
@@ -248,7 +237,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 white-space: nowrap;
                 background-color: #333;
                 border-radius: 3px;
-                margin: 1px 5px 0 0;
+                margin: 0 2px;
                 height: 25px;
                 > * {
                     height: 100%;
