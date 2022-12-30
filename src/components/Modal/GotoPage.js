@@ -23,6 +23,7 @@ import {
 import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { closePopup } from "../../store/uiSlice";
 import { AppRefs } from "../../RefsProvider";
+import PartsPie from "../PartsPie";
 
 const GotoPage = ({ open }) => {
     const isCompact = useSelector(selectIsCompact);
@@ -265,6 +266,7 @@ const GotoPage = ({ open }) => {
                     </div>
                 </form>
             </div>
+            <PartsPie />
         </>
     );
 };
