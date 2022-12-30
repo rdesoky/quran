@@ -1,27 +1,38 @@
-import { useContext } from "react";
-import { useIntl } from "react-intl";
+import { useContext, useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../RefsProvider";
-import { getPagePartNumber, TOTAL_PAGES, TOTAL_PARTS } from "../services/QData";
+import {
+    getPartFirstAyaId,
+    getPartIndexByAyaId,
+    hezbInfo,
+    TOTAL_PAGES,
+    TOTAL_PARTS,
+} from "../services/QData";
 import { describeArc, rotatePoint } from "../services/svg";
 import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
 import { selectHifzRanges } from "../store/dbSlice";
-import { selectActivePage } from "../store/layoutSlice";
-import { gotoPage, gotoPart } from "../store/navSlice";
+import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
 
-export default function PartsPie({ size = 300 }) {
+export default function PartsPie({ size }) {
     const history = useHistory();
     const dispatch = useDispatch();
+    const [activePartIndex, setActivePartIndex] = useState(0);
     const hifzRanges = useSelector(selectHifzRanges);
-    const pageIndex = useSelector(selectActivePage);
-    const partIndex = getPagePartNumber(pageIndex + 1) - 1;
+    const selectedAya = useSelector(selectStartSelection);
+    const selectedPartIndex = getPartIndexByAyaId(selectedAya);
     const intl = useIntl();
     const suraNames = useContext(AppRefs).get("suraNames").suraNames;
 
-    const boxSize = size;
+    useEffect(() => {
+        setActivePartIndex(selectedPartIndex);
+    }, [selectedPartIndex]);
+
+    const boxSize = size || 300;
     const radius = boxSize / 2;
     const parts = new Array(TOTAL_PARTS).fill(0);
+    const partHezbs = new Array(8).fill(0);
     const cx = radius;
     const cy = radius;
     const partsStrokeWidth = 50;
@@ -29,9 +40,10 @@ export default function PartsPie({ size = 300 }) {
     const hifzDonutRadius = boxSize / 2 - hifzDonutStrokeWidth / 2;
     const partsRadius =
         hifzDonutRadius - hifzDonutStrokeWidth / 2 - partsStrokeWidth / 2;
-    const selectedPartRadius = 16;
-    const hizbRadius = 40;
-    const hizbStrokWidth = 40;
+    const hezbRadius = 60;
+    const hezbStrokeWidth = 30;
+    const partPieAngel = 360.0 / TOTAL_PARTS;
+    const activePartAngel = activePartIndex * partPieAngel;
     return (
         <div
             className="PartsPie"
@@ -46,42 +58,54 @@ export default function PartsPie({ size = 300 }) {
                 {parts.map((p, index) => {
                     const { dx: dxPartNum, dy: dyPartNum } = rotatePoint(
                         partsRadius,
-                        ((index + 0.5) * 360.0) / parts.length
+                        (index + 0.5) * partPieAngel
                     );
                     return (
                         <>
                             <path
                                 className={`partPie ${
-                                    ["even", "odd"][index % 2]
-                                }`}
+                                    index === activePartIndex && "active"
+                                } ${index === selectedPartIndex && "selected"}`}
                                 d={describeArc({
                                     x: cx,
                                     y: cy,
                                     r: partsRadius,
-                                    a1: (index * 360) / 30,
-                                    a2: ((index + 1) * 360) / 30,
+                                    a1: index * partPieAngel,
+                                    a2: (index + 1) * partPieAngel - 0.2,
                                 })}
                                 style={{
                                     fill: "none",
                                     strokeWidth: partsStrokeWidth,
                                 }}
-                                onClick={() =>
-                                    dispatch(gotoPart(history, index))
-                                }
-                            />
+                                onClick={() => {
+                                    if (activePartIndex !== index) {
+                                        setActivePartIndex(index);
+                                    } else {
+                                        dispatch(
+                                            gotoAya(
+                                                history,
+                                                getPartFirstAyaId(index)
+                                            )
+                                        );
+                                    }
+                                }}
+                            >
+                                <title>
+                                    <FormattedMessage
+                                        id="part_num"
+                                        values={{ num: activePartIndex + 1 }}
+                                    />
+                                </title>
+                            </path>
 
                             <text
+                                className="piePartNumber"
                                 key={`text-${index}`}
                                 x={cx + dxPartNum}
                                 y={cy - partsRadius + dyPartNum}
                                 textAnchor="middle"
                                 // alignmentBaseline="central"
                                 dy=".4em"
-                                style={{
-                                    pointerEvents: "none",
-                                    fontSize: 12,
-                                    fontWeight: "bold",
-                                }}
                             >
                                 {index + 1}
                             </text>
@@ -97,7 +121,11 @@ export default function PartsPie({ size = 300 }) {
                         strokeWidth: hifzDonutStrokeWidth,
                         fill: "none",
                     }}
-                />
+                >
+                    <title>
+                        <FormattedMessage id="favorites" />
+                    </title>
+                </circle>
                 {hifzRanges.map((r, index) => {
                     const a1 = (360.0 * r.startPage) / TOTAL_PAGES;
                     const a2 = a1 + (360.0 * r.pages) / TOTAL_PAGES;
@@ -112,7 +140,7 @@ export default function PartsPie({ size = 300 }) {
 
                     return (
                         <path
-                            className={`hifzPie ${ageClass}`}
+                            className={`pieHifzRange ${ageClass}`}
                             d={describeArc({
                                 x: cx,
                                 y: cy,
@@ -135,60 +163,50 @@ export default function PartsPie({ size = 300 }) {
                         </path>
                     );
                 })}
-                <circle
-                    className="partsPieCenter"
-                    style={{
-                        cx,
-                        cy,
-                        r: selectedPartRadius,
-                        strokeWidth: 0,
-                        fill: "#aaa",
-                        cursor: "pointer",
-                    }}
-                    onClick={() => dispatch(gotoPart(history, partIndex))}
-                />
-                <text
-                    x={cx}
-                    y={cy}
-                    textAnchor="middle"
-                    // alignmentBaseline="central"
-                    dy=".4em"
-                    style={{ pointerEvents: "none" }}
-                >
-                    {partIndex + 1}
-                </text>
-                {[1, 2, 3, 4].map((h, index) => {
-                    const { dx: dxHizbNum, dy: dyHizbNum } = rotatePoint(
-                        hizbRadius,
-                        ((index + 0.5) * 360.0) / 4
+                {partHezbs.map((i, index) => {
+                    const hezbAngel = 270.0 / 8;
+                    const { dx: dxHezbNum, dy: dyHezbNum } = rotatePoint(
+                        hezbRadius,
+                        activePartAngel + (index + 0.5) * hezbAngel
                     );
-
+                    const hInfo = hezbInfo(activePartIndex, index);
                     return (
                         <>
                             <path
-                                className={`hizbQuarterPie ${
+                                className={`hezbQuarterPie ${
                                     ["even", "odd"][index % 2]
                                 }`}
                                 d={describeArc({
                                     x: cx,
                                     y: cy,
-                                    r: hizbRadius,
-                                    a1: index * 90,
-                                    a2: (index + 1) * 90,
+                                    r: hezbRadius,
+                                    a1: activePartAngel + index * hezbAngel,
+                                    a2:
+                                        activePartAngel +
+                                        (index + 1) * hezbAngel -
+                                        0.3,
                                 })}
                                 fill="none"
-                                style={{ strokeWidth: hizbStrokWidth }}
+                                style={{ strokeWidth: hezbStrokeWidth }}
+                                onClick={() =>
+                                    dispatch(gotoAya(history, hInfo.aya))
+                                }
                             >
-                                <title>Hizb</title>
+                                <title>
+                                    <FormattedMessage
+                                        id="hezb_num"
+                                        values={{ num: hInfo.index + 1 }}
+                                    />
+                                </title>
                             </path>
                             <text
-                                x={cx + dxHizbNum}
-                                y={cy - hizbRadius + dyHizbNum}
+                                className="pieHezbNumber"
+                                x={cx + dxHezbNum}
+                                y={cy - hezbRadius + dyHezbNum}
                                 textAnchor="middle"
                                 alignmentBaseline="central"
-                                style={{ pointerEvents: "none" }}
                             >
-                                {h}
+                                {hInfo.text}
                             </text>
                         </>
                     );

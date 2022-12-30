@@ -6,6 +6,7 @@ export const sura_info = require("../data/sura-info.json");
 export const parts = require("../data/parts-info.json");
 export const pagesInfo = require("../data/pages-starting-sura-aya.json");
 
+//Used for searching purpose
 export const arSuraNames =
     "الفاتحة,البقرة,ال عمران,النساء,المائدة,الانعام,الاعراف,الانفال,التوبة,يونس,هود,يوسف,الرعد,ابراهيم,الحجر,النحل,الاسراء,الكهف,مريم,طه,الانبياء,الحج,المؤمنون,النور,الفرقان,الشعراء,النمل,القصص,العنكبوت,الروم,لقمان,السجدة,الاحزاب,سبأ,فاطر,يس,الصافات,ص,الزمر,غافر,فصلت,الشورى,الزخرف,الدخان,الجاثية,الاحقاف,محمد,الفتح,الحجرات,ق,الذاريات,الطور,النجم,القمر,الرحمن,الواقعة,الحديد,المجادلة,الحشر,الممتحنة,الصف,الجمعة,المنافقون,التغابن,الطلاق,التحريم,الملك,القلم,الحاقة,المعارج,نوح,الجن,المزمل,المدثر,القيامة,الانسان,المرسلات,النبا,النازعات,عبس,التكوير,الانفطار,المطففين,الانشقاق,البروج,الطارق,الاعلى,الغاشية,الفجر,البلد,الشمس,الليل,الضحى,الشرح,التين,العلق,القدر,البينة,الزلزلة,العاديات,القارعة,التكاثر,العصر,الهمزة,الفيل,قريش,الماعون,الكوثر,الكافرون,النصر,المسد,الاخلاص,الفلق,الناس".split(
         ","
@@ -96,18 +97,19 @@ export const ayaIdPage = (aya_id) => {
  * @param {number} aya_id absolute verse index
  */
 export const getPartIndexByAyaId = (aya_id) => {
-    const { sura: sIndex, aya: aIndex } = ayaIdInfo(aya_id);
-    for (let p = 0; p < parts.length; p++) {
-        const { s, a } = parts[p];
-        const [partSuraIndex, partAyaIndex] = [s - 1, a - 1];
-        if (
-            partSuraIndex > sIndex ||
-            (partSuraIndex === sIndex && partAyaIndex > aIndex)
-        ) {
-            return p - 1; //passed
+    return getAyaPartIndex(aya_id);
+};
+
+export const getAyaPartIndex = (aya_id) => {
+    for (let i = parts.length - 1; i >= 0; i--) {
+        const partInfo = parts[i];
+        const partFirstAya =
+            partInfo?.h?.[0] ?? ayaID(partInfo.s - 1, partInfo.a - 1);
+        if (aya_id >= partFirstAya) {
+            return i;
         }
     }
-    return parts.length - 1;
+    return 0;
 };
 
 /**
@@ -206,6 +208,16 @@ export const getPageSuras = (pageIndex) => {
         suraList.push(s);
     }
     return suraList;
+};
+
+export const hezbInfo = (partIndex, hezbIndex) => {
+    const index = partIndex * 2 + Math.floor(hezbIndex / 4);
+    const quarter = hezbIndex % 4;
+    const aya =
+        parts[partIndex]?.h?.[hezbIndex] ?? getPartFirstAyaId(partIndex);
+    const quarterText = ["", " (1/4)", " (1/2)", " (3/4)"][quarter];
+    const text = `${index + 1}${quarterText}`;
+    return { aya, index, quarter, text };
 };
 
 // export const suraInPage = (suraNum, pageNum) => {
