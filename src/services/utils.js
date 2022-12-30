@@ -1,5 +1,5 @@
 /* eslint-disable no-extend-native */
-import { getPagePartNumber } from "./QData";
+import { getPagePartNumber, sura_info } from "./QData";
 // import {RecitersInfo} from "./AudioData";
 
 export const num2string = (num, length = 3) => {
@@ -194,4 +194,42 @@ export const getStorageItem = (key, defaultValue = false) => {
         }
     }
     return defaultValue;
+};
+
+export const dayLength = 24 * 60 * 60 * 1000;
+
+export const getHifzRangeDisplayInfo = (range, intl) => {
+    const suraInfo = sura_info[range.sura];
+    const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
+    const rangePagesCount = range.endPage - range.startPage + 1;
+    let id = range.date
+        ? rangePagesCount === suraPagesCount
+            ? "sura_hifz_desc"
+            : "range_desc"
+        : "the_page_num";
+
+    let values = {
+        // sura: suraName,
+        page: range.startPage - (suraInfo.sp - 1) + 1,
+        start_page: range.startPage - (suraInfo.sp - 1) + 1,
+        end_page: range.pages > 1 ? "-" + (range.endPage + 1) : "",
+        pages: rangePagesCount,
+    };
+
+    const title = intl.formatMessage({ id }, values);
+    let ageText = "";
+
+    if (range.date) {
+        const age = Math.floor((Date.now() - range.date) / dayLength);
+        id =
+            range.revs > 0
+                ? age === 0
+                    ? "last_revised_today"
+                    : "last_revised_since"
+                : "not_revised";
+        values = { days: age };
+
+        ageText = intl.formatMessage({ id }, values);
+    }
+    return { title, ageText };
 };

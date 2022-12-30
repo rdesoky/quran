@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/Analytics";
+import { dayLength } from "../services/utils";
 import { selectSuraRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";
 import { gotoPage } from "../store/navSlice";
 import { getArSuraName, sura_info } from "./../services/QData";
-
-const dayLength = 24 * 60 * 60 * 1000;
 
 export const SuraHifzChart = ({
     sura,
