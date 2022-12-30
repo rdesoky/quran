@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import useSuraName from "../hooks/useSuraName";
 import { AppRefs } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
+import { getHifzRangeDisplayInfo } from "../services/utils";
 import {
     addHifzRange,
     deleteHifzRange,
@@ -57,72 +58,19 @@ export const HifzRange = ({
     const [ageInfo, setAgeInfo] = useState("");
     const [actions, setActions] = useState(showActions);
     const pagesCount = useSelector(selectPagesCount);
-    const lang = useSelector(selectLang);
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const intl = useIntl();
     const history = useHistory();
     const maskOn = useSelector(selectMaskOn);
-    // const appSize = useSelector(selectAppSize);
 
     const suraInfo = sura_info[range.sura];
 
     useEffect(() => {
-        const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
-        const rangePagesCount = range.endPage - range.startPage + 1;
-        let id = range.date
-            ? rangePagesCount === suraPagesCount
-                ? "sura_hifz_desc"
-                : "range_desc"
-            : "the_page_num";
-
-        let values = {
-            // sura: suraName,
-            page: range.startPage - (suraInfo.sp - 1) + 1,
-            start_page: range.startPage - (suraInfo.sp - 1) + 1,
-            end_page: range.pages > 1 ? "-" + (range.endPage + 1) : "",
-            pages: rangePagesCount,
-        };
-
-        setRangeInfo(intl.formatMessage({ id }, values));
-
-        if (!range.date) {
-            // setAgeClass("NoHifz");
-            setAgeInfo("");
-            return;
-        }
-        const age = Math.floor((Date.now() - range.date) / dayLength);
-        id =
-            range.revs > 0
-                ? age === 0
-                    ? "last_revised_today"
-                    : "last_revised_since"
-                : "not_revised";
-        values = { days: age };
-
-        const ageInfo = intl.formatMessage({ id }, values);
-
-        // let ageClass = "GoodHifz";
-        // if (age > 7) {
-        //     ageClass = "FairHifz";
-        // }
-        // if (age > 14) {
-        //     ageClass = "WeakHifz";
-        // }
-
-        // setAgeClass(ageClass);
-        setAgeInfo(ageInfo);
-    }, [
-        range.date,
-        lang,
-        suraInfo.ep,
-        suraInfo.sp,
-        range.endPage,
-        range.startPage,
-        range.pages,
-        range.revs,
-        intl,
-    ]);
+        const { title, ageText } = getHifzRangeDisplayInfo(range, intl);
+        setRangeInfo(title);
+        setAgeInfo(ageText);
+    }, [intl, range]);
 
     useEffect(() => {
         setActions(showActions);
