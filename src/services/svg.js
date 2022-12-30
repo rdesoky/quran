@@ -29,3 +29,13 @@ export function describeArc({ x, y, r: radius, a1: startAngle, a2: endAngle }) {
 
     return d;
 }
+
+export const rotatePoint = (radius, angleInDegrees) => {
+    const angleInRadians = (degree) => (degree * Math.PI) / 180.0;
+    const dx = radius * Math.sin(angleInRadians(angleInDegrees));
+    const dy = dx * Math.tan(angleInRadians(90 - (180 - angleInDegrees) / 2));
+    return {
+        dx,
+        dy,
+    };
+};

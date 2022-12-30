@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../RefsProvider";
 import { getPagePartNumber, TOTAL_PAGES, TOTAL_PARTS } from "../services/QData";
-import { describeArc } from "../services/svg";
+import { describeArc, rotatePoint } from "../services/svg";
 import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
 import { selectHifzRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";
@@ -24,11 +24,14 @@ export default function PartsPie({ size = 300 }) {
     const parts = new Array(TOTAL_PARTS).fill(0);
     const cx = radius;
     const cy = radius;
-    const arcStrokeWidth = 50;
-    const arcRadius = radius - arcStrokeWidth / 2;
-    const centerButtonRadius = 28;
-
-    const textAngleShift = 360 / parts.length / 2;
+    const partsStrokeWidth = 50;
+    const hifzDonutStrokeWidth = 16;
+    const hifzDonutRadius = boxSize / 2 - hifzDonutStrokeWidth / 2;
+    const partsRadius =
+        hifzDonutRadius - hifzDonutStrokeWidth / 2 - partsStrokeWidth / 2;
+    const selectedPartRadius = 16;
+    const hizbRadius = 40;
+    const hizbStrokWidth = 40;
     return (
         <div
             className="PartsPie"
@@ -41,23 +44,10 @@ export default function PartsPie({ size = 300 }) {
                 }}
             >
                 {parts.map((p, index) => {
-                    // const strokeDashoffset =
-                    //     dashBorderLength / 4 - partDashLength * index;
-
-                    // const strokeDasharray = [
-                    //     partDashLength, //drawing pie length
-                    //     dashBorderLength - partDashLength, //skip the rest of the circle
-                    // ].join(" ");
-                    const partAngel =
-                        (index * 360) / parts.length + textAngleShift;
-                    const xTextShift =
-                        arcRadius * Math.sin((partAngel * Math.PI) / 180);
-                    const angel2 = (180 - partAngel) / 2;
-                    const angel3 = 180 - 90 - angel2;
-                    const yTextShift =
-                        xTextShift * Math.tan((angel3 * Math.PI) / 180);
-                    const textSize = { w: 0, h: arcStrokeWidth };
-
+                    const { dx: dxPartNum, dy: dyPartNum } = rotatePoint(
+                        partsRadius,
+                        ((index + 0.5) * 360.0) / parts.length
+                    );
                     return (
                         <>
                             <path
@@ -67,15 +57,13 @@ export default function PartsPie({ size = 300 }) {
                                 d={describeArc({
                                     x: cx,
                                     y: cy,
-                                    r: radius - arcStrokeWidth / 2,
+                                    r: partsRadius,
                                     a1: (index * 360) / 30,
                                     a2: ((index + 1) * 360) / 30,
                                 })}
                                 style={{
                                     fill: "none",
-                                    strokeWidth: arcStrokeWidth,
-                                    // strokeLinecap: "round",
-                                    // strokeLinejoin: "round",
+                                    strokeWidth: partsStrokeWidth,
                                 }}
                                 onClick={() =>
                                     dispatch(gotoPart(history, index))
@@ -84,12 +72,16 @@ export default function PartsPie({ size = 300 }) {
 
                             <text
                                 key={`text-${index}`}
-                                x={cx + textSize.w / 2 + xTextShift}
-                                y={textSize.h / 2 + yTextShift}
+                                x={cx + dxPartNum}
+                                y={cy - partsRadius + dyPartNum}
                                 textAnchor="middle"
                                 // alignmentBaseline="central"
                                 dy=".4em"
-                                style={{ pointerEvents: "none" }}
+                                style={{
+                                    pointerEvents: "none",
+                                    fontSize: 12,
+                                    fontWeight: "bold",
+                                }}
                             >
                                 {index + 1}
                             </text>
@@ -98,12 +90,17 @@ export default function PartsPie({ size = 300 }) {
                 })}
                 <circle
                     className="hifzPieBackground"
-                    style={{ cx, cy, r: 80, strokeWidth: 16 }}
+                    style={{
+                        cx,
+                        cy,
+                        r: hifzDonutRadius,
+                        strokeWidth: hifzDonutStrokeWidth,
+                        fill: "none",
+                    }}
                 />
                 {hifzRanges.map((r, index) => {
-                    const a1 = Math.floor((360 * r.startPage) / TOTAL_PAGES);
-                    const a2 =
-                        a1 + (Math.floor((360 * r.pages) / TOTAL_PAGES) || 1);
+                    const a1 = (360.0 * r.startPage) / TOTAL_PAGES;
+                    const a2 = a1 + (360.0 * r.pages) / TOTAL_PAGES;
                     const age = Math.floor((Date.now() - r.date) / dayLength);
                     const ageClass =
                         age <= 7
@@ -119,15 +116,13 @@ export default function PartsPie({ size = 300 }) {
                             d={describeArc({
                                 x: cx,
                                 y: cy,
-                                r: 80,
+                                r: hifzDonutRadius,
                                 a1,
                                 a2,
                             })}
                             style={{
                                 fill: "none",
-                                strokeWidth: 16,
-                                // strokeLinecap: "round",
-                                // strokeLinejoin: "round",
+                                strokeWidth: hifzDonutStrokeWidth,
                             }}
                             onClick={() =>
                                 dispatch(gotoPage(history, r.startPage))
@@ -145,7 +140,7 @@ export default function PartsPie({ size = 300 }) {
                     style={{
                         cx,
                         cy,
-                        r: centerButtonRadius,
+                        r: selectedPartRadius,
                         strokeWidth: 0,
                         fill: "#aaa",
                         cursor: "pointer",
@@ -162,6 +157,42 @@ export default function PartsPie({ size = 300 }) {
                 >
                     {partIndex + 1}
                 </text>
+                {[1, 2, 3, 4].map((h, index) => {
+                    const { dx: dxHizbNum, dy: dyHizbNum } = rotatePoint(
+                        hizbRadius,
+                        ((index + 0.5) * 360.0) / 4
+                    );
+
+                    return (
+                        <>
+                            <path
+                                className={`hizbQuarterPie ${
+                                    ["even", "odd"][index % 2]
+                                }`}
+                                d={describeArc({
+                                    x: cx,
+                                    y: cy,
+                                    r: hizbRadius,
+                                    a1: index * 90,
+                                    a2: (index + 1) * 90,
+                                })}
+                                fill="none"
+                                style={{ strokeWidth: hizbStrokWidth }}
+                            >
+                                <title>Hizb</title>
+                            </path>
+                            <text
+                                x={cx + dxHizbNum}
+                                y={cy - hizbRadius + dyHizbNum}
+                                textAnchor="middle"
+                                alignmentBaseline="central"
+                                style={{ pointerEvents: "none" }}
+                            >
+                                {h}
+                            </text>
+                        </>
+                    );
+                })}
             </svg>
         </div>
     );

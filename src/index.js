@@ -1,11 +1,11 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.scss";
-import App from "./App";
-import { register as registerSW } from "./sw-registration";
 import { Provider } from "react-redux";
+import App from "./App";
+import "./index.scss";
 import { store } from "./store";
 import { showToast } from "./store/uiSlice";
+import { register as registerSW } from "./sw-registration";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <StrictMode>
@@ -19,8 +19,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 registerSW({
-    onUpdate: (installingWorker) => {
-        store.dispatch(showToast({ id: "sw_update", time: 10000 }));
+    onUpdate: () => {
+        store.dispatch(showToast({ id: "sw_update", time: 8000 }));
     },
     onSuccess: () => {
         store.dispatch(showToast({ id: "sw_success", time: 5000 }));
