@@ -835,3 +835,41 @@ hr {
         margin: 0 5px;
     }
 }
+
+.partPie {
+    &.even {
+        stroke: #b0b0b0;
+    }
+    &.odd {
+        stroke: #9d9d9d;
+    }
+    &:hover {
+        cursor: pointer;
+        stroke: rgb(220, 220, 220) !important;
+        stroke-width: 70px !important;
+    }
+}
+
+.hifzPieBackground {
+    stroke: #434343;
+}
+.hifzPie {
+    &.GoodHifz {
+        stroke: rgb(70, 142, 58);
+    }
+    &.FairHifz {
+        stroke: #be9518;
+    }
+    &.WeakHifz {
+        stroke: rgb(155, 82, 82);
+    }
+    &:hover {
+        cursor: pointer;
+        stroke-width: 30px !important;
+    }
+}
+.partsPieCenter {
+    &:hover {
+        fill: rgb(220, 220, 220) !important;
+    }
+}

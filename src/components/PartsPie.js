@@ -1,14 +1,23 @@
+import { useContext } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { gotoPart } from "../store/navSlice";
 import { useHistory } from "react-router-dom";
+import { AppRefs } from "../RefsProvider";
+import { getPagePartNumber, TOTAL_PAGES, TOTAL_PARTS } from "../services/QData";
+import { describeArc } from "../services/svg";
+import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
+import { selectHifzRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";
-import { getPagePartNumber, TOTAL_PARTS } from "../services/QData";
+import { gotoPage, gotoPart } from "../store/navSlice";
 
 export default function PartsPie({ size = 300 }) {
     const history = useHistory();
     const dispatch = useDispatch();
+    const hifzRanges = useSelector(selectHifzRanges);
     const pageIndex = useSelector(selectActivePage);
     const partIndex = getPagePartNumber(pageIndex + 1) - 1;
+    const intl = useIntl();
+    const suraNames = useContext(AppRefs).get("suraNames").suraNames;
 
     const boxSize = size;
     const radius = boxSize / 2;
@@ -17,24 +26,28 @@ export default function PartsPie({ size = 300 }) {
     const cy = radius;
     const arcStrokeWidth = 50;
     const arcRadius = radius - arcStrokeWidth / 2;
-    const dashBorderLength = Math.PI * (arcRadius * 2);
-    const partDashLength = dashBorderLength / parts.length;
+    const centerButtonRadius = 28;
+
     const textAngleShift = 360 / parts.length / 2;
     return (
-        <div className="PartsPie" style={{ width: size, height: size }}>
+        <div
+            className="PartsPie"
+            style={{ width: size, height: size }}
+            onClick={(e) => e.stopPropagation()}
+        >
             <svg
                 {...{
                     viewBox: `0 0 ${boxSize} ${boxSize}`,
                 }}
             >
                 {parts.map((p, index) => {
-                    const strokeDashoffset =
-                        dashBorderLength / 4 - partDashLength * index;
+                    // const strokeDashoffset =
+                    //     dashBorderLength / 4 - partDashLength * index;
 
-                    const strokeDasharray = [
-                        partDashLength, //drawing pie length
-                        dashBorderLength - partDashLength, //skip the rest of the circle
-                    ].join(" ");
+                    // const strokeDasharray = [
+                    //     partDashLength, //drawing pie length
+                    //     dashBorderLength - partDashLength, //skip the rest of the circle
+                    // ].join(" ");
                     const partAngel =
                         (index * 360) / parts.length + textAngleShift;
                     const xTextShift =
@@ -47,19 +60,28 @@ export default function PartsPie({ size = 300 }) {
 
                     return (
                         <>
-                            <circle
-                                key={`circle-${index}`}
-                                strokeWidth={arcStrokeWidth}
-                                stroke={["#aaa", "#888"][index % 2]}
-                                r={radius - arcStrokeWidth / 2}
+                            <path
+                                className={`partPie ${
+                                    ["even", "odd"][index % 2]
+                                }`}
+                                d={describeArc({
+                                    x: cx,
+                                    y: cy,
+                                    r: radius - arcStrokeWidth / 2,
+                                    a1: (index * 360) / 30,
+                                    a2: ((index + 1) * 360) / 30,
+                                })}
                                 style={{
-                                    cx,
-                                    cy,
                                     fill: "none",
-                                    strokeDasharray,
-                                    strokeDashoffset,
+                                    strokeWidth: arcStrokeWidth,
+                                    // strokeLinecap: "round",
+                                    // strokeLinejoin: "round",
                                 }}
+                                onClick={() =>
+                                    dispatch(gotoPart(history, index))
+                                }
                             />
+
                             <text
                                 key={`text-${index}`}
                                 x={cx + textSize.w / 2 + xTextShift}
@@ -67,10 +89,7 @@ export default function PartsPie({ size = 300 }) {
                                 textAnchor="middle"
                                 // alignmentBaseline="central"
                                 dy=".4em"
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                    dispatch(gotoPart(history, index))
-                                }
+                                style={{ pointerEvents: "none" }}
                             >
                                 {index + 1}
                             </text>
@@ -78,7 +97,60 @@ export default function PartsPie({ size = 300 }) {
                     );
                 })}
                 <circle
-                    style={{ cx, cy, r: 30, strokeWidth: 0, fill: "#aaa" }}
+                    className="hifzPieBackground"
+                    style={{ cx, cy, r: 80, strokeWidth: 16 }}
+                />
+                {hifzRanges.map((r, index) => {
+                    const a1 = Math.floor((360 * r.startPage) / TOTAL_PAGES);
+                    const a2 =
+                        a1 + (Math.floor((360 * r.pages) / TOTAL_PAGES) || 1);
+                    const age = Math.floor((Date.now() - r.date) / dayLength);
+                    const ageClass =
+                        age <= 7
+                            ? "GoodHifz"
+                            : age <= 14
+                            ? "FairHifz"
+                            : "WeakHifz";
+                    const { title, ageText } = getHifzRangeDisplayInfo(r, intl);
+
+                    return (
+                        <path
+                            className={`hifzPie ${ageClass}`}
+                            d={describeArc({
+                                x: cx,
+                                y: cy,
+                                r: 80,
+                                a1,
+                                a2,
+                            })}
+                            style={{
+                                fill: "none",
+                                strokeWidth: 16,
+                                // strokeLinecap: "round",
+                                // strokeLinejoin: "round",
+                            }}
+                            onClick={() =>
+                                dispatch(gotoPage(history, r.startPage))
+                            }
+                        >
+                            <title>
+                                {suraNames[r.sura]} - {title}
+                                {ageText ? ` - ${ageText}` : ""}
+                            </title>
+                        </path>
+                    );
+                })}
+                <circle
+                    className="partsPieCenter"
+                    style={{
+                        cx,
+                        cy,
+                        r: centerButtonRadius,
+                        strokeWidth: 0,
+                        fill: "#aaa",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => dispatch(gotoPart(history, partIndex))}
                 />
                 <text
                     x={cx}
@@ -86,8 +158,7 @@ export default function PartsPie({ size = 300 }) {
                     textAnchor="middle"
                     // alignmentBaseline="central"
                     dy=".4em"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => dispatch(gotoPart(history, partIndex))}
+                    style={{ pointerEvents: "none" }}
                 >
                     {partIndex + 1}
                 </text>
