@@ -177,6 +177,27 @@ export const getPageSuraIndex = (nPage, bStart) => {
     return 0;
 };
 
+export const getHezbByAya = (aya) => {
+    const partIndex = getAyaPartIndex(aya);
+    const partInfo = parts[partIndex];
+    const partHezbIndex = partInfo.h.findLastIndex((h) => aya >= h);
+    const absIndex = partHezbIndex + partIndex * 8;
+    const index = Math.floor(absIndex / 4);
+    const quarter = Math.floor(absIndex % 4);
+    return { index, quarter, absIndex };
+};
+
+export const rangeStartAya = (range) => {
+    const suraInfo = sura_info[range.sura];
+    const page = range.startPage;
+    const suraStartPage = suraInfo.sp - 1;
+    if (suraStartPage === page) {
+        return ayaID(range.sura, 0);
+    } else {
+        return getPageFirstAyaId(page);
+    }
+};
+
 export const getRangeVerses = (sura, startPage, endPage) => {
     let [rangeStartVerse, rangeEndVerse] = [0, 0];
     const suraStartPage = sura_info[sura].sp - 1;
@@ -217,7 +238,7 @@ export const hezbInfo = (partIndex, hezbIndex) => {
         parts[partIndex]?.h?.[hezbIndex] ?? getPartFirstAyaId(partIndex);
     const quarterText = ["", " (1/4)", " (1/2)", " (3/4)"][quarter];
     const text = `${index + 1}${quarterText}`;
-    return { aya, index, quarter, text };
+    return { aya, index, quarter, text, quarterText };
 };
 
 // export const suraInPage = (suraNum, pageNum) => {

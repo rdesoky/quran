@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import App from "./App";
 import "./index.scss";
 import { store } from "./store";
-import { showToast } from "./store/uiSlice";
+import { setUpdateAvailable } from "./store/uiSlice";
 import { register as registerSW } from "./sw-registration";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -20,9 +20,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 registerSW({
     onUpdate: () => {
-        store.dispatch(showToast({ id: "sw_update", time: 8000 }));
+        store.dispatch(setUpdateAvailable(true));
     },
     onSuccess: () => {
-        store.dispatch(showToast({ id: "sw_success", time: 5000 }));
+        // store.dispatch(showToast({ id: "sw_success", time: 5000 }));
     },
 });

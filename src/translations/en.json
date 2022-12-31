@@ -12,7 +12,7 @@
     "page": "Page",
     "pg": "p",
     "pg_num": "p:{num}",
-    "hezb_num": "Hezb: {num}",
+    "hezb_num": "{qr} Hezb: {num}",
     "browse": "browse",
     "pages_daily_graph": "Daily revised pages",
     "chars_daily_graph": "Daily written letters",

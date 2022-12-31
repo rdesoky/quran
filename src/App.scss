@@ -866,9 +866,10 @@ hr {
 }
 
 .hifzPieBackground {
-    stroke: #434343;
+    fill: #434343;
+    stroke-width: 0;
     .DarkTheme & {
-        stroke: #333;
+        fill: #333;
     }
 }
 .pieHifzRange {
@@ -906,10 +907,19 @@ hr {
             font-weight: bold;
         }
     }
+
+    &.selected {
+        + .pieHezbNumber {
+            font-weight: bold;
+            stroke: brown !important;
+            fill: brown !important;
+        }
+    }
 }
 
 .pieHezbNumber {
-    font-size: 8px;
+    font-size: 9px;
+    font-weight: bold;
 }
 
 svg text {

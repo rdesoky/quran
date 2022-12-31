@@ -4,44 +4,52 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../RefsProvider";
 import {
+    getHezbByAya,
     getPartFirstAyaId,
     getPartIndexByAyaId,
     hezbInfo,
+    rangeStartAya,
     TOTAL_PAGES,
     TOTAL_PARTS,
 } from "../services/QData";
 import { describeArc, rotatePoint } from "../services/svg";
 import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
 import { selectHifzRanges } from "../store/dbSlice";
-import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
+import { gotoAya, selectStartSelection } from "../store/navSlice";
 
-export default function PartsPie({ size }) {
+export default function PartsPie({ size, onFinish }) {
     const history = useHistory();
     const dispatch = useDispatch();
     const [activePartIndex, setActivePartIndex] = useState(0);
     const hifzRanges = useSelector(selectHifzRanges);
     const selectedAya = useSelector(selectStartSelection);
+    const selectedHezb = getHezbByAya(selectedAya);
     const selectedPartIndex = getPartIndexByAyaId(selectedAya);
     const intl = useIntl();
     const suraNames = useContext(AppRefs).get("suraNames").suraNames;
+    const contextPopup = useContext(AppRefs).get("contextPopup");
+
+    const onNavigate = () => {
+        onFinish ? onFinish() : contextPopup.close();
+    };
 
     useEffect(() => {
         setActivePartIndex(selectedPartIndex);
     }, [selectedPartIndex]);
 
-    const boxSize = size || 300;
+    const boxSize = 300;
     const radius = boxSize / 2;
     const parts = new Array(TOTAL_PARTS).fill(0);
     const partHezbs = new Array(8).fill(0);
     const cx = radius;
     const cy = radius;
+    const hifzStrokeWidth = 20;
+    const hifzRadius = radius - hifzStrokeWidth / 2;
     const partsStrokeWidth = 50;
-    const hifzDonutStrokeWidth = 16;
-    const hifzDonutRadius = boxSize / 2 - hifzDonutStrokeWidth / 2;
-    const partsRadius =
-        hifzDonutRadius - hifzDonutStrokeWidth / 2 - partsStrokeWidth / 2;
-    const hezbRadius = 60;
-    const hezbStrokeWidth = 30;
+    const partsRadius = hifzRadius - hifzStrokeWidth / 2 - partsStrokeWidth / 2;
+    const hezbStrokeWidth = 50;
+    const hezbRadius =
+        partsRadius - partsStrokeWidth / 2 - hezbStrokeWidth / 2 + 1; //adding 1 to erase border
     const partPieAngel = 360.0 / TOTAL_PARTS;
     const activePartAngel = activePartIndex * partPieAngel;
     return (
@@ -55,6 +63,14 @@ export default function PartsPie({ size }) {
                     viewBox: `0 0 ${boxSize} ${boxSize}`,
                 }}
             >
+                <circle
+                    className="hifzPieBackground"
+                    style={{
+                        cx,
+                        cy,
+                        r: radius,
+                    }}
+                ></circle>
                 {parts.map((p, index) => {
                     const { dx: dxPartNum, dy: dyPartNum } = rotatePoint(
                         partsRadius,
@@ -64,8 +80,12 @@ export default function PartsPie({ size }) {
                         <>
                             <path
                                 className={`partPie ${
-                                    index === activePartIndex && "active"
-                                } ${index === selectedPartIndex && "selected"}`}
+                                    index === activePartIndex ? "active" : ""
+                                } ${
+                                    index === selectedPartIndex
+                                        ? "selected"
+                                        : ""
+                                }`}
                                 d={describeArc({
                                     x: cx,
                                     y: cy,
@@ -87,6 +107,7 @@ export default function PartsPie({ size }) {
                                                 getPartFirstAyaId(index)
                                             )
                                         );
+                                        onNavigate();
                                     }
                                 }}
                             >
@@ -112,20 +133,6 @@ export default function PartsPie({ size }) {
                         </>
                     );
                 })}
-                <circle
-                    className="hifzPieBackground"
-                    style={{
-                        cx,
-                        cy,
-                        r: hifzDonutRadius,
-                        strokeWidth: hifzDonutStrokeWidth,
-                        fill: "none",
-                    }}
-                >
-                    <title>
-                        <FormattedMessage id="favorites" />
-                    </title>
-                </circle>
                 {hifzRanges.map((r, index) => {
                     const a1 = (360.0 * r.startPage) / TOTAL_PAGES;
                     const a2 = a1 + (360.0 * r.pages) / TOTAL_PAGES;
@@ -144,17 +151,18 @@ export default function PartsPie({ size }) {
                             d={describeArc({
                                 x: cx,
                                 y: cy,
-                                r: hifzDonutRadius,
+                                r: hifzRadius,
                                 a1,
                                 a2,
                             })}
                             style={{
                                 fill: "none",
-                                strokeWidth: hifzDonutStrokeWidth,
+                                strokeWidth: hifzStrokeWidth,
                             }}
-                            onClick={() =>
-                                dispatch(gotoPage(history, r.startPage))
-                            }
+                            onClick={() => {
+                                dispatch(gotoAya(history, rangeStartAya(r)));
+                                onNavigate();
+                            }}
                         >
                             <title>
                                 {suraNames[r.sura]} - {title}
@@ -174,7 +182,10 @@ export default function PartsPie({ size }) {
                         <>
                             <path
                                 className={`hezbQuarterPie ${
-                                    ["even", "odd"][index % 2]
+                                    selectedHezb.absIndex ===
+                                    index + activePartIndex * 8
+                                        ? "selected"
+                                        : ""
                                 }`}
                                 d={describeArc({
                                     x: cx,
@@ -188,14 +199,18 @@ export default function PartsPie({ size }) {
                                 })}
                                 fill="none"
                                 style={{ strokeWidth: hezbStrokeWidth }}
-                                onClick={() =>
-                                    dispatch(gotoAya(history, hInfo.aya))
-                                }
+                                onClick={() => {
+                                    dispatch(gotoAya(history, hInfo.aya));
+                                    onNavigate();
+                                }}
                             >
                                 <title>
                                     <FormattedMessage
                                         id="hezb_num"
-                                        values={{ num: hInfo.index + 1 }}
+                                        values={{
+                                            qr: hInfo.quarterText,
+                                            num: hInfo.index + 1,
+                                        }}
                                     />
                                 </title>
                             </path>

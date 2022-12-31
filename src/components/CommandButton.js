@@ -36,6 +36,7 @@ import {
     hideMenu,
     selectMenuExpanded,
     selectPopup,
+    selectUpdateAvailable,
     showPopup,
     showToast,
     toggleMenu,
@@ -46,6 +47,7 @@ import { useHistory } from "react-router-dom";
 import { selectPagesCount } from "../store/layoutSlice";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";
+import UpdateBadge from "./UpdateBadge";
 
 export const CommandButton = ({
     id,
@@ -57,6 +59,7 @@ export const CommandButton = ({
     onClick,
     playAya,
     audioRepeat = true,
+    updateChecker = false,
 }) => {
     const audio = useContext(AppRefs).get("audio");
     const msgBox = useContext(AppRefs).get("msgBox");
@@ -77,6 +80,7 @@ export const CommandButton = ({
     const pagesCount = useSelector(selectPagesCount);
     const popup = useSelector(selectPopup);
     const selectedRange = useSelector(selectSelectedRange);
+    const updateAvailable = useSelector(selectUpdateAvailable);
 
     const toggleBookmark = (e) => {
         if (isBookmarked) {
@@ -231,35 +235,44 @@ export const CommandButton = ({
         return false;
     };
 
+    const handleClick = (e) => {
+        if (updateChecker && updateAvailable) {
+            e.stopPropagation();
+            return;
+        }
+        if (onClick) {
+            onClick(e);
+        } else {
+            runCommand(command);
+        }
+        switch (command) {
+            case "Commands":
+            case "Stop":
+                e.stopPropagation();
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
-        <button
-            id={id}
-            onClick={(e) => {
-                if (onClick) {
-                    onClick(e);
-                } else {
-                    runCommand(command);
+        <>
+            <button
+                id={id}
+                onClick={handleClick}
+                style={style}
+                disabled={isDisabled(command)}
+                className={"CommandButton".appendWord(className)}
+                title={
+                    showLabel
+                        ? ""
+                        : intl.formatMessage({ id: command.toLowerCase() })
                 }
-                switch (command) {
-                    case "Commands":
-                    case "Stop":
-                        e.stopPropagation();
-                        break;
-                    default:
-                        break;
-                }
-            }}
-            style={style}
-            disabled={isDisabled(command)}
-            className={"CommandButton".appendWord(className)}
-            title={
-                showLabel
-                    ? ""
-                    : intl.formatMessage({ id: command.toLowerCase() })
-            }
-        >
-            <CommandIcon {...{ command }} />
-            {renderLabel()}
-        </button>
+            >
+                {updateChecker && updateAvailable && <UpdateBadge />}
+                <CommandIcon {...{ command }} />
+                {renderLabel()}
+            </button>
+        </>
     );
 };

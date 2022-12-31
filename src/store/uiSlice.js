@@ -29,6 +29,7 @@ const initialState = {
     popupParams: {},
 
     recentCommands: initSidebarCommands,
+    updateAvailable: true,
 };
 
 const slice = createSlice({
@@ -47,6 +48,9 @@ const slice = createSlice({
         },
         setPopupParams: (slice, action) => {
             slice.popupParams = action.payload;
+        },
+        setUpdateAvailable: (slice, action) => {
+            slice.updateAvailable = action.payload;
         },
 
         showMenu: (slice) => {
@@ -72,6 +76,7 @@ export const {
     setPopupParams,
     setShowPopup,
     showToast,
+    setUpdateAvailable,
 } = slice.actions;
 
 export const selectRecentCommands = (state) => state[sliceName].recentCommands;
@@ -90,6 +95,9 @@ export const selectToastMessage = (state) => ({
 
 export const selectSidebarWidth = (state) =>
     state[sliceName].isNarrow ? 0 : 50;
+
+export const selectUpdateAvailable = (state) =>
+    state[sliceName].updateAvailable;
 
 export const showPopup = (popup, params) => (dispatch, getState) => {
     const {

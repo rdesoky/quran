@@ -101,6 +101,7 @@ function Sidebar() {
                 id="SideMenuExpander"
                 command="Commands"
                 trigger="side_bar"
+                updateChecker={true}
                 style={{
                     position: "absolute",
                     left: 0,
