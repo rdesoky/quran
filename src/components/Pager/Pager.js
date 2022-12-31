@@ -77,6 +77,7 @@ export default function Pager() {
     useEffect(() => {
         if (params?.page >= 1) {
             dispatch(setActivePageIndex(params?.page - 1));
+            localStorage.activePage = params?.page;
         }
     }, [dispatch, params?.page]);
 

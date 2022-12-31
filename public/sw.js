@@ -1,41 +1,43 @@
 /* eslint-disable no-restricted-globals */
 
-const cacheId = "v1";
+const appCacheId = "v1";
+const assetCacheId = "assets";
 
-const cachedRoots = [location.origin, "https://www.everyayah.com/data"];
-const cachedExcludes = ["browser-sync"]; //
+const assetRoots = [location.origin, "https://www.everyayah.com/data"];
+const cacheExcludes = ["browser-sync"]; //
 
 const addResourcesToCache = async () => {
-    const cache = await caches.open(cacheId);
-    const assetManifest = await fetch("asset-manifest.json").then((res) =>
+    const appManifest = await fetch("asset-manifest.json").then((res) =>
         res.json()
     );
-    const assetFiles = Object.values(assetManifest.files).filter(
+    const appFiles = Object.values(appManifest.files).filter(
         (file) => !file.includes(".map")
     );
+    const appCache = await caches.open(appCacheId);
+    await appCache.addAll(appFiles);
+
     const publicManifest = await fetch("public-manifest.json").then((res) =>
         res.json()
     );
-    const publicAssetsFiles = publicManifest.files;
-
-    const resources = [...assetFiles, ...publicAssetsFiles].map(
-        (path) => location.origin + path
+    const publicAssetsFiles = publicManifest.files.filter(
+        (name) => !name.includes("sw.js")
     );
-    await cache.addAll(resources);
+    const assetCache = await caches.open(assetCacheId);
+    await assetCache.addAll(publicAssetsFiles);
 };
 
 const putInCache = async (request, response) => {
     if (
         request.method !== "GET" ||
-        !cachedRoots.some((cacheBase) => request.url.startsWith(cacheBase))
+        !assetRoots.some((cacheBase) => request.url.startsWith(cacheBase))
     ) {
         return;
     }
-    if (cachedExcludes.some((exclude) => request.url.includes(exclude))) {
+    if (cacheExcludes.some((exclude) => request.url.includes(exclude))) {
         return;
     }
-    const cache = await caches.open(cacheId);
-    await cache.put(request, response);
+    const assetCache = await caches.open(assetCacheId);
+    await assetCache.put(request, response);
 };
 
 const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
