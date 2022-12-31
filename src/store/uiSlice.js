@@ -29,7 +29,7 @@ const initialState = {
     popupParams: {},
 
     recentCommands: initSidebarCommands,
-    updateAvailable: true,
+    updateAvailable: false,
 };
 
 const slice = createSlice({

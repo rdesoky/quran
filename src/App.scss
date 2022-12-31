@@ -846,10 +846,9 @@ hr {
     }
     &.selected {
         + .piePartNumber {
-            font-weight: bold;
             font-size: 14px;
-            stroke: brown;
-            fill: brown;
+            fill: green;
+            font-weight: bold;
         }
     }
     &:hover {
@@ -910,16 +909,14 @@ hr {
 
     &.selected {
         + .pieHezbNumber {
+            fill: green !important;
             font-weight: bold;
-            stroke: brown !important;
-            fill: brown !important;
         }
     }
 }
 
 .pieHezbNumber {
     font-size: 9px;
-    font-weight: bold;
 }
 
 svg text {

@@ -1,5 +1,9 @@
 import React, { useContext } from "react";
-import { FormattedMessage as String, useIntl } from "react-intl";
+import {
+    FormattedMessage,
+    FormattedMessage as String,
+    useIntl,
+} from "react-intl";
 import { analytics } from "./../services/Analytics";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +41,7 @@ import {
     selectMenuExpanded,
     selectPopup,
     selectUpdateAvailable,
+    setUpdateAvailable,
     showPopup,
     showToast,
     toggleMenu,
@@ -237,6 +242,14 @@ export const CommandButton = ({
 
     const handleClick = (e) => {
         if (updateChecker && updateAvailable) {
+            dispatch(setUpdateAvailable(false));
+            msgBox.push({
+                title: <FormattedMessage id="update_available_title" />,
+                content: <FormattedMessage id="update_available" />,
+                onYes: () => {
+                    document.location.reload();
+                },
+            });
             e.stopPropagation();
             return;
         }
@@ -256,23 +269,21 @@ export const CommandButton = ({
     };
 
     return (
-        <>
-            <button
-                id={id}
-                onClick={handleClick}
-                style={style}
-                disabled={isDisabled(command)}
-                className={"CommandButton".appendWord(className)}
-                title={
-                    showLabel
-                        ? ""
-                        : intl.formatMessage({ id: command.toLowerCase() })
-                }
-            >
-                {updateChecker && updateAvailable && <UpdateBadge />}
-                <CommandIcon {...{ command }} />
-                {renderLabel()}
-            </button>
-        </>
+        <button
+            id={id}
+            onClick={handleClick}
+            style={style}
+            disabled={isDisabled(command)}
+            className={"CommandButton".appendWord(className)}
+            title={
+                showLabel
+                    ? ""
+                    : intl.formatMessage({ id: command.toLowerCase() })
+            }
+        >
+            {updateChecker && updateAvailable && <UpdateBadge />}
+            <CommandIcon {...{ command }} />
+            {renderLabel()}
+        </button>
     );
 };
