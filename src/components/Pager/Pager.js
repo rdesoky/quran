@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
@@ -35,6 +35,7 @@ import {
     selectMaskStart,
     selectSelectedText,
     selectStartSelection,
+    setSelectedAya,
     setSelectStart,
     startMask,
 } from "../../store/navSlice";
@@ -73,11 +74,32 @@ export default function Pager() {
     const shownPages = useSelector(selectShownPages);
     const pageIndex = useSelector(selectActivePage);
     const location = useLocation();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (loading && pageIndex !== -1) {
+            const savedActiveAya = parseInt(localStorage.getItem("activeAya"));
+
+            dispatch(
+                setSelectedAya(
+                    !isNaN(savedActiveAya)
+                        ? savedActiveAya
+                        : getPageFirstAyaId(pageIndex)
+                )
+            );
+            setLoading(false);
+        }
+    }, [loading, pageIndex, dispatch]);
+    useEffect(() => {
+        if (!loading) {
+            localStorage.setItem("activeAya", selectStart);
+        }
+    }, [selectStart, loading]);
 
     useEffect(() => {
         if (params?.page >= 1) {
             dispatch(setActivePageIndex(params?.page - 1));
-            localStorage.activePage = params?.page;
+            localStorage.setItem("activePage", params.page);
         }
     }, [dispatch, params?.page]);
 

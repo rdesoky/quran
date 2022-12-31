@@ -20,9 +20,7 @@ import { ToastMessage } from "./components/Widgets";
 import SuraNames from "./providers/SuraNames";
 import RefsProvider from "./RefsProvider";
 import { analytics } from "./services/Analytics";
-import { getPageFirstAyaId } from "./services/QData";
 import { onResize, selectAppSize } from "./store/layoutSlice";
-import { setSelectedAya } from "./store/navSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
 
@@ -119,22 +117,20 @@ export default function App() {
                                 />
                                 <Route
                                     render={() => {
-                                        const activePage =
-                                            localStorage.activePage || "1";
-                                        localStorage.removeItem("activePage"); //remove if corrupted
+                                        const activePage = parseInt(
+                                            localStorage.getItem("activePage")
+                                        );
+                                        const activePageNumber = isNaN(
+                                            activePage
+                                        )
+                                            ? 1
+                                            : activePage;
                                         const defUrl =
                                             process.env.PUBLIC_URL +
                                             "/page/" +
-                                            activePage;
+                                            activePageNumber;
                                         console.log(
                                             `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                        );
-                                        dispatch(
-                                            setSelectedAya(
-                                                getPageFirstAyaId(
-                                                    activePage - 1
-                                                )
-                                            )
                                         );
                                         return <Redirect to={defUrl} />;
                                     }}
