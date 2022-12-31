@@ -8,21 +8,23 @@ import {
     Route,
     Switch,
 } from "react-router-dom";
+import "./App.scss";
 import { Audio } from "./components/Audio";
 import { ContextPopup } from "./components/ContextPopup";
 import { MessageBox } from "./components/MessageBox";
 import PopupView from "./components/Modal/PopupView";
 import Pager from "./components/Pager/Pager";
+import PageRedirect from "./components/Pager/PageRedirect";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { ToastMessage } from "./components/Widgets";
+import SuraNames from "./providers/SuraNames";
 import RefsProvider from "./RefsProvider";
 import { analytics } from "./services/Analytics";
+import { getPageFirstAyaId } from "./services/QData";
 import { onResize, selectAppSize } from "./store/layoutSlice";
+import { setSelectedAya } from "./store/navSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
-import "./App.scss";
-import PageRedirect from "./components/Pager/PageRedirect";
-import SuraNames from "./providers/SuraNames";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -126,6 +128,13 @@ export default function App() {
                                             activePage;
                                         console.log(
                                             `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+                                        );
+                                        dispatch(
+                                            setSelectedAya(
+                                                getPageFirstAyaId(
+                                                    activePage - 1
+                                                )
+                                            )
                                         );
                                         return <Redirect to={defUrl} />;
                                     }}
