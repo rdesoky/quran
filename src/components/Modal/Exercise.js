@@ -46,9 +46,7 @@ import {
     AudioRepeat,
     selectExerciseLevel,
     selectExerciseMemorized,
-    selectFollowPlayer,
     selectRandomAutoRecite,
-    selectRepeat,
 } from "../../store/settingsSlice";
 import { showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "../ExerciseSettings";
@@ -87,14 +85,10 @@ const Exercise = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const audio = useContext(AppRefs).get("audio");
-    const repeat = useSelector(selectRepeat);
-    const followPlayer = useSelector(selectFollowPlayer);
     const duration = useSelector(selectTrackDuration);
     const remainingTime = useSelector(selectRemainingTime);
     const trigger = "exercise";
     const audioState = useSelector(selectAudioState);
-    const [savedRepeat, setSavedRepeat] = useState();
-    const [savedFollowPlayer, setSavedFollowPlayer] = useState();
     const hifzRanges = useSelector(selectHifzRanges);
 
     const setCurrStep = (step) => {
@@ -183,14 +177,9 @@ const Exercise = () => {
             new_verse = Math.floor(Math.random() * verseList.length);
         } while (!checkVerseLevel(new_verse));
         dispatch(gotoAya(history, new_verse));
-        // app.gotoAya(new_verse, { sel: true, keepMask: true });
-        // app.setMaskStart(new_verse + 1, true);
-        // setCurrStep(Step.intro);
-        // if (currStep === Step.intro && defaultButton) {
-        //     defaultButton.focus();
-        // }
+
         if (randomAutoRecite) {
-            startReciting(e);
+            audio.play(new_verse, AudioRepeat.noRepeat);
         }
 
         analytics.logEvent("get_random_verse", {
