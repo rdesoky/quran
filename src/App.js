@@ -117,8 +117,13 @@ export default function App() {
                                 />
                                 <Route
                                     render={() => {
+                                        const activePage =
+                                            localStorage.activePage || "1";
+                                        localStorage.removeItem("activePage"); //remove if corrupted
                                         const defUrl =
-                                            process.env.PUBLIC_URL + "/page/1";
+                                            process.env.PUBLIC_URL +
+                                            "/page/" +
+                                            activePage;
                                         console.log(
                                             `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
                                         );

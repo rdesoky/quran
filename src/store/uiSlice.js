@@ -53,8 +53,8 @@ const slice = createSlice({
             slice.updateAvailable = action.payload;
         },
 
-        showMenu: (slice) => {
-            slice.menuExpanded = true;
+        showMenu: (slice, { payload = false }) => {
+            slice.menuExpanded = payload;
         },
         hideMenu: (slice) => {
             slice.menuExpanded = false;
