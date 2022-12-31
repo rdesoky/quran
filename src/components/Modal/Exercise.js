@@ -63,6 +63,7 @@ const Step = {
 };
 
 const Exercise = () => {
+    const [currStep, setCurrentStep] = useState(Step.intro);
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
 
@@ -70,7 +71,6 @@ const Exercise = () => {
     const randomAutoRecite = useSelector(selectRandomAutoRecite);
     const exerciseMemorized = useSelector(selectExerciseMemorized);
 
-    const [currStep, setCurrentStep] = useState(Step.intro);
     const selectStart = useSelector(selectStartSelection);
     const [verse, setVerse] = useState(selectStart);
     const [writtenText, setWrittenText] = useState("");
@@ -221,7 +221,23 @@ const Exercise = () => {
     const showIntro = useCallback(
         (e) => {
             audio.stop();
-            setTimeout(() => setCurrStep(Step.intro));
+            setCurrStep(Step.intro);
+            analytics.logEvent("exercise_go_back", { trigger });
+        },
+        [audio]
+    );
+
+    const goBack = useCallback(
+        (e) => {
+            audio.stop();
+            setCurrStep((currStep) => {
+                switch (currStep) {
+                    case Step.reciting:
+                        return Step.typing;
+                    default:
+                        return Step.intro;
+                }
+            });
             analytics.logEvent("exercise_go_back", { trigger });
         },
         [audio]
@@ -236,8 +252,7 @@ const Exercise = () => {
         // setCurrStep(Step.intro);
         const handleKeyDown = ({ code }) => {
             if (code === "Escape") {
-                analytics.logEvent("exercise_go_back", { trigger });
-                showIntro();
+                goBack();
             }
         };
 
@@ -250,7 +265,7 @@ const Exercise = () => {
             // dispatch(hideMask());
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [dispatch, showIntro]);
+    }, [dispatch, goBack]);
 
     //selected aya has changed
     useEffect(() => {
