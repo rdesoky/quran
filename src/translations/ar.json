@@ -11,7 +11,7 @@
     "page": "صفحة",
     "pg": "ص",
     "pg_num": "ص:{num}",
-    "hezb_num": "حزب: {num}",
+    "hezb_num": "{qr} حزب: {num}",
     "browse": "عرض",
     "pages_daily_graph": "الصفحات المراجعة يوميا",
     "chars_daily_graph": "الحروف المكتوبة يوميا",

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -20,9 +20,7 @@ import {
     gotoSura,
     selectStartSelection,
 } from "../../store/navSlice";
-import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { closePopup } from "../../store/uiSlice";
-import { AppRefs } from "../../RefsProvider";
 import PartsPie from "../PartsPie";
 
 const GotoPage = ({ open }) => {
@@ -30,8 +28,6 @@ const GotoPage = ({ open }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
-    const audio = useContext(AppRefs).get("audio");
-    const audioState = useSelector(selectAudioState);
 
     // const [isOpen, setIsOpen] = useState(true);
     const pagesCount = useSelector(selectPagesCount);
@@ -56,10 +52,6 @@ const GotoPage = ({ open }) => {
 
     let gotoPageForm;
 
-    // useEffect(() => {
-    //     setIsOpen(open); //update internal state to match
-    // }, [open]);
-
     useEffect(() => {
         updatePageNumber(ayaIdPage(selectStart) + 1);
         updatePartNumber(getPartIndexByAyaId(selectStart) + 1);
@@ -75,11 +67,11 @@ const GotoPage = ({ open }) => {
         };
     }, [gotoPageForm?.PageNumber]);
 
-    const stopAudio = () => {
-        if (audioState !== AudioState.stopped) {
-            audio.stop();
-        }
-    };
+    // const stopAudio = () => {
+    //     if (audioState !== AudioState.stopped) {
+    //         audio.stop();
+    //     }
+    // };
 
     const checkClosePopup = () => {
         if (!isCompact && pagesCount === 1) {
@@ -266,7 +258,15 @@ const GotoPage = ({ open }) => {
                     </div>
                 </form>
             </div>
-            <PartsPie />
+            <div
+                style={{
+                    direction: "ltr",
+                    textAlign: "center",
+                    padding: "20px 0",
+                }}
+            >
+                <PartsPie size={280} onFinish={checkClosePopup} />
+            </div>
         </>
     );
 };
