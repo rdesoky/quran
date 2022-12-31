@@ -97,11 +97,7 @@ function Sidebar() {
                     </div>
                 </div>
             </div>
-            <CommandButton
-                id="SideMenuExpander"
-                command="Commands"
-                trigger="side_bar"
-                updateChecker={true}
+            <div
                 style={{
                     position: "absolute",
                     left: 0,
@@ -109,7 +105,15 @@ function Sidebar() {
                     height: 50,
                     backgroundColor: "#000",
                 }}
-            />
+            >
+                <CommandButton
+                    id="SideMenuExpander"
+                    command="Commands"
+                    trigger="side_bar"
+                    updateChecker={true}
+                    style={{ height: 50 }}
+                />
+            </div>
         </div>
     );
 }

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 
 const Help = () => {
-    const [unsecureLink, setUnsecureLink] = useState(null);
+    // const [unsecureLink, setUnsecureLink] = useState(null);
     // useEffect(() => {
     //   const newLink = window.location.href.replace("https://", "http://");
     //   if (newLink !== window.location.href) {
@@ -16,10 +16,24 @@ const Help = () => {
                 <Message id="help" />
             </div>
             <div className="PopupBody">
-                <div>
-                    <Message id="add_to_home" />
+                <div id="GooglePlayBadge">
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.muslim_web.quran"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <img
+                            id="GooglePlay"
+                            src="/images/google-play.png"
+                            alt="get it on Google Play"
+                        />
+                    </a>
                 </div>
                 <hr />
+                {/* <div>
+                    <Message id="add_to_home" />
+                </div>
+                <hr /> */}
 
                 <div>
                     <Message
@@ -49,7 +63,7 @@ const Help = () => {
                         }}
                     />
                 </div>
-                {unsecureLink && (
+                {/* {unsecureLink && (
                     <div>
                         <hr />
                         <Message
@@ -59,7 +73,7 @@ const Help = () => {
                             }}
                         />
                     </div>
-                )}
+                )} */}
             </div>
         </>
     );
