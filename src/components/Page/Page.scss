@@ -2,8 +2,9 @@ $selectionBgColor: #c8ccf0;
 $selectionBgColorDark: rgb(38, 93, 138);
 
 .HifzSegments {
-    position: relative;
-
+    position: absolute;
+    height: 100%;
+    width: 100%;
     .HifzSegment {
         height: 100px;
         margin-bottom: 4px;
@@ -18,8 +19,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
 }
 
 .Page {
-    height: 100%;
     position: relative;
+    min-height: 100%;
 
     .LeftPage & {
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
@@ -79,7 +80,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
 
     .PageFrame {
         position: relative;
-        height: calc(100% - 51px);
+        height: 100%;
         // padding: 0 20px;
         .PageImageFrame {
             // position: absolute;
@@ -118,6 +119,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
             position: absolute;
             top: 0;
             height: 100%;
+            width: 100%;
             .Verse {
                 box-sizing: border-box;
                 position: absolute;
@@ -140,21 +142,6 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 &.Playing {
                     border-bottom: solid 2px green;
                 }
-            }
-        }
-    }
-
-    .SelectionButton {
-        color: black;
-        background-color: $selectionBgColor;
-        &:hover {
-            color: black !important;
-        }
-        .DarkTheme & {
-            color: white;
-            background-color: $selectionBgColorDark;
-            &:hover {
-                color: white !important;
             }
         }
     }
@@ -186,90 +173,116 @@ $selectionBgColorDark: rgb(38, 93, 138);
             filter: invert(1);
         }
     }
+}
 
-    .PageHeader {
+.PageHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    // justify-content: center;
+    height: 50px;
+    color: #bbb;
+    position: relative;
+    background-color: #444;
+    box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
+    transition: background-color 0.5s;
+    width: 100%;
+
+    .PageHeaderContent {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        justify-content: flex-start;
-        height: 50px;
+        justify-content: center;
         min-width: 200px; //to prevent 3 lines and header vertical overflow
-        color: #bbb;
-        position: relative;
-        background-color: #444;
-        box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
-        transition: background-color 0.5s;
-        .circle-background {
-            stroke: #555;
-        }
-        .circle-progress {
-            stroke: #bbb;
-        }
-        .circle-text {
-            fill: #bbb;
-            font-size: 12px;
+    }
+
+    .circle-background {
+        stroke: #555;
+    }
+    .circle-progress {
+        stroke: #bbb;
+    }
+    .circle-text {
+        fill: #bbb;
+        font-size: 12px;
+    }
+
+    &.active {
+        background-color: black;
+    }
+    .narrow & {
+        padding-left: 50px;
+    }
+    .PageHeaderContent {
+        // text-align: center;//will make buttons move when sura name changes
+        [dir="rtl"] & {
+            direction: rtl;
         }
 
-        .Active & {
-            background-color: black;
-        }
-        .narrow & {
-            padding-left: 50px;
-        }
-        .PageHeaderContent {
-            // text-align: center;//will make buttons move when sura name changes
-            [dir="rtl"] & {
-                direction: rtl;
-            }
-
-            svg {
-                vertical-align: middle;
-                cursor: default;
-            }
-
-            button {
-                padding: 0 10px;
-                line-height: 24px;
-                border-radius: 3px;
-            }
-
-            .PageHeaderSection {
-                display: inline-block;
-                white-space: nowrap;
-                background-color: #333;
-                border-radius: 3px;
-                margin: 0 2px;
-                height: 25px;
-                > * {
-                    height: 100%;
-                }
-            }
+        svg {
+            vertical-align: middle;
+            cursor: default;
         }
 
-        select {
-            height: 25px;
-            color: #ddd;
-            // background-color: transparent;
-            background-color: #444;
-            border: none;
-            // background-color: #444;
-            border-radius: 5px;
-            // option {
-            //     color: black;
-            //     background-color: silver;
-            // }
-            font-size: 14px;
+        button {
+            padding: 0 10px;
+            line-height: 24px;
+            border-radius: 3px;
+        }
+
+        .PageHeaderSection {
+            display: inline-block;
+            white-space: nowrap;
+            background-color: #333;
+            border-radius: 3px;
             margin: 0 2px;
-        }
-        .SuraTitle {
-            right: 0;
+            height: 25px;
+            > * {
+                height: 100%;
+            }
         }
     }
-    .PageFooter {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        text-align: center;
+
+    select {
+        height: 25px;
+        color: #ddd;
+        // background-color: transparent;
+        background-color: #444;
+        border: none;
+        // background-color: #444;
+        border-radius: 5px;
+        // option {
+        //     color: black;
+        //     background-color: silver;
+        // }
+        font-size: 14px;
+        margin: 0 2px;
     }
+    .SuraTitle {
+        right: 0;
+    }
+}
+
+.SelectionButton {
+    color: black;
+    background-color: $selectionBgColor;
+    &:hover {
+        color: black !important;
+    }
+    .DarkTheme & {
+        color: white;
+        background-color: $selectionBgColorDark;
+        &:hover {
+            color: white !important;
+        }
+    }
+}
+
+.PageFooter {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    text-align: center;
 }
 
 .LeftPage {

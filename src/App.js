@@ -95,7 +95,7 @@ export default function App() {
         localeMessages && (
             <IntlProvider locale={lang} messages={localeMessages}>
                 <RefsProvider>
-                    <div className={"App " + theme + "Theme"}>
+                    <div className={`App ${theme}Theme ${app_size}`}>
                         <Router>
                             <Switch>
                                 <Route

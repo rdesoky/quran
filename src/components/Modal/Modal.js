@@ -8,11 +8,10 @@ import {
     selectIsCompact,
     selectIsNarrow,
     selectIsWide,
-    selectModalPopup,
     selectPagerWidth,
     selectPagesCount,
 } from "../../store/layoutSlice";
-import { selectSidebarWidth } from "../../store/uiSlice";
+import { selectModalPopup, selectSidebarWidth } from "../../store/uiSlice";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
@@ -38,24 +37,6 @@ const Modal = ({ onClose, children, show, name }) => {
         e.stopPropagation();
     };
 
-    // let activeSide = app.getActiveSide();
-
-    // useEffect(() => {
-    //     // //select the launching command from in the side bar
-    //     // const commandBtn = document.querySelector(
-    //     //     `#RecentCommands button[command=${app.popup}]`
-    //     // );
-    //     // if (commandBtn) {
-    //     //     commandBtn.focus();
-    //     // }
-    //     return () => {
-    //         //Upon exit, select the most recent command to avoid hidden focus
-    //         selectTopCommand();
-    //     };
-    // }, []);
-
-    // const {isCompact, isWide, appWidth, pagesCount} = app;
-
     const calcLeft = () => {
         return isWide || isCompact ? 0 : activeSide === 0 ? 0 : "50%";
     };
@@ -67,7 +48,7 @@ const Modal = ({ onClose, children, show, name }) => {
         if (pagesCount === 2 && activeSide === 0) {
             return appWidth - pagerWidth / 2 - sidebarWidth;
         }
-        return 0;
+        return 0; //the full width of the app
     };
 
     return (

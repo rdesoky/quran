@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import {
     ayaID,
     ayaIdInfo,
@@ -12,7 +13,11 @@ import {
     TOTAL_PARTS,
     TOTAL_SURAS,
 } from "../../services/QData";
-import { selectIsCompact, selectPagesCount } from "../../store/layoutSlice";
+import {
+    selectAppHeight,
+    selectIsCompact,
+    selectPagesCount,
+} from "../../store/layoutSlice";
 import {
     gotoAya,
     gotoPage,
@@ -31,6 +36,8 @@ const GotoPage = ({ open }) => {
 
     // const [isOpen, setIsOpen] = useState(true);
     const pagesCount = useSelector(selectPagesCount);
+    const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
 
     const [pageNumber, updatePageNumber] = useState(
         () => ayaIdPage(selectStart) + 1
@@ -258,14 +265,16 @@ const GotoPage = ({ open }) => {
                     </div>
                 </form>
             </div>
-            <div
-                style={{
-                    direction: "ltr",
-                    textAlign: "center",
-                    padding: "20px 0",
-                }}
-            >
-                <PartsPie size={280} onFinish={checkClosePopup} />
+            <div className="PopupBody" ref={bodyRef}>
+                <div
+                    style={{
+                        direction: "ltr",
+                        textAlign: "center",
+                        padding: "20px 0",
+                    }}
+                >
+                    <PartsPie size={280} onFinish={checkClosePopup} />
+                </div>
             </div>
         </>
     );

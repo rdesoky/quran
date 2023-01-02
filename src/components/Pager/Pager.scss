@@ -1,17 +1,21 @@
 .Pager {
     direction: rtl;
     position: fixed;
-    top: 1px;
-    right: 0;
-    bottom: 0;
     display: flex;
+    align-items: flex-start;
+    top: 0; //1px;
+    right: 0;
+    bottom: 50px;
+    .one_page_scroll & {
+        overflow-y: overlay;
+        overflow-x: hidden;
+    }
     // border: solid 2px yellow;
     box-sizing: content-box;
     transition: width 0.5s;
     .PageSide {
         width: 50%;
         height: 100%;
-        display: inline-block;
         box-sizing: border-box;
         &.RightPage {
             .PageFrame {
@@ -64,4 +68,15 @@
             left: 50px;
         }
     }
+}
+
+.PagerFooter {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transition: width 0.5s;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

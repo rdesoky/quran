@@ -18,7 +18,6 @@ const initSidebarCommands = [
 ];
 
 const initialState = {
-    modalPopup: false,
     menuExpanded: false,
 
     toastMessage: null,
@@ -27,6 +26,8 @@ const initialState = {
     showPopup: false, //show/hide flag ( used for transitioning purpose )
     popup: null, //modal popup component
     popupParams: {},
+
+    modalPopup: false, //used to block user interaction outside the active popup
 
     recentCommands: initSidebarCommands,
     updateAvailable: false,
@@ -65,6 +66,9 @@ const slice = createSlice({
         addRecentCommand: (slice, { payload }) => {
             slice.recentCommands = [payload, ...slice.recentCommands];
         },
+        setModalPopup: (slice, action) => {
+            slice.modalPopup = action.payload;
+        },
     },
 });
 
@@ -77,8 +81,10 @@ export const {
     setShowPopup,
     showToast,
     setUpdateAvailable,
+    setModalPopup,
 } = slice.actions;
 
+export const selectModalPopup = (state) => state[sliceName].modalPopup;
 export const selectRecentCommands = (state) => state[sliceName].recentCommands;
 export const selectMessageBox = (state) =>
     state[sliceName].messageBox?.[state[sliceName].messageBox.length];

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ayaID } from "../../services/QData";
 import { downloadPageImage } from "../../services/utils";
 import {
+    selectIsScrollable,
     selectPageHeight,
     selectPageMargin,
     selectPagesCount,
@@ -12,18 +13,9 @@ import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
 import { HifzSegments } from "../HifzSegments";
 import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
-import PageHeader from "./PageHeader";
 import VerseLayout from "./VerseLayout";
 
-const Page = ({
-    index: pageIndex,
-    order,
-    onArrowKey,
-    onPageUp,
-    onPageDown,
-    scaleX,
-    shiftX,
-}) => {
+const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
     const [imageUrl, setImageUrl] = useState(null);
     const [versesInfo, setVerseInfo] = useState([]);
     const pagesCount = useSelector(selectPagesCount);
@@ -102,13 +94,14 @@ const Page = ({
                 }}
             >
                 <div
-                    className={
-                        "PageImageFrame" + (imageUrl ? " AnimatePage" : "")
-                    }
+                    className={"PageImageFrame".appendWord(
+                        imageUrl && "AnimatePage"
+                    )}
                     style={{
                         transform: `translateX(${shiftX || 0}px) scaleX(${
                             scaleX || 1
                         })`,
+                        height: pageHeight,
                         // transform: `translateX(${shiftX || 0}px) scaleX(1)`,
                     }}
                 >
@@ -121,7 +114,7 @@ const Page = ({
                         <img
                             style={{
                                 visibility: imageUrl ? "visible" : "hidden",
-                                margin: pageMargin,
+                                margin: `0 ${pageMargin}px`,
                                 width: pageWidth,
                                 height: pageHeight,
                             }}
@@ -132,16 +125,6 @@ const Page = ({
                     </VerseLayout>
                 </div>
             </div>
-            <PageHeader
-                index={pageIndex}
-                order={order}
-                // onIncrement={onIncrement}
-                // onDecrement={onDecrement}
-                // offsetSelection={offsetSelection}
-                onArrowKey={onArrowKey}
-                onPageUp={onPageUp}
-                onPageDown={onPageDown}
-            />
         </div>
     );
 };

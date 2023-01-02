@@ -1,8 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectHifzRanges } from "../store/dbSlice";
+import { selectPageHeight } from "../store/layoutSlice";
 
-export const HifzSegment = ({ sura, page, pageHeight, versesInfo }) => {
+export const HifzSegment = ({ sura, page, versesInfo }) => {
+    const pageHeight = useSelector(selectPageHeight);
     const hifzRanges = useSelector(selectHifzRanges);
     const suraVerses = versesInfo.filter((i) => i.sura - 1 === sura);
     if (suraVerses.length === 0) {

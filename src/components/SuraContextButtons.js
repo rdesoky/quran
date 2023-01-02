@@ -40,6 +40,7 @@ export const SuraContextButtons = ({ sura }) => {
                     }}
                 />
             )}
+            <CommandButton {...{ trigger, command: "Goto" }} />
         </div>
     );
 };

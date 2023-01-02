@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
-import { selectAppHeight, selectPageMargin } from "../../store/layoutSlice";
+import {
+    selectAppHeight,
+    selectPageHeight,
+    selectPageMargin,
+} from "../../store/layoutSlice";
 import {
     extendSelection,
     gotoAya,
@@ -22,7 +26,6 @@ import { analytics } from "./../../services/Analytics";
 const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const playingAya = useSelector(selectPlayingAya);
     const [hoverVerse, setHoverVerse] = useState(-1);
-    const appHeight = useSelector(selectAppHeight);
     const pageMargin = useSelector(selectPageMargin);
     const selectStart = useSelector(selectStartSelection);
     const selectEnd = useSelector(selectEndSelection);
@@ -31,7 +34,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const history = useHistory();
     const contextPopup = useContext(AppRefs).get("contextPopup");
 
-    const pageHeight = appHeight - 50;
+    const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth;
 
@@ -347,12 +350,11 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 className="VerseLayout"
                 style={{
                     direction: "ltr",
+                    left: pageMargin,
                     width: pageWidth,
                     height: pageHeight,
-                    margin: pageMargin,
                 }}
             >
-                {/* <Verses verseInfo={versesInfo} /> */}
                 {Verses(versesInfo)}
             </div>
             {children}
@@ -363,7 +365,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     top: 0,
                     width: pageWidth,
                     height: pageHeight,
-                    margin: pageMargin,
+                    margin: `0 ${pageMargin}px`,
                 }}
             >
                 {renderMask()}

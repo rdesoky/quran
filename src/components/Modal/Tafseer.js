@@ -75,7 +75,7 @@ const Tafseer = () => {
                 <String id="tafseer" />
                 {isNarrow ? <PlayerButtons trigger="tafseer_title" /> : null}
             </div>
-            <div className="PopupBody" style={{ maxHeight: appHeight - 85 }}>
+            <div className="PopupBody">
                 <TafseerView
                     verse={verse}
                     onMoveNext={offsetSelection}

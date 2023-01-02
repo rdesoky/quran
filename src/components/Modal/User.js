@@ -1,6 +1,7 @@
 import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { selectUser, signOut } from "../../store/dbSlice";
 import { selectAppHeight } from "../../store/layoutSlice";
 import { ActivityChart } from "../Hifz";
@@ -9,6 +10,7 @@ import Login from "./../Login";
 
 const User = () => {
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
 
@@ -21,29 +23,31 @@ const User = () => {
             <div className="Title">
                 <String id="profile" />
             </div>
-            <div className="PopupBody" style={{ maxHeight: appHeight - 80 }}>
-                {user && user.isAnonymous === false ? (
-                    <div className="ButtonsBar">
-                        <UserImage />
-                        <div className="VCentered" style={{ flexGrow: 1 }}>
+            <div className="HCentered">
+                {user?.isAnonymous === false ? (
+                    <>
+                        <div className="VACentered">
+                            <UserImage />
+                        </div>
+                        <div className="VCentered" style={{ padding: 10 }}>
                             <div>{user.displayName}</div>
                             <div>{user.email}</div>
-                        </div>
-                        <div className="ButtonsBar">
-                            <button onClick={onSignOut}>
+                            <button onClick={onSignOut} className="btn">
                                 <String id="sign_out" />
                             </button>
                         </div>
-                    </div>
+                    </>
                 ) : (
-                    <div>
+                    <>
                         <div>
                             <String id="guest_msg" />
                         </div>
                         <Login />
-                    </div>
+                    </>
                 )}
-                <hr />
+            </div>
+            <hr />
+            <div className="PopupBody" ref={bodyRef}>
                 <ActivityChart activity="pages" />
                 <hr />
                 <ActivityChart activity="chars" />
