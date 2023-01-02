@@ -140,7 +140,6 @@ export const HifzRange = ({
     };
 
     const checkClosePopup = () => {
-        // 	if (appSize === "one_page") {
         if (!isCompact && pagesCount === 1) {
             dispatch(closePopup());
         }

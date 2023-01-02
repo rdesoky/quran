@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
@@ -14,14 +20,14 @@ import {
 } from "../../services/utils";
 import {
     selectActivePage,
-    selectAppHeight,
     selectIsNarrow,
+    selectIsScrollable,
     selectIsWide,
-    selectModalPopup,
     selectPagerWidth,
     selectPagesCount,
     selectPageWidth,
     selectShownPages,
+    selectZoomOptions,
     setActivePageIndex,
 } from "../../store/layoutSlice";
 import {
@@ -42,20 +48,23 @@ import {
 import {
     closePopup,
     selectMenuExpanded,
+    selectModalPopup,
     selectPopup,
     showMenu,
     showPopup,
 } from "../../store/uiSlice";
+import { CommandButton } from "../CommandButton";
 import { shownMessageBoxes } from "../MessageBox";
 import Page from "../Page/Page";
+import PageHeader from "../Page/PageHeader";
 import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
 import "./Pager.scss";
 
 export default function Pager() {
+    const zoomOptions = useSelector(selectZoomOptions);
     const pagesCount = useSelector(selectPagesCount);
     const isWide = useSelector(selectIsWide);
-    const appHeight = useSelector(selectAppHeight);
     const pageWidth = useSelector(selectPageWidth);
     const pagerWidth = useSelector(selectPagerWidth);
     const dispatch = useDispatch();
@@ -75,6 +84,8 @@ export default function Pager() {
     const pageIndex = useSelector(selectActivePage);
     const location = useLocation();
     const [loading, setLoading] = useState(true);
+    const isScrollable = useSelector(selectIsScrollable);
+    const pagerRef = useRef();
 
     useEffect(() => {
         if (loading && pageIndex !== -1) {
@@ -89,6 +100,7 @@ export default function Pager() {
             );
             setLoading(false);
         }
+        pagerRef.current && (pagerRef.current.scrollTop = 0);
     }, [loading, pageIndex, dispatch]);
     useEffect(() => {
         if (!loading) {
@@ -143,6 +155,10 @@ export default function Pager() {
     }, [pagesCount, pageIndex]);
 
     const handleWheel = (e) => {
+        if (isScrollable) {
+            return;
+        }
+
         if (e.deltaY > 0) {
             analytics.setTrigger("mouse_wheel");
             //scroll down
@@ -414,7 +430,7 @@ export default function Pager() {
                     .appendWord(pageClass)
                     .appendWord(activeClass)}
                 style={{
-                    height: appHeight + "px",
+                    // height: appHeight + "px",
                     width: 100 / pagesCount + "%",
                 }}
                 key={thisPageIndex}
@@ -433,47 +449,75 @@ export default function Pager() {
     };
 
     return (
-        <DDrop
-            maxShift={200}
-            dropShift={50}
-            onDrop={({ dX, dY }) => {
-                if (dX > 50) {
-                    analytics.setTrigger("dragging");
-                    pageDown();
-                }
-                if (dX < -50) {
-                    analytics.setTrigger("dragging");
-                    pageUp();
-                }
-            }}
-        >
-            {({ dX, dY }) => {
-                //Shrink the width using the scaling
-                const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
-                const shiftX = dX * scaleX;
-                // console.log(
-                //     `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
-                // );
-                const firstPageShiftX =
-                    pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
-                const firstPageScaleX =
-                    pagesCount === 1 ? scaleX : shiftX < 0 ? scaleX : 1;
-                const secondPageShiftX = shiftX > 0 ? shiftX : 0;
-                const secondPageScaleX = shiftX > 0 ? scaleX : 1;
+        <>
+            <DDrop
+                maxShift={200}
+                dropShift={50}
+                onDrop={({ dX, dY }) => {
+                    if (dX > 50) {
+                        analytics.setTrigger("dragging");
+                        pageDown();
+                    }
+                    if (dX < -50) {
+                        analytics.setTrigger("dragging");
+                        pageUp();
+                    }
+                }}
+            >
+                {({ dX, dY }) => {
+                    //Shrink the width using the scaling
+                    const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
+                    const shiftX = dX * scaleX;
+                    // console.log(
+                    //     `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
+                    // );
+                    const firstPageShiftX =
+                        pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
+                    const firstPageScaleX =
+                        pagesCount === 1 ? scaleX : shiftX < 0 ? scaleX : 1;
+                    const secondPageShiftX = shiftX > 0 ? shiftX : 0;
+                    const secondPageScaleX = shiftX > 0 ? scaleX : 1;
 
-                return (
-                    <div
-                        className={"Pager" + (isNarrow ? " narrow" : "")}
-                        onWheel={handleWheel}
-                        style={{
-                            width: pagerWidth,
-                        }}
-                    >
-                        {renderPage(0, firstPageShiftX, firstPageScaleX)}
-                        {renderPage(1, secondPageShiftX, secondPageScaleX)}
-                    </div>
-                );
-            }}
-        </DDrop>
+                    return (
+                        <div
+                            ref={pagerRef}
+                            className={"Pager" + (isNarrow ? " narrow" : "")}
+                            onWheel={handleWheel}
+                            style={{
+                                width: pagerWidth,
+                            }}
+                        >
+                            {renderPage(0, firstPageShiftX, firstPageScaleX)}
+                            {renderPage(1, secondPageShiftX, secondPageScaleX)}
+                        </div>
+                    );
+                }}
+            </DDrop>
+            <div className="PagerFooter" style={{ width: pagerWidth }}>
+                <PageHeader
+                    index={shownPages[0]}
+                    order={0}
+                    onArrowKey={onArrowKey}
+                    onPageUp={pageUp}
+                    onPageDown={pageDown}
+                />
+                {shownPages.length > 1 && (
+                    <PageHeader
+                        index={shownPages[1]}
+                        order={1}
+                        onArrowKey={onArrowKey}
+                        onPageUp={pageUp}
+                        onPageDown={pageDown}
+                    />
+                )}
+            </div>
+            {zoomOptions.length > 0 && (
+                <div style={{ position: "fixed", left: 50, bottom: 0 }}>
+                    <button className="CommandButton" style={{ height: 50 }}>
+                        {zoomOptions.length > 1 ? "Z" : "z"}
+                    </button>
+                </div>
+            )}
+        </>
     );
 }

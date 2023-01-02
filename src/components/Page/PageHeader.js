@@ -19,9 +19,15 @@ import {
     TOTAL_PAGES,
     verseLocation,
 } from "../../services/QData";
-import { selectPagesCount, selectShownPages } from "../../store/layoutSlice";
+import {
+    selectActivePage,
+    selectIsNarrow,
+    selectPagerWidth,
+    selectPagesCount,
+    selectShownPages,
+} from "../../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
+import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { AudioRepeat } from "../../store/settingsSlice";
 import { CommandIcon } from "../CommandIcon";
 import PartsPie from "../PartsPie";
@@ -43,7 +49,10 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     const dispatch = useDispatch();
     const contextPopup = useContext(AppRefs).get("contextPopup");
     const audio = useContext(AppRefs).get("audio");
-    const playingAya = useSelector(selectPlayingAya);
+    const activePage = useSelector(selectActivePage);
+    const pagerWidth = useSelector(selectPagerWidth);
+    const audioState = useSelector(selectAudioState);
+    const isNarrow = useSelector(selectIsNarrow);
 
     const trigger = "page_header";
     const partIndex = getPagePartNumber(pageIndex + 1) - 1;
@@ -116,7 +125,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
 
     const onTogglePlay = (e) => {
         const aya = ayaID(suraIndex, 0);
-        if (playingAya === -1) {
+        if (audioState !== AudioState.playing) {
             audio.play(aya, AudioRepeat.sura);
             dispatch(gotoAya(history, aya));
             analytics.logEvent("play_audio", {
@@ -128,9 +137,23 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
         }
     };
 
+    const onClick = (e) => {
+        if (activePage !== pageIndex) {
+            dispatch(gotoPage(history, pageIndex));
+        }
+    };
+
     return (
-        <div className="PageHeader">
-            <div className="PageHeaderContent">
+        <div
+            className={"PageHeader".appendWord(
+                pageIndex === activePage && "active"
+            )}
+            onClick={onClick}
+        >
+            <div
+                className="PageHeaderContent"
+                style={{ maxWidth: pagerWidth - (isNarrow ? 50 : 0) }}
+            >
                 <CircleProgress
                     target={TOTAL_PAGES}
                     progress={pageIndex + 1}
@@ -141,7 +164,7 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         { id: "part_num" },
                         { num: partIndex + 1 }
                     )}
-                    style={{ marginRight: 5 }}
+                    style={{ margin: "0 5px 0 3px" }}
                 />{" "}
                 <div className="PageHeaderSection">
                     <button
@@ -169,49 +192,53 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                         <Icon icon={faAngleDown} />
                     </button>
                 </div>
-                <div
-                    className="PageHeaderSection"
-                    style={{
-                        display: pagesCount === 1 || order ? "" : "none",
-                    }}
-                >
-                    <button
-                        className="NavButton NavBackward"
-                        onClick={onClickPrevious}
-                    >
-                        <Icon icon={faAngleUp} />
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            dispatch(gotoAya(history, selectStart));
-                            showVerseContextPopup(e);
-                        }}
-                        className="SelectionButton"
-                        title={intl.formatMessage({ id: "goto_selection" })}
-                        style={{ minWidth: 40, padding: 0 }}
-                    >
-                        {selectedAyaInfo.sura +
-                            1 +
-                            ":" +
-                            (selectedAyaInfo.aya + 1)}
-                    </button>
-                    <button
-                        onClick={onClickNext}
-                        className="NavButton NavForward"
-                    >
-                        <Icon icon={faAngleDown} />
-                    </button>
-                </div>
+                {order === 0 && (
+                    <div className="PageHeaderSection">
+                        <button
+                            className="NavButton NavBackward"
+                            onClick={onClickPrevious}
+                        >
+                            <Icon icon={faAngleUp} />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                dispatch(gotoAya(history, selectStart));
+                                showVerseContextPopup(e);
+                            }}
+                            className="SelectionButton"
+                            title={intl.formatMessage({ id: "goto_selection" })}
+                            style={{ minWidth: 40, padding: 0 }}
+                        >
+                            {selectedAyaInfo.sura +
+                                1 +
+                                ":" +
+                                (selectedAyaInfo.aya + 1)}
+                        </button>
+                        <button
+                            onClick={onClickNext}
+                            className="NavButton NavForward"
+                        >
+                            <Icon icon={faAngleDown} />
+                        </button>
+                    </div>
+                )}
                 <div className="PageHeaderSection">
                     <button
                         sura={suraIndex}
                         onClick={onTogglePlay}
                         title={intl.formatMessage({
-                            id: playingAya === -1 ? "play" : "stop",
+                            id:
+                                audioState !== AudioState.playing
+                                    ? "play"
+                                    : "stop",
                         })}
                     >
                         <CommandIcon
-                            command={playingAya === -1 ? "Play" : "Stop"}
+                            command={
+                                audioState !== AudioState.playing
+                                    ? "Play"
+                                    : "Stop"
+                            }
                         />
                     </button>
                     <button

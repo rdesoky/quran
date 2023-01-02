@@ -7,6 +7,9 @@ import {
     faStepBackward,
     faFastBackward,
 } from "@fortawesome/free-solid-svg-icons";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
+import { selectAppHeight } from "../../store/layoutSlice";
+import { useSelector } from "react-redux";
 
 const keyMap = {
     //first

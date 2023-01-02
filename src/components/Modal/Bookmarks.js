@@ -4,6 +4,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { AppRefs } from "../../RefsProvider";
 import {
     addBookmark,
@@ -18,6 +19,7 @@ import { VerseText } from "./../Widgets";
 
 const Bookmarks = () => {
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const isNarrow = useSelector(selectIsNarrow);
     const dispatch = useDispatch();
     const msgBox = useContext(AppRefs).get("msgBox");
@@ -44,7 +46,7 @@ const Bookmarks = () => {
                 <String id="bookmarks" />
                 {isNarrow ? <PlayerButtons trigger="bookmarks_title" /> : ""}
             </div>
-            <div className="PopupBody" style={{ maxHeight: appHeight - 85 }}>
+            <div className="PopupBody" ref={bodyRef}>
                 <div className="BigToggler">
                     <button onClick={toggleBookmark}>
                         <Icon icon={isBookmarked ? faBookmark : farBookmark} />

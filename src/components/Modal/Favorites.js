@@ -3,12 +3,15 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { selectActivePage, selectAppHeight } from "../../store/layoutSlice";
 import { AddHifz } from "../AddHifz";
 import { ActivityChart, HifzRanges } from "../Hifz";
 
 const Favorites = () => {
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
+
     const [activeTab, selectTab] = useState("add");
     const pageIndex = useSelector(selectActivePage);
 
@@ -59,7 +62,7 @@ const Favorites = () => {
                     </button>
                 </div>
             </div>
-            <div className="PopupBody" style={{ maxHeight: appHeight - 85 }}>
+            <div className="PopupBody" ref={bodyRef}>
                 {renderBody()}
             </div>
         </>

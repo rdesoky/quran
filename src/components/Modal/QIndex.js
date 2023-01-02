@@ -8,6 +8,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { selectAppHeight } from "../../store/layoutSlice";
 import { selectLang } from "../../store/settingsSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
@@ -23,6 +24,7 @@ export default function QIndex({ simple }) {
     );
     const [filter, setFilter] = useState("");
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
 
     const selectTab = (tabId) => {
         localStorage.setItem("activeTab", tabId);
@@ -58,12 +60,7 @@ export default function QIndex({ simple }) {
         return (
             <>
                 <div className="Title"></div>
-                <div
-                    className="PopupBody"
-                    style={{
-                        height: appHeight - 80,
-                    }}
-                >
+                <div ref={bodyRef} className="PopupBody">
                     <SuraList simple={simple} />
                 </div>
             </>
@@ -141,9 +138,7 @@ export default function QIndex({ simple }) {
 
             <div
                 className="PopupBody"
-                style={{
-                    height: appHeight - 135,
-                }}
+                ref={bodyRef}
                 onTouchStart={hideKeyboard}
                 onMouseDown={hideKeyboard}
             >

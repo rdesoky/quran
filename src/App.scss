@@ -75,6 +75,16 @@ button,
     .actions & {
         text-align: center !important;
     }
+    &.btn {
+        padding: 0 10px;
+        background-color: #555;
+        border-radius: 4px;
+        padding: 5px 10px;
+        margin: 5px 0;
+        &:hover {
+            background-color: #666;
+        }
+    }
     &:hover {
         color: white !important;
         background: #666;
@@ -486,6 +496,29 @@ hr {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+.VACentered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.HCentered {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.HACentered {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.VEnd {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .RadioGroup {

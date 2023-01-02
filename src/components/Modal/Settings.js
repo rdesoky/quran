@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ListReciters } from "../../services/AudioData";
@@ -41,6 +42,7 @@ const Settings = () => {
     const dispatch = useDispatch();
     const popupWidth = useSelector(selectPopupWidth);
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const isNarrow = useSelector(selectIsNarrow);
     const popup = useSelector(selectPopup);
     const playingAya = useSelector(selectPlayingAya);
@@ -132,9 +134,7 @@ const Settings = () => {
                     popupBody = ref;
                 }}
                 className="PopupBody"
-                style={{
-                    height: appHeight - 80,
-                }}
+                ref={bodyRef}
             >
                 <div className="OptionRow">
                     <label>

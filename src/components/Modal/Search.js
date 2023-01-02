@@ -10,6 +10,7 @@ import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranNormalizedText, quranText } from "../../App";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { analytics } from "../../services/Analytics";
 import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/QData";
 import {
@@ -46,11 +47,13 @@ export default function Search() {
         localStorage.getItem("searchTreeView") === "1"
     );
     const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
+    const resultsRef = useSnapHeightToBottomOf(appHeight - 15);
 
-    let resultsDiv;
+    const resultsDiv = resultsRef.current;
 
     const toggleTreeView = (e) => {
         analytics.logEvent("search_toggle_view", {
@@ -259,9 +262,7 @@ export default function Search() {
             <div
                 className="ResultsList"
                 onMouseDown={hideKeyboard}
-                ref={(ref) => {
-                    resultsDiv = ref;
-                }}
+                ref={resultsRef}
             >
                 {groups.map(({ sura, verses }, i) => {
                     const expanded = expandedGroup === i;
@@ -338,9 +339,7 @@ export default function Search() {
             <div
                 className="ResultsList"
                 onMouseDown={hideKeyboard}
-                ref={(ref) => {
-                    resultsDiv = ref;
-                }}
+                ref={resultsRef}
             >
                 {page.map(
                     ({ aya, text: ayaText, ntext: normalizedAyaText }, i) => {
@@ -453,8 +452,7 @@ export default function Search() {
         );
     };
 
-    const formHeight = 130,
-        resultsInfoHeight = 30;
+    const resultsInfoHeight = 30;
 
     return (
         <>
@@ -482,7 +480,7 @@ export default function Search() {
                     );
                 })}
             </div>
-            <div className="ResultsInfo" style={{ height: resultsInfoHeight }}>
+            <div className="ResultsInfo">
                 {results.length ? (
                     <button
                         id="SearchViewToggler"
@@ -513,9 +511,7 @@ export default function Search() {
                 className="PopupBody"
                 onTouchStart={hideKeyboard}
                 onMouseDown={hideKeyboard}
-                style={{
-                    height: appHeight - formHeight - 11, // footer + padding + formMargins
-                }}
+                ref={bodyRef}
             >
                 {renderSuras()}
                 {treeView ? renderResultsTree() : renderResults()}

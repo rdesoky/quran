@@ -226,7 +226,7 @@ export const CommandButton = ({
             switch (command) {
                 case "Profile":
                     if (user && !user.isAnonymous) {
-                        label = user.email;
+                        label = user.displayName;
                     }
                     break;
                 default:

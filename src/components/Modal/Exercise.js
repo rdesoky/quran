@@ -1,3 +1,4 @@
+//TODO: replace rendering functions with components
 import {
     faPlayCircle,
     faRandom,
@@ -17,17 +18,15 @@ import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranNormalizedText, quranText } from "../../App";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
 import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
 import {
     selectAppHeight,
-    selectIsCompact,
     selectIsNarrow,
-    selectIsWide,
-    selectPagesCount,
-    setModalPopup,
+    selectIsNarrowLayout,
 } from "../../store/layoutSlice";
 import {
     gotoAya,
@@ -48,11 +47,8 @@ import {
     selectExerciseMemorized,
     selectRandomAutoRecite,
 } from "../../store/settingsSlice";
-import { showToast } from "../../store/uiSlice";
+import { setModalPopup, showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "../ExerciseSettings";
-
-// const useForceUpdate = useCallback(() => updateState({}), []);
-// const useForceUpdate = () => useState()[1];
 
 const Step = {
     unknown: "unknown",
@@ -79,9 +75,6 @@ const Exercise = () => {
     const verseList = quranText;
     const normVerseList = quranNormalizedText;
     const [quickMode, setQuickMode] = useState(0);
-    const pagesCount = useSelector(selectPagesCount);
-    const isWide = useSelector(selectIsWide);
-    const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
     const audio = useContext(AppRefs).get("audio");
@@ -90,6 +83,8 @@ const Exercise = () => {
     const trigger = "exercise";
     const audioState = useSelector(selectAudioState);
     const hifzRanges = useSelector(selectHifzRanges);
+    const isNarrowLayout = useSelector(selectIsNarrowLayout);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
 
     const setCurrStep = (step) => {
         setCurrentStep(step);
@@ -122,10 +117,6 @@ const Exercise = () => {
     //         }
     //     };
     // }, [dispatch, savedFollowPlayer, savedRepeat]);
-
-    const isNarrowLayout = () => {
-        return !(isWide || isCompact || pagesCount > 1);
-    };
 
     const checkVerseLevel = (new_verse) => {
         const text = quranText?.[new_verse];
@@ -440,33 +431,35 @@ const Exercise = () => {
     };
 
     const renderIntro = () => {
-        if (isNarrowLayout()) {
-            return "";
-        }
         return (
-            <div className="ContentFrame">
-                <VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
-                <VerseText copy={true} bookmark={true} />
-                <div className="FootNote">
-                    <String id="exercise_intro" />
-                </div>
-                <hr />
-                <TafseerView
-                    verse={verse}
-                    showVerseText={false}
-                    bookmark={true}
-                    copy={true}
-                    onMoveNext={onMoveNext}
-                    trigger={trigger}
-                />
-                <hr />
-                <div>
-                    <String id="random_exercise" />
-                </div>
-                <ExerciseSettings />
+            !isNarrowLayout && (
+                <div className="PopupBody" ref={bodyRef}>
+                    <VerseInfo
+                        trigger="exercise_intro"
+                        onMoveNext={onMoveNext}
+                    />
+                    <VerseText copy={true} bookmark={true} />
+                    <div className="FootNote">
+                        <String id="exercise_intro" />
+                    </div>
+                    <hr />
+                    <TafseerView
+                        verse={verse}
+                        showVerseText={false}
+                        bookmark={true}
+                        copy={true}
+                        onMoveNext={onMoveNext}
+                        trigger={trigger}
+                    />
+                    <hr />
+                    <div>
+                        <String id="random_exercise" />
+                    </div>
+                    <ExerciseSettings />
 
-                <ActivityChart activity="chars" />
-            </div>
+                    <ActivityChart activity="chars" />
+                </div>
+            )
         );
     };
 
@@ -480,7 +473,7 @@ const Exercise = () => {
         const narrow = isNarrow;
         return (
             <>
-                {isNarrowLayout() ? (
+                {isNarrowLayout ? (
                     <div className="TitleNote">
                         <String id="exercise_intro" />
                     </div>
@@ -488,7 +481,7 @@ const Exercise = () => {
                 <div className="TitleButtons">
                     <VerseInfo
                         trigger="exercise_intro_title"
-                        show={isNarrowLayout()}
+                        show={isNarrowLayout}
                     />
                     <div className="ButtonsBar">
                         <button
@@ -656,7 +649,6 @@ const Exercise = () => {
                 <div
                     style={{
                         position: "relative",
-                        height: appHeight - 248, //keyboard and title heights
                     }}
                 >
                     <div
@@ -720,12 +712,14 @@ const Exercise = () => {
                         </div>
                     </div>
                 </div>
-                <AKeyboard
-                    initText={writtenText}
-                    onUpdateText={onUpdateText}
-                    onEnter={onFinishedTyping}
-                    onCancel={showIntro}
-                />
+                <div className="PopupBody VEnd" ref={bodyRef}>
+                    <AKeyboard
+                        initText={writtenText}
+                        onUpdateText={onUpdateText}
+                        onEnter={onFinishedTyping}
+                        onCancel={showIntro}
+                    />
+                </div>
             </>
         );
     };
@@ -867,7 +861,7 @@ const Exercise = () => {
         };
 
         return (
-            <div className="ContentFrame">
+            <div className="PopupBody" ref={bodyRef}>
                 {renderMessage()}
                 <h3 className="TypedVerseText">
                     {answerWords.map((word, index) => (
@@ -910,7 +904,7 @@ const Exercise = () => {
     const renderRecitingTitle = () => {
         return (
             <div className="TitleButtons">
-                <VerseInfo trigger="reciting_title" show={isNarrowLayout()} />
+                <VerseInfo trigger="reciting_title" show={isNarrowLayout} />
                 <span className="TrackDuration">
                     {renderCounter(
                         32,
@@ -941,26 +935,25 @@ const Exercise = () => {
     };
 
     const renderReciting = () => {
-        if (isNarrowLayout()) {
-            return "";
-        }
         return (
-            <div className="ContentFrame">
-                <VerseInfo trigger="exercise_reciting" />
-                <VerseText />
-                <div className="FootNote">
-                    <String id="exercise_intro" />
+            !isNarrowLayout && (
+                <div className="PopupBody" ref={bodyRef}>
+                    <VerseInfo trigger="exercise_reciting" />
+                    <VerseText />
+                    <div className="FootNote">
+                        <String id="exercise_intro" />
+                    </div>
+                    <hr />
+                    <TafseerView
+                        verse={verse}
+                        showVerseText={false}
+                        bookmark={true}
+                        copy={true}
+                        onMoveNext={onMoveNext}
+                        trigger={trigger}
+                    />
                 </div>
-                <hr />
-                <TafseerView
-                    verse={verse}
-                    showVerseText={false}
-                    bookmark={true}
-                    copy={true}
-                    onMoveNext={onMoveNext}
-                    trigger={trigger}
-                />
-            </div>
+            )
         );
     };
 
@@ -982,9 +975,7 @@ const Exercise = () => {
     return (
         <>
             <div className="Title">{renderTitle()}</div>
-            <div className="PopupBody" style={{ maxHeight: appHeight - 50 }}>
-                {renderContent()}
-            </div>
+            {renderContent()}
         </>
     );
 };

@@ -8,7 +8,7 @@ export const HifzSegments = ({ page, versesInfo }) => {
     const pageHeight = useSelector(selectPageHeight);
     const page_suras = getPageSuras(page);
     return (
-        <div className="HifzSegments">
+        <div className="HifzSegments" style={{ height: pageHeight }}>
             {page_suras.map((sura) => (
                 <HifzSegment
                     key={page.toString() + "-" + sura.toString()}
