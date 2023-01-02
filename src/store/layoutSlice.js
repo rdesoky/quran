@@ -11,43 +11,32 @@ export const ViewCapacity = {
     twoPagesPlus: "two_full_pages_plus", //can accommodate popup
 };
 
+export const PAGE_ASPECT = 10 / 16;
 export const DisplayMode = {};
 
 const initialState = {
     viewAspect: 1,
     viewCapacity: ViewCapacity.onePage,
-    zoomOptions: [],
+    zoom: 0,
+    zoomLevels: 0,
 
-    isNarrow: false, //hidden sidebar and stretched single page width
-    isCompact: false, //single page with extra margin for popup
+    // isNarrow: false, //hidden sidebar and stretched single page width
+    // isCompact: false, //single page with extra margin for popup
     isWide: false, //two pages with extra margin for popup
-    isScrollable: false, // too wide
-    pagesCount: 1,
+    // isScrollable: false, // too wide
+    // pagesCount: 1,
     pagerWidth: 0,
-    pageWidth: 0,
+    // pageWidth: 0,
     pageMargin: 0,
     appWidth: 800,
     appHeight: 600,
     displayMode: 0, //(unused) 0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
-    app_size: "two_pages",
+    // app_size: "two_pages",
     activePageIndex: -1,
     shownPages: [],
 };
 
-const calcShownPages = (slice) => {
-    const pageIndex = slice.activePageIndex;
-    if (pageIndex === -1) {
-        slice.shownPages = [];
-        return; //
-    }
-    if (slice.pagesCount === 1) {
-        slice.shownPages = [pageIndex];
-    } else {
-        const firstPage = pageIndex - (pageIndex % 2);
-        const secondePage = firstPage + 1;
-        slice.shownPages = [firstPage, secondePage];
-    }
-};
+const calcShownPages = (state) => {};
 
 const slice = createSlice({
     name: sliceName,
@@ -55,105 +44,127 @@ const slice = createSlice({
     reducers: {
         onResize: (slice, { payload: { width, height } }) => {
             const viewAspect = Math.floor((100 * width) / height) / 100;
-            const zoomOptions = [];
+            let zoomLevels = 0;
             if (viewAspect < 0.7) {
                 slice.viewCapacity = ViewCapacity.onePageCompact;
             } else if (viewAspect < 1.2) {
                 slice.viewCapacity = ViewCapacity.onePage;
                 if (viewAspect - 0.7 > 0.2) {
-                    zoomOptions.push("fit_one_pages_width");
+                    zoomLevels = 1;
                 }
             } else if (viewAspect < 1.35) {
                 slice.viewCapacity = ViewCapacity.onePagePlus;
-                zoomOptions.push("fit_one_page_width");
+                zoomLevels = 1;
             } else if (viewAspect < 1.9) {
-                zoomOptions.push("fit_one_page_width");
+                zoomLevels = 1;
                 if (viewAspect - 1.35 > 0.2) {
-                    zoomOptions.push("fit_two_pages_width");
+                    zoomLevels = 2;
                 }
                 slice.viewCapacity = ViewCapacity.twoPages;
             } else {
-                zoomOptions.push("fit_one_page_width");
-                zoomOptions.push("fit_two_pages_width");
+                zoomLevels = 2;
                 slice.viewCapacity = ViewCapacity.twoPagesPlus;
             }
-            slice.zoomOptions = zoomOptions;
+            slice.zoomLevels = zoomLevels;
             slice.viewAspect = viewAspect;
             slice.appWidth = width;
             slice.appHeight = height;
 
             const isNarrow = width / height < 0.7;
-            const isScrollable = width / height > 2;
-            const isWide = width / height > 1.8;
+            // const isScrollable = width / height > 2;
+            // const isWide = width / height > 1.8;
             const pageMargin = isNarrow ? 0 : 20;
 
-            const pageAspectRatio = 10 / 16;
-            const pagerHeight = height - 50;
-            const pagerWidth = width - (isNarrow ? 0 : 50);
+            // const pageAspectRatio = PAGE_ASPECT;
+            slice.pagerHeight = height - 50;
+            // const pagerWidth = width - (isNarrow ? 0 : 50);
 
-            slice.pagerWidth = pagerWidth;
+            // slice.pagerWidth = pagerWidth;
             slice.pageMargin = pageMargin;
 
-            if (isScrollable) {
-                slice.pageWidth = pagerWidth - pageMargin * 2;
-                slice.pageHeight = slice.pageWidth / pageAspectRatio;
-            } else {
-                slice.pageHeight = pagerHeight;
-                const pageWidth = pagerHeight * pageAspectRatio;
-                slice.pageWidth =
-                    pageWidth < pagerWidth ? pageWidth : pagerWidth;
-            }
+            // if (isScrollable) {
+            //     slice.pageWidth = pagerWidth - pageMargin * 2;
+            //     slice.pageHeight = slice.pageWidth / pageAspectRatio;
+            // } else {
+            //     slice.pageHeight = pagerHeight;
+            //     const pageWidth = pagerHeight * pageAspectRatio;
+            //     slice.pageWidth =
+            //         pageWidth < pagerWidth ? pageWidth : pagerWidth;
+            // }
 
-            const pagesCount = isScrollable ? 1 : width > height * 1.35 ? 2 : 1;
-            const isCompact =
-                !isWide && pagesCount === 1 && width / height > 1.2;
+            // const pagesCount = isScrollable ? 1 : width > height * 1.35 ? 2 : 1;
+            // const isCompact =
+            //     !isWide && pagesCount === 1 && width / height > 1.2;
 
-            const app_size =
-                pagesCount > 1
-                    ? isWide
-                        ? isScrollable
-                            ? "two_page_scroll"
-                            : "two_pages_plus"
-                        : "two_pages"
-                    : isScrollable
-                    ? "one_page_scroll"
-                    : isCompact
-                    ? "one_page_plus"
-                    : isNarrow
-                    ? "one_page_minus"
-                    : "one_page";
+            // const app_size =
+            //     pagesCount > 1
+            //         ? isWide
+            //             ? isScrollable
+            //                 ? "two_page_scroll"
+            //                 : "two_pages_plus"
+            //             : "two_pages"
+            //         : isScrollable
+            //         ? "one_page_scroll"
+            //         : isCompact
+            //         ? "one_page_plus"
+            //         : isNarrow
+            //         ? "one_page_minus"
+            //         : "one_page";
 
-            slice.pagesCount = pagesCount;
-            slice.isNarrow = isNarrow;
-            slice.isWide = isScrollable ? false : isWide;
-            slice.isCompact = isScrollable ? false : isCompact;
-            slice.isScrollable = isScrollable;
-            slice.app_size = app_size;
-            calcShownPages(slice);
+            // slice.pagesCount = pagesCount;
+            // slice.isNarrow = isNarrow;
+            // slice.isWide = isScrollable ? false : isWide;
+            // slice.isCompact = isScrollable ? false : isCompact;
+            // slice.isScrollable = isScrollable;
+            // slice.app_size = app_size;
+            // slice.shownPages = calcShownPages(slice);
             // analytics.setParams({ app_size });
         },
         setActivePageIndex: (slice, action) => {
             slice.activePageIndex = action.payload;
-            calcShownPages(slice);
+            // slice.shownPages = calcShownPages(slice);
+        },
+        setZoom: (slice, action) => {
+            slice.zoom = action.payload;
+        },
+        incrementZoom: (slice) => {
+            let zoom = slice.zoom;
+            if (zoom < slice.zoomLevels) {
+                zoom++;
+            } else {
+                zoom = 0;
+            }
+            slice.zoom = zoom;
         },
     },
 });
 
-export const selectZoomOptions = (state) => {
-    return state[sliceName].zoomOptions;
+export const selectZoomLevels = (state) => {
+    return state[sliceName].zoomLevels;
 };
-export const selectPagesCount = (state) => state[sliceName].pagesCount;
-export const selectAppSize = (state) => state[sliceName].app_size;
+export const selectZoom = (state) => {
+    const zoomLevels = selectZoomLevels(state);
+    let zoom = state[sliceName].zoom;
+    return zoom <= zoomLevels ? zoom : zoomLevels;
+};
+export const selectZoomClass = (state) => {
+    const zoom = selectZoom(state);
+    return ["", "fit_page", "fit_two_pages"][zoom];
+};
+export const selectPagesCount = (state) => {
+    const pagerWidth = selectPagerWidth(state);
+    const pageWidth = selectPageWidth(state);
+    return Math.floor(pagerWidth / pageWidth) >= 2 ? 2 : 1;
+};
 export const selectIsWide = (state) => state[sliceName].isWide;
 export const selectIsNarrow = (state) => state[sliceName].isNarrow;
 export const selectIsCompact = (state) => state[sliceName].isCompact;
 export const selectIsScrollable = (state) => state[sliceName].isScrollable;
 export const selectAppWidth = (state) => state[sliceName].appWidth;
 export const selectAppHeight = (state) => state[sliceName].appHeight;
-export const selectPageWidth = (state) => state[sliceName].pageWidth;
 
 export const selectPageMargin = (state) => state[sliceName].pageMargin;
-export const selectPageHeight = (state) => state[sliceName].pageHeight;
+// export const selectPageHeight = (state) => state[sliceName].pageHeight;
 export const selectIsNarrowLayout = (state) => {
     const { isWide, isCompact, pagesCount } = state[sliceName];
     return !(isWide || isCompact || pagesCount > 1);
@@ -165,14 +176,46 @@ export const selectActiveSide = (state) =>
         : state[sliceName].activePageIndex % 2;
 
 export const selectPagerWidth = (state) => {
-    const { pagerWidth, pageWidth, pageMargin, pagesCount, app_size } =
-        state[sliceName];
+    const { appWidth, viewCapacity, appHeight } = state[sliceName];
     const popup = selectPopup(state);
-    if (popup && ["two_pages_plus", "one_page_plus"].includes(app_size)) {
-        return pageWidth * pagesCount + pageMargin * pagesCount * 2;
+    if (popup) {
+        switch (viewCapacity) {
+            case ViewCapacity.onePagePlus:
+                return appWidth - 50 - (appHeight - 50) / PAGE_ASPECT;
+            case ViewCapacity.twoPagesPlus:
+                return appWidth - 50 - (2 * (appHeight - 50)) / PAGE_ASPECT;
+            default:
+                return appWidth - 50;
+        }
+    } else {
+        switch (viewCapacity) {
+            case ViewCapacity.onePageCompact:
+                return appWidth;
+            default:
+                return appWidth - 50;
+        }
     }
-    return pagerWidth;
 };
+// export const selectPageWidth = (state) => state[sliceName].pageWidth;
+export const selectPageWidth = (state) => {
+    const { pagerHeight, pageMargin } = state[sliceName];
+    const zoom = selectZoom(state);
+    const pagerWidth = selectPagerWidth(state);
+    switch (zoom) {
+        case 1:
+            return pagerWidth;
+        case 2:
+            return pagerWidth / 2;
+        default:
+            return pagerHeight * PAGE_ASPECT + 2 * pageMargin;
+    }
+};
+
+export const selectPageHeight = (state) => {
+    const pageMargin = selectPageMargin(state);
+    return (selectPageWidth(state) - 2 * pageMargin) / PAGE_ASPECT;
+};
+
 // export const selectPagerWidth = (state) => {
 //     const { popup } = state.ui;
 //     const { isWide, appWidth, appHeight, isCompact, isNarrow, isScrollable } =
@@ -194,7 +237,20 @@ export const selectPagerWidth = (state) => {
 // };
 
 export const selectActivePage = (state) => state[sliceName].activePageIndex;
-export const selectShownPages = (state) => state[sliceName].shownPages;
+export const selectShownPages = (state) => {
+    const pageIndex = selectActivePage(state);
+    const pagesCount = selectPagesCount(state);
+    if (pageIndex === -1) {
+        return [];
+    }
+    if (pagesCount === 1) {
+        return [pageIndex];
+    } else {
+        const firstPage = pageIndex - (pageIndex % 2);
+        const secondePage = firstPage + 1;
+        return [firstPage, secondePage];
+    }
+};
 
 export const selectPopupWidth = (state) => {
     const {
@@ -224,7 +280,8 @@ export const selectPopupWidth = (state) => {
     return appWidth / pagesCount - (isNarrow ? 0 : 50);
 };
 
-export const { onResize, setActivePageIndex } = slice.actions;
+export const { onResize, setActivePageIndex, setZoom, incrementZoom } =
+    slice.actions;
 
 //TODO: unused
 export const updateAppSize =

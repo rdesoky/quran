@@ -5,11 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
-import {
-    selectAppHeight,
-    selectPageHeight,
-    selectPageMargin,
-} from "../../store/layoutSlice";
+import { selectPageHeight, selectPageMargin } from "../../store/layoutSlice";
 import {
     extendSelection,
     gotoAya,
@@ -36,7 +32,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
 
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
-    const lineWidth = pageWidth;
+    const lineWidth = pageWidth - 2 * pageMargin;
 
     const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
@@ -351,7 +347,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 style={{
                     direction: "ltr",
                     left: pageMargin,
-                    width: pageWidth,
+                    width: pageWidth - 2 * pageMargin,
                     height: pageHeight,
                 }}
             >
@@ -363,7 +359,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 style={{
                     direction: "ltr",
                     top: 0,
-                    width: pageWidth,
+                    width: pageWidth - 2 * pageMargin,
                     height: pageHeight,
                     margin: `0 ${pageMargin}px`,
                 }}

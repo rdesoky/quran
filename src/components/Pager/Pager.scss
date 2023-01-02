@@ -6,7 +6,8 @@
     top: 0; //1px;
     right: 0;
     bottom: 50px;
-    .one_page_scroll & {
+    .fit_page &,
+    .fit_two_pages & {
         overflow-y: overlay;
         overflow-x: hidden;
     }

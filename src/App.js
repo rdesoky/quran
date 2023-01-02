@@ -20,7 +20,7 @@ import { ToastMessage } from "./components/Widgets";
 import SuraNames from "./providers/SuraNames";
 import RefsProvider from "./RefsProvider";
 import { analytics } from "./services/Analytics";
-import { onResize, selectAppSize } from "./store/layoutSlice";
+import { onResize, selectAppSize, selectZoomClass } from "./store/layoutSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";
 
@@ -57,7 +57,8 @@ export default function App() {
         height: window.innerHeight,
     });
     const deferredWindowSize = useDeferredValue(windowSize);
-    const app_size = useSelector(selectAppSize);
+    // const app_size = useSelector(selectAppSize);
+    const zoomClass = useSelector(selectZoomClass);
     useInitApp();
 
     // const themeContext = useContext(ThemeContext);
@@ -66,9 +67,9 @@ export default function App() {
     const lang = useSelector(selectLang);
     const theme = useSelector(selectTheme);
 
-    useEffect(() => {
-        analytics.setParams({ app_size });
-    }, [app_size]);
+    // useEffect(() => {
+    //     analytics.setParams({ app_size });
+    // }, [app_size]);
 
     useEffect(() => {
         dispatch(onResize(deferredWindowSize));
@@ -95,7 +96,7 @@ export default function App() {
         localeMessages && (
             <IntlProvider locale={lang} messages={localeMessages}>
                 <RefsProvider>
-                    <div className={`App ${theme}Theme ${app_size}`}>
+                    <div className={`App ${theme}Theme ${zoomClass}`}>
                         <Router>
                             <Switch>
                                 <Route
