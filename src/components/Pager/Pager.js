@@ -19,10 +19,9 @@ import {
     downloadPageImage,
 } from "../../services/utils";
 import {
-    incrementZoom,
+    decrementZoom,
     selectActivePage,
     selectIsNarrow,
-    selectIsScrollable,
     selectPagerWidth,
     selectPagesCount,
     selectPageWidth,
@@ -85,7 +84,7 @@ export default function Pager() {
     const pageIndex = useSelector(selectActivePage);
     const location = useLocation();
     const [loading, setLoading] = useState(true);
-    const isScrollable = useSelector(selectIsScrollable);
+    const popup = useSelector(selectPopup);
     const pagerRef = useRef();
 
     useEffect(() => {
@@ -158,7 +157,7 @@ export default function Pager() {
     }, [pagesCount, pageIndex]);
 
     const handleWheel = (e) => {
-        if (isScrollable) {
+        if (zoom > 0) {
             return;
         }
 
@@ -514,12 +513,12 @@ export default function Pager() {
                     />
                 )}
             </div>
-            {zoomLevels > 0 && (
+            {!popup && zoomLevels > 0 && (
                 <div style={{ position: "fixed", left: 50, bottom: 0 }}>
                     <button
                         className="CommandButton"
                         style={{ height: 50 }}
-                        onClick={(e) => dispatch(incrementZoom())}
+                        onClick={(e) => dispatch(decrementZoom())}
                     >
                         {zoom}
                     </button>

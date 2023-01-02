@@ -4,27 +4,24 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
     selectActiveSide,
-    selectAppWidth,
-    selectIsCompact,
     selectIsNarrow,
-    selectIsWide,
-    selectPagerWidth,
-    selectPagesCount,
+    selectPopupLeft,
+    selectPopupWidth,
+    selectViewWidth,
 } from "../../store/layoutSlice";
-import { selectModalPopup, selectSidebarWidth } from "../../store/uiSlice";
+import { selectModalPopup } from "../../store/uiSlice";
 import Transition from "./../../services/Transition";
 import "./Modal.scss";
 
 const Modal = ({ onClose, children, show, name }) => {
-    const pagerWidth = useSelector(selectPagerWidth);
+    // const pagerWidth = useSelector(selectPagerWidth);
     const activeSide = useSelector(selectActiveSide);
-    const isCompact = useSelector(selectIsCompact);
-    const isWide = useSelector(selectIsWide);
-    const appWidth = useSelector(selectAppWidth);
-    const pagesCount = useSelector(selectPagesCount);
     const isNarrow = useSelector(selectIsNarrow);
-    const sidebarWidth = useSelector(selectSidebarWidth);
+    // const sidebarWidth = useSelector(selectSidebarWidth);
     const modalPopup = useSelector(selectModalPopup);
+    const popupWidth = useSelector(selectPopupWidth);
+    const viewWidth = useSelector(selectViewWidth);
+    const popupLeft = useSelector(selectPopupLeft);
 
     const onClickClose = (e) => {
         if (typeof onClose === "function") {
@@ -35,20 +32,6 @@ const Modal = ({ onClose, children, show, name }) => {
 
     const preventClose = (e) => {
         e.stopPropagation();
-    };
-
-    const calcLeft = () => {
-        return isWide || isCompact ? 0 : activeSide === 0 ? 0 : "50%";
-    };
-
-    const calcRight = () => {
-        if (isWide || isCompact) {
-            return pagerWidth;
-        }
-        if (pagesCount === 2 && activeSide === 0) {
-            return appWidth - pagerWidth / 2 - sidebarWidth;
-        }
-        return 0; //the full width of the app
     };
 
     return (
@@ -65,8 +48,8 @@ const Modal = ({ onClose, children, show, name }) => {
             >
                 <div
                     style={{
-                        left: calcLeft(),
-                        right: calcRight(),
+                        left: popupLeft,
+                        width: popupWidth - 1,
                     }}
                     className={
                         "ModalContent" + (show === false ? " HiddenPopup" : "")
