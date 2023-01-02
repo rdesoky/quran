@@ -19,15 +19,16 @@ import {
     downloadPageImage,
 } from "../../services/utils";
 import {
+    incrementZoom,
     selectActivePage,
     selectIsNarrow,
     selectIsScrollable,
-    selectIsWide,
     selectPagerWidth,
     selectPagesCount,
     selectPageWidth,
     selectShownPages,
-    selectZoomOptions,
+    selectZoom,
+    selectZoomLevels,
     setActivePageIndex,
 } from "../../store/layoutSlice";
 import {
@@ -53,7 +54,6 @@ import {
     showMenu,
     showPopup,
 } from "../../store/uiSlice";
-import { CommandButton } from "../CommandButton";
 import { shownMessageBoxes } from "../MessageBox";
 import Page from "../Page/Page";
 import PageHeader from "../Page/PageHeader";
@@ -62,9 +62,10 @@ import DDrop from "./../DDrop";
 import "./Pager.scss";
 
 export default function Pager() {
-    const zoomOptions = useSelector(selectZoomOptions);
+    const zoomLevels = useSelector(selectZoomLevels);
+    const zoom = useSelector(selectZoom);
     const pagesCount = useSelector(selectPagesCount);
-    const isWide = useSelector(selectIsWide);
+    // const isWide = useSelector(selectIsWide);
     const pageWidth = useSelector(selectPageWidth);
     const pagerWidth = useSelector(selectPagerWidth);
     const dispatch = useDispatch();
@@ -121,26 +122,28 @@ export default function Pager() {
 
     const pageUp = useCallback(
         (e) => {
-            let count = activePopup && !isWide ? 1 : pagesCount;
+            // let count = activePopup && !isWide ? 1 : pagesCount;
+            let count = pagesCount;
             if (count > 1 && pageIndex % 2 === 0) {
                 count = 1; //right page is active
             }
             dispatch(offsetPage(history, -count));
             analytics.logEvent("nav_prev_page");
         },
-        [activePopup, dispatch, history, isWide, pageIndex, pagesCount]
+        [dispatch, history, pageIndex, pagesCount]
     );
 
     const pageDown = useCallback(
         (e) => {
-            let count = activePopup && !isWide ? 1 : pagesCount;
+            // let count = activePopup && !isWide ? 1 : pagesCount;
+            let count = pagesCount;
             if (count > 1 && pageIndex % 2 === 1) {
                 count = 1; //left page is active
             }
             dispatch(offsetPage(history, count));
             analytics.logEvent("nav_next_page");
         },
-        [activePopup, dispatch, history, isWide, pageIndex, pagesCount]
+        [dispatch, history, pageIndex, pagesCount]
     );
 
     //ComponentDidUpdate
@@ -511,10 +514,14 @@ export default function Pager() {
                     />
                 )}
             </div>
-            {zoomOptions.length > 0 && (
+            {zoomLevels > 0 && (
                 <div style={{ position: "fixed", left: 50, bottom: 0 }}>
-                    <button className="CommandButton" style={{ height: 50 }}>
-                        {zoomOptions.length > 1 ? "Z" : "z"}
+                    <button
+                        className="CommandButton"
+                        style={{ height: 50 }}
+                        onClick={(e) => dispatch(incrementZoom())}
+                    >
+                        {zoom}
                     </button>
                 </div>
             )}

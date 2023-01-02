@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ayaID } from "../../services/QData";
 import { downloadPageImage } from "../../services/utils";
 import {
-    selectIsScrollable,
     selectPageHeight,
     selectPageMargin,
     selectPagesCount,
@@ -115,7 +114,7 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                             style={{
                                 visibility: imageUrl ? "visible" : "hidden",
                                 margin: `0 ${pageMargin}px`,
-                                width: pageWidth,
+                                width: pageWidth - 2 * pageMargin,
                                 height: pageHeight,
                             }}
                             src={imageUrl}
