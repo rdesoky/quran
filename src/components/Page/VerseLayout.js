@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
 import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
-import { selectPageHeight, selectPageMargin } from "../../store/layoutSlice";
+import {
+    selectPageHeight,
+    selectPageMargin,
+    selectZoom,
+} from "../../store/layoutSlice";
 import {
     extendSelection,
     gotoAya,
@@ -29,6 +33,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const maskStart = useSelector(selectMaskStart);
     const history = useHistory();
     const contextPopup = useContext(AppRefs).get("contextPopup");
+    const zoom = useSelector(selectZoom);
 
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
@@ -42,16 +47,17 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                 behavior: "smooth",
                 block: "center",
             });
-        } else {
-            console.log("no selected verse");
         }
+        // else {
+        //     console.log("no selected verse");
+        // }
     };
 
     useEffect(() => {
-        if (versesInfo.length > 0) {
+        if (versesInfo.length > 0 && zoom !== 0) {
             setTimeout(scrollToSelectedAya, 100);
         }
-    }, [selectStart, versesInfo]);
+    }, [selectStart, versesInfo, zoom]);
 
     const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });

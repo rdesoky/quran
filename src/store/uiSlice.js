@@ -106,11 +106,15 @@ export const selectUpdateAvailable = (state) =>
     state[sliceName].updateAvailable;
 
 export const showPopup = (popup, params) => (dispatch, getState) => {
-    const {
-        [sliceName]: { popup: currentPopup },
-    } = getState();
+    const state = getState();
+    const currentPopup = selectPopup(state);
+    const menuExpanded = selectMenuExpanded(state);
+    if (menuExpanded) {
+        dispatch(hideMenu());
+    }
     if (currentPopup) {
         dispatch(setShowPopup(false));
+        //Animation trick
         setTimeout(() => {
             if (currentPopup === popup) {
                 dispatch(setPopup(null));

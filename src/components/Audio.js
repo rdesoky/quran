@@ -214,8 +214,10 @@ export function Audio() {
     }, [dispatch]);
 
     const resume = useCallback(() => {
-        audioRef.current?.play();
-    }, []);
+        if (playingAya !== -1) {
+            audioRef.current?.play();
+        }
+    }, [playingAya]);
 
     const stop = useCallback(() => {
         audioRef.current?.pause();
