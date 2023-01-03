@@ -1,6 +1,6 @@
 {
     "name": "Quran Hafiz",
-    "short_name": "Quran",
+    "short_name": "Hafiz",
     "id": "/?source=pwa",
     "start_url": "/?source=pwa",
     "background_color": "#202020",
