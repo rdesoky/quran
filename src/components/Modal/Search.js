@@ -47,7 +47,6 @@ export default function Search() {
         localStorage.getItem("searchTreeView") === "1"
     );
     const appHeight = useSelector(selectAppHeight);
-    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -480,39 +479,44 @@ export default function Search() {
                     );
                 })}
             </div>
-            <div className="ResultsInfo">
-                {results.length ? (
-                    <button
-                        id="SearchViewToggler"
-                        className={"TreeToggler".appendWord("active", treeView)}
-                        onClick={toggleTreeView}
-                    >
-                        <Icon icon={faIndent} />
-                    </button>
-                ) : null}
-                <String className="SuraTitle" id="results_for">
-                    {(resultsFor) => {
-                        if (searchTerm.length) {
-                            return (
-                                <>
-                                    {results.length +
-                                        " " +
-                                        resultsFor +
-                                        " " +
-                                        searchTerm}
-                                </>
-                            );
-                        }
-                        return null;
-                    }}
-                </String>
-            </div>
+
             <div
                 className="PopupBody"
                 onTouchStart={hideKeyboard}
                 onMouseDown={hideKeyboard}
-                ref={bodyRef}
+                // ref={bodyRef}
+                style={{ marginTop: 0 }}
             >
+                <div className="ResultsInfo">
+                    {results.length ? (
+                        <button
+                            id="SearchViewToggler"
+                            className={"TreeToggler".appendWord(
+                                "active",
+                                treeView
+                            )}
+                            onClick={toggleTreeView}
+                        >
+                            <Icon icon={faIndent} />
+                        </button>
+                    ) : null}
+                    <String className="SuraTitle" id="results_for">
+                        {(resultsFor) => {
+                            if (searchTerm.length) {
+                                return (
+                                    <>
+                                        {results.length +
+                                            " " +
+                                            resultsFor +
+                                            " " +
+                                            searchTerm}
+                                    </>
+                                );
+                            }
+                            return null;
+                        }}
+                    </String>
+                </div>{" "}
                 {renderSuras()}
                 {treeView ? renderResultsTree() : renderResults()}
                 {renderKeyboard()}

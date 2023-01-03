@@ -1,3 +1,4 @@
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, {
     useCallback,
     useContext,
@@ -19,7 +20,7 @@ import {
     downloadPageImage,
 } from "../../services/utils";
 import {
-    decrementZoom,
+    toggleZoom,
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
@@ -58,13 +59,15 @@ import Page from "../Page/Page";
 import PageHeader from "../Page/PageHeader";
 import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
+
+import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
+import { useIntl } from "react-intl";
 
 export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);
     const zoom = useSelector(selectZoom);
     const pagesCount = useSelector(selectPagesCount);
-    // const isWide = useSelector(selectIsWide);
     const pageWidth = useSelector(selectPageWidth);
     const pagerWidth = useSelector(selectPagerWidth);
     const dispatch = useDispatch();
@@ -86,6 +89,7 @@ export default function Pager() {
     const [loading, setLoading] = useState(true);
     const popup = useSelector(selectPopup);
     const pagerRef = useRef();
+    const intl = useIntl();
 
     useEffect(() => {
         if (loading && pageIndex !== -1) {
@@ -518,9 +522,10 @@ export default function Pager() {
                     <button
                         className="CommandButton"
                         style={{ height: 50 }}
-                        onClick={(e) => dispatch(decrementZoom())}
+                        onClick={(e) => dispatch(toggleZoom())}
+                        title={intl.formatMessage({ id: "zoom" })}
                     >
-                        {zoom}
+                        <Icon icon={faExpand} />
                     </button>
                 </div>
             )}

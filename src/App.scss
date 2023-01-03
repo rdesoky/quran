@@ -1,5 +1,5 @@
-$appBgColor: #444;
-$appBgColorDk: black;
+$appBgColor: #222;
+$appBgColorDk: #111;
 $appHeaderBgColor: #282c34;
 
 $goodHifzBg: rgba(0, 128, 0, 0.15);
@@ -24,7 +24,7 @@ $PageThumbColor: rgba(170, 170, 170, 0.25);
 
 .App {
     position: absolute;
-    top: 1px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -602,7 +602,7 @@ hr {
     position: fixed;
     z-index: 3;
     left: 0;
-    top: 1px;
+    top: 0;
     bottom: 0;
     right: 0;
 
@@ -703,7 +703,7 @@ hr {
     }
     .CloseButton {
         position: absolute;
-        top: 1px;
+        top: 0;
         right: 0;
         left: auto;
         [dir="rtl"] & {
@@ -770,7 +770,7 @@ hr {
         }
         .actions {
             position: absolute;
-            top: 1px;
+            top: 0;
             right: 0;
             z-index: 1;
             display: flex;
