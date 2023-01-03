@@ -101,6 +101,7 @@ export const CommandButton = ({
         }
     };
 
+    //TODO: move to a hook for other components to use
     const runCommand = (command) => {
         selectTopCommand();
         switch (command) {
@@ -226,7 +227,7 @@ export const CommandButton = ({
             switch (command) {
                 case "Profile":
                     if (user && !user.isAnonymous) {
-                        label = user.displayName;
+                        label = user.displayName + " (u)";
                     }
                     break;
                 default:

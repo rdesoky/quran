@@ -6,6 +6,7 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
@@ -20,7 +21,6 @@ import {
     downloadPageImage,
 } from "../../services/utils";
 import {
-    toggleZoom,
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
@@ -30,6 +30,7 @@ import {
     selectZoom,
     selectZoomLevels,
     setActivePageIndex,
+    toggleZoom,
 } from "../../store/layoutSlice";
 import {
     extendSelection,
@@ -53,6 +54,8 @@ import {
     selectPopup,
     showMenu,
     showPopup,
+    showToast,
+    toggleMenu,
 } from "../../store/uiSlice";
 import { shownMessageBoxes } from "../MessageBox";
 import Page from "../Page/Page";
@@ -62,7 +65,8 @@ import DDrop from "./../DDrop";
 
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
-import { useIntl } from "react-intl";
+import { AddHifz } from "../AddHifz";
+import { AudioState, selectAudioState } from "../../store/playerSlice";
 
 export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);
@@ -90,6 +94,8 @@ export default function Pager() {
     const popup = useSelector(selectPopup);
     const pagerRef = useRef();
     const intl = useIntl();
+    const audio = useContext(AppRefs).get("audio");
+    const audioState = useSelector(selectAudioState);
 
     useEffect(() => {
         if (loading && pageIndex !== -1) {
@@ -278,9 +284,37 @@ export default function Pager() {
             e.stopPropagation();
 
             switch (e.code) {
-                case "Insert":
+                case "Slash":
+                    if (canShowPopup) {
+                        dispatch(showPopup("Help"));
+                    }
+                    break;
+
+                case "KeyU":
+                    if (canShowPopup) {
+                        dispatch(showPopup("Profile"));
+                    }
+                    break;
+                case "KeyC":
                     copy2Clipboard(selectedText);
-                    // app.pushRecentCommand("Copy");
+                    dispatch(showToast({ id: "text_copied" }));
+                    //     // app.pushRecentCommand("Copy");
+                    break;
+                case "KeyR":
+                    audio.play();
+                    break;
+                case "KeyP":
+                    if (audioState === AudioState.playing) {
+                        audio.pause();
+                    } else {
+                        audio.resume();
+                    }
+                    break;
+                case "KeyS":
+                    audio.stop();
+                    break;
+                case "KeyZ":
+                    dispatch(toggleZoom());
                     break;
                 case "Escape":
                     if (contextPopup.info) {
@@ -300,14 +334,6 @@ export default function Pager() {
                 case "KeyI":
                     if (canShowPopup) {
                         dispatch(showPopup("Indices"));
-                    }
-                    break;
-                case "KeyF":
-                    if (canShowPopup) {
-                        // app.setMessageBox({
-                        //   title: <String id="update_hifz" />,
-                        //   content: <AddHifz />,
-                        // });
                     }
                     break;
                 case "KeyG":
@@ -330,9 +356,24 @@ export default function Pager() {
                         dispatch(showPopup("Settings"));
                     }
                     break;
-                case "KeyS":
+                case "KeyF":
                     if (canShowPopup) {
                         dispatch(showPopup("Search"));
+                    }
+                    break;
+                case "KeyA":
+                    if (popup) {
+                        dispatch(closePopup());
+                    }
+                    dispatch(toggleMenu());
+                    break;
+                case "KeyH":
+                    msgBox.set({
+                        title: <String id="update_hifz" />,
+                        content: <AddHifz />,
+                    });
+                    if (popup && pagesCount === 1) {
+                        dispatch(closePopup());
                     }
                     break;
                 case "KeyT":
