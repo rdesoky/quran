@@ -22,7 +22,6 @@ const initialState = {
     viewCapacity: ViewCapacity.onePage,
     zoom: parseInt(localStorage.getItem("zoom")) || 0,
     zoomLevels: 0,
-    pagerWidth: 0,
     appWidth: 800,
     appHeight: 600,
     displayMode: 0, //(unused) 0:compact, 1:single page, 15:single page+margin, 2:two pages, 25: two pages+margin
@@ -145,19 +144,30 @@ export const selectPageWidth = (state) => {
     const pagerHeight = selectPagerHeight(state);
     const zoom = selectZoom(state);
     const pagerWidth = selectPagerWidth(state);
+    let width;
     switch (zoom) {
         case 1:
-            return pagerWidth;
+            width = pagerWidth;
+            break;
         case 2:
-            return pagerWidth / 2;
+            width = pagerWidth / 2;
+            break;
         default:
-            return pagerHeight * PAGE_ASPECT;
+            width = pagerHeight * PAGE_ASPECT;
     }
+    if (width > pagerWidth) {
+        return pagerWidth;
+    }
+    return width;
 };
 
 export const selectPageHeight = (state) => {
-    // const pageMargin = selectPageMargin(state);
-    return selectPageWidth(state) / PAGE_ASPECT;
+    const pagerHeight = selectPagerHeight(state);
+    const height = selectPageWidth(state) / PAGE_ASPECT;
+    if (height < pagerHeight) {
+        return pagerHeight;
+    }
+    return height;
 };
 
 export const selectActivePage = (state) => state[sliceName].activePageIndex;
