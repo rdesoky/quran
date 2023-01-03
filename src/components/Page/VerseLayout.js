@@ -8,6 +8,7 @@ import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
 import {
     selectPageHeight,
     selectPageMargin,
+    selectPageWidth,
     selectZoom,
 } from "../../store/layoutSlice";
 import {
@@ -23,7 +24,7 @@ import { selectPlayingAya } from "../../store/playerSlice";
 import { VerseContextButtons } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
-const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
+const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
     const playingAya = useSelector(selectPlayingAya);
     const [hoverVerse, setHoverVerse] = useState(-1);
     const pageMargin = useSelector(selectPageMargin);
@@ -35,6 +36,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const contextPopup = useContext(AppRefs).get("contextPopup");
     const zoom = useSelector(selectZoom);
 
+    const pageWidth = useSelector(selectPageWidth);
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth - 2 * pageMargin;

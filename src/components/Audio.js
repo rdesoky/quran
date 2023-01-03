@@ -167,9 +167,7 @@ export function Audio() {
             const audioSource = selectAudioSource(playedAya)(store.getState());
             audioRef.current.setAttribute("src", audioSource);
             audioRef.current.play();
-            if (ayaId !== undefined) {
-                dispatch(setPlayingAya(playedAya));
-            }
+            dispatch(setPlayingAya(playedAya));
             if (followPlayer) {
                 const ayaPage = ayaIdPage(playedAya);
                 if (!shownPages.includes(ayaPage)) {

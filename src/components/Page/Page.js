@@ -105,11 +105,7 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                     }}
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />
-                    <VerseLayout
-                        page={pageIndex}
-                        pageWidth={pageWidth}
-                        versesInfo={versesInfo}
-                    >
+                    <VerseLayout page={pageIndex} versesInfo={versesInfo}>
                         <img
                             style={{
                                 visibility: imageUrl ? "visible" : "hidden",
