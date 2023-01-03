@@ -131,13 +131,14 @@ export default function Pager() {
 
     const pageUp = useCallback(
         (e) => {
-            // let count = activePopup && !isWide ? 1 : pagesCount;
             let count = pagesCount;
             if (count > 1 && pageIndex % 2 === 0) {
                 count = 1; //right page is active
             }
             dispatch(offsetPage(history, -count));
             analytics.logEvent("nav_prev_page");
+            pagerRef.current &&
+                (pagerRef.current.scrollTop = pagerRef.current.scrollHeight);
         },
         [dispatch, history, pageIndex, pagesCount]
     );
@@ -151,6 +152,7 @@ export default function Pager() {
             }
             dispatch(offsetPage(history, count));
             analytics.logEvent("nav_next_page");
+            pagerRef.current && (pagerRef.current.scrollTop = 0);
         },
         [dispatch, history, pageIndex, pagesCount]
     );
