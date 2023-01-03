@@ -104,7 +104,7 @@ export default function Pager() {
             );
             setLoading(false);
         }
-        pagerRef.current && (pagerRef.current.scrollTop = 0);
+        // pagerRef.current && (pagerRef.current.scrollTop = 0);
     }, [loading, pageIndex, dispatch]);
     useEffect(() => {
         if (!loading) {
