@@ -1,6 +1,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRefs } from "../../RefsProvider";
@@ -33,6 +33,25 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth - 2 * pageMargin;
+    const ref = useRef(null);
+
+    const scrollToSelectedAya = () => {
+        const selectedVerse = ref.current?.querySelector(".VerseHead.Selected");
+        if (selectedVerse) {
+            selectedVerse.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        } else {
+            console.log("no selected verse");
+        }
+    };
+
+    useEffect(() => {
+        if (versesInfo.length > 0) {
+            setTimeout(scrollToSelectedAya, 100);
+        }
+    }, [selectStart, versesInfo]);
 
     const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
@@ -350,6 +369,7 @@ const VerseLayout = ({ page: pageIndex, children, pageWidth, versesInfo }) => {
                     width: pageWidth - 2 * pageMargin,
                     height: pageHeight,
                 }}
+                ref={ref}
             >
                 {Verses(versesInfo)}
             </div>
