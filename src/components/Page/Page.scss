@@ -176,6 +176,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
 }
 
 .PageHeader {
+    direction: rtl;
+
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -208,7 +210,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     }
 
     &.active {
-        background-color: black;
+        background-color: #111;
     }
     .narrow & {
         padding-left: 50px;
@@ -264,10 +266,10 @@ $selectionBgColorDark: rgb(38, 93, 138);
 }
 
 .SelectionButton {
-    color: black;
+    color: #111;
     background-color: $selectionBgColor;
     &:hover {
-        color: black !important;
+        color: hsl(0, 0%, 7%) !important;
     }
     .DarkTheme & {
         color: white;
@@ -283,6 +285,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     width: 100%;
     top: 0;
     text-align: center;
+    direction: rtl;
 }
 
 .LeftPage {

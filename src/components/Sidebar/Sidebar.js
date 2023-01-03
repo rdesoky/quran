@@ -103,7 +103,7 @@ function Sidebar() {
                     left: 0,
                     bottom: 0,
                     height: 50,
-                    backgroundColor: "#000",
+                    backgroundColor: "#111",
                 }}
             >
                 <CommandButton

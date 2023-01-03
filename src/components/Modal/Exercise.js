@@ -83,7 +83,7 @@ const Exercise = () => {
     const trigger = "exercise";
     const audioState = useSelector(selectAudioState);
     const hifzRanges = useSelector(selectHifzRanges);
-    const isNarrowLayout = useSelector(selectIsNarrowLayout);
+    // const isNarrowLayout = useSelector(selectIsNarrowLayout);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
 
     const setCurrStep = (step) => {
@@ -432,34 +432,29 @@ const Exercise = () => {
 
     const renderIntro = () => {
         return (
-            !isNarrowLayout && (
-                <div className="PopupBody" ref={bodyRef}>
-                    <VerseInfo
-                        trigger="exercise_intro"
-                        onMoveNext={onMoveNext}
-                    />
-                    <VerseText copy={true} bookmark={true} />
-                    <div className="FootNote">
-                        <String id="exercise_intro" />
-                    </div>
-                    <hr />
-                    <TafseerView
-                        verse={verse}
-                        showVerseText={false}
-                        bookmark={true}
-                        copy={true}
-                        onMoveNext={onMoveNext}
-                        trigger={trigger}
-                    />
-                    <hr />
-                    <div>
-                        <String id="random_exercise" />
-                    </div>
-                    <ExerciseSettings />
-
-                    <ActivityChart activity="chars" />
+            <div className="PopupBody" ref={bodyRef}>
+                <VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
+                <VerseText copy={true} bookmark={true} />
+                <div className="FootNote">
+                    <String id="exercise_intro" />
                 </div>
-            )
+                <hr />
+                <TafseerView
+                    verse={verse}
+                    showVerseText={false}
+                    bookmark={true}
+                    copy={true}
+                    onMoveNext={onMoveNext}
+                    trigger={trigger}
+                />
+                <hr />
+                <div>
+                    <String id="random_exercise" />
+                </div>
+                <ExerciseSettings />
+
+                <ActivityChart activity="chars" />
+            </div>
         );
     };
 
@@ -473,15 +468,15 @@ const Exercise = () => {
         const narrow = isNarrow;
         return (
             <>
-                {isNarrowLayout ? (
+                {/* {isNarrowLayout ? (
                     <div className="TitleNote">
                         <String id="exercise_intro" />
                     </div>
-                ) : null}
+                ) : null} */}
                 <div className="TitleButtons">
                     <VerseInfo
                         trigger="exercise_intro_title"
-                        show={isNarrowLayout}
+                        // show={isNarrowLayout}
                     />
                     <div className="ButtonsBar">
                         <button
@@ -904,7 +899,10 @@ const Exercise = () => {
     const renderRecitingTitle = () => {
         return (
             <div className="TitleButtons">
-                <VerseInfo trigger="reciting_title" show={isNarrowLayout} />
+                <VerseInfo
+                    trigger="reciting_title"
+                    // show={isNarrowLayout}
+                />
                 <span className="TrackDuration">
                     {renderCounter(
                         32,
@@ -936,24 +934,23 @@ const Exercise = () => {
 
     const renderReciting = () => {
         return (
-            !isNarrowLayout && (
-                <div className="PopupBody" ref={bodyRef}>
-                    <VerseInfo trigger="exercise_reciting" />
-                    <VerseText />
-                    <div className="FootNote">
-                        <String id="exercise_intro" />
-                    </div>
-                    <hr />
-                    <TafseerView
-                        verse={verse}
-                        showVerseText={false}
-                        bookmark={true}
-                        copy={true}
-                        onMoveNext={onMoveNext}
-                        trigger={trigger}
-                    />
+            // !isNarrowLayout &&
+            <div className="PopupBody" ref={bodyRef}>
+                <VerseInfo trigger="exercise_reciting" />
+                <VerseText />
+                <div className="FootNote">
+                    <String id="exercise_intro" />
                 </div>
-            )
+                <hr />
+                <TafseerView
+                    verse={verse}
+                    showVerseText={false}
+                    bookmark={true}
+                    copy={true}
+                    onMoveNext={onMoveNext}
+                    trigger={trigger}
+                />
+            </div>
         );
     };
 
