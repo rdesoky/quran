@@ -79,6 +79,7 @@ export default function PartsPie({ size, onFinish }) {
                     return (
                         <>
                             <path
+                                key={`path-${index}`}
                                 className={`partPie ${
                                     index === activePartIndex ? "active" : ""
                                 } ${
@@ -120,8 +121,8 @@ export default function PartsPie({ size, onFinish }) {
                             </path>
 
                             <text
-                                className="piePartNumber"
                                 key={`text-${index}`}
+                                className="piePartNumber"
                                 x={cx + dxPartNum}
                                 y={cy - partsRadius + dyPartNum}
                                 textAnchor="middle"
@@ -147,6 +148,7 @@ export default function PartsPie({ size, onFinish }) {
 
                     return (
                         <path
+                            key={index}
                             className={`pieHifzRange ${ageClass}`}
                             d={describeArc({
                                 x: cx,
@@ -181,6 +183,7 @@ export default function PartsPie({ size, onFinish }) {
                     return (
                         <>
                             <path
+                                key={`path.${index}`}
                                 className={`hezbQuarterPie ${
                                     selectedHezb.absIndex ===
                                     index + activePartIndex * 8
@@ -215,6 +218,7 @@ export default function PartsPie({ size, onFinish }) {
                                 </title>
                             </path>
                             <text
+                                key={`text.${index}`}
                                 className="pieHezbNumber"
                                 x={cx + dxHezbNum}
                                 y={cy - hezbRadius + dyHezbNum}

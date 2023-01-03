@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ayaIdInfo } from "../../services/QData";
 import { copy2Clipboard } from "../../services/utils";
-import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
+import { selectIsNarrow } from "../../store/layoutSlice";
 import {
     gotoAya,
     selectMaskStart,
@@ -40,7 +40,6 @@ const TafseerList = [
 ];
 
 const Tafseer = () => {
-    const appHeight = useSelector(selectAppHeight);
     const selectStart = useSelector(selectStartSelection);
     const [verse, setVerse] = useState(selectStart);
     const isNarrow = useSelector(selectIsNarrow);

@@ -23,7 +23,6 @@ import {
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
-    selectPagesCount,
     selectShownPages,
 } from "../../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
@@ -62,7 +61,6 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     );
     suraIndex =
         selectedAyaPage === pageIndex ? selectedAyaInfo.sura : suraIndex;
-    const pagesCount = useSelector(selectPagesCount);
 
     const showPartContextPopup = ({ currentTarget: target }) => {
         analytics.logEvent("show_part_context", { trigger });

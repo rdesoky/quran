@@ -3,11 +3,9 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
-    selectActiveSide,
     selectIsNarrow,
     selectPopupLeft,
     selectPopupWidth,
-    selectViewWidth,
 } from "../../store/layoutSlice";
 import { selectModalPopup } from "../../store/uiSlice";
 import Transition from "./../../services/Transition";
@@ -15,12 +13,10 @@ import "./Modal.scss";
 
 const Modal = ({ onClose, children, show, name }) => {
     // const pagerWidth = useSelector(selectPagerWidth);
-    const activeSide = useSelector(selectActiveSide);
     const isNarrow = useSelector(selectIsNarrow);
     // const sidebarWidth = useSelector(selectSidebarWidth);
     const modalPopup = useSelector(selectModalPopup);
     const popupWidth = useSelector(selectPopupWidth);
-    const viewWidth = useSelector(selectViewWidth);
     const popupLeft = useSelector(selectPopupLeft);
 
     const onClickClose = (e) => {

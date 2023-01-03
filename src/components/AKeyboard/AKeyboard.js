@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
-import "./AKeyboard.scss";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import {
     faBackspace,
     faCheckCircle,
-    faStepBackward,
     faFastBackward,
+    faStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { selectAppHeight } from "../../store/layoutSlice";
-import { useSelector } from "react-redux";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useEffect, useState } from "react";
+import "./AKeyboard.scss";
 
 const keyMap = {
     //first
