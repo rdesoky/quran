@@ -10,6 +10,9 @@ export const CircleProgress = ({
     title,
     style,
 }) => {
+    if (isNaN(progress)) {
+        return null;
+    }
     const radius = (sqSize - strokeWidth) / 2;
     // Enclose circle in a circumscribing square
     // const viewBox = `0 0 ${sqSize} ${sqSize}`;
