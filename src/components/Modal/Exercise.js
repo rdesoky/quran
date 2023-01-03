@@ -23,11 +23,7 @@ import { AppRefs } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
 import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
-import {
-    selectAppHeight,
-    selectIsNarrow,
-    selectIsNarrowLayout,
-} from "../../store/layoutSlice";
+import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import {
     gotoAya,
     hideMask,

@@ -28,7 +28,6 @@ import {
     showMask,
 } from "../store/navSlice";
 import { setRepeatRange } from "../store/playerSlice";
-import { selectLang } from "../store/settingsSlice";
 import { closePopup, showToast } from "../store/uiSlice";
 import {
     ayaID,
@@ -40,8 +39,6 @@ import {
 } from "./../services/QData";
 import { SuraHifzChart } from "./SuraHifzChart";
 import { VerseText } from "./Widgets";
-
-const dayLength = 24 * 60 * 60 * 1000;
 
 export const HifzRange = ({
     range,

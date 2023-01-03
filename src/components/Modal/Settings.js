@@ -52,8 +52,6 @@ const Settings = () => {
     const audioState = useSelector(selectAudioState);
     const audio = useContext(AppRefs).get("audio");
 
-    let popupBody;
-
     const recitersList = ListReciters("ayaAudio");
     const [buttonWidth, outerMargin, scrollBarWidth] = [90, 30, 20];
     const recitersListWidth = popupWidth - outerMargin - scrollBarWidth;
@@ -90,7 +88,7 @@ const Settings = () => {
         const reciter = currentTarget.getAttribute("reciter");
 
         dispatch(changeReciter(reciter));
-        popupBody.scrollTop = 0;
+        bodyRef.current && (bodyRef.current.scrollTop = 0);
         analytics.logEvent("set_reciter", { reciter, trigger: popup });
         if (playingAya) {
             if (
@@ -129,13 +127,7 @@ const Settings = () => {
                     ""
                 )}
             </div>
-            <div
-                ref={(ref) => {
-                    popupBody = ref;
-                }}
-                className="PopupBody"
-                ref={bodyRef}
-            >
+            <div className="PopupBody" ref={bodyRef}>
                 <div className="OptionRow">
                     <label>
                         <span>

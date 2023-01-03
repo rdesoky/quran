@@ -451,8 +451,6 @@ export default function Search() {
         );
     };
 
-    const resultsInfoHeight = 30;
-
     return (
         <>
             <div className="Title">

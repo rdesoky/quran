@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ayaID } from "../services/QData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
-import { AudioState, selectAudioState } from "../store/playerSlice";
-import { AudioRepeat } from "../store/settingsSlice";
 import { CommandButton } from "./CommandButton";
 
 export const SuraContextButtons = ({ sura }) => {

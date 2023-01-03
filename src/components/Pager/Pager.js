@@ -64,9 +64,9 @@ import { analytics } from "./../../services/Analytics";
 import DDrop from "./../DDrop";
 
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import "./Pager.scss";
-import { AddHifz } from "../AddHifz";
 import { AudioState, selectAudioState } from "../../store/playerSlice";
+import { AddHifz } from "../AddHifz";
+import "./Pager.scss";
 
 export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);
@@ -424,14 +424,18 @@ export default function Pager() {
             activePopup,
             modalPopup,
             selectedText,
+            dispatch,
+            audio,
+            audioState,
             contextPopup,
             expandedMenu,
             maskStart,
+            popup,
+            msgBox,
+            pagesCount,
             onArrowKey,
             pageDown,
             pageUp,
-            msgBox,
-            dispatch,
             history,
         ]
     );
