@@ -154,18 +154,20 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
                 className="PageHeaderContent"
                 style={{ maxWidth: pagerWidth - (isNarrow ? 50 : 0) }}
             >
-                <CircleProgress
-                    target={TOTAL_PAGES}
-                    progress={pageIndex + 1}
-                    display={partIndex + 1}
-                    onClick={showPartContextPopup}
-                    strokeWidth={3}
-                    title={intl.formatMessage(
-                        { id: "part_num" },
-                        { num: partIndex + 1 }
-                    )}
-                    style={{ margin: "0 5px 0 3px" }}
-                />{" "}
+                {pageIndex >= 0 && (
+                    <CircleProgress
+                        target={TOTAL_PAGES}
+                        progress={pageIndex + 1}
+                        display={partIndex + 1}
+                        onClick={showPartContextPopup}
+                        strokeWidth={3}
+                        title={intl.formatMessage(
+                            { id: "part_num" },
+                            { num: partIndex + 1 }
+                        )}
+                        style={{ margin: "0 5px 0 3px" }}
+                    />
+                )}
                 <div className="PageHeaderSection">
                     <button
                         className="NavButton NavBackward"
