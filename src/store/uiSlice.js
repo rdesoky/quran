@@ -4,6 +4,7 @@ const sliceName = "ui";
 
 const initSidebarCommands = [
     // "AudioPlayer",
+    "Profile",
     "Indices",
     "Search",
     "Exercise",
@@ -15,6 +16,7 @@ const initSidebarCommands = [
     "Copy",
     // "Share",
     "Help",
+    "Settings",
 ];
 
 const initialState = {

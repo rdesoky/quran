@@ -13,7 +13,7 @@ import {
     selectStartSelection,
 } from "../../store/navSlice";
 import { showToast } from "../../store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { VerseInfo, VerseText } from "../Widgets";
 
 const TafseerList = [

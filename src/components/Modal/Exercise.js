@@ -6,7 +6,13 @@ import {
     faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { FormattedMessage as String } from "react-intl";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { ActivityChart } from "../Hifz";
@@ -81,10 +87,20 @@ const Exercise = () => {
     const hifzRanges = useSelector(selectHifzRanges);
     // const isNarrowLayout = useSelector(selectIsNarrowLayout);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
+    const cursorRef = useRef();
 
     const setCurrStep = (step) => {
         setCurrentStep(step);
     };
+
+    useEffect(() => {
+        cursorRef.current &&
+            cursorRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center",
+            });
+    }, [writtenText]);
 
     useEffect(() => {
         return () => {
@@ -612,7 +628,7 @@ const Exercise = () => {
     };
 
     const renderCursor = () => {
-        return <span className="TypingCursor"></span>;
+        return <span className="TypingCursor" ref={cursorRef}></span>;
     };
 
     const renderText = () => {
@@ -630,78 +646,51 @@ const Exercise = () => {
     const onUpdateQuickMode = ({ target }) => {
         //setQuickMode(target.checked);
         setQuickMode(parseInt(target.value));
-        defaultButton.focus();
+        // defaultButton.focus();//to avoid changing the radio value upon typing
     };
 
     const renderTypingConsole = () => {
         const correct = isTypingCorrect();
         return (
             <>
+                <div>
+                    <select
+                        onChange={onUpdateQuickMode}
+                        value={quickMode}
+                        style={{ width: "100%" }}
+                    >
+                        <option value={0}>
+                            <String id="quick_mode_0" />
+                        </option>
+                        <option value={1}>
+                            <String id="quick_mode_1" />
+                        </option>
+                        <option value={2}>
+                            <String id="quick_mode_2" />
+                        </option>
+                    </select>
+                </div>
                 <div
+                    tabIndex={0}
+                    ref={(ref) => {
+                        defaultButton = ref;
+                    }}
+                    className={
+                        "TypingConsole" +
+                        (!writtenText.length
+                            ? " empty"
+                            : correct
+                            ? " Correct"
+                            : " Wrong")
+                    }
                     style={{
-                        position: "relative",
+                        position: "absolute",
+                        left: 15,
+                        right: 15,
+                        maxHeight: 44,
                     }}
                 >
-                    <div
-                        tabIndex="0"
-                        ref={(ref) => {
-                            defaultButton = ref;
-                        }}
-                        className={
-                            "TypingConsole" +
-                            (!writtenText.length
-                                ? " empty"
-                                : correct
-                                ? " Correct"
-                                : " Wrong")
-                        }
-                    >
-                        {renderText()}
-                    </div>
-                    <div className="RadioGroup">
-                        <div>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="quickMode"
-                                    value={0}
-                                    checked={quickMode === 0}
-                                    onChange={onUpdateQuickMode}
-                                />
-                                <span>
-                                    <String id="quick_mode_0" />
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="quickMode"
-                                    value={1}
-                                    checked={quickMode === 1}
-                                    onChange={onUpdateQuickMode}
-                                />
-                                <span>
-                                    <String id="quick_mode_1" />
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="quickMode"
-                                    value={2}
-                                    checked={quickMode === 2}
-                                    onChange={onUpdateQuickMode}
-                                />
-                                <span>
-                                    <String id="quick_mode_2" />
-                                </span>
-                            </label>
-                        </div>
-                    </div>
+                    {renderText()}
                 </div>
                 <div className="PopupBody VEnd" ref={bodyRef}>
                     <AKeyboard

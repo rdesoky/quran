@@ -8,7 +8,7 @@ import { showPopup } from "../../store/uiSlice";
 
 const PageFooter = ({ index: pageIndex, order }) => {
     // const location = useLocation();
-    const pagesCount = useSelector(selectPagesCount);
+    // const pagesCount = useSelector(selectPagesCount);
     const pageWidth = useSelector(selectPageWidth);
     const dispatch = useDispatch();
     const showGotoPopup = (e) => {
@@ -16,11 +16,11 @@ const PageFooter = ({ index: pageIndex, order }) => {
         dispatch(showPopup("Goto"));
     };
 
-    let textAlign =
-        pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
+    // let textAlign =
+    //     pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     return (
-        <div className="PageFooter" style={{ textAlign }}>
+        <div className="PageFooter">
             <div
                 className="PageHeaderContent"
                 style={{

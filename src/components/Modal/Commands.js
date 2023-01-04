@@ -3,7 +3,7 @@ import { FormattedMessage as String } from "react-intl";
 
 import { useSelector } from "react-redux";
 import { selectIsNarrow } from "../../store/layoutSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { VerseInfo } from "../Widgets";
 
 import { CommandButton } from "../CommandButton";

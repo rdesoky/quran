@@ -137,8 +137,7 @@ export default function Pager() {
             }
             dispatch(offsetPage(history, -count));
             analytics.logEvent("nav_prev_page");
-            pagerRef.current &&
-                (pagerRef.current.scrollTop = pagerRef.current.scrollHeight);
+            pagerRef.current && (pagerRef.current.scrollTop = 0);
         },
         [dispatch, history, pageIndex, pagesCount]
     );
@@ -238,6 +237,9 @@ export default function Pager() {
                     return;
                 } else {
                     dispatch(gotoPage(history, maskPage, { select: true }));
+                    pagerRef.current &&
+                        (pagerRef.current.scrollTop =
+                            pagerRef.current.scrollHeight);
                     return; //mask head page is not visible
                 }
             }

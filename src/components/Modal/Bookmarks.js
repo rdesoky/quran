@@ -13,7 +13,7 @@ import {
 } from "../../store/dbSlice";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { selectStartSelection } from "../../store/navSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { BookmarksList } from "../BookmarksList";
 import { VerseText } from "./../Widgets";
 

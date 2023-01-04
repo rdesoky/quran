@@ -8,7 +8,7 @@ import {
     selectRecentCommands,
     selectMenuExpanded,
 } from "../../store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { CommandButton } from "../CommandButton";
 import "./Sidebar.scss";
 
@@ -38,63 +38,36 @@ function Sidebar() {
             id="SidebarBlocker"
             style={{ pointerEvents: isShowMenu ? "fill" : "none" }}
             onClick={(e) => {
-                // app.setExpandedMenu(false);
+                //hide menu upon clicking outside of it
                 if (menuExpanded) {
                     dispatch(hideMenu());
                 }
             }}
         >
             <div
-                className={"Sidebar".appendWord("narrow", isNarrow)}
-                style={{
-                    width: isShowMenu ? 220 : isShowMenu || !isNarrow ? 50 : 0,
-                }}
+                className={"Sidebar"
+                    .appendWord("narrow", isNarrow)
+                    .appendWord("expanded", isShowMenu)
+                    .appendWord("HiddenScroller", !isShowMenu)}
             >
-                <div
-                    className="ButtonsList"
-                    style={{
-                        direction: "ltr",
-                    }}
-                >
-                    <div id="SidebarPlayer" className="SidebarSection">
+                <div id="SidebarButtons">
+                    <div className="SidebarSection">
                         <PlayerButtons
                             trigger="side_bar"
                             showLabels={isShowMenu}
                             showReciter={true}
                         />
                     </div>
-                    <div
-                        id="RecentCommands"
-                        className="SidebarSection HiddenScroller"
-                    >
-                        <div style={{ height: recentCommands.length * 50 }}>
-                            {recentCommands
-                                .filter((c) => c != null)
-                                .map((command, index) => (
-                                    <CommandButton
-                                        command={command}
-                                        trigger="side_bar"
-                                        key={command}
-                                        style={{
-                                            top: index * 50,
-                                        }}
-                                        showLabel={isShowMenu}
-                                    />
-                                ))}
-                        </div>
-                    </div>
-                    <div id="SidebarFooter" className="SidebarSection">
-                        <CommandButton
-                            command="Profile"
-                            trigger="side_bar"
-                            showLabel={isShowMenu}
-                        />
-                        <CommandButton
-                            command="Settings"
-                            trigger="side_bar"
-                            showLabel={isShowMenu}
-                        />
-                    </div>
+                    {recentCommands
+                        .filter((c) => c != null)
+                        .map((command, index) => (
+                            <CommandButton
+                                command={command}
+                                trigger="side_bar"
+                                key={command}
+                                showLabel={isShowMenu}
+                            />
+                        ))}
                 </div>
             </div>
             <div
