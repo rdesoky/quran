@@ -29,8 +29,12 @@
     transition: width 0.3s;
     width: 50px;
     direction: ltr;
-    &.expanded {
+    &.expanded,
+    &.expanded.narrow {
         width: 240px;
+    }
+    &.narrow {
+        width: 0;
     }
 
     button {
