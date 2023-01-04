@@ -388,9 +388,9 @@ export default function Pager() {
                             title: <String id="update_hifz" />,
                             content: <AddHifz />,
                         });
-                    }
-                    if (popup && pagesCount === 1) {
-                        dispatch(closePopup());
+                        if (popup && pagesCount === 1) {
+                            dispatch(closePopup());
+                        }
                     }
                     break;
                 case "KeyT":
