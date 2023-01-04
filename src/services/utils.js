@@ -146,6 +146,18 @@ Number.prototype.between = function (a, b) {
     return this >= min && this <= max;
 };
 
+Array.prototype.findLastIndex =
+    Array.prototype.findLastIndex ||
+    function (cb) {
+        let i = this.length;
+        while (i--) {
+            if (cb(this[i], i, this)) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
 export const getCurrentPageNumber = (location) => {
     const { pathname } = location || window.location;
     let match = pathname.match(/page\/(.+)/);
@@ -172,9 +184,16 @@ export const getSuraName = (intl, index) => {
 
 export const checkActiveInput = () => {
     const { tagName, type } = document.activeElement;
-    const isInput = ["INPUT", "BUTTON", "TEXTAREA"].includes(tagName);
+    const isInput = ["INPUT", "BUTTON", "TEXTAREA", "SELECT"].includes(tagName);
     const isTextInput =
-        isInput && ["text", "number", "textarea"].includes(type);
+        isInput &&
+        [
+            "text",
+            "number",
+            "textarea",
+            "select-one",
+            "select-multiple",
+        ].includes(type);
 
     return { isInput, isTextInput };
 };
