@@ -22,7 +22,8 @@
         "react-scripts": "^5.0.1",
         "react-switch": "^7.0.0",
         "react-touch": "^0.4.4",
-        "recharts": "^2.2.0"
+        "recharts": "^2.2.0",
+        "source-map-explorer": "^2.5.3"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -32,7 +33,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d build"
+        "deploy": "gh-pages -d build",
+        "analyze": "source-map-explorer 'build/static/js/*.js'"
     },
     "browserslist": {
         "production": [
