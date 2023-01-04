@@ -1,11 +1,21 @@
-//Tue Jan 03 2023 22:36:57 GMT-0800 (Pacific Standard Time)
+//Wed Jan 04 2023 07:13:43 GMT-0800 (Pacific Standard Time)
 /* eslint-disable no-restricted-globals */
 
-const appCacheId = "v1";
-const assetCacheId = "assets";
+const appVersion = 1;
+const appCacheId = `app.v${appVersion}`;
+const assetsVersion = 1;
+const assetsCacheId = `assets.v${assetsVersion}`;
 
-const assetRoots = [location.origin, "https://www.everyayah.com/data"];
+const assetRoots = [location.origin /*, "https://www.everyayah.com/data"*/];
 const cacheExcludes = ["browser-sync"]; //
+
+const deleteOldCaches = async () => {
+    const cacheNames = await caches.keys();
+    const oldCacheNames = cacheNames.filter(
+        (name) => name !== appCacheId && name !== assetsCacheId
+    );
+    await Promise.all(oldCacheNames.map((name) => caches.delete(name)));
+};
 
 const addResourcesToCache = async () => {
     const appManifest = await fetch("asset-manifest.json").then((res) =>
@@ -23,7 +33,7 @@ const addResourcesToCache = async () => {
     const publicAssetsFiles = publicManifest.files.filter(
         (name) => !name.includes("sw.js")
     );
-    const assetCache = await caches.open(assetCacheId);
+    const assetCache = await caches.open(assetsCacheId);
     await assetCache.addAll(publicAssetsFiles);
 };
 
@@ -37,7 +47,7 @@ const putInCache = async (request, response) => {
     if (cacheExcludes.some((exclude) => request.url.includes(exclude))) {
         return;
     }
-    const assetCache = await caches.open(assetCacheId);
+    const assetCache = await caches.open(assetsCacheId);
     await assetCache.put(request, response);
 };
 
@@ -88,6 +98,7 @@ const enableNavigationPreload = async () => {
 
 self.addEventListener("activate", (event) => {
     event.waitUntil(enableNavigationPreload());
+    deleteOldCaches();
 });
 
 self.addEventListener("install", (event) => {
