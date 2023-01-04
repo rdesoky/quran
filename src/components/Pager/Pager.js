@@ -278,7 +278,9 @@ export default function Pager() {
         (e) => {
             const { isTextInput } = checkActiveInput();
 
-            const vEditorOn = ["Search", "Index"].includes(activePopup);
+            const vEditorOn = ["Search", "Indices", "Exercise"].includes(
+                activePopup
+            );
 
             const canShowPopup = activePopup === null && isTextInput === false;
 
@@ -289,36 +291,46 @@ export default function Pager() {
 
             switch (e.code) {
                 case "Slash":
-                    if (canShowPopup) {
+                    if (canShowPopup && !vEditorOn) {
                         dispatch(showPopup("Help"));
                     }
                     break;
 
                 case "KeyU":
-                    if (canShowPopup) {
+                    if (canShowPopup && !vEditorOn) {
                         dispatch(showPopup("Profile"));
                     }
                     break;
                 case "KeyC":
-                    copy2Clipboard(selectedText);
-                    dispatch(showToast({ id: "text_copied" }));
-                    //     // app.pushRecentCommand("Copy");
+                    if (!vEditorOn) {
+                        copy2Clipboard(selectedText);
+                        dispatch(showToast({ id: "text_copied" }));
+                        //     // app.pushRecentCommand("Copy");
+                    }
                     break;
                 case "KeyR":
-                    audio.play();
+                    if (!vEditorOn) {
+                        audio.play();
+                    }
                     break;
                 case "KeyP":
-                    if (audioState === AudioState.playing) {
-                        audio.pause();
-                    } else {
-                        audio.resume();
+                    if (!vEditorOn) {
+                        if (audioState === AudioState.playing) {
+                            audio.pause();
+                        } else {
+                            audio.resume();
+                        }
                     }
                     break;
                 case "KeyS":
-                    audio.stop();
+                    if (!vEditorOn) {
+                        audio.stop();
+                    }
                     break;
                 case "KeyZ":
-                    dispatch(toggleZoom());
+                    if (!vEditorOn) {
+                        dispatch(toggleZoom());
+                    }
                     break;
                 case "Escape":
                     if (contextPopup.info) {
@@ -336,52 +348,53 @@ export default function Pager() {
                     }
                     break;
                 case "KeyI":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Indices"));
                     }
                     break;
                 case "KeyG":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Goto"));
                     }
                     break;
                 case "KeyX":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Exercise"));
                     }
                     break;
                 case "KeyB":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Bookmarks"));
                     }
                     break;
                 case "KeyO":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Settings"));
                     }
                     break;
                 case "KeyF":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Search"));
                     }
                     break;
                 case "KeyA":
-                    if (popup) {
-                        dispatch(closePopup());
+                    if (!popup && !vEditorOn) {
+                        dispatch(toggleMenu());
                     }
-                    dispatch(toggleMenu());
                     break;
                 case "KeyH":
-                    msgBox.set({
-                        title: <String id="update_hifz" />,
-                        content: <AddHifz />,
-                    });
+                    if (!vEditorOn) {
+                        msgBox.set({
+                            title: <String id="update_hifz" />,
+                            content: <AddHifz />,
+                        });
+                    }
                     if (popup && pagesCount === 1) {
                         dispatch(closePopup());
                     }
                     break;
                 case "KeyT":
-                    if (canShowPopup) {
+                    if (!vEditorOn && canShowPopup) {
                         dispatch(showPopup("Tafseer"));
                     }
                     break;
