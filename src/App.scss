@@ -35,9 +35,9 @@ $PageThumbColor: rgba(170, 170, 170, 0.25);
         background-color: $appBgColorDk;
     }
 
-    [dir="rtl"] & {
-        direction: rtl;
-    }
+    // [dir="rtl"] & {
+    //     direction: rtl;
+    // }
 }
 
 .App-logo {
@@ -143,11 +143,12 @@ button,
 .ActionsBar {
     display: flex;
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: center;
+
     > span {
         line-height: 30px;
         padding: 0 3px 0 0;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             padding: 0 0 0 3px;
         }
         &:first-child::after {
@@ -562,6 +563,9 @@ hr {
         animation: HideToast 0.5s;
         display: flex;
     }
+    [lang="ar"] & {
+        direction: rtl;
+    }
 }
 
 @keyframes ShowToast {
@@ -647,8 +651,12 @@ hr {
         }
         .ContextBody {
             overflow-y: auto;
+            overflow-x: hidden;
             flex-grow: 1;
             padding: 5px;
+        }
+        [lang="ar"] & {
+            direction: rtl;
         }
     }
 }
@@ -692,7 +700,7 @@ hr {
         line-height: 30px;
         border-radius: 4px 4px 0 0;
         padding: 0 40px 0 10px;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             padding: 0 10px 0 40px;
         }
     }
@@ -716,6 +724,9 @@ hr {
         border-radius: 15px;
         color: white;
         font-size: 20px;
+    }
+    [lang="ar"] & {
+        direction: rtl;
     }
 }
 
@@ -778,7 +789,7 @@ hr {
             height: $chartHeight;
             min-width: 25px;
             pointer-events: none;
-            [dir="rtl"] & {
+            [lang="ar"] & {
                 left: 0;
                 right: auto;
             }

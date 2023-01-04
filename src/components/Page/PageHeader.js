@@ -39,7 +39,13 @@ import {
     VerseContextButtons,
 } from "../Widgets";
 
-const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
+const PageHeader = ({
+    index: pageIndex,
+    order,
+    onArrowKey,
+    onPageDown,
+    onPageUp,
+}) => {
     const intl = useIntl();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
@@ -113,12 +119,16 @@ const PageHeader = ({ index: pageIndex, order, onArrowKey }) => {
     };
 
     const gotoNextPage = (e) => {
-        dispatch(gotoPage(history, pageIndex + shownPages.length));
-        analytics.logEvent("nav_prev_page", { trigger });
+        // dispatch(gotoPage(history, pageIndex + shownPages.length));
+        // analytics.logEvent("nav_prev_page", { trigger });
+        analytics.setTrigger(trigger);
+        onPageDown();
     };
     const gotoPrevPage = (e) => {
-        dispatch(gotoPage(history, pageIndex - shownPages.length));
-        analytics.logEvent("nav_prev_page", { trigger });
+        // dispatch(gotoPage(history, pageIndex - shownPages.length));
+        // analytics.logEvent("nav_prev_page", { trigger });
+        analytics.setTrigger(trigger);
+        onPageUp();
     };
 
     const onTogglePlay = (e) => {

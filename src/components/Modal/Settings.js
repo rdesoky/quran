@@ -31,7 +31,7 @@ import {
     setTheme,
 } from "../../store/settingsSlice";
 import { selectPopup } from "../../store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/AudioPlayer";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { ExerciseSettings } from "../ExerciseSettings";
 import { VerseInfo } from "../Widgets";
 import ReciterName from "./../AudioPlayer/ReciterName";

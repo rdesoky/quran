@@ -87,7 +87,7 @@ export default function App() {
     }, [dispatch]);
 
     useEffect(() => {
-        document.body.dir = lang === "en" ? "ltr" : "rtl";
+        document.body.setAttribute("lang", lang);
         setLocaleMessages(require(`./translations/${lang}.json`));
         // addLocaleData(require(`react-intl/locale-data/${lang}`));
     }, [lang]);

@@ -59,7 +59,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     box-sizing: border-box;
     max-height: 100%;
 
-    [dir="rtl"] & {
+    [lang="ar"] & {
         direction: rtl;
     }
 
@@ -146,7 +146,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
                 min-width: 100px;
                 width: 36%;
                 text-align: right;
-                [dir="rtl"] & {
+                [lang="ar"] & {
                     text-align: left;
                 }
             }
@@ -170,7 +170,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     .FieldLabel {
         width: 38%;
         text-align: right;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             text-align: left;
         }
         padding: 0 10px;
@@ -275,7 +275,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     .ResultInfo {
         direction: ltr;
         float: left;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             float: right;
             direction: rtl;
         }
@@ -426,7 +426,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
             span {
                 display: inline-block;
                 margin: 0 0 0 5px;
-                [dir="rtl"] & {
+                [lang="ar"] & {
                     margin: 0 5px 0 0;
                 }
                 font-size: 16px;
@@ -539,7 +539,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     text-align: center;
     padding: 0 4px;
     margin: 0 5px 0 0;
-    [dir="rtl"] & {
+    [lang="ar"] & {
         margin: 0 0 0 5px;
     }
 
@@ -548,7 +548,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         border-radius: 12px;
         float: right;
         min-width: 20px;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             float: left;
         }
     }
@@ -564,7 +564,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
             color: white;
             background-color: $selectionBgColorDark;
         }
-        [dir="rtl"] & {
+        [lang="ar"] & {
             float: right;
         }
     }
@@ -602,7 +602,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         display: none;
         padding: 0 0 0 20px;
 
-        [dir="rtl"] & {
+        [lang="ar"] & {
             padding: 0 20px 0 0;
         }
     }
@@ -615,7 +615,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     padding: 3px 12px;
     border-radius: 4px;
     margin: 0 5px 0 0;
-    [dir="rtl"] & {
+    [lang="ar"] & {
         // float: left;
         transform: scaleX(-1);
         margin: 0 0 0 5px;
