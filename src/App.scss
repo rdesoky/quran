@@ -714,7 +714,7 @@ hr {
         top: 0;
         right: 0;
         left: auto;
-        [dir="rtl"] & {
+        [lang="ar"] & {
             left: 0;
             right: auto;
         }
