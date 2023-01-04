@@ -21,6 +21,7 @@ import {
     selectStartSelection,
 } from "../../store/navSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
+import { selectFollowPlayer } from "../../store/settingsSlice";
 import { VerseContextButtons } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
@@ -35,15 +36,15 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
     const history = useHistory();
     const contextPopup = useContext(AppRefs).get("contextPopup");
     const zoom = useSelector(selectZoom);
-
+    const followPlayer = useSelector(selectFollowPlayer);
     const pageWidth = useSelector(selectPageWidth);
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth - 2 * pageMargin;
     const ref = useRef(null);
 
-    const scrollToSelectedAya = () => {
-        const selectedVerse = ref.current?.querySelector(".VerseHead.Selected");
+    const scrollToSelectedAya = (selector = ".VerseHead.Selected") => {
+        const selectedVerse = ref.current?.querySelector(selector);
         if (selectedVerse) {
             selectedVerse.scrollIntoView({
                 behavior: "smooth",
@@ -60,6 +61,12 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
             setTimeout(scrollToSelectedAya, 100);
         }
     }, [selectStart, versesInfo, zoom]);
+
+    useEffect(() => {
+        if (versesInfo.length > 0 && zoom !== 0 && followPlayer) {
+            setTimeout(() => scrollToSelectedAya(".VerseHead.Playing"), 100);
+        }
+    }, [playingAya, zoom, versesInfo, followPlayer]);
 
     const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
