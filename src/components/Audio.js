@@ -171,6 +171,7 @@ export function Audio() {
             if (followPlayer) {
                 const ayaPage = ayaIdPage(playedAya);
                 if (!shownPages.includes(ayaPage)) {
+                    //TODO: scroll to playing aya
                     dispatch(gotoPage(history, ayaPage, { sel: false }));
                 }
             }
