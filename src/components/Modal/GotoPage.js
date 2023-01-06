@@ -16,6 +16,7 @@ import {
 import {
     selectAppHeight,
     selectIsCompact,
+    selectPagerHeight,
     selectPagesCount,
 } from "../../store/layoutSlice";
 import {
@@ -37,7 +38,7 @@ const GotoPage = ({ open }) => {
     // const [isOpen, setIsOpen] = useState(true);
     const pagesCount = useSelector(selectPagesCount);
     const appHeight = useSelector(selectAppHeight);
-    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
 
     const [pageNumber, updatePageNumber] = useState(
         () => ayaIdPage(selectStart) + 1
@@ -160,112 +161,112 @@ const GotoPage = ({ open }) => {
             <div className="Title">
                 <String id="goto" />
             </div>
-            <div className="FieldRow">
-                <form
-                    onSubmit={onGotoPage}
-                    ref={(form) => {
-                        gotoPageForm = form;
-                    }}
-                >
-                    <div className="FieldLabel">
-                        <label htmlFor="PageNumber">
-                            <String id="page" />
-                        </label>
-                    </div>
-                    <div className="FieldValue">
-                        <input
-                            type="Number"
-                            name="PageNumber"
-                            min={1}
-                            max={TOTAL_PAGES}
-                            id="PageNumber"
-                            value={pageNumber}
-                            onChange={updatePage}
-                        />
-                    </div>
-                    <div className="FieldAction">
-                        <button type="submit">
-                            <String id="go" />
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div className="FieldRow">
-                <form onSubmit={onGotoPart}>
-                    <div className="FieldLabel">
-                        <label htmlFor="PartNumber">
-                            <String id="part" />
-                        </label>
-                    </div>
-                    <div className="FieldValue">
-                        <input
-                            type="Number"
-                            name="PartNumber"
-                            min={1}
-                            max={TOTAL_PARTS}
-                            id="PartNumber"
-                            value={partNumber}
-                            onChange={updatePart}
-                        />
-                    </div>
-                    <div className="FieldAction">
-                        <button type="submit">
-                            <String id="go" />
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div className="FieldRow">
-                <form onSubmit={onGotoSura}>
-                    <div className="FieldLabel">
-                        <label htmlFor="SuraNumber">
-                            <String id="sura" />
-                        </label>
-                    </div>
-                    <div className="FieldValue">
-                        <input
-                            type="Number"
-                            name="SuraNumber"
-                            min={1}
-                            max={TOTAL_SURAS}
-                            id="SuraNumber"
-                            value={suraNumber}
-                            onChange={updateSura}
-                        />
-                    </div>
-                    <div className="FieldAction">
-                        <button type="submit">
-                            <String id="go" />
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div className="FieldRow">
-                <form onSubmit={onGotoAya}>
-                    <div className="FieldLabel">
-                        <label htmlFor="SuraNumber">
-                            <String id="verse" />
-                        </label>
-                    </div>
-                    <div className="FieldValue">
-                        <input
-                            type="Number"
-                            name="VerseNumber"
-                            min={1}
-                            max={lastVerseNumber}
-                            id="VerseNumber"
-                            value={verseNumber}
-                            onChange={updateVerse}
-                        />
-                    </div>
-                    <div className="FieldAction">
-                        <button type="submit">
-                            <String id="go" />
-                        </button>
-                    </div>
-                </form>
-            </div>
             <div className="PopupBody" ref={bodyRef}>
+                <div className="FieldRow">
+                    <form
+                        onSubmit={onGotoPage}
+                        ref={(form) => {
+                            gotoPageForm = form;
+                        }}
+                    >
+                        <div className="FieldLabel">
+                            <label htmlFor="PageNumber">
+                                <String id="page" />
+                            </label>
+                        </div>
+                        <div className="FieldValue">
+                            <input
+                                type="Number"
+                                name="PageNumber"
+                                min={1}
+                                max={TOTAL_PAGES}
+                                id="PageNumber"
+                                value={pageNumber}
+                                onChange={updatePage}
+                            />
+                        </div>
+                        <div className="FieldAction">
+                            <button type="submit">
+                                <String id="go" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div className="FieldRow">
+                    <form onSubmit={onGotoPart}>
+                        <div className="FieldLabel">
+                            <label htmlFor="PartNumber">
+                                <String id="part" />
+                            </label>
+                        </div>
+                        <div className="FieldValue">
+                            <input
+                                type="Number"
+                                name="PartNumber"
+                                min={1}
+                                max={TOTAL_PARTS}
+                                id="PartNumber"
+                                value={partNumber}
+                                onChange={updatePart}
+                            />
+                        </div>
+                        <div className="FieldAction">
+                            <button type="submit">
+                                <String id="go" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div className="FieldRow">
+                    <form onSubmit={onGotoSura}>
+                        <div className="FieldLabel">
+                            <label htmlFor="SuraNumber">
+                                <String id="sura" />
+                            </label>
+                        </div>
+                        <div className="FieldValue">
+                            <input
+                                type="Number"
+                                name="SuraNumber"
+                                min={1}
+                                max={TOTAL_SURAS}
+                                id="SuraNumber"
+                                value={suraNumber}
+                                onChange={updateSura}
+                            />
+                        </div>
+                        <div className="FieldAction">
+                            <button type="submit">
+                                <String id="go" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div className="FieldRow">
+                    <form onSubmit={onGotoAya}>
+                        <div className="FieldLabel">
+                            <label htmlFor="SuraNumber">
+                                <String id="verse" />
+                            </label>
+                        </div>
+                        <div className="FieldValue">
+                            <input
+                                type="Number"
+                                name="VerseNumber"
+                                min={1}
+                                max={lastVerseNumber}
+                                id="VerseNumber"
+                                value={verseNumber}
+                                onChange={updateVerse}
+                            />
+                        </div>
+                        <div className="FieldAction">
+                            <button type="submit">
+                                <String id="go" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <div
                     style={{
                         direction: "ltr",

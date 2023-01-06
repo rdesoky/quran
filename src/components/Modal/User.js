@@ -23,34 +23,36 @@ const User = () => {
             <div className="Title">
                 <String id="profile" />
             </div>
-            <div className="HCentered">
-                {user?.isAnonymous === false ? (
-                    <>
-                        <div className="VACentered">
-                            <UserImage />
-                        </div>
-                        <div className="VCentered" style={{ padding: 10 }}>
-                            <div>{user.displayName}</div>
-                            <div>{user.email}</div>
-                            <button onClick={onSignOut} className="btn">
-                                <String id="sign_out" />
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div>
-                            <String id="guest_msg" />
-                        </div>
-                        <Login />
-                    </>
-                )}
-            </div>
-            <hr />
             <div className="PopupBody" ref={bodyRef}>
-                <ActivityChart activity="pages" />
+                <div className="HCentered">
+                    {user?.isAnonymous === false ? (
+                        <>
+                            <div className="VACentered">
+                                <UserImage />
+                            </div>
+                            <div className="VCentered" style={{ padding: 10 }}>
+                                <div>{user.displayName}</div>
+                                <div>{user.email}</div>
+                                <button onClick={onSignOut} className="btn">
+                                    <String id="sign_out" />
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <String id="guest_msg" />
+                            </div>
+                            <Login />
+                        </>
+                    )}
+                </div>
                 <hr />
-                <ActivityChart activity="chars" />
+                <div>
+                    <ActivityChart activity="pages" />
+                    <hr />
+                    <ActivityChart activity="chars" />
+                </div>
             </div>
         </>
     );

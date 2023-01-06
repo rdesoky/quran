@@ -4,9 +4,14 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { ayaIdInfo } from "../../services/QData";
 import { copy2Clipboard } from "../../services/utils";
-import { selectIsNarrow } from "../../store/layoutSlice";
+import {
+    selectAppHeight,
+    selectIsNarrow,
+    selectPagerHeight,
+} from "../../store/layoutSlice";
 import {
     gotoAya,
     selectMaskStart,
@@ -46,6 +51,8 @@ const Tafseer = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const maskStart = useSelector(selectMaskStart);
+    const appHeight = useSelector(selectAppHeight);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
 
     const offsetSelection = (offset) => {
         // setVerse(verse + offset);
@@ -70,11 +77,10 @@ const Tafseer = () => {
     return (
         <>
             <div className="Title">
-                {" "}
                 <String id="tafseer" />
                 {isNarrow ? <PlayerButtons trigger="tafseer_title" /> : null}
             </div>
-            <div className="PopupBody">
+            <div className="PopupBody" ref={bodyRef}>
                 <TafseerView
                     verse={verse}
                     onMoveNext={offsetSelection}

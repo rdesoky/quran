@@ -87,6 +87,7 @@ const Exercise = () => {
     const hifzRanges = useSelector(selectHifzRanges);
     // const isNarrowLayout = useSelector(selectIsNarrowLayout);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
+    const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 240, currStep);
     const cursorRef = useRef();
 
     const setCurrStep = (step) => {
@@ -296,6 +297,7 @@ const Exercise = () => {
                 // dispatch(setMaskStart(verse));
                 dispatch(setModalPopup(true)); //block outside selection
                 dispatch(setMaskShift(0));
+                typingConsoleRef.current?.focus();
                 break;
             case Step.reciting:
                 // setTimeout(() => {
@@ -316,7 +318,7 @@ const Exercise = () => {
             default:
                 dispatch(setModalPopup(false)); //allow selecting outside
         }
-    }, [currStep, defaultButton, dispatch]);
+    }, [currStep, defaultButton, dispatch, typingConsoleRef]);
 
     //monitor player to start answer upon player ends
     useEffect(() => {
@@ -672,9 +674,7 @@ const Exercise = () => {
                 </div>
                 <div
                     tabIndex={0}
-                    ref={(ref) => {
-                        defaultButton = ref;
-                    }}
+                    ref={typingConsoleRef}
                     className={
                         "TypingConsole" +
                         (!writtenText.length
@@ -687,7 +687,7 @@ const Exercise = () => {
                         position: "absolute",
                         left: 15,
                         right: 15,
-                        maxHeight: 44,
+                        // maxHeight: 44,
                     }}
                 >
                     {renderText()}

@@ -3,15 +3,16 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { downloadImage } from "../services/utils";
-import { selectUser } from "../store/dbSlice";
+import { selectPhotoUrl, selectUser } from "../store/dbSlice";
 
 export const UserImage = () => {
     const [imageUrl, setImageUrl] = useState(null);
-    const user = useSelector(selectUser);
+    // const user = useSelector(selectUser);
+    const photoURL = useSelector(selectPhotoUrl);
 
     useEffect(() => {
-        if (user) {
-            const url = user.photoURL;
+        if (photoURL) {
+            const url = photoURL;
             downloadImage(url)
                 .then(() => {
                     setImageUrl(url);
@@ -20,7 +21,7 @@ export const UserImage = () => {
         } else {
             setImageUrl(null);
         }
-    }, [user, user?.photoURL]);
+    }, [photoURL]);
 
     return imageUrl ? (
         <span>

@@ -462,21 +462,40 @@ export default function Search() {
                     tabIndex="0"
                     onClick={showKeyboard}
                 >
+                    {results.length ? (
+                        <span
+                            className="ParaId Chapter"
+                            style={{ margin: "0 20px", fontSize: ".8em" }}
+                        >
+                            {results.length}
+                        </span>
+                    ) : null}
                     {renderTypedText()}
                 </div>
                 <button className="CommandButton" onClick={onSubmitSearch}>
                     <Icon icon={faSearch} />
                 </button>
+                {results.length ? (
+                    <button
+                        id="SearchViewToggler"
+                        className={"TreeToggler".appendWord("active", treeView)}
+                        onClick={toggleTreeView}
+                    >
+                        <Icon icon={faIndent} />
+                    </button>
+                ) : null}
             </div>
-            <div id="SearchHistory">
-                {searchHistory.map((s, i) => {
-                    return (
-                        <button key={i} onClick={onHistoryButtonClick}>
-                            {s}
-                        </button>
-                    );
-                })}
-            </div>
+            {searchTerm.length === 0 && (
+                <div id="SearchHistory">
+                    {searchHistory.map((s, i) => {
+                        return (
+                            <button key={i} onClick={onHistoryButtonClick}>
+                                {s}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
             <div
                 className="PopupBody"
@@ -485,7 +504,7 @@ export default function Search() {
                 // ref={bodyRef}
                 style={{ marginTop: 0 }}
             >
-                <div className="ResultsInfo">
+                {/* <div className="ResultsInfo">
                     {results.length ? (
                         <button
                             id="SearchViewToggler"
@@ -514,7 +533,7 @@ export default function Search() {
                             return null;
                         }}
                     </String>
-                </div>{" "}
+                </div> */}
                 {renderSuras()}
                 {treeView ? renderResultsTree() : renderResults()}
                 {renderKeyboard()}

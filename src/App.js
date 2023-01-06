@@ -137,10 +137,10 @@ export default function App() {
                                     }}
                                 />
                             </Switch>
-                            <Sidebar />
                             <PopupView />
                             <ContextPopup />
                             <MessageBox />
+                            <Sidebar />
                             <Audio />
                         </Router>
                     </div>
