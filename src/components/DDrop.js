@@ -45,8 +45,9 @@ const DDrop = ({
                 }
                 setPointerCaptured(true);
                 isCaptured = true;
-            }
-            if (isCaptured) {
+                setStartX(clientX);
+                setStartY(clientY);
+            } else if (isCaptured) {
                 // pointerId && console.log(`~~onPointerMove ${pointerId}`);
                 if (shiftX > minShift && shiftX < maxShift) {
                     setDX(clientX - startX);
