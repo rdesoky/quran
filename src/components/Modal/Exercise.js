@@ -95,13 +95,18 @@ const Exercise = () => {
     };
 
     useEffect(() => {
-        cursorRef.current &&
-            cursorRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-                inline: "center",
-            });
-    }, [writtenText]);
+        if (cursorRef.current && currStep === Step.typing) {
+            setTimeout(
+                () =>
+                    cursorRef.current.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center",
+                    }),
+                5
+            );
+        }
+    }, [writtenText, currStep]);
 
     useEffect(() => {
         return () => {
@@ -582,7 +587,8 @@ const Exercise = () => {
         }
 
         setWrongWord(wrongWord);
-        setMissingWords(correctWords.length - answerWords.length);
+        const missingWordsCount = correctWords.length - answerWords.length;
+        setMissingWords(missingWordsCount >= 0 ? missingWordsCount : 0);
         if (quickMode === 2 && wrongWord === -1 && answerWords.length >= 3) {
             const typed_chars = dispatch(logTypedVerse(verse, 3));
             analytics.logEvent("exercise_quick_success", {
