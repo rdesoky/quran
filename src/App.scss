@@ -273,6 +273,9 @@ hr {
     .Sidebar & {
         justify-content: initial;
     }
+    &.selected {
+        background-color: #000;
+    }
 }
 
 .NoHifz {

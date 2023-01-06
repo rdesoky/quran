@@ -68,6 +68,7 @@ function Sidebar() {
                                 command={command}
                                 trigger="side_bar"
                                 key={command}
+                                className={popup === command ? "selected" : ""}
                                 showLabel={isShowMenu}
                             />
                         ))}
