@@ -19,7 +19,8 @@ import { VerseText } from "./../Widgets";
 
 const Bookmarks = () => {
     const appHeight = useSelector(selectAppHeight);
-    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
+
     const isNarrow = useSelector(selectIsNarrow);
     const dispatch = useDispatch();
     const msgBox = useContext(AppRefs).get("msgBox");

@@ -473,6 +473,11 @@ hr {
         height: 30px;
         border-radius: 15px;
     }
+    .PopupBody & {
+        width: 70px;
+        height: 70px;
+        border-radius: 35px;
+    }
 }
 
 .SuraIndexCell,

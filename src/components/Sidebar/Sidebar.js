@@ -36,7 +36,10 @@ function Sidebar() {
     return (
         <div
             id="SidebarBlocker"
-            style={{ pointerEvents: isShowMenu ? "fill" : "none" }}
+            style={{
+                pointerEvents: isShowMenu ? "fill" : "none",
+                zIndex: menuExpanded ? 4 : 2,
+            }}
             onClick={(e) => {
                 //hide menu upon clicking outside of it
                 if (menuExpanded) {

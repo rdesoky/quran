@@ -43,6 +43,7 @@ const Settings = () => {
     const popupWidth = useSelector(selectPopupWidth);
     const appHeight = useSelector(selectAppHeight);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
+
     const isNarrow = useSelector(selectIsNarrow);
     const popup = useSelector(selectPopup);
     const playingAya = useSelector(selectPlayingAya);

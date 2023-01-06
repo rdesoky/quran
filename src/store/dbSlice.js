@@ -50,6 +50,7 @@ export default { [sliceName]: slice.reducer };
 
 //Selectors
 export const selectUser = (state) => state[sliceName].user;
+export const selectPhotoUrl = (state) => state[sliceName].user?.photoURL;
 export const selectBookmarks = (state) => state[sliceName].bookmarks;
 export const selectIsBookmarked = (ayaId) => (state) => {
     const { bookmarks } = state[sliceName];
