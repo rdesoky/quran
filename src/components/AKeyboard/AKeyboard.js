@@ -5,7 +5,8 @@ import {
     faStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { AppRefs } from "../../RefsProvider";
 import "./AKeyboard.scss";
 
 const keyMap = {
@@ -110,6 +111,7 @@ const AKeyboard = ({
 }) => {
     const [text, setText] = useState(initText);
     const [typedChar, setTypedChar] = useState("");
+    const msgBox = useContext(AppRefs).get("msgBox");
 
     const updateText = useCallback(
         (newText) => {
@@ -124,14 +126,20 @@ const AKeyboard = ({
 
     const handleKeyDown = useCallback(
         (e) => {
+            if (msgBox.getMessages().length) {
+                return; //a message box is active
+            }
             const { code, ctrlKey, target } = e;
             setTypedChar(code);
-            // setTimeout(() => {
-            //     setTypedChar("");
-            // }, 400);
+            setTimeout(() => {
+                setTypedChar("");
+            }, 300);
             if (code === "Space") {
-                //Avoid entring space when user presses a button using space bar
-                if (target && target.tagName.match(/input|button/i)) {
+                //Avoid entering space when user presses a button using space bar
+                if (
+                    target &&
+                    target.tagName.match(/input|button|select|radio|textarea/i)
+                ) {
                     return;
                 }
                 if (text.trim().length === 0) {
@@ -141,9 +149,16 @@ const AKeyboard = ({
 
             switch (code) {
                 case "Escape":
-                    onCancel();
+                    onCancel?.();
                     break;
                 case "Enter":
+                    if (
+                        document.activeElement.tagName.match(
+                            /input|button|select|textarea/i
+                        )
+                    ) {
+                        return;
+                    }
                     onEnter(text);
                     break;
                 case "Backspace":
@@ -178,7 +193,7 @@ const AKeyboard = ({
                 e.preventDefault();
             }
         },
-        [langIndex, onCancel, onEnter, text, updateText]
+        [langIndex, onCancel, onEnter, text, updateText, msgBox]
     );
 
     useEffect(() => {

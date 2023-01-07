@@ -17,7 +17,7 @@ import {
     faQuestion,
     faQuran,
     faSearch,
-    faShareAlt,
+    faShareSquare,
     faStopCircle,
     faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -55,7 +55,7 @@ export const CommandIcons = {
     Mask: faLightbulb,
     MaskOn: farLightbulb,
     Copy: faCopy,
-    Share: faShareAlt,
+    Share: faShareSquare,
     Tafseer: faQuran,
     // Exercise: faPenNib,
     Exercise: faKeyboard,
@@ -94,21 +94,6 @@ export const CommandIcon = ({ command }) => {
             return <UserImage />;
         case "AudioPlayer":
             return (
-                // <div
-                //     className={"ReciterIcon".appendWord(
-                //         "blinking",
-                //         player.audioState === AudioState.playing
-                //     )}
-                //     style={{
-                //         backgroundImage:
-                //             "url(" +
-                //             process.env.PUBLIC_URL +
-                //             "/images/" +
-                //             player.reciter +
-                //             ".jpg)"
-                //     }}
-                // />
-                // <span>
                 <img
                     src={`${process.env.PUBLIC_URL}/images/${reciter}.jpg`}
                     className={"ReciterIcon".appendWord(
@@ -117,7 +102,6 @@ export const CommandIcon = ({ command }) => {
                     )}
                     alt="recite"
                 />
-                // </span>
             );
 
         default:

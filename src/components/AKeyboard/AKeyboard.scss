@@ -1,12 +1,10 @@
 #AKeyboard {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
     .KeysRow {
         display: flex;
-        flex-direction: row;
-        margin-bottom: 8px;
-        direction: rtl;
+        flex-direction: row-reverse;
+        margin: 0 auto 5px auto;
+        direction: ltr;
+        max-width: 500px;
         .KeyButton {
             display: inline-block;
             position: relative;

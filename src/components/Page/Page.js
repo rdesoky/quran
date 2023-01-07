@@ -29,30 +29,38 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
 
     //Handle pageIndex update
     useEffect(() => {
+        let cancelled = false;
         let setImageTimeout;
         setImageUrl(null);
         const pgIndex = pageIndex;
         downloadPageImage(pgIndex)
             .then((url) => {
-                setImageTimeout = setTimeout(() => {
-                    //don't update the Url state unless the component is mounted
-                    if (pgIndex === pageIndex) {
-                        setImageUrl(url);
-                    }
-                }, 100); //The delay is to make sure imageLoaded is set after index update event handler
+                if (cancelled) {
+                    return;
+                }
+                setImageUrl(url);
+                // setImageTimeout = setTimeout(() => {
+                //     //don't update the Url state unless the component is mounted
+                //     if (pgIndex === pageIndex) {
+                //         setImageUrl(url);
+                //     }
+                // }, 1000); //The delay is to make sure imageLoaded is set after index update event handler
 
                 //onImageLoaded(url, pgIndex);
             })
             .catch((e) => {});
         setVerseInfo([]);
         let pageNumber = parseInt(pageIndex) + 1;
-        let controller = new AbortController();
+        // let controller = new AbortController();
         let url = `${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`;
         fetch(url, {
-            signal: controller.signal,
+            // signal: controller.signal,
         })
             .then((response) => response.json())
             .then(({ child_list }) => {
+                if (cancelled) {
+                    return;
+                }
                 setVerseInfo(
                     child_list.map((c) => {
                         const aya_id = ayaID(c.sura, c.aya);
@@ -63,14 +71,11 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                         return { ...c, epos, aya_id };
                     })
                 );
-            })
-            .catch((e) => {
-                // const { name, message } = e;
-                // console.info(`${name}: ${message}\n${url}`);
             });
         return () => {
+            cancelled = true;
             //Cleanup function
-            controller.abort();
+            // controller.abort();
             if (setImageTimeout !== undefined) {
                 clearTimeout(setImageTimeout);
             }
@@ -79,7 +84,7 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
 
     return (
         <div className="Page">
-            <Spinner visible={imageUrl === null} />
+            {/* <Spinner visible={imageUrl === null} /> */}
             <div
                 className="PageFrame"
                 onClick={(e) => {
@@ -89,34 +94,48 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                 }}
                 style={{
                     textAlign,
-                    visibility: imageUrl ? "visible" : "hidden",
+                    // visibility: imageUrl ? "visible" : "hidden",
                 }}
             >
                 <div
-                    className={"PageImageFrame".appendWord(
-                        imageUrl && "AnimatePage"
-                    )}
+                    className={"PageImageFrame".appendWord("AnimatePage")}
                     style={{
                         transform: `translateX(${shiftX || 0}px) scaleX(${
                             scaleX || 1
                         })`,
                         height: pageHeight,
+                        width: pageWidth,
                         // transform: `translateX(${shiftX || 0}px) scaleX(1)`,
                     }}
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />
                     <VerseLayout page={pageIndex} versesInfo={versesInfo}>
-                        <img
-                            style={{
-                                visibility: imageUrl ? "visible" : "hidden",
-                                margin: `0 ${pageMargin}px`,
-                                width: pageWidth - 2 * pageMargin,
-                                height: pageHeight,
-                            }}
-                            src={imageUrl}
-                            className="PageImage"
-                            alt="page"
-                        />
+                        {imageUrl ? (
+                            <img
+                                style={{
+                                    visibility: imageUrl ? "visible" : "hidden",
+                                    margin: `0 ${pageMargin}px`,
+                                    width: pageWidth - 2 * pageMargin,
+                                    height: pageHeight,
+                                }}
+                                src={imageUrl}
+                                className="PageImage"
+                                alt="page"
+                            />
+                        ) : (
+                            <img
+                                className="page-loader-image"
+                                src={
+                                    process.env.PUBLIC_URL +
+                                    "/images/page_loader.png"
+                                }
+                                alt="loading"
+                                style={{
+                                    width: pageWidth - 2 * pageMargin,
+                                    height: pageHeight,
+                                }}
+                            />
+                        )}
                     </VerseLayout>
                 </div>
             </div>

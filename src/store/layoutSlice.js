@@ -17,10 +17,11 @@ export const PAGE_FOOTER_HEIGHT = 50;
 
 export const DisplayMode = {};
 
+const initialZoom = parseInt(localStorage.getItem("zoom"));
+
 const initialState = {
-    viewAspect: 1,
     viewCapacity: ViewCapacity.onePage,
-    zoom: parseInt(localStorage.getItem("zoom")) || 0,
+    zoom: isNaN(initialZoom) ? 2 : initialZoom, //0: no zoom, 1: fit one page, 2: fit two page
     zoomLevels: 0,
     appWidth: 800,
     appHeight: 600,
@@ -38,7 +39,10 @@ const slice = createSlice({
             const viewWidth = width - SIDE_BAR_WIDTH;
             const viewHeight = height - PAGE_FOOTER_HEIGHT;
             const viewAspect = viewWidth / viewHeight;
-            if (viewAspect > PAGE_ASPECT * 2.8) {
+            const viewAspect2 = (viewWidth - 300) / viewHeight;
+            slice.viewAspect = viewAspect;
+            slice.viewAspect2 = viewAspect2;
+            if (viewAspect2 > PAGE_ASPECT * 2.2) {
                 slice.viewCapacity = ViewCapacity.twoPagesPlus;
                 zoomLevels = 2;
             } else if (viewAspect >= PAGE_ASPECT * 2.2) {
@@ -47,19 +51,19 @@ const slice = createSlice({
             } else if (viewAspect >= PAGE_ASPECT * 2) {
                 slice.viewCapacity = ViewCapacity.twoPages;
                 zoomLevels = 1;
-            } else if (viewWidth / viewHeight > PAGE_ASPECT * 1.8) {
+            } else if (viewAspect2 > PAGE_ASPECT) {
                 slice.viewCapacity = ViewCapacity.onePagePlus;
                 zoomLevels = 1;
-            } else if (viewWidth / viewHeight > PAGE_ASPECT * 1.2) {
+            } else if (viewAspect > PAGE_ASPECT * 1.2) {
                 slice.viewCapacity = ViewCapacity.onePage;
                 zoomLevels = 1;
-            } else if (viewWidth / viewHeight >= PAGE_ASPECT) {
+            } else if (viewAspect >= PAGE_ASPECT) {
                 slice.viewCapacity = ViewCapacity.onePage;
             } else {
                 slice.viewCapacity = ViewCapacity.onePageCompact;
             }
             slice.zoomLevels = zoomLevels;
-            slice.viewAspect = Math.floor((100 * width) / height) / 100;
+            // slice.viewAspect = Math.floor((100 * width) / height) / 100;
             slice.appWidth = width;
             slice.appHeight = height;
             slice.pagerHeight = height - PAGE_FOOTER_HEIGHT;

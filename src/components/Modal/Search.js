@@ -50,7 +50,7 @@ export default function Search() {
     const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
-    const resultsRef = useSnapHeightToBottomOf(appHeight - 15);
+    const resultsRef = useSnapHeightToBottomOf(appHeight - 15, searchTerm);
 
     const resultsDiv = resultsRef.current;
 
@@ -391,7 +391,7 @@ export default function Search() {
 
     useEffect(() => {
         doSearch(searchTerm);
-        // setExpandedGroup(0);
+        setExpandedGroup(0); //to select first group on new search
     }, [doSearch, searchTerm]);
 
     const onSubmitSearch = (txt) => {

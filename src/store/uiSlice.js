@@ -14,7 +14,7 @@ const initSidebarCommands = [
     "Bookmarks",
     "Goto",
     "Copy",
-    // "Share",
+    "Share",
     "Help",
     "Settings",
 ];
@@ -87,7 +87,10 @@ export const {
 } = slice.actions;
 
 export const selectModalPopup = (state) => state[sliceName].modalPopup;
-export const selectRecentCommands = (state) => state[sliceName].recentCommands;
+export const selectRecentCommands = (state) =>
+    state[sliceName].recentCommands.filter(
+        (c) => c !== "Share" || navigator.share !== undefined
+    );
 export const selectMessageBox = (state) =>
     state[sliceName].messageBox?.[state[sliceName].messageBox.length];
 export const selectMenuExpanded = (state) => state[sliceName].menuExpanded;

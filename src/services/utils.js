@@ -27,13 +27,15 @@ export const downloadImage = (url) => {
     });
 };
 
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const downloadPageImage = (pageIndex) => {
     const imageUrl =
         process.env.PUBLIC_URL +
         "/qpages_1260/page" +
         num2string(pageIndex + 1, 3) +
         ".png";
-    return downloadImage(imageUrl);
+    return delay(0).then(() => downloadImage(imageUrl));
 };
 
 export const pageFromPath = (path) => {

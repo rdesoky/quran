@@ -330,3 +330,12 @@ $selectionBgColorDark: rgb(38, 93, 138);
         transform-origin: top right;
     }
 }
+
+.page-loader-image {
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 90%;
+    height: 100%;
+    opacity: 0.2;
+}

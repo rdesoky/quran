@@ -5,7 +5,10 @@ import {
     faThumbsDown,
     faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import {
+    FontAwesomeIcon,
+    FontAwesomeIcon as Icon,
+} from "@fortawesome/react-fontawesome";
 import React, {
     useCallback,
     useContext,
@@ -13,7 +16,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage, FormattedMessage as String } from "react-intl";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { ActivityChart } from "../Hifz";
 import { normalizeText } from "./../../services/utils";
@@ -51,6 +54,8 @@ import {
 } from "../../store/settingsSlice";
 import { setModalPopup, showToast } from "../../store/uiSlice";
 import { ExerciseSettings } from "../ExerciseSettings";
+import { CommandIcons } from "../CommandIcon";
+import ExerciseTypingOptions from "../ExerciseTypingOptions";
 
 const Step = {
     unknown: "unknown",
@@ -62,6 +67,8 @@ const Step = {
 
 const Exercise = () => {
     const [currStep, setCurrentStep] = useState(Step.intro);
+    const msgBox = useContext(AppRefs).get("msgBox");
+
     const appHeight = useSelector(selectAppHeight);
     const isNarrow = useSelector(selectIsNarrow);
 
@@ -86,8 +93,8 @@ const Exercise = () => {
     const audioState = useSelector(selectAudioState);
     const hifzRanges = useSelector(selectHifzRanges);
     // const isNarrowLayout = useSelector(selectIsNarrowLayout);
-    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
-    const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 240, currStep);
+    const bodyRef = useSnapHeightToBottomOf(appHeight, currStep);
+    const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 205, currStep);
     const cursorRef = useRef();
 
     const setCurrStep = (step) => {
@@ -98,6 +105,7 @@ const Exercise = () => {
         if (cursorRef.current && currStep === Step.typing) {
             setTimeout(
                 () =>
+                    cursorRef.current &&
                     cursorRef.current.scrollIntoView({
                         behavior: "smooth",
                         block: "center",
@@ -113,28 +121,6 @@ const Exercise = () => {
             dispatch(hideMask());
         };
     }, [dispatch]);
-
-    // useEffect(() => {
-    //     if (repeat !== AudioRepeat.noRepeat) {
-    //         setSavedRepeat(repeat);
-    //         dispatch(setRepeat(AudioRepeat.noRepeat));
-    //     }
-    //     if (followPlayer !== true) {
-    //         setSavedFollowPlayer(followPlayer);
-    //         dispatch(setFollowPlayer(true));
-    //     }
-    // }, [repeat, followPlayer, dispatch]);
-
-    // useEffect(() => {
-    //     return () => {
-    //         if (savedRepeat !== undefined) {
-    //             dispatch(setRepeat(savedRepeat));
-    //         }
-    //         if (savedFollowPlayer !== undefined) {
-    //             dispatch(setFollowPlayer(savedFollowPlayer));
-    //         }
-    //     };
-    // }, [dispatch, savedFollowPlayer, savedRepeat]);
 
     const checkVerseLevel = (new_verse) => {
         const text = quranText?.[new_verse];
@@ -179,7 +165,6 @@ const Exercise = () => {
     };
 
     const gotoRandomVerse = (e) => {
-        // dispatch(stop(audio));
         audio.stop();
         let new_verse;
         do {
@@ -198,9 +183,7 @@ const Exercise = () => {
     };
 
     const startReciting = (e) => {
-        // setCurrStep(Step.reciting);
         audio.play(verse, AudioRepeat.noRepeat);
-        //app.setMaskStart(verse + 1, true);
         analytics.logEvent("exercise_play_audio", {
             trigger,
         });
@@ -212,18 +195,8 @@ const Exercise = () => {
         analytics.logEvent("redo_reciting", { trigger });
     };
 
-    // const stopCounter = useCallback(() => {
-    //     if (counterInterval) {
-    //         clearInterval(counterInterval);
-    //         setCounterInterval(null);
-    //     }
-    // }, [counterInterval]);
-
     const startAnswer = useCallback(() => {
-        // setTimeout(() => {
         audio.stop();
-        // });
-        // stopCounter();
         setCurrStep(Step.typing);
     }, [audio]);
 
@@ -235,6 +208,13 @@ const Exercise = () => {
         },
         [audio]
     );
+
+    const showTypingSettings = () => {
+        msgBox.set({
+            title: <String id="typing_settings" />,
+            content: <ExerciseTypingOptions {...{ quickMode, setQuickMode }} />,
+        });
+    };
 
     const goBack = useCallback(
         (e) => {
@@ -256,25 +236,26 @@ const Exercise = () => {
         localStorage.getItem("resultsDefaultButton") || "typeNext";
     let defaultButton = null;
 
+    const onCancel = useCallback(() => {
+        if (msgBox.getMessages().length > 0) {
+            msgBox.pop();
+            return;
+        }
+        goBack();
+    }, [goBack, msgBox]);
+
     useEffect(() => {
-        // audio.stop(true);
-        // setCurrStep(Step.intro);
         const handleKeyDown = ({ code }) => {
             if (code === "Escape") {
-                goBack();
+                onCancel();
             }
         };
-
         document.addEventListener("keydown", handleKeyDown);
-        // dispatch(gotoAya(history));
         return () => {
-            // audio.stop(true);
             dispatch(setModalPopup(false));
-            // app.hideMask();
-            // dispatch(hideMask());
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [dispatch, goBack]);
+    }, [dispatch, onCancel]);
 
     //selected aya has changed
     useEffect(() => {
@@ -285,7 +266,7 @@ const Exercise = () => {
     useEffect(() => {
         dispatch(showMask());
         if (currStep !== Step.typing) {
-            dispatch(setMaskShift(1));
+            dispatch(setMaskShift(1)); //show selected aya
         }
     }, [currStep, dispatch, selectStart]);
 
@@ -299,25 +280,20 @@ const Exercise = () => {
         }
         switch (currStep) {
             case Step.typing:
-                // dispatch(setMaskStart(verse));
                 dispatch(setModalPopup(true)); //block outside selection
-                dispatch(setMaskShift(0));
+                dispatch(setMaskShift(0)); //hide selected aya
                 typingConsoleRef.current?.focus();
                 break;
             case Step.reciting:
-                // setTimeout(() => {
-                //     audio.play();
-                // }, 100);
                 dispatch(setModalPopup(true)); //block outside selection
-                dispatch(setMaskShift(1));
+                dispatch(setMaskShift(1)); //show selected aya
                 break;
             case Step.results:
                 //if correct answer, save number of verse letters in Firebase
-                dispatch(setMaskShift(1));
+                dispatch(setMaskShift(1)); //show selected aya
                 dispatch(setModalPopup(false));
                 break;
             case Step.intro:
-                // app.setMaskStart(verse + 1, true);
                 dispatch(setMaskShift(1));
             // eslint-disable-next-line no-fallthrough
             default:
@@ -630,6 +606,9 @@ const Exercise = () => {
                     <button onClick={showIntro}>
                         <String id="home" />
                     </button>
+                    <button onClick={showTypingSettings}>
+                        <FontAwesomeIcon icon={CommandIcons.Settings} />
+                    </button>
                 </div>
             </div>
         );
@@ -651,33 +630,10 @@ const Exercise = () => {
         );
     };
 
-    const onUpdateQuickMode = ({ target }) => {
-        //setQuickMode(target.checked);
-        setQuickMode(parseInt(target.value));
-        // defaultButton.focus();//to avoid changing the radio value upon typing
-    };
-
     const renderTypingConsole = () => {
         const correct = isTypingCorrect();
         return (
             <>
-                <div>
-                    <select
-                        onChange={onUpdateQuickMode}
-                        value={quickMode}
-                        style={{ width: "100%" }}
-                    >
-                        <option value={0}>
-                            <String id="quick_mode_0" />
-                        </option>
-                        <option value={1}>
-                            <String id="quick_mode_1" />
-                        </option>
-                        <option value={2}>
-                            <String id="quick_mode_2" />
-                        </option>
-                    </select>
-                </div>
                 <div
                     tabIndex={0}
                     ref={typingConsoleRef}
@@ -703,7 +659,7 @@ const Exercise = () => {
                         initText={writtenText}
                         onUpdateText={onUpdateText}
                         onEnter={onFinishedTyping}
-                        onCancel={showIntro}
+                        // onCancel={onCancel}
                     />
                 </div>
             </>
@@ -895,12 +851,14 @@ const Exercise = () => {
                     // show={isNarrowLayout}
                 />
                 <span className="TrackDuration">
-                    {renderCounter(
-                        32,
-                        3,
-                        Math.floor(remainingTime || 0),
-                        duration
-                    )}
+                    {duration
+                        ? renderCounter(
+                              32,
+                              3,
+                              Math.floor(remainingTime || 0),
+                              duration
+                          )
+                        : null}
                 </span>
                 <div className="ButtonsBar">
                     <button
