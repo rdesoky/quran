@@ -94,7 +94,7 @@ const Exercise = () => {
     const hifzRanges = useSelector(selectHifzRanges);
     // const isNarrowLayout = useSelector(selectIsNarrowLayout);
     const bodyRef = useSnapHeightToBottomOf(appHeight, currStep);
-    const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 205, currStep);
+    const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 230, currStep);
     const cursorRef = useRef();
 
     const setCurrStep = (step) => {

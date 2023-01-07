@@ -110,32 +110,23 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />
                     <VerseLayout page={pageIndex} versesInfo={versesInfo}>
-                        {imageUrl ? (
-                            <img
-                                style={{
-                                    visibility: imageUrl ? "visible" : "hidden",
-                                    margin: `0 ${pageMargin}px`,
-                                    width: pageWidth - 2 * pageMargin,
-                                    height: pageHeight,
-                                }}
-                                src={imageUrl}
-                                className="PageImage"
-                                alt="page"
-                            />
-                        ) : (
-                            <img
-                                className="page-loader-image"
-                                src={
-                                    process.env.PUBLIC_URL +
+                        <img
+                            style={{
+                                margin: `0 ${pageMargin}px`,
+                                width: pageWidth - 2 * pageMargin,
+                                height: pageHeight,
+                            }}
+                            src={
+                                imageUrl ||
+                                process.env.PUBLIC_URL +
                                     "/images/page_loader.png"
-                                }
-                                alt="loading"
-                                style={{
-                                    width: pageWidth - 2 * pageMargin,
-                                    height: pageHeight,
-                                }}
-                            />
-                        )}
+                            }
+                            className={"PageImage".appendWord(
+                                "page-loader-image",
+                                !imageUrl
+                            )}
+                            alt="page"
+                        />
                     </VerseLayout>
                 </div>
             </div>
