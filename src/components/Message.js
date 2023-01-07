@@ -1,8 +1,28 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useLayoutEffect, useRef } from "react";
 import { FormattedMessage as String } from "react-intl";
 
 export const Message = ({ msgBoxInfo, onClose, disabled }) => {
+    const yesRef = useRef();
+    const contentRef = useRef();
+    const closeBtnRef = useRef();
+
+    useLayoutEffect(() => {
+        if (yesRef.current) {
+            yesRef.current.focus();
+        } else if (contentRef.current) {
+            const btn = contentRef.current.querySelector(
+                "button,input,select,radio"
+            );
+            if (btn) {
+                btn.focus();
+            } else {
+                closeBtnRef.current.focus();
+            }
+        }
+    }, []);
+
     const onYes = (e) => {
         if (msgBoxInfo.onYes) {
             setTimeout(() => {
@@ -27,17 +47,19 @@ export const Message = ({ msgBoxInfo, onClose, disabled }) => {
             <button className="CloseButton" onClick={onClose}>
                 <Icon icon={faTimes} />
             </button>
-            <div className="MessageBoxContent">{msgBoxInfo.content}</div>
-            {msgBoxInfo.onYes ? (
+            <div className="MessageBoxContent" ref={contentRef}>
+                {msgBoxInfo.content}
+            </div>
+            {msgBoxInfo.onYes && (
                 <div className="ButtonsBar">
-                    <button onClick={onYes}>
+                    <button onClick={onYes} ref={yesRef}>
                         <String id="yes" />
                     </button>
                     <button onClick={onNo}>
                         <String id="no" />
                     </button>
                 </div>
-            ) : null}
+            )}
             {disabled && (
                 <div
                     style={{

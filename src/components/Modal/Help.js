@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
+import { CommandButton } from "../CommandButton";
 
 const Help = () => {
     // const [unsecureLink, setUnsecureLink] = useState(null);
@@ -9,6 +10,7 @@ const Help = () => {
     //     setUnsecureLink(newLink);
     //   }
     // }, []);
+    const trigger = "Help";
 
     return (
         <>
@@ -63,17 +65,12 @@ const Help = () => {
                         }}
                     />
                 </div>
-                {/* {unsecureLink && (
-                    <div>
-                        <hr />
-                        <Message
-                            id="audio_fix"
-                            values={{
-                                link: <a href={unsecureLink}>{unsecureLink}</a>,
-                            }}
-                        />
-                    </div>
-                )} */}
+                <hr />
+                <div>
+                    <CommandButton
+                        {...{ command: "Share", trigger, showLabel: true }}
+                    />
+                </div>
             </div>
         </>
     );

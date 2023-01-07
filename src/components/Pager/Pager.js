@@ -57,7 +57,6 @@ import {
     showToast,
     toggleMenu,
 } from "../../store/uiSlice";
-import { shownMessageBoxes } from "../MessageBox";
 import Page from "../Page/Page";
 import PageHeader from "../Page/PageHeader";
 import { analytics } from "./../../services/Analytics";
@@ -335,7 +334,7 @@ export default function Pager() {
                 case "Escape":
                     if (contextPopup.info) {
                         contextPopup.close();
-                    } else if (shownMessageBoxes.length > 0) {
+                    } else if (msgBox.getMessages().length > 0) {
                         msgBox.pop();
                     } else if (activePopup !== null) {
                         dispatch(closePopup());

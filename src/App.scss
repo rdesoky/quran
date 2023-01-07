@@ -464,6 +464,11 @@ hr {
         font-size: 50px;
         margin: 0 10px;
     }
+    .PopupBody & {
+        svg {
+            height: 75px;
+        }
+    }
 }
 
 .UserImage {

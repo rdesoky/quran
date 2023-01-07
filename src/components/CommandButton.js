@@ -178,6 +178,12 @@ export const CommandButton = ({
                 dispatch(showToast({ id: "text_copied" }));
                 break;
             case "Share":
+                analytics.logEvent("share", { trigger });
+                navigator.share?.({
+                    url: window.location.origin,
+                    title: intl.formatMessage({ id: "app_share_title" }),
+                    text: intl.formatMessage({ id: "app_share_message" }),
+                });
                 break;
             case "Fullscreen":
                 requestFullScreen();
