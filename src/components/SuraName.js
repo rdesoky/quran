@@ -1,7 +1,6 @@
-import { useIntl } from "react-intl";
+import useSuraName from "../hooks/useSuraName";
 
 export default function SuraName({ index }) {
-  const intl = useIntl();
-  const suraNames = intl.formatMessage({ id: "sura_names" }).split(",");
-  return suraNames?.[index];
+  const suraName = useSuraName(index);
+  return <>{suraName}</>;
 }

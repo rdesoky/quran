@@ -3,7 +3,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { downloadImage } from "../services/utils";
-import { selectPhotoUrl, selectUser } from "../store/dbSlice";
+import { selectPhotoUrl } from "../store/dbSlice";
 
 export const UserImage = () => {
     const [imageUrl, setImageUrl] = useState(null);

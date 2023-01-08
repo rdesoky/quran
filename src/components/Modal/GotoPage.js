@@ -4,27 +4,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import {
-    ayaID,
-    ayaIdInfo,
-    ayaIdPage,
-    getPartIndexByAyaId,
-    sura_info,
-    TOTAL_PAGES,
-    TOTAL_PARTS,
-    TOTAL_SURAS,
+  ayaID,
+  ayaIdInfo,
+  ayaIdPage,
+  getPartIndexByAyaId,
+  sura_info,
+  TOTAL_PAGES,
+  TOTAL_PARTS,
+  TOTAL_SURAS,
 } from "../../services/QData";
 import {
-    selectAppHeight,
-    selectIsCompact,
-    selectPagerHeight,
-    selectPagesCount,
+  selectAppHeight,
+  selectIsCompact,
+  selectPagesCount,
 } from "../../store/layoutSlice";
 import {
-    gotoAya,
-    gotoPage,
-    gotoPart,
-    gotoSura,
-    selectStartSelection,
+  gotoAya,
+  gotoPage,
+  gotoPart,
+  gotoSura,
+  selectStartSelection,
 } from "../../store/navSlice";
 import { closePopup } from "../../store/uiSlice";
 import PartsPie from "../PartsPie";

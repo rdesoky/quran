@@ -332,20 +332,20 @@ $selectionBgColorDark: rgb(38, 93, 138);
 }
 
 .page-loader-image {
-    opacity: 0.2;
+    opacity: 0.1;
     animation: animateOpacity 3s ease-in-out infinite;
 }
 
 @keyframes animateOpacity {
     25% {
-        opacity: 0.1;
+        opacity: 0.3;
     }
 
     50% {
-        opacity: 0.2;
+        opacity: 0.1;
     }
 
     75% {
-        opacity: 0.1;
+        opacity: 0.3;
     }
 }

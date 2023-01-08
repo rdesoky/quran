@@ -1,14 +1,22 @@
-import { useContext, useEffect } from "react";
-import useSuraNames from "../hooks/useSuraNames";
+import { useContext, useEffect, useState } from "react";
 import { AppRefs } from "../RefsProvider";
+import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
+import { selectLang } from "../store/settingsSlice";
 
 export default function SuraNames() {
-    const appRefs = useContext(AppRefs);
-    const suraNames = useSuraNames();
+  const appRefs = useContext(AppRefs);
+  const [suraNames, setSuraNames] = useState([]);
+  const intl = useIntl();
+  const lang = useSelector(selectLang);
 
-    useEffect(() => {
-        appRefs.add("suraNames", { suraNames });
-    }, [appRefs, suraNames]);
+  useEffect(() => {
+    setSuraNames(intl.formatMessage({ id: "sura_names" }).split(","));
+  }, [intl, lang]);
 
-    return null;
+  useEffect(() => {
+    appRefs.add("suraNames", { suraNames });
+  }, [appRefs, suraNames]);
+
+  return null;
 }

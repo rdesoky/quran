@@ -19,930 +19,1028 @@ $PageThumbColor: rgba(170, 170, 170, 0.25);
 //     // outline: solid 2px rgb(61, 145, 255);
 // }
 #root {
-    background-color: $appBgColor;
+  background-color: $appBgColor;
 }
 
 .App {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    /* text-align: center; */
-    background-color: $appBgColor;
-    &.DarkTheme {
-        background-color: $appBgColorDk;
-    }
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  /* text-align: center; */
+  background-color: $appBgColor;
 
-    // [dir="rtl"] & {
-    //     direction: rtl;
-    // }
+  &.DarkTheme {
+    background-color: $appBgColorDk;
+  }
+
+  // [dir="rtl"] & {
+  //     direction: rtl;
+  // }
 }
 
 .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 40vmin;
-    pointer-events: none;
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
 }
 
 .App-header {
-    background-color: $appHeaderBgColor;
-    // background-color: rgba(0, 0, 0, 0.6);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  background-color: $appHeaderBgColor;
+  // background-color: rgba(0, 0, 0, 0.6);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
 .App-link {
-    color: #61dafb;
+  color: #61dafb;
 }
 
 button,
 .LinkButton {
-    font-family: Arial;
-    transition: background-color 0.3s, top 0.5s;
-    border: none;
-    border-width: 0;
-    background-color: transparent;
-    color: #ddd;
-    pointer-events: all;
-    text-align: center;
-    .actions & {
-        text-align: center !important;
-    }
-    &.btn {
-        padding: 0 10px;
-        background-color: #555;
-        border-radius: 4px;
-        padding: 5px 10px;
-        margin: 5px 0;
-        &:hover {
-            background-color: #666;
-        }
-    }
-    &:hover {
-        color: white !important;
-        background: #666;
-    }
+  font-family: Arial;
+  transition: background-color 0.3s, top 0.5s;
+  border: none;
+  border-width: 0;
+  background-color: transparent;
+  color: #ddd;
+  pointer-events: all;
+  text-align: center;
 
-    * {
-        pointer-events: none;
+  .actions & {
+    text-align: center !important;
+  }
+
+  &.btn {
+    padding: 0 10px;
+    background-color: #555;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin: 5px 0;
+
+    &:hover {
+      background-color: #666;
     }
-    a {
-        pointer-events: fill;
-    }
+  }
+
+  &:hover {
+    color: white !important;
+    background: #666;
+  }
+
+  * {
+    pointer-events: none;
+  }
+
+  a {
+    pointer-events: fill;
+  }
 }
 
 .LinkButton {
-    padding: 0 !important;
-    a {
-        display: block;
-        padding: 8px;
-    }
+  padding: 0 !important;
+
+  a {
+    display: block;
+    padding: 8px;
+  }
 }
 
 .ButtonsBar {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    align-items: stretch;
-    padding: 5px 4px;
-    flex-grow: 1;
-    min-height: 25px;
-    button,
-    .CommandButton {
-        margin: 0 2px;
-        padding: 0;
-        border-radius: 6px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        span {
-            line-height: 16px;
-        }
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 5px 4px;
+  flex-grow: 1;
+  min-height: 25px;
 
-        flex-grow: 1;
-        font-size: 13px;
-        svg {
-            font-size: 18px;
-        }
-        background: #444;
-        &:hover {
-            color: white;
-            background: #666;
-        }
+  button,
+  .CommandButton {
+    margin: 0 2px;
+    padding: 0;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      line-height: 16px;
     }
+
+    flex-grow: 1;
+    font-size: 13px;
+
+    svg {
+      font-size: 18px;
+    }
+
+    background: #444;
+
+    &:hover {
+      color: white;
+      background: #666;
+    }
+  }
 }
 
 .ActionsBar {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
-    > span {
-        line-height: 30px;
-        padding: 0 3px 0 0;
-        [lang="ar"] & {
-            padding: 0 0 0 3px;
-        }
-        &:first-child::after {
-            content: ":";
-        }
+  > span {
+    line-height: 30px;
+    padding: 0 3px 0 0;
+
+    [lang="ar"] & {
+      padding: 0 0 0 3px;
     }
-    button {
-        li & {
-            background-color: rgba(255, 255, 255, 0.2);
-            width: inherit;
-            margin: 0 2px 2px 0;
-        }
-        background-color: #444;
+
+    &:first-child::after {
+      content: ":";
     }
+  }
+
+  button {
+    li & {
+      background-color: rgba(255, 255, 255, 0.2);
+      width: inherit;
+      margin: 0 2px 2px 0;
+    }
+
+    background-color: #444;
+  }
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 hr {
-    border-style: solid;
-    border-width: 1px 0;
-    border-color: #222 #888 #888 #222;
+  border-style: solid;
+  border-width: 1px 0;
+  border-color: #222 #888 #888 #222;
 }
 
 .iBlock {
-    display: inline-block;
-    margin: 0 5px;
+  display: inline-block;
+  margin: 0 5px;
 }
 
 .flipHorizontal {
-    transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 // .VerseInfoFrame {
 // }
 .VerseInfo {
-    float: left;
-    .PopupBody & {
-        margin: 0 10px 10px 0;
-    }
+  float: left;
+
+  .PopupBody & {
+    margin: 0 10px 10px 0;
+  }
+
+  display: flex;
+  min-width: 60px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+
+  .VerseInfoList {
+    font-size: 13px;
     display: flex;
-    min-width: 60px;
     flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    .VerseInfoList {
-        font-size: 13px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    button {
-        min-height: 25px;
-        line-height: 14px;
-    }
+    align-items: center;
+  }
+
+  button {
+    min-height: 25px;
+    line-height: 14px;
+  }
 }
 
 .VerseText {
-    margin: 0;
-    // line-height: 22px;
-    color: rgb(207, 207, 0);
-    text-overflow: ellipsis;
-    overflow: hidden;
-    direction: rtl;
-    text-align: right;
+  margin: 0;
+  // line-height: 22px;
+  color: rgb(207, 207, 0);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  direction: rtl;
+  text-align: right;
 }
+
 .TypedVerseText {
-    direction: rtl;
+  direction: rtl;
 }
 
 .circle-background,
 .circle-progress {
-    fill: none;
+  fill: none;
 }
 
 .circle-background {
-    stroke: #444;
+  stroke: #444;
 }
 
 .circle-progress {
-    stroke: yellowgreen;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  stroke: yellowgreen;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .circle-text {
-    font-size: 10px;
-    font-weight: bold;
-    fill: yellowgreen;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  fill: yellowgreen;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .CommandButton {
-    display: flex;
-    // flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px !important;
-    // height: 50px !important;
-    min-height: 40px;
-    min-width: 50px;
-    padding: 0;
-    pointer-events: fill;
-    span {
-        svg {
-            width: 50px;
-        }
-        img {
-            width: 40px;
-        }
+  display: flex;
+  // flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px !important;
+  // height: 50px !important;
+  min-height: 40px;
+  min-width: 50px;
+  padding: 0;
+  pointer-events: fill;
+
+  span {
+    svg {
+      width: 50px;
     }
-    .CommandLabel {
-        flex-grow: 1;
+
+    img {
+      width: 40px;
     }
-    .Sidebar & {
-        justify-content: initial;
-    }
-    &.selected {
-        background-color: #444;
-    }
+  }
+
+  .CommandLabel {
+    flex-grow: 1;
+  }
+
+  .Sidebar & {
+    justify-content: initial;
+  }
+
+  &.selected {
+    background-color: #444;
+  }
 }
 
 .NoHifz {
-    // background-color: rgba(0, 117, 195, 0.219);
-    border-color: rgb(0, 109, 182);
+  // background-color: rgba(0, 117, 195, 0.219);
+  border-color: rgb(0, 109, 182);
 }
 
 .GoodHifz {
-    // border-color: $goodHifzBg !important;
-    background-color: $goodHifzBg;
-    border-color: rgb(0, 90, 0) !important;
+  // border-color: $goodHifzBg !important;
+  background-color: $goodHifzBg;
+  border-color: rgb(0, 90, 0) !important;
 }
+
 .FairHifz {
-    // border-color: $fairHifzBg !important;
-    background-color: $fairHifzBg;
-    border-color: rgb(121, 86, 0) !important;
+  // border-color: $fairHifzBg !important;
+  background-color: $fairHifzBg;
+  border-color: rgb(121, 86, 0) !important;
 }
+
 .WeakHifz {
-    // border-color: $weakHifzBg !important;
-    background-color: $weakHifzBg;
-    border-color: brown !important;
+  // border-color: $weakHifzBg !important;
+  background-color: $weakHifzBg;
+  border-color: brown !important;
 }
 
 .HifzRangeRow {
-    margin-bottom: 14px;
-    border: solid 1px #444;
-    border-radius: 5px;
+  margin-bottom: 14px;
+  border: solid 1px #444;
+  border-radius: 5px;
 
-    // border: solid 1px #444;
-    // min-width: 280px;
-    // width: 100%;
+  // border: solid 1px #444;
+  // min-width: 280px;
+  // width: 100%;
 
-    .MessageBox & {
-        min-width: 280px;
-    }
+  .MessageBox & {
+    min-width: 280px;
+  }
 
-    &:last-child {
-        margin-bottom: 0;
-    }
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-    > .HifzRangeBody {
-        padding: 0 !important;
-        border-radius: 4px;
-        width: 100%;
-        font-size: 12px;
-        text-align: inherit;
-        height: $hifzRowHeight;
-        background-color: #222;
-        &:hover {
-            background-color: #111 !important;
-        }
-        > div {
-            line-height: $chartHeight;
-            margin: 0 5px;
-        }
+  > .HifzRangeBody {
+    padding: 0 !important;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 12px;
+    text-align: inherit;
+    height: $hifzRowHeight;
+    background-color: #222;
+
+    &:hover {
+      background-color: #111 !important;
     }
 
-    .ActionsBar {
-        button {
-            background-color: #444;
-            border-radius: 5px;
-        }
+    > div {
+      line-height: $chartHeight;
+      margin: 0 5px;
     }
+  }
 
-    .AgeInfo {
-        float: right;
-        // [dir="rtl"] & {
-        //     float: left;
-        // }
+  .ActionsBar {
+    button {
+      background-color: #444;
+      border-radius: 5px;
     }
-    .RangeInfo {
-        font-weight: bold;
+  }
+
+  .AgeInfo {
+    float: right;
+    // [dir="rtl"] & {
+    //     float: left;
+    // }
+  }
+
+  .RangeInfo {
+    font-weight: bold;
+  }
+
+  .ActionsBar {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    height: $chartHeight;
+
+    button {
+      height: 100%;
+      min-width: $chartHeight;
+      text-align: center;
+      margin: 0 1px;
     }
-    .ActionsBar {
-        position: absolute;
-        bottom: 0px;
-        left: 0;
-        height: $chartHeight;
-        button {
-            height: 100%;
-            min-width: $chartHeight;
-            text-align: center;
-            margin: 0 1px;
-        }
-    }
-    .RangeText {
-        height: 30px;
-        // display: flex;
-        // align-items: center;
-    }
+  }
+
+  .RangeText {
+    height: 30px;
+    // display: flex;
+    // align-items: center;
+  }
 }
 
 .ContentFrame {
-    padding: 15px 10px;
+  padding: 15px 10px;
 }
 
 .FootNote {
-    border-top: solid 1px white;
-    padding-top: 5px;
-    margin-top: 15px;
-    font-size: smaller;
-    clear: both;
+  border-top: solid 1px white;
+  padding-top: 5px;
+  margin-top: 15px;
+  font-size: smaller;
+  clear: both;
 }
 
 .HiddenScroller {
-    overflow: -moz-scrollbars-none;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-        width: 0 !important;
-    }
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
 }
 
 .SuraHifzChart {
+  position: absolute;
+  // top: 0;
+  // left: 0;
+  // height: 100%;
+  // width: 100%;
+  height: $chartHeight;
+  width: 100%;
+  border: solid 1px $PageThumbColor;
+  box-sizing: border-box;
+  border-radius: 5px;
+  // .HifzRangeRow & {
+  //     height: 46%;
+  // }
+  pointer-events: none;
+
+  .SuraRange {
     position: absolute;
-    // top: 0;
-    // left: 0;
-    // height: 100%;
-    // width: 100%;
-    height: $chartHeight;
-    width: 100%;
-    border: solid 1px $PageThumbColor;
+    height: 100%;
+    border-style: solid;
+    border-width: 0;
     box-sizing: border-box;
-    border-radius: 5px;
-    // .HifzRangeRow & {
-    //     height: 46%;
-    // }
+    border-radius: 4px;
+    // background-color: $fairHifzBg;
     pointer-events: none;
-    .SuraRange {
-        position: absolute;
-        height: 100%;
-        border-style: solid;
-        border-width: 0;
-        box-sizing: border-box;
-        border-radius: 4px;
-        // background-color: $fairHifzBg;
-        pointer-events: none;
-        &.active {
-            border-width: 1px;
-        }
+
+    &.active {
+      border-width: 1px;
     }
-    .HifzRanges {
-        width: 100%;
-        height: 100%;
-        position: absolute;
+  }
+
+  .HifzRanges {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .PageThumbs {
+    display: flex;
+    direction: rtl;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .PageThumb {
+    // position: absolute;
+    flex-grow: 1;
+    height: 100%;
+    border-style: solid;
+    border-color: $PageThumbColor;
+    border-width: 0 0 0 1px;
+    background-position-x: 2px;
+    box-sizing: border-box;
+    pointer-events: fill;
+
+    &.ActivePage {
+      border-radius: 3px;
+      background-color: $PageThumbColor;
     }
-    .PageThumbs {
-        display: flex;
-        direction: rtl;
-        width: 100%;
-        height: 100%;
-        position: absolute;
+
+    &:hover {
+      border-radius: 3px;
+      background-color: rgba(255, 255, 255, 0.493);
     }
-    .PageThumb {
-        // position: absolute;
-        flex-grow: 1;
-        height: 100%;
-        border-style: solid;
-        border-color: $PageThumbColor;
-        border-width: 0 0 0 1px;
-        background-position-x: 2px;
-        box-sizing: border-box;
-        pointer-events: fill;
-        &.ActivePage {
-            border-radius: 3px;
-            background-color: $PageThumbColor;
-        }
-        &:hover {
-            border-radius: 3px;
-            background-color: rgba(255, 255, 255, 0.493);
-        }
-        &:last-child {
-            border-width: 0;
-        }
+
+    &:last-child {
+      border-width: 0;
     }
+  }
 }
 
 .UserIcon {
-    // width: 50px;
-    // height: 50px;
-    // // font-size: 30px !important;
-    // // margin: 10px;
-    .ButtonsBar & {
-        // width: 25px;
-        // height: 25px;
-        font-size: 50px;
-        margin: 0 10px;
+  // width: 50px;
+  // height: 50px;
+  // // font-size: 30px !important;
+  // // margin: 10px;
+  .ButtonsBar & {
+    // width: 25px;
+    // height: 25px;
+    font-size: 50px;
+    margin: 0 10px;
+  }
+
+  .PopupBody & {
+    svg {
+      height: 75px;
     }
-    .PopupBody & {
-        svg {
-            height: 75px;
-        }
-    }
+  }
 }
 
 .UserImage {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    margin: 10px;
-    .Sidebar & {
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-    }
-    .PopupBody & {
-        width: 70px;
-        height: 70px;
-        border-radius: 35px;
-    }
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin: 10px;
+
+  .Sidebar & {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+  }
+
+  .PopupBody & {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+  }
 }
 
 .SuraIndexCell,
 .PartIndexCell {
-    margin: 2px 0;
-    display: flex;
-    > * {
-        border-radius: 5px;
-        height: $chartHeight;
-    }
+  margin: 2px 0;
+  display: flex;
+
+  > * {
+    border-radius: 5px;
+    height: $chartHeight;
+  }
 }
 
 .recharts-wrapper {
-    direction: ltr;
-    text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 12px;
-    // margin: 10px 20px;
+  direction: ltr;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12px;
+  // margin: 10px 20px;
 }
 
 .VCentered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
 .VACentered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
 .HCentered {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
 }
+
 .HACentered {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
+
 .VEnd {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .RadioGroup {
-    label {
-        display: flex;
-        align-items: center;
-        min-height: 30px;
-        span {
-            display: inline-block;
-        }
-        input {
-            margin: 0 10px;
-        }
-        &:hover {
-            background-color: #444;
-        }
+  label {
+    display: flex;
+    align-items: center;
+    min-height: 30px;
+
+    span {
+      display: inline-block;
     }
+
+    input {
+      margin: 0 10px;
+    }
+
+    &:hover {
+      background-color: #444;
+    }
+  }
 }
 
 .ToastMessage {
-    z-index: 5;
-    position: fixed;
-    max-width: 200px;
-    border-radius: 10px;
-    background-color: #000000c2;
-    color: yellow;
-    display: none;
-    align-items: center;
-    padding: 20px;
-    left: 50%;
-    top: 80%;
-    transform: translateY(-50%) translateX(-50%);
-    border: solid 3px rgba(255, 255, 255, 0.493);
-    cursor: default;
-    text-align: center;
-    &.ShowToast {
-        display: flex;
-        animation: ShowToast 0.4s;
-    }
-    &.HideToast {
-        animation: HideToast 0.5s;
-        display: flex;
-    }
-    [lang="ar"] & {
-        direction: rtl;
-    }
+  z-index: 5;
+  position: fixed;
+  max-width: 200px;
+  border-radius: 10px;
+  background-color: #000000c2;
+  color: yellow;
+  display: none;
+  align-items: center;
+  padding: 20px;
+  left: 50%;
+  top: 80%;
+  transform: translateY(-50%) translateX(-50%);
+  border: solid 3px rgba(255, 255, 255, 0.493);
+  cursor: default;
+  text-align: center;
+
+  &.ShowToast {
+    display: flex;
+    animation: ShowToast 0.4s;
+  }
+
+  &.HideToast {
+    animation: HideToast 0.5s;
+    display: flex;
+  }
+
+  [lang="ar"] & {
+    direction: rtl;
+  }
 }
 
 @keyframes ShowToast {
-    from {
-        top: 100%;
-    }
-    to {
-        top: 80%;
-    }
+  from {
+    top: 100%;
+  }
+  to {
+    top: 80%;
+  }
 }
 
 @keyframes HideToast {
-    from {
-        top: 80%;
-    }
-    to {
-        top: 100%;
-        transform: translateX(-50%) translateY(0);
-    }
+  from {
+    top: 80%;
+  }
+  to {
+    top: 100%;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .IconButton {
-    position: relative;
-    font-weight: bold;
-    > * {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-    svg {
-        font-size: 22px;
-        opacity: 0.3;
-    }
-}
+  position: relative;
+  font-weight: bold;
 
-.ContextPopupBlocker {
-    position: fixed;
-    z-index: 3;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-
-    .PopupPointer {
-        position: absolute;
-        width: 17px;
-        height: 17px;
-        border-style: solid;
-        border-color: #aaa;
-        border-width: 1px 0 0 1px;
-        background-color: #333;
-        transform: translateY(33%) translateX(-50%) rotate(45deg);
-        animation: FadeIn 0.5s;
-        &.DownPointer {
-            transform: translateY(-36%) translateX(-55%) rotate(45deg);
-            border-width: 0 1px 1px 0;
-        }
-        .DarkTheme & {
-            background-color: #444;
-        }
-    }
-
-    .ContextPopup {
-        position: absolute;
-        color: white;
-        background-color: #333;
-        transform: translateX(-50%);
-        // min-width: 200px;
-        max-width: 400px;
-        box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
-        animation: FadeIn 0.4s;
-        border: solid 1px #aaa;
-        border-radius: 4px;
-        .DarkTheme & {
-            background-color: #444;
-        }
-        display: flex;
-        flex-direction: column;
-        padding: 5px;
-        .ContextHeader {
-            padding: 5px;
-        }
-        .ContextBody {
-            overflow-y: auto;
-            overflow-x: hidden;
-            flex-grow: 1;
-            padding: 5px;
-        }
-        [lang="ar"] & {
-            direction: rtl;
-        }
-    }
-}
-
-@keyframes FadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes FadeInToCenter {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(0);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-50%);
-    }
-}
-
-.MessageBox {
-    position: fixed;
-    z-index: 4;
-    border: solid 1px #aaa;
-    border-radius: 4px;
+  > * {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    background-color: #222;
-    color: white;
-    min-width: 200px;
-    box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
-    animation: FadeInToCenter 0.4s;
-    .MessageBoxTitle {
-        background-color: #333;
-        height: 30px;
-        line-height: 30px;
-        border-radius: 4px 4px 0 0;
-        padding: 0 40px 0 10px;
-        [lang="ar"] & {
-            padding: 0 10px 0 40px;
-        }
-    }
-    .MessageBoxContent {
-        padding: 15px;
-        // min-height: 40px;
-        // text-align: center;
-    }
-    .CloseButton {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: auto;
-        [lang="ar"] & {
-            left: 0;
-            right: auto;
-        }
+  }
 
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        color: white;
-        font-size: 20px;
+  svg {
+    font-size: 22px;
+    opacity: 0.3;
+  }
+}
+
+.ContextPopupBlocker {
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+
+  .PopupPointer {
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    border-style: solid;
+    border-color: #aaa;
+    border-width: 1px 0 0 1px;
+    background-color: #333;
+    transform: translateY(33%) translateX(-50%) rotate(45deg);
+    animation: FadeIn 0.5s;
+
+    &.DownPointer {
+      transform: translateY(-36%) translateX(-55%) rotate(45deg);
+      border-width: 0 1px 1px 0;
     }
+
+    .DarkTheme & {
+      background-color: #444;
+    }
+  }
+
+  .ContextPopup {
+    position: absolute;
+    color: white;
+    background-color: #333;
+    transform: translateX(-50%);
+    // min-width: 200px;
+    max-width: 400px;
+    box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
+    animation: FadeIn 0.4s;
+    border: solid 1px #aaa;
+    border-radius: 4px;
+
+    .DarkTheme & {
+      background-color: #444;
+    }
+
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+
+    .ContextHeader {
+      padding: 5px;
+    }
+
+    .ContextBody {
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-grow: 1;
+      padding: 5px;
+    }
+
     [lang="ar"] & {
-        direction: rtl;
+      direction: rtl;
     }
+  }
+}
+
+@keyframes FadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes FadeInToCenter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.MessageBox {
+  position: fixed;
+  z-index: 4;
+  border: solid 1px #aaa;
+  border-radius: 4px;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #222;
+  color: white;
+  min-width: 320px;
+  max-width: 95%;
+  box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
+  animation: FadeInToCenter 0.4s;
+
+  .MessageBoxTitle {
+    background-color: #333;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px 4px 0 0;
+    padding: 0 40px 0 10px;
+
+    [lang="ar"] & {
+      padding: 0 10px 0 40px;
+    }
+  }
+
+  .MessageBoxContent {
+    padding: 15px;
+    // min-height: 40px;
+    // text-align: center;
+  }
+
+  .CloseButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+
+    [lang="ar"] & {
+      left: 0;
+      right: auto;
+    }
+
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    color: white;
+    font-size: 20px;
+  }
+
+  [lang="ar"] & {
+    direction: rtl;
+  }
 }
 
 .IconsBar {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .BigToggler {
-    float: right;
-    margin: 0 0 0 10px;
-    button {
-        padding: 10px 5px;
-    }
-    svg {
-        font-size: 30px;
-    }
+  float: right;
+  margin: 0 0 0 10px;
+
+  button {
+    padding: 10px 5px;
+  }
+
+  svg {
+    font-size: 30px;
+  }
 }
 
 .SpreadSheet,
 .FlowingList {
-    list-style: none;
-    margin: 0;
-    padding-inline-start: 0;
-    margin-block-start: 0;
-    margin-block-end: 0;
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
 
-    li {
-        list-style: none;
-        display: inline-block;
-        width: 100%;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        position: relative;
-        > button {
-            width: 100%;
-        }
-        button,
-        .LinkButton {
-            padding: 8px;
-            background-color: transparent;
-            text-align: inherit;
-            &:hover {
-                background-color: #666;
-            }
-            &.active {
-                background-color: #111;
-                .DarkTheme & {
-                    background-color: #333;
-                }
-            }
-        }
-        .actions {
-            position: absolute;
-            top: 0;
-            right: 0;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            height: $chartHeight;
-            min-width: 25px;
-            pointer-events: none;
-            [lang="ar"] & {
-                left: 0;
-                right: auto;
-            }
-            button {
-                width: 30px;
-                text-align: center;
-                color: white;
-                svg {
-                    font-size: 15px;
-                }
-            }
-        }
+  li {
+    list-style: none;
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+
+    > button {
+      width: 100%;
     }
+
+    button,
+    .LinkButton {
+      padding: 8px;
+      background-color: transparent;
+      text-align: inherit;
+
+      &:hover {
+        background-color: #666;
+      }
+
+      &.active {
+        background-color: #111;
+
+        .DarkTheme & {
+          background-color: #333;
+        }
+      }
+    }
+
+    .actions {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      height: $chartHeight;
+      min-width: 25px;
+      pointer-events: none;
+
+      [lang="ar"] & {
+        left: 0;
+        right: auto;
+      }
+
+      button {
+        width: 30px;
+        text-align: center;
+        color: white;
+
+        svg {
+          font-size: 15px;
+        }
+      }
+    }
+  }
 }
 
 .FlowingList {
-    li {
-        display: block;
-        width: auto;
-    }
+  li {
+    display: block;
+    width: auto;
+  }
 }
 
 .blinking {
-    animation: smooth-blink 3s linear infinite;
+  animation: smooth-blink 3s linear infinite;
 }
 
 @keyframes blink {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 0;
-    }
-    50.01% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  50.01% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes smooth-blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 li.BookmarkRow {
-    > button {
-        width: 100%;
-        display: block;
-        line-height: 22px;
-    }
+  > button {
+    width: 100%;
+    display: block;
+    line-height: 22px;
+  }
 }
 
 .SuraNavigator {
-    display: flex;
-    direction: rtl;
-    button {
-        flex-grow: 1;
-        font-size: 16px;
-        padding: 5px;
-    }
+  display: flex;
+  direction: rtl;
+
+  button {
+    flex-grow: 1;
+    font-size: 16px;
+    padding: 5px;
+  }
 }
 
 .SuraContextHeader {
-    height: $chartHeight;
-    position: relative;
+  height: $chartHeight;
+  position: relative;
 }
 
 hr {
-    clear: both;
+  clear: both;
 }
 
 .InputRow {
-    display: flex;
-    padding: 6px 4px;
-    background-color: #333;
-    &:hover {
-        background-color: #555;
-    }
-    label {
-        flex-grow: 1;
-        margin: 0 5px;
-    }
+  display: flex;
+  padding: 6px 4px;
+  background-color: #333;
+
+  &:hover {
+    background-color: #555;
+  }
+
+  label {
+    flex-grow: 1;
+    margin: 0 5px;
+  }
 }
 
 .partPie {
-    stroke: #a7b9e4;
-    &.active {
-        stroke: rgb(216, 216, 216) !important;
-        &:hover {
-            stroke: white !important;
-        }
-    }
-    &.selected {
-        + .piePartNumber {
-            font-size: 14px;
-            fill: green;
-            font-weight: bold;
-        }
-    }
+  stroke: #a7b9e4;
+
+  &.active {
+    stroke: rgb(216, 216, 216) !important;
+
     &:hover {
-        cursor: pointer;
-        stroke: rgb(220, 220, 220) !important;
-        // stroke-width: 70px !important;
+      stroke: white !important;
     }
-    & + .piePartNumber {
-        font-size: 12px;
-        // fill: white;
-        pointer-events: none;
-        transition: font-weight 0.2s;
+  }
+
+  &.selected {
+    + .piePartNumber {
+      font-size: 14px;
+      fill: green;
+      font-weight: bold;
     }
+  }
+
+  &:hover {
+    cursor: pointer;
+    stroke: rgb(220, 220, 220) !important;
+    // stroke-width: 70px !important;
+  }
+
+  & + .piePartNumber {
+    font-size: 12px;
+    // fill: white;
+    pointer-events: none;
+    transition: font-weight 0.2s;
+  }
 }
 
 .hifzPieBackground {
-    fill: #434343;
-    stroke-width: 0;
-    .DarkTheme & {
-        fill: #333;
-    }
+  fill: #434343;
+  stroke-width: 0;
+
+  .DarkTheme & {
+    fill: #333;
+  }
 }
+
 .pieHifzRange {
-    &.GoodHifz {
-        stroke: rgb(70, 142, 58);
-    }
-    &.FairHifz {
-        stroke: #be9518;
-    }
-    &.WeakHifz {
-        stroke: rgb(155, 82, 82);
-    }
-    &:hover {
-        cursor: pointer;
-        stroke-width: 30px !important;
-    }
+  &.GoodHifz {
+    stroke: rgb(70, 142, 58);
+  }
+
+  &.FairHifz {
+    stroke: #be9518;
+  }
+
+  &.WeakHifz {
+    stroke: rgb(155, 82, 82);
+  }
+
+  &:hover {
+    cursor: pointer;
+    stroke-width: 30px !important;
+  }
 }
+
 // .partsPieCenter {
 //     &:hover {
 //         fill: rgb(220, 220, 220) !important;
@@ -950,32 +1048,32 @@ hr {
 // }
 
 .hezbQuarterPie {
-    stroke: rgb(216, 216, 216);
+  stroke: rgb(216, 216, 216);
 
-    // &.even {
-    //     stroke: rgb(239, 239, 239);
-    // }
-    &:hover {
-        cursor: pointer;
-        stroke: white !important;
-        // stroke-width: 50px !important;
-        + .pieHezbNumber {
-            font-weight: bold;
-        }
+  // &.even {
+  //     stroke: rgb(239, 239, 239);
+  // }
+  &:hover {
+    cursor: pointer;
+    stroke: white !important;
+    // stroke-width: 50px !important;
+    + .pieHezbNumber {
+      font-weight: bold;
     }
+  }
 
-    &.selected {
-        + .pieHezbNumber {
-            fill: green !important;
-            font-weight: bold;
-        }
+  &.selected {
+    + .pieHezbNumber {
+      fill: green !important;
+      font-weight: bold;
     }
+  }
 }
 
 .pieHezbNumber {
-    font-size: 9px;
+  font-size: 9px;
 }
 
 svg text {
-    pointer-events: none;
+  pointer-events: none;
 }

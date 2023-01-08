@@ -7,15 +7,11 @@ import { useHistory } from "react-router-dom";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { ayaIdInfo } from "../../services/QData";
 import { copy2Clipboard } from "../../services/utils";
+import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import {
-    selectAppHeight,
-    selectIsNarrow,
-    selectPagerHeight,
-} from "../../store/layoutSlice";
-import {
-    gotoAya,
-    selectMaskStart,
-    selectStartSelection,
+  gotoAya,
+  selectMaskStart,
+  selectStartSelection,
 } from "../../store/navSlice";
 import { showToast } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
