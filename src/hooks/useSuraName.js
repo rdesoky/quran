@@ -1,15 +1,29 @@
-import { useContext, useEffect, useState } from "react";
-import { AppRefs } from "../RefsProvider";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectStartSelection } from "../store/navSlice";
+import { ayaIdInfo, TOTAL_SURAS } from "../services/QData";
+import useSuraNames from "./useSuraNames";
 
-export default function useSuraName(index) {
-    const ref = useContext(AppRefs).get("suraNames");
-    const [suraName, setSuraName] = useState("");
+export default function useSuraName(index = -1) {
+  const [suraIndex, setSuraIndex] = useState(-1);
+  const selectedAya = useSelector(selectStartSelection);
+  const suraNames = useSuraNames();
+  const [suraName, setSuraName] = useState("");
 
-    useEffect(() => {
-        if (ref?.suraNames?.length > index) {
-            setSuraName(ref.suraNames?.[index]);
-        }
-    }, [index, ref]);
+  useEffect(() => {
+    if (index === -1) {
+      const ayaInfo = ayaIdInfo(selectedAya);
+      setSuraIndex(ayaInfo.sura);
+    } else if (index < TOTAL_SURAS) {
+      setSuraIndex(index);
+    }
+  }, [selectedAya, index]);
 
-    return suraName;
+  useEffect(() => {
+    if (suraIndex !== -1) {
+      setSuraName(suraNames?.[suraIndex]);
+    }
+  }, [suraIndex, suraNames]);
+
+  return suraName;
 }

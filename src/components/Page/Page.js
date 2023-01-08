@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ayaID } from "../../services/QData";
 import { downloadPageImage } from "../../services/utils";
 import {
-    selectPageHeight,
-    selectPageMargin,
-    selectPagesCount,
-    selectPageWidth,
+  selectPageHeight,
+  selectPageMargin,
+  selectPagesCount,
+  selectPageWidth,
 } from "../../store/layoutSlice";
 import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
 import { HifzSegments } from "../HifzSegments";
-import Spinner from "../Spinner/Spinner";
 import "./Page.scss";
 import VerseLayout from "./VerseLayout";
 

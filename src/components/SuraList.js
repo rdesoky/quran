@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useDeferredValue, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo } from "../services/QData";
@@ -8,43 +8,44 @@ import { SimpleSuraIndexCell } from "./SimpleSuraCell";
 import { SuraIndexCell } from "./SuraIndexCell";
 
 export const SuraList = ({ filter, simple, trigger = "chapters_index" }) => {
-    const popupWidth = useSelector(selectPopupWidth);
-    const selectStart = useSelector(selectStartSelection);
-    const [actionsIndex, setActionsIndex] = useState(0);
+  const popupWidth = useSelector(selectPopupWidth);
+  const selectStart = useSelector(selectStartSelection);
+  const [actionsIndex, setActionsIndex] = useState(0);
+  const selectedAya = useDeferredValue(selectStart);
 
-    useEffect(() => {
-        analytics.setTrigger(trigger);
-    }, [trigger]);
+  useEffect(() => {
+    analytics.setTrigger(trigger);
+  }, [trigger]);
 
-    useEffect(() => {
-        const currentSura = ayaIdInfo(selectStart).sura;
-        setActionsIndex(currentSura);
-    }, [selectStart]);
+  useEffect(() => {
+    const currentSura = ayaIdInfo(selectedAya).sura;
+    setActionsIndex(currentSura);
+  }, [selectedAya]);
 
-    const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
+  const CellComponent = simple ? SimpleSuraIndexCell : SuraIndexCell;
 
-    return (
-        <ul
-            className="SpreadSheet"
-            style={{
-                columnCount: Math.floor((popupWidth - 50) / 180), //-50px margin
-            }}
-        >
-            {Array(114)
-                .fill(0)
-                .map((zero, suraIndex) => {
-                    return (
-                        <CellComponent
-                            key={suraIndex}
-                            sura={suraIndex}
-                            filter={filter}
-                            selectSura={setActionsIndex}
-                            selectedSura={actionsIndex}
-                            simple={simple}
-                            trigger={trigger}
-                        />
-                    );
-                })}
-        </ul>
-    );
+  return (
+    <ul
+      className="SpreadSheet"
+      style={{
+        columnCount: Math.floor((popupWidth - 50) / 180), //-50px margin
+      }}
+    >
+      {Array(114)
+        .fill(0)
+        .map((zero, suraIndex) => {
+          return (
+            <CellComponent
+              key={suraIndex}
+              sura={suraIndex}
+              filter={filter}
+              selectSura={setActionsIndex}
+              selectedSura={actionsIndex}
+              simple={simple}
+              trigger={trigger}
+            />
+          );
+        })}
+    </ul>
+  );
 };

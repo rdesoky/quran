@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/Analytics";
