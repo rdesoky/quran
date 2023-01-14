@@ -15,6 +15,7 @@ import { greaterOf, lesserOf } from "../services/utils";
 import {
     selectActivePage,
     selectShownPages,
+    setActivePageIndex,
     sliceName as layoutSliceName,
 } from "./layoutSlice";
 
@@ -117,7 +118,10 @@ export const startMask = (history) => (dispatch, getState) => {
         dispatch(
             gotoAya(history, firstVisibleAya, { sel: true, replace: false })
         );
+    } else {
+        dispatch(setActivePageIndex(selectedAyaPage));
     }
+
     dispatch(showMask());
 };
 
@@ -142,6 +146,7 @@ export const gotoPage =
         const selectPageAya = () => {
             if (select) {
                 const verse = getPageFirstAyaId(pageIndex);
+                dispatch(setActivePageIndex(pageIndex));
                 dispatch(selectAya(verse));
             }
         };
