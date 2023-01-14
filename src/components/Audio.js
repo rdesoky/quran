@@ -63,7 +63,7 @@ export function Audio() {
             );
         if (playingAya !== -1) {
             const ayaInfo = ayaIdInfo(playingAya);
-            docTitle = `${intl.formatMessage({ id: "play" })}: ${getSuraName(
+            docTitle = `${intl.formatMessage({ id: "start" })}: ${getSuraName(
                 intl,
                 ayaInfo.sura
             )} (${ayaInfo.aya + 1}) - ${docTitle}`;

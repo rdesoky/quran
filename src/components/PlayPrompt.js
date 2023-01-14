@@ -119,6 +119,19 @@ export default function PlayPrompt({ trigger }) {
 
   return (
     <div>
+      <div>
+        <select
+          value={reciter}
+          onChange={onSelectReciter}
+          style={{ width: "100%", marginBottom: 10 }}
+        >
+          {reciters.map((r) => (
+            <option value={r} key={r}>
+              <String id={"r." + r} />
+            </option>
+          ))}
+        </select>
+      </div>
       <div
         style={{
           float: lang === "ar" ? "left" : "right",
@@ -131,15 +144,6 @@ export default function PlayPrompt({ trigger }) {
           src={process.env.PUBLIC_URL + "/images/" + reciter + ".jpg"}
           alt="reciter"
         />
-        <div>
-          <select value={reciter} onChange={onSelectReciter}>
-            {reciters.map((r) => (
-              <option value={r} key={r}>
-                <String id={"r." + r} />
-              </option>
-            ))}
-          </select>
-        </div>
         <label className="VACentered" style={{ margin: "10px 0" }}>
           <div>
             <Message id="followPlayer" />
