@@ -1,4 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+    selectPagesCount,
+    selectViewCapacity,
+    selectZoom,
+    ViewCapacity,
+} from "./layoutSlice";
 
 const sliceName = "ui";
 
@@ -143,6 +149,27 @@ export const closePopup = () => (dispatch) => {
     setTimeout(() => {
         dispatch(setPopup(null));
     }, 500);
+};
+
+export const closePopupIfBlocking = () => (dispatch, getState) => {
+    const state = getState();
+    const popup = selectPopup(state);
+    if (!popup) {
+        return false;
+    }
+    const pagesCount = selectPagesCount(state);
+    if (pagesCount === 2) {
+        return; //
+    }
+    if (pagesCount === 1) {
+        const viewCapacity = selectViewCapacity(state);
+        const zoom = selectZoom(state);
+        if (viewCapacity === ViewCapacity.onePagePlus && zoom === 0) {
+            return false; //popup is not blocking
+        }
+    }
+    dispatch(closePopup());
+    return true;
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
