@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, ayaIdPage } from "../services/QData";
-import { selectPagesCount } from "../store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
-import { closePopup, selectPopup } from "../store/uiSlice";
+import { closePopupIfBlocking } from "../store/uiSlice";
 import SuraName from "./SuraName";
 
 export const VerseInfo = ({
@@ -23,8 +22,6 @@ export const VerseInfo = ({
     const history = useHistory();
     const dispatch = useDispatch();
     const selectStart = useSelector(selectStartSelection);
-    const pagesCount = useSelector(selectPagesCount);
-    const popup = useSelector(selectPopup);
 
     if (verse === undefined || verse === -1) {
         verse = selectStart;
@@ -40,9 +37,7 @@ export const VerseInfo = ({
             onClick(verse);
         } else {
             dispatch(gotoPage(history, ayaIdPage(verse)));
-            if (pagesCount === 1 && popup) {
-                dispatch(closePopup());
-            }
+            dispatch(closePopupIfBlocking());
         }
     };
 
