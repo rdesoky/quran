@@ -42,7 +42,6 @@ function PopupView() {
     };
 
     const onClose = () => {
-        // app.closePopup();
         dispatch(closePopup());
     };
 

@@ -1,10 +1,10 @@
 import {
-  faBookmark,
-  faEllipsisH,
-  faFileDownload,
-  faPlayCircle,
-  faQuran,
-  faTimes as faDelete,
+    faBookmark,
+    faEllipsisH,
+    faFileDownload,
+    faPlayCircle,
+    faQuran,
+    faTimes as faDelete,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
@@ -20,187 +20,170 @@ import { deleteBookmark } from "../store/dbSlice";
 import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
 import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
-import { closePopup } from "../store/uiSlice";
+import { closePopup, closePopupIfBlocking } from "../store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
 
 export const BookmarkListItem = ({
-  verse,
-  filter,
-  selectedVerse,
-  selectVerse,
-  showTafseer = false,
-  trigger = "bookmarks",
+    verse,
+    filter,
+    selectedVerse,
+    selectVerse,
+    showTafseer = false,
+    trigger = "bookmarks",
 }) => {
-  const pagesCount = useSelector(selectPagesCount);
-  const [verseText, setVerseText] = useState("");
-  const [bookmarkDesc, setBookmarkDesc] = useState("");
-  const suraName = useSuraName(ayaIdInfo(verse).sura);
-  const [showTafseerView, setShowTafseer] = useState(showTafseer);
-  const isCompact = useSelector(selectIsCompact);
-  const dispatch = useDispatch();
-  const intl = useIntl();
-  const history = useHistory();
-  const audio = useAudio();
-  const msgBox = useMessageBox();
-  const audioSource = useSelector(selectAudioSource(verse));
-  const maskOn = useSelector(selectMaskOn);
+    const [verseText, setVerseText] = useState("");
+    const [bookmarkDesc, setBookmarkDesc] = useState("");
+    const suraName = useSuraName(ayaIdInfo(verse).sura);
+    const [showTafseerView, setShowTafseer] = useState(showTafseer);
+    const dispatch = useDispatch();
+    const intl = useIntl();
+    const history = useHistory();
+    const audio = useAudio();
+    const msgBox = useMessageBox();
+    const audioSource = useSelector(selectAudioSource(verse));
+    const maskOn = useSelector(selectMaskOn);
 
-  useEffect(() => {
-    setVerseText(quranText[verse]);
+    useEffect(() => {
+        setVerseText(quranText[verse]);
 
-    const bookmarkDesc = intl.formatMessage(
-      { id: "bookmark_desc" },
-      {
-        sura: suraName,
-        verse: ayaIdInfo(verse).aya + 1,
-      }
-    );
+        const bookmarkDesc = intl.formatMessage(
+            { id: "bookmark_desc" },
+            {
+                sura: suraName,
+                verse: ayaIdInfo(verse).aya + 1,
+            }
+        );
 
-    setBookmarkDesc(bookmarkDesc);
-  }, [intl, suraName, verse]);
+        setBookmarkDesc(bookmarkDesc);
+    }, [intl, suraName, verse]);
 
-  const checkClosePopup = () => {
-    if (!isCompact && pagesCount === 1) {
-      dispatch(closePopup());
-    }
-  };
-
-  const onClickAya = (e) => {
-    if (selectedVerse !== verse) {
-      selectVerse(verse);
-      return;
-    }
-    dispatch(gotoAya(history, verse, { sel: true }));
-    checkClosePopup();
-    analytics.logEvent("goto_verse", {
-      ...verseLocation(verse),
-      trigger,
-    });
-  };
-
-  const onRemoveBookmark = (e) => {
-    msgBox.push({
-      title: <Message id="are_you_sure" />,
-      content: <Message id="delete_bookmark" />,
-      onYes: () => {
-        dispatch(deleteBookmark(verse));
-        analytics.logEvent("remove_bookmark", {
-          ...verseLocation(verse),
-          trigger,
-        });
-      },
-    });
-  };
-
-  const playVerse = (e) => {
-    // audio.stop();
-    if (maskOn) {
-      dispatch(hideMask());
-    }
-    dispatch(gotoPage(history, ayaIdPage(verse)));
-    audio.play(verse);
-    checkClosePopup();
-    analytics.logEvent("play_audio", {
-      ...verseLocation(verse),
-      trigger,
-    });
-  };
-
-  // const reviewVerse = e => {
-  //     app.gotoAya(verse, { sel: true });
-  //     setTimeout(() => {
-  //         app.setMaskStart();
-  //         //app.closePopup();
-  //         checkClosePopup();
-  //     });
-  //     app.pushRecentCommand("Mask");
-  // };
-
-  useEffect(() => {
-    setShowTafseer(showTafseer);
-  }, [showTafseer]);
-
-  if (filter && suraName.match(new RegExp(filter, "i")) === null) {
-    return "";
-  }
-
-  const download = (e) => {
-    msgBox.set({
-      title: <Message id="download_verse_audio" />,
-      content: <Message id="download_guide" />,
-    });
-    e.preventDefault();
-  };
-
-  const toggleTafseer = (e) => {
-    analytics.logEvent(showTafseerView ? "hide_tafseer" : "show_tafseer", {
-      ...verseLocation(verse),
-      trigger,
-    });
-    setShowTafseer(!showTafseerView);
-  };
-
-  return (
-    <li className="BookmarkRow">
-      <div className="actions">
-        {
-          // eslint-disable-next-line eqeqeq
-          selectedVerse == verse ? (
-            <>
-              <button
-                onClick={playVerse}
-                title={intl.formatMessage({ id: "play" })}
-              >
-                <Icon icon={faPlayCircle} />
-              </button>
-              <button
-                onClick={toggleTafseer}
-                title={intl.formatMessage({ id: "tafseer" })}
-              >
-                <Icon icon={faQuran} />
-              </button>
-              <div
-                className="LinkButton"
-                title={intl.formatMessage({
-                  id: "download_verse_audio",
-                })}
-              >
-                <a href={audioSource} onClick={download}>
-                  <Icon icon={faFileDownload} />
-                </a>
-              </div>
-              <button
-                onClick={onRemoveBookmark}
-                title={intl.formatMessage({ id: "unbookmark" })}
-              >
-                <Icon icon={faDelete} />
-              </button>
-            </>
-          ) : (
-            <Icon icon={faEllipsisH} />
-          )
+    const onClickAya = (e) => {
+        if (selectedVerse !== verse) {
+            selectVerse(verse);
+            return;
         }
-      </div>
-      <button onClick={onClickAya}>
-        <Icon icon={faBookmark} />
-        &nbsp;
-        {bookmarkDesc}
-        {showTafseerView ? null : (
-          <div
-            style={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              pointerEvents: "none",
-            }}
-          >
-            {verseText}
-          </div>
-        )}
-      </button>
-      {showTafseerView ? (
-        <TafseerView verse={verse} showVerse={false} copy={true} />
-      ) : null}
-    </li>
-  );
+        dispatch(gotoAya(history, verse, { sel: true }));
+        dispatch(closePopupIfBlocking());
+        analytics.logEvent("goto_verse", {
+            ...verseLocation(verse),
+            trigger,
+        });
+    };
+
+    const onRemoveBookmark = (e) => {
+        msgBox.push({
+            title: <Message id="are_you_sure" />,
+            content: <Message id="delete_bookmark" />,
+            onYes: () => {
+                dispatch(deleteBookmark(verse));
+                analytics.logEvent("remove_bookmark", {
+                    ...verseLocation(verse),
+                    trigger,
+                });
+            },
+        });
+    };
+
+    const playVerse = (e) => {
+        // audio.stop();
+        if (maskOn) {
+            dispatch(hideMask());
+        }
+        dispatch(gotoPage(history, ayaIdPage(verse)));
+        audio.play(verse);
+        dispatch(closePopupIfBlocking());
+
+        analytics.logEvent("play_audio", {
+            ...verseLocation(verse),
+            trigger,
+        });
+    };
+
+    useEffect(() => {
+        setShowTafseer(showTafseer);
+    }, [showTafseer]);
+
+    if (filter && suraName.match(new RegExp(filter, "i")) === null) {
+        return "";
+    }
+
+    const download = (e) => {
+        msgBox.set({
+            title: <Message id="download_verse_audio" />,
+            content: <Message id="download_guide" />,
+        });
+        e.preventDefault();
+    };
+
+    const toggleTafseer = (e) => {
+        analytics.logEvent(showTafseerView ? "hide_tafseer" : "show_tafseer", {
+            ...verseLocation(verse),
+            trigger,
+        });
+        setShowTafseer(!showTafseerView);
+    };
+
+    return (
+        <li className="BookmarkRow">
+            <div className="actions">
+                {
+                    // eslint-disable-next-line eqeqeq
+                    selectedVerse == verse ? (
+                        <>
+                            <button
+                                onClick={playVerse}
+                                title={intl.formatMessage({ id: "play" })}
+                            >
+                                <Icon icon={faPlayCircle} />
+                            </button>
+                            <button
+                                onClick={toggleTafseer}
+                                title={intl.formatMessage({ id: "tafseer" })}
+                            >
+                                <Icon icon={faQuran} />
+                            </button>
+                            <div
+                                className="LinkButton"
+                                title={intl.formatMessage({
+                                    id: "download_verse_audio",
+                                })}
+                            >
+                                <a href={audioSource} onClick={download}>
+                                    <Icon icon={faFileDownload} />
+                                </a>
+                            </div>
+                            <button
+                                onClick={onRemoveBookmark}
+                                title={intl.formatMessage({ id: "unbookmark" })}
+                            >
+                                <Icon icon={faDelete} />
+                            </button>
+                        </>
+                    ) : (
+                        <Icon icon={faEllipsisH} />
+                    )
+                }
+            </div>
+            <button onClick={onClickAya}>
+                <Icon icon={faBookmark} />
+                &nbsp;
+                {bookmarkDesc}
+                {showTafseerView ? null : (
+                    <div
+                        style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            pointerEvents: "none",
+                        }}
+                    >
+                        {verseText}
+                    </div>
+                )}
+            </button>
+            {showTafseerView ? (
+                <TafseerView verse={verse} showVerse={false} copy={true} />
+            ) : null}
+        </li>
+    );
 };

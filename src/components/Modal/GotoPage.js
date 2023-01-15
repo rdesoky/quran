@@ -4,38 +4,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import {
-  ayaID,
-  ayaIdInfo,
-  ayaIdPage,
-  getPartIndexByAyaId,
-  sura_info,
-  TOTAL_PAGES,
-  TOTAL_PARTS,
-  TOTAL_SURAS,
+    ayaID,
+    ayaIdInfo,
+    ayaIdPage,
+    getPartIndexByAyaId,
+    sura_info,
+    TOTAL_PAGES,
+    TOTAL_PARTS,
+    TOTAL_SURAS,
 } from "../../services/QData";
+import { selectAppHeight } from "../../store/layoutSlice";
 import {
-  selectAppHeight,
-  selectIsCompact,
-  selectPagesCount,
-} from "../../store/layoutSlice";
-import {
-  gotoAya,
-  gotoPage,
-  gotoPart,
-  gotoSura,
-  selectStartSelection,
+    gotoAya,
+    gotoPage,
+    gotoPart,
+    gotoSura,
+    selectStartSelection,
 } from "../../store/navSlice";
-import { closePopup } from "../../store/uiSlice";
+import { closePopupIfBlocking } from "../../store/uiSlice";
 import PartsPie from "../PartsPie";
 
 const GotoPage = ({ open }) => {
-    const isCompact = useSelector(selectIsCompact);
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
 
     // const [isOpen, setIsOpen] = useState(true);
-    const pagesCount = useSelector(selectPagesCount);
     const appHeight = useSelector(selectAppHeight);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
 
@@ -74,18 +68,6 @@ const GotoPage = ({ open }) => {
         };
     }, [gotoPageForm?.PageNumber]);
 
-    // const stopAudio = () => {
-    //     if (audioState !== AudioState.stopped) {
-    //         audio.stop();
-    //     }
-    // };
-
-    const checkClosePopup = () => {
-        if (!isCompact && pagesCount === 1) {
-            dispatch(closePopup());
-        }
-    };
-
     const onGotoPage = (e) => {
         e.preventDefault();
         const { target: form } = e;
@@ -94,7 +76,7 @@ const GotoPage = ({ open }) => {
         // app.gotoPage(pageNum);
         // let ayaId = getPageFirstAyaId(pageNum - 1);
         // app.selectAya(ayaId);
-        checkClosePopup();
+        dispatch(closePopupIfBlocking());
         // stopAudio();
     };
 
@@ -105,7 +87,7 @@ const GotoPage = ({ open }) => {
         // const partInfo = parts[part - 1];
         dispatch(gotoPart(history, part - 1, { sel: true }));
         // app.gotoPart(part - 1);
-        checkClosePopup();
+        dispatch(closePopupIfBlocking());
         // stopAudio();
     };
 
@@ -113,7 +95,7 @@ const GotoPage = ({ open }) => {
         e.preventDefault();
         // app.gotoSura(suraNumber - 1);
         dispatch(gotoSura(history, suraNumber - 1, { sel: true }));
-        checkClosePopup();
+        dispatch(closePopupIfBlocking());
         // stopAudio();
     };
 
@@ -126,7 +108,7 @@ const GotoPage = ({ open }) => {
         // app.gotoAya(ayaID(suraNumber - 1, verseNumber - 1), {
         //     sel: true,
         // });
-        checkClosePopup();
+        dispatch(closePopupIfBlocking());
         // stopAudio();
         e.preventDefault();
     };
@@ -273,7 +255,10 @@ const GotoPage = ({ open }) => {
                         padding: "20px 0",
                     }}
                 >
-                    <PartsPie size={280} onFinish={checkClosePopup} />
+                    <PartsPie
+                        size={280}
+                        onFinish={() => dispatch(closePopupIfBlocking())}
+                    />
                 </div>
             </div>
         </>
