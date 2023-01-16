@@ -103,8 +103,8 @@ export default function Pager() {
             );
             setLoading(false);
         }
-        // pagerRef.current && (pagerRef.current.scrollTop = 0);
     }, [loading, pageIndex, dispatch]);
+
     useEffect(() => {
         if (!loading) {
             localStorage.setItem("activeAya", selectStart);
@@ -123,20 +123,25 @@ export default function Pager() {
     }, [location]);
 
     const pageUp = useCallback(
-        (e) => {
+        (e, options = { bottom: false }) => {
             let count = pagesCount;
             if (count > 1 && pageIndex % 2 === 0) {
                 count = 1; //right page is active
             }
             dispatch(offsetPage(history, -count));
             analytics.logEvent("nav_prev_page");
-            pagerRef.current && (pagerRef.current.scrollTop = 0);
+            const viewRef = pagerRef.current;
+            viewRef?.scrollTo?.({
+                top: options?.bottom
+                    ? viewRef?.scrollHeight - viewRef?.clientHeight
+                    : 0,
+            });
         },
         [dispatch, history, pageIndex, pagesCount]
     );
 
     const pageDown = useCallback(
-        (e) => {
+        (e, scroll = true) => {
             // let count = activePopup && !isWide ? 1 : pagesCount;
             let count = pagesCount;
             if (count > 1 && pageIndex % 2 === 1) {
@@ -144,7 +149,7 @@ export default function Pager() {
             }
             dispatch(offsetPage(history, count));
             analytics.logEvent("nav_next_page");
-            pagerRef.current && (pagerRef.current.scrollTop = 0);
+            pagerRef.current?.scrollTo?.({ top: 0 });
         },
         [dispatch, history, pageIndex, pagesCount]
     );
@@ -162,7 +167,8 @@ export default function Pager() {
 
     const handleWheel = (e) => {
         let viewRef = pagerRef.current;
-        const LINE_HEIGHT = 14;
+        const LINE_HEIGHT = 12;
+        //Check if page next or prev to active page is in the view
 
         if (e.deltaY > 0) {
             if (
@@ -170,14 +176,34 @@ export default function Pager() {
                 viewRef?.scrollHeight - viewRef?.clientHeight
             ) {
                 analytics.setTrigger("mouse_wheel");
-                //scroll down ( backward )
+                //scroll down ( forward )
+                if (shownPages.includes(pageIndex + 1)) {
+                    dispatch(setActivePageIndex(pageIndex + 1));
+                    setTimeout(() =>
+                        viewRef.scrollTo?.({ top: 0, behavior: "smooth" })
+                    );
+                    console.log(`~~scrollForward`);
+                    return;
+                }
+
                 pageDown(e);
             }
         } else if (pagerRef.current?.scrollTop === 0) {
-            //scroll up ( forward )
+            //scroll up ( backward )
             if (viewRef?.scrollTop === 0) {
                 analytics.setTrigger("mouse_wheel");
-                pageUp(e);
+                if (shownPages.includes(pageIndex - 1)) {
+                    dispatch(setActivePageIndex(pageIndex - 1));
+                    console.log(`~~scrollBackward`);
+                    setTimeout(() =>
+                        viewRef.scrollTo?.({
+                            top: viewRef.scrollHeight - viewRef.clientHeight,
+                            behavior: "smooth",
+                        })
+                    );
+                    return;
+                }
+                pageUp(e, { bottom: true });
             }
         }
     };
@@ -237,9 +263,11 @@ export default function Pager() {
                     return;
                 } else {
                     dispatch(gotoPage(history, maskPage, { select: true }));
-                    pagerRef.current &&
-                        (pagerRef.current.scrollTop =
-                            pagerRef.current.scrollHeight);
+                    const viewRef = pagerRef.current;
+                    viewRef?.scrollTo?.({
+                        top: viewRef?.scrollHeight - viewRef?.clientHeight,
+                        behavior: "smooth",
+                    });
                     return; //mask head page is not visible
                 }
             }
@@ -450,7 +478,6 @@ export default function Pager() {
             maskStart,
             popup,
             msgBox,
-            pagesCount,
             onArrowKey,
             pageDown,
             pageUp,
