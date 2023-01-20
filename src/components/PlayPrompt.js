@@ -122,13 +122,16 @@ export default function PlayPrompt({ trigger }) {
 
     return (
         <div>
-            <div className="HACentered">
+            <div className="HACentered" style={{ marginBottom: 5 }}>
+                <span>
+                    <String id="repeat" />
+                    {":"}
+                </span>
                 <select
                     value={reciter}
                     onChange={onSelectReciter}
                     style={{
                         flexGrow: 1,
-                        marginBottom: 15,
                         fontSize: 16,
                         padding: 4,
                     }}
@@ -166,10 +169,6 @@ export default function PlayPrompt({ trigger }) {
                 </label>
             </div>
             <div className="RadioGroup">
-                <div>
-                    <String id="repeat" />
-                    {":"}
-                </div>
                 {[
                     { value: AudioRepeat.selection, strId: "selection" },
                     {
