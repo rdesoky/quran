@@ -1,22 +1,27 @@
-import { useContext, useEffect, useState } from "react";
-import { AppRefs } from "../RefsProvider";
+import { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectLang } from "../store/settingsSlice";
+import { setSuraNames } from "../store/uiSlice";
 
 export default function SuraNames() {
-  const appRefs = useContext(AppRefs);
-  const [suraNames, setSuraNames] = useState([]);
-  const intl = useIntl();
-  const lang = useSelector(selectLang);
+    // const appRefs = useContext(AppRefs);
+    // const [suraNames, setSuraNames] = useState([]);
+    const dispatch = useDispatch();
+    const intl = useIntl();
+    const lang = useSelector(selectLang);
 
-  useEffect(() => {
-    setSuraNames(intl.formatMessage({ id: "sura_names" }).split(","));
-  }, [intl, lang]);
+    useEffect(() => {
+        dispatch(
+            setSuraNames(intl.formatMessage({ id: "sura_names" }).split(","))
+        );
+    }, [dispatch, intl, lang]);
 
-  useEffect(() => {
-    appRefs.add("suraNames", { suraNames });
-  }, [appRefs, suraNames]);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         appRefs.add("suraNames", { suraNames });
+    //     }, 1000);
+    // }, [appRefs, suraNames]);
 
-  return null;
+    return null;
 }

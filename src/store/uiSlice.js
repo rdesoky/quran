@@ -39,6 +39,8 @@ const initialState = {
 
     recentCommands: initSidebarCommands,
     updateAvailable: false,
+
+    suraNames: [],
 };
 
 const slice = createSlice({
@@ -77,6 +79,9 @@ const slice = createSlice({
         setModalPopup: (slice, action) => {
             slice.modalPopup = action.payload;
         },
+        setSuraNames: (slice, action) => {
+            slice.suraNames = action.payload;
+        },
     },
 });
 
@@ -90,6 +95,7 @@ export const {
     showToast,
     setUpdateAvailable,
     setModalPopup,
+    setSuraNames,
 } = slice.actions;
 
 export const selectModalPopup = (state) => state[sliceName].modalPopup;
@@ -115,6 +121,8 @@ export const selectSidebarWidth = (state) =>
 
 export const selectUpdateAvailable = (state) =>
     state[sliceName].updateAvailable;
+
+export const selectSuraNames = (state) => state[sliceName].suraNames;
 
 export const showPopup = (popup, params) => (dispatch, getState) => {
     const state = getState();
