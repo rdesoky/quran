@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 const DDrop = ({
     children,
     onDrop,
-    minShift = 10, //shift before drop is triggered
+    minShift = 20, //shift before drag is triggered
     dropShift = 50,
     maxShift = 200, //shift before drop is triggered
 }) => {
@@ -49,12 +49,8 @@ const DDrop = ({
                 setStartY(clientY);
             } else if (isCaptured) {
                 // pointerId && console.log(`~~onPointerMove ${pointerId}`);
-                if (shiftX > minShift && shiftX < maxShift) {
-                    setDX(clientX - startX);
-                }
-                if (shiftY > minShift && shiftY < maxShift) {
-                    setDY(clientY - startY);
-                }
+                setDX(clientX - startX);
+                setDY(clientY - startY);
             }
         },
         [pointerDown, startX, startY, pointerCaptured, minShift, maxShift]
