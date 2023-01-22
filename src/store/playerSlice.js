@@ -85,3 +85,5 @@ export const selectAudioSource = (ayaId) => (state) => {
 
 export const selectTrackDuration = (state) => state[sliceName].trackDuration;
 export const selectRemainingTime = (state) => state[sliceName].remainingTime;
+export const selectRepeatStart = (state) => state[sliceName].repeat.start;
+export const selectRepeatEnd = (state) => state[sliceName].repeat.end;

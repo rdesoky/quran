@@ -8,6 +8,9 @@ export const PlayerButtons = ({
     showReciter,
     showLabels,
     trigger = "player_buttons",
+    showHotKeys = true,
+    onPlay,
+    onStop,
 }) => {
     const audioState = useSelector(selectAudioState);
 
@@ -20,6 +23,8 @@ export const PlayerButtons = ({
                 trigger={trigger}
                 command="Stop"
                 showLabel={showLabels}
+                showHotKey={showHotKeys}
+                onClick={onStop}
             />
         );
     }
@@ -29,7 +34,8 @@ export const PlayerButtons = ({
             playButton = (
                 <CommandButton
                     trigger={trigger}
-                    command="Pause"
+                    command="Resume"
+                    showHotKey={showHotKeys}
                     className="blinking"
                     showLabel={showLabels}
                 />
@@ -40,6 +46,7 @@ export const PlayerButtons = ({
                 <CommandButton
                     trigger={trigger}
                     command="Pause"
+                    showHotKey={showHotKeys}
                     showLabel={showLabels}
                 />
             );
@@ -50,6 +57,7 @@ export const PlayerButtons = ({
                     trigger={trigger}
                     command="Downloading"
                     className="blinking"
+                    showHotKey={showHotKeys}
                     showLabel={showLabels}
                 />
             );
@@ -60,6 +68,8 @@ export const PlayerButtons = ({
                     trigger={trigger}
                     command="Play"
                     showLabel={showLabels}
+                    showHotKey={showHotKeys}
+                    onClick={onPlay}
                 />
             );
     }

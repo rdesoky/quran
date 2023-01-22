@@ -1,4 +1,5 @@
 #AudioPlayerPopup,
+#PlayPrompt,
 #SettingsPopup {
     .RecitersList {
         position: relative;
@@ -56,6 +57,13 @@
     }
 }
 
+#PlayPrompt {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-height: 240px;
+}
+
 .PlayerButtons {
     .CommandButton {
         img {
@@ -63,6 +71,23 @@
             height: 30px !important;
             width: 30px !important;
             border-radius: 15px !important;
+        }
+    }
+    .PlayPrompt & {
+        display: flex;
+        justify-content: space-around;
+        .CommandButton {
+            font-size: 16px !important;
+            border-radius: 4px;
+            background-color: #444;
+            margin: 0 2px;
+            .CommandLabel {
+                padding: 0 10px 0 0;
+                text-align: initial;
+                [lang="ar"] & {
+                    padding: 0 0 0 10px;
+                }
+            }
         }
     }
 }
