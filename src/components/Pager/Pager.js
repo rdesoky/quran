@@ -13,6 +13,7 @@ import {
     checkActiveInput,
     copy2Clipboard,
     downloadPageImage,
+    keyValues,
 } from "../../services/utils";
 import {
     selectActivePage,
@@ -336,10 +337,11 @@ export default function Pager() {
                         //     // app.pushRecentCommand("Copy");
                     }
                     break;
+                case "KeyS":
                 case "KeyR":
                     if (!vEditorOn) {
                         msgBox.set({
-                            title: <String id="play" />,
+                            title: <String id="play" values={keyValues("r")} />,
                             content: <PlayPrompt trigger={"keyboard"} />,
                         });
                     }
@@ -351,11 +353,6 @@ export default function Pager() {
                         } else {
                             audio.resume();
                         }
-                    }
-                    break;
-                case "KeyS":
-                    if (!vEditorOn) {
-                        audio.stop();
                     }
                     break;
                 case "KeyZ":

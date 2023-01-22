@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-    FormattedMessage as Message,
-    FormattedMessage as String,
-} from "react-intl";
-import { useAudio, useMessageBox } from "../RefsProvider";
-import {
-    AudioRepeat,
-    changeReciter,
-    selectFollowPlayer,
-    selectLang,
-    selectReciter,
-    setFollowPlayer,
-} from "../store/settingsSlice";
-import useSuraName from "../hooks/useSuraName";
-import { selectActivePage } from "../store/layoutSlice";
+import React, { useCallback, useEffect, useState } from "react";
+import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import Switch from "react-switch";
+import useSuraName from "../hooks/useSuraName";
+import { useAudio } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
 import {
     ayaID,
@@ -22,25 +11,50 @@ import {
     getPageFirstAyaId,
     verseLocation,
 } from "../services/QData";
+import { checkActiveInput } from "../services/utils";
+import { selectActivePage, selectAppHeight } from "../store/layoutSlice";
 import { selectSelectedRange } from "../store/navSlice";
-import { CommandIcon } from "./CommandIcon";
-import { ListReciters } from "../services/AudioData";
-import Switch from "react-switch";
+import {
+    AudioState,
+    selectAudioState,
+    selectPlayingAya,
+    selectRepeatEnd,
+    selectRepeatStart,
+} from "../store/playerSlice";
+import {
+    AudioRepeat,
+    selectFollowPlayer,
+    selectLang,
+    selectReciter,
+    setFollowPlayer,
+} from "../store/settingsSlice";
+import { PlayerButtons } from "./AudioPlayer/PlayerButtons";
+import ReciterName from "./AudioPlayer/ReciterName";
+import AyaName from "./AyaName";
+import { CommandButton } from "./CommandButton";
+import PlayerCountDown from "./PlayerCountDown";
+import RecitersGrid from "./RecitersGrid";
+import SuraName from "./SuraName";
+import { VerseInfo } from "./VerseInfo";
 
-export default function PlayPrompt({ trigger }) {
+export default function PlayPrompt({ trigger, showReciters }) {
     const [selectedScope, setSelectedScope] = useState(-1);
     const pageIndex = useSelector(selectActivePage);
-    const msgBox = useMessageBox();
     const suraName = useSuraName();
     const audio = useAudio();
     const reciter = useSelector(selectReciter);
-    const [reciters] = useState(() => ListReciters("ayaAudio"));
     const lang = useSelector(selectLang);
     const dispatch = useDispatch();
     const selection = useSelector(selectSelectedRange);
     const ayaInfo = ayaIdInfo(selection.start);
     const selectedSuraName = useSuraName(ayaInfo.sura);
     const followPlayer = useSelector(selectFollowPlayer);
+    const playingAya = useSelector(selectPlayingAya);
+    const [_showReciters, setShowReciters] = useState(showReciters);
+    const appHeight = useSelector(selectAppHeight);
+    const audioState = useSelector(selectAudioState);
+    const repeatStart = useSelector(selectRepeatStart);
+    const repeatEnd = useSelector(selectRepeatEnd);
 
     useEffect(() => {
         switch (trigger) {
@@ -64,10 +78,30 @@ export default function PlayPrompt({ trigger }) {
                 setSelectedScope(AudioRepeat.noStop);
         }
     }, [trigger]);
+
     const onScopeChange = (e) => {
         setSelectedScope(parseInt(e.target.value));
     };
-    const onPlay = () => {
+
+    const onPause = useCallback(() => {
+        analytics.logEvent("pause_audio", {
+            ...verseLocation(playingAya),
+            reciter,
+            trigger,
+        });
+        audioState === AudioState.playing ? audio.pause() : audio.resume();
+    }, [audio, audioState, playingAya, reciter, trigger]);
+
+    const onStop = useCallback(() => {
+        analytics.logEvent("stop_audio", {
+            ...verseLocation(playingAya),
+            reciter,
+            trigger,
+        });
+        audio.stop();
+    }, [audio, playingAya, reciter, trigger]);
+
+    const onPlay = useCallback(() => {
         let aya = selection.start;
         switch (selectedScope) {
             case AudioRepeat.page:
@@ -84,13 +118,52 @@ export default function PlayPrompt({ trigger }) {
             ...verseLocation(aya),
         });
         audio.play(aya, selectedScope);
-        msgBox.pop();
-    };
-    const groupName = "playPrompt";
+    }, [
+        audio,
+        ayaInfo.sura,
+        pageIndex,
+        selectedScope,
+        selection.start,
+        trigger,
+    ]);
 
-    function onSelectReciter(e) {
-        dispatch(changeReciter(e.target.value));
-    }
+    const handleKeyDown = useCallback(
+        (e) => {
+            const { isTextInput } = checkActiveInput();
+            if (isTextInput) {
+                return;
+            }
+            switch (e.code) {
+                case "Backspace":
+                    if (_showReciters) {
+                        setShowReciters(false);
+                        e.stopPropagation();
+                    }
+                    break;
+                case "KeyR":
+                    onPlay();
+                    break;
+                case "KeyP":
+                    onPause();
+                    break;
+                case "KeyS":
+                    onStop();
+                    break;
+                default:
+                    break;
+            }
+        },
+        [_showReciters, onPause, onPlay, onStop]
+    );
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+    const groupName = "playPrompt";
 
     const renderOption = ({ strId, value, strValues }) => (
         <div key={value}>
@@ -103,7 +176,7 @@ export default function PlayPrompt({ trigger }) {
                     onChange={onScopeChange}
                 />
                 <span>
-                    <String id={strId} values={strValues} />
+                    <Message id={strId} values={strValues} />
                 </span>
             </label>
         </div>
@@ -120,57 +193,22 @@ export default function PlayPrompt({ trigger }) {
         );
     };
 
-    return (
-        <div>
-            <div className="HACentered" style={{ marginBottom: 5 }}>
-                <span>
-                    <String id="repeat" />
+    const onClickShowReciters = () => {
+        setShowReciters(true);
+    };
+
+    const renderRadioOptions = () => {
+        return (
+            <>
+                <div>
+                    <Message id="repeat" />
                     {":"}
-                </span>
-                <select
-                    value={reciter}
-                    onChange={onSelectReciter}
-                    style={{
-                        flexGrow: 1,
-                        fontSize: 16,
-                        padding: 4,
-                    }}
-                >
-                    {reciters.map((r) => (
-                        <option value={r} key={r}>
-                            <String id={"r." + r} />
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div
-                style={{
-                    float: lang === "ar" ? "left" : "right",
-                    margin: "0 10px",
-                }}
-                className="VACentered"
-            >
-                <img
-                    className="ReciterIcon"
-                    src={process.env.PUBLIC_URL + "/images/" + reciter + ".jpg"}
-                    alt="reciter"
-                />
-                <label className="VACentered" style={{ margin: "10px 0" }}>
-                    <div>
-                        <Message id="followPlayer" />
-                    </div>
-                    <Switch
-                        height={22}
-                        width={42}
-                        onChange={updateFollowPlayer}
-                        checked={followPlayer}
-                        // disabled={player.repeat == 1}
-                    />
-                </label>
-            </div>
-            <div className="RadioGroup">
+                </div>
                 {[
-                    { value: AudioRepeat.selection, strId: "selection" },
+                    {
+                        value: AudioRepeat.selection,
+                        strId: "selection",
+                    },
                     {
                         value: AudioRepeat.page,
                         strId: "page_num",
@@ -183,7 +221,7 @@ export default function PlayPrompt({ trigger }) {
                     },
                 ].map(renderOption)}
                 <div style={{ marginTop: 10 }}>
-                    <String id="no_stop_recite_from" />
+                    <Message id="no_stop_recite_from" />
                     {":"}
                 </div>
                 {[
@@ -196,14 +234,96 @@ export default function PlayPrompt({ trigger }) {
                         },
                     },
                 ].map(renderOption)}
-            </div>
-            <div className="ButtonsBar" style={{ padding: 0, marginTop: 10 }}>
-                <button onClick={onPlay} style={{ padding: 10 }}>
-                    <CommandIcon command="Play" />
-                    <div style={{ margin: "0 10px", fontSize: 16 }}>
-                        <String id="start" />
+            </>
+        );
+    };
+
+    const renderReciteStatus = () => {
+        return (
+            <>
+                <div className="ReciteStatus">
+                    <div>
+                        <Message id="playing_aya" />:
                     </div>
-                </button>
+                    <div>
+                        <AyaName index={playingAya} clickable={true} />
+                    </div>
+                    <div className="HACentered">
+                        <PlayerCountDown sqSize={42} strokeWidth={4} />
+                    </div>
+                    <div style={{ marginTop: 15 }}>
+                        <Message id="loop_start" />:
+                    </div>
+                    <div>
+                        <AyaName index={repeatStart} clickable={true} />
+                    </div>
+                    <div>
+                        <Message id="loop_end" />:
+                    </div>
+                    <div>
+                        <AyaName index={repeatEnd} clickable={true} />
+                    </div>
+                </div>
+            </>
+        );
+    };
+
+    if (_showReciters) {
+        return (
+            <div
+                id="PlayPrompt"
+                style={{ height: appHeight - 100, overflowY: "overlay" }}
+            >
+                <RecitersGrid
+                    onClick={() => {
+                        setShowReciters(false);
+                    }}
+                />
+            </div>
+        );
+    }
+
+    return (
+        <div id="PlayPrompt" style={{ height: appHeight - 100 }}>
+            <div className="RadioGroup">
+                <div
+                    style={{
+                        float: lang === "ar" ? "left" : "right",
+                        margin: "0 10px",
+                    }}
+                    className="VACentered"
+                >
+                    <CommandButton
+                        command="AudioPlayer"
+                        onClick={onClickShowReciters}
+                    />
+                    <ReciterName />
+                    <label className="VACentered" style={{ marginTop: 20 }}>
+                        <Switch
+                            height={22}
+                            width={42}
+                            onChange={updateFollowPlayer}
+                            checked={followPlayer}
+                        />
+                        <div style={{ marginTop: 10 }}>
+                            <Message id="followPlayer" />
+                        </div>
+                    </label>
+                </div>
+                {audioState === AudioState.stopped
+                    ? renderRadioOptions()
+                    : renderReciteStatus()}
+            </div>
+            <div className="PlayPrompt" style={{ padding: 0, marginTop: 10 }}>
+                <PlayerButtons
+                    {...{
+                        trigger,
+                        showLabels: true,
+                        showReciter: false,
+                        onPlay,
+                        onStop,
+                    }}
+                />
             </div>
         </div>
     );

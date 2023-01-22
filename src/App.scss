@@ -207,8 +207,15 @@ hr {
 
 // .VerseInfoFrame {
 // }
+
+.ReciteStatus {
+}
+
 .VerseInfo {
     float: left;
+    .ReciteStatus & {
+        float: none;
+    }
 
     .PopupBody & {
         margin: 0 10px 10px 0;
@@ -225,6 +232,13 @@ hr {
         display: flex;
         flex-direction: column;
         align-items: center;
+        .ReciteStatus & {
+            font-size: 15px;
+            flex-direction: row;
+            > div {
+                margin: 0 5px;
+            }
+        }
     }
 
     button {
@@ -267,6 +281,9 @@ hr {
     font-weight: bold;
     fill: yellowgreen;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    #PlayPrompt & {
+        font-size: 20px;
+    }
 }
 
 .CommandButton {
@@ -676,7 +693,7 @@ hr {
 
 .ContextPopupBlocker {
     position: fixed;
-    z-index: 3;
+    z-index: 5;
     left: 0;
     top: 0;
     bottom: 0;
@@ -761,6 +778,7 @@ hr {
 }
 
 .MessageBox {
+    opacity: 0.96;
     position: fixed;
     z-index: 4;
     border: solid 1px #aaa;
@@ -1078,4 +1096,18 @@ hr {
 
 svg text {
     pointer-events: none;
+}
+
+.align-text-start {
+    text-align: left;
+    [lang="ar"] & {
+        text-align: right;
+    }
+}
+
+.align-text-end {
+    text-align: right;
+    [lang="ar"] & {
+        text-align: left;
+    }
 }

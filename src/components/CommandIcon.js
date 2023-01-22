@@ -64,6 +64,7 @@ export const CommandIcons = {
     ToggleButton: faAngleDoubleDown,
     Downloading: faFileDownload,
     Pause: faPauseCircle,
+    Resume: faPauseCircle,
     Stop: faStopCircle,
 };
 

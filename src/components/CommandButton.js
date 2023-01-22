@@ -1,15 +1,13 @@
 import React from "react";
-import {
-    FormattedMessage,
-    FormattedMessage as String,
-    useIntl,
-} from "react-intl";
+import { FormattedMessage as Message, useIntl } from "react-intl";
 import { analytics } from "./../services/Analytics";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useAudio, useContextPopup, useMessageBox } from "../RefsProvider";
 import {
+    commandKey,
     copy2Clipboard,
+    keyValues,
     requestFullScreen,
     selectTopCommand,
 } from "../services/utils";
@@ -60,12 +58,11 @@ export const CommandButton = ({
     id,
     command,
     showLabel,
+    showHotKey = true,
     style,
     className,
     trigger,
     onClick,
-    playAya,
-    audioRepeat = true,
     updateChecker = false,
 }) => {
     const audio = useAudio();
@@ -92,8 +89,8 @@ export const CommandButton = ({
     const toggleBookmark = (e) => {
         if (isBookmarked) {
             msgBox.push({
-                title: <String id="are_you_sure" />,
-                content: <String id="delete_bookmark" />,
+                title: <Message id="are_you_sure" />,
+                content: <Message id="delete_bookmark" />,
                 onYes: () => {
                     dispatch(deleteBookmark(selectStart));
                 },
@@ -122,12 +119,13 @@ export const CommandButton = ({
                     audio.play(selectedRange.start, AudioRepeat.noRepeat);
                 } else {
                     msgBox.set({
-                        title: <String id={"play"} />,
+                        title: <Message id={"play"} values={keyValues("r")} />,
                         content: <PlayPrompt trigger={trigger} />,
                     });
                 }
                 return;
             case "Pause":
+            case "Resume":
                 analytics.logEvent("pause_audio", {
                     ...verseLocation(playingAya),
                     reciter,
@@ -139,23 +137,28 @@ export const CommandButton = ({
                     audio.resume();
                 }
                 return;
+            case "AudioPlayer":
             case "Stop":
-                analytics.logEvent("stop_audio", {
-                    ...verseLocation(playingAya),
-                    reciter,
-                    trigger,
+                // analytics.logEvent("stop_audio", {
+                //     ...verseLocation(playingAya),
+                //     reciter,
+                //     trigger,
+                // });
+                // audio.stop(true);
+                msgBox.set({
+                    title: <Message id="play" values={keyValues("r")} />,
+                    content: <PlayPrompt trigger={trigger} />,
                 });
-                audio.stop(true);
                 return;
             case "Downloading":
                 analytics.logEvent("retry_stuck_audio", {
                     ...verseLocation(playingAya),
                     reciter: reciter,
                 });
-                audio.stop();
-                setTimeout(() => {
-                    audio.play();
-                }, 500);
+                // audio.stop();
+                // setTimeout(() => {
+                audio.play();
+                // }, 500);
                 return;
             case "ToggleButton":
                 analytics.logEvent(
@@ -211,7 +214,7 @@ export const CommandButton = ({
                     trigger,
                 });
                 msgBox.set({
-                    title: <String id="update_hifz" />,
+                    title: <Message id="update_hifz" />,
                     content: <AddHifz />,
                 });
                 if (popup && pagesCount === 1) {
@@ -244,7 +247,11 @@ export const CommandButton = ({
     const renderLabel = () => {
         if (showLabel === true) {
             let label = (
-                <String className="CommandLabel" id={command.toLowerCase()} />
+                <Message
+                    className="CommandLabel"
+                    id={command.toLowerCase()}
+                    values={keyValues(showHotKey && commandKey(command))}
+                />
             );
             switch (command) {
                 case "Profile":
@@ -267,8 +274,8 @@ export const CommandButton = ({
         if (updateChecker && updateAvailable) {
             dispatch(setUpdateAvailable(false));
             msgBox.push({
-                title: <FormattedMessage id="update_available_title" />,
-                content: <FormattedMessage id="update_available" />,
+                title: <Message id="update_available_title" />,
+                content: <Message id="update_available" />,
                 onYes: () => {
                     document.location.reload();
                 },

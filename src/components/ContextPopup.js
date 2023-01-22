@@ -32,6 +32,7 @@ export const ContextPopup = () => {
     }, [refs, contextPopup]);
 
     useEffect(() => {
+        //Make sure the popup is not outside the viewport
         const popup = popupRef.current;
         if (popup) {
             const popupRect = popup?.getBoundingClientRect?.();

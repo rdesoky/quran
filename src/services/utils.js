@@ -254,3 +254,15 @@ export const getHifzRangeDisplayInfo = (range, intl) => {
     }
     return { title, ageText };
 };
+
+export const keyValues = (keyName) => ({ key: keyName ? ` (${keyName})` : "" });
+
+export const commandKey = (command) => {
+    return {
+        play: "r",
+        pause: "p",
+        stop: "s",
+        resume: "p",
+        indices: "i",
+    }[command.toLowerCase()];
+};

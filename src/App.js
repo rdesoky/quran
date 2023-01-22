@@ -138,8 +138,8 @@ export default function App() {
                                 />
                             </Switch>
                             <PopupView />
-                            <ContextPopup />
                             <MessageBox />
+                            <ContextPopup />
                             <Sidebar />
                             <Audio />
                         </Router>
