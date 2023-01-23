@@ -34,8 +34,6 @@ import AyaName from "./AyaName";
 import { CommandButton } from "./CommandButton";
 import PlayerCountDown from "./PlayerCountDown";
 import RecitersGrid from "./RecitersGrid";
-import SuraName from "./SuraName";
-import { VerseInfo } from "./VerseInfo";
 
 export default function PlayPrompt({ trigger, showReciters }) {
     const [selectedScope, setSelectedScope] = useState(-1);
@@ -43,7 +41,6 @@ export default function PlayPrompt({ trigger, showReciters }) {
     const suraName = useSuraName();
     const audio = useAudio();
     const reciter = useSelector(selectReciter);
-    const lang = useSelector(selectLang);
     const dispatch = useDispatch();
     const selection = useSelector(selectSelectedRange);
     const ayaInfo = ayaIdInfo(selection.start);
@@ -51,7 +48,6 @@ export default function PlayPrompt({ trigger, showReciters }) {
     const followPlayer = useSelector(selectFollowPlayer);
     const playingAya = useSelector(selectPlayingAya);
     const [_showReciters, setShowReciters] = useState(showReciters);
-    const appHeight = useSelector(selectAppHeight);
     const audioState = useSelector(selectAudioState);
     const repeatStart = useSelector(selectRepeatStart);
     const repeatEnd = useSelector(selectRepeatEnd);
@@ -242,27 +238,32 @@ export default function PlayPrompt({ trigger, showReciters }) {
         return (
             <>
                 <div className="ReciteStatus">
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                         <Message id="playing_aya" />:
+                        <div style={{ margin: "0 5px" }}>
+                            <PlayerCountDown />
+                        </div>
                     </div>
                     <div>
                         <AyaName index={playingAya} clickable={true} />
                     </div>
-                    <div className="HACentered">
-                        <PlayerCountDown sqSize={42} strokeWidth={4} />
-                    </div>
-                    <div style={{ marginTop: 15 }}>
-                        <Message id="loop_start" />:
-                    </div>
-                    <div>
-                        <AyaName index={repeatStart} clickable={true} />
-                    </div>
-                    <div>
-                        <Message id="loop_end" />:
-                    </div>
-                    <div>
-                        <AyaName index={repeatEnd} clickable={true} />
-                    </div>
+                    {/* <div className="HACentered"></div> */}
+                    {repeatEnd !== -1 && (
+                        <>
+                            <div style={{ marginTop: 5 }}>
+                                <Message id="loop_start" />:
+                            </div>
+                            <div>
+                                <AyaName index={repeatStart} clickable={true} />
+                            </div>
+                            <div>
+                                <Message id="loop_end" />:
+                            </div>
+                            <div>
+                                <AyaName index={repeatEnd} clickable={true} />
+                            </div>
+                        </>
+                    )}
                 </div>
             </>
         );
@@ -270,10 +271,7 @@ export default function PlayPrompt({ trigger, showReciters }) {
 
     if (_showReciters) {
         return (
-            <div
-                id="PlayPrompt"
-                style={{ height: appHeight - 100, overflowY: "overlay" }}
-            >
+            <div id="PlayPrompt" style={{ height: 220, overflowY: "overlay" }}>
                 <RecitersGrid
                     onClick={() => {
                         setShowReciters(false);
@@ -284,36 +282,34 @@ export default function PlayPrompt({ trigger, showReciters }) {
     }
 
     return (
-        <div id="PlayPrompt" style={{ height: appHeight - 100 }}>
-            <div className="RadioGroup">
-                <div
-                    style={{
-                        float: lang === "ar" ? "left" : "right",
-                        margin: "0 10px",
-                    }}
-                    className="VACentered"
-                >
-                    <CommandButton
-                        command="AudioPlayer"
-                        onClick={onClickShowReciters}
-                    />
-                    <ReciterName />
-                    <label className="VACentered" style={{ marginTop: 20 }}>
-                        <Switch
-                            height={22}
-                            width={42}
-                            onChange={updateFollowPlayer}
-                            checked={followPlayer}
-                        />
-                        <div style={{ marginTop: 10 }}>
-                            <Message id="followPlayer" />
+        <div id="PlayPrompt">
+            <table className="RadioGroup">
+                <tr>
+                    <td>
+                        {audioState === AudioState.stopped
+                            ? renderRadioOptions()
+                            : renderReciteStatus()}
+                    </td>
+                    <td>
+                        <div className="VACentered">
+                            <CommandButton
+                                command="AudioPlayer"
+                                onClick={onClickShowReciters}
+                            />
+                            <ReciterName />
                         </div>
-                    </label>
-                </div>
-                {audioState === AudioState.stopped
-                    ? renderRadioOptions()
-                    : renderReciteStatus()}
-            </div>
+                        <label className="VACentered" style={{ marginTop: 10 }}>
+                            <Switch
+                                height={22}
+                                width={42}
+                                onChange={updateFollowPlayer}
+                                checked={followPlayer}
+                            />
+                            <Message id="followPlayer" />
+                        </label>
+                    </td>
+                </tr>
+            </table>
             <div className="PlayPrompt" style={{ padding: 0, marginTop: 10 }}>
                 <PlayerButtons
                     {...{

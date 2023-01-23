@@ -9,10 +9,11 @@ import { ayaIdInfo } from "../../services/QData";
 import { copy2Clipboard } from "../../services/utils";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import {
-  gotoAya,
-  selectMaskStart,
-  selectStartSelection,
+    gotoAya,
+    selectMaskStart,
+    selectStartSelection,
 } from "../../store/navSlice";
+import { selectPlayingAya } from "../../store/playerSlice";
 import { showToast } from "../../store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { VerseInfo, VerseText } from "../Widgets";
@@ -49,6 +50,7 @@ const Tafseer = () => {
     const maskStart = useSelector(selectMaskStart);
     const appHeight = useSelector(selectAppHeight);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
+    const playingAya = useSelector(selectPlayingAya);
 
     const offsetSelection = (offset) => {
         // setVerse(verse + offset);
@@ -57,18 +59,18 @@ const Tafseer = () => {
     };
 
     useEffect(() => {
+        if (playingAya !== -1) {
+            setVerse(playingAya);
+        }
+    }, [playingAya]);
+
+    useEffect(() => {
         if (maskStart !== -1) {
             setVerse(maskStart - 1);
         } else {
             setVerse(selectStart);
         }
     }, [selectStart, maskStart]);
-
-    // useEffect(() => {
-    //     if (playingAya !== -1) {
-    //         setVerse(playingAya);
-    //     }
-    // }, [playingAya]);
 
     return (
         <>

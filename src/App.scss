@@ -282,7 +282,7 @@ hr {
     fill: yellowgreen;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     #PlayPrompt & {
-        font-size: 20px;
+        font-size: 14px;
     }
 }
 
@@ -581,6 +581,7 @@ hr {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .HCentered {
@@ -810,7 +811,7 @@ hr {
         padding: 15px;
         // min-height: 40px;
         // text-align: center;
-        min-width: 285px;
+        min-width: 270px;
     }
 
     .CloseButton {
