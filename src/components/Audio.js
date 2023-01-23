@@ -201,6 +201,7 @@ export function Audio() {
         const nextAya = offsetPlayingAya(1);
         if (nextAya === -1) {
             dispatch(setAudioState(AudioState.stopped));
+            dispatch(setPlayingAya(-1));
             return;
         }
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAudio } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
 import { ListReciters } from "../services/AudioData";
-import { selectAppWidth, selectPopupWidth } from "../store/layoutSlice";
+import { selectAppWidth } from "../store/layoutSlice";
 import {
     AudioState,
     selectAudioState,
@@ -13,6 +13,7 @@ import { changeReciter, selectReciter } from "../store/settingsSlice";
 import ReciterName from "./AudioPlayer/ReciterName";
 
 export default function RecitersGrid({ trigger, onClick }) {
+    const [userAction, setUserAction] = useState(false);
     const audio = useAudio();
     const audioState = useSelector(selectAudioState);
 
@@ -39,15 +40,14 @@ export default function RecitersGrid({ trigger, onClick }) {
     }, [appWidth]);
 
     useEffect(() => {
-        const btn = bodyRef.current?.querySelector(`button[reciter]`);
-        setTimeout(() => {
-            btn?.scrollIntoView?.({
+        if (userAction) {
+            bodyRef.current?.scrollIntoView?.({
                 behavior: "smooth",
-                block: "end",
-                inline: "end",
+                block: "start",
+                inline: "start",
             });
-        }, 600);
-    }, [activeReciter]);
+        }
+    }, [activeReciter, userAction]);
 
     const onSelectReciter = ({ currentTarget }) => {
         const reciter = currentTarget.getAttribute("reciter");
@@ -55,6 +55,7 @@ export default function RecitersGrid({ trigger, onClick }) {
         if (reciter === activeReciter) {
             onClick?.(reciter);
         } else {
+            setUserAction(true);
             dispatch(changeReciter(reciter));
             analytics.logEvent("set_reciter", { reciter, trigger });
 
@@ -72,7 +73,7 @@ export default function RecitersGrid({ trigger, onClick }) {
             //wait for animation
             setTimeout(() => {
                 onClick?.(reciter);
-            }, 500);
+            }, 600);
         }
     };
 

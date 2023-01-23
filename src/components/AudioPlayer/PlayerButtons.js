@@ -17,7 +17,7 @@ export const PlayerButtons = ({
     let playButton = null,
         stopBtn = null;
 
-    if (audioState !== AudioState.stopped) {
+    if (audioState !== AudioState.stopped && showReciter === false) {
         stopBtn = (
             <CommandButton
                 trigger={trigger}

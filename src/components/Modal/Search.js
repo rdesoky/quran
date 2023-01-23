@@ -172,6 +172,13 @@ export default function Search() {
         const groupId = parseInt(currentTarget.getAttribute("group-index"));
         if (groupId !== undefined) {
             setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
+            setTimeout(() => {
+                currentTarget?.scrollIntoView?.({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "nearest",
+                });
+            }, [300]);
         }
     };
 

@@ -123,7 +123,7 @@ export const CommandButton = ({
                         content: <PlayPrompt trigger={trigger} />,
                     });
                 }
-                return;
+                break;
             case "Pause":
             case "Resume":
                 analytics.logEvent("pause_audio", {
@@ -136,7 +136,7 @@ export const CommandButton = ({
                 } else {
                     audio.resume();
                 }
-                return;
+                break;
             case "AudioPlayer":
             case "Stop":
                 // analytics.logEvent("stop_audio", {
@@ -149,7 +149,7 @@ export const CommandButton = ({
                     title: <Message id="play" values={keyValues("r")} />,
                     content: <PlayPrompt trigger={trigger} />,
                 });
-                return;
+                break;
             case "Downloading":
                 analytics.logEvent("retry_stuck_audio", {
                     ...verseLocation(playingAya),
