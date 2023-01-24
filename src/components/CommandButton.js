@@ -157,7 +157,7 @@ export const CommandButton = ({
                 });
                 // audio.stop();
                 // setTimeout(() => {
-                audio.play();
+                audio.play(playingAya, false);
                 // }, 500);
                 return;
             case "ToggleButton":

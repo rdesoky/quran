@@ -253,9 +253,9 @@ const PageHeader = ({
                     >
                         <CommandIcon
                             command={
-                                audioState !== AudioState.playing
+                                audioState === AudioState.stopped
                                     ? "Play"
-                                    : "Stop"
+                                    : "AudioPlayer"
                             }
                         />
                     </button>
