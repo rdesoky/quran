@@ -559,10 +559,16 @@ export default function Pager() {
             >
                 {({ dX, dY }) => {
                     //Shrink the width using the scaling
-                    const scaleX = (pageWidth - Math.abs(dX)) / pageWidth;
-                    const shiftX = dX * scaleX;
+                    // const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
+                    // const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
+                    // const shiftX = dX * accel;
+                    const scaleX = (pageWidth - Math.abs(dX)) / pageWidth; // * accel;
+                    // const angle = 90 * scaleX;
+                    // const accel = Math.cos(angle2Radians(angle));
+                    const shiftX = dX * scaleX; //accel;
+                    // (accel * (pageWidth - Math.abs(dX))) / pageWidth;
                     // console.log(
-                    //     `dX:${dX}, shiftX=${shiftX}, pageWidth:${pageWidth}, scaleX:${scaleX}`
+                    //     `dX:${dX}, Sh:${shiftX} Sc:${scaleX} Wd:${pageWidth}`
                     // );
                     const firstPageShiftX =
                         pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
