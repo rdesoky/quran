@@ -82,7 +82,7 @@ export default function Pager() {
     const maskShift = useSelector(selectMaskShift);
     const params = useParams();
     const shownPages = useSelector(selectShownPages);
-    const pageIndex = useSelector(selectActivePage);
+    const activePage = useSelector(selectActivePage);
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const popup = useSelector(selectPopup);
@@ -92,19 +92,19 @@ export default function Pager() {
     const audioState = useSelector(selectAudioState);
 
     useEffect(() => {
-        if (loading && pageIndex !== -1) {
+        if (loading && activePage !== -1) {
             const savedActiveAya = parseInt(localStorage.getItem("activeAya"));
 
             dispatch(
                 setSelectedAya(
                     !isNaN(savedActiveAya)
                         ? savedActiveAya
-                        : getPageFirstAyaId(pageIndex)
+                        : getPageFirstAyaId(activePage)
                 )
             );
             setLoading(false);
         }
-    }, [loading, pageIndex, dispatch]);
+    }, [loading, activePage, dispatch]);
 
     useEffect(() => {
         if (!loading) {
@@ -126,7 +126,7 @@ export default function Pager() {
     const pageUp = useCallback(
         (e, options = { bottom: false }) => {
             let count = pagesCount;
-            if (count > 1 && pageIndex % 2 === 0) {
+            if (count > 1 && activePage % 2 === 0) {
                 count = 1; //right page is active
             }
             dispatch(offsetPage(history, -count));
@@ -138,33 +138,33 @@ export default function Pager() {
                     : 0,
             });
         },
-        [dispatch, history, pageIndex, pagesCount]
+        [dispatch, history, activePage, pagesCount]
     );
 
     const pageDown = useCallback(
         (e, scroll = true) => {
             // let count = activePopup && !isWide ? 1 : pagesCount;
             let count = pagesCount;
-            if (count > 1 && pageIndex % 2 === 1) {
+            if (count > 1 && activePage % 2 === 1) {
                 count = 1; //left page is active
             }
             dispatch(offsetPage(history, count));
             analytics.logEvent("nav_next_page");
             pagerRef.current?.scrollTo?.({ top: 0 });
         },
-        [dispatch, history, pageIndex, pagesCount]
+        [dispatch, history, activePage, pagesCount]
     );
 
     //ComponentDidUpdate
     useEffect(() => {
         //cache next pages
         if (pagesCount === 1) {
-            downloadPageImage(pageIndex + 1).catch((e) => {});
+            downloadPageImage(activePage + 1).catch((e) => {});
         } else {
-            downloadPageImage(pageIndex + 2).catch((e) => {});
-            downloadPageImage(pageIndex + 3).catch((e) => {});
+            downloadPageImage(activePage + 2).catch((e) => {});
+            downloadPageImage(activePage + 3).catch((e) => {});
         }
-    }, [pagesCount, pageIndex]);
+    }, [pagesCount, activePage]);
 
     const handleWheel = (e) => {
         let viewRef = pagerRef.current;
@@ -178,8 +178,8 @@ export default function Pager() {
             ) {
                 analytics.setTrigger("mouse_wheel");
                 //scroll down ( forward )
-                if (shownPages.includes(pageIndex + 1)) {
-                    dispatch(setActivePageIndex(pageIndex + 1));
+                if (shownPages.includes(activePage + 1)) {
+                    dispatch(setActivePageIndex(activePage + 1));
                     setTimeout(() =>
                         viewRef.scrollTo?.({ top: 0, behavior: "smooth" })
                     );
@@ -193,8 +193,8 @@ export default function Pager() {
             //scroll up ( backward )
             if (viewRef?.scrollTop === 0) {
                 analytics.setTrigger("mouse_wheel");
-                if (shownPages.includes(pageIndex - 1)) {
-                    dispatch(setActivePageIndex(pageIndex - 1));
+                if (shownPages.includes(activePage - 1)) {
+                    dispatch(setActivePageIndex(activePage - 1));
                     console.log(`~~scrollBackward`);
                     setTimeout(() =>
                         viewRef.scrollTo?.({
@@ -236,7 +236,7 @@ export default function Pager() {
                 return;
             }
             const incrementedMaskPage = ayaIdPage(incrementedMask);
-            if (shownPages.includes(incrementedMaskPage)) {
+            if (activePage === incrementedMaskPage) {
                 dispatch(gotoAya(history, dispatch(offsetSelection(1))));
                 return;
             } else {
@@ -252,7 +252,7 @@ export default function Pager() {
             }
             dispatch(setSelectStart(dispatch(offsetSelection(1))));
         },
-        [dispatch, history, maskStart, shownPages]
+        [activePage, dispatch, history, maskStart]
     );
 
     const decrementMask = useCallback(
@@ -507,14 +507,14 @@ export default function Pager() {
         let thisPageIndex = shownPages?.[order];
 
         function selectPage(e) {
-            if (pageIndex !== thisPageIndex) {
+            if (activePage !== thisPageIndex) {
                 dispatch(gotoPage(history, thisPageIndex));
                 // console.log(`Set active page: ${thisPageIndex + 1}`);
             }
         }
 
         let pageClass = thisPageIndex % 2 === 0 ? "RightPage" : "LeftPage";
-        let activeClass = pageIndex === thisPageIndex ? "Active" : "";
+        let activeClass = activePage === thisPageIndex ? "Active" : "";
 
         return (
             <div
@@ -536,6 +536,7 @@ export default function Pager() {
                     onArrowKey={onArrowKey}
                     scaleX={scaleX}
                     shiftX={shiftX}
+                    incrementMask={incrementMask}
                 />
             </div>
         );

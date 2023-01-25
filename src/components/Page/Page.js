@@ -3,17 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { ayaID } from "../../services/QData";
 import { downloadPageImage } from "../../services/utils";
 import {
-  selectPageHeight,
-  selectPageMargin,
-  selectPagesCount,
-  selectPageWidth,
+    selectPageHeight,
+    selectPageMargin,
+    selectPagesCount,
+    selectPageWidth,
 } from "../../store/layoutSlice";
 import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
 import { HifzSegments } from "../HifzSegments";
 import "./Page.scss";
 import VerseLayout from "./VerseLayout";
 
-const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
+const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
     const [imageUrl, setImageUrl] = useState(null);
     const [versesInfo, setVerseInfo] = useState([]);
     const pagesCount = useSelector(selectPagesCount);
@@ -108,7 +108,11 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX }) => {
                     }}
                 >
                     <HifzSegments page={pageIndex} versesInfo={versesInfo} />
-                    <VerseLayout page={pageIndex} versesInfo={versesInfo}>
+                    <VerseLayout
+                        page={pageIndex}
+                        versesInfo={versesInfo}
+                        incrementMask={incrementMask}
+                    >
                         <img
                             style={{
                                 margin: `0 ${pageMargin}px`,
