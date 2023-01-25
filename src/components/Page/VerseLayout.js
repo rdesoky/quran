@@ -1,11 +1,12 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useContextPopup } from "../../RefsProvider";
-import { ayaIdPage, getPageFirstAyaId } from "../../services/QData";
+import { ayaIdPage } from "../../services/QData";
 import {
+    selectActivePage,
     selectPageHeight,
     selectPageMargin,
     selectPageWidth,
@@ -16,7 +17,6 @@ import {
     extendSelection,
     gotoAya,
     hideMask,
-    offsetSelection,
     selectEndSelection,
     selectMaskStart,
     selectStartSelection,
@@ -26,7 +26,12 @@ import { selectFollowPlayer } from "../../store/settingsSlice";
 import { VerseContextButtons } from "../Widgets";
 import { analytics } from "./../../services/Analytics";
 
-const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
+const VerseLayout = ({
+    page: pageIndex,
+    children,
+    versesInfo,
+    incrementMask,
+}) => {
     const playingAya = useSelector(selectPlayingAya);
     const [hoverVerse, setHoverVerse] = useState(-1);
     const pageMargin = useSelector(selectPageMargin);
@@ -44,31 +49,39 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
     const lineWidth = pageWidth - 2 * pageMargin;
     const shownPages = useSelector(selectShownPages);
     const ref = useRef(null);
+    const activePage = useSelector(selectActivePage);
 
-    const scrollToSelectedAya = (selector = ".VerseHead.Selected") => {
-        const selectedVerse = ref.current?.querySelector(selector);
-        if (selectedVerse) {
-            selectedVerse.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
-        }
-        // else {
-        //     console.log("no selected verse");
-        // }
-    };
+    const scrollToSelectedAya = useCallback(
+        (selector = ".VerseHead.Selected") => {
+            if (ayaIdPage(selectStart) !== activePage) {
+                return;
+            }
+
+            const selectedVerse = ref.current?.querySelector(selector);
+            if (selectedVerse) {
+                selectedVerse.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+            // else {
+            //     console.log("no selected verse");
+            // }
+        },
+        [activePage, selectStart]
+    );
 
     useEffect(() => {
         if (versesInfo.length > 0 && zoom !== 0) {
             setTimeout(scrollToSelectedAya, 100);
         }
-    }, [selectStart, versesInfo, zoom]);
+    }, [scrollToSelectedAya, selectStart, activePage, versesInfo, zoom]);
 
     useEffect(() => {
         if (versesInfo.length > 0 && zoom !== 0 && followPlayer) {
             setTimeout(() => scrollToSelectedAya(".VerseHead.Playing"), 100);
         }
-    }, [playingAya, zoom, versesInfo, followPlayer]);
+    }, [playingAya, zoom, versesInfo, followPlayer, scrollToSelectedAya]);
 
     const closeMask = (e) => {
         analytics.logEvent("hide_mask", { trigger: "mask_x_button" });
@@ -108,16 +121,7 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
     };
 
     const onClickMask = (e) => {
-        let nPageIndex = parseInt(e.target.getAttribute("page"));
-        let maskStartPage = ayaIdPage(maskStart);
-        if (shownPages.includes(maskStartPage)) {
-            dispatch(offsetSelection(1));
-            //same page
-            // app.offsetMask(1);
-        } else {
-            let clickedPageFirstAyaId = getPageFirstAyaId(nPageIndex);
-            dispatch(gotoAya(history, clickedPageFirstAyaId));
-        }
+        incrementMask();
         e.stopPropagation();
     };
 
@@ -175,7 +179,7 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
         return className;
     };
 
-    const VerseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const verseHead = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         let aClass = ayaClass(aya_id);
 
         return (
@@ -205,7 +209,7 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
         );
     };
 
-    const VerseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const verseTail = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         if (eline - sline > 0) {
             let aClass = ayaClass(aya_id);
             return (
@@ -234,7 +238,7 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
         return null;
     };
 
-    const VerseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
+    const verseBody = ({ aya_id, sura, aya, sline, spos, eline, epos }) => {
         if (eline - sline > 1) {
             let aClass = ayaClass(aya_id);
             let lines = [];
@@ -275,12 +279,9 @@ const VerseLayout = ({ page: pageIndex, children, versesInfo }) => {
     const VerseStructure = (verse) => {
         return (
             <div className="VerseParts" aya={verse.aya_id} key={verse.aya_id}>
-                {VerseHead(verse)}
-                {VerseBody(verse)}
-                {VerseTail(verse)}
-                {/* <VerseHead {...verse} />
-                <VerseBody {...verse} />
-                <VerseTail {...verse} /> */}
+                {verseHead(verse)}
+                {verseBody(verse)}
+                {verseTail(verse)}
             </div>
         );
     };
