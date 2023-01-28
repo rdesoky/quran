@@ -1,7 +1,7 @@
-//Tue Jan 24 2023 21:28:06 GMT-0800 (Pacific Standard Time)
+//Sat Jan 28 2023 09:51:25 GMT-0800 (Pacific Standard Time)
 /* eslint-disable no-restricted-globals */
 
-const appVersion = 13;
+const appVersion = 14;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
