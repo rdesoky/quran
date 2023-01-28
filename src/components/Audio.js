@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -32,6 +32,7 @@ import {
 import {
     AudioRepeat,
     selectFollowPlayer,
+    selectReciter,
     selectRepeat,
 } from "../store/settingsSlice";
 
@@ -50,6 +51,8 @@ export function Audio() {
     const repeatRange = useSelector(selectRepeatRange);
     const activePageIndex = useSelector(selectActivePage);
     const shownPages = useSelector(selectShownPages);
+    const activeReciter = useSelector(selectReciter);
+    const [playingReciter, setPlayingReciter] = useState(null);
 
     let audio = audioRef.current;
 
@@ -163,6 +166,7 @@ export function Audio() {
 
     const play = useCallback(
         (ayaId, setupRepeat = true) => {
+            setPlayingReciter(activeReciter);
             const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
             const audioSource = selectAudioSource(playedAya)(store.getState());
             audioRef.current.setAttribute("src", audioSource);
@@ -194,6 +198,7 @@ export function Audio() {
             history,
             setupRepeatRange,
             repeat,
+            activeReciter,
         ]
     );
 
@@ -215,9 +220,13 @@ export function Audio() {
 
     const resume = useCallback(() => {
         if (playingAya !== -1) {
-            audioRef.current?.play();
+            if (activeReciter !== playingReciter) {
+                play(playingAya, false); //re-set audio source
+            } else {
+                audioRef.current?.play();
+            }
         }
-    }, [playingAya]);
+    }, [playingAya, activeReciter, playingReciter, play]);
 
     const stop = useCallback(() => {
         audioRef.current?.pause();

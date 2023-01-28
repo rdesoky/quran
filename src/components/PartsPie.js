@@ -116,7 +116,7 @@ export default function PartsPie({ size, onFinish }) {
                                 <title>
                                     <FormattedMessage
                                         id="part_num"
-                                        values={{ num: activePartIndex + 1 }}
+                                        values={{ num: index + 1 }}
                                     />
                                 </title>
                             </path>

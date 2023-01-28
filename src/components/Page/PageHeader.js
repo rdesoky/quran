@@ -36,7 +36,7 @@ import {
     VerseContextButtons,
 } from "../Widgets";
 import PlayPrompt from "../PlayPrompt";
-import { keyValues } from "../../services/utils";
+import { commandKey, keyValues } from "../../services/utils";
 
 const PageHeader = ({
     index: pageIndex,
@@ -158,6 +158,7 @@ const PageHeader = ({
             dispatch(gotoPage(history, pageIndex));
         }
     };
+    const audioCommand = audioState !== AudioState.playing ? "play" : "stop";
 
     return (
         <div
@@ -244,12 +245,12 @@ const PageHeader = ({
                     <button
                         sura={suraIndex}
                         onClick={onTogglePlay}
-                        title={intl.formatMessage({
-                            id:
-                                audioState !== AudioState.playing
-                                    ? "play"
-                                    : "stop",
-                        })}
+                        title={intl.formatMessage(
+                            {
+                                id: audioCommand,
+                            },
+                            keyValues(commandKey(audioCommand))
+                        )}
                     >
                         <CommandIcon
                             command={
