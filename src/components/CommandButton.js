@@ -308,7 +308,12 @@ export const CommandButton = ({
             title={
                 showLabel
                     ? ""
-                    : intl.formatMessage({ id: command.toLowerCase() })
+                    : intl.formatMessage(
+                          {
+                              id: command.toLowerCase(),
+                          },
+                          keyValues(commandKey(command))
+                      )
             }
         >
             {updateChecker && updateAvailable && <UpdateBadge />}

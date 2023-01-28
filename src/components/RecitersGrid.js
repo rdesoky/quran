@@ -67,7 +67,7 @@ export default function RecitersGrid({ trigger, onClick }) {
                 ) {
                     audio.play(playingAya, false); //restart playing aya, don't setup the repeat range
                 } else if ([AudioState.paused].includes(audioState)) {
-                    audio.stop(); //change pause to stop
+                    // audio.stop(); //change pause to stop ??
                 }
             }
             //wait for animation
