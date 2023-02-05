@@ -9,7 +9,7 @@ const initialState = {
     exerciseMemorized: getStorageItem("exerciseMemorized", false),
     randomAutoRecite: getStorageItem("randomAutoRecite", false),
     followPlayer: getStorageItem("followPlayer", false),
-    repeat: getStorageItem("repeat", 0),
+    repeat: getStorageItem("repeat", false),
     reciter: getStorageItem("reciter", ListReciters()[0]),
     theme: getStorageItem("theme", "Default"),
     lang: getStorageItem("lang", "ar"),
@@ -98,11 +98,11 @@ export const changeReciter = (reciter) => (dispatch, getState) => {
     return true;
 };
 
-export const AudioRepeat = {
-    noStop: 0,
+export const AudioRange = {
+    continuous: 0,
     selection: 1,
     page: 2,
     sura: 3,
     part: 4,
-    noRepeat: 5,
+    exercise: 5,
 };

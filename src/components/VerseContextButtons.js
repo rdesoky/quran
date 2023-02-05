@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectMaskOn } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
-import { AudioRepeat } from "../store/settingsSlice";
+import { AudioRange } from "../store/settingsSlice";
 import { selectPopup } from "../store/uiSlice";
 import { CommandButton } from "./CommandButton";
 
@@ -19,7 +19,7 @@ export const VerseContextButtons = ({ verse }) => {
                     {...{
                         trigger,
                         command: "Play",
-                        audioRepeat: AudioRepeat.selection,
+                        audioRepeat: AudioRange.selection,
                     }}
                 />
             ) : (

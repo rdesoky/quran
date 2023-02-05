@@ -76,9 +76,10 @@
     "unknown": "غير معروف",
     "fullscreen": "تكبير",
     "followPlayer": "عرض آية التلاوة",
-    "repeat": "تلاوة وتكرار",
+    "repeat": "تكرار التلاوة",
     "no_repeat": "مرة واحدة",
     "no_stop_recite_from": "تلاوة متصلة من",
+    "recite_range": "تلاوة محددة",
     "selection": "الآيات المحددة",
     "r.baset": "عبد الباسط (حفص)",
     "r.baset_tgw": "عبد الباسط (مجود)",
@@ -176,7 +177,7 @@
     "zoom": "تكبير وتصغير (z)",
     "typing_settings": "اعدادات الكتابة",
     "ok": "حسنا",
-    "loop_start": "بداية التكرار",
+    "recite_start": "بداية التلاوة",
     "playing_aya": "الآية الحالية",
-    "loop_end": "تكرار بعد"
+    "recite_end": "نهاية التلاوة"
 }

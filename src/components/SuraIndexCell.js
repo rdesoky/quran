@@ -19,7 +19,7 @@ import {
 } from "../services/QData";
 import { addHifzRange, selectSuraRanges } from "../store/dbSlice";
 import { gotoSura, hideMask, selectStartSelection } from "../store/navSlice";
-import { AudioRepeat } from "../store/settingsSlice";
+import { AudioRange } from "../store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "../store/uiSlice";
 import { AddHifz } from "./AddHifz";
 import { SuraHifzChart } from "./Hifz";
@@ -96,7 +96,7 @@ export const SuraIndexCell = ({
     const onClickPlay = (e) => {
         // audio.stop();
         onClickSura(e);
-        audio.play(ayaID(suraIndex, 0), AudioRepeat.sura);
+        audio.play(ayaID(suraIndex, 0), AudioRange.sura);
         analytics.logEvent("play_audio", {
             trigger,
             ...verseLocation(ayaID(suraIndex, 0)),

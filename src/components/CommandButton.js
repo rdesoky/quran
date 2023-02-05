@@ -33,7 +33,7 @@ import {
     selectAudioState,
     selectPlayingAya,
 } from "../store/playerSlice";
-import { AudioRepeat, selectReciter } from "../store/settingsSlice";
+import { AudioRange, selectReciter } from "../store/settingsSlice";
 import {
     closePopup,
     hideMenu,
@@ -116,7 +116,7 @@ export const CommandButton = ({
                         trigger,
                     });
                     dispatch(gotoPage(history, ayaIdPage(playStart)));
-                    audio.play(selectedRange.start, AudioRepeat.noRepeat);
+                    audio.play(selectedRange.start, AudioRange.exercise);
                 } else {
                     msgBox.set({
                         title: <Message id={"play"} values={keyValues("r")} />,

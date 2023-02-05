@@ -4,15 +4,14 @@ import React from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
+import AudioSettings from "../../AudioSettings";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { analytics } from "../../services/Analytics";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
 import {
-    selectFollowPlayer,
     selectLang,
     selectTheme,
-    setFollowPlayer,
     setLang,
     setTheme,
 } from "../../store/settingsSlice";
@@ -32,28 +31,6 @@ const Settings = () => {
     const isNarrow = useSelector(selectIsNarrow);
     const popup = useSelector(selectPopup);
     const playingAya = useSelector(selectPlayingAya);
-    const followPlayer = useSelector(selectFollowPlayer);
-
-    // const onChangeRepeat = ({ currentTarget }) => {
-    //   const repeat = parseInt(currentTarget.value);
-    //   dispatch(setRepeat(repeat));
-    //   localStorage.setItem("repeat", repeat);
-    //   analytics.logEvent("set_repeat", { repeat, trigger: popup });
-    //   if (playingAya) {
-    //     audio.setupRepeatRange(playingAya, repeat);
-    //   }
-    // };
-
-    const updateFollowPlayer = (checked) => {
-        dispatch(setFollowPlayer(checked));
-        localStorage.setItem("followPlayer", checked);
-        analytics.logEvent(
-            checked ? "set_follow_player" : "set_unfollow_player",
-            {
-                trigger: popup,
-            }
-        );
-    };
 
     const onUpdateTheme = (checked) => {
         const theme_name = checked ? "Dark" : "Default";
@@ -113,47 +90,8 @@ const Settings = () => {
                 </div>
                 <ExerciseSettings />
                 <hr />
-                <div className="OptionRow">
-                    <label>
-                        <span>
-                            <Message id="followPlayer" />
-                        </span>
-                        <Switch
-                            height={22}
-                            width={42}
-                            onChange={updateFollowPlayer}
-                            checked={followPlayer}
-                            // disabled={player.repeat == 1}
-                        />
-                    </label>
-                </div>
-                {/*<div className="OptionRow">*/}
-                {/*  <label>*/}
-                {/*    <span>*/}
-                {/*      <Message id="repeat" />*/}
-                {/*    </span>*/}
-                {/*    <select*/}
-                {/*      onChange={onChangeRepeat}*/}
-                {/*      value={repeat}*/}
-                {/*    >*/}
-                {/*      <Message id="no_repeat">*/}
-                {/*        {(label) => <option value={0}>{label}</option>}*/}
-                {/*      </Message>*/}
-                {/*      <Message id="selection">*/}
-                {/*        {(label) => <option value={1}>{label}</option>}*/}
-                {/*      </Message>*/}
-                {/*      <Message id="page">*/}
-                {/*        {(label) => <option value={2}>{label}</option>}*/}
-                {/*      </Message>*/}
-                {/*      <Message id="sura">*/}
-                {/*        {(label) => <option value={3}>{label}</option>}*/}
-                {/*      </Message>*/}
-                {/*      <Message id="part">*/}
-                {/*        {(label) => <option value={4}>{label}</option>}*/}
-                {/*      </Message>*/}
-                {/*    </select>*/}
-                {/*  </label>*/}
-                {/*</div>*/}
+                <AudioSettings />
+                <hr />
                 <RecitersGrid />
             </div>
         </>

@@ -40,7 +40,7 @@ import {
     selectPlayingAya,
 } from "../../store/playerSlice";
 import {
-    AudioRepeat,
+    AudioRange,
     selectExerciseLevel,
     selectExerciseMemorized,
     selectRandomAutoRecite,
@@ -165,7 +165,7 @@ const Exercise = () => {
         dispatch(gotoAya(history, new_verse));
 
         if (randomAutoRecite) {
-            audio.play(new_verse, AudioRepeat.noRepeat);
+            audio.play(new_verse, AudioRange.exercise);
         }
 
         analytics.logEvent("get_random_verse", {
@@ -175,7 +175,7 @@ const Exercise = () => {
     };
 
     const startReciting = (e) => {
-        audio.play(verse, AudioRepeat.noRepeat);
+        audio.play(verse, AudioRange.exercise);
         analytics.logEvent("exercise_play_audio", {
             trigger,
         });
@@ -326,7 +326,7 @@ const Exercise = () => {
     const reciteNextVerse = (e) => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         moveToNextVerse();
-        audio.play(verse + 1, AudioRepeat.noRepeat);
+        audio.play(verse + 1, AudioRange.exercise);
         analytics.logEvent("recite_next_verse", { trigger });
         // app.setMaskStart(verse + 2, true);
     };
