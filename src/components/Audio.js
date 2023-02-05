@@ -22,15 +22,15 @@ import {
     selectAudioSource,
     selectAudioState,
     selectPlayingAya,
-    selectRepeatRange,
+    selectReciteRange,
     setAudioState,
     setPlayingAya,
     setRemainingTime,
-    setRepeatRange,
+    setReciteRange,
     setTrackDuration,
 } from "../store/playerSlice";
 import {
-    AudioRepeat,
+    AudioRange,
     selectFollowPlayer,
     selectReciter,
     selectRepeat,
@@ -48,7 +48,7 @@ export function Audio() {
     const selectedRange = useSelector(selectSelectedRange);
     const history = useHistory();
     const intl = useIntl();
-    const repeatRange = useSelector(selectRepeatRange);
+    const reciteRange = useSelector(selectReciteRange);
     const activePageIndex = useSelector(selectActivePage);
     const shownPages = useSelector(selectShownPages);
     const activeReciter = useSelector(selectReciter);
@@ -93,17 +93,23 @@ export function Audio() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [audioState, dispatch]);
 
-    const offsetPlayingAya = (offset) => {
-        if (repeatRange.end === -1) {
-            return -1; //no repeat
-        }
+    const offsetPlayingAya = useCallback(
+        (offset) => {
+            if (reciteRange.end === -1) {
+                return -1; //no repeat
+            }
 
-        let nextAya = playingAya + offset;
-        if (nextAya <= repeatRange.end) {
-            return nextAya;
-        }
-        return repeatRange.start;
-    };
+            let nextAya = playingAya + offset;
+            if (nextAya <= reciteRange.end) {
+                return nextAya;
+            }
+            if (repeat) {
+                return reciteRange.start;
+            }
+            return -1;
+        },
+        [playingAya, reciteRange.end, reciteRange.start, repeat]
+    );
 
     const onPlaying = useCallback(() => {
         dispatch(setAudioState(AudioState.playing));
@@ -123,25 +129,25 @@ export function Audio() {
         // dispatch(setAudioState(AudioState.paused));
     }, []);
 
-    const setupRepeatRange = useCallback(
-        (playedAya, repeat) => {
+    const setupReciteRange = useCallback(
+        (playedAya, range) => {
             let start, end;
-            switch (repeat) {
-                case AudioRepeat.selection:
+            switch (range) {
+                case AudioRange.selection:
                     start = selectedRange.start;
                     end = selectedRange.end;
                     break;
-                case AudioRepeat.page:
+                case AudioRange.page:
                     const page = ayaIdPage(playedAya);
                     start = getPageFirstAyaId(page);
                     end = getPageLastAyaId(page);
                     break;
-                case AudioRepeat.sura:
+                case AudioRange.sura:
                     const ayaInfo = ayaIdInfo(playedAya);
                     start = ayaID(ayaInfo.sura, 0);
                     end = start + ayaInfo.ac - 1;
                     break;
-                case AudioRepeat.part:
+                case AudioRange.part:
                     const currPart = getPartIndexByAyaId(playedAya);
                     start = getPartFirstAyaId(currPart);
                     end =
@@ -149,23 +155,23 @@ export function Audio() {
                             ? getPartFirstAyaId(currPart + 1) - 1
                             : TOTAL_VERSES - 1;
                     break;
-                case AudioRepeat.noStop:
+                case AudioRange.continuous:
                     start = 0;
                     end = TOTAL_VERSES - 1;
                     break;
-                case AudioRepeat.noRepeat: //no repeat
+                case AudioRange.exercise: //exercise mode
                 // eslint-disable-next-line no-fallthrough
                 default:
                     start = playedAya;
                     end = -1;
             }
-            dispatch(setRepeatRange({ start, end }));
+            dispatch(setReciteRange({ start, end }));
         },
         [dispatch, selectedRange.end, selectedRange.start]
     );
 
     const play = useCallback(
-        (ayaId, setupRepeat = true) => {
+        (ayaId, setupRange = true) => {
             setPlayingReciter(activeReciter);
             const playedAya = ayaId !== undefined ? ayaId : selectedRange.start;
             const audioSource = selectAudioSource(playedAya)(store.getState());
@@ -179,14 +185,14 @@ export function Audio() {
                     dispatch(gotoPage(history, ayaPage, { sel: false }));
                 }
             }
-            switch (setupRepeat) {
+            switch (setupRange) {
                 case false: //no setup
                     break;
-                case true: //auto setup
-                    setupRepeatRange(playedAya, repeat);
-                    break;
+                // case true: //auto setup
+                //     setupReciteRange(playedAya, repeat);
+                //     break;
                 default: //setup with given repeat
-                    setupRepeatRange(playedAya, setupRepeat);
+                    setupReciteRange(playedAya, setupRange);
             }
         },
         [
@@ -196,13 +202,12 @@ export function Audio() {
             dispatch,
             shownPages,
             history,
-            setupRepeatRange,
-            repeat,
+            setupReciteRange,
             activeReciter,
         ]
     );
 
-    const onEnded = () => {
+    const onEnded = useCallback(() => {
         const nextAya = offsetPlayingAya(1);
         if (nextAya === -1) {
             dispatch(setAudioState(AudioState.stopped));
@@ -211,7 +216,7 @@ export function Audio() {
         }
 
         play(nextAya, false);
-    };
+    }, [dispatch, offsetPlayingAya, play]);
 
     const pause = useCallback(() => {
         audioRef.current?.pause();
@@ -240,9 +245,9 @@ export function Audio() {
             stop,
             pause,
             resume,
-            setupRepeatRange,
+            setupReciteRange, //TODO: unused
         });
-    }, [pause, play, appRefs, resume, setupRepeatRange, stop]);
+    }, [pause, play, appRefs, resume, setupReciteRange, stop]);
 
     const onDurationChange = (e) => {
         dispatch(setTrackDuration(audio.duration));

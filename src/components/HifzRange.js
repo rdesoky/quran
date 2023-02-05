@@ -26,7 +26,7 @@ import {
     setSelectEnd,
     showMask,
 } from "../store/navSlice";
-import { setRepeatRange } from "../store/playerSlice";
+import { setReciteRange } from "../store/playerSlice";
 import { closePopupIfBlocking, showToast } from "../store/uiSlice";
 import {
     ayaID,
@@ -89,7 +89,7 @@ export const HifzRange = ({
         if (maskOn) {
             dispatch(hideMask());
         }
-        dispatch(setRepeatRange({ start, end }));
+        dispatch(setReciteRange({ start, end }));
         audio.play(start, false);
         dispatch(gotoPage(history, ayaIdPage(start)));
         dispatch(closePopupIfBlocking());

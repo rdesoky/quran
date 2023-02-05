@@ -75,10 +75,11 @@
     "error": "error",
     "unknown": "unknown",
     "fullscreen": "zoom-in",
-    "followPlayer": "Follow recitation",
-    "repeat": "Recite & repeat",
+    "followPlayer": "Follow recite",
+    "repeat": "Repeat recite",
     "no_repeat": "One time",
     "no_stop_recite_from": "Non-stop from",
+    "recite_range": "Recite range",
     "selection": "Selected verses",
     "r.baset": "Abdulbaset (Hafs)",
     "r.baset_tgw": "Abdulbaset (tajweed)",
@@ -176,7 +177,7 @@
     "zoom": "Change pages zoom (z)",
     "typing_settings": "Typing settings",
     "ok": "OK",
+    "recite_start": "Recite start",
     "playing_aya": "Recited verse",
-    "loop_start": "Loop start",
-    "loop_end": "Loop after"
+    "recite_end": "Recite end"
 }

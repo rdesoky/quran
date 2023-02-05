@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { getPageFirstAyaId } from "../services/QData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
-import { AudioRepeat } from "../store/settingsSlice";
+import { AudioRange } from "../store/settingsSlice";
 import { CommandButton } from "./CommandButton";
 
 export const PageContextButtons = ({ page }) => {
@@ -22,7 +22,7 @@ export const PageContextButtons = ({ page }) => {
                     trigger,
                     command:
                         audioState === AudioState.stopped ? "Play" : "Stop",
-                    audioRepeat: AudioRepeat.page,
+                    audioRepeat: AudioRange.page,
                     playAya: getPageFirstAyaId(page),
                 }}
             />

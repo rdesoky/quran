@@ -18,7 +18,7 @@ export const AudioState = {
 const initialState = {
     audioState: AudioState.stopped,
     playingAya: -1,
-    repeat: {
+    recite: {
         start: 0,
         end: TOTAL_VERSES,
     },
@@ -46,9 +46,9 @@ const slice = createSlice({
         setRemainingTime: (slice, { payload: remainingTime }) => {
             slice.remainingTime = remainingTime;
         },
-        setRepeatRange: (slice, { payload: { start, end } }) => {
-            slice.repeat.start = start;
-            slice.repeat.end = end;
+        setReciteRange: (slice, { payload: { start, end } }) => {
+            slice.recite.start = start;
+            slice.recite.end = end;
         },
     },
 });
@@ -61,10 +61,10 @@ export const {
     setPlayingAya,
     setTrackDuration,
     setRemainingTime,
-    setRepeatRange,
+    setReciteRange,
 } = slice.actions;
 
-export const selectRepeatRange = (state) => state[sliceName].repeat;
+export const selectReciteRange = (state) => state[sliceName].recite;
 export const selectPlayingAya = (state) => state[sliceName].playingAya;
 export const selectAudioState = (state) => state[sliceName].audioState;
 export const selectAudioSource = (ayaId) => (state) => {
@@ -85,5 +85,5 @@ export const selectAudioSource = (ayaId) => (state) => {
 
 export const selectTrackDuration = (state) => state[sliceName].trackDuration;
 export const selectRemainingTime = (state) => state[sliceName].remainingTime;
-export const selectRepeatStart = (state) => state[sliceName].repeat.start;
-export const selectRepeatEnd = (state) => state[sliceName].repeat.end;
+export const selectReciteStart = (state) => state[sliceName].recite.start;
+export const selectReciteEnd = (state) => state[sliceName].recite.end;
