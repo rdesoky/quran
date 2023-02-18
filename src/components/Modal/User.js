@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { selectUser, signOut } from "../../store/dbSlice";
 import { selectAppHeight } from "../../store/layoutSlice";
+import { ActivityGrid } from "../ActivityGrid";
 import { ActivityChart } from "../Hifz";
 import { UserImage } from "../UserImage";
 import Login from "./../Login";
@@ -47,11 +48,13 @@ const User = () => {
                         </>
                     )}
                 </div>
-                <hr />
-                <div>
-                    <ActivityChart activity="pages" />
-                    <hr />
-                    <ActivityChart activity="chars" />
+                <div className="VACentered">
+                    <div>
+                        <hr />
+                        <ActivityGrid activity="pages" />
+                        <hr />
+                        <ActivityGrid activity="chars" />
+                    </div>
                 </div>
             </div>
         </>
