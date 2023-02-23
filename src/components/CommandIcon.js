@@ -8,9 +8,9 @@ import {
     faCog,
     faCopy,
     faExpand,
+    faEyeSlash,
     faFileDownload,
     faHeart,
-    faLightbulb,
     faListAlt,
     faPauseCircle,
     faPlayCircle,
@@ -26,8 +26,8 @@ import React from "react";
 
 import {
     faBookmark as farBookmark,
+    faEyeSlash as farEyeSlash,
     faKeyboard,
-    faLightbulb as farLightbulb,
 } from "@fortawesome/free-regular-svg-icons";
 
 import { useSelector } from "react-redux";
@@ -52,8 +52,8 @@ export const CommandIcons = {
     Favorites: faHeart,
     update_hifz: faHeart,
     Help: faQuestion,
-    Mask: faLightbulb,
-    MaskOn: farLightbulb,
+    Mask: faEyeSlash,
+    MaskOn: farEyeSlash,
     Copy: faCopy,
     Share: faShareSquare,
     Tafseer: faQuran,

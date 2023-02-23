@@ -9,13 +9,15 @@ export const ActivityGrid = ({ activity = "pages" }) => {
     const intl = useIntl();
 
     useEffect(() => {
-        setData(
-            dailyActivities[activity].slice(0, 30).map((pgInfo) => {
-                return Object.assign({}, pgInfo, {
-                    day: pgInfo.day.substring(5),
-                });
-            })
-        );
+        if (Array.isArray(dailyActivities?.[activity])) {
+            setData(
+                dailyActivities[activity].slice(0, 30).map((pgInfo) => {
+                    return Object.assign({}, pgInfo, {
+                        day: pgInfo.day.substring(5),
+                    });
+                })
+            );
+        }
     }, [activity, dailyActivities]);
 
     if (!data.length) {
@@ -40,12 +42,13 @@ export const ActivityGrid = ({ activity = "pages" }) => {
                     >
                         {new Array(10).fill(0).map((v, c) => (
                             <div
+                                key={c}
                                 style={{
                                     display: "flex",
                                     borderRadius: 5,
                                     flexGrow: 1,
                                     margin: 2,
-                                    backgroundColor: "#333",
+                                    border: "solid 1px #444",
                                     height: 30,
                                 }}
                             >
