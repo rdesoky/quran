@@ -5,7 +5,6 @@ import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { selectUser, signOut } from "../../store/dbSlice";
 import { selectAppHeight } from "../../store/layoutSlice";
 import { ActivityGrid } from "../ActivityGrid";
-import { ActivityChart } from "../Hifz";
 import { UserImage } from "../UserImage";
 import Login from "./../Login";
 
