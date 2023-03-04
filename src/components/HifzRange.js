@@ -1,6 +1,6 @@
 import {
     faCheck,
-    faLightbulb,
+    faEyeSlash,
     faPlayCircle,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
@@ -292,7 +292,7 @@ export const HifzRange = ({
                             onClick={reviewRange}
                             title={intl.formatMessage({ id: "revise" })}
                         >
-                            <Icon icon={faLightbulb} />
+                            <Icon icon={faEyeSlash} />
                         </button>
                         <button onClick={onSetRangeRevised}>
                             <Icon icon={faCheck} /> <String id="revised" />
