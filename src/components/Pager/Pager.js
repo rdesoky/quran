@@ -178,11 +178,11 @@ export default function Pager() {
             ) {
                 analytics.setTrigger("mouse_wheel");
                 //scroll down ( forward )
+                setTimeout(() => {
+                    viewRef.scrollTo?.({ top: 0, behavior: "smooth" });
+                }, 10);
                 if (shownPages.includes(activePage + 1)) {
                     dispatch(setActivePageIndex(activePage + 1));
-                    setTimeout(() =>
-                        viewRef.scrollTo?.({ top: 0, behavior: "smooth" })
-                    );
                     console.log(`~~scrollForward`);
                     return;
                 }
@@ -193,15 +193,15 @@ export default function Pager() {
             //scroll up ( backward )
             if (viewRef?.scrollTop === 0) {
                 analytics.setTrigger("mouse_wheel");
+                setTimeout(() =>
+                    viewRef.scrollTo?.({
+                        top: viewRef.scrollHeight - viewRef.clientHeight,
+                        behavior: "smooth",
+                    })
+                );
                 if (shownPages.includes(activePage - 1)) {
                     dispatch(setActivePageIndex(activePage - 1));
                     console.log(`~~scrollBackward`);
-                    setTimeout(() =>
-                        viewRef.scrollTo?.({
-                            top: viewRef.scrollHeight - viewRef.clientHeight,
-                            behavior: "smooth",
-                        })
-                    );
                     return;
                 }
                 pageUp(e, { bottom: true });

@@ -296,7 +296,7 @@ export default function PlayPrompt({ trigger, showReciters }) {
             <table className="RadioGroup">
                 <tbody>
                     <tr>
-                        <td style={{ maxWidth: appWidth / 2 }}>
+                        <td style={{ maxWidth: appWidth / 2 }} className="card">
                             {audioState === AudioState.stopped
                                 ? renderRadioOptions()
                                 : renderReciteStatus()}
