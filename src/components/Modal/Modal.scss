@@ -49,7 +49,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     pointer-events: all;
     position: absolute;
     right: 0;
-    padding: 0 15px 0 15px;
+    // padding: 0 15px 0 15px;
     box-shadow: 0 0px 15px 0px rgba(17, 17, 17, 0.35);
     background-color: $popupBgColor;
     #ExercisePopup & {
@@ -96,12 +96,13 @@ $selectionBgColorDark: rgb(38, 93, 138);
             display: flex;
             align-items: stretch;
             justify-content: stretch;
+            margin: 0 -12px;
         }
         flex-wrap: nowrap;
         align-items: center;
-        padding: 0 3px 0 50px;
+        padding: 0 10px 0 60px;
         background-color: #111;
-        margin: 0 -15px 0 -15px;
+        // margin: 0 -15px 0 -15px;
         border-bottom: solid 1px #444;
         min-height: 50px;
         position: relative;
@@ -124,11 +125,9 @@ $selectionBgColorDark: rgb(38, 93, 138);
         }
     }
     .PopupBody {
-        // flex-grow: 1;
         overflow-y: auto;
         overflow-x: hidden;
-        // max-height: calc(100% - 40px);
-        margin: 5px 0 15px 0;
+        padding: 10px;
         .ButtonsBar {
             margin: 10px 0;
         }
@@ -376,8 +375,11 @@ $selectionBgColorDark: rgb(38, 93, 138);
         left: 0;
         right: 0;
         background-color: #111;
-        padding: 10px 5px 0;
+        // padding: 10px 5px 0;
         pointer-events: fill;
+        #AKeyboard{
+            margin:0;
+        }
     }
     // .PopupBody {
     //     margin-top: 0;
@@ -397,7 +399,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         }
         .ButtonsBar {
             padding: 0;
-            margin: 0 4px;
+            margin: 0 -4px;
             .CommandButton {
                 span {
                     font-size: 12px;
@@ -446,6 +448,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         right: 0;
         background-color: #111;
         z-index: 2;
+        margin:0;
     }
 }
 
@@ -488,10 +491,10 @@ $selectionBgColorDark: rgb(38, 93, 138);
     direction: rtl;
     padding: 10px;
     min-height: 21px;
-    max-height: calc(100% - 40px);
-    // max-height: 92px;
+    // max-width:480px;
+    // max-height: calc(100% - 40px); // hight is set via JS hook
     border: solid 1px #444;
-    margin: 5px 0;
+    margin: 5px auto;
     font-size: 18px;
     overflow: auto;
     position: relative;
