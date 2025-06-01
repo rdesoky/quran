@@ -7,13 +7,13 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "editor.insertSpaces": false,
+	"editor.insertSpaces": true,
     "prettier.tabWidth": 4,
     "editor.detectIndentation": false,
     "editor.renderWhitespace": "none",
     "editor.useTabStops": false,
     "eslint.alwaysShowStatus": true,
-    "editor.tabSize": 2,
+		"editor.tabSize": 4,
     "cSpell.words": [
         "eline",
         "fontawesome",

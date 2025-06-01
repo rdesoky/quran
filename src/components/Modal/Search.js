@@ -5,7 +5,7 @@ import {
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -20,19 +20,16 @@ import {
 } from "../../services/utils";
 import {
     selectAppHeight,
-    selectIsCompact,
-    selectPagesCount,
-    selectPopupWidth,
+    selectPopupWidth
 } from "../../store/layoutSlice";
 import { gotoAya, gotoSura, hideMask } from "../../store/navSlice";
+import { selectLang } from "../../store/settingsSlice";
 import {
-    closePopup,
     closePopupIfBlocking,
-    showToast,
+    showToast
 } from "../../store/uiSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import SuraName from "../SuraName";
-import { selectLang } from "../../store/settingsSlice";
 
 export default function Search() {
     const popupWidth = useSelector(selectPopupWidth);
@@ -54,7 +51,7 @@ export default function Search() {
     const dispatch = useDispatch();
     const history = useHistory();
     const lang = useSelector(selectLang);
-    const resultsRef = useSnapHeightToBottomOf(appHeight - 15, searchTerm);
+    const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm);// substract 8px for the bottom padding
 
     const resultsDiv = resultsRef.current;
 
