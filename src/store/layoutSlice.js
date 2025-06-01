@@ -175,19 +175,24 @@ export const selectPageHeight = (state) => {
 
 export const selectActivePage = (state) => state[sliceName].activePageIndex;
 
+const shownPages = [];//to avoid creating new array on each selector call
+
 export const selectShownPages = (state) => {
     const pageIndex = selectActivePage(state);
     const pagesCount = selectPagesCount(state);
     if (pageIndex === -1) {
-        return [];
+        shownPages.length = 0;
     }
-    if (pagesCount === 1) {
-        return [pageIndex];
+    else if (pagesCount === 1) {
+        shownPages.length = 1;
+        shownPages[0] = pageIndex;
     } else {
         const firstPage = pageIndex - (pageIndex % 2);
         const secondePage = firstPage + 1;
-        return [firstPage, secondePage];
+        shownPages[0] = firstPage;
+        shownPages[1] = secondePage;
     }
+    return shownPages;
 };
 export const selectViewWidth = (state) => {
     const { appWidth, viewCapacity } = state[sliceName];
