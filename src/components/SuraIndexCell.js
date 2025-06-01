@@ -4,7 +4,7 @@ import {
     faPlayCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -39,7 +39,7 @@ export const SuraIndexCell = ({
     const audio = useAudio();
     const msgBox = useMessageBox();
     const selectStart = useSelector(selectStartSelection);
-    const suraRanges = useSelector(selectSuraRanges(suraIndex));
+    const suraRanges = useMemo(useSelector(selectSuraRanges(suraIndex)), [suraIndex]);
 
     const onClickSura = (e) => {
         // eslint-disable-next-line eqeqeq

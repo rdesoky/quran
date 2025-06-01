@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/Analytics";
@@ -15,7 +15,7 @@ export const SuraHifzChart = ({
     onClickPage,
     trigger = "header_chapter_index",
 }) => {
-    const suraRanges = useSelector(selectSuraRanges(sura));
+    const suraRanges = useMemo(useSelector(selectSuraRanges(sura)), [sura]);
     const [activeRange, setActiveRange] = useState(null);
 
     const suraIndex = sura !== undefined ? sura : range.sura;
