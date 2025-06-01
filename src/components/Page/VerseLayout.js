@@ -1,6 +1,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useContextPopup } from "../../RefsProvider";
@@ -10,8 +10,7 @@ import {
     selectPageHeight,
     selectPageMargin,
     selectPageWidth,
-    selectShownPages,
-    selectZoom,
+    selectZoom
 } from "../../store/layoutSlice";
 import {
     extendSelection,
@@ -47,7 +46,7 @@ const VerseLayout = ({
     const pageHeight = useSelector(selectPageHeight);
     const lineHeight = pageHeight / 15;
     const lineWidth = pageWidth - 2 * pageMargin;
-    const shownPages = useSelector(selectShownPages);
+    // const shownPages = useSelector(selectShownPages);
     const ref = useRef(null);
     const activePage = useSelector(selectActivePage);
 

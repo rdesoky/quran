@@ -4,11 +4,10 @@ import {
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useAudio, useContextPopup, useMessageBox } from "../../RefsProvider";
+import { useContextPopup, useMessageBox } from "../../RefsProvider";
 import { analytics } from "../../services/Analytics";
 import {
     ayaID,
@@ -18,6 +17,7 @@ import {
     getPageSuraIndex,
     TOTAL_PAGES,
 } from "../../services/QData";
+import { commandKey, keyValues } from "../../services/utils";
 import {
     selectActivePage,
     selectIsNarrow,
@@ -27,6 +27,7 @@ import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
 import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { CommandIcon } from "../CommandIcon";
 import PartsPie from "../PartsPie";
+import PlayPrompt from "../PlayPrompt";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
 import {
@@ -35,8 +36,6 @@ import {
     SuraContextHeader,
     VerseContextButtons,
 } from "../Widgets";
-import PlayPrompt from "../PlayPrompt";
-import { commandKey, keyValues } from "../../services/utils";
 
 const PageHeader = ({
     index: pageIndex,

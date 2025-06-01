@@ -1,26 +1,25 @@
 import {
     faBookmark,
+    faTimes as faDelete,
     faEllipsisH,
     faFileDownload,
     faPlayCircle,
     faQuran,
-    faTimes as faDelete,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranText } from "../App";
 import useSuraName from "../hooks/useSuraName";
-import { AppRefs, useAudio, useMessageBox } from "../RefsProvider";
+import { useAudio, useMessageBox } from "../RefsProvider";
 import { analytics } from "../services/Analytics";
 import { ayaIdInfo, ayaIdPage, verseLocation } from "../services/QData";
 import { deleteBookmark } from "../store/dbSlice";
-import { selectIsCompact, selectPagesCount } from "../store/layoutSlice";
 import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
-import { closePopup, closePopupIfBlocking } from "../store/uiSlice";
+import { closePopupIfBlocking } from "../store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
 
 export const BookmarkListItem = ({
