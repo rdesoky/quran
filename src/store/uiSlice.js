@@ -28,8 +28,10 @@ const initSidebarCommands = [
 const initialState = {
     menuExpanded: false,
 
-    toastMessage: null,
-    toastTime: 2000,
+    toastMessage: {
+        id: null,
+        time: 2000
+    },
 
     showPopup: false, //show/hide flag ( used for transitioning purpose )
     popup: null, //modal popup component
@@ -48,8 +50,8 @@ const slice = createSlice({
     initialState,
     reducers: {
         showToast: (slice, { payload: { id, time = 2000 } }) => {
-            slice.toastMessage = id;
-            slice.toastTime = time;
+            slice.toastMessage.id = id;
+            slice.toastMessage.time = time;
         },
         setShowPopup: (slice, action) => {
             slice.showPopup = action.payload;
@@ -99,10 +101,14 @@ export const {
 } = slice.actions;
 
 export const selectModalPopup = (state) => state[sliceName].modalPopup;
-export const selectRecentCommands = (state) =>
-    state[sliceName].recentCommands.filter(
+const recentCommands = [];
+export const selectRecentCommands = (state) => {
+    const filtered = state[sliceName].recentCommands.filter(
         (c) => c !== "Share" || navigator.share !== undefined
     );
+    recentCommands.splice(0, recentCommands.length, ...filtered);
+    return recentCommands;
+}
 export const selectMessageBox = (state) =>
     state[sliceName].messageBox?.[state[sliceName].messageBox.length];
 export const selectMenuExpanded = (state) => state[sliceName].menuExpanded;
@@ -111,10 +117,7 @@ export const selectPopup = (state) => state[sliceName].popup;
 export const selectIsExercisePopupOn = (state) =>
     state[sliceName].popup === "Exercise";
 export const selectPopupParams = (state) => state[sliceName].popupParams;
-export const selectToastMessage = (state) => ({
-    id: state[sliceName].toastMessage,
-    time: state[sliceName].toastTime,
-});
+export const selectToastMessage = (state) => (state[sliceName].toastMessage);
 
 export const selectSidebarWidth = (state) =>
     state[sliceName].isNarrow ? 0 : 50;

@@ -53,7 +53,7 @@ const DDrop = ({
                 setDY(clientY - startY);
             }
         },
-        [pointerDown, startX, startY, pointerCaptured, minShift, maxShift]
+        [pointerDown, startX, startY, pointerCaptured, minShift/*, maxShift*/]
     );
 
     const checkDrop = useCallback(

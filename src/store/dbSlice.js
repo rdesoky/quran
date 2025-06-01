@@ -62,10 +62,13 @@ export const selectIsBookmarked = (ayaId) => (state) => {
 export const selectHifzRanges = (state) => state[sliceName].hifzRanges;
 export const selectDailyActivities = (state) => state[sliceName].daily;
 
+const suraRanges = [];
 export const selectSuraRanges = (sura) => (state) => {
-    return state[sliceName].hifzRanges
+    const ranges = state[sliceName].hifzRanges
         .filter((r) => r.sura === sura)
         .sort((r1, r2) => (r1.startPage > r2.startPage ? 1 : -1));
+    suraRanges.splice(0, suraRanges.length, ...ranges);
+    return suraRanges;
 };
 
 //Thunks

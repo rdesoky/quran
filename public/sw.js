@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 
-const appVersion = 21;
+const appVersion = 22;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;

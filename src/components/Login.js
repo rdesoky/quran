@@ -1,5 +1,4 @@
 import firebase from "firebase";
-import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { useSelector } from "react-redux";
 import { analytics } from "../services/Analytics";
