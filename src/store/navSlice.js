@@ -79,10 +79,18 @@ export const {
 } = slice.actions;
 
 //selectors
-export const selectSelectedRange = (state) => ({
-    start: lesserOf(state[sliceName].selectStart, state[sliceName].selectEnd),
-    end: greaterOf(state[sliceName].selectEnd, state[sliceName].selectStart),
-});
+const selectedRange = { start: -1, end: -1 };
+export const selectSelectedRange = (state) => {
+    selectedRange.start = lesserOf(
+        state[sliceName].selectStart,
+        state[sliceName].selectEnd
+    );
+    selectedRange.end = greaterOf(
+        state[sliceName].selectEnd,
+        state[sliceName].selectStart
+    );
+    return selectedRange;
+};
 
 export const selectStartSelection = (state) => state[sliceName].selectStart;
 export const selectEndSelection = (state) => state[sliceName].selectEnd;
