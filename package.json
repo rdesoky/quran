@@ -4,17 +4,16 @@
     "version": "1.0.0",
     "private": true,
     "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^1.2.22",
+        "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-regular-svg-icons": "^5.11.2",
         "@fortawesome/free-solid-svg-icons": "^5.10.2",
-        "@fortawesome/react-fontawesome": "^0.1.4",
+        "@fortawesome/react-fontawesome": "^0.2.2",
         "@reduxjs/toolkit": "^1.9.1",
         "firebase": "^7.0.0",
-        "gh-pages": "^2.1.1",
+        "react-firebaseui": "^4.0.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-firebaseui": "^4.0.0",
         "react-intl": "^6.2.5",
         "react-redux": "^8.0.5",
         "react-router-dom": "^5.0.1",
@@ -22,7 +21,11 @@
         "react-switch": "^7.0.0",
         "react-touch": "^0.4.4",
         "recharts": "^2.2.0",
-        "sass": "^1.64.1",
+        "sass": "^1.64.1"
+    },
+    "devDependencies": {
+        "eslint": "^9.28.0",
+        "gh-pages": "^6.3.0",
         "source-map-explorer": "^2.5.3"
     },
     "scripts": {
