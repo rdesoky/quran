@@ -192,9 +192,11 @@ $selectionBgColorDark: rgb(38, 93, 138);
 
     .PageHeaderContent {
         display: flex;
+        gap: 2px 3px;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
+        padding: 0 3px;
         min-width: 200px; //to prevent 3 lines and header vertical overflow
     }
 
@@ -237,8 +239,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
             white-space: nowrap;
             background-color: #333;
             border-radius: 3px;
-            margin: 0 2px;
-            height: 25px;
+            // margin: 0 2px;
+            height: 24px;
             > * {
                 height: 100%;
             }

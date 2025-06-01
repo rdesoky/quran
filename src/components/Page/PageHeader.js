@@ -182,7 +182,7 @@ const PageHeader = ({
                             { id: "part_num" },
                             { num: partIndex + 1 }
                         )}
-                        style={{ margin: "0 5px 0 3px" }}
+                        style={{ margin: "0 3px" }}
                     />
                 )}
                 <div className="PageHeaderSection">
