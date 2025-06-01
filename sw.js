@@ -1,7 +1,7 @@
-//Fri May 30 2025 15:39:27 GMT-0700 (Pacific Daylight Time)
+//Sat May 31 2025 22:01:56 GMT-0700 (Pacific Daylight Time)
 /* eslint-disable no-restricted-globals */
 
-const appVersion = 19;
+const appVersion = 20;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
