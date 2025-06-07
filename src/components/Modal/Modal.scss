@@ -377,8 +377,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
         background-color: #111;
         // padding: 10px 5px 0;
         pointer-events: fill;
-        #AKeyboard{
-            margin:0;
+        #AKeyboard {
+            margin: 0;
         }
     }
     // .PopupBody {
@@ -448,7 +448,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
         right: 0;
         background-color: #111;
         z-index: 2;
-        margin:0;
+        margin: 0;
     }
 }
 
@@ -491,8 +491,6 @@ $selectionBgColorDark: rgb(38, 93, 138);
     direction: rtl;
     padding: 10px;
     min-height: 21px;
-    // max-width:480px;
-    // max-height: calc(100% - 40px); // hight is set via JS hook
     border: solid 1px #444;
     margin: 5px auto;
     font-size: 24px;
