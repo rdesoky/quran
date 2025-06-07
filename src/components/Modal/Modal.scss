@@ -96,7 +96,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
             display: flex;
             align-items: stretch;
             justify-content: stretch;
-            margin: 0 -12px;
+            margin: 0 -6px;
         }
         flex-wrap: nowrap;
         align-items: center;
@@ -495,7 +495,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
     // max-height: calc(100% - 40px); // hight is set via JS hook
     border: solid 1px #444;
     margin: 5px auto;
-    font-size: 18px;
+    font-size: 24px;
     overflow: auto;
     position: relative;
     &.empty {

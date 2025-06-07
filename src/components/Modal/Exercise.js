@@ -85,7 +85,7 @@ const Exercise = () => {
 	const audio = useAudio();
 	const audioState = useSelector(selectAudioState);
 	const hifzRanges = useSelector(selectHifzRanges);
-	const bodyRef = useSnapHeightToBottomOf(appHeight - 21, currStep);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
     const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 220, currStep);
 	const cursorRef = useRef();
 

@@ -121,10 +121,11 @@ button,
 	padding: 5px 0px;
 	flex-grow: 1;
 	min-height: 25px;
+	gap: 3px;
 
 	button,
 	.CommandButton {
-		margin: 0 2px;
+		// margin: 0 2px;
 		padding: 0;
 		border-radius: 6px;
 		display: flex;
@@ -252,6 +253,7 @@ hr {
 }
 
 .VerseText {
+	font-size:18px;
 	margin: 0;
 	// line-height: 22px;
 	color: rgb(207, 207, 0);
@@ -407,6 +409,8 @@ hr {
 		position: absolute;
 		bottom: 0px;
 		left: 0;
+		right: 0;
+		justify-content: flex-end;
 		height: $chartHeight;
 
 		button {

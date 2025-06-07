@@ -24,7 +24,7 @@ export default function QIndex({ simple }) {
 	);
 	const [filter, setFilter] = useState("");
 	const appHeight = useSelector(selectAppHeight);
-	const bodyRef = useSnapHeightToBottomOf(appHeight - 26);
+    const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
 
 	const selectTab = (tabId) => {
 		localStorage.setItem("activeTab", tabId);
