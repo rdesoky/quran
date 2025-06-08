@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { selectHifzRanges } from "../store/dbSlice";
 import { HifzRange } from "./HifzRange";
 

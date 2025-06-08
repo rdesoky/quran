@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { gotoPart } from "../store/navSlice";
 
 export const PartCell = ({ part: partIndex, selected }) => {

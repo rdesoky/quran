@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { dayLength } from "../services/utils";
 import { selectSuraRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";

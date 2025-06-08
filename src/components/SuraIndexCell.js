@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useSuraName from "../hooks/useSuraName";
 import { useAudio, useMessageBox } from "../RefsProvider";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import {
     ayaID,
     getArSuraName,

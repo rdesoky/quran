@@ -19,7 +19,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import { ToastMessage } from "./components/Widgets";
 import SuraNames from "./providers/SuraNames";
 import RefsProvider from "./RefsProvider";
-import { analytics } from "./services/Analytics";
+import { analytics } from "./services/analytics";
 import { onResize, selectZoomClass } from "./store/layoutSlice";
 import { selectLang, selectTheme } from "./store/settingsSlice";
 import useInitApp from "./useInitApp";

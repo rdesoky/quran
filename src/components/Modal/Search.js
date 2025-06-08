@@ -11,23 +11,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { quranNormalizedText, quranText } from "../../App";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { analytics } from "../../services/Analytics";
+import { analytics } from "../../services/analytics";
 import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/QData";
 import {
     copy2Clipboard,
     highlightSearch,
     normalizeText,
 } from "../../services/utils";
-import {
-    selectAppHeight,
-    selectPopupWidth
-} from "../../store/layoutSlice";
+import { selectAppHeight, selectPopupWidth } from "../../store/layoutSlice";
 import { gotoAya, gotoSura, hideMask } from "../../store/navSlice";
 import { selectLang } from "../../store/settingsSlice";
-import {
-    closePopupIfBlocking,
-    showToast
-} from "../../store/uiSlice";
+import { closePopupIfBlocking, showToast } from "../../store/uiSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import SuraName from "../SuraName";
 
@@ -51,7 +45,7 @@ export default function Search() {
     const dispatch = useDispatch();
     const history = useHistory();
     const lang = useSelector(selectLang);
-    const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm);// substract 8px for the bottom padding
+    const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm); // substract 8px for the bottom padding
 
     const resultsDiv = resultsRef.current;
 

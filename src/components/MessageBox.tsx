@@ -28,22 +28,21 @@ export const MessageBox = () => {
         });
     }, [refs, getMessages]);
 
-    const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        switch (e.code) {
-            case "Escape":
-                onClose();
-                break;
-            default:
-                break;
-        }
-    }, []);
-
     useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown);
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
+        const onKeyDown = (e: KeyboardEvent) => {
+            switch (e.code) {
+                case "Escape":
+                    onClose();
+                    break;
+                default:
+                    break;
+            }
         };
-    }, [handleKeyDown]);
+        document.addEventListener("keydown", onKeyDown);
+        return () => {
+            document.removeEventListener("keydown", onKeyDown);
+        };
+    }, []);
 
     return (
         <>

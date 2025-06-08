@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { PartCell } from "./PartCell";
 
 export const PartsList = ({ part }) => {

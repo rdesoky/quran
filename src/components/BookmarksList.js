@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { selectBookmarks } from "../store/dbSlice";
 import { BookmarkListItem } from "./BookmarkListItem";
 

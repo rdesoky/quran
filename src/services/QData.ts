@@ -2,9 +2,11 @@ export const TOTAL_PARTS = 30;
 export const TOTAL_SURAS = 114;
 export const TOTAL_PAGES = 604;
 export const TOTAL_VERSES = 6236;
-export const sura_info = require("../data/sura-info.json");
-export const parts = require("../data/parts-info.json");
-export const pagesInfo = require("../data/pages-starting-sura-aya.json");
+
+export const sura_info = require("../data/sura-info.json") as SuraInfo[];
+export const parts = require("../data/parts-info.json") as PartInfo[];
+export const pagesInfo =
+    require("../data/pages-starting-sura-aya.json") as PageInfo[];
 
 //Used for searching purpose
 export const arSuraNames =
@@ -12,11 +14,11 @@ export const arSuraNames =
         ","
     );
 
-export const getArSuraName = (index) => {
+export const getArSuraName = (index: number) => {
     return index < arSuraNames.length ? arSuraNames[index] : "(not found)";
 };
 
-export const getPagePartNumber = (nPage) => {
+export const getPagePartNumber = (nPage: number) => {
     for (let i = 0, len = parts.length; i < len; i++) {
         const part = parts[i];
         if (nPage >= part.p && nPage <= part.ep) {
@@ -34,7 +36,7 @@ export const getPagePartNumber = (nPage) => {
  * @param {number} aya
  * @returns {number} absolute aya index
  */
-export const ayaID = (sura, aya) => {
+export const ayaID = (sura: number | string, aya: number | string) => {
     if (typeof sura === "string") {
         sura = parseInt(sura) - 1;
     }
@@ -56,7 +58,7 @@ export const ayaID = (sura, aya) => {
 /**
  * Returns sura and aya indices given AyaId
  */
-export const ayaIdInfo = (aya_id) => {
+export const ayaIdInfo = (aya_id: number) => {
     let id = 0;
     for (let s = 0; s < sura_info.length; s++) {
         let ac = sura_info[s].ac;
@@ -71,7 +73,7 @@ export const ayaIdInfo = (aya_id) => {
 /**
  * For analytics purpose
  */
-export const verseLocation = (verse) => {
+export const verseLocation = (verse: number) => {
     const info = ayaIdInfo(verse);
     return {
         verse: `${info.sura + 1}:${info.aya + 1}`,
@@ -83,7 +85,7 @@ export const verseLocation = (verse) => {
 /**
  * Returns page index by aya ID
  */
-export const ayaIdPage = (aya_id) => {
+export const ayaIdPage = (aya_id: number) => {
     if (aya_id >= TOTAL_VERSES) {
         return TOTAL_PAGES; //beyond last page
     }
@@ -96,11 +98,11 @@ export const ayaIdPage = (aya_id) => {
  *
  * @param {number} aya_id absolute verse index
  */
-export const getPartIndexByAyaId = (aya_id) => {
+export const getPartIndexByAyaId = (aya_id: number) => {
     return getAyaPartIndex(aya_id);
 };
 
-export const getAyaPartIndex = (aya_id) => {
+export const getAyaPartIndex = (aya_id: number) => {
     for (let i = parts.length - 1; i >= 0; i--) {
         const partInfo = parts[i];
         const partFirstAya =
@@ -117,7 +119,7 @@ export const getAyaPartIndex = (aya_id) => {
  *
  * @param {number} partIndex zero based part index
  */
-export const getPartFirstAyaId = (partIndex) => {
+export const getPartFirstAyaId = (partIndex: number) => {
     const { s: suraNum, a: ayaNum } = parts[partIndex];
     return ayaID(suraNum - 1, ayaNum - 1);
 };
@@ -127,7 +129,7 @@ export const getPartFirstAyaId = (partIndex) => {
  *
  * @param {number} pageIndex
  */
-export const getPageFirstAyaId = (pageIndex) => {
+export const getPageFirstAyaId = (pageIndex: number) => {
     if (pageIndex >= TOTAL_PAGES) {
         return TOTAL_VERSES; //beyond last page
     }
@@ -135,7 +137,7 @@ export const getPageFirstAyaId = (pageIndex) => {
     return ayaID(sura - 1, aya - 1);
 };
 
-export const getPageLastAyaId = (pageIndex) => {
+export const getPageLastAyaId = (pageIndex: number) => {
     if (pageIndex === -1) {
         return -1;
     }
@@ -151,7 +153,7 @@ export const getPageLastAyaId = (pageIndex) => {
  * @param {number} suraIndex
  * @param {number} ayaIndex
  */
-export const getPageIndex = (suraIndex, ayaIndex) => {
+export const getPageIndex = (suraIndex: number, ayaIndex: number) => {
     let page = sura_info[suraIndex].sp - 1;
     while (page < pagesInfo.length - 1) {
         if (
@@ -168,7 +170,7 @@ export const getPageIndex = (suraIndex, ayaIndex) => {
 /**
  * Returns sura index for a specific page number
  */
-export const getPageSuraIndex = (nPage, bStart) => {
+export const getPageSuraIndex = (nPage: number) => {
     for (let i = 0; i < TOTAL_SURAS; i++) {
         if (sura_info[i].ep >= nPage) {
             return i;
@@ -177,7 +179,7 @@ export const getPageSuraIndex = (nPage, bStart) => {
     return 0;
 };
 
-export const getHezbByAya = (aya) => {
+export const getHezbByAya = (aya: number) => {
     const partIndex = getAyaPartIndex(aya);
     const partInfo = parts[partIndex];
     const partHezbIndex = partInfo.h.findLastIndex((h) => aya >= h);
@@ -187,7 +189,7 @@ export const getHezbByAya = (aya) => {
     return { index, quarter, absIndex };
 };
 
-export const rangeStartAya = (range) => {
+export const rangeStartAya = (range: HifzRange) => {
     const suraInfo = sura_info[range.sura];
     const page = range.startPage;
     const suraStartPage = suraInfo.sp - 1;
@@ -198,7 +200,11 @@ export const rangeStartAya = (range) => {
     }
 };
 
-export const getRangeVerses = (sura, startPage, endPage) => {
+export const getRangeVerses = (
+    sura: number,
+    startPage: number,
+    endPage: number
+) => {
     let [rangeStartVerse, rangeEndVerse] = [0, 0];
     const suraStartPage = sura_info[sura].sp - 1;
     const suraEndPage = sura_info[sura].ep - 1;
@@ -217,7 +223,7 @@ export const getRangeVerses = (sura, startPage, endPage) => {
     return [rangeStartVerse, rangeEndVerse];
 };
 
-export const getPageSuras = (pageIndex) => {
+export const getPageSuras = (pageIndex: number) => {
     if (pageIndex + 1 === pagesInfo.length) {
         return [111, 112, 113]; //last page special case
     }
@@ -231,7 +237,7 @@ export const getPageSuras = (pageIndex) => {
     return suraList;
 };
 
-export const hezbInfo = (partIndex, hezbIndex) => {
+export const hezbInfo = (partIndex: number, hezbIndex: number) => {
     const index = partIndex * 2 + Math.floor(hezbIndex / 4);
     const quarter = hezbIndex % 4;
     const aya =
@@ -240,83 +246,3 @@ export const hezbInfo = (partIndex, hezbIndex) => {
     const text = `${index + 1}${quarterText}`;
     return { aya, index, quarter, text, quarterText };
 };
-
-// export const suraInPage = (suraNum, pageNum) => {
-//   var nSura = suraNum - 1;
-//   return sura_info[nSura].sp <= pageNum && sura_info[nSura].ep >= pageNum;
-// };
-
-// ayatCount: function getAyatCount() {
-//   return 6236;
-//
-//   //for( var i=0, len= sura_info.length, count=0 ; i < len ; i++ ){
-//   //	count += sura_info[i].ac;
-//   //}
-//   //return count;
-// },
-//
-// suraStartPage: (sura) => {
-//   return sura_info[sura].sp - 1;
-// },
-//
-// suraPageCount: function getSuraPageCount(ndx) {
-//   var sInfo = sura_info[ndx];
-//   return sInfo.ep - sInfo.sp + 1;
-// },
-//
-// partPageProgress: function getPartPageProgress(nPart, nPageNo) {
-//   var startPage = parts[nPart].p;
-//   var endPage = parts[nPart].ep;
-//
-//   return ((nPageNo - startPage) * 100) / (endPage - startPage);
-// },
-//
-// suraPageProgress: function GetSuraPageProgress(nSura, nPageNo) {
-//   var startPage = sura_info[nSura].sp;
-//   var endPage = sura_info[nSura].ep;
-//
-//   return ((nPageNo - startPage) * 100) / (endPage - startPage);
-// },
-
-// nextAya: function (sura, aya) {
-//   var ret = { sura: sura, aya: aya };
-//   if (aya >= sura_info[sura - 1].ac) {
-//     if (sura < TOTAL_SURAS) {
-//       ret.sura = sura + 1;
-//       ret.aya = 1;
-//     } else {
-//       return null; //last aya in Quran, no increment
-//     }
-//   } else {
-//     ret.sura = sura;
-//     ret.aya = aya + 1;
-//   }
-//   return ret;
-// },
-
-// prevAya: function (sura, aya) {
-//   var ret = { sura: sura, aya: aya };
-//   if (aya <= 1) {
-//     if (sura > 1) {
-//       ret.sura = sura - 1;
-//       ret.aya = sura_info[ret.sura - 1].ac;
-//     } else {
-//       return ret;
-//     }
-//   } else {
-//     ret.sura = sura;
-//     ret.aya = aya - 1;
-//   }
-//   return ret;
-// },
-
-// compareVerses: function (infoL, infoR) {
-//   if (infoL.sura === infoR.sura) {
-//     if (infoL.aya === infoR.aya) {
-//       return 0;
-//     }
-//     return infoL.aya > infoR.aya ? 1 : -1;
-//   }
-//
-//   return infoL.sura > infoR.sura ? 1 : -1;
-// },

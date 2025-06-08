@@ -1,7 +1,7 @@
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import ReactSwitch from "react-switch";
-import { analytics } from "./services/Analytics";
+import { analytics } from "./services/analytics";
 import {
     selectFollowPlayer,
     selectRepeat,
