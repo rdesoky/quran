@@ -142,9 +142,9 @@ export default function useInitApp() {
             });
 
         return () => {
-            offBookmarksUpdate?.();
-            offHifzUpdate?.();
-            offActivityUpdate?.();
+            offBookmarksUpdate?.(null);
+            offHifzUpdate?.(null);
+            offActivityUpdate?.(null);
         };
     }, [dispatch, user]);
 }

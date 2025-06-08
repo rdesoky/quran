@@ -1,60 +1,64 @@
 {
-    "name": "hafiz",
-    "homepage": "/",
-    "version": "1.0.0",
-    "private": true,
-    "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^6.7.2",
-        "@fortawesome/free-regular-svg-icons": "^5.11.2",
-        "@fortawesome/free-solid-svg-icons": "^5.10.2",
-        "@fortawesome/react-fontawesome": "^0.2.2",
-        "@reduxjs/toolkit": "^1.9.1",
-        "firebase": "^7.0.0",
-        "prop-types": "^15.8.1",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-firebaseui": "^4.0.0",
-        "react-intl": "^6.2.5",
-        "react-redux": "^8.0.5",
-        "react-router-dom": "^5.0.1",
-        "react-scripts": "^5.0.1",
-        "react-switch": "^7.0.0",
-        "react-touch": "^0.4.4",
-        "recharts": "^2.2.0",
-        "sass": "^1.64.1"
-    },
-    "devDependencies": {
-        "eslint": "^9.28.0",
-        "eslint-config-react-app": "^7.0.1",
-        "gh-pages": "^6.3.0",
-        "source-map-explorer": "^2.5.3"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "sw-setup": "node sw-post-build.mjs",
-        "build": "react-scripts build",
-        "postbuild": "cp build/index.html build/404.html & npm run sw-setup",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d build",
-        "analyze": "source-map-explorer 'build/static/js/*.js'"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app"
-        ]
-    }
+  "name": "hafiz",
+  "homepage": "/",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@reduxjs/toolkit": "^1.9.1",
+    "firebase": "^7.0.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-firebaseui": "^4.0.0",
+    "react-intl": "^6.2.5",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "^5.0.1",
+    "react-switch": "^7.0.0",
+    "react-touch": "^0.4.4",
+    "recharts": "^2.2.0",
+    "sass": "^1.64.1"
+  },
+  "devDependencies": {
+    "@types/firebase": "^3.2.3",
+    "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "eslint": "^9.28.0",
+    "eslint-config-react-app": "^7.0.1",
+    "gh-pages": "^6.3.0",
+    "source-map-explorer": "^2.5.3",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "sw-setup": "node sw-post-build.mjs",
+    "build": "react-scripts build",
+    "postbuild": "cp build/index.html build/404.html & npm run sw-setup",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
