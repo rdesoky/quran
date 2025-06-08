@@ -1,12 +1,23 @@
 import { createContext, useCallback, useContext, useRef } from "react";
 
-export const AppRefs = createContext({});
+export type RefsType = { [x: string]: any };
 
-export default function RefsProvider({ children }) {
+export type AppRefsType = {
+    add: (id: string, ref: any) => void;
+    get: (id: string) => any;
+};
+
+export const AppRefs = createContext({} as AppRefsType);
+
+export default function RefsProvider({
+    children,
+}: {
+    children: React.ReactNode;
+}): JSX.Element {
     // const [updates, setUpdates] = useState(0);
-    const refs = useRef({});
+    const refs = useRef({} as RefsType);
 
-    const addRef = useCallback((id, ref) => {
+    const addRef = useCallback((id: string, ref: any) => {
         if (refs.current[id] !== undefined) {
             Object.assign(refs.current[id], ref);
         } else {
@@ -16,7 +27,7 @@ export default function RefsProvider({ children }) {
         // console.log(`RefsProvider/${id} add`);
     }, []);
 
-    const getRef = useCallback((id) => {
+    const getRef = useCallback((id: string) => {
         // console.log(`RefsProvider/${id} get`);
         return refs.current[id];
     }, []);

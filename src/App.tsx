@@ -1,11 +1,11 @@
 import firebase from "firebase";
-import React, { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { IntlProvider } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    BrowserRouter as Router,
     Redirect,
     Route,
+    BrowserRouter as Router,
     Switch,
 } from "react-router-dom";
 import "./App.scss";
@@ -47,9 +47,7 @@ if (!analytics.devMode()) {
 analytics.setCurrentScreen(window.location.pathname);
 analytics.setUserProps({ web_user: "yes" });
 
-// analytics.logEvent("page_view");
-
-export default function App() {
+export default function App(): JSX.Element | null {
     //Handles componentDidMount/unmount, props changes
     const [localeMessages, setLocaleMessages] = useState();
     const [windowSize, setWindowSize] = useState({
@@ -77,11 +75,11 @@ export default function App() {
     }, [deferredWindowSize, dispatch]);
 
     useEffect(() => {
-        window.addEventListener("selectstart", (e) => {
+        window.addEventListener("selectstart", (e: Event) => {
             e.preventDefault();
         });
-        window.addEventListener("resize", (e) => {
-            const { innerWidth: width, innerHeight: height } = e.target;
+        window.addEventListener("resize", (e: UIEvent) => {
+            const { innerWidth: width, innerHeight: height } = window;
             setWindowSize({ width, height });
         });
     }, [dispatch]);
@@ -92,76 +90,74 @@ export default function App() {
         // addLocaleData(require(`react-intl/locale-data/${lang}`));
     }, [lang]);
 
+    if (!localeMessages) {
+        return null;
+    }
+
     return (
-        localeMessages && (
-            <IntlProvider locale={lang} messages={localeMessages}>
-                <RefsProvider>
-                    <div className={`App ${theme}Theme ${zoomClass}`}>
-                        <Router>
-                            <Switch>
-                                <Route
-                                    path={
-                                        process.env.PUBLIC_URL + "/page/:page"
-                                    }
-                                    component={Pager}
-                                />
-                                <Route
-                                    path={
+        <IntlProvider locale={lang} messages={localeMessages}>
+            <RefsProvider>
+                <div className={`App ${theme}Theme ${zoomClass}`}>
+                    <Router>
+                        <Switch>
+                            <Route
+                                path={process.env.PUBLIC_URL + "/page/:page"}
+                                component={Pager}
+                            />
+                            <Route
+                                path={
+                                    process.env.PUBLIC_URL +
+                                    "/sura/:sura/aya/:aya"
+                                }
+                                component={Pager}
+                            />
+                            <Route
+                                path={process.env.PUBLIC_URL + "/aya/:aya"}
+                                component={PageRedirect}
+                            />
+                            <Route
+                                render={() => {
+                                    const activePage = Number(
+                                        localStorage.getItem("activePage")
+                                    );
+                                    const activePageNumber = isNaN(activePage)
+                                        ? 1
+                                        : activePage;
+                                    const defUrl =
                                         process.env.PUBLIC_URL +
-                                        "/sura/:sura/aya/:aya"
-                                    }
-                                    component={Pager}
-                                />
-                                <Route
-                                    path={process.env.PUBLIC_URL + "/aya/:aya"}
-                                    component={PageRedirect}
-                                />
-                                <Route
-                                    render={() => {
-                                        const activePage = parseInt(
-                                            localStorage.getItem("activePage")
-                                        );
-                                        const activePageNumber = isNaN(
-                                            activePage
-                                        )
-                                            ? 1
-                                            : activePage;
-                                        const defUrl =
-                                            process.env.PUBLIC_URL +
-                                            "/page/" +
-                                            activePageNumber;
-                                        console.log(
-                                            `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                        );
-                                        return <Redirect to={defUrl} />;
-                                    }}
-                                />
-                            </Switch>
-                            <PopupView />
-                            <MessageBox />
-                            <ContextPopup />
-                            <Sidebar />
-                            <Audio />
-                        </Router>
-                    </div>
-                    <ToastMessage />
-                    <SuraNames />
-                </RefsProvider>
-            </IntlProvider>
-        )
+                                        "/page/" +
+                                        activePageNumber;
+                                    console.log(
+                                        `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
+                                    );
+                                    return <Redirect to={defUrl} />;
+                                }}
+                            />
+                        </Switch>
+                        <PopupView />
+                        <MessageBox />
+                        <ContextPopup />
+                        <Sidebar />
+                        <Audio />
+                    </Router>
+                </div>
+                <ToastMessage />
+                <SuraNames />
+            </RefsProvider>
+        </IntlProvider>
     );
 }
 
-export const quranText = [];
+export const quranText: string[] = [];
 
 fetch(`${process.env.PUBLIC_URL}/db/quran.txt`)
     .then((results) => results.text())
-    .then((text) => {
+    .then((text: string) => {
         quranText.push(...text.split("\n"));
     })
     .catch((e) => {});
 
-export const quranNormalizedText = [];
+export const quranNormalizedText: string[] = [];
 
 fetch(`${process.env.PUBLIC_URL}/db/normalized_quran.txt`)
     .then((results) => results.text())

@@ -16,9 +16,9 @@ export default function AudioSettings() {
     const dispatch = useDispatch();
     const popup = useSelector(selectPopup);
 
-    const updateFollowPlayer = (checked) => {
+    const updateFollowPlayer = (checked: boolean) => {
         dispatch(setFollowPlayer(checked));
-        localStorage.setItem("followPlayer", checked);
+        localStorage.setItem("followPlayer", String(checked));
         analytics.logEvent(
             checked ? "set_follow_player" : "set_unfollow_player",
             {
@@ -26,9 +26,9 @@ export default function AudioSettings() {
             }
         );
     };
-    const updateRepeat = (checked) => {
+    const updateRepeat = (checked: boolean) => {
         dispatch(setRepeat(checked));
-        localStorage.setItem("repeat", checked);
+        localStorage.setItem("repeat", String(checked));
         analytics.logEvent(checked ? "set_repeat_on" : "set_repeat_off", {
             trigger: popup,
         });

@@ -7,7 +7,7 @@ import { store } from "./store";
 import { setUpdateAvailable } from "./store/uiSlice";
 import { register as registerSW } from "./sw-registration";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root") || document.body).render(
     <StrictMode>
         <Provider store={store}>
             <App />
