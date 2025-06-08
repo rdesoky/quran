@@ -22,12 +22,13 @@ export const MessageBox = () => {
                     { ...msg, key: Date.now() },
                 ]),
             pop: () => setMessages((messages) => messages.slice(0, -1)),
-            set: (msg) => setMessages(msg ? [{ ...msg, key: Date.now() }] : []),
+            set: (msg: Msg) =>
+                setMessages(msg ? [{ ...msg, key: Date.now() }] : []),
             getMessages,
         });
     }, [refs, getMessages]);
 
-    const handleKeyDown = useCallback((e) => {
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
         switch (e.code) {
             case "Escape":
                 onClose();

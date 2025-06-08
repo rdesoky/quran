@@ -5,6 +5,7 @@ import {
     selectZoom,
     ViewCapacity,
 } from "./layoutSlice";
+import { AppDispatch, GetState, RootState } from "./config";
 
 const sliceName = "ui";
 
@@ -30,7 +31,7 @@ const initialState = {
 
     toastMessage: {
         id: null,
-        time: 2000
+        time: 2000,
     },
 
     showPopup: false, //show/hide flag ( used for transitioning purpose )
@@ -43,6 +44,9 @@ const initialState = {
     updateAvailable: false,
 
     suraNames: [],
+
+    isNarrow: false, //used to hide the sidebar in narrow screens
+    // messageBox: [] as Msg[], //used to show messages in the bottom of the screen
 };
 
 const slice = createSlice({
@@ -100,88 +104,95 @@ export const {
     setSuraNames,
 } = slice.actions;
 
-export const selectModalPopup = (state) => state[sliceName].modalPopup;
-const recentCommands = [];
-export const selectRecentCommands = (state) => {
+export const selectModalPopup = (state: RootState) =>
+    state[sliceName].modalPopup;
+const recentCommands: string[] = [];
+export const selectRecentCommands = (state: RootState) => {
     const filtered = state[sliceName].recentCommands.filter(
         (c) => c !== "Share" || navigator.share !== undefined
     );
     recentCommands.splice(0, recentCommands.length, ...filtered);
     return recentCommands;
-}
-export const selectMessageBox = (state) =>
-    state[sliceName].messageBox?.[state[sliceName].messageBox.length];
-export const selectMenuExpanded = (state) => state[sliceName].menuExpanded;
-export const selectShowPopup = (state) => state[sliceName].showPopup;
-export const selectPopup = (state) => state[sliceName].popup;
-export const selectIsExercisePopupOn = (state) =>
+};
+//TODO: unused
+// export const selectMessageBox = (state: RootState) =>
+//     state[sliceName].messageBox[state[sliceName].messageBox.length - 1];
+export const selectMenuExpanded = (state: RootState) =>
+    state[sliceName].menuExpanded;
+export const selectShowPopup = (state: RootState) => state[sliceName].showPopup;
+export const selectPopup = (state: RootState) => state[sliceName].popup;
+export const selectIsExercisePopupOn = (state: RootState) =>
     state[sliceName].popup === "Exercise";
-export const selectPopupParams = (state) => state[sliceName].popupParams;
-export const selectToastMessage = (state) => (state[sliceName].toastMessage);
+export const selectPopupParams = (state: RootState) =>
+    state[sliceName].popupParams;
+export const selectToastMessage = (state: RootState) =>
+    state[sliceName].toastMessage;
 
-export const selectSidebarWidth = (state) =>
+export const selectSidebarWidth = (state: RootState) =>
     state[sliceName].isNarrow ? 0 : 50;
 
-export const selectUpdateAvailable = (state) =>
+export const selectUpdateAvailable = (state: RootState) =>
     state[sliceName].updateAvailable;
 
-export const selectSuraNames = (state) => state[sliceName].suraNames;
+export const selectSuraNames = (state: RootState) => state[sliceName].suraNames;
 
-export const showPopup = (popup, params) => (dispatch, getState) => {
-    const state = getState();
-    const currentPopup = selectPopup(state);
-    const menuExpanded = selectMenuExpanded(state);
-    if (menuExpanded) {
-        dispatch(hideMenu());
-    }
-    if (currentPopup) {
-        dispatch(setShowPopup(false));
-        //Animation trick
-        setTimeout(() => {
-            if (currentPopup === popup) {
-                dispatch(setPopup(null));
-                dispatch(setPopupParams(null));
-            } else {
-                //show new popup
-                dispatch(setPopup(popup));
-                dispatch(setPopupParams(params));
-                dispatch(setShowPopup(true));
-            }
-        }, 500);
-    } else {
-        dispatch(setPopup(popup));
-        dispatch(setPopupParams(params));
-        dispatch(setShowPopup(true));
-    }
-};
+export const showPopup =
+    (popup: string, params: Record<string, any>) =>
+    (dispatch: AppDispatch, getState: GetState) => {
+        const state = getState();
+        const currentPopup = selectPopup(state);
+        const menuExpanded = selectMenuExpanded(state);
+        if (menuExpanded) {
+            dispatch(hideMenu());
+        }
+        if (currentPopup) {
+            dispatch(setShowPopup(false));
+            //Animation trick
+            setTimeout(() => {
+                if (currentPopup === popup) {
+                    dispatch(setPopup(null));
+                    dispatch(setPopupParams(null));
+                } else {
+                    //show new popup
+                    dispatch(setPopup(popup));
+                    dispatch(setPopupParams(params));
+                    dispatch(setShowPopup(true));
+                }
+            }, 500);
+        } else {
+            dispatch(setPopup(popup));
+            dispatch(setPopupParams(params));
+            dispatch(setShowPopup(true));
+        }
+    };
 
-export const closePopup = () => (dispatch) => {
+export const closePopup = () => (dispatch: AppDispatch) => {
     dispatch(setShowPopup(false));
     setTimeout(() => {
         dispatch(setPopup(null));
     }, 500);
 };
 
-export const closePopupIfBlocking = () => (dispatch, getState) => {
-    const state = getState();
-    const popup = selectPopup(state);
-    if (!popup) {
-        return false;
-    }
-    const pagesCount = selectPagesCount(state);
-    if (pagesCount === 2) {
-        return; //
-    }
-    if (pagesCount === 1) {
-        const viewCapacity = selectViewCapacity(state);
-        const zoom = selectZoom(state);
-        if (viewCapacity === ViewCapacity.onePagePlus && zoom === 0) {
-            return false; //popup is not blocking
+export const closePopupIfBlocking =
+    () => (dispatch: AppDispatch, getState: GetState) => {
+        const state = getState();
+        const popup = selectPopup(state);
+        if (!popup) {
+            return false;
         }
-    }
-    dispatch(closePopup());
-    return true;
-};
+        const pagesCount = selectPagesCount(state);
+        if (pagesCount === 2) {
+            return; //
+        }
+        if (pagesCount === 1) {
+            const viewCapacity = selectViewCapacity(state);
+            const zoom = selectZoom(state);
+            if (viewCapacity === ViewCapacity.onePagePlus && zoom === 0) {
+                return false; //popup is not blocking
+            }
+        }
+        dispatch(closePopup());
+        return true;
+    };
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };

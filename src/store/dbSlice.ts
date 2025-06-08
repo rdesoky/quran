@@ -3,16 +3,18 @@ import firebase from "firebase";
 import { quranNormalizedText } from "../App";
 import { dateKey, num2string } from "../services/utils";
 import { showToast } from "./uiSlice";
+import { AppDispatch, GetState, RootState } from "./config";
+import { Root } from "react-dom/client";
 
 const sliceName = "db";
 
 const initialState = {
-    user: null,
-    hifzRanges: [],
-    bookmarks: [],
+    user: null as firebase.User | null,
+    hifzRanges: [] as HifzRange[],
+    bookmarks: [] as Bookmark[],
     daily: {
-        pages: [], //{date:'??',pages:123}
-        chars: [], //{date:'??',chars:123}
+        pages: [] as DailyActivity[],
+        chars: [] as DailyActivity[],
     },
 };
 
@@ -23,10 +25,18 @@ const slice = createSlice({
         setUser: (slice, action) => {
             slice.user = action.payload;
         },
-        setBookmarks: (slice, { payload: { bookmarks } }) => {
+        setBookmarks: (
+            slice,
+            { payload: { bookmarks } }: { payload: { bookmarks: Bookmark[] } }
+        ) => {
             slice.bookmarks = bookmarks;
         },
-        setHifzRanges: (slice, { payload: { hifzRanges } }) => {
+        setHifzRanges: (
+            slice,
+            {
+                payload: { hifzRanges },
+            }: { payload: { hifzRanges: HifzRange[] } }
+        ) => {
             slice.hifzRanges = hifzRanges;
         },
         setActivities: (
@@ -49,21 +59,24 @@ export const { setUser, setActivities, setBookmarks, setHifzRanges } =
 export default { [sliceName]: slice.reducer };
 
 //Selectors
-export const selectUser = (state) => state[sliceName].user;
-export const selectPhotoUrl = (state) => state[sliceName].user?.photoURL;
-export const selectBookmarks = (state) => state[sliceName].bookmarks;
-export const selectIsBookmarked = (ayaId) => (state) => {
+export const selectUser = (state: RootState) => state[sliceName].user;
+export const selectPhotoUrl = (state: RootState) =>
+    state[sliceName].user?.photoURL;
+export const selectBookmarks = (state: RootState) => state[sliceName].bookmarks;
+export const selectIsBookmarked = (ayaId: number) => (state: RootState) => {
     const { bookmarks } = state[sliceName];
     const bookMarkInfo = bookmarks?.find(
-        (bookmarkInfo) => parseInt(bookmarkInfo.aya) === ayaId
+        (bookmarkInfo) => Number(bookmarkInfo.aya) === ayaId
     );
     return bookMarkInfo === undefined ? false : true;
 };
-export const selectHifzRanges = (state) => state[sliceName].hifzRanges;
-export const selectDailyActivities = (state) => state[sliceName].daily;
+export const selectHifzRanges = (state: RootState) =>
+    state[sliceName].hifzRanges;
+export const selectDailyActivities = (state: RootState) =>
+    state[sliceName].daily;
 
-const suraRanges = [];
-export const selectSuraRanges = (sura) => (state) => {
+const suraRanges: HifzRange[] = [];
+export const selectSuraRanges = (sura: number) => (state: RootState) => {
     const ranges = state[sliceName].hifzRanges
         .filter((r) => r.sura === sura)
         .sort((r1, r2) => (r1.startPage > r2.startPage ? 1 : -1));
@@ -73,72 +86,91 @@ export const selectSuraRanges = (sura) => (state) => {
 
 //Thunks
 
-export const addBookmark = (ayaId) => (dispatch, getState) => {
-    const { user } = getState()[sliceName];
-    if (!user) {
-        return;
-    }
-    bookmarksRef(user).child(ayaId).set(-new Date().getTime());
-    dispatch(showToast({ id: "bookmark_added" }));
-};
-
-export const deleteBookmark = (ayaId) => (dispatch, getState) => {
-    const { user } = getState()[sliceName];
-    if (!user) {
-        return;
-    }
-    bookmarksRef(user).child(ayaId).set(null);
-    dispatch(showToast({ id: "bookmark_deleted" }));
-};
-
-export const logTypedVerse = (verseId, words) => (dispatch, getState) => {
-    const state = getState();
-    const { user } = state[sliceName];
-    const verseText = quranNormalizedText[verseId];
-    const today = new Date();
-    const activityKey = dateKey(today);
-    const activityCharsRef = activityRef(user).child(activityKey + "/chars");
-    const charsCount = words
-        ? verseText.split(" ").slice(0, words).join("").length
-        : verseText.replace(/\s/g, "").length;
-    activityCharsRef.once("value", (snapshot) => {
-        let chars = snapshot.val() || 0;
-        chars += charsCount;
-        activityCharsRef.set(chars);
-    });
-
-    return charsCount;
-};
-
-export const setRangeRevised = (range) => (dispatch, getState) => {
-    const state = getState();
-    const { user } = state[sliceName];
-    const rangeNodeRef = hifzRef(user).child(range.id);
-    rangeNodeRef.once("value", (snapshot) => {
-        let curr_range = snapshot.val();
-        const now = Date.now();
-        const timeSinceLastRevision = now - curr_range.ts;
-        if (timeSinceLastRevision > 60 * 60 * 1000) {
-            //One hour has passed since last revision
-            curr_range.ts = now;
-            curr_range.revs++;
-            //Record new activity
-            const today = new Date();
-            const activityKey = dateKey(today);
-            const activityPagesRef = activityRef(user).child(
-                activityKey + "/pages"
-            );
-            activityPagesRef.once("value", (snapshot) => {
-                let pages = snapshot.val() || 0;
-                pages += range.pages;
-                activityPagesRef.set(pages);
-            });
+export const addBookmark =
+    (ayaId: number) => (dispatch: AppDispatch, getState: GetState) => {
+        const { user } = getState()[sliceName];
+        if (!user) {
+            return;
         }
-        rangeNodeRef.set(curr_range);
-    });
-};
+        bookmarksRef(user).child(String(ayaId)).set(-new Date().getTime());
+        dispatch(showToast({ id: "bookmark_added" }));
+    };
 
-const includesRanges = (hifzRanges, sura, startPage, pages) => {
+export const deleteBookmark =
+    (ayaId: number) => (dispatch: AppDispatch, getState: GetState) => {
+        const { user } = getState()[sliceName];
+        if (!user) {
+            return;
+        }
+        bookmarksRef(user).child(String(ayaId)).set(null);
+        dispatch(showToast({ id: "bookmark_deleted" }));
+    };
+
+export const logTypedVerse =
+    (verseId: number, words: number) =>
+    (dispatch: AppDispatch, getState: GetState) => {
+        const state = getState();
+        const { user } = state[sliceName];
+        if (!user) {
+            return 0;
+        }
+        const verseText = quranNormalizedText[verseId];
+        const today = new Date();
+        const activityKey = dateKey(today);
+        const activityCharsRef = activityRef(user).child(
+            activityKey + "/chars"
+        );
+        const charsCount = words
+            ? verseText.split(" ").slice(0, words).join("").length
+            : verseText.replace(/\s/g, "").length;
+        activityCharsRef.once("value", (snapshot) => {
+            let chars = snapshot.val() || 0;
+            chars += charsCount;
+            activityCharsRef.set(chars);
+        });
+
+        return charsCount;
+    };
+
+export const setRangeRevised =
+    (range: { id: string; pages: number }) =>
+    (dispatch: AppDispatch, getState: GetState) => {
+        const state = getState();
+        const { user } = state[sliceName];
+        if (!user) {
+            return;
+        }
+        const rangeNodeRef = hifzRef(user).child(range.id);
+        rangeNodeRef.once("value", (snapshot) => {
+            let curr_range = snapshot.val();
+            const now = Date.now();
+            const timeSinceLastRevision = now - curr_range.ts;
+            if (timeSinceLastRevision > 60 * 60 * 1000) {
+                //One hour has passed since last revision
+                curr_range.ts = now;
+                curr_range.revs++;
+                //Record new activity
+                const today = new Date();
+                const activityKey = dateKey(today);
+                const activityPagesRef = activityRef(user).child(
+                    activityKey + "/pages"
+                );
+                activityPagesRef.once("value", (snapshot) => {
+                    let pages = snapshot.val() || 0;
+                    pages += range.pages;
+                    activityPagesRef.set(pages);
+                });
+            }
+            rangeNodeRef.set(curr_range);
+        });
+    };
+
+const includesRanges = (
+    hifzRanges: HifzRange[],
+    sura: number,
+    startPage: number,
+    pages: number
+) => {
     const endPage = startPage + pages;
     const foundRanges = hifzRanges.filter(
         (r) =>
@@ -150,9 +182,12 @@ const includesRanges = (hifzRanges, sura, startPage, pages) => {
 };
 
 export const addHifzRange =
-    (startPage, sura, pages, overwrite = false) =>
-    (dispatch, getState) => {
+    (startPage: number, sura: number, pages: number, overwrite = false) =>
+    (dispatch: AppDispatch, getState: GetState) => {
         const { user, hifzRanges } = getState()[sliceName];
+        if (!user) {
+            return false;
+        }
 
         //TODO: implement the merging logic in a Firebase function
 
@@ -162,7 +197,7 @@ export const addHifzRange =
 
         const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
         const newRangeID = num2string(startPage, 3) + num2string(sura);
-        let newRange = {
+        let newRange: NewRange = {
             revs: 0,
             startPage,
             endPage: startPage + pages - 1,
@@ -171,7 +206,7 @@ export const addHifzRange =
         let addNew = true;
 
         //Calculate average rev/page
-        const mergeRangesRevs = (r1, r2) => {
+        const mergeRangesRevs = (r1: NewRange, r2: NewRange) => {
             const totalRevs = r1.revs * r1.pages + r2.revs * r2.pages;
             const startPage = Math.min(r1.startPage, r2.startPage);
             const endPage = Math.max(r1.endPage, r2.endPage);
@@ -244,12 +279,16 @@ export const addHifzRange =
         return true;
     };
 
-export const deleteHifzRange = (range) => (dispatch, getState) => {
-    const { user } = getState()[sliceName];
-    hifzRef(user).child(range.id).set(null);
-};
+export const deleteHifzRange =
+    (range: HifzRange) => (dispatch: AppDispatch, getState: GetState) => {
+        const { user } = getState()[sliceName];
+        if (!user) {
+            return;
+        }
+        hifzRef(user).child(range.id).set(null);
+    };
 
-export const signOut = () => (dispatch, getState) => {
+export const signOut = () => (dispatch: AppDispatch, getState: GetState) => {
     // dispatch(setBookmarks([]));
     // dispatch(setHifzRanges([]));
     // dispatch(setUser(null));
@@ -261,15 +300,15 @@ export const signOut = () => (dispatch, getState) => {
 export const dbRef = () => {
     return firebase.app().database().ref();
 };
-export const userRef = (user) => {
+export const userRef = (user: firebase.User) => {
     return dbRef().child(`data/${user?.uid}`);
 };
-export const activityRef = (user) => {
+export const activityRef = (user: firebase.User) => {
     return userRef(user).child(`activity`);
 };
-export const hifzRef = (user) => {
+export const hifzRef = (user: firebase.User) => {
     return userRef(user).child(`hifz`);
 };
-export const bookmarksRef = (user) => {
+export const bookmarksRef = (user: firebase.User) => {
     return userRef(user).child(`aya_marks`);
 };

@@ -73,7 +73,7 @@ export default function useInitApp() {
                     return;
                 }
                 const snapshot_val = snapshot.val();
-                const bookmarks = !snapshot_val
+                const bookmarks: Bookmark[] = !snapshot_val
                     ? []
                     : Object.keys(snapshot_val)
                           .sort((k1, k2) =>

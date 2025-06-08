@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ListReciters } from "../services/AudioData";
 import { getStorageItem } from "../services/utils";
+import { AppDispatch, GetState, RootState } from "./config";
 
 const sliceName = "settings";
 
@@ -61,42 +62,48 @@ export const {
     setFollowPlayer,
 } = settingsSlice.actions;
 
-export const selectExerciseLevel = (state) => state[sliceName].exerciseLevel;
-export const selectExerciseMemorized = (state) =>
+export const selectExerciseLevel = (state: RootState) =>
+    state[sliceName].exerciseLevel;
+export const selectExerciseMemorized = (state: RootState) =>
     state[sliceName].exerciseMemorized;
-export const selectRandomAutoRecite = (state) =>
+export const selectRandomAutoRecite = (state: RootState) =>
     state[sliceName].randomAutoRecite;
 
-export const selectFollowPlayer = (state) => state[sliceName].followPlayer;
+export const selectFollowPlayer = (state: RootState) =>
+    state[sliceName].followPlayer;
 
-export const selectLang = (state) => state[sliceName].lang;
-export const selectTheme = (state) => state[sliceName].theme;
+export const selectLang = (state: RootState) => state[sliceName].lang;
+export const selectTheme = (state: RootState) => state[sliceName].theme;
 
-export const selectRepeat = (state) => state[sliceName].repeat;
+export const selectRepeat = (state: RootState) => state[sliceName].repeat;
 
-export const selectReciter = (state) => state[sliceName].reciter;
+export const selectReciter = (state: RootState) => state[sliceName].reciter;
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: settingsSlice.reducer };
 
-export const changeReciter = (reciter) => (dispatch, getState) => {
-    const state = getState();
-    const prevReciter = selectReciter(state);
-    if (reciter === prevReciter) {
-        return false;
-    }
-    dispatch(setReciter(reciter));
-    localStorage.setItem("reciter", reciter);
+export const changeReciter =
+    (reciter: string) => (dispatch: AppDispatch, getState: GetState) => {
+        const state = getState();
+        const prevReciter = selectReciter(state);
+        if (reciter === prevReciter) {
+            return false;
+        }
+        dispatch(setReciter(reciter));
+        localStorage.setItem("reciter", reciter);
 
-    let updated_reciters = ListReciters("ayaAudio").filter(
-        (r) => r !== reciter
-    );
+        let updated_reciters = ListReciters("ayaAudio").filter(
+            (r: string) => r !== reciter
+        );
 
-    updated_reciters.splice(0, 0, reciter);
-    localStorage.setItem("reciters_ayaAudio", JSON.stringify(updated_reciters));
+        updated_reciters.splice(0, 0, reciter);
+        localStorage.setItem(
+            "reciters_ayaAudio",
+            JSON.stringify(updated_reciters)
+        );
 
-    return true;
-};
+        return true;
+    };
 
 export const AudioRange = {
     continuous: 0,

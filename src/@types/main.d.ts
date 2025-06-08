@@ -5,3 +5,36 @@ type Msg = {
     key?: number;
     onClose?: () => void;
 };
+
+type NewRange = {
+    startPage: number;
+    endPage: number;
+    pages: number;
+    revs: number;
+};
+
+type HifzRange = NewRange & {
+    id: string;
+    sura: number;
+    date: number;
+};
+
+type Bookmark = {
+    // id: number;
+    aya: string;
+    ts: number;
+};
+
+type DailyActivity = {
+    id: string;
+    date: string;
+    pages: number;
+    chars: number;
+};
+
+interface Number {
+    between(min: number, max: number): boolean;
+}
+interface String {
+    appendWord(word: string, condition: boolean): String;
+}
