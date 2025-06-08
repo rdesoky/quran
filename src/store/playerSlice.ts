@@ -4,6 +4,7 @@ import { GetAudioURL } from "../services/AudioData";
 import { ayaIdInfo, TOTAL_VERSES } from "../services/QData";
 import { selectSelectedRange } from "./navSlice";
 import { selectReciter } from "./settingsSlice";
+import { RootState } from "./config";
 
 const sliceName = "audio";
 
@@ -53,7 +54,6 @@ const slice = createSlice({
     },
 });
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };
 
 export const {
@@ -64,26 +64,33 @@ export const {
     setReciteRange,
 } = slice.actions;
 
-export const selectReciteRange = (state) => state[sliceName].recite;
-export const selectPlayingAya = (state) => state[sliceName].playingAya;
-export const selectAudioState = (state) => state[sliceName].audioState;
-export const selectAudioSource = (ayaId) => (state) => {
-    const reciter = selectReciter(state);
-    let targetAya = ayaId;
-    if (ayaId === undefined) {
-        targetAya = selectPlayingAya(state);
-    }
-    if (targetAya === -1) {
-        targetAya = selectSelectedRange(state).start;
-    }
-    if (targetAya === -1) {
-        return null; //no audio source
-    }
-    const { sura, aya } = ayaIdInfo(targetAya);
-    return GetAudioURL(reciter, sura + 1, aya + 1);
-};
+export const selectReciteRange = (state: RootState) => state[sliceName].recite;
+export const selectPlayingAya = (state: RootState) =>
+    state[sliceName].playingAya;
+export const selectAudioState = (state: RootState) =>
+    state[sliceName].audioState;
+export const selectAudioSource =
+    (ayaId: number | undefined) => (state: RootState) => {
+        const reciter = selectReciter(state);
+        let targetAya = ayaId;
+        if (ayaId === undefined) {
+            targetAya = selectPlayingAya(state);
+        }
+        if (targetAya === -1) {
+            targetAya = selectSelectedRange(state).start;
+        }
+        if (targetAya === -1) {
+            return null; //no audio source
+        }
+        const { sura, aya } = ayaIdInfo(targetAya);
+        return GetAudioURL(reciter, sura + 1, aya + 1);
+    };
 
-export const selectTrackDuration = (state) => state[sliceName].trackDuration;
-export const selectRemainingTime = (state) => state[sliceName].remainingTime;
-export const selectReciteStart = (state) => state[sliceName].recite.start;
-export const selectReciteEnd = (state) => state[sliceName].recite.end;
+export const selectTrackDuration = (state: RootState) =>
+    state[sliceName].trackDuration;
+export const selectRemainingTime = (state: RootState) =>
+    state[sliceName].remainingTime;
+export const selectReciteStart = (state: RootState) =>
+    state[sliceName].recite.start;
+export const selectReciteEnd = (state: RootState) =>
+    state[sliceName].recite.end;

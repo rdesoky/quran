@@ -1,22 +1,23 @@
 /* eslint-disable no-extend-native */
+import { IntlShape } from "react-intl";
 import { getPagePartNumber, sura_info } from "./QData";
 // import {RecitersInfo} from "./AudioData";
 
-export const num2string = (num, length = 3) => {
+export const num2string = (num: number, length = 3) => {
     let ret = num.toString();
     let zeros = length - ret.length;
     let padding = zeros > 0 ? new Array(zeros + 1).join("0") : "";
     return padding + ret;
 };
 
-export const dateKey = (dt) => {
+export const dateKey = (dt: Date) => {
     return `${dt.getFullYear()}-${num2string(
         dt.getMonth() + 1,
         2
     )}-${num2string(dt.getDate(), 2)}`;
 };
 
-export const downloadImage = (url) => {
+export const downloadImage = (url: string) => {
     return new Promise((resolve, reject) => {
         let img = document.createElement("img");
         img.onload = (e) => {
@@ -27,9 +28,10 @@ export const downloadImage = (url) => {
     });
 };
 
-export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
-export const downloadPageImage = (pageIndex) => {
+export const downloadPageImage = (pageIndex: number) => {
     const imageUrl =
         process.env.PUBLIC_URL +
         "/qpages_1260/page" +
@@ -38,7 +40,7 @@ export const downloadPageImage = (pageIndex) => {
     return delay(0).then(() => downloadImage(imageUrl));
 };
 
-export const pageFromPath = (path) => {
+export const pageFromPath = (path: string) => {
     let matchPage = path.match(/\/page\/([0-9]+)/i);
     if (matchPage) {
         return matchPage[1];
@@ -47,7 +49,7 @@ export const pageFromPath = (path) => {
     return "1";
 };
 
-export const partFromPath = (path) => {
+export const partFromPath = (path: string) => {
     let page = pageFromPath(path);
     let part = getPagePartNumber(page);
     return part;
@@ -66,15 +68,15 @@ export const selectTopCommand = () => {
     // setTimeout(() => {
     const sideMenuExpander = document.querySelector("#SideMenuExpander");
     if (sideMenuExpander) {
-        sideMenuExpander.focus();
+        (sideMenuExpander as HTMLElement).focus();
     }
     // }, 50);
 };
-export const highlightSearch = (query, text, ntext) => {
+export const highlightSearch = (query: string, text: string, ntext: string) => {
     let words = text.trim().split(" "); //phrase words
     let nwords = ntext.split(" "); //normalized phrase words
     let qwords = query.split(" "); //normalized query words
-    let hwords = []; //highlighted words indices
+    let hwords: number[] = []; //highlighted words indices
 
     for (let n = 0; n <= nwords.length - qwords.length; n++) {
         let found = true;
@@ -109,8 +111,8 @@ export const highlightSearch = (query, text, ntext) => {
     return { __html: ret };
 };
 
-export const normalizeText = (t) => {
-    let ret;
+export const normalizeText = (t: string) => {
+    let ret = t;
     try {
         ret = t
             .replace(/ {2}/g, " ")
@@ -124,7 +126,7 @@ export const normalizeText = (t) => {
     return ret;
 };
 
-export const copy2Clipboard = (t) => {
+export const copy2Clipboard = (t: string) => {
     navigator.clipboard.writeText(t).then(
         (p) => {
             console.log(`${t} is successfully copied to clipboard`);
@@ -135,7 +137,7 @@ export const copy2Clipboard = (t) => {
     );
 };
 
-String.prototype.appendWord = function (word, condition) {
+String.prototype.appendWord = function (word: string, condition: boolean) {
     if (typeof word === "string" && word.length && condition !== false) {
         return this + " " + word;
     }
@@ -145,47 +147,47 @@ String.prototype.appendWord = function (word, condition) {
 Number.prototype.between = function (a, b) {
     const min = Math.min.apply(Math, [a, b]),
         max = Math.max.apply(Math, [a, b]);
-    return this >= min && this <= max;
+    const thisNum = this.valueOf();
+    return thisNum >= min && thisNum <= max;
 };
 
-Array.prototype.findLastIndex =
-    Array.prototype.findLastIndex ||
-    function (cb) {
-        let i = this.length;
-        while (i--) {
-            if (cb(this[i], i, this)) {
-                return i;
-            }
+Array.prototype.findLastIndex = function (cb) {
+    let i = this.length;
+    while (i--) {
+        if (cb(this[i], i, this)) {
+            return i;
         }
-        return -1;
-    };
+    }
+    return -1;
+};
 
-export const getCurrentPageNumber = (location) => {
+export const getCurrentPageNumber = (location: Location | undefined) => {
     const { pathname } = location || window.location;
     let match = pathname.match(/page\/(.+)/);
     let pageNumber = match ? match[1] : undefined;
-    return parseInt(pageNumber);
+    return Number(pageNumber);
 };
 
-export const greaterOf = (...numbers) => {
+export const greaterOf = (...numbers: number[]) => {
     return numbers.reduce((a, b) => {
         return a > b ? a : b;
     }, numbers[0]);
 };
 
-export const lesserOf = (...numbers) => {
+export const lesserOf = (...numbers: number[]) => {
     return numbers.reduce((a, b) => {
         return a < b ? a : b;
     }, numbers[0]);
 };
 
-export const getSuraName = (intl, index) => {
+export const getSuraName = (intl: IntlShape, index: number) => {
     const suraNames = intl.formatMessage({ id: "sura_names" }).split(",");
     return suraNames?.[index];
 };
 
 export const checkActiveInput = () => {
-    const { tagName, type } = document.activeElement;
+    const { tagName, type } =
+        (document.activeElement as HTMLInputElement) || {};
     const isInput = ["INPUT", "BUTTON", "TEXTAREA", "SELECT"].includes(tagName);
     const isTextInput =
         isInput &&
@@ -200,7 +202,7 @@ export const checkActiveInput = () => {
     return { isInput, isTextInput };
 };
 
-export const getStorageItem = (key, defaultValue = false) => {
+export const getStorageItem = (key: string, defaultValue: any = false) => {
     const val = localStorage.getItem(key);
     if (val !== null) {
         switch (typeof defaultValue) {
@@ -219,7 +221,7 @@ export const getStorageItem = (key, defaultValue = false) => {
 
 export const dayLength = 24 * 60 * 60 * 1000;
 
-export const getHifzRangeDisplayInfo = (range, intl) => {
+export const getHifzRangeDisplayInfo = (range: HifzRange, intl: IntlShape) => {
     const suraInfo = sura_info[range.sura];
     const suraPagesCount = suraInfo.ep - suraInfo.sp + 1;
     const rangePagesCount = range.endPage - range.startPage + 1;
@@ -229,7 +231,7 @@ export const getHifzRangeDisplayInfo = (range, intl) => {
             : "range_desc"
         : "the_page_num";
 
-    let values = {
+    let values: any = {
         // sura: suraName,
         page: range.startPage - (suraInfo.sp - 1) + 1,
         start_page: range.startPage - (suraInfo.sp - 1) + 1,
@@ -255,9 +257,11 @@ export const getHifzRangeDisplayInfo = (range, intl) => {
     return { title, ageText };
 };
 
-export const keyValues = (keyName) => ({ key: keyName ? ` (${keyName})` : "" });
+export const keyValues = (keyName: string) => ({
+    key: keyName ? ` (${keyName})` : "",
+});
 
-export const commandKey = (command) => {
+export const commandKey = (command: string) => {
     return {
         play: "r",
         pause: "p",

@@ -16,3 +16,7 @@ export const store = configureStore({
         ...playerSlice,
     },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type GetState = () => RootState;
