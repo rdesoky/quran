@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetAudioURL } from "../services/AudioData";
+import { GetAudioURL } from "../services/audioData";
 
-import { ayaIdInfo, TOTAL_VERSES } from "../services/QData";
+import { ayaIdInfo, TOTAL_VERSES } from "../services/qData";
 import { selectSelectedRange } from "./navSlice";
 import { selectReciter } from "./settingsSlice";
 import { RootState } from "./config";
@@ -72,7 +72,7 @@ export const selectAudioState = (state: RootState) =>
 export const selectAudioSource =
     (ayaId: number | undefined) => (state: RootState) => {
         const reciter = selectReciter(state);
-        let targetAya = ayaId;
+        let targetAya = ayaId || 0;
         if (ayaId === undefined) {
             targetAya = selectPlayingAya(state);
         }

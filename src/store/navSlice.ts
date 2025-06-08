@@ -10,7 +10,7 @@ import {
     TOTAL_PARTS,
     TOTAL_SURAS,
     TOTAL_VERSES,
-} from "../services/QData";
+} from "../services/qData";
 import { greaterOf, lesserOf } from "../services/utils";
 import {
     selectActivePage,

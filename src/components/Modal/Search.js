@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import { quranNormalizedText, quranText } from "../../App";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { analytics } from "../../services/analytics";
-import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/QData";
+import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/qData";
 import {
     copy2Clipboard,
     highlightSearch,

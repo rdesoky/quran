@@ -24,7 +24,7 @@ import { quranNormalizedText, quranText } from "../../App";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { useAudio, useMessageBox } from "../../RefsProvider";
 import { analytics } from "../../services/analytics";
-import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/QData";
+import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/qData";
 import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import {

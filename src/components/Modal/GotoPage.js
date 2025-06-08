@@ -12,7 +12,7 @@ import {
     TOTAL_PAGES,
     TOTAL_PARTS,
     TOTAL_SURAS,
-} from "../../services/QData";
+} from "../../services/qData";
 import { selectAppHeight } from "../../store/layoutSlice";
 import {
     gotoAya,

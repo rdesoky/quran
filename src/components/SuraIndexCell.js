@@ -16,7 +16,7 @@ import {
     getArSuraName,
     sura_info,
     verseLocation,
-} from "../services/QData";
+} from "../services/qData";
 import { addHifzRange, selectSuraRanges } from "../store/dbSlice";
 import { gotoSura, hideMask, selectStartSelection } from "../store/navSlice";
 import { AudioRange } from "../store/settingsSlice";

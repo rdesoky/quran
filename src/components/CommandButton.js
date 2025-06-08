@@ -45,7 +45,7 @@ import {
     showToast,
     toggleMenu,
 } from "../store/uiSlice";
-import { ayaIdPage, verseLocation } from "./../services/QData";
+import { ayaIdPage, verseLocation } from "./../services/qData";
 
 import { useHistory } from "react-router-dom";
 import { selectPagesCount } from "../store/layoutSlice";

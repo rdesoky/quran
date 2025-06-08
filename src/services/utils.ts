@@ -1,7 +1,6 @@
 /* eslint-disable no-extend-native */
 import { IntlShape } from "react-intl";
-import { getPagePartNumber, sura_info } from "./QData";
-// import {RecitersInfo} from "./AudioData";
+import { getPagePartNumber, sura_info } from "./qData";
 
 export const num2string = (num: number, length = 3) => {
     let ret = num.toString();
@@ -51,7 +50,7 @@ export const pageFromPath = (path: string) => {
 
 export const partFromPath = (path: string) => {
     let page = pageFromPath(path);
-    let part = getPagePartNumber(page);
+    let part = getPagePartNumber(Number(page));
     return part;
 };
 

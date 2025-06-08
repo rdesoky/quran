@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { getPageSuras } from "../services/QData";
+import { getPageSuras } from "../services/qData";
 import { selectPageHeight } from "../store/layoutSlice";
 import { HifzSegment } from "./HifzSegment";
 

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useContextPopup } from "../../RefsProvider";
-import { ayaIdPage } from "../../services/QData";
+import { ayaIdPage } from "../../services/qData";
 import {
     selectActivePage,
     selectPageHeight,

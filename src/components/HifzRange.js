@@ -35,7 +35,7 @@ import {
     getRangeVerses,
     sura_info,
     verseLocation,
-} from "./../services/QData";
+} from "./../services/qData";
 import { SuraHifzChart } from "./SuraHifzChart";
 import { VerseText } from "./Widgets";
 

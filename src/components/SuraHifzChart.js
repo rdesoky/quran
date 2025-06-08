@@ -6,7 +6,7 @@ import { dayLength } from "../services/utils";
 import { selectSuraRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";
 import { gotoPage } from "../store/navSlice";
-import { getArSuraName, sura_info } from "./../services/QData";
+import { getArSuraName, sura_info } from "./../services/qData";
 
 export const SuraHifzChart = ({
     sura,

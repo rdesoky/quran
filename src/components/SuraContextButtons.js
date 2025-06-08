@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { ayaID } from "../services/QData";
+import { ayaID } from "../services/qData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
 import { CommandButton } from "./CommandButton";
 

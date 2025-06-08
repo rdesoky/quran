@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ayaID } from "../../services/QData";
+import { ayaID } from "../../services/qData";
 import { downloadPageImage } from "../../services/utils";
 import {
     selectPageHeight,

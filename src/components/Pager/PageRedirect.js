@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
-import { ayaIdPage } from "../../services/QData";
+import { ayaIdPage } from "../../services/qData";
 import { selectAya } from "../../store/navSlice";
 import "./Pager.scss";
 

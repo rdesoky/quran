@@ -8,7 +8,7 @@ import {
     ayaIdPage,
     getPageFirstAyaId,
     TOTAL_VERSES,
-} from "../../services/QData";
+} from "../../services/qData";
 import {
     checkActiveInput,
     copy2Clipboard,

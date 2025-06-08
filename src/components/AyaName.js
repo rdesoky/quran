@@ -2,7 +2,7 @@ import { FormattedMessage as Message } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useSuraName from "../hooks/useSuraName";
-import { ayaIdInfo } from "../services/QData";
+import { ayaIdInfo } from "../services/qData";
 import { gotoAya } from "../store/navSlice";
 
 export default function AyaName({ index, clickable = false }) {

@@ -2,21 +2,15 @@ import { FC, useEffect, useState } from "react";
 
 const Transition: FC<{ children: React.ReactNode; feature?: string }> = ({
     children,
-    feature,
+    feature = "trans",
 }) => {
-    const getInitialClass = () => {
-        const className = feature || "trans";
-        return className;
-    };
-
-    const [className, updateStyle] = useState(getInitialClass() + "-start");
+    const [className, updateStyle] = useState(feature + "-start");
 
     useEffect(() => {
         setTimeout(() => {
-            const className = getInitialClass();
-            updateStyle(className + "-end");
+            updateStyle(feature + "-end");
         }, 1);
-    }, []);
+    }, [feature]);
 
     return <div className={className}>{children}</div>;
 };
