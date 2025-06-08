@@ -62,3 +62,57 @@ type PageInfo = {
     s: number; // sura
     a: number; // aya
 };
+
+type AudioServerId =
+    | "everyayah"
+    | "egylist_vaudio"
+    | "egylist"
+    | "quranicaudio"
+    | "quranicaudio_complete"
+    | "islamway_mp3";
+
+type ReciterID =
+    | "ali_jaber"
+    | "baset"
+    | "baset_tgw"
+    | "ibr_kd"
+    | "agmy"
+    | "noaenee"
+    | "matrood"
+    | "abasfar"
+    | "hozefee"
+    | "m_ayoub"
+    | "mjebreel"
+    | "menshawee"
+    | "tablawee"
+    | "hosaree"
+    | "affassi"
+    | "ghamdi"
+    | "h_refaae"
+    | "alqassem"
+    | "alili"
+    | "husary_tgw"
+    | "moaelaqi"
+    | "banna"
+    | "swaid"
+    | "dossary"
+    | "swaisy"
+    | "juhaynee"
+    | "alqatami"
+    | "qahtanee";
+
+type ReciterInfo = {
+    on?: boolean;
+    ayaAudio: ServerInfo;
+    suraAudio?: ServerInfo;
+    url?: string;
+    actv?: string;
+    rw?: number;
+};
+
+type ServerInfo = {
+    server: AudioServerId;
+    rkey: string;
+    actv?: string;
+    rw?: number;
+};
