@@ -16,7 +16,7 @@ import {
     getPagePartNumber,
     getPageSuraIndex,
     TOTAL_PAGES,
-} from "../../services/QData";
+} from "../../services/qData";
 import { commandKey, keyValues } from "../../services/utils";
 import {
     selectActivePage,

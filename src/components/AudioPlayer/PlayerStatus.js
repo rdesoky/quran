@@ -1,7 +1,7 @@
 import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { ayaIdInfo } from "../../services/QData";
+import { ayaIdInfo } from "../../services/qData";
 import { gotoAya, selectStartSelection } from "../../store/navSlice";
 import {
     AudioState,

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAudio } from "../RefsProvider";
 import { analytics } from "../services/analytics";
-import { ListReciters } from "../services/AudioData";
+import { ListReciters } from "../services/audioData";
 import { selectAppWidth } from "../store/layoutSlice";
 import {
     AudioState,

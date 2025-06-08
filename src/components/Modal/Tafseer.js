@@ -5,7 +5,7 @@ import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { ayaIdInfo } from "../../services/QData";
+import { ayaIdInfo } from "../../services/qData";
 import { copy2Clipboard } from "../../services/utils";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import {

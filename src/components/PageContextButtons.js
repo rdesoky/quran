@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getPageFirstAyaId } from "../services/QData";
+import { getPageFirstAyaId } from "../services/qData";
 import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
 import { AudioState, selectAudioState } from "../store/playerSlice";
 import { AudioRange } from "../store/settingsSlice";

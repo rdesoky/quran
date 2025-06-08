@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectHifzRanges } from "../store/dbSlice";
 import { selectActivePage } from "../store/layoutSlice";
-import { getPageSuras } from "../services/QData";
+import { getPageSuras } from "../services/qData";
 import { HifzRange } from "./Hifz";
 
 export const AddHifz = ({ page }) => {

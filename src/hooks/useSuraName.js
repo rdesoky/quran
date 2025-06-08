@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ayaIdInfo, TOTAL_SURAS } from "../services/QData";
+import { ayaIdInfo, TOTAL_SURAS } from "../services/qData";
 import { selectStartSelection } from "../store/navSlice";
 import { selectSuraNames } from "../store/uiSlice";
 

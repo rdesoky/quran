@@ -13,7 +13,7 @@ import {
     getPartIndexByAyaId,
     TOTAL_PARTS,
     TOTAL_VERSES,
-} from "../services/QData";
+} from "../services/qData";
 import { getSuraName } from "../services/utils";
 import { selectActivePage, selectShownPages } from "../store/layoutSlice";
 import { gotoPage, selectSelectedRange } from "../store/navSlice";

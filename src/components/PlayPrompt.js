@@ -10,7 +10,7 @@ import {
     ayaIdInfo,
     getPageFirstAyaId,
     verseLocation,
-} from "../services/QData";
+} from "../services/qData";
 import { checkActiveInput } from "../services/utils";
 import { selectActivePage, selectAppWidth } from "../store/layoutSlice";
 import { selectSelectedRange } from "../store/navSlice";

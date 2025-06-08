@@ -15,7 +15,7 @@ import { quranText } from "../App";
 import useSuraName from "../hooks/useSuraName";
 import { useAudio, useMessageBox } from "../RefsProvider";
 import { analytics } from "../services/analytics";
-import { ayaIdInfo, ayaIdPage, verseLocation } from "../services/QData";
+import { ayaIdInfo, ayaIdPage, verseLocation } from "../services/qData";
 import { deleteBookmark } from "../store/dbSlice";
 import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";

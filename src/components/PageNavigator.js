@@ -8,7 +8,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/analytics";
-import { TOTAL_PAGES } from "../services/QData";
+import { TOTAL_PAGES } from "../services/qData";
 import { selectActivePage } from "../store/layoutSlice";
 import { gotoPage } from "../store/navSlice";
 

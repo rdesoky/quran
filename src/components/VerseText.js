@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { quranText } from "../App";
 import { analytics } from "../services/analytics";
-import { ayaIdInfo, verseLocation } from "../services/QData";
+import { ayaIdInfo, verseLocation } from "../services/qData";
 import { copy2Clipboard } from "../services/utils";
 import {
     addBookmark,

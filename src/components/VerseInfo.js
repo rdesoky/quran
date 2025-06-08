@@ -5,7 +5,7 @@ import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { analytics } from "../services/analytics";
-import { ayaIdInfo, ayaIdPage } from "../services/QData";
+import { ayaIdInfo, ayaIdPage } from "../services/qData";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
 import { closePopupIfBlocking } from "../store/uiSlice";
 import SuraName from "./SuraName";
