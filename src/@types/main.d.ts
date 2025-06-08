@@ -38,3 +38,27 @@ interface Number {
 interface String {
     appendWord(word: string, condition: boolean): String;
 }
+
+type PartInfo = {
+    s: number;
+    a: number;
+    es: number;
+    ea: number;
+    p: number;
+    ep: number;
+    h: number[];
+};
+
+type SuraInfo = {
+    id: number;
+    name: string;
+    sp: number; // start page
+    ep: number; // end page
+    ac: number; // aya count
+    hifz?: boolean; // is hifz sura
+};
+
+type PageInfo = {
+    s: number; // sura
+    a: number; // aya
+};

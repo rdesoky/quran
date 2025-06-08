@@ -54,7 +54,7 @@ import {
 } from "../../store/uiSlice";
 import Page from "../Page/Page";
 import PageHeader from "../Page/PageHeader";
-import { analytics } from "./../../services/Analytics";
+import { analytics } from "./../../services/analytics";
 import DDrop from "./../DDrop";
 
 import { faExpand } from "@fortawesome/free-solid-svg-icons";

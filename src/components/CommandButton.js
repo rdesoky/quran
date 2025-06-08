@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
-import { analytics } from "./../services/Analytics";
+import { analytics } from "./../services/analytics";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useAudio, useContextPopup, useMessageBox } from "../RefsProvider";

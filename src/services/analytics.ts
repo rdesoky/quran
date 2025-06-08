@@ -6,15 +6,15 @@ export const analytics = {
         localStorage.getItem("dev") === "1",
     //devMode: () => false,
     params: { trigger: "session_start", app_size: "two_pages" },
-    setTrigger: (trigger) => {
+    setTrigger: (trigger: string) => {
         return analytics.setParams({ trigger });
     },
-    setParams: (params) => {
+    setParams: (params: Record<string, any>) => {
         // console.log(`setParams ->${JSON.stringify(params)}`);
         analytics.params = { ...analytics.params, ...params };
         return analytics;
     },
-    logEvent: (name, payload = {}) => {
+    logEvent: (name: string, payload: Record<string, any> = {}) => {
         const params = { ...analytics.params, ...payload };
         // console.log(`Post '${name}'->${JSON.stringify(params)}`);
         if (!analytics.devMode()) {
@@ -22,14 +22,14 @@ export const analytics = {
         }
         return analytics;
     },
-    setCurrentScreen: (name) => {
+    setCurrentScreen: (name: string) => {
         // console.log(`SetScreen '${name}'`);
         if (!analytics.devMode()) {
             firebaseAnalytics().setCurrentScreen(name);
         }
         return analytics;
     },
-    setUserProps: (props) => {
+    setUserProps: (props: Record<string, any>) => {
         // console.log(`SetUserProperties: ${JSON.stringify(props)}`);
         if (!analytics.devMode()) {
             firebaseAnalytics().setUserProperties(props);

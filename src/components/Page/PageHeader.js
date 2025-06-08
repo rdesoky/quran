@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useContextPopup, useMessageBox } from "../../RefsProvider";
-import { analytics } from "../../services/Analytics";
+import { analytics } from "../../services/analytics";
 import {
     ayaID,
     ayaIdInfo,

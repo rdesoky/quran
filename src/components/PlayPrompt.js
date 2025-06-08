@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
 import useSuraName from "../hooks/useSuraName";
 import { useAudio } from "../RefsProvider";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import {
     ayaID,
     ayaIdInfo,

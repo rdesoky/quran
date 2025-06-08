@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { analytics } from "../services/Analytics";
+import { analytics } from "../services/analytics";
 import { ayaIdInfo } from "../services/QData";
 import { selectPagerWidth, selectPopupWidth } from "../store/layoutSlice";
 import { selectStartSelection } from "../store/navSlice";

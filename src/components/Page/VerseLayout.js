@@ -10,7 +10,7 @@ import {
     selectPageHeight,
     selectPageMargin,
     selectPageWidth,
-    selectZoom
+    selectZoom,
 } from "../../store/layoutSlice";
 import {
     extendSelection,
@@ -23,7 +23,7 @@ import {
 import { selectPlayingAya } from "../../store/playerSlice";
 import { selectFollowPlayer } from "../../store/settingsSlice";
 import { VerseContextButtons } from "../Widgets";
-import { analytics } from "./../../services/Analytics";
+import { analytics } from "./../../services/analytics";
 
 const VerseLayout = ({
     page: pageIndex,

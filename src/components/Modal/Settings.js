@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
 import AudioSettings from "../../AudioSettings";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { analytics } from "../../services/Analytics";
+import { analytics } from "../../services/analytics";
 import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
 import { selectPlayingAya } from "../../store/playerSlice";
 import {
