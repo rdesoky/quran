@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { AppRefs } from "../RefsProvider";
-import { Message } from "./Message";
+import { AppRefs } from "@/RefsProvider";
+import { Message } from "@/components/Message";
 
 export const MessageBox = () => {
     const [messages, setMessages] = useState<Msg[]>([]);

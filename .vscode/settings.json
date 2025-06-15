@@ -11,7 +11,6 @@
     "prettier.tabWidth": 4,
     "editor.detectIndentation": false,
     "editor.renderWhitespace": "none",
-    "editor.useTabStops": true,
     "eslint.alwaysShowStatus": true,
     "editor.tabSize": 2,
     "cSpell.words": [

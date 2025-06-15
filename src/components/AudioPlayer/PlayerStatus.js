@@ -1,5 +1,5 @@
 import React from "react";
-import { FormattedMessage as String } from "react-intl";
+import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { ayaIdInfo } from "../../services/qData";
 import { gotoAya, selectStartSelection } from "../../store/navSlice";
@@ -47,13 +47,13 @@ export const PlayerStatus = () => {
 
     return (
         <button onClick={gotoPlayingAya} className="AudioStatusButton">
-            <String id={stateId} />
+            <Message id={stateId} />
             :&nbsp;
-            <String id="sura_names">
+            <Message id="sura_names">
                 {(sura_names) => {
                     return sura_names.split(",")[sura] + " (" + (aya + 1) + ")";
                 }}
-            </String>
+            </Message>
         </button>
     );
 };
