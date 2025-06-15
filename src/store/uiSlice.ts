@@ -4,8 +4,8 @@ import {
     selectViewCapacity,
     selectZoom,
     ViewCapacity,
-} from "./layoutSlice";
-import { AppDispatch, GetState, RootState } from "./config";
+} from "@/store/layoutSlice";
+import { AppDispatch, GetState, RootState } from "@/store/config";
 
 const sliceName = "ui";
 
@@ -137,7 +137,7 @@ export const selectUpdateAvailable = (state: RootState) =>
 export const selectSuraNames = (state: RootState) => state[sliceName].suraNames;
 
 export const showPopup =
-    (popup: string, params: Record<string, any>) =>
+    (popup: string, params?: Record<string, any>) =>
     (dispatch: AppDispatch, getState: GetState) => {
         const state = getState();
         const currentPopup = selectPopup(state);

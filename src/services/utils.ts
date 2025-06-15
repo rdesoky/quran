@@ -140,7 +140,7 @@ String.prototype.appendWord = function (word: string, condition: boolean) {
     if (typeof word === "string" && word.length && condition !== false) {
         return this + " " + word;
     }
-    return this;
+    return this.toString();
 };
 
 Number.prototype.between = function (a, b) {

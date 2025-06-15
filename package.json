@@ -24,6 +24,7 @@
         "sass": "^1.64.1"
     },
     "devDependencies": {
+        "@craco/craco": "^7.1.0",
         "@types/firebase": "^3.2.3",
         "@types/react-dom": "^19.1.6",
         "@types/react-router-dom": "^5.3.3",
@@ -34,12 +35,11 @@
         "typescript": "^5.8.3"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "craco start",
         "sw-setup": "node sw-post-build.mjs",
-        "build": "react-scripts build",
+        "build": "craco build",
         "postbuild": "cp build/index.html build/404.html & npm run sw-setup",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
+        "test": "craco test",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build",
         "analyze": "source-map-explorer 'build/static/js/*.js'",

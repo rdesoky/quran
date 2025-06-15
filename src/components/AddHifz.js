@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectHifzRanges } from "../store/dbSlice";
-import { selectActivePage } from "../store/layoutSlice";
-import { getPageSuras } from "../services/qData";
-import { HifzRange } from "./Hifz";
+import { selectHifzRanges } from "@/store/dbSlice";
+import { selectActivePage } from "@/store/layoutSlice";
+import { getPageSuras } from "@/services/qData";
+import { HifzRange } from "@/components/Hifz";
 
-export const AddHifz = ({ page }) => {
+export const AddHifz = () => {
     const pageIndex = useSelector(selectActivePage);
     const hifzRanges = useSelector(selectHifzRanges);
 

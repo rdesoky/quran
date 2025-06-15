@@ -1,9 +1,8 @@
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FormattedMessage as Message, useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import DDrop from "@/components/DDrop";
+import Page from "@/components/Page/Page";
+import PageHeader from "@/components/Page/PageHeader";
 import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
 import { ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
 import {
     checkActiveInput,
@@ -48,15 +47,17 @@ import {
     showToast,
     toggleMenu,
 } from "@/store/uiSlice";
-import Page from "@/components/Page/Page";
-import PageHeader from "@/components/Page/PageHeader";
-import { analytics } from "@/services/analytics";
-import DDrop from "@/components/DDrop";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FormattedMessage as Message, useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { AddHifz } from "@/components/AddHifz";
 import PlayPrompt from "@/components/PlayPrompt";
+import { AppDispatch } from "@/store/config";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
 
 export default function Pager(): JSX.Element {
@@ -64,7 +65,7 @@ export default function Pager(): JSX.Element {
     const pagesCount = useSelector(selectPagesCount);
     const pageWidth = useSelector(selectPageWidth);
     const pagerWidth = useSelector(selectPagerWidth);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch() as AppDispatch;
     const isNarrow = useSelector(selectIsNarrow);
     const expandedMenu = useSelector(selectMenuExpanded);
     const activePopup = useSelector(selectPopup);
@@ -82,7 +83,7 @@ export default function Pager(): JSX.Element {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const popup = useSelector(selectPopup);
-    const pagerRef = useRef();
+    const pagerRef = useRef<HTMLDivElement>(null);
     const intl = useIntl();
     const audio = useAudio();
     const audioState = useSelector(selectAudioState);
@@ -120,7 +121,7 @@ export default function Pager(): JSX.Element {
     }, [location]);
 
     const pageUp = useCallback(
-        (e, options = { bottom: false }) => {
+        (e: MouseEvent, options = { bottom: false }) => {
             let count = pagesCount;
             if (count > 1 && activePage % 2 === 0) {
                 count = 1; //right page is active
@@ -138,7 +139,7 @@ export default function Pager(): JSX.Element {
     );
 
     const pageDown = useCallback(
-        (e, scroll = true) => {
+        (e: React.WheelEvent<HTMLDivElement>, scroll = true) => {
             // let count = activePopup && !isWide ? 1 : pagesCount;
             let count = pagesCount;
             if (count > 1 && activePage % 2 === 1) {
@@ -162,15 +163,16 @@ export default function Pager(): JSX.Element {
         }
     }, [pagesCount, activePage]);
 
-    const handleWheel = (e) => {
+    const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
         let viewRef = pagerRef.current;
         const LINE_HEIGHT = 12;
         //Check if page next or prev to active page is in the view
 
-        if (e.deltaY > 0) {
+        if (viewRef && e.deltaY > 0) {
+            const { scrollHeight, clientHeight, scrollTop } = viewRef;
             if (
-                viewRef?.scrollTop + LINE_HEIGHT >=
-                viewRef?.scrollHeight - viewRef?.clientHeight
+                Number(scrollTop) + LINE_HEIGHT >=
+                Number(scrollHeight) - Number(clientHeight)
             ) {
                 analytics.setTrigger("mouse_wheel");
                 //scroll down ( forward )
@@ -200,13 +202,13 @@ export default function Pager(): JSX.Element {
                     console.log(`~~scrollBackward`);
                     return;
                 }
-                pageUp(e, { bottom: true });
+                pageUp(e as any, { bottom: true });
             }
         }
     };
 
     const onOffsetSelection = useCallback(
-        ({ shiftKey }, offset) => {
+        ({ shiftKey }: KeyboardEvent, offset: number) => {
             let selectedAyaId;
             if (shiftKey) {
                 selectedAyaId = dispatch(extendSelection(selectStart + offset));
@@ -225,7 +227,7 @@ export default function Pager(): JSX.Element {
     );
 
     const incrementMask = useCallback(
-        (e) => {
+        (_e: React.MouseEvent<HTMLDivElement>) => {
             const incrementedMask = maskStart + 1;
             if (incrementedMask >= TOTAL_VERSES) {
                 dispatch(hideMask());
@@ -240,7 +242,7 @@ export default function Pager(): JSX.Element {
                 if (maskStart === pageFirstAya) {
                     dispatch(
                         gotoPage(history, incrementedMaskPage, {
-                            select: true,
+                            sel: true,
                         })
                     );
                     return; //mask head page is not visible
@@ -252,14 +254,14 @@ export default function Pager(): JSX.Element {
     );
 
     const decrementMask = useCallback(
-        (e) => {
+        (_e: React.MouseEvent<HTMLDivElement>) => {
             if (maskStart > 0) {
                 const maskPage = ayaIdPage(maskStart - 1);
                 if (shownPages.includes(maskPage)) {
                     dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
                     return;
                 } else {
-                    dispatch(gotoPage(history, maskPage, { select: true }));
+                    dispatch(gotoPage(history, maskPage, { sel: true }));
                     const viewRef = pagerRef.current;
                     viewRef?.scrollTo?.({
                         top: viewRef?.scrollHeight - viewRef?.clientHeight,
@@ -273,24 +275,24 @@ export default function Pager(): JSX.Element {
         [dispatch, history, maskStart, shownPages]
     );
     const onArrowKey = useCallback(
-        (e, direction) => {
+        (e: React.KeyboardEvent<HTMLDivElement>, direction: "up" | "down") => {
             const { isTextInput } = checkActiveInput();
 
             if (!isTextInput) {
                 if (direction === "down") {
                     analytics.setTrigger("down_key");
                     if (!maskShift && maskStart !== -1) {
-                        incrementMask(e);
+                        incrementMask(e as any);
                     } else {
-                        onOffsetSelection(e, 1);
+                        onOffsetSelection(e as any, 1);
                     }
                     analytics.logEvent("nav_next_verse", {});
                 } else {
                     analytics.setTrigger("up_key");
                     if (maskStart !== -1 && !maskShift) {
-                        decrementMask(e);
+                        decrementMask(e as any);
                     } else {
-                        onOffsetSelection(e, -1);
+                        onOffsetSelection(e as any, -1);
                     }
                     analytics.logEvent("nav_prev_verse", {});
                 }
@@ -300,12 +302,12 @@ export default function Pager(): JSX.Element {
     );
 
     const handleKeyDown = useCallback(
-        (e) => {
+        (e: KeyboardEvent) => {
             const { isTextInput } = checkActiveInput();
 
-            const vEditorOn = ["Search", "Indices", "Exercise"].includes(
-                activePopup
-            );
+            const vEditorOn =
+                activePopup &&
+                ["Search", "Indices", "Exercise"].includes(activePopup);
 
             const canShowPopup = activePopup === null && isTextInput === false;
 
@@ -340,7 +342,14 @@ export default function Pager(): JSX.Element {
                             title: (
                                 <Message id="play" values={keyValues("r")} />
                             ),
-                            content: <PlayPrompt trigger={"keyboard"} />,
+                            content: (
+                                <PlayPrompt
+                                    {...{
+                                        trigger: "keyboard",
+                                        showReciters: false,
+                                    }}
+                                />
+                            ),
                         });
                     }
                     break;
@@ -429,29 +438,29 @@ export default function Pager(): JSX.Element {
                     }
                     break;
                 case "ArrowDown":
-                    onArrowKey(e, "down");
+                    onArrowKey(e as any, "down");
                     break;
                 case "ArrowUp":
-                    onArrowKey(e, "up");
+                    onArrowKey(e as any, "up");
                     break;
                 case "ArrowLeft":
                     analytics.setTrigger("left_key");
-                    pageDown(e);
+                    pageDown(e as any);
                     break;
                 case "PageDown":
                     if (!isTextInput) {
                         analytics.setTrigger("page_down_key");
-                        pageDown(e);
+                        pageDown(e as any);
                     }
                     break;
                 case "ArrowRight":
                     analytics.setTrigger("right_key");
-                    pageUp(e);
+                    pageUp(e as any);
                     break;
                 case "PageUp":
                     if (!isTextInput) {
                         analytics.setTrigger("page_up_key");
-                        pageUp(e);
+                        pageUp(e as any);
                     }
                     break;
                 default:
@@ -495,7 +504,7 @@ export default function Pager(): JSX.Element {
         handleKeyDown,
     ]);
 
-    const renderPage = (order, shiftX, scaleX) => {
+    const renderPage = (order: number, shiftX: number, scaleX: number) => {
         if (order + 1 > shownPages.length) {
             return; //not enough pages
         }
@@ -504,7 +513,7 @@ export default function Pager(): JSX.Element {
         //     pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
         let thisPageIndex = shownPages?.[order];
 
-        function selectPage(e) {
+        function selectPage(e: React.MouseEvent<HTMLDivElement>) {
             if (activePage !== thisPageIndex) {
                 dispatch(gotoPage(history, thisPageIndex));
                 // console.log(`Set active page: ${thisPageIndex + 1}`);
@@ -529,9 +538,9 @@ export default function Pager(): JSX.Element {
                 <Page
                     index={thisPageIndex}
                     order={order}
-                    onPageUp={pageUp}
-                    onPageDown={pageDown}
-                    onArrowKey={onArrowKey}
+                    // onPageUp={pageUp}
+                    // onPageDown={pageDown}
+                    // onArrowKey={onArrowKey}
                     scaleX={scaleX}
                     shiftX={shiftX}
                     incrementMask={incrementMask}
@@ -545,18 +554,18 @@ export default function Pager(): JSX.Element {
             <DDrop
                 maxShift={200}
                 dropShift={50}
-                onDrop={({ dX, dY }) => {
+                onDrop={({ dX, dY }: { dX: number; dY: number }) => {
                     if (dX > 50) {
                         analytics.setTrigger("dragging");
-                        pageDown();
+                        pageDown({} as any);
                     }
                     if (dX < -50) {
                         analytics.setTrigger("dragging");
-                        pageUp();
+                        pageUp({} as any);
                     }
                 }}
             >
-                {({ dX, dY }) => {
+                {({ dX, dY }: { dX: number; dY: number }) => {
                     //Shrink the width using the scaling
                     // const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
                     // const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
@@ -617,7 +626,7 @@ export default function Pager(): JSX.Element {
                         onClick={(e) => dispatch(toggleZoom())}
                         title={intl.formatMessage({ id: "zoom" })}
                     >
-                        <Icon icon={faExpand} />
+                        <Icon icon={faExpand as any} />
                     </button>
                 </div>
             )}
