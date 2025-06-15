@@ -26,3 +26,4 @@ public/pg_map/create_page_map_json.pl
 .history
 debug.log
 .idea/
+/dist/*
