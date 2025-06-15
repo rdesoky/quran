@@ -1,20 +1,16 @@
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FormattedMessage as String, useIntl } from "react-intl";
+import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { useAudio, useContextPopup, useMessageBox } from "../../RefsProvider";
-import {
-    ayaIdPage,
-    getPageFirstAyaId,
-    TOTAL_VERSES,
-} from "../../services/qData";
+import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
+import { ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
 import {
     checkActiveInput,
     copy2Clipboard,
     downloadPageImage,
     keyValues,
-} from "../../services/utils";
+} from "@/services/utils";
 import {
     selectActivePage,
     selectIsNarrow,
@@ -25,7 +21,7 @@ import {
     selectZoomLevels,
     setActivePageIndex,
     toggleZoom,
-} from "../../store/layoutSlice";
+} from "@/store/layoutSlice";
 import {
     extendSelection,
     gotoAya,
@@ -40,7 +36,7 @@ import {
     setSelectedAya,
     setSelectStart,
     startMask,
-} from "../../store/navSlice";
+} from "@/store/navSlice";
 import {
     closePopup,
     closePopupIfBlocking,
@@ -51,19 +47,19 @@ import {
     showPopup,
     showToast,
     toggleMenu,
-} from "../../store/uiSlice";
-import Page from "../Page/Page";
-import PageHeader from "../Page/PageHeader";
-import { analytics } from "./../../services/analytics";
-import DDrop from "./../DDrop";
+} from "@/store/uiSlice";
+import Page from "@/components/Page/Page";
+import PageHeader from "@/components/Page/PageHeader";
+import { analytics } from "@/services/analytics";
+import DDrop from "@/components/DDrop";
 
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import { AudioState, selectAudioState } from "../../store/playerSlice";
-import { AddHifz } from "../AddHifz";
-import PlayPrompt from "../PlayPrompt";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { AddHifz } from "@/components/AddHifz";
+import PlayPrompt from "@/components/PlayPrompt";
 import "./Pager.scss";
 
-export default function Pager() {
+export default function Pager(): JSX.Element {
     const zoomLevels = useSelector(selectZoomLevels);
     const pagesCount = useSelector(selectPagesCount);
     const pageWidth = useSelector(selectPageWidth);
@@ -80,7 +76,7 @@ export default function Pager() {
     const msgBox = useMessageBox();
     const selectedText = useSelector(selectSelectedText);
     const maskShift = useSelector(selectMaskShift);
-    const params = useParams();
+    const params = useParams<{ page: string }>();
     const shownPages = useSelector(selectShownPages);
     const activePage = useSelector(selectActivePage);
     const location = useLocation();
@@ -93,7 +89,7 @@ export default function Pager() {
 
     useEffect(() => {
         if (loading && activePage !== -1) {
-            const savedActiveAya = parseInt(localStorage.getItem("activeAya"));
+            const savedActiveAya = Number(localStorage.getItem("activeAya"));
 
             dispatch(
                 setSelectedAya(
@@ -108,13 +104,13 @@ export default function Pager() {
 
     useEffect(() => {
         if (!loading) {
-            localStorage.setItem("activeAya", selectStart);
+            localStorage.setItem("activeAya", String(selectStart));
         }
     }, [selectStart, loading]);
 
     useEffect(() => {
-        if (params?.page >= 1) {
-            dispatch(setActivePageIndex(params?.page - 1));
+        if (Number(params.page) >= 1) {
+            dispatch(setActivePageIndex(Number(params.page) - 1));
             localStorage.setItem("activePage", params.page);
         }
     }, [dispatch, params?.page]);
@@ -341,7 +337,9 @@ export default function Pager() {
                 case "KeyR":
                     if (!vEditorOn) {
                         msgBox.set({
-                            title: <String id="play" values={keyValues("r")} />,
+                            title: (
+                                <Message id="play" values={keyValues("r")} />
+                            ),
                             content: <PlayPrompt trigger={"keyboard"} />,
                         });
                     }
@@ -413,7 +411,7 @@ export default function Pager() {
                 case "KeyH":
                     if (!vEditorOn) {
                         msgBox.set({
-                            title: <String id="update_hifz" />,
+                            title: <Message id="update_hifz" />,
                             content: <AddHifz />,
                         });
                         dispatch(closePopupIfBlocking());
