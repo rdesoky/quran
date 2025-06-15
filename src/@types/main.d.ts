@@ -36,7 +36,7 @@ interface Number {
     between(min: number, max: number): boolean;
 }
 interface String {
-    appendWord(word: string, condition: boolean): String;
+    appendWord(word: string, condition?: boolean): string;
 }
 
 type PartInfo = {
