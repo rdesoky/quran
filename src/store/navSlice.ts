@@ -1,6 +1,6 @@
 import { HistoryType } from "@/hooks/useHistory";
 import { Action, createSlice } from "@reduxjs/toolkit";
-import { quranText } from "../App";
+import { quranText } from "@/App";
 import {
     ayaID,
     ayaIdInfo,
@@ -11,15 +11,15 @@ import {
     TOTAL_PARTS,
     TOTAL_SURAS,
     TOTAL_VERSES,
-} from "../services/qData";
-import { greaterOf, lesserOf } from "../services/utils";
-import { AppDispatch, GetState, RootState } from "./config";
+} from "@/services/qData";
+import { greaterOf, lesserOf } from "@/services/utils";
+import { AppDispatch, GetState, RootState } from "@/store/config";
 import {
     sliceName as layoutSliceName,
     selectActivePage,
     selectShownPages,
     setActivePageIndex,
-} from "./layoutSlice";
+} from "@/store/layoutSlice";
 // import { History } from "history";
 
 const sliceName = "nav";

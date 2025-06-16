@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ListReciters } from "../services/audioData";
-import { getStorageItem } from "../services/utils";
-import { AppDispatch, GetState, RootState } from "./config";
+import { ListReciters } from "@/services/audioData";
+import { getStorageItem } from "@/services/utils";
+import { AppDispatch, GetState, RootState } from "@/store/config";
 
 const sliceName = "settings";
 

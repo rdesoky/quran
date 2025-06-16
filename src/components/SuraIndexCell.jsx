@@ -8,21 +8,21 @@ import { useEffect } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import useSuraName from "../hooks/useSuraName";
-import { useAudio, useMessageBox } from "../RefsProvider";
-import { analytics } from "../services/analytics";
+import useSuraName from "@/hooks/useSuraName";
+import { useAudio, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
 import {
     ayaID,
     getArSuraName,
     sura_info,
     verseLocation,
-} from "../services/qData";
-import { addHifzRange, selectSuraRanges } from "../store/dbSlice";
-import { gotoSura, hideMask, selectStartSelection } from "../store/navSlice";
-import { AudioRange } from "../store/settingsSlice";
-import { closePopupIfBlocking, showToast } from "../store/uiSlice";
-import { AddHifz } from "./AddHifz";
-import { SuraHifzChart } from "./Hifz";
+} from "@/services/qData";
+import { addHifzRange, selectSuraRanges } from "@/store/dbSlice";
+import { gotoSura, hideMask, selectStartSelection } from "@/store/navSlice";
+import { AudioRange } from "@/store/settingsSlice";
+import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
+import { AddHifz } from "@/components/AddHifz";
+import { SuraHifzChart } from "@/components/Hifz";
 
 export const SuraIndexCell = ({
     sura: suraIndex,

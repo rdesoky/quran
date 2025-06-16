@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { getPageSuras } from "../services/qData";
-import { selectPageHeight } from "../store/layoutSlice";
-import { HifzSegment } from "./HifzSegment";
+import { getPageSuras } from "@/services/qData";
+import { selectPageHeight } from "@/store/layoutSlice";
+import { HifzSegment } from "@/components/HifzSegment";
 
 export const HifzSegments = ({ page, versesInfo }) => {
     const pageHeight = useSelector(selectPageHeight);

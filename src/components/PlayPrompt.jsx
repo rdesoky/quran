@@ -2,25 +2,25 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
-import useSuraName from "../hooks/useSuraName";
-import { useAudio } from "../RefsProvider";
-import { analytics } from "../services/analytics";
+import useSuraName from "@/hooks/useSuraName";
+import { useAudio } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
 import {
     ayaID,
     ayaIdInfo,
     getPageFirstAyaId,
     verseLocation,
-} from "../services/qData";
-import { checkActiveInput } from "../services/utils";
-import { selectActivePage, selectAppWidth } from "../store/layoutSlice";
-import { selectSelectedRange } from "../store/navSlice";
+} from "@/services/qData";
+import { checkActiveInput } from "@/services/utils";
+import { selectActivePage, selectAppWidth } from "@/store/layoutSlice";
+import { selectSelectedRange } from "@/store/navSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
     selectReciteEnd,
     selectReciteStart,
-} from "../store/playerSlice";
+} from "@/store/playerSlice";
 import {
     AudioRange,
     selectFollowPlayer,
@@ -28,13 +28,13 @@ import {
     selectRepeat,
     setFollowPlayer,
     setRepeat,
-} from "../store/settingsSlice";
-import { PlayerButtons } from "./AudioPlayer/PlayerButtons";
-import ReciterName from "./AudioPlayer/ReciterName";
-import AyaName from "./AyaName";
-import { CommandButton } from "./CommandButton";
-import PlayerCountDown from "./PlayerCountDown";
-import RecitersGrid from "./RecitersGrid";
+} from "@/store/settingsSlice";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import ReciterName from "@/components/AudioPlayer/ReciterName";
+import AyaName from "@/components/AyaName";
+import { CommandButton } from "@/components/CommandButton";
+import PlayerCountDown from "@/components/PlayerCountDown";
+import RecitersGrid from "@/components/RecitersGrid";
 
 export default function PlayPrompt({ trigger, showReciters }) {
     const [selectedScope, setSelectedScope] = useState(-1);

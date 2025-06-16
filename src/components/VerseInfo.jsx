@@ -4,11 +4,11 @@ import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { analytics } from "../services/analytics";
-import { ayaIdInfo, ayaIdPage } from "../services/qData";
-import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";
-import { closePopupIfBlocking } from "../store/uiSlice";
-import SuraName from "./SuraName";
+import { analytics } from "@/services/analytics";
+import { ayaIdInfo, ayaIdPage } from "@/services/qData";
+import { gotoAya, gotoPage, selectStartSelection } from "@/store/navSlice";
+import { closePopupIfBlocking } from "@/store/uiSlice";
+import SuraName from "@/components/SuraName";
 
 export const VerseInfo = ({
     verse,

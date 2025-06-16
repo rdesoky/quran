@@ -1,5 +1,5 @@
-import { RecitersInfo } from "../data/reciters";
-import { num2string } from "./utils";
+import { RecitersInfo } from "@/data/reciters";
+import { num2string } from "@/services/utils";
 
 const NumToString = num2string;
 

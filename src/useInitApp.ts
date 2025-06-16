@@ -7,8 +7,8 @@ import {
     setBookmarks,
     setHifzRanges,
     setUser,
-} from "./store/dbSlice";
-import { onResize } from "./store/layoutSlice";
+} from "@/store/dbSlice";
+import { onResize } from "@/store/layoutSlice";
 
 export default function useInitApp() {
     const dispatch = useDispatch();

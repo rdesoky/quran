@@ -1,11 +1,11 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { analytics } from "../services/analytics";
-import { ayaIdInfo } from "../services/qData";
-import { selectPagerWidth, selectPopupWidth } from "../store/layoutSlice";
-import { selectStartSelection } from "../store/navSlice";
-import { SimpleSuraIndexCell } from "./SimpleSuraCell";
-import { SuraIndexCell } from "./SuraIndexCell";
+import { analytics } from "@/services/analytics";
+import { ayaIdInfo } from "@/services/qData";
+import { selectPagerWidth, selectPopupWidth } from "@/store/layoutSlice";
+import { selectStartSelection } from "@/store/navSlice";
+import { SimpleSuraIndexCell } from "@/components/SimpleSuraCell";
+import { SuraIndexCell } from "@/components/SuraIndexCell";
 
 export const SuraList = ({
     filter,

@@ -38,7 +38,8 @@
         "vite-tsconfig-paths": "^5.1.4"
     },
     "scripts": {
-        "start": "vite --debug",
+        "start-debug": "vite --debug",
+        "start": "vite",
         "build": "vite build",
         "sw-setup": "node sw-post-build.mjs",
         "postbuild": "cp build/index.html build/404.html && yarn sw-setup",

@@ -123,7 +123,9 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
                             }}
                             src={
                                 imageUrl ||
-                                location.origin + "/images/page_loader.png"
+                                location.origin +
+                                    import.meta.env.BASE_URL +
+                                    "images/page_loader.png"
                             }
                             className={"PageImage".appendWord(
                                 "page-loader-image",

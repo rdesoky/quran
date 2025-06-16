@@ -3,18 +3,18 @@ import { faBookmark, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { quranText } from "../App";
-import { analytics } from "../services/analytics";
-import { ayaIdInfo, verseLocation } from "../services/qData";
-import { copy2Clipboard } from "../services/utils";
+import { quranText } from "@/App";
+import { analytics } from "@/services/analytics";
+import { ayaIdInfo, verseLocation } from "@/services/qData";
+import { copy2Clipboard } from "@/services/utils";
 import {
     addBookmark,
     deleteBookmark,
     selectIsBookmarked,
-} from "../store/dbSlice";
-import { selectStartSelection } from "../store/navSlice";
-import { showToast } from "../store/uiSlice";
-import { VerseInfo } from "./VerseInfo";
+} from "@/store/dbSlice";
+import { selectStartSelection } from "@/store/navSlice";
+import { showToast } from "@/store/uiSlice";
+import { VerseInfo } from "@/components/VerseInfo";
 export const VerseText = ({
     verse,
     showInfo,

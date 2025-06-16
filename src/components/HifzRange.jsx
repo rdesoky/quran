@@ -9,15 +9,15 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import useSuraName from "../hooks/useSuraName";
-import { useAudio, useMessageBox } from "../RefsProvider";
-import { analytics } from "../services/analytics";
-import { getHifzRangeDisplayInfo } from "../services/utils";
+import useSuraName from "@/hooks/useSuraName";
+import { useAudio, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
+import { getHifzRangeDisplayInfo } from "@/services/utils";
 import {
     addHifzRange,
     deleteHifzRange,
     setRangeRevised,
-} from "../store/dbSlice";
+} from "@/store/dbSlice";
 import {
     gotoAya,
     gotoPage,
@@ -25,9 +25,9 @@ import {
     selectMaskOn,
     setSelectEnd,
     showMask,
-} from "../store/navSlice";
-import { setReciteRange } from "../store/playerSlice";
-import { closePopupIfBlocking, showToast } from "../store/uiSlice";
+} from "@/store/navSlice";
+import { setReciteRange } from "@/store/playerSlice";
+import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import {
     ayaID,
     ayaIdPage,
@@ -35,9 +35,9 @@ import {
     getRangeVerses,
     sura_info,
     verseLocation,
-} from "./../services/qData";
-import { SuraHifzChart } from "./SuraHifzChart";
-import { VerseText } from "./Widgets";
+} from "@/services/qData";
+import { SuraHifzChart } from "@/components/SuraHifzChart";
+import { VerseText } from "@/components/Widgets";
 
 export const HifzRange = ({
     range,

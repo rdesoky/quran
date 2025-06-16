@@ -111,8 +111,8 @@ export default function RecitersGrid({ trigger, onClick }) {
                         <img
                             className="ReciterIcon"
                             src={
-                                import.meta.env.PUBLIC_URL +
-                                "/images/" +
+                                import.meta.env.BASE_URL +
+                                "images/" +
                                 reciter +
                                 ".jpg"
                             }

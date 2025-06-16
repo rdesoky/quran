@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "../services/analytics";
-import { getArSuraName } from "../services/qData";
-import { gotoSura } from "../store/navSlice";
-import SuraName from "./SuraName";
+import { getArSuraName } from "@/services/qData";
+import { gotoSura } from "@/store/navSlice";
+import SuraName from "@/components/SuraName";
 
 export const SimpleSuraIndexCell = ({ sura: suraIndex, selectedSura }) => {
     const history = useHistory();

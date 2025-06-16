@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ayaIdInfo, TOTAL_SURAS } from "../services/qData";
-import { selectStartSelection } from "../store/navSlice";
-import { selectSuraNames } from "../store/uiSlice";
+import { ayaIdInfo, TOTAL_SURAS } from "@/services/qData";
+import { selectStartSelection } from "@/store/navSlice";
+import { selectSuraNames } from "@/store/uiSlice";
 
 export default function useSuraName(index = -1) {
     const [suraIndex, setSuraIndex] = useState(index);

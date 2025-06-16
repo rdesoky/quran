@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { getPageFirstAyaId } from "../services/qData";
-import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
-import { AudioState, selectAudioState } from "../store/playerSlice";
-import { AudioRange } from "../store/settingsSlice";
-import { CommandButton } from "./CommandButton";
+import { getPageFirstAyaId } from "@/services/qData";
+import { gotoAya, selectMaskOn, showMask } from "@/store/navSlice";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { AudioRange } from "@/store/settingsSlice";
+import { CommandButton } from "@/components/CommandButton";
 
 export const PageContextButtons = ({ page }) => {
     const audioState = useSelector(selectAudioState);

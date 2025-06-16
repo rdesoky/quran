@@ -12,11 +12,11 @@ import {
     TOTAL_PAGES,
     TOTAL_PARTS,
 } from "@/services/qData";
-import { describeArc, rotatePoint } from "../services/svg";
-import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
-import { selectHifzRanges } from "../store/dbSlice";
-import { gotoAya, selectStartSelection } from "../store/navSlice";
-import { selectSuraNames } from "../store/uiSlice";
+import { describeArc, rotatePoint } from "@/services/svg";
+import { dayLength, getHifzRangeDisplayInfo } from "@/services/utils";
+import { selectHifzRanges } from "@/store/dbSlice";
+import { gotoAya, selectStartSelection } from "@/store/navSlice";
+import { selectSuraNames } from "@/store/uiSlice";
 
 export default function PartsPie({ size, onFinish }) {
     const history = useHistory();
