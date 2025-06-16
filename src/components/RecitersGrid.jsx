@@ -10,7 +10,7 @@ import {
     selectPlayingAya,
 } from "@/store/playerSlice";
 import { changeReciter, selectReciter } from "@/store/settingsSlice";
-import ReciterName from "./AudioPlayer/ReciterName";
+import ReciterName from "@/components/AudioPlayer/ReciterName";
 
 export default function RecitersGrid({ trigger, onClick }) {
     const [userAction, setUserAction] = useState(false);
