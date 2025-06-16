@@ -4,18 +4,18 @@ import React from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "react-switch";
-import AudioSettings from "../../AudioSettings";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { analytics } from "../../services/analytics";
-import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
+import AudioSettings from "@/AudioSettings";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { analytics } from "@/services/analytics";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
+import { selectPlayingAya } from "@/store/playerSlice";
 import {
     selectLang,
     selectTheme,
     setLang,
     setTheme,
-} from "../../store/settingsSlice";
-import { selectPopup } from "../../store/uiSlice";
+} from "@/store/settingsSlice";
+import { selectPopup } from "@/store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { ExerciseSettings } from "../ExerciseSettings";
 import RecitersGrid from "../RecitersGrid";

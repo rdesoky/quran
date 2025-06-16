@@ -51,7 +51,9 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
         setVerseInfo([]);
         let pageNumber = parseInt(pageIndex) + 1;
         // let controller = new AbortController();
-        let url = `${process.env.PUBLIC_URL}/pg_map/pm_${pageNumber}.json`;
+        let url = `${location.origin}${
+            import.meta.env.BASE_URL
+        }pg_map/pm_${pageNumber}.json`;
         fetch(url, {
             // signal: controller.signal,
         })
@@ -121,8 +123,7 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
                             }}
                             src={
                                 imageUrl ||
-                                process.env.PUBLIC_URL +
-                                    "/images/page_loader.png"
+                                location.origin + "/images/page_loader.png"
                             }
                             className={"PageImage".appendWord(
                                 "page-loader-image",

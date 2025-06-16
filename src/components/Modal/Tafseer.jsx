@@ -3,18 +3,18 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { ayaIdInfo } from "../../services/qData";
-import { copy2Clipboard } from "../../services/utils";
-import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
+import { useHistory } from "@/hooks/useHistory";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { ayaIdInfo } from "@/services/qData";
+import { copy2Clipboard } from "@/services/utils";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import {
     gotoAya,
     selectMaskStart,
     selectStartSelection,
-} from "../../store/navSlice";
-import { selectPlayingAya } from "../../store/playerSlice";
-import { showToast } from "../../store/uiSlice";
+} from "@/store/navSlice";
+import { selectPlayingAya } from "@/store/playerSlice";
+import { showToast } from "@/store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { VerseInfo, VerseText } from "../Widgets";
 
@@ -108,7 +108,7 @@ export const TafseerView = ({
     useEffect(() => {
         let fileName = TafseerList.find((i) => i.id === tafseer).file;
         let controller = new AbortController();
-        let url = `${process.env.PUBLIC_URL}/translation/${fileName}`;
+        let url = `${import.meta.env.PUBLIC_URL}/translation/${fileName}`;
         fetch(url, { signal: controller.signal })
             .then((r) => r.text())
             .then((txt) => {

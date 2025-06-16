@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "../services/analytics";
 import { getArSuraName } from "../services/qData";
 import { gotoSura } from "../store/navSlice";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useContextPopup } from "../RefsProvider";
+import { useHistory } from "@/hooks/useHistory";
+import { useContextPopup } from "@/RefsProvider";
 import {
     getHezbByAya,
     getPartFirstAyaId,
@@ -11,7 +11,7 @@ import {
     rangeStartAya,
     TOTAL_PAGES,
     TOTAL_PARTS,
-} from "../services/qData";
+} from "@/services/qData";
 import { describeArc, rotatePoint } from "../services/svg";
 import { dayLength, getHifzRangeDisplayInfo } from "../services/utils";
 import { selectHifzRanges } from "../store/dbSlice";

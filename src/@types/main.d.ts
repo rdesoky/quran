@@ -50,11 +50,12 @@ type PartInfo = {
 };
 
 type SuraInfo = {
-    id: number;
-    name: string;
     sp: number; // start page
     ep: number; // end page
     ac: number; // aya count
+    t?: number;
+    id?: number;
+    name?: string;
     hifz?: boolean; // is hifz sura
 };
 

@@ -32,7 +32,7 @@ export const delay = (ms: number) =>
 
 export const downloadPageImage = (pageIndex: number) => {
     const imageUrl =
-        process.env.PUBLIC_URL +
+        location.origin +
         "/qpages_1260/page" +
         num2string(pageIndex + 1, 3) +
         ".png";

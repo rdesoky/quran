@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { AppRefs } from "../RefsProvider";
 import {
     ayaID,

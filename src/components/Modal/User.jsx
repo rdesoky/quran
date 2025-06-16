@@ -1,11 +1,11 @@
 import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { selectUser, signOut } from "../../store/dbSlice";
-import { selectAppHeight } from "../../store/layoutSlice";
-import { ActivityGrid } from "../ActivityGrid";
-import { UserImage } from "../UserImage";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { selectUser, signOut } from "@/store/dbSlice";
+import { selectAppHeight } from "@/store/layoutSlice";
+import { ActivityGrid } from "@/components/ActivityGrid";
+import { UserImage } from "@/components/UserImage";
 import Login from "./../Login";
 
 const User = () => {

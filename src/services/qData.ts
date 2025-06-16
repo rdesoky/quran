@@ -3,10 +3,12 @@ export const TOTAL_SURAS = 114;
 export const TOTAL_PAGES = 604;
 export const TOTAL_VERSES = 6236;
 
-export const sura_info = require("../data/sura-info.json") as SuraInfo[];
-export const parts = require("../data/parts-info.json") as PartInfo[];
-export const pagesInfo =
-    require("../data/pages-starting-sura-aya.json") as PageInfo[];
+import _sura_info from "@/data/sura-info.json";
+export const sura_info = _sura_info as SuraInfo[];
+import _parts from "@/data/parts-info.json";
+export const parts = _parts as PartInfo[];
+import _pagesInfo from "@/data/pages-starting-sura-aya.json";
+export const pagesInfo = _pagesInfo as PageInfo[];
 
 //Used for searching purpose
 export const arSuraNames =

@@ -8,7 +8,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import useSuraName from "../hooks/useSuraName";
 import { useAudio, useMessageBox } from "../RefsProvider";
 import { analytics } from "../services/analytics";

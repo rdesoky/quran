@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTopCommand } from "../../services/utils";
-import { selectIsNarrow } from "../../store/layoutSlice";
+import { selectTopCommand } from "@/services/utils";
+import { selectIsNarrow } from "@/store/layoutSlice";
 import {
     hideMenu,
     selectPopup,
     selectRecentCommands,
     selectMenuExpanded,
-} from "../../store/uiSlice";
+} from "@/store/uiSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { CommandButton } from "../CommandButton";
 import "./Sidebar.scss";

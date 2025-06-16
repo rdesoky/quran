@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { useContextPopup, useMessageBox } from "../../RefsProvider";
 import { analytics } from "../../services/analytics";
 import {

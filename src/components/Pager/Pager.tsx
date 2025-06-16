@@ -47,11 +47,11 @@ import {
     showToast,
     toggleMenu,
 } from "@/store/uiSlice";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router";
 
 import { AddHifz } from "@/components/AddHifz";
 import PlayPrompt from "@/components/PlayPrompt";
@@ -59,8 +59,10 @@ import { AppDispatch } from "@/store/config";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
+import { useHistory } from "@/hooks/useHistory";
+const Icon = FontAwesomeIcon as any;
 
-export default function Pager(): JSX.Element {
+export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);
     const pagesCount = useSelector(selectPagesCount);
     const pageWidth = useSelector(selectPageWidth);
@@ -110,7 +112,7 @@ export default function Pager(): JSX.Element {
     }, [selectStart, loading]);
 
     useEffect(() => {
-        if (Number(params.page) >= 1) {
+        if (params.page && Number(params.page) >= 1) {
             dispatch(setActivePageIndex(Number(params.page) - 1));
             localStorage.setItem("activePage", params.page);
         }

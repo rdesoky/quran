@@ -10,7 +10,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { quranText } from "../App";
 import useSuraName from "../hooks/useSuraName";
 import { useAudio, useMessageBox } from "../RefsProvider";
