@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import firebase from "firebase";
-import { quranNormalizedText } from "../App";
-import { dateKey, num2string } from "../services/utils";
-import { AppDispatch, GetState, RootState } from "./config";
-import { showToast } from "./uiSlice";
+import { quranNormalizedText } from "@/App";
+import { dateKey, num2string } from "@/services/utils";
+import { AppDispatch, GetState, RootState } from "@/store/config";
+import { showToast } from "@/store/uiSlice";
 
 const sliceName = "db";
 

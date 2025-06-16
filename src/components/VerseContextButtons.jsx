@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectMaskOn } from "../store/navSlice";
-import { AudioState, selectAudioState } from "../store/playerSlice";
-import { AudioRange } from "../store/settingsSlice";
-import { selectPopup } from "../store/uiSlice";
-import { CommandButton } from "./CommandButton";
+import { selectMaskOn } from "@/store/navSlice";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { AudioRange } from "@/store/settingsSlice";
+import { selectPopup } from "@/store/uiSlice";
+import { CommandButton } from "@/components/CommandButton";
 
 export const VerseContextButtons = ({ verse }) => {
     const audioState = useSelector(selectAudioState);

@@ -3,21 +3,21 @@ import { useDeferredValue, useEffect, useState } from "react";
 import { IntlProvider } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import "./App.scss";
-import { Audio } from "./components/Audio";
-import { ContextPopup } from "./components/ContextPopup";
-import { MessageBox } from "./components/MessageBox";
-import PopupView from "./components/Modal/PopupView";
-import Pager from "./components/Pager/Pager";
-import PageRedirect from "./components/Pager/PageRedirect";
-import Sidebar from "./components/Sidebar/Sidebar";
-import { ToastMessage } from "./components/Widgets";
-import SuraNames from "./providers/SuraNames";
-import RefsProvider from "./RefsProvider";
-import { analytics } from "./services/analytics";
-import { onResize, selectZoomClass } from "./store/layoutSlice";
-import { selectLang, selectTheme } from "./store/settingsSlice";
-import useInitApp from "./useInitApp";
+import "@/App.scss";
+import { Audio } from "@/components/Audio";
+import { ContextPopup } from "@/components/ContextPopup";
+import { MessageBox } from "@/components/MessageBox";
+import PopupView from "@/components/Modal/PopupView";
+import Pager from "@/components/Pager/Pager";
+import PageRedirect from "@/components/Pager/PageRedirect";
+import Sidebar from "@/components/Sidebar/Sidebar";
+import { ToastMessage } from "@/components/Widgets";
+import SuraNames from "@/providers/SuraNames";
+import RefsProvider from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
+import { onResize, selectZoomClass } from "@/store/layoutSlice";
+import { selectLang, selectTheme } from "@/store/settingsSlice";
+import useInitApp from "@/useInitApp";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -132,7 +132,7 @@ function DefaultRoute() {
     const activePage = Number(localStorage.getItem("activePage"));
     const activePageNumber = isNaN(activePage) ? 1 : activePage;
     const defUrl = import.meta.env.BASE_URL + "page/" + activePageNumber;
-    console.log(`PUBLIC_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
+    console.log(`BASE_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
     return <Navigate to={defUrl} replace={true} />;
 }
 

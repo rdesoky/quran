@@ -15,8 +15,8 @@ import {
 } from "@/store/navSlice";
 import { selectPlayingAya } from "@/store/playerSlice";
 import { showToast } from "@/store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
-import { VerseInfo, VerseText } from "../Widgets";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { VerseInfo, VerseText } from "@/components/Widgets";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -108,7 +108,7 @@ export const TafseerView = ({
     useEffect(() => {
         let fileName = TafseerList.find((i) => i.id === tafseer).file;
         let controller = new AbortController();
-        let url = `${import.meta.env.PUBLIC_URL}/translation/${fileName}`;
+        let url = `${import.meta.env.BASE_URL}translation/${fileName}`;
         fetch(url, { signal: controller.signal })
             .then((r) => r.text())
             .then((txt) => {

@@ -96,7 +96,7 @@ export const CommandIcon = ({ command }) => {
         case "AudioPlayer":
             return (
                 <img
-                    src={`${import.meta.env.PUBLIC_URL}/images/${reciter}.jpg`}
+                    src={`${import.meta.env.BASE_URL}images/${reciter}.jpg`}
                     className={"ReciterIcon".appendWord(
                         "blinking",
                         audioState === AudioState.playing

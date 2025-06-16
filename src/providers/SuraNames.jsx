@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLang } from "../store/settingsSlice";
-import { setSuraNames } from "../store/uiSlice";
+import { selectLang } from "@/store/settingsSlice";
+import { setSuraNames } from "@/store/uiSlice";
 
 export default function SuraNames() {
     // const appRefs = useContext(AppRefs);

@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { AppRefs } from "../RefsProvider";
+import { AppRefs } from "@/RefsProvider";
 import {
     ayaID,
     ayaIdInfo,
@@ -13,10 +13,10 @@ import {
     getPartIndexByAyaId,
     TOTAL_PARTS,
     TOTAL_VERSES,
-} from "../services/qData";
-import { getSuraName } from "../services/utils";
-import { selectActivePage, selectShownPages } from "../store/layoutSlice";
-import { gotoPage, selectSelectedRange } from "../store/navSlice";
+} from "@/services/qData";
+import { getSuraName } from "@/services/utils";
+import { selectActivePage, selectShownPages } from "@/store/layoutSlice";
+import { gotoPage, selectSelectedRange } from "@/store/navSlice";
 import {
     AudioState,
     selectAudioSource,
@@ -28,13 +28,13 @@ import {
     setRemainingTime,
     setReciteRange,
     setTrackDuration,
-} from "../store/playerSlice";
+} from "@/store/playerSlice";
 import {
     AudioRange,
     selectFollowPlayer,
     selectReciter,
     selectRepeat,
-} from "../store/settingsSlice";
+} from "@/store/settingsSlice";
 
 export function Audio() {
     const appRefs = useContext(AppRefs);

@@ -5,7 +5,7 @@ import {
     selectAudioState,
     selectRemainingTime,
     selectTrackDuration,
-} from "../store/playerSlice";
+} from "@/store/playerSlice";
 
 export default function PlayerCountDown({ sqSize = 32, strokeWidth = 3 }) {
     const audioState = useSelector(selectAudioState);

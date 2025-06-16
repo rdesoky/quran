@@ -2,8 +2,8 @@ import { FormattedMessage as Message } from "react-intl";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ListReciters } from "../services/audioData";
-import { changeReciter, selectReciter } from "../store/settingsSlice";
+import { ListReciters } from "@/services/audioData";
+import { changeReciter, selectReciter } from "@/store/settingsSlice";
 
 export default function RecitersDropDown() {
     const reciter = useSelector(selectReciter);

@@ -9,21 +9,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { quranNormalizedText, quranText } from "../../App";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { analytics } from "../../services/analytics";
-import { arSuraNames, ayaIdInfo, verseLocation } from "../../services/qData";
+import { analytics } from "@/services/analytics";
+import { arSuraNames, ayaIdInfo, verseLocation } from "@/services/qData";
 import {
     copy2Clipboard,
     highlightSearch,
     normalizeText,
-} from "../../services/utils";
-import { selectAppHeight, selectPopupWidth } from "../../store/layoutSlice";
-import { gotoAya, gotoSura, hideMask } from "../../store/navSlice";
-import { selectLang } from "../../store/settingsSlice";
-import { closePopupIfBlocking, showToast } from "../../store/uiSlice";
+} from "@/services/utils";
+import { selectAppHeight, selectPopupWidth } from "@/store/layoutSlice";
+import { gotoAya, gotoSura, hideMask } from "@/store/navSlice";
+import { selectLang } from "@/store/settingsSlice";
+import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import SuraName from "../SuraName";
+import { quranNormalizedText, quranText } from "@/App";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 
 export default function Search() {
     const popupWidth = useSelector(selectPopupWidth);

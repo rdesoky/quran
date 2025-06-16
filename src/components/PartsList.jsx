@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { analytics } from "../services/analytics";
-import { PartCell } from "./PartCell";
+import { analytics } from "@/services/analytics";
+import { PartCell } from "@/components/PartCell";
 
 export const PartsList = ({ part }) => {
     const [listWidth, setListWidth] = useState(0);

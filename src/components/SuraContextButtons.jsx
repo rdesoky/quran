@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { ayaID } from "../services/qData";
-import { gotoAya, selectMaskOn, showMask } from "../store/navSlice";
-import { CommandButton } from "./CommandButton";
+import { ayaID } from "@/services/qData";
+import { gotoAya, selectMaskOn, showMask } from "@/store/navSlice";
+import { CommandButton } from "@/components/CommandButton";
 
 export const SuraContextButtons = ({ sura }) => {
     // const audioState = useSelector(selectAudioState);

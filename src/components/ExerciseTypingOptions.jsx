@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { AppRefs } from "../RefsProvider";
+import { AppRefs } from "@/RefsProvider";
 
 export default function ExerciseTypingOptions({ setQuickMode, quickMode }) {
     const [option, setOption] = useState(quickMode);

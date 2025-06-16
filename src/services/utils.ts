@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 import { IntlShape } from "react-intl";
-import { getPagePartNumber, sura_info } from "./qData";
+import { getPagePartNumber, sura_info } from "@/services/qData";
 
 export const num2string = (num: number, length = 3) => {
     let ret = num.toString();

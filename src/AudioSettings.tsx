@@ -1,14 +1,14 @@
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import ReactSwitch from "react-switch";
-import { analytics } from "./services/analytics";
+import { analytics } from "@/services/analytics";
 import {
     selectFollowPlayer,
     selectRepeat,
     setFollowPlayer,
     setRepeat,
-} from "./store/settingsSlice";
-import { selectPopup } from "./store/uiSlice";
+} from "@/store/settingsSlice";
+import { selectPopup } from "@/store/uiSlice";
 
 export default function AudioSettings() {
     const followPlayer = useSelector(selectFollowPlayer);

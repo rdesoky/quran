@@ -9,7 +9,7 @@ import {
     setExerciseLevel,
     setExerciseMemorized,
     setRandomAutoRecite,
-} from "../store/settingsSlice";
+} from "@/store/settingsSlice";
 
 export const ExerciseSettings = () => {
     const dispatch = useDispatch();
