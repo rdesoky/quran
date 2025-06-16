@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import { ayaIdPage } from "../../services/qData";
 import { selectAya } from "../../store/navSlice";
 import "./Pager.scss";
@@ -8,15 +8,22 @@ import "./Pager.scss";
 export default function PageRedirect() {
     const params = useParams();
     const dispatch = useDispatch();
-    let { aya } = params;
-    let pageNum = 1;
+    const navigate = useNavigate();
 
-    if (aya !== undefined) {
-        setTimeout(() => {
-            // app.selectAya(parseInt(aya));
-            dispatch(selectAya(parseInt(aya)));
-        }, 10);
-        pageNum = ayaIdPage(aya) + 1;
-    }
-    return <Redirect to={process.env.PUBLIC_URL + "/page/" + pageNum} />;
+    useEffect(() => {
+        let { aya } = params;
+        let pageNum = 1;
+        if (aya !== undefined) {
+            setTimeout(() => {
+                // app.selectAya(parseInt(aya));
+                dispatch(selectAya(Number(aya)));
+            }, 10);
+            pageNum = ayaIdPage(aya) + 1;
+        }
+        navigate(`/page/${pageNum}`, {
+            replace: true,
+        });
+    }, [params, dispatch]);
+
+    return null;
 }

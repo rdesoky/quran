@@ -1,6 +1,6 @@
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import useSuraName from "../hooks/useSuraName";
 import { ayaIdInfo } from "../services/qData";
 import { gotoAya } from "../store/navSlice";

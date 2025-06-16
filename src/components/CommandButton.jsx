@@ -47,7 +47,7 @@ import {
 } from "../store/uiSlice";
 import { ayaIdPage, verseLocation } from "./../services/qData";
 
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { selectPagesCount } from "../store/layoutSlice";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";

@@ -3,7 +3,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "../services/analytics";
 import { ayaIdInfo, ayaIdPage } from "../services/qData";
 import { gotoAya, gotoPage, selectStartSelection } from "../store/navSlice";

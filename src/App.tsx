@@ -2,12 +2,7 @@ import firebase from "firebase";
 import { useDeferredValue, useEffect, useState } from "react";
 import { IntlProvider } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    Redirect,
-    Route,
-    BrowserRouter as Router,
-    Switch,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import "./App.scss";
 import { Audio } from "./components/Audio";
 import { ContextPopup } from "./components/ContextPopup";
@@ -40,14 +35,14 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-if (!analytics.devMode()) {
-    firebase.analytics();
-}
+// if (!analytics.devMode()) {
+//     firebase.analytics();
+// }
 
 analytics.setCurrentScreen(window.location.pathname);
 analytics.setUserProps({ web_user: "yes" });
 
-export default function App(): JSX.Element | null {
+const App: React.FC = () => {
     //Handles componentDidMount/unmount, props changes
     const [localeMessages, setLocaleMessages] = useState();
     const [windowSize, setWindowSize] = useState({
@@ -86,7 +81,9 @@ export default function App(): JSX.Element | null {
 
     useEffect(() => {
         document.body.setAttribute("lang", lang);
-        setLocaleMessages(require(`./translations/${lang}.json`));
+        import(`./translations/${lang}.json`).then((messages) => {
+            setLocaleMessages(messages.default);
+        });
         // addLocaleData(require(`react-intl/locale-data/${lang}`));
     }, [lang]);
 
@@ -98,59 +95,54 @@ export default function App(): JSX.Element | null {
         <IntlProvider locale={lang} messages={localeMessages}>
             <RefsProvider>
                 <div className={`App ${theme}Theme ${zoomClass}`}>
-                    <Router>
-                        <Switch>
+                    <BrowserRouter>
+                        <Routes>
                             <Route
-                                path={process.env.PUBLIC_URL + "/page/:page"}
-                                component={Pager}
+                                path={import.meta.env.BASE_URL + "page/:page"}
+                                element={<Pager />}
                             />
                             <Route
                                 path={
-                                    process.env.PUBLIC_URL +
+                                    import.meta.env.BASE_URL +
                                     "/sura/:sura/aya/:aya"
                                 }
-                                component={Pager}
+                                element={<Pager />}
                             />
                             <Route
-                                path={process.env.PUBLIC_URL + "/aya/:aya"}
-                                component={PageRedirect}
+                                path={import.meta.env.BASE_URL + "aya/:aya"}
+                                element={<PageRedirect />}
                             />
-                            <Route
-                                render={() => {
-                                    const activePage = Number(
-                                        localStorage.getItem("activePage")
-                                    );
-                                    const activePageNumber = isNaN(activePage)
-                                        ? 1
-                                        : activePage;
-                                    const defUrl =
-                                        process.env.PUBLIC_URL +
-                                        "/page/" +
-                                        activePageNumber;
-                                    console.log(
-                                        `PUBLIC_URL=${process.env.PUBLIC_URL}, To=${defUrl}`
-                                    );
-                                    return <Redirect to={defUrl} />;
-                                }}
-                            />
-                        </Switch>
+                            <Route path="*" element={<DefaultRoute />} />
+                        </Routes>
                         <PopupView />
                         <MessageBox />
                         <ContextPopup />
                         <Sidebar />
                         <Audio />
-                    </Router>
+                    </BrowserRouter>
                 </div>
                 <ToastMessage />
                 <SuraNames />
             </RefsProvider>
         </IntlProvider>
     );
+};
+
+function DefaultRoute() {
+    const activePage = Number(localStorage.getItem("activePage"));
+    const activePageNumber = isNaN(activePage) ? 1 : activePage;
+    const defUrl = import.meta.env.BASE_URL + "page/" + activePageNumber;
+    console.log(`PUBLIC_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
+    return <Navigate to={defUrl} replace={true} />;
 }
 
 export const quranText: string[] = [];
 
-fetch(`${process.env.PUBLIC_URL}/db/quran.txt`)
+const quranTextUrl = `${location.origin}${
+    import.meta.env.BASE_URL
+}db/quran.txt`;
+
+fetch(quranTextUrl)
     .then((results) => results.text())
     .then((text: string) => {
         quranText.push(...text.split("\n"));
@@ -159,9 +151,14 @@ fetch(`${process.env.PUBLIC_URL}/db/quran.txt`)
 
 export const quranNormalizedText: string[] = [];
 
-fetch(`${process.env.PUBLIC_URL}/db/normalized_quran.txt`)
+const quranNormalizedTextUrl = `${location.origin}${
+    import.meta.env.BASE_URL
+}db/normalized_quran.txt`;
+fetch(quranNormalizedTextUrl)
     .then((results) => results.text())
     .then((text) => {
         quranNormalizedText.push(...text.split("\n"));
     })
     .catch((e) => {});
+
+export default App;

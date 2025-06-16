@@ -8,7 +8,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { quranNormalizedText, quranText } from "../../App";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { analytics } from "../../services/analytics";

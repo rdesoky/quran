@@ -9,11 +9,9 @@ export type AppRefsType = {
 
 export const AppRefs = createContext({} as AppRefsType);
 
-export default function RefsProvider({
+const RefsProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
-}: {
-    children: React.ReactNode;
-}): JSX.Element {
+}) => {
     // const [updates, setUpdates] = useState(0);
     const refs = useRef({} as RefsType);
 
@@ -37,7 +35,9 @@ export default function RefsProvider({
             {children}
         </AppRefs.Provider>
     );
-}
+};
+
+export default RefsProvider;
 
 export const useMessageBox = () => {
     const refs = useContext(AppRefs);

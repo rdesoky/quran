@@ -2,8 +2,8 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { downloadImage } from "../services/utils";
-import { selectPhotoUrl } from "../store/dbSlice";
+import { downloadImage } from "@/services/utils";
+import { selectPhotoUrl } from "@/store/dbSlice";
 
 export const UserImage = () => {
     const [imageUrl, setImageUrl] = useState(null);

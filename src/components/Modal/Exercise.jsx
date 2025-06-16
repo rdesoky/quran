@@ -19,7 +19,7 @@ import { TafseerView } from "./Tafseer";
 
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { quranNormalizedText, quranText } from "../../App";
 import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
 import { useAudio, useMessageBox } from "../../RefsProvider";

@@ -1,4 +1,4 @@
-import { analytics as firebaseAnalytics } from "firebase";
+import firebase from "firebase/";
 
 export const analytics = {
     devMode: () =>
@@ -18,21 +18,21 @@ export const analytics = {
         const params = { ...analytics.params, ...payload };
         // console.log(`Post '${name}'->${JSON.stringify(params)}`);
         if (!analytics.devMode()) {
-            firebaseAnalytics().logEvent(name, params);
+            firebase.analytics().logEvent(name, params);
         }
         return analytics;
     },
     setCurrentScreen: (name: string) => {
         // console.log(`SetScreen '${name}'`);
         if (!analytics.devMode()) {
-            firebaseAnalytics().setCurrentScreen(name);
+            firebase.analytics().setCurrentScreen(name);
         }
         return analytics;
     },
     setUserProps: (props: Record<string, any>) => {
         // console.log(`SetUserProperties: ${JSON.stringify(props)}`);
         if (!analytics.devMode()) {
-            firebaseAnalytics().setUserProperties(props);
+            firebase.analytics().setUserProperties(props);
         }
         return analytics;
     },

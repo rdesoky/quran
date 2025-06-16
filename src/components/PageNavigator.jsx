@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "@/services/analytics";
 import { TOTAL_PAGES } from "@/services/qData";
 import { selectActivePage } from "@/store/layoutSlice";

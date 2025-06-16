@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToastMessage, showToast } from "../store/uiSlice";
+import { selectToastMessage, showToast } from "@/store/uiSlice";
 
 export const ToastMessage = () => {
     const [hiding, setHiding] = useState(false);

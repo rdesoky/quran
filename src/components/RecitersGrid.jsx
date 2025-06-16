@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAudio } from "../RefsProvider";
-import { analytics } from "../services/analytics";
-import { ListReciters } from "../services/audioData";
-import { selectAppWidth } from "../store/layoutSlice";
+import { useAudio } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
+import { ListReciters } from "@/services/audioData";
+import { selectAppWidth } from "@/store/layoutSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
-} from "../store/playerSlice";
-import { changeReciter, selectReciter } from "../store/settingsSlice";
+} from "@/store/playerSlice";
+import { changeReciter, selectReciter } from "@/store/settingsSlice";
 import ReciterName from "./AudioPlayer/ReciterName";
 
 export default function RecitersGrid({ trigger, onClick }) {
@@ -111,7 +111,7 @@ export default function RecitersGrid({ trigger, onClick }) {
                         <img
                             className="ReciterIcon"
                             src={
-                                process.env.PUBLIC_URL +
+                                import.meta.env.PUBLIC_URL +
                                 "/images/" +
                                 reciter +
                                 ".jpg"

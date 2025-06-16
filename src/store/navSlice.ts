@@ -1,3 +1,4 @@
+import { HistoryType } from "@/hooks/useHistory";
 import { Action, createSlice } from "@reduxjs/toolkit";
 import { quranText } from "../App";
 import {
@@ -12,14 +13,14 @@ import {
     TOTAL_VERSES,
 } from "../services/qData";
 import { greaterOf, lesserOf } from "../services/utils";
+import { AppDispatch, GetState, RootState } from "./config";
 import {
+    sliceName as layoutSliceName,
     selectActivePage,
     selectShownPages,
     setActivePageIndex,
-    sliceName as layoutSliceName,
 } from "./layoutSlice";
-import { AppDispatch, GetState, RootState } from "./config";
-import { History } from "history";
+// import { History } from "history";
 
 const sliceName = "nav";
 
@@ -125,7 +126,7 @@ export const selectSelectedText = (state: RootState) => {
 
 //thunks
 export const startMask =
-    (history: History) => (dispatch: AppDispatch, getState: GetState) => {
+    (history: HistoryType) => (dispatch: AppDispatch, getState: GetState) => {
         const state = getState();
         const shownPages = selectShownPages(state);
         const selectedAya = selectStartSelection(state);
@@ -148,7 +149,7 @@ export type GotoAyaOptions = {
 };
 
 export const gotoAya =
-    (history: History, ayaId: number, options: GotoAyaOptions = {}) =>
+    (history: HistoryType, ayaId: number, options: GotoAyaOptions = {}) =>
     (dispatch: AppDispatch, getState: GetState) => {
         const { sel = true, replace = true } = options;
         const state = getState();
@@ -164,7 +165,7 @@ export const gotoAya =
 
 export const gotoPage =
     (
-        history: History,
+        history: HistoryType,
         pageIndex: number,
         { sel: select = false, replace = true } = {}
     ) =>
@@ -182,7 +183,7 @@ export const gotoPage =
             return;
         }
         if (pageIndex < TOTAL_PAGES && pageIndex >= 0) {
-            let targetPath = `${process.env.PUBLIC_URL}/page/${pageIndex + 1}`;
+            let targetPath = `${import.meta.env.BASE_URL}page/${pageIndex + 1}`;
             if (replace) {
                 history.replace(targetPath);
             } else {
@@ -194,7 +195,7 @@ export const gotoPage =
     };
 
 export const offsetPage =
-    (history: History, offset: number) =>
+    (history: HistoryType, offset: number) =>
     (dispatch: AppDispatch, getState: GetState) => {
         const pageIndex = selectActivePage(getState());
         if (pageIndex !== undefined) {
@@ -203,16 +204,16 @@ export const offsetPage =
         }
     };
 
-export const nextPage = (history: History) => (dispatch: AppDispatch) => {
+export const nextPage = (history: HistoryType) => (dispatch: AppDispatch) => {
     dispatch(offsetPage(history, 1));
 };
 
-export const prevPage = (history: History) => (dispatch: AppDispatch) => {
+export const prevPage = (history: HistoryType) => (dispatch: AppDispatch) => {
     dispatch(offsetPage(history, -1));
 };
 
 export const gotoSura =
-    (history: History, suraIndex: number) => (dispatch: AppDispatch) => {
+    (history: HistoryType, suraIndex: number) => (dispatch: AppDispatch) => {
         if (suraIndex >= TOTAL_SURAS) {
             return 0;
         }
@@ -222,7 +223,7 @@ export const gotoSura =
     };
 
 export const gotoPart =
-    (history: History, partIndex: number) => (dispatch: AppDispatch) => {
+    (history: HistoryType, partIndex: number) => (dispatch: AppDispatch) => {
         if (partIndex < 0 || partIndex >= TOTAL_PARTS) {
             return 0;
         }
