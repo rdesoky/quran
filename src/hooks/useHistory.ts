@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useNavigate } from "react-router";
 
 export type HistoryType = {
@@ -11,11 +12,16 @@ export type HistoryType = {
 export const useHistory = () => {
     const navigate = useNavigate();
 
-    return {
-        push: (path: string) => navigate(path),
-        replace: (path: string) => navigate(path, { replace: true }),
-        goBack: () => navigate(-1),
-        goForward: () => navigate(1),
-        go: (n: number) => navigate(n),
-    } as HistoryType;
+    const history: HistoryType = useMemo(
+        () => ({
+            push: (path: string) => navigate(path),
+            replace: (path: string) => navigate(path, { replace: true }),
+            goBack: () => navigate(-1),
+            goForward: () => navigate(1),
+            go: (n: number) => navigate(n),
+        }),
+        [navigate]
+    );
+
+    return history;
 };
