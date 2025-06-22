@@ -1,7 +1,6 @@
-import React from "react";
+import { selectReciter } from "@/store/settingsSlice";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
-import { selectReciter } from "@/store/settingsSlice";
 
 type ReciterNameProps = {
     id?: string;
