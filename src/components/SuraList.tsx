@@ -7,13 +7,21 @@ import { selectStartSelection } from "@/store/navSlice";
 import { SimpleSuraIndexCell } from "@/components/SimpleSuraCell";
 import { SuraIndexCell } from "@/components/SuraIndexCell";
 
+type SuraListProps = {
+    filter?: (sura: number) => boolean;
+    simple?: boolean;
+    trigger?: string;
+    listWidth?: number;
+    cellWidth?: number;
+};
+
 export const SuraList = ({
     filter,
     simple,
     trigger = "chapters_index",
     listWidth: requestedWidth,
     cellWidth: requestedCellWidth,
-}) => {
+}: SuraListProps) => {
     const popupWidth = useSelector(selectPopupWidth);
     const selectStart = useSelector(selectStartSelection);
     const [actionsIndex, setActionsIndex] = useState(0);

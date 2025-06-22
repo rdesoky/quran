@@ -12,14 +12,19 @@ import {
 import { changeReciter, selectReciter } from "@/store/settingsSlice";
 import ReciterName from "@/components/AudioPlayer/ReciterName";
 
-export default function RecitersGrid({ trigger, onClick }) {
+type RecitersGridProps = {
+    trigger?: string;
+    onClick?: (reciter: string) => void;
+};
+
+export default function RecitersGrid({ trigger, onClick }: RecitersGridProps) {
     const [userAction, setUserAction] = useState(false);
     const audio = useAudio();
     const audioState = useSelector(selectAudioState);
 
     const recitersList = ListReciters("ayaAudio");
     const buttonWidth = 90;
-    const [recitersListWidth, setListWidth] = useState(100);
+    const [recitersListWidth, setListWidth] = useState<number>(100);
 
     const recitersPerRow = Math.floor(recitersListWidth / buttonWidth);
     const recitersRowsCount = Math.floor(
@@ -31,12 +36,12 @@ export default function RecitersGrid({ trigger, onClick }) {
 
     const activeReciter = useSelector(selectReciter);
     const dispatch = useDispatch();
-    const bodyRef = useRef(null);
+    const bodyRef = useRef<HTMLDivElement | null>(null);
     const playingAya = useSelector(selectPlayingAya);
     const appWidth = useSelector(selectAppWidth);
 
     useEffect(() => {
-        setListWidth(bodyRef.current?.clientWidth);
+        bodyRef.current && setListWidth(bodyRef.current.clientWidth);
     }, [appWidth]);
 
     useEffect(() => {
@@ -49,8 +54,10 @@ export default function RecitersGrid({ trigger, onClick }) {
         }
     }, [activeReciter, userAction]);
 
-    const onSelectReciter = ({ currentTarget }) => {
-        const reciter = currentTarget.getAttribute("reciter");
+    const onSelectReciter = (reciter: ReciterID) => {
+        // if (!reciter) {
+        //     return;
+        // }
 
         if (reciter === activeReciter) {
             onClick?.(reciter);
@@ -96,13 +103,12 @@ export default function RecitersGrid({ trigger, onClick }) {
                     buttonWidth;
                 return (
                     <button
-                        reciter={reciter}
                         key={reciter}
                         className={
                             "ReciterButton" +
                             (reciter === activeReciter ? " Selected" : "")
                         }
-                        onClick={onSelectReciter}
+                        onClick={() => onSelectReciter(reciter)}
                         style={{
                             top,
                             left,

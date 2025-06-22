@@ -36,7 +36,12 @@ import { CommandButton } from "@/components/CommandButton";
 import PlayerCountDown from "@/components/PlayerCountDown";
 import RecitersGrid from "@/components/RecitersGrid";
 
-export default function PlayPrompt({ trigger, showReciters }) {
+type PlayPromptProps = {
+    trigger?: string;
+    showReciters?: boolean;
+};
+
+export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
     const [selectedScope, setSelectedScope] = useState(-1);
     const pageIndex = useSelector(selectActivePage);
     const suraName = useSuraName();
@@ -78,7 +83,7 @@ export default function PlayPrompt({ trigger, showReciters }) {
         }
     }, [trigger]);
 
-    const onScopeChange = (e) => {
+    const onScopeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedScope(parseInt(e.target.value));
     };
 
@@ -127,7 +132,7 @@ export default function PlayPrompt({ trigger, showReciters }) {
     ]);
 
     const handleKeyDown = useCallback(
-        (e) => {
+        (e: KeyboardEvent) => {
             const { isTextInput } = checkActiveInput();
             if (isTextInput) {
                 return;
@@ -164,7 +169,15 @@ export default function PlayPrompt({ trigger, showReciters }) {
 
     const groupName = "playPrompt";
 
-    const renderOption = ({ strId, value, strValues }) => (
+    const renderOption = ({
+        strId,
+        value,
+        strValues,
+    }: {
+        strId: string;
+        value: number;
+        strValues?: Record<string, any>;
+    }) => (
         <div key={value}>
             <label>
                 <input
@@ -181,9 +194,9 @@ export default function PlayPrompt({ trigger, showReciters }) {
         </div>
     );
 
-    const updateFollowPlayer = (checked) => {
+    const updateFollowPlayer = (checked: boolean) => {
         dispatch(setFollowPlayer(checked));
-        localStorage.setItem("followPlayer", checked);
+        localStorage.setItem("followPlayer", checked.toString());
         analytics.logEvent(
             checked ? "set_follow_player" : "set_unfollow_player",
             {
@@ -191,9 +204,9 @@ export default function PlayPrompt({ trigger, showReciters }) {
             }
         );
     };
-    const updateRepeat = (checked) => {
+    const updateRepeat = (checked: boolean) => {
         dispatch(setRepeat(checked));
-        localStorage.setItem("repeat", checked);
+        localStorage.setItem("repeat", checked.toString());
         analytics.logEvent(checked ? "set_repeat_on" : "set_repeat_off", {
             trigger,
         });
@@ -281,7 +294,10 @@ export default function PlayPrompt({ trigger, showReciters }) {
 
     if (_showReciters) {
         return (
-            <div id="PlayPrompt" style={{ height: 220, overflowY: "overlay" }}>
+            <div
+                id="PlayPrompt"
+                style={{ height: 220, overflowY: "overlay" } as any}
+            >
                 <RecitersGrid
                     onClick={() => {
                         setShowReciters(false);

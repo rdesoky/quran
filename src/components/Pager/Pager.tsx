@@ -123,7 +123,7 @@ export default function Pager() {
     }, [location]);
 
     const pageUp = useCallback(
-        (e: MouseEvent, options = { bottom: false }) => {
+        (bottom = false) => {
             let count = pagesCount;
             if (count > 1 && activePage % 2 === 0) {
                 count = 1; //right page is active
@@ -132,27 +132,22 @@ export default function Pager() {
             analytics.logEvent("nav_prev_page");
             const viewRef = pagerRef.current;
             viewRef?.scrollTo?.({
-                top: options?.bottom
-                    ? viewRef?.scrollHeight - viewRef?.clientHeight
-                    : 0,
+                top: bottom ? viewRef?.scrollHeight - viewRef?.clientHeight : 0,
             });
         },
         [dispatch, history, activePage, pagesCount]
     );
 
-    const pageDown = useCallback(
-        (e: React.WheelEvent<HTMLDivElement>, scroll = true) => {
-            // let count = activePopup && !isWide ? 1 : pagesCount;
-            let count = pagesCount;
-            if (count > 1 && activePage % 2 === 1) {
-                count = 1; //left page is active
-            }
-            dispatch(offsetPage(history, count));
-            analytics.logEvent("nav_next_page");
-            pagerRef.current?.scrollTo?.({ top: 0 });
-        },
-        [dispatch, history, activePage, pagesCount]
-    );
+    const pageDown = useCallback(() => {
+        // let count = activePopup && !isWide ? 1 : pagesCount;
+        let count = pagesCount;
+        if (count > 1 && activePage % 2 === 1) {
+            count = 1; //left page is active
+        }
+        dispatch(offsetPage(history, count));
+        analytics.logEvent("nav_next_page");
+        pagerRef.current?.scrollTo?.({ top: 0 });
+    }, [dispatch, history, activePage, pagesCount]);
 
     //ComponentDidUpdate
     useEffect(() => {
@@ -187,7 +182,7 @@ export default function Pager() {
                     return;
                 }
 
-                pageDown(e);
+                pageDown();
             }
         } else if (pagerRef.current?.scrollTop === 0) {
             //scroll up ( backward )
@@ -204,13 +199,13 @@ export default function Pager() {
                     console.log(`~~scrollBackward`);
                     return;
                 }
-                pageUp(e as any, { bottom: true });
+                pageUp(true);
             }
         }
     };
 
     const onOffsetSelection = useCallback(
-        ({ shiftKey }: KeyboardEvent, offset: number) => {
+        (shiftKey: boolean, offset: number) => {
             let selectedAyaId;
             if (shiftKey) {
                 selectedAyaId = dispatch(extendSelection(selectStart + offset));
@@ -228,73 +223,68 @@ export default function Pager() {
         [dispatch, history, selectStart]
     );
 
-    const incrementMask = useCallback(
-        (_e: React.MouseEvent<HTMLDivElement>) => {
-            const incrementedMask = maskStart + 1;
-            if (incrementedMask >= TOTAL_VERSES) {
-                dispatch(hideMask());
-                return;
+    const incrementMask = useCallback(() => {
+        const incrementedMask = maskStart + 1;
+        if (incrementedMask >= TOTAL_VERSES) {
+            dispatch(hideMask());
+            return;
+        }
+        const incrementedMaskPage = ayaIdPage(incrementedMask);
+        if (activePage === incrementedMaskPage) {
+            dispatch(gotoAya(history, dispatch(offsetSelection(1))));
+            return;
+        } else {
+            const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
+            if (maskStart === pageFirstAya) {
+                dispatch(
+                    gotoPage(history, incrementedMaskPage, {
+                        sel: true,
+                    })
+                );
+                return; //mask head page is not visible
             }
-            const incrementedMaskPage = ayaIdPage(incrementedMask);
-            if (activePage === incrementedMaskPage) {
-                dispatch(gotoAya(history, dispatch(offsetSelection(1))));
+        }
+        dispatch(setSelectStart(dispatch(offsetSelection(1))));
+    }, [activePage, dispatch, history, maskStart]);
+
+    const decrementMask = useCallback(() => {
+        if (maskStart > 0) {
+            const maskPage = ayaIdPage(maskStart - 1);
+            if (shownPages.includes(maskPage)) {
+                dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
                 return;
             } else {
-                const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
-                if (maskStart === pageFirstAya) {
-                    dispatch(
-                        gotoPage(history, incrementedMaskPage, {
-                            sel: true,
-                        })
-                    );
-                    return; //mask head page is not visible
-                }
+                dispatch(gotoPage(history, maskPage, { sel: true }));
+                const viewRef = pagerRef.current;
+                viewRef?.scrollTo?.({
+                    top: viewRef?.scrollHeight - viewRef?.clientHeight,
+                    behavior: "smooth",
+                });
+                return; //mask head page is not visible
             }
-            dispatch(setSelectStart(dispatch(offsetSelection(1))));
-        },
-        [activePage, dispatch, history, maskStart]
-    );
+        }
+        dispatch(setSelectStart(dispatch(offsetSelection(-1)))); //soft selection
+    }, [dispatch, history, maskStart, shownPages]);
 
-    const decrementMask = useCallback(
-        (_e: React.MouseEvent<HTMLDivElement>) => {
-            if (maskStart > 0) {
-                const maskPage = ayaIdPage(maskStart - 1);
-                if (shownPages.includes(maskPage)) {
-                    dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
-                    return;
-                } else {
-                    dispatch(gotoPage(history, maskPage, { sel: true }));
-                    const viewRef = pagerRef.current;
-                    viewRef?.scrollTo?.({
-                        top: viewRef?.scrollHeight - viewRef?.clientHeight,
-                        behavior: "smooth",
-                    });
-                    return; //mask head page is not visible
-                }
-            }
-            dispatch(setSelectStart(dispatch(offsetSelection(-1)))); //soft selection
-        },
-        [dispatch, history, maskStart, shownPages]
-    );
     const onArrowKey = useCallback(
-        (e: React.KeyboardEvent<HTMLDivElement>, direction: "up" | "down") => {
+        (shiftKey: boolean, direction: "up" | "down") => {
             const { isTextInput } = checkActiveInput();
 
             if (!isTextInput) {
                 if (direction === "down") {
                     analytics.setTrigger("down_key");
                     if (!maskShift && maskStart !== -1) {
-                        incrementMask(e as any);
+                        incrementMask();
                     } else {
-                        onOffsetSelection(e as any, 1);
+                        onOffsetSelection(shiftKey, 1);
                     }
                     analytics.logEvent("nav_next_verse", {});
                 } else {
                     analytics.setTrigger("up_key");
                     if (maskStart !== -1 && !maskShift) {
-                        decrementMask(e as any);
+                        decrementMask();
                     } else {
-                        onOffsetSelection(e as any, -1);
+                        onOffsetSelection(shiftKey, -1);
                     }
                     analytics.logEvent("nav_prev_verse", {});
                 }
@@ -440,29 +430,29 @@ export default function Pager() {
                     }
                     break;
                 case "ArrowDown":
-                    onArrowKey(e as any, "down");
+                    onArrowKey(e.shiftKey, "down");
                     break;
                 case "ArrowUp":
-                    onArrowKey(e as any, "up");
+                    onArrowKey(e.shiftKey, "up");
                     break;
                 case "ArrowLeft":
                     analytics.setTrigger("left_key");
-                    pageDown(e as any);
+                    pageDown();
                     break;
                 case "PageDown":
                     if (!isTextInput) {
                         analytics.setTrigger("page_down_key");
-                        pageDown(e as any);
+                        pageDown();
                     }
                     break;
                 case "ArrowRight":
                     analytics.setTrigger("right_key");
-                    pageUp(e as any);
+                    pageUp();
                     break;
                 case "PageUp":
                     if (!isTextInput) {
                         analytics.setTrigger("page_up_key");
-                        pageUp(e as any);
+                        pageUp();
                     }
                     break;
                 default:
@@ -559,11 +549,11 @@ export default function Pager() {
                 onDrop={({ dX, dY }: { dX: number; dY: number }) => {
                     if (dX > 50) {
                         analytics.setTrigger("dragging");
-                        pageDown({} as any);
+                        pageDown();
                     }
                     if (dX < -50) {
                         analytics.setTrigger("dragging");
-                        pageUp({} as any);
+                        pageUp();
                     }
                 }}
             >

@@ -49,10 +49,10 @@ export function shuffleArray(array: any[]) {
 export const ListReciters = (
     feature: "ayaAudio" | "suraAudio" = "ayaAudio"
 ) => {
-    const saved_list = JSON.parse(
+    const saved_list: ReciterID[] = JSON.parse(
         localStorage.getItem("reciters_" + feature) || "[]"
     );
-    let availableReciters = [];
+    let availableReciters: ReciterID[] = [];
     let k: ReciterID;
     for (k in RecitersInfo) {
         // if (RecitersInfo.hasOwnProperty(k)) {

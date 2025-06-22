@@ -18,7 +18,12 @@ import { selectHifzRanges } from "@/store/dbSlice";
 import { gotoAya, selectStartSelection } from "@/store/navSlice";
 import { selectSuraNames } from "@/store/uiSlice";
 
-export default function PartsPie({ size, onFinish }) {
+type PartsPieProps = {
+    size: number;
+    onFinish?: () => void;
+};
+
+export default function PartsPie({ size, onFinish }: PartsPieProps) {
     const history = useHistory();
     const dispatch = useDispatch();
     const [activePartIndex, setActivePartIndex] = useState(0);
@@ -66,11 +71,13 @@ export default function PartsPie({ size, onFinish }) {
             >
                 <circle
                     className="hifzPieBackground"
-                    style={{
-                        cx,
-                        cy,
-                        r: radius,
-                    }}
+                    style={
+                        {
+                            cx,
+                            cy,
+                            r: radius,
+                        } as any
+                    }
                 ></circle>
                 {parts.map((p, index) => {
                     const { dx: dxPartNum, dy: dyPartNum } = rotatePoint(
