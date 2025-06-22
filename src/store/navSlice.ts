@@ -149,7 +149,7 @@ export type GotoAyaOptions = {
 };
 
 export const gotoAya =
-    (history: HistoryType, ayaId: number, options: GotoAyaOptions = {}) =>
+    (history: HistoryType, ayaId?: number, options: GotoAyaOptions = {}) =>
     (dispatch: AppDispatch, getState: GetState) => {
         const { sel = true, replace = true } = options;
         const state = getState();

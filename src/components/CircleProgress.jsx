@@ -5,8 +5,8 @@ export const CircleProgress = ({
     strokeWidth = 2,
     progress = 1,
     target = 5,
-    display = null,
-    onClick = (e) => false,
+    display = 0,
+    onClick = (e) => {},
     title,
     style,
 }) => {

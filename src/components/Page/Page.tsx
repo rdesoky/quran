@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ayaID } from "../../services/qData";
-import { downloadPageImage } from "../../services/utils";
+import { HifzSegments } from "@/components/HifzSegments";
+import { ayaID } from "@/services/qData";
+import { downloadPageImage } from "@/services/utils";
 import {
     selectPageHeight,
     selectPageMargin,
     selectPagesCount,
     selectPageWidth,
-} from "../../store/layoutSlice";
-import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
-import { HifzSegments } from "../HifzSegments";
+} from "@/store/layoutSlice";
+import { hideMenu, selectMenuExpanded } from "@/store/uiSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./Page.scss";
-import VerseLayout from "./VerseLayout";
-import { text } from "@fortawesome/fontawesome-svg-core";
+import VerseLayout from "@/components/Page/VerseLayout";
 
 type PageProps = {
     index: number;
     order: number;
     scaleX: number;
     shiftX: number;
-    incrementMask: boolean;
+    incrementMask: () => void;
 };
 
 type VerseInfo = Omit<PageVerse, "epos"> & { epos: number; aya_id: number };

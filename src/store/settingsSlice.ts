@@ -11,7 +11,8 @@ const initialState = {
     randomAutoRecite: getStorageItem("randomAutoRecite", false),
     followPlayer: getStorageItem("followPlayer", false),
     repeat: getStorageItem("repeat", false),
-    reciter: getStorageItem("reciter", ListReciters()[0]),
+    reciter:
+        (getStorageItem("reciter", ListReciters()[0]) as ReciterID) || null,
     theme: getStorageItem("theme", "Default"),
     lang: getStorageItem("lang", "ar"),
 };
@@ -83,7 +84,7 @@ export const selectReciter = (state: RootState) => state[sliceName].reciter;
 export default { [sliceName]: settingsSlice.reducer };
 
 export const changeReciter =
-    (reciter: string) => (dispatch: AppDispatch, getState: GetState) => {
+    (reciter: ReciterID) => (dispatch: AppDispatch, getState: GetState) => {
         const state = getState();
         const prevReciter = selectReciter(state);
         if (reciter === prevReciter) {

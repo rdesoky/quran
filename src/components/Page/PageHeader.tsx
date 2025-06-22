@@ -3,12 +3,12 @@ import {
     faAngleUp,
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { useContextPopup, useMessageBox } from "../../RefsProvider";
-import { analytics } from "../../services/analytics";
+import { useContextPopup, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
 import {
     ayaID,
     ayaIdInfo,
@@ -16,26 +16,36 @@ import {
     getPagePartNumber,
     getPageSuraIndex,
     TOTAL_PAGES,
-} from "../../services/qData";
-import { commandKey, keyValues } from "../../services/utils";
+} from "@/services/qData";
+import { commandKey, keyValues } from "@/services/utils";
 import {
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
-} from "../../store/layoutSlice";
-import { gotoAya, gotoPage, selectStartSelection } from "../../store/navSlice";
-import { AudioState, selectAudioState } from "../../store/playerSlice";
-import { CommandIcon } from "../CommandIcon";
-import PartsPie from "../PartsPie";
-import PlayPrompt from "../PlayPrompt";
-import { SuraList } from "../SuraList";
-import SuraName from "../SuraName";
+} from "@/store/layoutSlice";
+import { gotoAya, gotoPage, selectStartSelection } from "@/store/navSlice";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { CommandIcon } from "@/components/CommandIcon";
+import PartsPie from "@/components/PartsPie";
+import PlayPrompt from "@/components/PlayPrompt";
+import { SuraList } from "@/components/SuraList";
+import SuraName from "@/components/SuraName";
 import {
     CircleProgress,
     PageContextButtons,
     SuraContextHeader,
     VerseContextButtons,
-} from "../Widgets";
+} from "@/components/Widgets";
+
+const Icon = FontAwesomeIcon as any;
+
+type PageHeaderProps = {
+    index: number;
+    order: number;
+    onArrowKey?: (shiftKey: boolean, direction: "up" | "down") => void;
+    onPageDown?: () => void;
+    onPageUp?: () => void;
+};
 
 const PageHeader = ({
     index: pageIndex,
@@ -43,7 +53,7 @@ const PageHeader = ({
     onArrowKey,
     onPageDown,
     onPageUp,
-}) => {
+}: PageHeaderProps) => {
     const intl = useIntl();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
@@ -66,7 +76,9 @@ const PageHeader = ({
     suraIndex =
         selectedAyaPage === pageIndex ? selectedAyaInfo.sura : suraIndex;
 
-    const showPartContextPopup = ({ currentTarget: target }) => {
+    const showPartContextPopup = ({
+        currentTarget: target,
+    }: React.MouseEvent) => {
         analytics.logEvent("show_part_context", { trigger });
         contextPopup.show({
             target,
@@ -74,7 +86,7 @@ const PageHeader = ({
         });
     };
 
-    const showPageContextPopup = ({ target }) => {
+    const showPageContextPopup = ({ target }: React.MouseEvent) => {
         analytics.logEvent("show_page_context", { trigger });
         contextPopup.show({
             target,
@@ -83,7 +95,7 @@ const PageHeader = ({
         });
     };
 
-    const showVerseContextPopup = ({ target }) => {
+    const showVerseContextPopup = ({ target }: React.MouseEvent) => {
         analytics.logEvent("show_verse_context", { trigger });
         contextPopup.show({
             target,
@@ -91,19 +103,19 @@ const PageHeader = ({
         });
     };
 
-    const onClickNext = (e) => {
-        onArrowKey?.(e, "down");
+    const onClickNext = (e: React.MouseEvent) => {
+        onArrowKey?.(e.shiftKey, "down");
         analytics.logEvent("nav_next_verse", { trigger });
         e.stopPropagation();
     };
 
-    const onClickPrevious = (e) => {
-        onArrowKey?.(e, "up");
+    const onClickPrevious = (e: React.MouseEvent) => {
+        onArrowKey?.(e.shiftKey, "up");
         analytics.logEvent("nav_prev_verse", { trigger });
         e.stopPropagation();
     };
 
-    const showSuraContextPopup = ({ target }) => {
+    const showSuraContextPopup = ({ target }: React.MouseEvent) => {
         analytics.logEvent("show_chapter_context", {
             trigger,
         });
@@ -121,28 +133,20 @@ const PageHeader = ({
         });
     };
 
-    const gotoNextPage = (e) => {
+    const gotoNextPage = (e: React.MouseEvent) => {
         // dispatch(gotoPage(history, pageIndex + shownPages.length));
         // analytics.logEvent("nav_prev_page", { trigger });
         analytics.setTrigger(trigger);
-        onPageDown();
+        onPageDown?.();
     };
-    const gotoPrevPage = (e) => {
+    const gotoPrevPage = () => {
         // dispatch(gotoPage(history, pageIndex - shownPages.length));
         // analytics.logEvent("nav_prev_page", { trigger });
         analytics.setTrigger(trigger);
-        onPageUp();
+        onPageUp?.();
     };
 
-    const onTogglePlay = (e) => {
-        // if (audioState !== AudioState.playing) {
-        // const aya = ayaID(suraIndex, 0);
-        //     audio.play(aya, AudioRepeat.sura);
-        //     dispatch(gotoAya(history, aya));
-        //     analytics.logEvent("play_audio", {
-        //         trigger,
-        //         ...verseLocation(aya),
-        //     });
+    const onTogglePlay = () => {
         msgBox.set({
             title: <FormattedMessage id="play" values={keyValues("r")} />,
             content: <PlayPrompt trigger={trigger} />,
@@ -152,7 +156,7 @@ const PageHeader = ({
         // }
     };
 
-    const onClick = (e) => {
+    const onClick = () => {
         if (activePage !== pageIndex) {
             dispatch(gotoPage(history, pageIndex));
         }
@@ -162,7 +166,8 @@ const PageHeader = ({
     return (
         <div
             className={"PageHeader".appendWord(
-                pageIndex === activePage && "active"
+                "active",
+                pageIndex === activePage
             )}
             onClick={onClick}
         >
@@ -242,7 +247,7 @@ const PageHeader = ({
                 )}
                 <div className="PageHeaderSection">
                     <button
-                        sura={suraIndex}
+                        // sura={suraIndex}
                         onClick={onTogglePlay}
                         title={intl.formatMessage(
                             {

@@ -136,7 +136,7 @@ export const copy2Clipboard = (t: string) => {
     );
 };
 
-String.prototype.appendWord = function (word: string, condition: boolean) {
+String.prototype.appendWord = function (word?: string, condition?: boolean) {
     if (typeof word === "string" && word.length && condition !== false) {
         return this + " " + word;
     }
@@ -256,7 +256,7 @@ export const getHifzRangeDisplayInfo = (range: HifzRange, intl: IntlShape) => {
     return { title, ageText };
 };
 
-export const keyValues = (keyName: string) => ({
+export const keyValues = (keyName?: string) => ({
     key: keyName ? ` (${keyName})` : "",
 });
 

@@ -1,22 +1,20 @@
-import React from "react";
+import { analytics } from "@/services/analytics";
 import { FormattedMessage as Message, useIntl } from "react-intl";
-import { analytics } from "./../services/analytics";
 
-import { useDispatch, useSelector } from "react-redux";
-import { useAudio, useContextPopup, useMessageBox } from "../RefsProvider";
+import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import {
     commandKey,
     copy2Clipboard,
     keyValues,
     requestFullScreen,
     selectTopCommand,
-} from "../services/utils";
+} from "@/services/utils";
 import {
     addBookmark,
     deleteBookmark,
     selectIsBookmarked,
     selectUser,
-} from "../store/dbSlice";
+} from "@/store/dbSlice";
 import {
     gotoAya,
     gotoPage,
@@ -27,13 +25,13 @@ import {
     selectSelectedText,
     selectStartSelection,
     startMask,
-} from "../store/navSlice";
+} from "@/store/navSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
-} from "../store/playerSlice";
-import { AudioRange, selectReciter } from "../store/settingsSlice";
+} from "@/store/playerSlice";
+import { AudioRange, selectReciter } from "@/store/settingsSlice";
 import {
     closePopup,
     hideMenu,
@@ -44,15 +42,28 @@ import {
     showPopup,
     showToast,
     toggleMenu,
-} from "../store/uiSlice";
-import { ayaIdPage, verseLocation } from "./../services/qData";
+} from "@/store/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ayaIdPage, verseLocation } from "@/services/qData";
 
 import { useHistory } from "@/hooks/useHistory";
-import { selectPagesCount } from "../store/layoutSlice";
+import { selectPagesCount } from "@/store/layoutSlice";
 import { AddHifz } from "./AddHifz";
 import { CommandIcon } from "./CommandIcon";
-import UpdateBadge from "./UpdateBadge";
 import PlayPrompt from "./PlayPrompt";
+import UpdateBadge from "./UpdateBadge";
+
+type CommandButtonProps = {
+    id?: string;
+    command: string;
+    showLabel?: boolean;
+    showHotKey?: boolean;
+    style?: React.CSSProperties;
+    className?: string;
+    trigger?: string;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    updateChecker?: boolean; // if true, will check for updates and show a badge if
+};
 
 export const CommandButton = ({
     id,
@@ -64,7 +75,7 @@ export const CommandButton = ({
     trigger,
     onClick,
     updateChecker = false,
-}) => {
+}: CommandButtonProps) => {
     const audio = useAudio();
     const msgBox = useMessageBox();
     const contextPopup = useContextPopup();
@@ -86,7 +97,7 @@ export const CommandButton = ({
     const selectedRange = useSelector(selectSelectedRange);
     const updateAvailable = useSelector(selectUpdateAvailable);
 
-    const toggleBookmark = (e) => {
+    const toggleBookmark = () => {
         if (isBookmarked) {
             msgBox.push({
                 title: <Message id="are_you_sure" />,
@@ -101,7 +112,7 @@ export const CommandButton = ({
     };
 
     //TODO: move to a hook for other components to use
-    const runCommand = (command) => {
+    const runCommand = (command: string) => {
         selectTopCommand();
         switch (command) {
             case "Commands":
@@ -163,7 +174,7 @@ export const CommandButton = ({
             case "ToggleButton":
                 analytics.logEvent(
                     menuExpanded ? "collapse_menu" : "expand_menu",
-                    trigger
+                    { trigger }
                 );
                 dispatch(toggleMenu());
                 return;
@@ -246,11 +257,10 @@ export const CommandButton = ({
 
     const renderLabel = () => {
         if (showLabel === true) {
-            let label = (
+            let label: React.ReactNode | string = (
                 <Message
-                    className="CommandLabel"
                     id={command.toLowerCase()}
-                    values={keyValues(showHotKey && commandKey(command))}
+                    values={showHotKey ? keyValues(commandKey(command)) : {}}
                 />
             );
             switch (command) {
@@ -266,11 +276,7 @@ export const CommandButton = ({
         }
     };
 
-    const isDisabled = (command) => {
-        return false;
-    };
-
-    const handleClick = (e) => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (updateChecker && updateAvailable) {
             dispatch(setUpdateAvailable(false));
             msgBox.push({
@@ -303,7 +309,6 @@ export const CommandButton = ({
             id={id}
             onClick={handleClick}
             style={style}
-            disabled={isDisabled(command)}
             className={"CommandButton".appendWord(className)}
             title={
                 showLabel
