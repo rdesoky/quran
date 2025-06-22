@@ -64,6 +64,17 @@ type PageInfo = {
     a: number; // aya
 };
 
+type PageVerse = {
+    id: string;
+    page: string;
+    aya: string;
+    sura: string;
+    sline: string;
+    eline: string;
+    spos: string;
+    epos: string;
+};
+
 type AudioServerId =
     | "everyayah"
     | "egylist_vaudio"

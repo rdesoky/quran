@@ -16,8 +16,8 @@ export const dateKey = (dt: Date) => {
     )}-${num2string(dt.getDate(), 2)}`;
 };
 
-export const downloadImage = (url: string) => {
-    return new Promise((resolve, reject) => {
+export const downloadImage = async (url: string) => {
+    return new Promise<string>((resolve, reject) => {
         let img = document.createElement("img");
         img.onload = (e) => {
             resolve(url);
@@ -30,7 +30,7 @@ export const downloadImage = (url: string) => {
 export const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
-export const downloadPageImage = (pageIndex: number) => {
+export const downloadPageImage = async (pageIndex: number) => {
     const imageUrl =
         location.origin +
         "/qpages_1260/page" +
