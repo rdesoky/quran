@@ -34,16 +34,14 @@ export const getPagePartNumber = (nPage: number) => {
  * Zero based with numeric params
  * If string params, it is one based
  *
- * @param {number} sura
- * @param {number} aya
- * @returns {number} absolute aya index
+ * @returns  absolute aya index
  */
 export const ayaID = (sura: number | string, aya: number | string) => {
     if (typeof sura === "string") {
-        sura = parseInt(sura) - 1;
+        sura = Number(sura) - 1;
     }
     if (typeof aya === "string") {
-        aya = parseInt(aya) - 1;
+        aya = Number(aya) - 1;
     }
     let id = 0;
 

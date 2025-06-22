@@ -12,10 +12,27 @@ import { hideMenu, selectMenuExpanded } from "../../store/uiSlice";
 import { HifzSegments } from "../HifzSegments";
 import "./Page.scss";
 import VerseLayout from "./VerseLayout";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
-const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
-    const [imageUrl, setImageUrl] = useState(null);
-    const [versesInfo, setVerseInfo] = useState([]);
+type PageProps = {
+    index: number;
+    order: number;
+    scaleX: number;
+    shiftX: number;
+    incrementMask: boolean;
+};
+
+type VerseInfo = Omit<PageVerse, "epos"> & { epos: number; aya_id: number };
+
+const Page = ({
+    index: pageIndex,
+    order,
+    scaleX,
+    shiftX,
+    incrementMask,
+}: PageProps) => {
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [versesInfo, setVersesInfo] = useState<VerseInfo[]>([]);
     const pagesCount = useSelector(selectPagesCount);
     const dispatch = useDispatch();
     const pageMargin = useSelector(selectPageMargin);
@@ -23,7 +40,7 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
     const pageWidth = useSelector(selectPageWidth);
     const menuExpanded = useSelector(selectMenuExpanded);
 
-    let textAlign =
+    let textAlign: CanvasTextAlign =
         pagesCount === 1 ? "center" : order === 0 ? "left" : "right";
 
     //Handle pageIndex update
@@ -38,18 +55,10 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
                     return;
                 }
                 setImageUrl(url);
-                // setImageTimeout = setTimeout(() => {
-                //     //don't update the Url state unless the component is mounted
-                //     if (pgIndex === pageIndex) {
-                //         setImageUrl(url);
-                //     }
-                // }, 1000); //The delay is to make sure imageLoaded is set after index update event handler
-
-                //onImageLoaded(url, pgIndex);
             })
             .catch((e) => {});
-        setVerseInfo([]);
-        let pageNumber = parseInt(pageIndex) + 1;
+        setVersesInfo([]);
+        let pageNumber = Number(pageIndex) + 1;
         // let controller = new AbortController();
         let url = `${location.origin}${
             import.meta.env.BASE_URL
@@ -58,16 +67,16 @@ const Page = ({ index: pageIndex, order, scaleX, shiftX, incrementMask }) => {
             // signal: controller.signal,
         })
             .then((response) => response.json())
-            .then(({ child_list }) => {
+            .then(({ child_list }: { child_list: PageVerse[] }) => {
                 if (cancelled) {
                     return;
                 }
-                setVerseInfo(
-                    child_list.map((c) => {
+                setVersesInfo(
+                    child_list.map((c: PageVerse) => {
                         const aya_id = ayaID(c.sura, c.aya);
-                        let epos = c.epos;
+                        let epos = Number(c.epos);
                         if (epos > 980) {
-                            epos = 1000;
+                            epos = 1000; //?? why is this needed?
                         }
                         return { ...c, epos, aya_id };
                     })
