@@ -1,11 +1,14 @@
+import { CommandIcon } from "@/components/CommandIcon";
+import PartsPie from "@/components/PartsPie";
+import PlayPrompt from "@/components/PlayPrompt";
+import { SuraList } from "@/components/SuraList";
+import SuraName from "@/components/SuraName";
 import {
-    faAngleDown,
-    faAngleUp,
-    faBookOpen,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormattedMessage, useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
+    CircleProgress,
+    PageContextButtons,
+    SuraContextHeader,
+    VerseContextButtons,
+} from "@/components/Widgets";
 import { useHistory } from "@/hooks/useHistory";
 import { useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
@@ -25,17 +28,14 @@ import {
 } from "@/store/layoutSlice";
 import { gotoAya, gotoPage, selectStartSelection } from "@/store/navSlice";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
-import { CommandIcon } from "@/components/CommandIcon";
-import PartsPie from "@/components/PartsPie";
-import PlayPrompt from "@/components/PlayPrompt";
-import { SuraList } from "@/components/SuraList";
-import SuraName from "@/components/SuraName";
 import {
-    CircleProgress,
-    PageContextButtons,
-    SuraContextHeader,
-    VerseContextButtons,
-} from "@/components/Widgets";
+    faAngleDown,
+    faAngleUp,
+    faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FormattedMessage, useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 
 const Icon = FontAwesomeIcon as any;
 
