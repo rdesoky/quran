@@ -3,11 +3,11 @@ import { useEffect, useRef } from "react";
 const MIN_HEIGHT = 10;
 
 export default function useSnapHeightToBottomOf(
-    height,
-    itemNumber = 0,
-    style = "height"
+    height: number,
+    itemNumber: number | string = 0,
+    style: "height" | "maxHeight" = "height"
 ) {
-    const ref = useRef();
+    const ref = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (ref.current) {
             const setHeight = height - ref.current.offsetTop;

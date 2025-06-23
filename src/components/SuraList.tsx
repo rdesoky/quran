@@ -8,7 +8,7 @@ import { SimpleSuraIndexCell } from "@/components/SimpleSuraCell";
 import { SuraIndexCell } from "@/components/SuraIndexCell";
 
 type SuraListProps = {
-    filter?: (sura: number) => boolean;
+    filter?: string;
     simple?: boolean;
     trigger?: string;
     listWidth?: number;

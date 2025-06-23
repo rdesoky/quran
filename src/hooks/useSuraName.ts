@@ -8,7 +8,7 @@ export default function useSuraName(index = -1) {
     const [suraIndex, setSuraIndex] = useState(index);
     const selectedAya = useSelector(selectStartSelection);
     const suraNames = useSelector(selectSuraNames);
-    const [suraName, setSuraName] = useState(suraNames?.[index]);
+    const [suraName, setSuraName] = useState<string>(suraNames?.[index]);
 
     useEffect(() => {
         if (index === -1) {

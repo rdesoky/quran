@@ -4,7 +4,6 @@ import {
     faSearch,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,17 +23,31 @@ import AKeyboard from "../AKeyboard/AKeyboard";
 import SuraName from "../SuraName";
 import { quranNormalizedText, quranText } from "@/App";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import Icon from "../Icon";
+
+type ResultItem = {
+    aya: number;
+    text: string;
+    ntext: string;
+};
+
+type GroupItem = { aya: number; text: string; ntext: string; ayaNum: number };
+
+type ResultGroup = {
+    sura: number;
+    verses: GroupItem[];
+};
 
 export default function Search() {
     const popupWidth = useSelector(selectPopupWidth);
-    const input = useRef(null);
+    const input = useRef<HTMLInputElement>(null);
     const [searchTerm, setSearchTerm] = useState(
         localStorage.getItem("LastSearch") || ""
     );
-    const [searchHistory, setSearchHistory] = useState(
+    const [searchHistory, setSearchHistory] = useState<string[]>(
         JSON.parse(localStorage.getItem("SearchHistory") || "[]")
     );
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState<ResultItem[]>([]);
     const [pages, setPages] = useState(1);
     const [keyboard, setKeyboard] = useState(false);
     const [expandedGroup, setExpandedGroup] = useState(0);
@@ -49,7 +62,7 @@ export default function Search() {
 
     const resultsDiv = resultsRef.current;
 
-    const toggleTreeView = (e) => {
+    const toggleTreeView = () => {
         analytics.logEvent("search_toggle_view", {
             view_mode: treeView ? "list" : "tree",
         });
@@ -57,15 +70,15 @@ export default function Search() {
         setTreeView(!treeView);
     };
 
-    const showKeyboard = (e) => {
+    const showKeyboard = () => {
         setKeyboard(true);
     };
-    const hideKeyboard = (e) => {
+    const hideKeyboard = () => {
         setKeyboard(false);
     };
 
-    const doSearch = useCallback((searchTerm) => {
-        let sResults = [];
+    const doSearch = useCallback((searchTerm: string) => {
+        let sResults: ResultItem[] = [];
         let normSearchTerm = normalizeText(searchTerm);
 
         if (normSearchTerm.length > 0) {
@@ -83,7 +96,7 @@ export default function Search() {
                     });
                 }
                 return results;
-            }, []);
+            }, [] as ResultItem[]);
         }
         setResults(sResults);
     }, []);
@@ -91,6 +104,9 @@ export default function Search() {
     useEffect(() => {
         analytics.setTrigger("search_ui");
         let textInput = input.current;
+        if (!textInput) {
+            return;
+        }
         setTimeout(function () {
             textInput.focus();
             // textInput.select();
@@ -122,25 +138,26 @@ export default function Search() {
     };
 
     //TODO: duplicate code with QIndex
-    const onClickSura = ({ target }) => {
+    const onClickSura = (e: React.MouseEvent) => {
+        const target = e.currentTarget;
         dispatch(hideMask());
         setKeyboard(false);
-        let index = parseInt(target.getAttribute("sura"));
+        let index = Number(target.getAttribute("data-sura"));
         // app.gotoSura(index);
         dispatch(gotoSura(history, index));
         dispatch(closePopupIfBlocking());
     };
 
-    const onClickAya = (e) => {
-        const aya = e.target.getAttribute("aya");
+    const onClickAya = (e: React.MouseEvent) => {
+        const aya = e.currentTarget.getAttribute("data-aya");
 
         analytics.logEvent("click_search_result", {
-            ...verseLocation(aya),
+            ...verseLocation(Number(aya)),
         });
 
         dispatch(closePopupIfBlocking());
         setKeyboard(false);
-        dispatch(gotoAya(history, parseInt(aya), { sel: true }));
+        dispatch(gotoAya(history, Number(aya), { sel: true }));
         addToSearchHistory();
         e.preventDefault();
     };
@@ -159,9 +176,10 @@ export default function Search() {
         }
     };
 
-    const toggleGroup = ({ currentTarget }) => {
-        const groupId = parseInt(currentTarget.getAttribute("group-index"));
-        if (groupId !== undefined) {
+    const toggleGroup = (e: React.MouseEvent) => {
+        const currentTarget = e.currentTarget;
+        const groupId = Number(currentTarget.getAttribute("group-index"));
+        if (!isNaN(groupId)) {
             setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
             setTimeout(() => {
                 currentTarget?.scrollIntoView?.({
@@ -169,7 +187,7 @@ export default function Search() {
                     block: "start",
                     inline: "nearest",
                 });
-            }, [300]);
+            }, 300);
         }
     };
 
@@ -215,7 +233,7 @@ export default function Search() {
                                 <button
                                     className="VerseLink"
                                     onClick={onClickSura}
-                                    sura={suraInfo.index}
+                                    data-sura={suraInfo.index}
                                 >
                                     {suraInfo.index + 1 + ". " + suraInfo.name}
                                 </button>
@@ -226,9 +244,9 @@ export default function Search() {
         );
     };
 
-    const copyVerse = (e) => {
+    const copyVerse = (e: React.MouseEvent<HTMLButtonElement>) => {
         const { currentTarget } = e;
-        const verse = currentTarget.getAttribute("verse");
+        const verse = Number(currentTarget.getAttribute("data-verse"));
         const verseInfo = ayaIdInfo(verse);
         const text = quranText?.[verse];
         copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
@@ -253,7 +271,7 @@ export default function Search() {
                 groups.push({ sura, verses: [ayaInfoEx] });
             }
             return groups;
-        }, []);
+        }, [] as ResultGroup[]);
 
         return (
             <div
@@ -276,7 +294,7 @@ export default function Search() {
                                 className="ResultsGroupHeader"
                                 group-index={i}
                                 onClick={toggleGroup}
-                                tabIndex="0"
+                                tabIndex={0}
                             >
                                 <span className="ParaId Chapter">
                                     {verses.length}
@@ -296,8 +314,8 @@ export default function Search() {
                                                 key={aya}
                                                 className="ResultItem"
                                                 onClick={onClickAya}
-                                                tabIndex="0"
-                                                aya={aya}
+                                                tabIndex={0}
+                                                data-aya={aya}
                                             >
                                                 <span className="ParaId Verse">
                                                     {ayaNum}
@@ -313,7 +331,7 @@ export default function Search() {
                                                 <Icon
                                                     onClick={copyVerse}
                                                     icon={faCopy}
-                                                    verse={aya}
+                                                    data-verse={aya}
                                                 />
                                             </button>
                                         )
@@ -345,9 +363,9 @@ export default function Search() {
                             <button
                                 key={aya}
                                 onClick={onClickAya}
-                                aya={aya}
+                                data-aya={aya}
                                 className="ResultItem"
-                                tabIndex="0"
+                                tabIndex={0}
                             >
                                 <span className="ResultInfo">
                                     {ayaInfo.sura + 1}.
@@ -376,8 +394,8 @@ export default function Search() {
         );
     };
 
-    const onHistoryButtonClick = (e) => {
-        const searchTerm = e.target.textContent;
+    const onHistoryButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const searchTerm = e.currentTarget.textContent ?? "";
         setKeyboard(false);
         setSearchTerm(searchTerm);
         doSearch(searchTerm);
@@ -392,8 +410,10 @@ export default function Search() {
         setExpandedGroup(0); //to select first group on new search
     }, [doSearch, searchTerm]);
 
-    const onSubmitSearch = (txt) => {
-        let firstResult = resultsDiv.querySelector(".ResultItem");
+    const onSubmitSearch = () => {
+        let firstResult = resultsDiv?.querySelector(
+            ".ResultItem"
+        ) as HTMLButtonElement;
         if (firstResult) {
             //Make sure there is at least one result
             firstResult.focus();
@@ -429,7 +449,7 @@ export default function Search() {
         return <span className="TypingCursor"></span>;
     };
 
-    const clearSearch = (e) => {
+    const clearSearch = (e: React.MouseEvent) => {
         setSearchTerm("");
         e.stopPropagation();
     };
@@ -457,7 +477,7 @@ export default function Search() {
                     className={
                         "TypingConsole" + (!searchTerm.length ? " empty" : "")
                     }
-                    tabIndex="0"
+                    tabIndex={0}
                     onClick={showKeyboard}
                 >
                     {results.length ? (
