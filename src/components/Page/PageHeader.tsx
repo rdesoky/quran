@@ -33,11 +33,9 @@ import {
     faAngleUp,
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-
-const Icon = FontAwesomeIcon as any;
+import Icon from "@/components/Icon";
 
 type PageHeaderProps = {
     index: number;

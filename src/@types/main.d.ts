@@ -75,6 +75,11 @@ type PageVerse = {
     epos: string;
 };
 
+type VerseInfo = omit<PageVerse,"epos"> & {
+    aya_id: number;
+    epos: number;
+};
+
 type AudioServerId =
     | "everyayah"
     | "egylist_vaudio"
