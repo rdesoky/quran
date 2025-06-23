@@ -4,10 +4,22 @@ import {
     faAngleRight,
     faAngleUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React from "react";
 
-const Header = ({ onPageUp, onPageDown, onIncrement, onDecrement }) => {
+import Icon from "@/components/Icon";
+
+type HeaderProps = {
+    onPageUp: () => void;
+    onPageDown: () => void;
+    onIncrement: () => void;
+    onDecrement: () => void;
+};
+
+const Header = ({
+    onPageUp,
+    onPageDown,
+    onIncrement,
+    onDecrement,
+}: HeaderProps) => {
     return (
         <div className="HeaderNavbar">
             <button className="NavButton NavPgUp" onClick={onPageUp}>

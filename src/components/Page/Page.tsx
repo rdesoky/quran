@@ -21,7 +21,7 @@ type PageProps = {
     incrementMask: () => void;
 };
 
-type VerseInfo = Omit<PageVerse, "epos"> & { epos: number; aya_id: number };
+// type VerseInfo = Omit<PageVerse, "epos"> & { epos: number; aya_id: number };
 
 const Page = ({
     index: pageIndex,

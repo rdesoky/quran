@@ -47,7 +47,6 @@ import {
     showToast,
     toggleMenu,
 } from "@/store/uiSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,7 +59,7 @@ import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import "./Pager.scss";
 import { useHistory } from "@/hooks/useHistory";
-const Icon = FontAwesomeIcon as any;
+import Icon from "@/components/Icon";
 
 export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);

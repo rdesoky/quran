@@ -1,17 +1,19 @@
 //TODO: unused
-import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPagesCount } from "../../store/app";
 import { selectPageWidth } from "../../store/layoutSlice";
 import { showPopup } from "../../store/uiSlice";
 
-const PageFooter = ({ index: pageIndex, order }) => {
+type PageFooterProps = {
+    index: number;
+};
+
+const PageFooter = ({ index: pageIndex }: PageFooterProps) => {
     // const location = useLocation();
     // const pagesCount = useSelector(selectPagesCount);
     const pageWidth = useSelector(selectPageWidth);
     const dispatch = useDispatch();
-    const showGotoPopup = (e) => {
+    const showGotoPopup = () => {
         // app.setPopup("Goto");
         dispatch(showPopup("Goto"));
     };
