@@ -8,17 +8,25 @@ import { selectActivePage } from "@/store/layoutSlice";
 import { gotoPage } from "@/store/navSlice";
 import { getArSuraName, sura_info } from "@/services/qData";
 
+type SuraHifzChartProps = {
+    sura?: number;
+    range?: HifzRange;
+    pages?: boolean;
+    onClickPage?: (page: number) => void;
+    trigger?: string; // e.g., "header_chapter_index", "hifz_chart", etc.
+};
+
 export const SuraHifzChart = ({
     sura,
     range,
     pages = true,
     onClickPage,
     trigger = "header_chapter_index",
-}) => {
-    const suraRanges = useSelector(selectSuraRanges(sura));
-    const [activeRange, setActiveRange] = useState(null);
+}: SuraHifzChartProps) => {
+    const suraIndex = sura ?? range?.sura ?? 0;
+    const suraRanges = useSelector(selectSuraRanges(suraIndex));
+    const [activeRange, setActiveRange] = useState<HifzRange | null>(null);
 
-    const suraIndex = sura !== undefined ? sura : range.sura;
     const suraInfo = sura_info[suraIndex];
     const suraPages = suraInfo.ep - suraInfo.sp + 1;
     const pageList = Array(suraPages).fill(0);
@@ -35,8 +43,9 @@ export const SuraHifzChart = ({
 
     const suraStartPage = suraInfo.sp;
 
-    const onClickChart = ({ target }) => {
-        const page = parseInt(target.getAttribute("page"));
+    const onClickChart = ({ target }: React.MouseEvent<HTMLDivElement>) => {
+        const page = Number((target as HTMLElement).getAttribute("data-page"));
+
         if (onClickPage) {
             onClickPage(suraStartPage + page);
         } else {
@@ -47,12 +56,14 @@ export const SuraHifzChart = ({
                 })
             );
         }
-        analytics.logEvent("chart_page_click", {
-            trigger,
-            page,
-            chapter_num: sura + 1,
-            chapter: getArSuraName(sura),
-        });
+
+        sura &&
+            analytics.logEvent("chart_page_click", {
+                trigger,
+                page,
+                chapter_num: sura + 1,
+                chapter: getArSuraName(sura),
+            });
     };
 
     return (
@@ -80,7 +91,7 @@ export const SuraHifzChart = ({
                                 .appendWord(ageClass)
                                 .appendWord(
                                     "active",
-                                    activeRange &&
+                                    activeRange !== null &&
                                         activeRange.startPage === r.startPage &&
                                         activeRange.sura === r.sura
                                 )}
@@ -102,11 +113,11 @@ export const SuraHifzChart = ({
                           return (
                               <div
                                   key={i}
-                                  page={i}
+                                  data-page={i}
                                   className={"PageThumb".appendWord(
                                       activeClass
                                   )}
-                                  title={i + 1}
+                                  title={String(i + 1)}
                                   //   style={{
                                   //       right: `${(100 * i) / suraPages}%`,
                                   //       width: pageWidth

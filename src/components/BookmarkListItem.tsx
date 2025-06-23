@@ -6,7 +6,6 @@ import {
     faPlayCircle,
     faQuran,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +20,16 @@ import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
 import { selectAudioSource } from "../store/playerSlice";
 import { closePopupIfBlocking } from "../store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
+import Icon from "./Icon";
+
+type BookmarkListItemProps = {
+    verse: number;
+    filter?: string;
+    selectedVerse: number;
+    selectVerse: (verse: number) => void;
+    showTafseer?: boolean;
+    trigger?: string; // e.g., "bookmarks", "search", etc.
+};
 
 export const BookmarkListItem = ({
     verse,
@@ -29,7 +38,7 @@ export const BookmarkListItem = ({
     selectVerse,
     showTafseer = false,
     trigger = "bookmarks",
-}) => {
+}: BookmarkListItemProps) => {
     const [verseText, setVerseText] = useState("");
     const [bookmarkDesc, setBookmarkDesc] = useState("");
     const suraName = useSuraName(ayaIdInfo(verse).sura);
@@ -56,7 +65,7 @@ export const BookmarkListItem = ({
         setBookmarkDesc(bookmarkDesc);
     }, [intl, suraName, verse]);
 
-    const onClickAya = (e) => {
+    const onClickAya = () => {
         if (selectedVerse !== verse) {
             selectVerse(verse);
             return;
@@ -69,7 +78,7 @@ export const BookmarkListItem = ({
         });
     };
 
-    const onRemoveBookmark = (e) => {
+    const onRemoveBookmark = () => {
         msgBox.push({
             title: <Message id="are_you_sure" />,
             content: <Message id="delete_bookmark" />,
@@ -83,7 +92,7 @@ export const BookmarkListItem = ({
         });
     };
 
-    const playVerse = (e) => {
+    const playVerse = () => {
         // audio.stop();
         if (maskOn) {
             dispatch(hideMask());
@@ -106,7 +115,7 @@ export const BookmarkListItem = ({
         return "";
     }
 
-    const download = (e) => {
+    const download = (e: React.MouseEvent<HTMLAnchorElement>) => {
         msgBox.set({
             title: <Message id="download_verse_audio" />,
             content: <Message id="download_guide" />,
@@ -114,7 +123,7 @@ export const BookmarkListItem = ({
         e.preventDefault();
     };
 
-    const toggleTafseer = (e) => {
+    const toggleTafseer = () => {
         analytics.logEvent(showTafseerView ? "hide_tafseer" : "show_tafseer", {
             ...verseLocation(verse),
             trigger,
@@ -147,7 +156,10 @@ export const BookmarkListItem = ({
                                     id: "download_verse_audio",
                                 })}
                             >
-                                <a href={audioSource} onClick={download}>
+                                <a
+                                    href={audioSource ?? undefined}
+                                    onClick={download}
+                                >
                                     <Icon icon={faFileDownload} />
                                 </a>
                             </div>

@@ -3,7 +3,6 @@ import {
     faHeart,
     faPlayCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +22,16 @@ import { AudioRange } from "@/store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import { AddHifz } from "@/components/AddHifz";
 import { SuraHifzChart } from "@/components/Hifz";
+import Icon from "./Icon";
+
+type SuraIndexCellProps = {
+    sura: number;
+    filter?: string;
+    selectedSura: number;
+    selectSura?: (sura: number) => void;
+    simple?: boolean;
+    trigger?: string; // e.g., "chapters_index", "hifz", etc.
+};
 
 export const SuraIndexCell = ({
     sura: suraIndex,
@@ -31,7 +40,7 @@ export const SuraIndexCell = ({
     selectSura,
     simple,
     trigger = "chapters_index",
-}) => {
+}: SuraIndexCellProps) => {
     const suraName = useSuraName(suraIndex);
     const dispatch = useDispatch();
     const intl = useIntl();
@@ -41,7 +50,7 @@ export const SuraIndexCell = ({
     const selectStart = useSelector(selectStartSelection);
     const suraRanges = useSelector(selectSuraRanges(suraIndex));
 
-    const onClickSura = (e) => {
+    const onClickSura = () => {
         // eslint-disable-next-line eqeqeq
         if (selectedSura == suraIndex) {
             analytics.logEvent("goto_chapter", {
@@ -56,7 +65,7 @@ export const SuraIndexCell = ({
             selectSura?.(suraIndex);
         }
     };
-    const addUpdateHifz = (e) => {
+    const addUpdateHifz = () => {
         //TODO: check if sura has old ranges, then confirmation is required
         const suraInfo = sura_info[suraIndex];
         const trigger = "chapters_index";
@@ -93,9 +102,9 @@ export const SuraIndexCell = ({
         }
     };
 
-    const onClickPlay = (e) => {
+    const onClickPlay = () => {
         // audio.stop();
-        onClickSura(e);
+        onClickSura();
         audio.play(ayaID(suraIndex, 0), AudioRange.sura);
         analytics.logEvent("play_audio", {
             trigger,
@@ -117,7 +126,7 @@ export const SuraIndexCell = ({
     //   setSura_name(app.suraName(sura));
     // }, [app, sura]);
 
-    let btn;
+    let btn: HTMLButtonElement | null = null;
 
     useEffect(() => {
         // eslint-disable-next-line eqeqeq
@@ -149,14 +158,14 @@ export const SuraIndexCell = ({
                     selectedSura == suraIndex ? (
                         <>
                             <button
-                                sura={suraIndex}
+                                // sura={suraIndex}
                                 onClick={onClickPlay}
                                 title={intl.formatMessage({ id: "play" })}
                             >
                                 <Icon icon={faPlayCircle} />
                             </button>
                             <button
-                                sura={suraIndex}
+                                // sura={suraIndex}
                                 onClick={addUpdateHifz}
                                 title={intl.formatMessage({
                                     id: "update_hifz",

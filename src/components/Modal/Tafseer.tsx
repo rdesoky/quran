@@ -1,8 +1,5 @@
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { FormattedMessage as String } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { VerseInfo, VerseText } from "@/components/Widgets";
 import { useHistory } from "@/hooks/useHistory";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import { ayaIdInfo } from "@/services/qData";
@@ -15,8 +12,11 @@ import {
 } from "@/store/navSlice";
 import { selectPlayingAya } from "@/store/playerSlice";
 import { showToast } from "@/store/uiSlice";
-import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
-import { VerseInfo, VerseText } from "@/components/Widgets";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import Icon from "../Icon";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },
@@ -52,7 +52,7 @@ const Tafseer = () => {
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, 0, "maxHeight");
     const playingAya = useSelector(selectPlayingAya);
 
-    const offsetSelection = (offset) => {
+    const offsetSelection = (offset: number) => {
         // setVerse(verse + offset);
         // app.gotoAya(verse + offset, { sel: true });
         dispatch(gotoAya(history, verse + offset, { sel: true }));
@@ -90,6 +90,16 @@ const Tafseer = () => {
     );
 };
 
+type TafseerViewProps = {
+    verse: number;
+    onMoveNext?: (offset: number) => void;
+    bookmark?: boolean;
+    copy?: boolean;
+    showVerse?: boolean;
+    showVerseText?: boolean;
+    trigger?: string;
+};
+
 export const TafseerView = ({
     verse,
     onMoveNext,
@@ -98,15 +108,15 @@ export const TafseerView = ({
     bookmark = false,
     copy = false,
     trigger = "tafseer_view",
-}) => {
+}: TafseerViewProps) => {
     const [tafseer, setTafseer] = useState(
         localStorage.getItem("tafseer") || "muyassar"
     );
-    const [tafseerData, setTafseerData] = useState([]);
+    const [tafseerData, setTafseerData] = useState<string[]>([]);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let fileName = TafseerList.find((i) => i.id === tafseer).file;
+        let fileName = TafseerList.find((i) => i.id === tafseer)?.file;
         let controller = new AbortController();
         let url = `${import.meta.env.BASE_URL}translation/${fileName}`;
         fetch(url, { signal: controller.signal })
@@ -133,9 +143,10 @@ export const TafseerView = ({
     };
 
     const tafseerName = () =>
-        TafseerList.find((item) => item.id === tafseer).name;
+        TafseerList.find((item) => item.id === tafseer)?.name;
 
-    const copyTafseer = (e) => {
+    const copyTafseer = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         const verseInfo = ayaIdInfo(verse);
         const text = tafseerData[verse];
         copy2Clipboard(
@@ -147,7 +158,7 @@ export const TafseerView = ({
         dispatch(showToast({ id: "text_copied" }));
     };
 
-    const onSelectTafseer = (e) => {
+    const onSelectTafseer = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { target: option } = e;
         const tafseer = option.value;
         localStorage.setItem("tafseer", option.value);
@@ -169,11 +180,11 @@ export const TafseerView = ({
     };
 
     const tafDirection = () => {
-        return TafseerList.find((i) => i.id === tafseer).dir;
+        return TafseerList.find((i) => i.id === tafseer)?.dir;
     };
 
     const tafTextAlign = () => {
-        return TafseerList.find((i) => i.id === tafseer).dir === "ltr"
+        return TafseerList.find((i) => i.id === tafseer)?.dir === "ltr"
             ? "left"
             : "right";
     };
@@ -205,7 +216,7 @@ export const TafseerView = ({
                 <p
                     className="TafseerText"
                     style={{
-                        direction: tafDirection(),
+                        direction: tafDirection() as any,
                         textAlign: tafTextAlign(),
                     }}
                 >
