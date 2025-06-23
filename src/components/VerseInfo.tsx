@@ -1,6 +1,4 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
@@ -9,6 +7,17 @@ import { ayaIdInfo, ayaIdPage } from "@/services/qData";
 import { gotoAya, gotoPage, selectStartSelection } from "@/store/navSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
 import SuraName from "@/components/SuraName";
+import Icon from "./Icon";
+
+type VerseInfoProps = {
+    verse: number;
+    show?: boolean;
+    children?: React.ReactNode | ((verse: number) => React.ReactNode);
+    onClick?: (verse: number) => void;
+    onMoveNext?: (offset: number) => void;
+    navigate?: boolean;
+    trigger?: string;
+};
 
 export const VerseInfo = ({
     verse,
@@ -18,7 +27,7 @@ export const VerseInfo = ({
     onMoveNext,
     navigate = false,
     trigger = "verse_info",
-}) => {
+}: VerseInfoProps) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const selectStart = useSelector(selectStartSelection);
@@ -30,7 +39,7 @@ export const VerseInfo = ({
         return "";
     }
 
-    const handleClick = (e) => {
+    const handleClick = () => {
         analytics.setTrigger(trigger);
 
         if (typeof onClick === "function") {

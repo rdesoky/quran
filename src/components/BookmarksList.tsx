@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
 import { analytics } from "../services/analytics";
 import { selectBookmarks } from "../store/dbSlice";
 import { BookmarkListItem } from "./BookmarkListItem";
 
-export const BookmarksList = ({ filter, trigger = "bookmarks_index" }) => {
+type BookmarksListProps = {
+    filter?: string;
+    trigger?: string;
+};
+
+export const BookmarksList = ({
+    filter,
+    trigger = "bookmarks_index",
+}: BookmarksListProps) => {
     const [actionsIndex, setActionsIndex] = useState(-1);
     const [showTafseer, setShowTafseer] = useState(false);
     const bookmarks = useSelector(selectBookmarks);
 
-    // const { bookmarks } = app;
-
-    const handleShowTafseerChange = ({ currentTarget }) => {
-        const showTafseer = currentTarget.checked;
-        setShowTafseer(showTafseer);
+    const handleShowTafseerChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setShowTafseer(e.currentTarget.checked);
     };
 
     useEffect(() => {
@@ -34,7 +41,7 @@ export const BookmarksList = ({ filter, trigger = "bookmarks_index" }) => {
                 <input
                     type="checkbox"
                     onChange={handleShowTafseerChange}
-                    value={showTafseer}
+                    checked={showTafseer}
                     id="toggleTafseer"
                 />
                 <label htmlFor="toggleTafseer">
