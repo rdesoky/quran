@@ -4,6 +4,15 @@ import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { CommandButton } from "../CommandButton";
 import "./AudioPlayer.scss";
 
+type PlayerButtonsProps = {
+    showReciter?: boolean;
+    showLabels?: boolean;
+    trigger?: string;
+    showHotKeys?: boolean;
+    onPlay?: () => void;
+    onStop?: () => void;
+};
+
 export const PlayerButtons = ({
     showReciter,
     showLabels,
@@ -11,7 +20,7 @@ export const PlayerButtons = ({
     showHotKeys = true,
     onPlay,
     onStop,
-}) => {
+}: PlayerButtonsProps) => {
     const audioState = useSelector(selectAudioState);
 
     let playButton = null,
