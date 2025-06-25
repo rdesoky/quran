@@ -1,54 +1,50 @@
-//TODO: replace rendering functions with components
+import { normalizeText } from "@/services/utils";
 import {
     faPlayCircle,
     faRandom,
     faThumbsDown,
     faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-    FontAwesomeIcon,
-    FontAwesomeIcon as Icon,
-} from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
-import { normalizeText } from "../../services/utils";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { ActivityChart } from "../Hifz";
 import { VerseInfo, VerseText } from "./../Widgets";
 import { TafseerView } from "./Tafseer";
 
-import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { quranNormalizedText, quranText } from "@/App";
 import { useHistory } from "@/hooks/useHistory";
-import { quranNormalizedText, quranText } from "../../App";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { useAudio, useMessageBox } from "../../RefsProvider";
-import { analytics } from "../../services/analytics";
-import { ayaIdInfo, getPageIndex, verseLocation } from "../../services/qData";
-import { logTypedVerse, selectHifzRanges } from "../../store/dbSlice";
-import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { useAudio, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
+import { ayaIdInfo, getPageIndex, verseLocation } from "@/services/qData";
+import { logTypedVerse, selectHifzRanges } from "@/store/dbSlice";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import {
     gotoAya,
     hideMask,
     selectStartSelection,
     setMaskShift,
     showMask,
-} from "../../store/navSlice";
+} from "@/store/navSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
-} from "../../store/playerSlice";
+} from "@/store/playerSlice";
 import {
     AudioRange,
     selectExerciseLevel,
     selectExerciseMemorized,
     selectRandomAutoRecite,
-} from "../../store/settingsSlice";
-import { setModalPopup, showToast } from "../../store/uiSlice";
+} from "@/store/settingsSlice";
+import { setModalPopup, showToast } from "@/store/uiSlice";
+import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
 import { CommandIcons } from "../CommandIcon";
 import { ExerciseSettings } from "../ExerciseSettings";
 import ExerciseTypingOptions from "../ExerciseTypingOptions";
+import Icon from "../Icon";
 import PlayerCountDown from "../PlayerCountDown";
 
 const Step = {
@@ -59,8 +55,10 @@ const Step = {
     results: "results",
 };
 
+type StepId = string;
+
 const Exercise = () => {
-    const [currStep, setCurrentStep] = useState(Step.intro);
+    const [currStep, setCurrentStep] = useState<StepId>(Step.intro);
     const trigger = "exercise";
     const msgBox = useMessageBox();
 
@@ -87,9 +85,9 @@ const Exercise = () => {
     const hifzRanges = useSelector(selectHifzRanges);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
     const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 220, currStep);
-    const cursorRef = useRef();
+    const cursorRef = useRef<HTMLDivElement | null>(null);
 
-    const setCurrStep = (step) => {
+    const setCurrStep = (step: StepId) => {
         setCurrentStep(step);
     };
 
@@ -114,7 +112,7 @@ const Exercise = () => {
         };
     }, [dispatch]);
 
-    const checkVerseLevel = (new_verse) => {
+    const checkVerseLevel = (new_verse: number) => {
         const text = quranText?.[new_verse];
         const length = text.length;
         switch (parseInt(exerciseLevel)) {
@@ -156,7 +154,7 @@ const Exercise = () => {
         return true;
     };
 
-    const gotoRandomVerse = (e) => {
+    const gotoRandomVerse = () => {
         audio.stop();
         let new_verse;
         do {
@@ -174,16 +172,16 @@ const Exercise = () => {
         });
     };
 
-    const startReciting = (e) => {
+    const startReciting = () => {
         audio.play(verse, AudioRange.exercise);
         analytics.logEvent("exercise_play_audio", {
             trigger,
         });
     };
 
-    const redoReciting = (e) => {
+    const redoReciting = () => {
         setWrittenText("");
-        startReciting(e);
+        startReciting();
         analytics.logEvent("redo_reciting", { trigger });
     };
 
@@ -192,14 +190,11 @@ const Exercise = () => {
         setCurrStep(Step.typing);
     }, [audio]);
 
-    const showIntro = useCallback(
-        (e) => {
-            audio.stop();
-            setCurrStep(Step.intro);
-            analytics.logEvent("exercise_go_back", { trigger });
-        },
-        [audio]
-    );
+    const showIntro = useCallback(() => {
+        audio.stop();
+        setCurrStep(Step.intro);
+        analytics.logEvent("exercise_go_back", { trigger });
+    }, [audio]);
 
     const showTypingSettings = () => {
         msgBox.set({
@@ -208,25 +203,22 @@ const Exercise = () => {
         });
     };
 
-    const goBack = useCallback(
-        (e) => {
-            audio.stop();
-            setCurrStep((currStep) => {
-                switch (currStep) {
-                    case Step.reciting:
-                        return Step.typing;
-                    default:
-                        return Step.intro;
-                }
-            });
-            analytics.logEvent("exercise_go_back", { trigger });
-        },
-        [audio]
-    );
+    const goBack = useCallback(() => {
+        audio.stop();
+        setCurrentStep((currStep: StepId) => {
+            switch (currStep) {
+                case Step.reciting:
+                    return Step.typing;
+                default:
+                    return Step.intro;
+            }
+        });
+        analytics.logEvent("exercise_go_back", { trigger });
+    }, [audio]);
 
     let resultsDefaultButton =
         localStorage.getItem("resultsDefaultButton") || "typeNext";
-    let defaultButton = null;
+    let defaultButton: HTMLButtonElement | null = null;
 
     const onCancel = useCallback(() => {
         if (msgBox.getMessages().length > 0) {
@@ -237,8 +229,8 @@ const Exercise = () => {
     }, [goBack, msgBox]);
 
     useEffect(() => {
-        const handleKeyDown = ({ code }) => {
-            if (code === "Escape") {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.code === "Escape") {
                 onCancel();
             }
         };
@@ -302,7 +294,7 @@ const Exercise = () => {
 
     //monitor player to start answer upon player ends
     useEffect(() => {
-        setCurrStep((currStep) => {
+        setCurrentStep((currStep) => {
             switch (audioState) {
                 case AudioState.stopped:
                     if (currStep === Step.reciting) {
@@ -323,7 +315,7 @@ const Exercise = () => {
         dispatch(gotoAya(history, verse + 1));
     };
 
-    const reciteNextVerse = (e) => {
+    const reciteNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "reciteNext");
         moveToNextVerse();
         audio.play(verse + 1, AudioRange.exercise);
@@ -331,7 +323,7 @@ const Exercise = () => {
         // app.setMaskStart(verse + 2, true);
     };
 
-    const typeNextVerse = (e) => {
+    const typeNextVerse = () => {
         localStorage.setItem("resultsDefaultButton", "typeNext");
         // app.setMaskStart(verse + 1);
         setWrittenText("");
@@ -362,7 +354,7 @@ const Exercise = () => {
         }
     };
 
-    const onMoveNext = (offset) => {
+    const onMoveNext = (offset: number) => {
         // app.gotoAya(verse + offset, { sel: true, keepMask: true });
         dispatch(gotoAya(history, verse + offset, { sel: true }));
     };
@@ -395,9 +387,10 @@ const Exercise = () => {
         );
     };
 
-    const onClickType = (e) => {
-        const trg = e.target.getAttribute("trigger") || trigger;
-        analytics.logEvent("start_typing", { trigger: trg });
+    const onClickType = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const btnTrigger =
+            e.currentTarget.getAttribute("data-trigger") || trigger;
+        analytics.logEvent("start_typing", { trigger: btnTrigger });
         startAnswer();
     };
 
@@ -418,7 +411,7 @@ const Exercise = () => {
                     <div className="ButtonsBar">
                         <button
                             onClick={onClickType}
-                            trigger="exercise_intro"
+                            data-trigger="exercise_intro"
                             ref={(ref) => {
                                 defaultButton = ref;
                             }}
@@ -452,7 +445,7 @@ const Exercise = () => {
         );
     };
 
-    const onUpdateText = (text) => {
+    const onUpdateText = (text: string) => {
         setWrittenText(text);
         //test written words ( except the last one )
         setWrongWord(-1);
@@ -477,7 +470,7 @@ const Exercise = () => {
         setCurrStep(Step.results);
     };
 
-    const testAnswer = (answerText) => {
+    const testAnswer = (answerText: string) => {
         const normVerse = normVerseList[verse].trim();
         const normAnswerText = normalizeText(answerText).trim();
         const correctWords = normVerse.split(/\s+/);
@@ -549,7 +542,7 @@ const Exercise = () => {
                         <String id="home" />
                     </button>
                     <button onClick={showTypingSettings}>
-                        <FontAwesomeIcon icon={CommandIcons.Settings} />
+                        <Icon icon={CommandIcons.Settings} />
                     </button>
                 </div>
             </div>
@@ -608,7 +601,7 @@ const Exercise = () => {
         );
     };
 
-    const redoTyping = (e) => {
+    const redoTyping = () => {
         setWrittenText("");
         startAnswer();
         analytics.logEvent("start_typing", { trigger: "exercise_redo" });
@@ -653,7 +646,7 @@ const Exercise = () => {
                                     defaultButton = ref;
                                 }}
                                 onClick={onClickType}
-                                trigger="exercise_retry"
+                                data-trigger="exercise_retry"
                             >
                                 <String id="correct" />
                             </button>
@@ -805,7 +798,7 @@ const Exercise = () => {
                 <div className="ButtonsBar">
                     <button
                         onClick={onClickType}
-                        trigger="exercise_reciter"
+                        data-trigger="exercise_reciter"
                         ref={(ref) => {
                             defaultButton = ref;
                         }}

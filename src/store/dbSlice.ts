@@ -106,7 +106,7 @@ export const deleteBookmark =
     };
 
 export const logTypedVerse =
-    (verseId: number, words: number) =>
+    (verseId: number, words: number = 0) =>
     (dispatch: AppDispatch, getState: GetState) => {
         const state = getState();
         const { user } = state[sliceName];

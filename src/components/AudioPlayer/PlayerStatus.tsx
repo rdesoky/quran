@@ -1,16 +1,18 @@
-import React from "react";
+//TODO: unused component
 import { FormattedMessage as Message } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { ayaIdInfo } from "../../services/qData";
-import { gotoAya, selectStartSelection } from "../../store/navSlice";
+import { ayaIdInfo } from "@/services/qData";
+import { gotoAya, selectStartSelection } from "@/store/navSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
-} from "../../store/playerSlice";
+} from "@/store/playerSlice";
 import "./AudioPlayer.scss";
+import { useHistory } from "@/hooks/useHistory";
 
 export const PlayerStatus = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const selectStart = useSelector(selectStartSelection);
     const playingAya = useSelector(selectPlayingAya);
@@ -41,19 +43,19 @@ export const PlayerStatus = () => {
             break;
     }
 
-    const gotoPlayingAya = (e) => {
-        dispatch(gotoAya(ayaId, { sel: true }));
+    const gotoPlayingAya = () => {
+        dispatch(gotoAya(history, ayaId, { sel: true }));
     };
 
     return (
         <button onClick={gotoPlayingAya} className="AudioStatusButton">
             <Message id={stateId} />
             :&nbsp;
-            <Message id="sura_names">
+            {/* <Message id="sura_names">
                 {(sura_names) => {
                     return sura_names.split(",")[sura] + " (" + (aya + 1) + ")";
                 }}
-            </Message>
+            </Message> */}
         </button>
     );
 };

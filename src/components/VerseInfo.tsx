@@ -10,7 +10,7 @@ import SuraName from "@/components/SuraName";
 import Icon from "./Icon";
 
 type VerseInfoProps = {
-    verse: number;
+    verse?: number;
     show?: boolean;
     children?: React.ReactNode | ((verse: number) => React.ReactNode);
     onClick?: (verse: number) => void;

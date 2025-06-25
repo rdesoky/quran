@@ -1,4 +1,3 @@
-import React from "react";
 import { FormattedMessage as String } from "react-intl";
 
 import { useSelector } from "react-redux";
