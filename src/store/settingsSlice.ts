@@ -114,3 +114,5 @@ export const AudioRange = {
     part: 4,
     exercise: 5,
 };
+
+export type AudioRangeProp = (typeof AudioRange)[keyof typeof AudioRange];

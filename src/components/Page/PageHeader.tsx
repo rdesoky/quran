@@ -97,7 +97,7 @@ const PageHeader = ({
         analytics.logEvent("show_verse_context", { trigger });
         contextPopup.show({
             target,
-            content: <VerseContextButtons verse={selectStart} />,
+            content: <VerseContextButtons />,
         });
     };
 

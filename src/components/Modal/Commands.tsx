@@ -6,11 +6,12 @@ import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { VerseInfo } from "../Widgets";
 
 import { CommandButton } from "../CommandButton";
+import { CommandType } from "../CommandIcon";
 
 const Commands = () => {
     const isNarrow = useSelector(selectIsNarrow);
 
-    const list = [
+    const list: CommandType[] = [
         "Index",
         "AudioPlayer",
         "Search",

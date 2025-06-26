@@ -158,7 +158,7 @@ const VerseLayout = ({
                 });
                 contextPopup.show({
                     target: e.target,
-                    content: <VerseContextButtons verse={aya_id} />,
+                    content: <VerseContextButtons />,
                 });
                 typeof e.stopPropagation === "function" && e.stopPropagation(); //prevent browser context menu
             } else {

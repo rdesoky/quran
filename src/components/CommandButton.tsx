@@ -49,13 +49,13 @@ import { ayaIdPage, verseLocation } from "@/services/qData";
 import { useHistory } from "@/hooks/useHistory";
 import { selectPagesCount } from "@/store/layoutSlice";
 import { AddHifz } from "./AddHifz";
-import { CommandIcon } from "./CommandIcon";
+import { CommandIcon, CommandType } from "./CommandIcon";
 import PlayPrompt from "./PlayPrompt";
 import UpdateBadge from "./UpdateBadge";
 
 type CommandButtonProps = {
     id?: string;
-    command: string;
+    command: CommandType;
     showLabel?: boolean;
     showHotKey?: boolean;
     style?: React.CSSProperties;

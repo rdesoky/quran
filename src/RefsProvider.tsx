@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useRef } from "react";
 
 export type RefsType = { [x: string]: any };
 
+//TODO: implement a generic type
 export type AppRefsType = {
     add: (id: string, ref: any) => void;
     get: (id: string) => any;
