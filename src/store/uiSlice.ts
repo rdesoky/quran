@@ -6,10 +6,12 @@ import {
     ViewCapacity,
 } from "@/store/layoutSlice";
 import { AppDispatch, GetState, RootState } from "@/store/config";
+import { PopupName, PopupsMap } from "@/components/Modal/PopupView";
+import { CommandType } from "@/components/CommandIcon";
 
 const sliceName = "ui";
 
-const initSidebarCommands = [
+const initSidebarCommands: CommandType[] = [
     // "AudioPlayer",
     "Profile",
     "Indices",
@@ -35,7 +37,7 @@ const initialState = {
     },
 
     showPopup: false, //show/hide flag ( used for transitioning purpose )
-    popup: null, //modal popup component
+    popup: null as PopupName | null, //modal popup component
     popupParams: {},
 
     modalPopup: false, //used to block user interaction outside the active popup
@@ -112,7 +114,7 @@ export const selectRecentCommands = (state: RootState) => {
         (c) => c !== "Share" || navigator.share !== undefined
     );
     recentCommands.splice(0, recentCommands.length, ...filtered);
-    return recentCommands;
+    return recentCommands as CommandType[];
 };
 //TODO: unused
 // export const selectMessageBox = (state: RootState) =>

@@ -1,11 +1,5 @@
-import firebase from "firebase";
-import { useDeferredValue, useEffect, useState } from "react";
-import { IntlProvider } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import "@/App.scss";
 import { Audio } from "@/components/Audio";
-import { ContextPopup } from "@/components/ContextPopup";
 import { MessageBox } from "@/components/MessageBox";
 import PopupView from "@/components/Modal/PopupView";
 import Pager from "@/components/Pager/Pager";
@@ -18,6 +12,12 @@ import { analytics } from "@/services/analytics";
 import { onResize, selectZoomClass } from "@/store/layoutSlice";
 import { selectLang, selectTheme } from "@/store/settingsSlice";
 import useInitApp from "@/useInitApp";
+import firebase from "firebase";
+import { useDeferredValue, useEffect, useState } from "react";
+import { IntlProvider } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+import { ContextPopup } from "./components/ContextPopup";
 
 // Firebase configuration
 const firebaseConfig = {

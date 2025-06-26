@@ -30,6 +30,7 @@ type DailyActivity = {
     date: string;
     pages: number;
     chars: number;
+    day: string; // MM-DD
 };
 
 interface Number {
@@ -75,7 +76,7 @@ type PageVerse = {
     epos: string;
 };
 
-type VerseInfo = omit<PageVerse,"epos"> & {
+type VerseInfo = omit<PageVerse, "epos"> & {
     aya_id: number;
     epos: number;
 };
