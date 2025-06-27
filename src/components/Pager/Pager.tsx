@@ -57,7 +57,7 @@ import PlayPrompt from "@/components/PlayPrompt";
 import { AppDispatch } from "@/store/config";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import "./Pager.scss";
+import "@/components/Pager/Pager.scss";
 import { useHistory } from "@/hooks/useHistory";
 import Icon from "@/components/Icon";
 

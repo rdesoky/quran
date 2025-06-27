@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String, useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { selectDailyActivities } from "../store/dbSlice";
+import { selectDailyActivities } from "@/store/dbSlice";
 
 type ActivityGridProps = {
     activity: "pages" | "chars";

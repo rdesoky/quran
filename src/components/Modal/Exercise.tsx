@@ -7,10 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
-import AKeyboard from "../AKeyboard/AKeyboard";
-import { ActivityChart } from "../Hifz";
-import { VerseInfo, VerseText } from "./../Widgets";
-import { TafseerView } from "./Tafseer";
+import AKeyboard from "@/components/AKeyboard/AKeyboard";
+import { ActivityChart } from "@/components/Hifz";
+import { VerseInfo, VerseText } from "@/components/Widgets";
+import { TafseerView } from "@/components/Modal/Tafseer";
 
 import { quranNormalizedText, quranText } from "@/App";
 import { useHistory } from "@/hooks/useHistory";
@@ -41,11 +41,11 @@ import {
 import { setModalPopup, showToast } from "@/store/uiSlice";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { CommandIcons } from "../CommandIcon";
-import { ExerciseSettings } from "../ExerciseSettings";
-import ExerciseTypingOptions from "../ExerciseTypingOptions";
-import Icon from "../Icon";
-import PlayerCountDown from "../PlayerCountDown";
+import { CommandIcons } from "@/components/CommandIcon";
+import { ExerciseSettings } from "@/components/ExerciseSettings";
+import ExerciseTypingOptions from "@/components/ExerciseTypingOptions";
+import Icon from "@/components/Icon";
+import PlayerCountDown from "@/components/PlayerCountDown";
 
 const Step = {
     unknown: "unknown",

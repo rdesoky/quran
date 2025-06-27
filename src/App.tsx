@@ -81,7 +81,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         document.body.setAttribute("lang", lang);
-        import(`./translations/${lang}.json`).then((messages) => {
+        import(`@/translations/${lang}.json`).then((messages) => {
             setLocaleMessages(messages.default);
         });
         // addLocaleData(require(`react-intl/locale-data/${lang}`));

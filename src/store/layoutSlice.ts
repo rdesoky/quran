@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, GetState, RootState } from "./config";
-import { selectPopup } from "./uiSlice";
+import { AppDispatch, GetState, RootState } from "@/store/config";
+import { selectPopup } from "@/store/uiSlice";
 
 export const sliceName = "layout";
 

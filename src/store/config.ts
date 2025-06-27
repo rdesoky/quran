@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import appSlice from "./layoutSlice";
-import uiSlice from "./uiSlice";
-import settingsSlice from "./settingsSlice";
-import dbSlice from "./dbSlice";
-import navSlice from "./navSlice";
-import playerSlice from "./playerSlice";
+import appSlice from "@/store/layoutSlice";
+import uiSlice from "@/store/uiSlice";
+import settingsSlice from "@/store/settingsSlice";
+import dbSlice from "@/store/dbSlice";
+import navSlice from "@/store/navSlice";
+import playerSlice from "@/store/playerSlice";
 
 export const store = configureStore({
     reducer: {

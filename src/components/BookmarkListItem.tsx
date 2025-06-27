@@ -19,8 +19,8 @@ import { deleteBookmark } from "@/store/dbSlice";
 import { gotoAya, gotoPage, hideMask, selectMaskOn } from "@/store/navSlice";
 import { selectAudioSource } from "@/store/playerSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
-import { TafseerView } from "./Modal/Tafseer";
-import Icon from "./Icon";
+import { TafseerView } from "@/components/Modal/Tafseer";
+import Icon from "@/components/Icon";
 
 type BookmarkListItemProps = {
     verse: number;

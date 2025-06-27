@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Spinner.css";
+import "@/components/Spinner/Spinner.css";
 
 type SpinnerProps = {
     visible: boolean;

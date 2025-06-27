@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { AppRefs } from "@/RefsProvider";
 import { selectAppHeight, selectAppWidth } from "@/store/layoutSlice";
-import { ContextPopupType } from "./Modal/PopupView";
+import { ContextPopupType } from "@/components/Modal/PopupView";
 
 export const ContextPopup = () => {
     const refs = useContext(AppRefs);

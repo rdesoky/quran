@@ -37,7 +37,7 @@ import {
 } from "@/services/qData";
 import { SuraHifzChart } from "@/components/SuraHifzChart";
 import { VerseText } from "@/components/Widgets";
-import Icon from "./Icon";
+import Icon from "@/components/Icon";
 
 interface HifzRangeProps {
     range: HifzRange;

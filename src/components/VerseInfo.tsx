@@ -7,7 +7,7 @@ import { ayaIdInfo, ayaIdPage } from "@/services/qData";
 import { gotoAya, gotoPage, selectStartSelection } from "@/store/navSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
 import SuraName from "@/components/SuraName";
-import Icon from "./Icon";
+import Icon from "@/components/Icon";
 
 type VerseInfoProps = {
     verse?: number;

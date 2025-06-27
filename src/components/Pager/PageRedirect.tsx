@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { ayaIdPage } from "@/services/qData";
 import { selectAya } from "@/store/navSlice";
-import "./Pager.scss";
+import "@/components/Pager/Pager.scss";
 
 export default function PageRedirect() {
     const params = useParams();

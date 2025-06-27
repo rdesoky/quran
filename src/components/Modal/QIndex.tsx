@@ -10,11 +10,11 @@ import { useSelector } from "react-redux";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import { selectAppHeight } from "@/store/layoutSlice";
 import { selectLang } from "@/store/settingsSlice";
-import AKeyboard from "../AKeyboard/AKeyboard";
-import { BookmarksList } from "../BookmarksList";
-import { HifzRanges } from "../Hifz";
-import Icon from "../Icon";
-import { SuraList } from "../SuraList";
+import AKeyboard from "@/components/AKeyboard/AKeyboard";
+import { BookmarksList } from "@/components/BookmarksList";
+import { HifzRanges } from "@/components/Hifz";
+import Icon from "@/components/Icon";
+import { SuraList } from "@/components/SuraList";
 
 type QIndexProps = {
     simple?: boolean;

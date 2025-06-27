@@ -31,12 +31,12 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 import { useSelector } from "react-redux";
-import { selectIsBookmarked } from "../store/dbSlice";
-import { selectMaskStart, selectStartSelection } from "../store/navSlice";
-import { AudioState, selectAudioState } from "../store/playerSlice";
-import { selectReciter } from "../store/settingsSlice";
-import { selectMenuExpanded } from "../store/uiSlice";
-import { UserImage } from "./UserImage";
+import { selectIsBookmarked } from "@/store/dbSlice";
+import { selectMaskStart, selectStartSelection } from "@/store/navSlice";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { selectReciter } from "@/store/settingsSlice";
+import { selectMenuExpanded } from "@/store/uiSlice";
+import { UserImage } from "@/components/UserImage";
 
 export const CommandIcons = {
     Commands: faBars,

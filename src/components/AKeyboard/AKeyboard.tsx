@@ -6,8 +6,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useMessageBox } from "@/RefsProvider";
-import "./AKeyboard.scss";
-import Icon from "../Icon";
+import "@/components/AKeyboard/AKeyboard.scss";
+import Icon from "@/components/Icon";
 
 const keyMap = {
     //first

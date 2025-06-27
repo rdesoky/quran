@@ -14,7 +14,7 @@ import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Icon from "./Icon";
+import Icon from "@/components/Icon";
 
 type VerseTextProps = {
     verse?: number;

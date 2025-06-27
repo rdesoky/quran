@@ -16,10 +16,10 @@ import {
     setTheme,
 } from "@/store/settingsSlice";
 import { selectPopup } from "@/store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
-import { ExerciseSettings } from "../ExerciseSettings";
-import RecitersGrid from "../RecitersGrid";
-import { VerseInfo } from "../Widgets";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { ExerciseSettings } from "@/components/ExerciseSettings";
+import RecitersGrid from "@/components/RecitersGrid";
+import { VerseInfo } from "@/components/Widgets";
 
 const Settings = () => {
     const lang = useSelector(selectLang);

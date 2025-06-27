@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetAudioURL } from "../services/audioData";
+import { GetAudioURL } from "@/services/audioData";
 
-import { ayaIdInfo, TOTAL_VERSES } from "../services/qData";
+import { ayaIdInfo, TOTAL_VERSES } from "@/services/qData";
 import { selectSelectedRange } from "./navSlice";
 import { selectReciter } from "./settingsSlice";
 import { RootState } from "./config";

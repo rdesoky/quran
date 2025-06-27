@@ -8,9 +8,9 @@ import {
     selectRecentCommands,
     selectMenuExpanded,
 } from "@/store/uiSlice";
-import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
-import { CommandButton } from "../CommandButton";
-import "./Sidebar.scss";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { CommandButton } from "@/components/CommandButton";
+import "@/components/Sidebar/Sidebar.scss";
 
 function Sidebar() {
     const dispatch = useDispatch();
