@@ -1,6 +1,5 @@
-import React from "react";
+import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { useSelector } from "react-redux";
-import { AudioState, selectAudioState } from "../../store/playerSlice";
 import { CommandButton } from "../CommandButton";
 import "./AudioPlayer.scss";
 

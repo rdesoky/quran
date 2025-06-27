@@ -93,7 +93,7 @@ type CommandIconProps = {
     command: CommandType;
 };
 
-export const CommandIcon = ({ command }: CommandIconProps) => {
+export const CommandIcon: React.FC<CommandIconProps> = ({ command }) => {
     const showMenu = useSelector(selectMenuExpanded);
     const maskStart = useSelector(selectMaskStart);
     const reciter = useSelector(selectReciter);

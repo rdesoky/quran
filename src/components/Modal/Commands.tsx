@@ -1,12 +1,12 @@
 import { FormattedMessage as String } from "react-intl";
 
 import { useSelector } from "react-redux";
-import { selectIsNarrow } from "../../store/layoutSlice";
-import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
-import { VerseInfo } from "../Widgets";
+import { selectIsNarrow } from "@/store/layoutSlice";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { VerseInfo } from "@/components/Widgets";
 
-import { CommandButton } from "../CommandButton";
-import { CommandType } from "../CommandIcon";
+import { CommandButton } from "@/components/CommandButton";
+import { CommandType } from "@/components/CommandIcon";
 
 const Commands = () => {
     const isNarrow = useSelector(selectIsNarrow);

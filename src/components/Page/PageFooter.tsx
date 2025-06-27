@@ -1,8 +1,8 @@
 //TODO: unused
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPageWidth } from "../../store/layoutSlice";
-import { showPopup } from "../../store/uiSlice";
+import { selectPageWidth } from "@/store/layoutSlice";
+import { showPopup } from "@/store/uiSlice";
 
 type PageFooterProps = {
     index: number;

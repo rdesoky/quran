@@ -3,18 +3,18 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { useMessageBox } from "../../RefsProvider";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { useMessageBox } from "@/RefsProvider";
 import {
     addBookmark,
     deleteBookmark,
     selectIsBookmarked,
-} from "../../store/dbSlice";
-import { selectAppHeight, selectIsNarrow } from "../../store/layoutSlice";
-import { selectStartSelection } from "../../store/navSlice";
+} from "@/store/dbSlice";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
+import { selectStartSelection } from "@/store/navSlice";
 import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 import { BookmarksList } from "../BookmarksList";
-import { VerseText } from "./../Widgets";
+import { VerseText } from "../Widgets";
 import Icon from "../Icon";
 
 const Bookmarks = () => {

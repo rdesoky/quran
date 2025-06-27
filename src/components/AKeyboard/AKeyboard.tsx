@@ -5,7 +5,7 @@ import {
     faStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { useMessageBox } from "../../RefsProvider";
+import { useMessageBox } from "@/RefsProvider";
 import "./AKeyboard.scss";
 import Icon from "../Icon";
 
