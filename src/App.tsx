@@ -17,7 +17,7 @@ import { useDeferredValue, useEffect, useState } from "react";
 import { IntlProvider } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import { ContextPopup } from "./components/ContextPopup";
+import { ContextPopup } from "@/components/ContextPopup";
 
 // Firebase configuration
 const firebaseConfig = {

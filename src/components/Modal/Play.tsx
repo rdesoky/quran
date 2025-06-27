@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import { keyValues } from "../../services/utils";
+import { keyValues } from "@/services/utils";
 
 const Play = () => {
     return (

@@ -10,15 +10,15 @@ import { useEffect, useState } from "react";
 import { FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
-import { quranText } from "../App";
-import useSuraName from "../hooks/useSuraName";
-import { useAudio, useMessageBox } from "../RefsProvider";
-import { analytics } from "../services/analytics";
-import { ayaIdInfo, ayaIdPage, verseLocation } from "../services/qData";
-import { deleteBookmark } from "../store/dbSlice";
-import { gotoAya, gotoPage, hideMask, selectMaskOn } from "../store/navSlice";
-import { selectAudioSource } from "../store/playerSlice";
-import { closePopupIfBlocking } from "../store/uiSlice";
+import { quranText } from "@/App";
+import useSuraName from "@/hooks/useSuraName";
+import { useAudio, useMessageBox } from "@/RefsProvider";
+import { analytics } from "@/services/analytics";
+import { ayaIdInfo, ayaIdPage, verseLocation } from "@/services/qData";
+import { deleteBookmark } from "@/store/dbSlice";
+import { gotoAya, gotoPage, hideMask, selectMaskOn } from "@/store/navSlice";
+import { selectAudioSource } from "@/store/playerSlice";
+import { closePopupIfBlocking } from "@/store/uiSlice";
 import { TafseerView } from "./Modal/Tafseer";
 import Icon from "./Icon";
 
@@ -31,14 +31,14 @@ type BookmarkListItemProps = {
     trigger?: string; // e.g., "bookmarks", "search", etc.
 };
 
-export const BookmarkListItem = ({
+export const BookmarkListItem: React.FC<BookmarkListItemProps> = ({
     verse,
     filter,
     selectedVerse,
     selectVerse,
     showTafseer = false,
     trigger = "bookmarks",
-}: BookmarkListItemProps) => {
+}) => {
     const [verseText, setVerseText] = useState("");
     const [bookmarkDesc, setBookmarkDesc] = useState("");
     const suraName = useSuraName(ayaIdInfo(verse).sura);

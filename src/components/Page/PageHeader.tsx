@@ -1,4 +1,5 @@
 import { CommandIcon } from "@/components/CommandIcon";
+import Icon from "@/components/Icon";
 import PartsPie from "@/components/PartsPie";
 import PlayPrompt from "@/components/PlayPrompt";
 import { SuraList } from "@/components/SuraList";
@@ -35,7 +36,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import Icon from "@/components/Icon";
 
 type PageHeaderProps = {
     index: number;
@@ -45,13 +45,13 @@ type PageHeaderProps = {
     onPageUp?: () => void;
 };
 
-const PageHeader = ({
+const PageHeader: React.FC<PageHeaderProps> = ({
     index: pageIndex,
     order,
     onArrowKey,
     onPageDown,
     onPageUp,
-}: PageHeaderProps) => {
+}) => {
     const intl = useIntl();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);

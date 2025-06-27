@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { ayaIdPage } from "../../services/qData";
-import { selectAya } from "../../store/navSlice";
+import { ayaIdPage } from "@/services/qData";
+import { selectAya } from "@/store/navSlice";
 import "./Pager.scss";
 
 export default function PageRedirect() {

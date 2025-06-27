@@ -7,9 +7,9 @@ import {
 import { useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
-import useSnapHeightToBottomOf from "../../hooks/useSnapHeightToBottomOff";
-import { selectAppHeight } from "../../store/layoutSlice";
-import { selectLang } from "../../store/settingsSlice";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { selectAppHeight } from "@/store/layoutSlice";
+import { selectLang } from "@/store/settingsSlice";
 import AKeyboard from "../AKeyboard/AKeyboard";
 import { BookmarksList } from "../BookmarksList";
 import { HifzRanges } from "../Hifz";
