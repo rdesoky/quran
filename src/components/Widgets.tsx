@@ -1,8 +1,8 @@
-export { PageNavigator } from "./PageNavigator";
-export { SuraContextHeader } from "./SuraContextHeader";
-export { ToastMessage } from "./ToastMessage";
-export { PageContextButtons } from "./PageContextButtons";
-export { CircleProgress } from "./CircleProgress";
-export { VerseInfo } from "./VerseInfo";
-export { VerseContextButtons } from "./VerseContextButtons";
-export { VerseText } from "./VerseText";
+export { PageNavigator } from "@/components/PageNavigator";
+export { SuraContextHeader } from "@/components/SuraContextHeader";
+export { ToastMessage } from "@/components/ToastMessage";
+export { PageContextButtons } from "@/components/PageContextButtons";
+export { CircleProgress } from "@/components/CircleProgress";
+export { VerseInfo } from "@/components/VerseInfo";
+export { VerseContextButtons } from "@/components/VerseContextButtons";
+export { VerseText } from "@/components/VerseText";

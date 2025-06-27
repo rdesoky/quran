@@ -22,7 +22,7 @@ import { AudioRange } from "@/store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import { AddHifz } from "@/components/AddHifz";
 import { SuraHifzChart } from "@/components/Hifz";
-import Icon from "./Icon";
+import Icon from "@/components/Icon";
 
 type SuraIndexCellProps = {
     sura: number;

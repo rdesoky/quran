@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
-import { selectDailyActivities } from "../store/dbSlice";
-import { selectPopupWidth } from "../store/layoutSlice";
-import { ActivityTooltip } from "./ActivityTooltip";
+import { selectDailyActivities } from "@/store/dbSlice";
+import { selectPopupWidth } from "@/store/layoutSlice";
+import { ActivityTooltip } from "@/components/ActivityTooltip";
 
 type ActivityChartProps = {
     activity: "pages" | "chars";

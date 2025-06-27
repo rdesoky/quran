@@ -8,7 +8,7 @@ import {
 } from "@/store/layoutSlice";
 import { selectModalPopup } from "@/store/uiSlice";
 import Transition from "@/services/Transition";
-import "./Modal.scss";
+import "@/components/Modal/Modal.scss";
 import Icon from "@/components/Icon";
 import { PopupName } from "./PopupView";
 

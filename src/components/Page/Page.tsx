@@ -10,7 +10,7 @@ import {
 import { hideMenu, selectMenuExpanded } from "@/store/uiSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./Page.scss";
+import "@/components/Page/Page.scss";
 import VerseLayout from "@/components/Page/VerseLayout";
 
 type PageProps = {

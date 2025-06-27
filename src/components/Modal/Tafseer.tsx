@@ -16,7 +16,7 @@ import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 
 const TafseerList = [
     { id: "muyassar", name: "الميسر", dir: "rtl", file: "ar.muyassar.txt" },

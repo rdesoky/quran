@@ -48,10 +48,10 @@ import { ayaIdPage, verseLocation } from "@/services/qData";
 
 import { useHistory } from "@/hooks/useHistory";
 import { selectPagesCount } from "@/store/layoutSlice";
-import { AddHifz } from "./AddHifz";
-import { CommandIcon, CommandType } from "./CommandIcon";
-import PlayPrompt from "./PlayPrompt";
-import UpdateBadge from "./UpdateBadge";
+import { AddHifz } from "@/components/AddHifz";
+import { CommandIcon, CommandType } from "@/components/CommandIcon";
+import PlayPrompt from "@/components/PlayPrompt";
+import UpdateBadge from "@/components/UpdateBadge";
 
 type CommandButtonProps = {
     id?: string;

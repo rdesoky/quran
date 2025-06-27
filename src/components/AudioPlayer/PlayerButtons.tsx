@@ -1,7 +1,7 @@
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { useSelector } from "react-redux";
-import { CommandButton } from "../CommandButton";
-import "./AudioPlayer.scss";
+import { CommandButton } from "@/components/CommandButton";
+import "@/components/AudioPlayer/AudioPlayer.scss";
 
 type PlayerButtonsProps = {
     showReciter?: boolean;

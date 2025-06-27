@@ -22,7 +22,7 @@ import {
     selectStartSelection,
 } from "@/store/navSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
-import PartsPie from "../PartsPie";
+import PartsPie from "@/components/PartsPie";
 
 const GotoPage = () => {
     const dispatch = useDispatch();

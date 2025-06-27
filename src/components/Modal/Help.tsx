@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage as Message } from "react-intl";
-import { CommandButton } from "../CommandButton";
+import { CommandButton } from "@/components/CommandButton";
 
 const Help = () => {
     // const [unsecureLink, setUnsecureLink] = useState(null);

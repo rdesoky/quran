@@ -4,9 +4,9 @@ import { FormattedMessage as String } from "react-intl";
 import { useSelector } from "react-redux";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import { selectActivePage, selectAppHeight } from "@/store/layoutSlice";
-import { AddHifz } from "../AddHifz";
-import { ActivityChart, HifzRanges } from "../Hifz";
-import Icon from "../Icon";
+import { AddHifz } from "@/components/AddHifz";
+import { ActivityChart, HifzRanges } from "@/components/Hifz";
+import Icon from "@/components/Icon";
 
 const Favorites: React.FC = () => {
     const appHeight: number = useSelector(selectAppHeight);

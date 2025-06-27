@@ -12,10 +12,10 @@ import {
 } from "@/store/dbSlice";
 import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import { selectStartSelection } from "@/store/navSlice";
-import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
-import { BookmarksList } from "../BookmarksList";
-import { VerseText } from "../Widgets";
-import Icon from "../Icon";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { BookmarksList } from "@/components/BookmarksList";
+import { VerseText } from "@/components/Widgets";
+import Icon from "@/components/Icon";
 
 const Bookmarks = () => {
     const appHeight = useSelector(selectAppHeight);

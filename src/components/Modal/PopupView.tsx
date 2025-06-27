@@ -1,18 +1,18 @@
 //Managing the active side modeless popup ( Index, Tafseer, Settings, etc )
-import GotoPage from "./GotoPage";
-import QIndex from "./QIndex";
-import Commands from "./Commands";
-import Search from "./Search";
-import Play from "./Play";
-import Hifz from "./Hifz";
-import Help from "./Help";
-import Settings from "./Settings";
-import Tafseer from "./Tafseer";
-import Favorites from "./Favorites";
-import Bookmarks from "./Bookmarks";
-import Modal from "./Modal";
-import User from "./User";
-import Exercise from "./Exercise";
+import GotoPage from "@/components/Modal/GotoPage";
+import QIndex from "@/components/Modal/QIndex";
+import Commands from "@/components/Modal/Commands";
+import Search from "@/components/Modal/Search";
+import Play from "@/components/Modal/Play";
+import Hifz from "@/components/Modal/Hifz";
+import Help from "@/components/Modal/Help";
+import Settings from "@/components/Modal/Settings";
+import Tafseer from "@/components/Modal/Tafseer";
+import Favorites from "@/components/Modal/Favorites";
+import Bookmarks from "@/components/Modal/Bookmarks";
+import Modal from "@/components/Modal/Modal";
+import User from "@/components/Modal/User";
+import Exercise from "@/components/Modal/Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import {
     closePopup,
