@@ -1,6 +1,6 @@
 import DDrop from "@/components/DDrop";
 import Page from "@/components/Page/Page";
-import PageHeader from "@/components/Page/PageHeader";
+import PageHeader from "@/components/Page/PageFooter";
 import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import { ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
@@ -11,6 +11,7 @@ import {
     keyValues,
 } from "@/services/utils";
 import {
+    PAGE_HEADER_HEIGHT,
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
@@ -526,12 +527,12 @@ export default function Pager() {
                 }}
                 key={thisPageIndex}
             >
+                <div style={{ color: "white", height: PAGE_HEADER_HEIGHT }}>
+                    Header
+                </div>
                 <Page
                     index={thisPageIndex}
                     order={order}
-                    // onPageUp={pageUp}
-                    // onPageDown={pageDown}
-                    // onArrowKey={onArrowKey}
                     scaleX={scaleX}
                     shiftX={shiftX}
                     incrementMask={incrementMask}
