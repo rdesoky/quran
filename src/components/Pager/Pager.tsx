@@ -1,6 +1,6 @@
 import DDrop from "@/components/DDrop";
 import Page from "@/components/Page/Page";
-import PageHeader from "@/components/Page/PageFooter";
+import PageFooter from "@/components/Page/PageFooter";
 import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import { ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
@@ -11,7 +11,7 @@ import {
     keyValues,
 } from "@/services/utils";
 import {
-    PAGE_HEADER_HEIGHT,
+    PAGE_FOOTER_HEIGHT,
     selectActivePage,
     selectIsNarrow,
     selectPagerWidth,
@@ -54,13 +54,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
 
 import { AddHifz } from "@/components/AddHifz";
+import Icon from "@/components/Icon";
+import "@/components/Pager/Pager.scss";
 import PlayPrompt from "@/components/PlayPrompt";
+import { useHistory } from "@/hooks/useHistory";
 import { AppDispatch } from "@/store/config";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import "@/components/Pager/Pager.scss";
-import { useHistory } from "@/hooks/useHistory";
-import Icon from "@/components/Icon";
 
 export default function Pager() {
     const zoomLevels = useSelector(selectZoomLevels);
@@ -254,7 +254,7 @@ export default function Pager() {
                 dispatch(gotoAya(history, dispatch(offsetSelection(-1))));
                 return;
             } else {
-                dispatch(gotoPage(history, maskPage, { sel: true }));
+                dispatch(gotoPage(history, maskPage, { sel: false }));
                 const viewRef = pagerRef.current;
                 viewRef?.scrollTo?.({
                     top: viewRef?.scrollHeight - viewRef?.clientHeight,
@@ -496,51 +496,6 @@ export default function Pager() {
         handleKeyDown,
     ]);
 
-    const renderPage = (order: number, shiftX: number, scaleX: number) => {
-        if (order + 1 > shownPages.length) {
-            return; //not enough pages
-        }
-
-        // let thisPageIndex =
-        //     pagesCount === 1 ? pageIndex : pageIndex - (pageIndex % 2) + order;
-        let thisPageIndex = shownPages?.[order];
-
-        function selectPage(e: React.MouseEvent<HTMLDivElement>) {
-            if (activePage !== thisPageIndex) {
-                dispatch(gotoPage(history, thisPageIndex));
-                // console.log(`Set active page: ${thisPageIndex + 1}`);
-            }
-        }
-
-        let pageClass = thisPageIndex % 2 === 0 ? "RightPage" : "LeftPage";
-        let activeClass = activePage === thisPageIndex ? "Active" : "";
-
-        return (
-            <div
-                onClick={selectPage}
-                className={"PageSide"
-                    .appendWord(pageClass)
-                    .appendWord(activeClass)}
-                style={{
-                    // height: appHeight + "px",
-                    width: 100 / pagesCount + "%",
-                }}
-                key={thisPageIndex}
-            >
-                <div style={{ color: "white", height: PAGE_HEADER_HEIGHT }}>
-                    Header
-                </div>
-                <Page
-                    index={thisPageIndex}
-                    order={order}
-                    scaleX={scaleX}
-                    shiftX={shiftX}
-                    incrementMask={incrementMask}
-                />
-            </div>
-        );
-    };
-
     return (
         <>
             <DDrop
@@ -586,14 +541,24 @@ export default function Pager() {
                                 width: pagerWidth,
                             }}
                         >
-                            {renderPage(0, firstPageShiftX, firstPageScaleX)}
-                            {renderPage(1, secondPageShiftX, secondPageScaleX)}
+                            <Page
+                                order={0}
+                                scaleX={firstPageScaleX}
+                                shiftX={firstPageShiftX}
+                                incrementMask={incrementMask}
+                            />
+                            <Page
+                                order={1}
+                                scaleX={secondPageScaleX}
+                                shiftX={secondPageShiftX}
+                                incrementMask={incrementMask}
+                            />
                         </div>
                     );
                 }}
             </DDrop>
             <div className="PagerFooter" style={{ width: pagerWidth }}>
-                <PageHeader
+                <PageFooter
                     index={shownPages[0]}
                     order={0}
                     onArrowKey={onArrowKey}
@@ -601,7 +566,7 @@ export default function Pager() {
                     onPageDown={pageDown}
                 />
                 {shownPages.length > 1 && (
-                    <PageHeader
+                    <PageFooter
                         index={shownPages[1]}
                         order={1}
                         onArrowKey={onArrowKey}
@@ -614,8 +579,8 @@ export default function Pager() {
                 <div style={{ position: "fixed", left: 50, bottom: 0 }}>
                     <button
                         className="CommandButton"
-                        style={{ height: 50 }}
-                        onClick={(e) => dispatch(toggleZoom())}
+                        style={{ height: PAGE_FOOTER_HEIGHT }}
+                        onClick={() => dispatch(toggleZoom())}
                         title={intl.formatMessage({ id: "zoom" })}
                     >
                         <Icon icon={faExpand as any} />

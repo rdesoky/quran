@@ -31,7 +31,7 @@ export const ActivityChart = ({ activity }: ActivityChartProps) => {
         return null;
     }
 
-    const chartWidth = popupWidth - 60;
+    const chartWidth = popupWidth;
     return (
         <>
             <String id={`${activity}_daily_graph`} />

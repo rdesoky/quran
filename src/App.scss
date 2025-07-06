@@ -65,7 +65,7 @@ $PageThumbColor: rgba(170, 170, 170, 0.25);
 
 button,
 .LinkButton {
-    font-family: Arial;
+    // font-family: Arial;
     transition: background-color 0.3s, top 0.5s;
     border: none;
     border-width: 0;
@@ -575,7 +575,7 @@ hr {
 .recharts-wrapper {
     direction: ltr;
     text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    // font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
     // margin: 10px 20px;
 }
