@@ -34,10 +34,11 @@ import {
     faAngleUp,
     faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
+import { useMemo } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 
-type PageHeaderProps = {
+type PageFooterProps = {
     index: number;
     order: number;
     onArrowKey?: (shiftKey: boolean, direction: "up" | "down") => void;
@@ -45,7 +46,7 @@ type PageHeaderProps = {
     onPageUp?: () => void;
 };
 
-const PageHeader: React.FC<PageHeaderProps> = ({
+const PageFooter: React.FC<PageFooterProps> = ({
     index: pageIndex,
     order,
     onArrowKey,
@@ -66,13 +67,19 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     const msgBox = useMessageBox();
 
     const trigger = "page_header";
-    const partIndex = getPagePartNumber(pageIndex + 1) - 1;
-    let suraIndex = getPageSuraIndex(pageIndex + 1);
-    const selectedAyaPage = ayaIdPage(
-        ayaID(selectedAyaInfo.sura, selectedAyaInfo.aya)
+    const partIndex = useMemo(
+        () => getPagePartNumber(pageIndex + 1) - 1,
+        [pageIndex]
     );
-    suraIndex =
-        selectedAyaPage === pageIndex ? selectedAyaInfo.sura : suraIndex;
+    const selectedAyaPage = useMemo(
+        () => ayaIdPage(ayaID(selectedAyaInfo.sura, selectedAyaInfo.aya)),
+        [selectedAyaInfo]
+    );
+    const suraIndex = useMemo(() => {
+        return selectedAyaPage === pageIndex
+            ? selectedAyaInfo.sura
+            : getPageSuraIndex(pageIndex + 1);
+    }, [pageIndex, selectedAyaPage, selectedAyaInfo]);
 
     const showPartContextPopup = ({
         currentTarget: target,
@@ -137,6 +144,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         analytics.setTrigger(trigger);
         onPageDown?.();
     };
+
     const gotoPrevPage = () => {
         // dispatch(gotoPage(history, pageIndex - shownPages.length));
         // analytics.logEvent("nav_prev_page", { trigger });
@@ -154,11 +162,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         // }
     };
 
-    const onClick = () => {
+    const onClickFooter = () => {
         if (activePage !== pageIndex) {
             dispatch(gotoPage(history, pageIndex));
         }
     };
+
     const audioCommand = audioState !== AudioState.playing ? "play" : "stop";
 
     return (
@@ -167,7 +176,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 "active",
                 pageIndex === activePage
             )}
-            onClick={onClick}
+            onClick={onClickFooter}
         >
             <div
                 className="PageHeaderContent"
@@ -277,4 +286,4 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     );
 };
 
-export default PageHeader;
+export default PageFooter;

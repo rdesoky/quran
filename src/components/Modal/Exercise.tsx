@@ -381,7 +381,7 @@ const Exercise = () => {
                     <String id="random_exercise" />
                 </div>
                 <ExerciseSettings />
-
+                <hr />
                 <ActivityChart activity="chars" />
             </div>
         );
