@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import { selectActivePage, selectAppHeight } from "@/store/layoutSlice";
 import { AddHifz } from "@/components/AddHifz";
-import { ActivityChart, HifzRanges } from "@/components/Hifz";
+import { ActivityChart } from "@/components/ActivityChart";
+import { HifzRanges } from "@/components/HifzRanges";
 import Icon from "@/components/Icon";
 
 const Favorites: React.FC = () => {

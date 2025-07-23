@@ -21,7 +21,7 @@ import { gotoSura, hideMask, selectStartSelection } from "@/store/navSlice";
 import { AudioRange } from "@/store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import { AddHifz } from "@/components/AddHifz";
-import { SuraHifzChart } from "@/components/Hifz";
+import { SuraHifzChart } from "@/components/SuraHifzChart";
 import Icon from "@/components/Icon";
 
 type SuraIndexCellProps = {

@@ -9,7 +9,7 @@ import { ActivityTooltip } from "@/components/ActivityTooltip";
 type ActivityChartProps = {
     activity: "pages" | "chars";
 };
-export const ActivityChart = ({ activity }: ActivityChartProps) => {
+export const ActivityChart: React.FC<ActivityChartProps> = ({ activity }) => {
     const [data, setData] = useState<DailyActivity[]>([]);
     const popupWidth = useSelector(selectPopupWidth);
     const dailyActivities = useSelector(selectDailyActivities);
