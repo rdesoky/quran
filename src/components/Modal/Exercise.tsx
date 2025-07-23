@@ -8,7 +8,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import AKeyboard from "@/components/AKeyboard/AKeyboard";
-import { ActivityChart } from "@/components/Hifz";
+import { ActivityChart } from "@/components/ActivityChart";
 import { VerseInfo, VerseText } from "@/components/Widgets";
 import { TafseerView } from "@/components/Modal/Tafseer";
 

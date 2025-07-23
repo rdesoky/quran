@@ -1,5 +1,5 @@
 import React from "react";
-import { SuraHifzChart } from "@/components/Hifz";
+import { SuraHifzChart } from "@/components/SuraHifzChart";
 import { SuraContextButtons } from "@/components/SuraContextButtons";
 
 type SuraContextHeaderProps = {

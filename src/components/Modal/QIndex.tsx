@@ -12,7 +12,7 @@ import { selectAppHeight } from "@/store/layoutSlice";
 import { selectLang } from "@/store/settingsSlice";
 import AKeyboard from "@/components/AKeyboard/AKeyboard";
 import { BookmarksList } from "@/components/BookmarksList";
-import { HifzRanges } from "@/components/Hifz";
+import { HifzRanges } from "@/components/HifzRanges";
 import Icon from "@/components/Icon";
 import { SuraList } from "@/components/SuraList";
 

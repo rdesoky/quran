@@ -16,13 +16,13 @@ type SuraHifzChartProps = {
     trigger?: string; // e.g., "header_chapter_index", "hifz_chart", etc.
 };
 
-export const SuraHifzChart = ({
+export const SuraHifzChart: React.FC<SuraHifzChartProps> = ({
     sura,
     range,
     pages = true,
     onClickPage,
     trigger = "header_chapter_index",
-}: SuraHifzChartProps) => {
+}) => {
     const suraIndex = sura ?? range?.sura ?? 0;
     const suraRanges = useSelector(selectSuraRanges(suraIndex));
     const [activeRange, setActiveRange] = useState<HifzRange | null>(null);
