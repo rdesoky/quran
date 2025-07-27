@@ -1,84 +1,117 @@
 .Pager {
-    direction: rtl;
-    position: fixed;
-    display: flex;
-    align-items: flex-start;
-    top: 0; //1px;
-    right: 0;
-    bottom: 50px;
-    .fit_page &,
-    .fit_two_pages & {
-        overflow-y: overlay;
-        overflow-x: hidden;
-    }
-    // border: solid 2px yellow;
-    box-sizing: content-box;
-    transition: width 0.5s;
-    .PageSide {
-        width: 50%;
-        height: 100%;
-        box-sizing: border-box;
-        &.RightPage {
-            .PageFrame {
-                direction: ltr;
-            }
-        }
-        &.LeftPage {
-            .PageFrame {
-                direction: rtl;
-            }
-        }
-    }
-    .HeaderNavbar {
-        position: absolute;
-        pointer-events: none;
-        right: 0;
-        left: 0;
-        top: 25px;
-        height: 25px;
-        line-height: 25px;
-        z-index: 1;
-        .narrow & {
-            left: 50px;
-        }
+	direction: rtl;
+	position: fixed;
+	display: flex;
+	align-items: flex-start;
+	top: 25px; //1px;
+	bottom: 25px;
+	right: 0;
 
-        .NavButton {
-            pointer-events: fill;
-            width: 50px;
-            font-size: 22px;
-            opacity: 0.5;
-            text-align: center;
-            padding: 0 10px;
-            &.NavPgDown,
-            &.NavPgUp {
-                float: right;
-                // text-align: right;
-            }
-            &.NavForward,
-            &.NavBackward {
-                float: left;
-                // text-align: left;
-            }
-        }
-    }
+	.fit_page &,
+	.fit_two_pages & {
+		overflow-y: overlay;
+		overflow-x: hidden;
+	}
+
+	// border: solid 2px yellow;
+	box-sizing: content-box;
+	transition: width 0.5s;
+
+	.PageSide {
+		width: 50%;
+		height: 100%;
+		box-sizing: border-box;
+
+		&.RightPage {
+			.PageFrame {
+				direction: ltr;
+			}
+		}
+
+		&.LeftPage {
+			.PageFrame {
+				direction: rtl;
+			}
+		}
+	}
+
+	.HeaderNavbar {
+		position: absolute;
+		pointer-events: none;
+		right: 0;
+		left: 0;
+		top: 25px;
+		height: 25px;
+		line-height: 25px;
+		z-index: 1;
+
+		.narrow & {
+			left: 50px;
+		}
+
+		.NavButton {
+			pointer-events: fill;
+			width: 50px;
+			font-size: 22px;
+			opacity: 0.5;
+			text-align: center;
+			padding: 0 10px;
+
+			&.NavPgDown,
+			&.NavPgUp {
+				float: right;
+				// text-align: right;
+			}
+
+			&.NavForward,
+			&.NavBackward {
+				float: left;
+				// text-align: left;
+			}
+		}
+	}
 }
 
 .Pager {
-    &.narrow {
-        .HeaderNavbar {
-            left: 50px;
-        }
-    }
+	&.narrow {
+		.HeaderNavbar {
+			left: 50px;
+		}
+	}
+}
+
+.PagerHeader,
+.PagerFooter {
+	position: absolute;
+	right: 0;
+	height: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: width 0.5s;
+	direction: rtl;
+	// padding: 0 3px;
+	// gap: 6px;
+	// flex-wrap: wrap;
+	// flex-wrap: nowrap;
+	color: #bbb;
+	background-color: #444;
+	transition: background-color 0.5s;
+	// width: 100%;
+	z-index: 1;
+}
+
+
+.PagerHeader {
+	box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.35);
+	top: 0;
+	bottom: auto;
 }
 
 .PagerFooter {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    transition: width 0.5s;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    direction: rtl;
+	top: auto;
+	bottom: 0;
+	text-align: center;
+	justify-content: center;
+	box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
 }
