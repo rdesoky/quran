@@ -2,356 +2,403 @@ $selectionBgColor: #c8ccf0;
 $selectionBgColorDark: rgb(38, 93, 138);
 
 .HifzSegments {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    .HifzSegment {
-        height: 100px;
-        margin-bottom: 4px;
-        pointer-events: none;
-        position: absolute;
-        width: 100%;
-        // border-style: solid;
-        // border-width: 5px 20px 5px 0;
-        box-sizing: border-box;
-        // border-radius: 5px;
-    }
+	position: absolute;
+	height: 100%;
+	width: 100%;
+
+	.HifzSegment {
+		height: 100px;
+		margin-bottom: 4px;
+		pointer-events: none;
+		position: absolute;
+		width: 100%;
+		// border-style: solid;
+		// border-width: 5px 20px 5px 0;
+		box-sizing: border-box;
+		// border-radius: 5px;
+	}
 }
 
 .Page {
-    position: relative;
-    min-height: 100%;
+	position: relative;
+	min-height: 100%;
 
-    .LeftPage & {
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
-        background: #ffffff; /* Old browsers */
-        background: -moz-linear-gradient(
-            left,
-            #ffffff 0%,
-            #f3e2c7 49%,
-            #f3e2c7 78%,
-            #b2a087 99%
-        ); /* FF3.6-15 */
-        background: -webkit-linear-gradient(
-            left,
-            #ffffff 0%,
-            #f3e2c7 49%,
-            #f3e2c7 78%,
-            #b2a087 99%
-        ); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(
-            to right,
-            #ffffff 0%,
-            #f3e2c7 49%,
-            #f3e2c7 78%,
-            #b2a087 99%
-        ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#b2a087',GradientType=1 ); /* IE6-9 */
-    }
-    .RightPage & {
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
-        background: #f3e2c7; /* Old browsers */
-        background: -moz-linear-gradient(
-            left,
-            #f3e2c7 0%,
-            #b2a087 6%,
-            #ffffff 100%
-        ); /* FF3.6-15 */
-        background: -webkit-linear-gradient(
-            left,
-            #f3e2c7 0%,
-            #b2a087 6%,
-            #ffffff 100%
-        ); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(
-            to right,
-            #f3e2c7 0%,
-            #b2a087 6%,
-            #ffffff 100%
-        ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3e2c7', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-        // border: solid 1px grey;
-    }
+	.LeftPage & {
+		/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f3e2c7+49,f3e2c7+78,b2a087+99 */
+		background: #ffffff;
+		/* Old browsers */
+		background: -moz-linear-gradient(left,
+				#ffffff 0%,
+				#f3e2c7 49%,
+				#f3e2c7 78%,
+				#b2a087 99%);
+		/* FF3.6-15 */
+		background: -webkit-linear-gradient(left,
+				#ffffff 0%,
+				#f3e2c7 49%,
+				#f3e2c7 78%,
+				#b2a087 99%);
+		/* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to right,
+				#ffffff 0%,
+				#f3e2c7 49%,
+				#f3e2c7 78%,
+				#b2a087 99%);
+		/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#b2a087', GradientType=1);
+		/* IE6-9 */
+	}
 
-    .DarkTheme & {
-        background: none;
-        background-color: #333;
-    }
+	.RightPage & {
+		/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f3e2c7+0,b2a087+6,ffffff+100 */
+		background: #f3e2c7;
+		/* Old browsers */
+		background: -moz-linear-gradient(left,
+				#f3e2c7 0%,
+				#b2a087 6%,
+				#ffffff 100%);
+		/* FF3.6-15 */
+		background: -webkit-linear-gradient(left,
+				#f3e2c7 0%,
+				#b2a087 6%,
+				#ffffff 100%);
+		/* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to right,
+				#f3e2c7 0%,
+				#b2a087 6%,
+				#ffffff 100%);
+		/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3e2c7', endColorstr='#ffffff', GradientType=1);
+		/* IE6-9 */
+		// border: solid 1px grey;
+	}
 
-    .PageFrame {
-        position: relative;
-        height: 100%;
-        // padding: 0 20px;
-        .PageImageFrame {
-            // position: absolute;
-            // width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            position: relative;
-            .MaskContainer {
-                position: absolute;
-                pointer-events: none;
-                .Verse {
-                    position: absolute;
-                    pointer-events: none;
-                    background-color: #888;
-                    .DarkTheme & {
-                        background-color: #555;
-                    }
-                }
-                .Mask {
-                    position: absolute;
-                    pointer-events: fill;
-                    background-color: #999998fa;
-                    .DarkTheme & {
-                        background-color: #666;
-                    }
-                }
-                button {
-                    transition: none;
-                    .DarkTheme & {
-                        background-color: #444 !important;
-                    }
-                }
-            }
-        }
-        .VerseLayout {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            .Verse {
-                box-sizing: border-box;
-                position: absolute;
-                &.Hovered {
-                    border-bottom: solid 2px silver;
-                    .DarkTheme & {
-                        border-color: rgba(255, 255, 255, 0.2);
-                    }
-                    //background-color: #ffffff28;
-                    // border-width: 0 4px;
-                    // border-color: rgba(0, 0, 0, 0.2);
-                    // border-style: solid;
-                }
-                &.Selected {
-                    background-color: $selectionBgColor;
-                    .DarkTheme & {
-                        background-color: $selectionBgColorDark;
-                    }
-                }
-                &.Playing {
-                    border-bottom: solid 2px green;
-                }
-            }
-        }
-    }
+	.DarkTheme & {
+		background: none;
+		background-color: #333;
+	}
 
-    .PageImageFrame {
-        position: relative;
-        display: inline-block;
-        height: 100%;
-        // width: 100%;
-        // border-style: solid;
-        // border-width: 0 1px;
-        // border-color: silver;
-        // padding: 0 10px;
-    }
+	.PageFrame {
+		position: relative;
+		height: 100%;
 
-    .Spinner {
-        position: absolute;
-        left: calc(50% - 32px);
-        top: calc(50% - 32px);
-    }
+		// padding: 0 20px;
+		.PageImageFrame {
+			// position: absolute;
+			// width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+			position: relative;
 
-    img.PageImage {
-        // width: auto;
-        height: 100%;
-        max-width: 100%;
-        position: relative;
-        pointer-events: none;
-        .DarkTheme & {
-            filter: invert(1);
-        }
-    }
+			.MaskContainer {
+				position: absolute;
+				pointer-events: none;
+
+				.Verse {
+					position: absolute;
+					pointer-events: none;
+					background-color: #888;
+
+					.DarkTheme & {
+						background-color: #555;
+					}
+				}
+
+				.Mask {
+					position: absolute;
+					pointer-events: fill;
+					background-color: #999998fa;
+
+					.DarkTheme & {
+						background-color: #666;
+					}
+				}
+
+				button {
+					transition: none;
+
+					.DarkTheme & {
+						background-color: #444 !important;
+					}
+				}
+			}
+		}
+
+		.VerseLayout {
+			position: absolute;
+			top: 0;
+			height: 100%;
+			width: 100%;
+
+			.Verse {
+				box-sizing: border-box;
+				position: absolute;
+
+				&.Hovered {
+					border-bottom: solid 2px silver;
+
+					.DarkTheme & {
+						border-color: rgba(255, 255, 255, 0.2);
+					}
+
+					//background-color: #ffffff28;
+					// border-width: 0 4px;
+					// border-color: rgba(0, 0, 0, 0.2);
+					// border-style: solid;
+				}
+
+				&.Selected {
+					background-color: $selectionBgColor;
+
+					.DarkTheme & {
+						background-color: $selectionBgColorDark;
+					}
+				}
+
+				&.Playing {
+					border-bottom: solid 2px green;
+				}
+			}
+		}
+	}
+
+	.PageImageFrame {
+		position: relative;
+		display: inline-block;
+		height: 100%;
+		// width: 100%;
+		// border-style: solid;
+		// border-width: 0 1px;
+		// border-color: silver;
+		// padding: 0 10px;
+	}
+
+	.Spinner {
+		position: absolute;
+		left: calc(50% - 32px);
+		top: calc(50% - 32px);
+	}
+
+	img.PageImage {
+		// width: auto;
+		height: 100%;
+		max-width: 100%;
+		position: relative;
+		pointer-events: none;
+
+		.DarkTheme & {
+			filter: invert(1);
+		}
+	}
 }
+
+.PageHeader,
+.PageFooter {
+	position: relative;
+	direction: rtl;
+	padding: 0 3px;
+	display: flex;
+	gap: 6px;
+	flex-wrap: nowrap;
+	// align-items: center;
+	height: 100%;
+	color: #bbb;
+	position: relative;
+	background-color: #444;
+	transition: background-color 0.5s;
+	width: 100%;
+
+	.PageHeaderContent,
+	.PageFooterContent {
+		display: flex;
+		gap: 2px 3px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		// padding: 0 3px;
+		// min-width: 200px; //to prevent 3 lines and header vertical overflow
+	}
+
+	.circle-background {
+		stroke: #555;
+	}
+
+	.circle-progress {
+		stroke: #bbb;
+	}
+
+	.circle-text {
+		fill: #bbb;
+		font-size: 12px;
+	}
+
+	&.active {
+		background-color: #111;
+	}
+
+	.narrow & {
+		padding-left: 50px;
+	}
+
+	.HeaderFooterContent {
+		display: flex;
+		gap: 5px;
+		align-items: center;
+
+		// text-align: center;//will make buttons move when sura name changes
+		[lang="ar"] & {
+			direction: rtl;
+		}
+
+		svg {
+			vertical-align: middle;
+			cursor: default;
+		}
+
+		button {
+			padding: 0 10px;
+			line-height: 23px;
+			border-radius: 3px;
+		}
+
+		.HeaderFooterSection {
+			display: flex;
+			white-space: nowrap;
+			background-color: #333;
+			border-radius: 3px;
+			// margin: 0 2px;
+			height: 23px;
+
+			>* {
+				height: 100%;
+			}
+
+			.ReciterIcon {
+				width: 16px;
+				height: 16px;
+			}
+		}
+	}
+
+	select {
+		height: 25px;
+		color: #ddd;
+		// background-color: transparent;
+		background-color: #444;
+		border: none;
+		// background-color: #444;
+		border-radius: 5px;
+		// option {
+		//     color: black;
+		//     background-color: silver;
+		// }
+		font-size: 14px;
+		margin: 0 2px;
+	}
+
+	.SuraTitle {
+		right: 0;
+	}
+}
+
 
 .PageHeader {
-    direction: rtl;
-
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    // justify-content: center;
-    height: 50px;
-    color: #bbb;
-    position: relative;
-    background-color: #444;
-    box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
-    transition: background-color 0.5s;
-    width: 100%;
-
-    .PageHeaderContent {
-        display: flex;
-        gap: 2px 3px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        padding: 0 3px;
-        min-width: 200px; //to prevent 3 lines and header vertical overflow
-    }
-
-    .circle-background {
-        stroke: #555;
-    }
-    .circle-progress {
-        stroke: #bbb;
-    }
-    .circle-text {
-        fill: #bbb;
-        font-size: 12px;
-    }
-
-    &.active {
-        background-color: #111;
-    }
-    .narrow & {
-        padding-left: 50px;
-    }
-    .PageHeaderContent {
-        // text-align: center;//will make buttons move when sura name changes
-        [lang="ar"] & {
-            direction: rtl;
-        }
-
-        svg {
-            vertical-align: middle;
-            cursor: default;
-        }
-
-        button {
-            padding: 0 10px;
-            line-height: 24px;
-            border-radius: 3px;
-        }
-
-        .PageHeaderSection {
-            display: flex;
-            white-space: nowrap;
-            background-color: #333;
-            border-radius: 3px;
-            // margin: 0 2px;
-            height: 24px;
-            > * {
-                height: 100%;
-            }
-            .ReciterIcon {
-                width: 16px;
-                height: 16px;
-            }
-        }
-    }
-
-    select {
-        height: 25px;
-        color: #ddd;
-        // background-color: transparent;
-        background-color: #444;
-        border: none;
-        // background-color: #444;
-        border-radius: 5px;
-        // option {
-        //     color: black;
-        //     background-color: silver;
-        // }
-        font-size: 14px;
-        margin: 0 2px;
-    }
-    .SuraTitle {
-        right: 0;
-    }
-}
-
-.SelectionButton {
-    color: #111;
-    background-color: $selectionBgColor;
-    &:hover {
-        color: hsl(0, 0%, 7%) !important;
-    }
-    .DarkTheme & {
-        color: white;
-        background-color: $selectionBgColorDark;
-        &:hover {
-            color: white !important;
-        }
-    }
+	// box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.35);
 }
 
 .PageFooter {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    text-align: center;
-    direction: rtl;
+	width: 100%;
+	// top: 0;
+	// text-align: center;
+	// direction: rtl;
+	// align-items: center;
+	justify-content: center;
+	// box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
+
 }
 
-.LeftPage {
-    .AnimatePage {
-        animation: LeftPageOpener 0.4s;
-    }
-    .PageImageFrame {
-        border-left: solid 1px silver;
-        box-shadow: -3px 0px 3px 0px rgba(0, 0, 0, 0.15);
-    }
+.SelectionButton {
+	color: #111;
+	background-color: $selectionBgColor;
+
+	&:hover {
+		color: hsl(0, 0%, 7%) !important;
+	}
+
+	.DarkTheme & {
+		color: white;
+		background-color: $selectionBgColorDark;
+
+		&:hover {
+			color: white !important;
+		}
+	}
 }
+
+
+.LeftPage {
+	.AnimatePage {
+		animation: LeftPageOpener 0.4s;
+	}
+
+	.PageImageFrame {
+		border-left: solid 1px silver;
+		box-shadow: -3px 0px 3px 0px rgba(0, 0, 0, 0.15);
+	}
+}
+
 .RightPage {
-    .AnimatePage {
-        animation: RightPageOpener 0.4s;
-    }
-    .PageImageFrame {
-        border-right: solid 1px silver;
-        box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.15);
-    }
+	.AnimatePage {
+		animation: RightPageOpener 0.4s;
+	}
+
+	.PageImageFrame {
+		border-right: solid 1px silver;
+		box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.15);
+	}
 }
 
 @keyframes RightPageOpener {
-    from {
-        transform: scaleX(0.85);
-        transform-origin: top left;
-    }
-    to {
-        transform: scaleX(1);
-        transform-origin: top left;
-    }
+	from {
+		transform: scaleX(0.85);
+		transform-origin: top left;
+	}
+
+	to {
+		transform: scaleX(1);
+		transform-origin: top left;
+	}
 }
 
 @keyframes LeftPageOpener {
-    from {
-        // transform: translateX(100%);
-        transform: scaleX(0.85);
-        transform-origin: top right;
-    }
-    to {
-        // transform: translateX(0);
-        transform: scaleX(1);
-        transform-origin: top right;
-    }
+	from {
+		// transform: translateX(100%);
+		transform: scaleX(0.85);
+		transform-origin: top right;
+	}
+
+	to {
+		// transform: translateX(0);
+		transform: scaleX(1);
+		transform-origin: top right;
+	}
 }
 
 .page-loader-image {
-    opacity: 0.1;
-    animation: animateOpacity 3s ease-in-out infinite;
+	opacity: 0.1;
+	animation: animateOpacity 3s ease-in-out infinite;
 }
 
 @keyframes animateOpacity {
-    25% {
-        opacity: 0.3;
-    }
+	25% {
+		opacity: 0.3;
+	}
 
-    50% {
-        opacity: 0.1;
-    }
+	50% {
+		opacity: 0.1;
+	}
 
-    75% {
-        opacity: 0.3;
-    }
+	75% {
+		opacity: 0.3;
+	}
 }
