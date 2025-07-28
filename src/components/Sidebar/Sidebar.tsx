@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
+import { CommandButton } from "@/components/CommandButton";
+import "@/components/Sidebar/Sidebar.scss";
 import { selectTopCommand } from "@/services/utils";
 import { selectIsNarrow, selectZoomLevels } from "@/store/layoutSlice";
 import {
 	hideMenu,
+	selectMenuExpanded,
 	selectPopup,
 	selectRecentCommands,
-	selectMenuExpanded,
 } from "@/store/uiSlice";
-import { PlayerButtons } from "@/components/AudioPlayer/PlayerButtons";
-import { CommandButton } from "@/components/CommandButton";
-import "@/components/Sidebar/Sidebar.scss";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function Sidebar() {
 	const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function Sidebar() {
 						.appendWord("narrow", isNarrow)
 						.appendWord("expanded", isShowMenu)
 						.appendWord("HiddenScroller", !isShowMenu)}
-					style={{ bottom: isNarrow ? (showZoom ? 75 : 25) : (showZoom ? 100 : 50) }}
+					style={{ bottom: isNarrow ? 25 : 50 }}
 				>
 					<div id="SidebarButtons">
 						<div className="SidebarSection">
@@ -66,7 +66,9 @@ function Sidebar() {
 							/>
 						</div>
 						{recentCommands
-							.filter((c) => c != null)
+							.filter((c) => {
+								return c !== "Zoom" || showZoom;
+							})
 							.map((command, index) => (
 								<CommandButton
 									command={command}
@@ -83,16 +85,16 @@ function Sidebar() {
 						position: "absolute",
 						left: 0,
 						bottom: 0,
-						height: isNarrow ? (showZoom ? 75 : 25) : (showZoom ? 100 : 50),
+						height: isNarrow ? 25 : 50,
 					}}
 				>
-					{showZoom && <CommandButton
+					{/* {showZoom && <CommandButton
 						id="SideMenuExpander"
 						command="Zoom"
 						trigger="side_bar"
 						updateChecker={true}
 						style={{ height: 50 }}
-					/>}
+					/>} */}
 
 					<CommandButton
 						id="SideMenuExpander"
@@ -103,7 +105,7 @@ function Sidebar() {
 					/>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 }
 
