@@ -3,7 +3,7 @@ import Page from "@/components/Page/Page";
 import PageFooter from "@/components/Page/PageFooter";
 import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
-import { ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
+import { ayaID, ayaIdInfo, ayaIdPage, getPageFirstAyaId, TOTAL_VERSES } from "@/services/qData";
 import {
 	checkActiveInput,
 	copy2Clipboard,
@@ -42,13 +42,14 @@ import {
 	selectMenuExpanded,
 	selectModalPopup,
 	selectPopup,
+	selectSuraNames,
 	showMenu,
 	showPopup,
 	showToast,
 	toggleMenu,
 } from "@/store/uiSlice";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FormattedMessage as Message, useIntl } from "react-intl";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FormattedMessage, FormattedMessage as Message, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
 
@@ -59,6 +60,11 @@ import { useHistory } from "@/hooks/useHistory";
 import { AppDispatch } from "@/store/config";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { PageHeader } from "./PageHeader";
+import Icon from "../Icon";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { SuraContextHeader } from "../SuraContextHeader";
+import { SuraList } from "../SuraList";
+import { VerseContextButtons } from "../VerseContextButtons";
 
 export default function Pager() {
 	const pagesCount = useSelector(selectPagesCount);
@@ -86,6 +92,7 @@ export default function Pager() {
 	const intl = useIntl();
 	const audio = useAudio();
 	const audioState = useSelector(selectAudioState);
+	const selectedAyaInfo = useMemo(() => ayaIdInfo(selectStart), [selectStart]);
 
 	useEffect(() => {
 		if (loading && activePage !== -1) {
@@ -492,6 +499,35 @@ export default function Pager() {
 		expandedMenu,
 		handleKeyDown,
 	]);
+	// const selectedAyaPage = useMemo(
+	// 	() => ayaIdPage(ayaID(selectedAyaInfo.sura, selectedAyaInfo.aya)),
+	// 	[selectedAyaInfo]
+	// );
+
+
+	const suraNames = useSelector(selectSuraNames)
+	const trigger = "page_footer";
+
+	const onClickNext = (e: React.MouseEvent) => {
+		onArrowKey?.(e.shiftKey, "down");
+		analytics.logEvent("nav_next_verse", { trigger });
+		e.stopPropagation();
+	};
+
+	const onClickPrevious = (e: React.MouseEvent) => {
+		onArrowKey?.(e.shiftKey, "up");
+		analytics.logEvent("nav_prev_verse", { trigger });
+		e.stopPropagation();
+	};
+
+	const showVerseContextPopup = ({ target }: React.MouseEvent) => {
+		analytics.logEvent("show_verse_context", { trigger });
+		contextPopup.show({
+			target,
+			content: <VerseContextButtons />,
+		});
+	};
+
 
 	return (
 		<>
@@ -581,6 +617,33 @@ export default function Pager() {
 						onPageDown={pageDown}
 					/>
 				)}
+				<div className="HeaderFooterSection" style={{ position: "fixed", bottom: 1, margin: "auto" }}>
+					<button
+						className="NavButton NavBackward"
+						onClick={onClickPrevious}
+					>
+						<Icon icon={faAngleUp} />
+					</button>
+					<button
+						onClick={(e) => {
+							dispatch(gotoAya(history, selectStart));
+							showVerseContextPopup(e);
+						}}
+						className="SelectionButton"
+						title={intl.formatMessage({ id: "goto_selection" })}
+					>
+						<FormattedMessage id="sura_name_aya_num" values={{
+							sura: suraNames[selectedAyaInfo.sura],
+							aya: selectedAyaInfo.aya + 1
+						}} />
+					</button>
+					<button
+						onClick={onClickNext}
+						className="NavButton NavForward"
+					>
+						<Icon icon={faAngleDown} />
+					</button>
+				</div>
 			</div>
 		</>
 	);
