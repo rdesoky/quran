@@ -1,96 +1,109 @@
 #AudioPlayerPopup,
 #PlayPrompt,
 #SettingsPopup {
-    .RecitersList {
-        position: relative;
-    }
-    .ReciterButton {
-        display: inline-block;
-        position: absolute;
-        width: 90px;
-        min-height: 90px;
-        text-align: center;
-        padding: 5px;
-        margin: 0;
-        border-radius: 10px;
-        transition: background-color 0.3s, left 0.4s, top 0.4s;
-        &:hover {
-            background-color: #444;
-        }
-        &.Selected {
-            background-color: #666;
-            cursor: default;
-        }
-        vertical-align: top;
-        cursor: pointer;
-        font-size: 12px;
-    }
-    .ReciterIcon {
-        // float: right;
-        width: auto;
-        height: 50px;
-    }
-    .ModalContent {
-        // top: auto;
-        // bottom: 0;
-        // background-color: #443322dd;
-        // padding: 0 50px 0 0;
-        // .Title {
-        //     margin: 5px;
-        // }
-        // #PlayerControl {
-        //     float: right;
-        // }
-        // #PlayerStatus {
-        //     button {
-        //         font-size: 15px;
-        //         line-height: 40px;
-        //         padding: 0 10px;
-        //         box-sizing: content-box;
-        //     }
-        // }
-        .ReciterIcon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-        }
-    }
+	.RecitersList {
+		position: relative;
+	}
+
+	.ReciterButton {
+		display: inline-block;
+		position: absolute;
+		width: 90px;
+		min-height: 90px;
+		text-align: center;
+		padding: 5px;
+		margin: 0;
+		border-radius: 10px;
+		transition: background-color 0.3s, left 0.4s, top 0.4s;
+
+		&:hover {
+			background-color: #444;
+		}
+
+		&.Selected {
+			background-color: #666;
+			cursor: default;
+		}
+
+		vertical-align: top;
+		cursor: pointer;
+		font-size: 12px;
+	}
+
+	.ReciterIcon {
+		// float: right;
+		width: auto;
+		height: 50px;
+	}
+
+	.ModalContent {
+
+		// top: auto;
+		// bottom: 0;
+		// background-color: #443322dd;
+		// padding: 0 50px 0 0;
+		// .Title {
+		//     margin: 5px;
+		// }
+		// #PlayerControl {
+		//     float: right;
+		// }
+		// #PlayerStatus {
+		//     button {
+		//         font-size: 15px;
+		//         line-height: 40px;
+		//         padding: 0 10px;
+		//         box-sizing: content-box;
+		//     }
+		// }
+		.ReciterIcon {
+			width: 50px;
+			height: 50px;
+			border-radius: 10px;
+		}
+	}
 }
 
 #PlayPrompt {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    // max-height: 240px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	// max-height: 240px;
 }
 
 .PlayerButtons {
-    .CommandButton {
-        img {
-            margin: 10px;
-            height: 30px !important;
-            width: 30px !important;
-            border-radius: 15px !important;
-        }
-    }
-    .PlayPrompt & {
-        display: flex;
-        justify-content: space-around;
-        .CommandButton {
-            font-size: 16px !important;
-            border-radius: 4px;
-            background-color: #444;
-            margin: 0 2px;
-            .CommandLabel {
-                padding: 0 10px 0 0;
-                text-align: initial;
-                [lang="ar"] & {
-                    padding: 0 0 0 10px;
-                }
-            }
-        }
-    }
+	.CommandButton {
+		img {
+			margin: 10px;
+			height: 30px !important;
+			width: 30px !important;
+			border-radius: 15px !important;
+		}
+	}
+
+	.PlayPrompt & {
+		display: flex;
+		justify-content: space-around;
+
+		.CommandButton {
+			padding: 5px;
+			font-size: 16px !important;
+			border-radius: 4px;
+			background-color: #444;
+			margin: 0 2px;
+
+			.CommandLabel {
+				padding: 0 10px 0 0;
+				text-align: initial;
+
+				[lang="ar"] & {
+					padding: 0 0 0 10px;
+				}
+			}
+		}
+	}
 }
+
 // .trans-start {
 //   #AudioPlayerPopup {
 //     .ModalContent {

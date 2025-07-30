@@ -1,8 +1,10 @@
 body {
+	overscroll-behavior: none;
+	touch-action: none;
 	margin: 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	// font-family: arial;
+	font-family: arial;
 
 	*::-webkit-scrollbar {
 		width: 16px;
@@ -38,4 +40,5 @@ button {
 	gap: 4px;
 	align-items: center;
 	justify-content: center;
+	min-width: 25px;
 }

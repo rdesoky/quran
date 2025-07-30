@@ -2,6 +2,7 @@ import Icon from "@/components/Icon";
 import {
 	PageContextButtons
 } from "@/components/Widgets";
+import useCommands from "@/hooks/useCommands";
 import { useHistory } from "@/hooks/useHistory";
 import { useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
@@ -42,8 +43,11 @@ const PageFooter: React.FC<PageFooterProps> = ({
 	const activePage = useSelector(selectActivePage);
 	const audioState = useSelector(selectAudioState);
 	const msgBox = useMessageBox();
+	const { runCommand } = useCommands();
 
-	const showPageContextPopup = ({ target }: React.MouseEvent) => {
+	const showPageContextPopup = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		const { target } = e;
 		analytics.logEvent("show_page_context", { trigger });
 		contextPopup.show({
 			target,
@@ -53,11 +57,13 @@ const PageFooter: React.FC<PageFooterProps> = ({
 
 
 	const gotoNextPage = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		analytics.setTrigger(trigger);
 		onPageDown?.();
 	};
 
-	const gotoPrevPage = () => {
+	const gotoPrevPage = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		analytics.setTrigger(trigger);
 		onPageUp?.();
 	};
@@ -66,6 +72,7 @@ const PageFooter: React.FC<PageFooterProps> = ({
 		if (activePage !== pageIndex) {
 			dispatch(gotoPage(history, pageIndex));
 		}
+		runCommand("Indices", "page_footer");
 	};
 
 	const audioCommand = audioState !== AudioState.playing ? "play" : "stop";

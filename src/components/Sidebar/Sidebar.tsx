@@ -39,7 +39,7 @@ function Sidebar() {
 			id="SidebarBlocker"
 			style={{
 				pointerEvents: isShowMenu ? "fill" : "none",
-				zIndex: menuExpanded ? 4 : 2,
+				zIndex: menuExpanded ? 4 : 3,
 			}}
 			onClick={(e) => {
 				//hide menu upon clicking outside of it
@@ -67,7 +67,7 @@ function Sidebar() {
 						</div>
 						{recentCommands
 							.filter((c) => {
-								return c !== "Zoom" || showZoom;
+								return c !== null;
 							})
 							.map((command, index) => (
 								<CommandButton

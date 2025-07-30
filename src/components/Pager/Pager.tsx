@@ -17,6 +17,7 @@ import {
 	selectPagesCount,
 	selectPageWidth,
 	selectShownPages,
+	selectZoom,
 	selectZoomLevels,
 	setActivePageIndex,
 	toggleZoom
@@ -65,6 +66,7 @@ import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { SuraContextHeader } from "../SuraContextHeader";
 import { SuraList } from "../SuraList";
 import { VerseContextButtons } from "../VerseContextButtons";
+import { CommandButton } from "../CommandButton";
 
 export default function Pager() {
 	const pagesCount = useSelector(selectPagesCount);
@@ -93,6 +95,10 @@ export default function Pager() {
 	const audio = useAudio();
 	const audioState = useSelector(selectAudioState);
 	const selectedAyaInfo = useMemo(() => ayaIdInfo(selectStart), [selectStart]);
+	const zoomLevels = useSelector(selectZoomLevels);
+	const showZoom = zoomLevels > 0;
+	const zoom = useSelector(selectZoom);
+	const zoomIn = zoom !== 1;
 
 	useEffect(() => {
 		if (loading && activePage !== -1) {
@@ -538,6 +544,12 @@ export default function Pager() {
 				{shownPages.length > 1 && (
 					<PageHeader
 						order={1}
+					/>
+				)}
+				{showZoom && (
+					<CommandButton
+						command={zoomIn ? "Zoom_In" : "Zoom_Out"}
+						style={{ position: "absolute", left: 0, top: 0, scale: "0.75" }}
 					/>
 				)}
 			</div>
