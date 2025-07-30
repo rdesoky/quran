@@ -13,7 +13,7 @@ const sliceName = "ui";
 
 const initSidebarCommands: CommandType[] = [
 	// "AudioPlayer",
-	"Zoom",
+	// "Zoom",
 	"Profile",
 	"Indices",
 	"Search",

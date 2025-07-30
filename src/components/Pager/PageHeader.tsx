@@ -1,30 +1,31 @@
 import { useHistory } from "@/hooks/useHistory";
-import { useContextPopup, useMessageBox } from "@/RefsProvider";
+import { useContextPopup } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import {
+	ayaIdInfo,
 	getPagePartNumber,
 	getPageSuraIndex,
 	TOTAL_PAGES
 } from "@/services/qData";
-import { commandKey, keyValues } from "@/services/utils";
 import { AppDispatch } from "@/store/config";
 import {
 	PAGE_HEADER_HEIGHT,
 	selectActivePage,
 	selectShownPages,
 } from "@/store/layoutSlice";
-import { gotoPage } from "@/store/navSlice";
+import { gotoPage, gotoSura, selectStartSelection } from "@/store/navSlice";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { CircleProgress } from "../CircleProgress";
-import { CommandIcon } from "../CommandIcon";
+import Icon from "../Icon";
 import PartsPie from "../PartsPie";
-import PlayPrompt from "../PlayPrompt";
 import { SuraContextHeader } from "../SuraContextHeader";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
+import useCommands from "@/hooks/useCommands";
 
 type PageHeaderProps = {
 	order: 0 | 1; // 0 for right page, 1 for left page
@@ -37,11 +38,14 @@ export function PageHeader({ order }: PageHeaderProps) {
 	const shownPages = useSelector(selectShownPages);
 	const activePage = useSelector(selectActivePage);
 	const pageIndex = shownPages[order];
-	const msgBox = useMessageBox();
-	const audioState = useSelector(selectAudioState);
+	// const audioState = useSelector(selectAudioState);
 	const contextPopup = useContextPopup();
 	const dispatch = useDispatch() as AppDispatch;
 	const history = useHistory();
+	const selectStart = useSelector(selectStartSelection);
+	const selectedAyaInfo = useMemo(() => ayaIdInfo(selectStart), [selectStart]);
+	const { runCommand } = useCommands();
+
 
 	const suraIndex = useMemo(
 		() => getPageSuraIndex(pageIndex + 1),
@@ -52,24 +56,29 @@ export function PageHeader({ order }: PageHeaderProps) {
 		[pageIndex]
 	);
 	const intl = useIntl();
-	const onTogglePlay = () => {
-		msgBox.set({
-			title: <FormattedMessage id="play" values={keyValues("r")} />,
-			content: <PlayPrompt trigger={trigger} />,
-		});
-		// } else {
-		//   audio.stop();
-		// }
-	};
+	// const onTogglePlay = () => {
+	// 	msgBox.set({
+	// 		title: <FormattedMessage id="play" values={keyValues("r")} />,
+	// 		content: <PlayPrompt trigger={trigger} />,
+	// 	});
+	// 	// } else {
+	// 	//   audio.stop();
+	// 	// }
+	// };
 
-	const audioCommand = audioState !== AudioState.playing ? "play" : "stop";
+	// const audioCommand = audioState !== AudioState.playing ? "play" : "stop";
 	const onClickHeader = () => {
 		if (activePage !== pageIndex) {
 			dispatch(gotoPage(history, pageIndex));
 		}
+		runCommand("Indices", "page_header")
 	};
 
-	const showSuraContextPopup = ({ target }: React.MouseEvent) => {
+	const showSuraContextPopup = (e: React.MouseEvent) => {
+		const {
+			currentTarget: target,
+		} = e;
+		e.stopPropagation();
 		analytics.logEvent("show_chapter_context", {
 			trigger,
 		});
@@ -87,9 +96,11 @@ export function PageHeader({ order }: PageHeaderProps) {
 		});
 	};
 
-	const showPartContextPopup = ({
-		currentTarget: target,
-	}: React.MouseEvent) => {
+	const showPartContextPopup = (e: React.MouseEvent) => {
+		const {
+			currentTarget: target,
+		} = e;
+		e.stopPropagation();
 		analytics.logEvent("show_part_context", { trigger });
 		contextPopup.show({
 			target,
@@ -97,6 +108,17 @@ export function PageHeader({ order }: PageHeaderProps) {
 		});
 	};
 
+	const gotoPrevSura = (e: React.MouseEvent) => {
+		// analytics.setTrigger(trigger);
+		e.stopPropagation();
+		dispatch(gotoSura(history, selectedAyaInfo.sura - 1));
+	};
+
+	const gotoNextSura = (e: React.MouseEvent) => {
+		// analytics.setTrigger(trigger);
+		e.stopPropagation();
+		dispatch(gotoSura(history, selectedAyaInfo.sura + 1));
+	};
 
 	return (
 		<div
@@ -110,39 +132,31 @@ export function PageHeader({ order }: PageHeaderProps) {
 			}}
 			onClick={onClickHeader}
 		>
-			<FormattedMessage id="part" />
-			<CircleProgress
-				target={TOTAL_PAGES}
-				progress={pageIndex + 1}
-				display={partIndex + 1}
-				onClick={showPartContextPopup}
-				strokeWidth={3}
-				title={intl.formatMessage(
-					{ id: "part_num" },
-					{ num: partIndex + 1 }
-				)}
-				style={{ margin: 1 }}
-			/>
+			<button onClick={showPartContextPopup}
+				className="HeaderFooterSection"
+			>
+				<FormattedMessage id="part" />
+				<CircleProgress
+					target={TOTAL_PAGES}
+					progress={pageIndex + 1}
+					display={partIndex + 1}
+					strokeWidth={3}
+					title={intl.formatMessage(
+						{ id: "part_num" },
+						{ num: partIndex + 1 }
+					)}
+					style={{ margin: 1 }}
+				/>
+			</button>
 			<div className="HeaderFooterSection">
 				<button
-					// sura={suraIndex}
-					onClick={onTogglePlay}
-					title={intl.formatMessage(
-						{
-							id: audioCommand,
-						},
-						keyValues(commandKey(audioCommand))
-					)}
+					className="NavButton NavBackward"
+					onClick={gotoPrevSura}
 				>
-					<CommandIcon
-						command={
-							audioState === AudioState.stopped
-								? "Play"
-								: "AudioPlayer"
-						}
-					/>
+					<Icon icon={faAngleRight} />
 				</button>
 				<button
+					style={{ minWidth: 80 }}
 					onClick={showSuraContextPopup}
 					title={intl.formatMessage(
 						{ id: "sura_num" },
@@ -150,6 +164,12 @@ export function PageHeader({ order }: PageHeaderProps) {
 					)}
 				>
 					{suraIndex + 1}. <SuraName index={suraIndex} />
+				</button>
+				<button
+					onClick={gotoNextSura}
+					className="NavButton NavForward"
+				>
+					<Icon icon={faAngleLeft} />
 				</button>
 			</div>
 		</div>

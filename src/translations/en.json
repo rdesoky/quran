@@ -177,6 +177,8 @@
 	"update_available_title": "Update available",
 	"update_available": "A new version of Quran Hafiz has been installed, and will be active after reloading the page. Would you like to reload now?",
 	"zoom": "Change pages zoom (z)",
+	"zoom_in": "Pages zoom in (z)",
+	"zoom_out": "Pages zoom out (z)",
 	"typing_settings": "Typing settings",
 	"ok": "OK",
 	"recite_start": "Recite start",

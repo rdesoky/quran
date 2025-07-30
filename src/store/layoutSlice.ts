@@ -257,9 +257,9 @@ export const toggleZoom = () => (dispatch: AppDispatch, getState: GetState) => {
 	const zoomLevels = selectZoomLevels(state);
 	let zoom = selectZoom(state);
 	if (zoom > 0) {
-		zoom--;
+		zoom--;//zoom in
 	} else {
-		zoom = zoomLevels;
+		zoom = zoomLevels;//zoom out
 	}
 	localStorage.zoom = zoom;
 	dispatch(setZoom(zoom));

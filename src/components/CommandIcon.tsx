@@ -2,14 +2,12 @@ import Icon from "@/components/Icon";
 import {
 	faAdjust,
 	faAngleDoubleDown,
-	faAngleDoubleRight,
 	faAngleDoubleUp,
 	faBookmark,
 	faBookOpen,
 	faCog,
 	faCopy,
 	faEllipsisH,
-	faExpand,
 	faEyeSlash,
 	faFileDownload,
 	faHeart,
@@ -19,6 +17,7 @@ import {
 	faQuestion,
 	faQuran,
 	faSearch,
+	faSearchMinus,
 	faSearchPlus,
 	faShareSquare,
 	faStopCircle,
@@ -69,7 +68,8 @@ export const CommandIcons = {
 	Pause: faPauseCircle,
 	Resume: faPauseCircle,
 	Stop: faStopCircle,
-	Zoom: faSearchPlus,
+	Zoom_In: faSearchPlus,
+	Zoom_Out: faSearchMinus,
 };
 export type CommandType = keyof typeof CommandIcons;
 

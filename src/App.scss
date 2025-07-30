@@ -253,7 +253,7 @@ hr {
 }
 
 .VerseText {
-	// font-size:18px;
+	font-size: 20px;
 	margin: 0;
 	// line-height: 22px;
 	color: rgb(207, 207, 0);
@@ -423,8 +423,12 @@ hr {
 
 	.RangeText {
 		height: 30px;
+
 		// display: flex;
 		// align-items: center;
+		.VerseText {
+			font-size: 14px;
+		}
 	}
 }
 
