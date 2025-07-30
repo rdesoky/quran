@@ -130,7 +130,7 @@ const App: React.FC = () => {
 
 function DefaultRoute() {
 	const activePage = Number(localStorage.getItem("activePage"));
-	const activePageNumber = isNaN(activePage) ? 1 : activePage;
+	const activePageNumber = (activePage <= 0) || isNaN(activePage) ? 1 : activePage;
 	const defUrl = import.meta.env.BASE_URL + "page/" + activePageNumber;
 	console.log(`BASE_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
 	return <Navigate to={defUrl} replace={true} />;

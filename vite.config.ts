@@ -65,6 +65,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		build: {
+			manifest: true, // Generate a manifest file
 			outDir: "build", // To maintain compatibility with existing setup
 			emptyOutDir: true,
 			sourcemap: true,
