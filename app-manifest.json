@@ -1,0 +1,49 @@
+{
+  "_firebase-B-C5Lxp8.js": {
+    "file": "assets/firebase-B-C5Lxp8.js",
+    "name": "firebase",
+    "imports": [
+      "_vendor-l6SXAgrW.js"
+    ],
+    "css": [
+      "assets/firebase-CudrN5Z3.css"
+    ]
+  },
+  "_firebase-CudrN5Z3.css": {
+    "file": "assets/firebase-CudrN5Z3.css",
+    "src": "_firebase-CudrN5Z3.css"
+  },
+  "_vendor-l6SXAgrW.js": {
+    "file": "assets/vendor-l6SXAgrW.js",
+    "name": "vendor"
+  },
+  "index.html": {
+    "file": "assets/index-IEP_5M-X.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_vendor-l6SXAgrW.js",
+      "_firebase-B-C5Lxp8.js"
+    ],
+    "dynamicImports": [
+      "src/translations/ar.json",
+      "src/translations/en.json"
+    ],
+    "css": [
+      "assets/index-kwp9qmX8.css"
+    ]
+  },
+  "src/translations/ar.json": {
+    "file": "assets/ar-C58wCpTq.js",
+    "name": "ar",
+    "src": "src/translations/ar.json",
+    "isDynamicEntry": true
+  },
+  "src/translations/en.json": {
+    "file": "assets/en-DiL9vXuV.js",
+    "name": "en",
+    "src": "src/translations/en.json",
+    "isDynamicEntry": true
+  }
+}
