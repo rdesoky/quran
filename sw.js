@@ -1,7 +1,7 @@
-//Wed Jul 30 2025 09:47:44 GMT-0700 (Pacific Daylight Time)
+//Wed Jul 30 2025 09:52:05 GMT-0700 (Pacific Daylight Time)
 /* eslint-disable no-restricted-globals */
 
-const appVersion = 27;
+const appVersion = 28;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
@@ -18,7 +18,7 @@ const deleteOldCaches = async () => {
 };
 
 const addResourcesToCache = async () => {
-	const appManifest = await fetch("asset-manifest.json").then((res) =>
+	const appManifest = await fetch("app-manifest.json").then((res) =>
 		res.json()
 	);
 	const appFiles = Object.values(appManifest.files).filter(
