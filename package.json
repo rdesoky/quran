@@ -33,7 +33,7 @@
 		"source-map-explorer": "^2.5.3",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.5",
-		"vite-plugin-pwa": "^1.0.0",
+		"vite-plugin-pwa": "^1.0.2",
 		"vite-plugin-svgr": "^4.3.0",
 		"vite-tsconfig-paths": "^5.1.4"
 	},
@@ -42,7 +42,7 @@
 		"start": "vite --debug hmr",
 		"build": "vite build",
 		"sw-setup": "node sw-post-build.mjs",
-		"postbuild": "cp build/index.html build/404.html && yarn sw-setup",
+		"postbuild": "copy build/index.html build/404.html && yarn sw-setup",
 		"preview": "vite preview",
 		"predeploy": "yarn build",
 		"deploy": "gh-pages -d build",
