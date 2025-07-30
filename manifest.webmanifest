@@ -1,16 +1,1 @@
-{
-    "name": "Quran Hafiz",
-    "short_name": "Hafiz",
-    "id": "/?source=pwa",
-    "start_url": "/?source=pwa",
-    "background_color": "#202020",
-    "description": "Read, recite, research, memorize and listen to the Holy Quran",
-    "display": "standalone",
-    "icons": [
-        {
-            "src": "images/quran_hafiz.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        }
-    ]
-}
+{"name":"Quran Hafiz","short_name":"Hafiz","description":"Quran Application with multiple translations and reciters","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","lang":"en","scope":"/","icons":[{"src":"/images/quran_hafiz.png","sizes":"192x192","type":"image/png"}]}
