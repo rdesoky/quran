@@ -7,7 +7,8 @@ import { useHistory } from "@/hooks/useHistory";
 import { useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import {
-	selectActivePage
+	selectActivePage,
+	selectIsNarrow
 } from "@/store/layoutSlice";
 import { gotoPage, selectStartSelection } from "@/store/navSlice";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
@@ -37,13 +38,12 @@ const PageFooter: React.FC<PageFooterProps> = ({
 }) => {
 	const intl = useIntl();
 	const history = useHistory();
-	const selectStart = useSelector(selectStartSelection);
 	const dispatch = useDispatch();
 	const contextPopup = useContextPopup();
 	const activePage = useSelector(selectActivePage);
 	const audioState = useSelector(selectAudioState);
-	const msgBox = useMessageBox();
 	const { runCommand } = useCommands();
+	const isNarrow = useSelector(selectIsNarrow)
 
 	const showPageContextPopup = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -72,7 +72,7 @@ const PageFooter: React.FC<PageFooterProps> = ({
 		if (activePage !== pageIndex) {
 			dispatch(gotoPage(history, pageIndex));
 		}
-		runCommand("Indices", "page_footer");
+		runCommand("Commands", "page_footer");
 	};
 
 	const audioCommand = audioState !== AudioState.playing ? "play" : "stop";
@@ -106,7 +106,7 @@ const PageFooter: React.FC<PageFooterProps> = ({
 				// style={{ minWidth: 25 }}
 				>
 					<FormattedMessage
-						id="pg_num"
+						id={isNarrow ? "num" : "pg_num"}
 						values={{ num: pageIndex + 1 }}
 					/>
 				</button>
