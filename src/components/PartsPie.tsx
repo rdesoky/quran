@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
@@ -85,7 +85,7 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
                         (index + 0.5) * partPieAngel
                     );
                     return (
-                        <>
+                        <Fragment key={index}>
                             <path
                                 key={`path-${index}`}
                                 className={`partPie ${
@@ -139,7 +139,7 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
                             >
                                 {index + 1}
                             </text>
-                        </>
+                        </Fragment>
                     );
                 })}
                 {hifzRanges.map((r, index) => {
