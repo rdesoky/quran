@@ -13,8 +13,8 @@ const DDrop = ({
     onDrop,
     minShift = 20, //shift before drag is triggered
     dropShift = 50,
-    maxShift = 200, //shift before drop is triggered
-}: DDropProps) => {
+}: // maxShift = 200, //shift before drop is triggered
+DDropProps) => {
     const [pointerCaptured, setPointerCaptured] = useState(false);
     const [pointerDown, setPointerDown] = useState(false);
     const [startX, setStartX] = useState(0);

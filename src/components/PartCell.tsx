@@ -14,7 +14,7 @@ export const PartCell = ({ part: partIndex, selected }: PartCellProps) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const btnRef = React.useRef<HTMLButtonElement>(null);
-    const onClickPart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickPart = (_e: React.MouseEvent<HTMLButtonElement>) => {
         analytics.logEvent("goto_part", { part: partIndex });
         dispatch(gotoPart(history, partIndex));
     };

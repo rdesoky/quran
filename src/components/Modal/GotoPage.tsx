@@ -51,7 +51,7 @@ const GotoPage = () => {
         () => sura_info[Number(suraNumber) - 1].ac
     );
 
-    let gotoPageForm: HTMLFormElement | null = null;
+    // let gotoPageForm: HTMLFormElement | null = null;
 
     useEffect(() => {
         updatePageNumber((ayaIdPage(Number(selectStart)) + 1).toString());
@@ -138,8 +138,8 @@ const GotoPage = () => {
                 <div className="FieldRow">
                     <form
                         onSubmit={onGotoPage}
-                        ref={(form) => {
-                            gotoPageForm = form;
+                        ref={(_form) => {
+                            // gotoPageForm = _form;
                         }}
                     >
                         <div className="FieldLabel">

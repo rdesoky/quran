@@ -52,7 +52,7 @@ export const ListReciters = (
     const saved_list: ReciterID[] = JSON.parse(
         localStorage.getItem("reciters_" + feature) || "[]"
     );
-    let availableReciters: ReciterID[] = [];
+    const availableReciters: ReciterID[] = [];
     let k: ReciterID;
     for (k in RecitersInfo) {
         // if (RecitersInfo.hasOwnProperty(k)) {

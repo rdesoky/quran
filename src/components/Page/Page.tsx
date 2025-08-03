@@ -15,6 +15,9 @@ Page
 */
 
 import { HifzSegments } from "@/components/HifzSegments";
+import "@/components/Page/Page.scss";
+import VerseLayout from "@/components/Page/VerseLayout";
+import { useHistory } from "@/hooks/useHistory";
 import { ayaID } from "@/services/qData";
 import { downloadPageImage } from "@/services/utils";
 import {
@@ -25,14 +28,10 @@ import {
     selectPageWidth,
     selectShownPages,
 } from "@/store/layoutSlice";
+import { gotoPage } from "@/store/navSlice";
 import { hideMenu, selectMenuExpanded } from "@/store/uiSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "@/components/Page/Page.scss";
-import VerseLayout from "@/components/Page/VerseLayout";
-import { gotoPage } from "@/store/navSlice";
-import { useHistory } from "@/hooks/useHistory";
-import { PageHeader } from "../Pager/PageHeader";
 
 type PageProps = {
     order: 0 | 1; //0 for right page, 1 for left page
@@ -76,7 +75,7 @@ const Page = ({ order, scaleX, shiftX, incrementMask }: PageProps) => {
                 }
                 setImageUrl(url);
             })
-            .catch((e) => {});
+            .catch((_e) => {});
         setVersesInfo([]);
         const pageNumber = Number(pageIndex) + 1;
         // let controller = new AbortController();
@@ -123,7 +122,7 @@ const Page = ({ order, scaleX, shiftX, incrementMask }: PageProps) => {
         }
     }
 
-    let pageClass = pageIndex % 2 === 0 ? "RightPage" : "LeftPage";
+    const pageClass = pageIndex % 2 === 0 ? "RightPage" : "LeftPage";
 
     return (
         <div

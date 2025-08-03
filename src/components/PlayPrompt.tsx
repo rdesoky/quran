@@ -93,7 +93,11 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
             reciter,
             trigger,
         });
-        audioState === AudioState.playing ? audio.pause() : audio.resume();
+        if (audioState === AudioState.playing) {
+            audio.pause();
+        } else {
+            audio.resume();
+        }
     }, [audio, audioState, playingAya, reciter, trigger]);
 
     const onStop = useCallback(() => {

@@ -8,7 +8,7 @@ fetch(quranTextUrl)
 	.then((text: string) => {
 		quranText.push(...text.split("\n"));
 	})
-	.catch((e) => { });
+	.catch((_e) => { });
 
 export const quranNormalizedText: string[] = [];
 
@@ -19,4 +19,4 @@ fetch(quranNormalizedTextUrl)
 	.then((text) => {
 		quranNormalizedText.push(...text.split("\n"));
 	})
-	.catch((e) => { });
+	.catch((_e) => { });

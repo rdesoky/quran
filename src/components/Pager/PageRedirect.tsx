@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router";
+import "@/components/Pager/Pager.scss";
 import { ayaIdPage } from "@/services/qData";
 import { selectAya } from "@/store/navSlice";
-import "@/components/Pager/Pager.scss";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
 export default function PageRedirect() {
     const params = useParams();
@@ -11,7 +11,7 @@ export default function PageRedirect() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        let { aya } = params;
+        const { aya } = params;
         let pageNum = 1;
         if (aya !== undefined) {
             setTimeout(() => {
@@ -23,7 +23,7 @@ export default function PageRedirect() {
         navigate(`/page/${pageNum}`, {
             replace: true,
         });
-    }, [params, dispatch]);
+    }, [params, dispatch, navigate]);
 
     return null;
 }

@@ -1,3 +1,4 @@
+import useCommands from "@/hooks/useCommands";
 import { useHistory } from "@/hooks/useHistory";
 import { useContextPopup } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
@@ -15,7 +16,6 @@ import {
     selectShownPages,
 } from "@/store/layoutSlice";
 import { gotoPage, gotoSura, selectStartSelection } from "@/store/navSlice";
-import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -26,7 +26,6 @@ import PartsPie from "../PartsPie";
 import { SuraContextHeader } from "../SuraContextHeader";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
-import useCommands from "@/hooks/useCommands";
 
 type PageHeaderProps = {
     order: 0 | 1; // 0 for right page, 1 for left page

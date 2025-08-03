@@ -1,10 +1,9 @@
-import firebase from "firebase";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { useSelector } from "react-redux";
 import { analytics } from "@/services/analytics";
 import { selectUser } from "@/store/dbSlice";
-import { User as FirebaseUser } from "firebase";
+import firebase, { User as FirebaseUser } from "firebase";
 import { ReactNode } from "react";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { useSelector } from "react-redux";
 
 interface LoginProps {
     onClose?: () => void;
@@ -36,7 +35,7 @@ export default function Login({ onClose }: LoginProps): ReactNode {
             // signInFailure callback must be provided to handle merge conflicts which
             // occur when an existing credential is linked to an anonymous user.
             signInFailure: function (error: any): Promise<void> {
-                let anonymousUser = firebase.auth().currentUser;
+                const anonymousUser = firebase.auth().currentUser;
                 // For merge conflicts, the error.code will be
                 // 'firebaseui/anonymous-upgrade-merge-conflict'.
                 if (
@@ -45,16 +44,16 @@ export default function Login({ onClose }: LoginProps): ReactNode {
                     return Promise.resolve();
                 }
                 // The credential the user tried to sign in with.
-                var cred = error.credential;
+                const cred = error.credential;
                 // If using Firebase Realtime Database. The anonymous user data has to be
                 // copied to the non-anonymous user.
-                var fbApp = firebase.app();
+                const fbApp = firebase.app();
                 // Save anonymous user data first.
                 return fbApp
                     .database()
-                    .ref("data/" + anonymousUser!.uid)
+                    .ref("data/" + anonymousUser?.uid)
                     .once("value")
-                    .then((snapshot: firebase.database.DataSnapshot) => {
+                    .then((_snapshot: firebase.database.DataSnapshot) => {
                         // data = snapshot.val();
                         // This will trigger onAuthStateChanged listener which
                         // could trigger a redirect to another page.
@@ -63,7 +62,7 @@ export default function Login({ onClose }: LoginProps): ReactNode {
                         // redirection.
                         return firebase.auth().signInWithCredential(cred);
                     })
-                    .then((signInResponse: firebase.auth.UserCredential) => {
+                    .then((_signInResponse: firebase.auth.UserCredential) => {
                         //TODO: merge data[activity,aya_marks,hifz,page_marks] into the new user data
                         // return fbApp
                         //     .database()
@@ -77,12 +76,12 @@ export default function Login({ onClose }: LoginProps): ReactNode {
                         return fbApp
                             .database()
                             .ref()
-                            .child(`data/${anonymousUser!.uid}`)
+                            .child(`data/${anonymousUser?.uid}`)
                             .remove();
                     })
                     .then(() => {
                         // Delete anonymous user.
-                        return anonymousUser!.delete();
+                        return anonymousUser?.delete();
                     })
                     .then(() => {
                         // Clear data in case a new user signs in, and the state change
@@ -110,7 +109,7 @@ export default function Login({ onClose }: LoginProps): ReactNode {
                     firebaseAuth={firebase.auth()}
                 />
             </div>
-            {typeof onClose == "function" ? (
+            {typeof onClose === "function" ? (
                 <div>
                     <button onClick={handleClose}>Cancel</button>
                 </div>

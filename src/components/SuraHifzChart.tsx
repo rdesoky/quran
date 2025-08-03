@@ -57,19 +57,20 @@ export const SuraHifzChart: React.FC<SuraHifzChartProps> = ({
             );
         }
 
-        sura &&
+        if (sura) {
             analytics.logEvent("chart_page_click", {
                 trigger,
                 page,
                 chapter_num: sura + 1,
                 chapter: getArSuraName(sura),
             });
+        }
     };
 
     return (
         <div className="SuraHifzChart" onClick={onClickChart}>
             <div className="HifzRanges">
-                {suraRanges.map((r, i) => {
+                {suraRanges.map((r) => {
                     const rangeStart = r.startPage - suraInfo.sp + 1;
                     const start = (100 * rangeStart) / suraPages;
                     const width = (100 * r.pages) / suraPages;

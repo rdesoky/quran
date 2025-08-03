@@ -17,7 +17,7 @@ export const UserImage = () => {
                 .then(() => {
                     setImageUrl(url);
                 })
-                .catch((e) => {});
+                .catch((_e) => {});
         } else {
             setImageUrl(null);
         }

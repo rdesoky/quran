@@ -69,7 +69,7 @@ export const VerseInfo = ({
         <div className="VerseInfo">
             {onMoveNext ? (
                 <button
-                    onClick={(e) => {
+                    onClick={(_e) => {
                         analytics.setTrigger(trigger);
                         onMoveNext(-1);
                     }}
@@ -98,7 +98,7 @@ export const VerseInfo = ({
             </button>
             {onMoveNext ? (
                 <button
-                    onClick={(e) => {
+                    onClick={(_e) => {
                         analytics.setTrigger(trigger);
                         onMoveNext(1);
                     }}

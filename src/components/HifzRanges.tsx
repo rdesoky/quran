@@ -33,7 +33,7 @@ export const HifzRanges: React.FC<HifzRangesProps> = ({
 
     return (
         <ul id="HifzRanges" className="FlowingList">
-            {hifzRanges.map((range, index) => {
+            {hifzRanges.map((range) => {
                 return (
                     <HifzRangeComponent
                         range={range}

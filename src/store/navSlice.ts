@@ -183,7 +183,7 @@ export const gotoPage =
 				return;
 			}
 			if (pageIndex < TOTAL_PAGES && pageIndex >= 0) {
-				let targetPath = `${import.meta.env.BASE_URL}page/${pageIndex + 1}`;
+				const targetPath = `${import.meta.env.BASE_URL}page/${pageIndex + 1}`;
 				if (replace) {
 					history.replace(targetPath);
 				} else {
@@ -235,7 +235,7 @@ export const gotoPart =
 export const offsetSelection =
 	(offset: number) => (dispatch: AppDispatch, getState: GetState) => {
 		const selectStart = selectStartSelection(getState());
-		let newSelectionId = dispatch(selectAya(selectStart + offset));
+		const newSelectionId = dispatch(selectAya(selectStart + offset));
 		return newSelectionId !== undefined ? newSelectionId : selectStart;
 	};
 

@@ -88,7 +88,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         }
     };
 
-    const playRange = (e: MouseEvent) => {
+    const playRange = (_e: MouseEvent) => {
         // audio.stop();
         const [start, end] = getRangeVerses(
             range.sura,
@@ -108,7 +108,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         });
     };
 
-    const reviewRange = (e: MouseEvent) => {
+    const reviewRange = (_e: MouseEvent) => {
         const { startVerse } = selectRange();
         setTimeout(() => {
             dispatch(showMask());
@@ -131,7 +131,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         return { startVerse, endVerse };
     };
 
-    const readRange = (e: MouseEvent) => {
+    const readRange = (_e: MouseEvent) => {
         const [rangeStartVerse] = getRangeVerses(
             range.sura,
             range.startPage,
@@ -142,7 +142,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         dispatch(closePopupIfBlocking());
     };
 
-    const onSetRangeRevised = (e: MouseEvent) => {
+    const onSetRangeRevised = (_e: MouseEvent) => {
         msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -198,16 +198,16 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         }
     };
 
-    const addCurrentPage = (e: MouseEvent) => {
+    const addCurrentPage = (_e: MouseEvent) => {
         confirmAddHifz(range.startPage, range.sura, 1, "page");
     };
 
-    const addSura = (e: MouseEvent) => {
+    const addSura = (_e: MouseEvent) => {
         const pagesCount = suraInfo.ep - suraInfo.sp + 1;
         confirmAddHifz(suraInfo.sp - 1, range.sura, pagesCount, "full_sura");
     };
 
-    const addFromSuraStart = (e: MouseEvent) => {
+    const addFromSuraStart = (_e: MouseEvent) => {
         const pagesCount = range.startPage - suraInfo.sp + 2;
         confirmAddHifz(
             suraInfo.sp - 1,
@@ -217,7 +217,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         );
     };
 
-    const addToSuraEnd = (e: MouseEvent) => {
+    const addToSuraEnd = (_e: MouseEvent) => {
         const pagesCount = suraInfo.ep - range.startPage;
         confirmAddHifz(
             range.startPage,
@@ -227,7 +227,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
         );
     };
 
-    const onDeleteHifzRange = (e: MouseEvent) => {
+    const onDeleteHifzRange = (_e: MouseEvent) => {
         msgBox.push({
             title: <String id="are_you_sure" />,
             onYes: () => {
@@ -252,7 +252,7 @@ export const HifzRange: React.FC<HifzRangeProps> = ({
             readRange(e);
             return;
         }
-        setActiveRange && setActiveRange(range.id);
+        setActiveRange?.(range.id);
     };
 
     return (

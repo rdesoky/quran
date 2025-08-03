@@ -1,13 +1,13 @@
-import { faChartLine } from "@fortawesome/free-solid-svg-icons";
-import React, { useState, RefObject } from "react";
-import { FormattedMessage as String } from "react-intl";
-import { useSelector } from "react-redux";
-import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
-import { selectActivePage, selectAppHeight } from "@/store/layoutSlice";
-import { AddHifz } from "@/components/AddHifz";
 import { ActivityChart } from "@/components/ActivityChart";
+import { AddHifz } from "@/components/AddHifz";
 import { HifzRanges } from "@/components/HifzRanges";
 import Icon from "@/components/Icon";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { selectAppHeight } from "@/store/layoutSlice";
+import { faChartLine } from "@fortawesome/free-solid-svg-icons";
+import React, { RefObject, useState } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useSelector } from "react-redux";
 
 const Favorites: React.FC = () => {
     const appHeight: number = useSelector(selectAppHeight);
@@ -16,7 +16,7 @@ const Favorites: React.FC = () => {
     );
 
     const [activeTab, selectTab] = useState<string>("add");
-    const pageIndex: number = useSelector(selectActivePage);
+    // const pageIndex: number = useSelector(selectActivePage);
 
     const renderBody = (): React.ReactNode => {
         switch (activeTab) {
@@ -37,7 +37,7 @@ const Favorites: React.FC = () => {
                 <String id="favorites" />
                 <div className="ButtonsBar">
                     <button
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        onClick={(_e: React.MouseEvent<HTMLButtonElement>) =>
                             selectTab("add")
                         }
                         className={"CommandButton".appendWord(
@@ -48,7 +48,7 @@ const Favorites: React.FC = () => {
                         <String id="add" />
                     </button>
                     <button
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        onClick={(_e: React.MouseEvent<HTMLButtonElement>) =>
                             selectTab("update")
                         }
                         className={"CommandButton".appendWord(
@@ -59,7 +59,7 @@ const Favorites: React.FC = () => {
                         <String id="browse" />
                     </button>
                     <button
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        onClick={(_e: React.MouseEvent<HTMLButtonElement>) =>
                             selectTab("graph")
                         }
                         className={"CommandButton".appendWord(

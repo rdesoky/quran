@@ -1,15 +1,14 @@
 //TODO: unused component
-import { FormattedMessage as Message } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { ayaIdInfo } from "@/services/qData";
+import { useHistory } from "@/hooks/useHistory";
 import { gotoAya, selectStartSelection } from "@/store/navSlice";
 import {
     AudioState,
     selectAudioState,
     selectPlayingAya,
 } from "@/store/playerSlice";
+import { FormattedMessage as Message } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 import "./AudioPlayer.scss";
-import { useHistory } from "@/hooks/useHistory";
 
 export const PlayerStatus = () => {
     const history = useHistory();
@@ -20,8 +19,8 @@ export const PlayerStatus = () => {
 
     // const { selectStart } = app;
     // const { playingAya, audioState } = player;
-    let ayaId = playingAya === -1 ? selectStart : playingAya;
-    let { sura, aya } = ayaIdInfo(ayaId);
+    const ayaId = playingAya === -1 ? selectStart : playingAya;
+    // const { sura, aya } = ayaIdInfo(ayaId);
     let stateId = "unknown";
     switch (audioState) {
         case AudioState.stopped:
