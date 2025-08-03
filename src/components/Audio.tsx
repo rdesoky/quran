@@ -57,7 +57,7 @@ export function Audio() {
         null
     );
 
-    let audio = audioRef.current;
+    // const audio = audioRef.current;
 
     useEffect(() => {
         let docTitle =
@@ -98,7 +98,6 @@ export function Audio() {
                 window.clearInterval(updateRemainingTimeInterval);
             }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [audioState, dispatch]);
 
     const offsetPlayingAya = useCallback(
@@ -107,7 +106,7 @@ export function Audio() {
                 return -1; //no repeat
             }
 
-            let nextAya = playingAya + offset;
+            const nextAya = playingAya + offset;
             if (nextAya <= reciteRange.end) {
                 return nextAya;
             }
@@ -146,22 +145,28 @@ export function Audio() {
                     end = selectedRange.end;
                     break;
                 case AudioRange.page:
-                    const page = ayaIdPage(playedAya);
-                    start = getPageFirstAyaId(page);
-                    end = getPageLastAyaId(page);
+                    {
+                        const page = ayaIdPage(playedAya);
+                        start = getPageFirstAyaId(page);
+                        end = getPageLastAyaId(page);
+                    }
                     break;
                 case AudioRange.sura:
-                    const ayaInfo = ayaIdInfo(playedAya);
-                    start = ayaID(ayaInfo.sura, 0);
-                    end = start + ayaInfo.ac - 1;
+                    {
+                        const ayaInfo = ayaIdInfo(playedAya);
+                        start = ayaID(ayaInfo.sura, 0);
+                        end = start + ayaInfo.ac - 1;
+                    }
                     break;
                 case AudioRange.part:
-                    const currPart = getPartIndexByAyaId(playedAya);
-                    start = getPartFirstAyaId(currPart);
-                    end =
-                        currPart + 1 < TOTAL_PARTS
-                            ? getPartFirstAyaId(currPart + 1) - 1
-                            : TOTAL_VERSES - 1;
+                    {
+                        const currPart = getPartIndexByAyaId(playedAya);
+                        start = getPartFirstAyaId(currPart);
+                        end =
+                            currPart + 1 < TOTAL_PARTS
+                                ? getPartFirstAyaId(currPart + 1) - 1
+                                : TOTAL_VERSES - 1;
+                    }
                     break;
                 case AudioRange.continuous:
                     start = 0;

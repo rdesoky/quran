@@ -76,7 +76,7 @@ type PageVerse = {
     epos: string;
 };
 
-type VerseInfo = omit<PageVerse, "epos"> & {
+type VerseInfo = Omit<PageVerse, "epos"> & {
     aya_id: number;
     epos: number;
 };

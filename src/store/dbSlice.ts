@@ -54,7 +54,6 @@ const slice = createSlice({
 export const { setUser, setActivities, setBookmarks, setHifzRanges } =
 	slice.actions;
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };
 
 //Selectors
@@ -147,7 +146,7 @@ export const setRangeRevised =
 			}
 			const rangeNodeRef = hifzRef(user).child(range.id);
 			rangeNodeRef.once("value", (snapshot) => {
-				let curr_range = snapshot.val();
+				const curr_range = snapshot.val();
 				const now = Date.now();
 				const timeSinceLastRevision = now - curr_range.ts;
 				if (timeSinceLastRevision > 60 * 60 * 1000) {
@@ -256,7 +255,7 @@ export const addHifzRange =
 					//intersecting with prior range, add additional pages to it, don't add new one
 					if (newRange.endPage > r.endPage) {
 						//Not completely inside an old range
-						let oldRange = Object.assign({}, r);
+						const oldRange = Object.assign({}, r);
 						oldRange.revs = mergeRangesRevs(oldRange, newRange);
 						oldRange.endPage = newRange.endPage;
 						oldRange.pages = oldRange.endPage - oldRange.startPage + 1;
@@ -293,7 +292,7 @@ export const deleteHifzRange =
 		hifzRef(user).child(range.id).set(null);
 	};
 
-export const signOut = () => (dispatch: AppDispatch, getState: GetState) => {
+export const signOut = () => (_dispatch: AppDispatch, _getState: GetState) => {
 	// dispatch(setBookmarks([]));
 	// dispatch(setHifzRanges([]));
 	// dispatch(setUser(null));

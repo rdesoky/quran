@@ -32,7 +32,7 @@ export default function useInitApp() {
             .auth()
             .onAuthStateChanged((user) => {
                 // this.setState({ user });
-                if (user == null) {
+                if (user === null) {
                     //No user yet, signing in anonymously
                     firebase.auth().signInAnonymously();
                 } else {
@@ -69,7 +69,7 @@ export default function useInitApp() {
         const offBookmarksUpdate = userRef
             .child(`aya_marks`)
             ?.on("value", (snapshot) => {
-                if (snapshot == null) {
+                if (snapshot === null) {
                     return;
                 }
                 const snapshot_val = snapshot.val();

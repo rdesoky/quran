@@ -21,15 +21,15 @@ import { ContextPopup } from "@/components/ContextPopup";
 
 // Firebase configuration
 const firebaseConfig = {
-	//     apiKey: "AIzaSyBBYAgJDBm7AYe2bSy96E-yBsD8O-9UeHw",
-	apiKey: "AIzaSyB7RhZMVC_PGW3YmkN_adAvsVeOYvz0Kkg",
-	authDomain: "quran-hafiz.firebaseapp.com",
-	databaseURL: "https://quran-hafiz.firebaseio.com",
-	projectId: "quran-hafiz",
-	storageBucket: "quran-hafiz.appspot.com",
-	messagingSenderId: "922718582198",
-	appId: "1:922718582198:web:b2719fd5aa71596f",
-	measurementId: "G-XZ7PLZ8DY3",
+    //     apiKey: "AIzaSyBBYAgJDBm7AYe2bSy96E-yBsD8O-9UeHw",
+    apiKey: "AIzaSyB7RhZMVC_PGW3YmkN_adAvsVeOYvz0Kkg",
+    authDomain: "quran-hafiz.firebaseapp.com",
+    databaseURL: "https://quran-hafiz.firebaseio.com",
+    projectId: "quran-hafiz",
+    storageBucket: "quran-hafiz.appspot.com",
+    messagingSenderId: "922718582198",
+    appId: "1:922718582198:web:b2719fd5aa71596f",
+    measurementId: "G-XZ7PLZ8DY3",
 };
 
 // Initialize Firebase
@@ -43,98 +43,98 @@ analytics.setCurrentScreen(window.location.pathname);
 analytics.setUserProps({ web_user: "yes" });
 
 const App: React.FC = () => {
-	//Handles componentDidMount/unmount, props changes
-	const [localeMessages, setLocaleMessages] = useState();
-	const [windowSize, setWindowSize] = useState({
-		width: window.innerWidth,
-		height: window.innerHeight,
-	});
-	const deferredWindowSize = useDeferredValue(windowSize);
-	// const app_size = useSelector(selectAppSize);
-	const zoomClass = useSelector(selectZoomClass);
-	useInitApp();
+    //Handles componentDidMount/unmount, props changes
+    const [localeMessages, setLocaleMessages] = useState();
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+    const deferredWindowSize = useDeferredValue(windowSize);
+    // const app_size = useSelector(selectAppSize);
+    const zoomClass = useSelector(selectZoomClass);
+    useInitApp();
 
-	// const themeContext = useContext(ThemeContext);
-	// const lang = themeContext.lang;
-	const dispatch = useDispatch();
-	const lang = useSelector(selectLang);
-	const theme = useSelector(selectTheme);
+    // const themeContext = useContext(ThemeContext);
+    // const lang = themeContext.lang;
+    const dispatch = useDispatch();
+    const lang = useSelector(selectLang);
+    const theme = useSelector(selectTheme);
 
-	// useEffect(() => {
-	//     analytics.setParams({ app_size });
-	// }, [app_size]);
+    // useEffect(() => {
+    //     analytics.setParams({ app_size });
+    // }, [app_size]);
 
-	useEffect(() => {
-		dispatch(onResize(deferredWindowSize));
-		// console.log("App: onResize", deferredWindowSize);
-	}, [deferredWindowSize, dispatch]);
+    useEffect(() => {
+        dispatch(onResize(deferredWindowSize));
+        // console.log("App: onResize", deferredWindowSize);
+    }, [deferredWindowSize, dispatch]);
 
-	useEffect(() => {
-		window.addEventListener("selectstart", (e: Event) => {
-			e.preventDefault();
-		});
-		window.addEventListener("resize", (e: UIEvent) => {
-			const { innerWidth: width, innerHeight: height } = window;
-			setWindowSize({ width, height });
-		});
-	}, [dispatch]);
+    useEffect(() => {
+        window.addEventListener("selectstart", (e: Event) => {
+            e.preventDefault();
+        });
+        window.addEventListener("resize", (_e: UIEvent) => {
+            const { innerWidth: width, innerHeight: height } = window;
+            setWindowSize({ width, height });
+        });
+    }, [dispatch]);
 
-	useEffect(() => {
-		document.body.setAttribute("lang", lang);
-		import(`@/translations/${lang}.json`).then((messages) => {
-			setLocaleMessages(messages.default);
-		});
-		// addLocaleData(require(`react-intl/locale-data/${lang}`));
-	}, [lang]);
+    useEffect(() => {
+        document.body.setAttribute("lang", lang);
+        import(`@/translations/${lang}.json`).then((messages) => {
+            setLocaleMessages(messages.default);
+        });
+        // addLocaleData(require(`react-intl/locale-data/${lang}`));
+    }, [lang]);
 
-	if (!localeMessages) {
-		return null;
-	}
+    if (!localeMessages) {
+        return null;
+    }
 
-	return (
-		<IntlProvider locale={lang} messages={localeMessages}>
-			<RefsProvider>
-				<div className={`App ${theme}Theme ${zoomClass}`}>
-					<BrowserRouter>
-						<Routes>
-							<Route
-								path={import.meta.env.BASE_URL + "page/:page"}
-								element={<Pager />}
-							/>
-							<Route
-								path={
-									import.meta.env.BASE_URL +
-									"/sura/:sura/aya/:aya"
-								}
-								element={<Pager />}
-							/>
-							<Route
-								path={import.meta.env.BASE_URL + "aya/:aya"}
-								element={<PageRedirect />}
-							/>
-							<Route path="*" element={<DefaultRoute />} />
-						</Routes>
-						<PopupView />
-						<MessageBox />
-						<ContextPopup />
-						<Sidebar />
-						<Audio />
-					</BrowserRouter>
-				</div>
-				<ToastMessage />
-				<SuraNames />
-			</RefsProvider>
-		</IntlProvider>
-	);
+    return (
+        <IntlProvider locale={lang} messages={localeMessages}>
+            <RefsProvider>
+                <div className={`App ${theme}Theme ${zoomClass}`}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route
+                                path={import.meta.env.BASE_URL + "page/:page"}
+                                element={<Pager />}
+                            />
+                            <Route
+                                path={
+                                    import.meta.env.BASE_URL +
+                                    "/sura/:sura/aya/:aya"
+                                }
+                                element={<Pager />}
+                            />
+                            <Route
+                                path={import.meta.env.BASE_URL + "aya/:aya"}
+                                element={<PageRedirect />}
+                            />
+                            <Route path="*" element={<DefaultRoute />} />
+                        </Routes>
+                        <PopupView />
+                        <MessageBox />
+                        <ContextPopup />
+                        <Sidebar />
+                        <Audio />
+                    </BrowserRouter>
+                </div>
+                <ToastMessage />
+                <SuraNames />
+            </RefsProvider>
+        </IntlProvider>
+    );
 };
 
 function DefaultRoute() {
-	const activePage = Number(localStorage.getItem("activePage"));
-	const activePageNumber = (activePage <= 0) || isNaN(activePage) ? 1 : activePage;
-	const defUrl = import.meta.env.BASE_URL + "page/" + activePageNumber;
-	console.log(`BASE_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
-	return <Navigate to={defUrl} replace={true} />;
+    const activePage = Number(localStorage.getItem("activePage"));
+    const activePageNumber =
+        activePage <= 0 || isNaN(activePage) ? 1 : activePage;
+    const defUrl = import.meta.env.BASE_URL + "page/" + activePageNumber;
+    console.log(`BASE_URL=${import.meta.env.BASE_URL}, To=${defUrl}`);
+    return <Navigate to={defUrl} replace={true} />;
 }
-
 
 export default App;

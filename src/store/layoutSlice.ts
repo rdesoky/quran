@@ -53,9 +53,9 @@ const slice = createSlice({
 			} else if (viewAspect >= PAGE_ASPECT * 2) {
 				slice.viewCapacity = ViewCapacity.twoPages;
 				zoomLevels = 2;
-			} else if (viewAspect >= PAGE_ASPECT * 2) {
-				slice.viewCapacity = ViewCapacity.twoPages;
-				zoomLevels = 1;
+			// } else if (viewAspect >= PAGE_ASPECT * 2) {
+			// 	slice.viewCapacity = ViewCapacity.twoPages;
+			// 	zoomLevels = 1;
 			} else if (viewAspect2 > PAGE_ASPECT) {
 				slice.viewCapacity = ViewCapacity.onePagePlus;
 				zoomLevels = 1;
@@ -87,7 +87,7 @@ export const selectZoomLevels = (state: RootState) => {
 };
 export const selectZoom = (state: RootState) => {
 	const zoomLevels = selectZoomLevels(state);
-	let zoom = state[sliceName].zoom;
+	const zoom = state[sliceName].zoom;
 	return zoom <= zoomLevels ? zoom : zoomLevels;
 };
 export const selectZoomClass = (state: RootState) => {
@@ -265,5 +265,4 @@ export const toggleZoom = () => (dispatch: AppDispatch, getState: GetState) => {
 	dispatch(setZoom(zoom));
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: slice.reducer };

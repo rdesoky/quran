@@ -216,7 +216,7 @@ const Exercise = () => {
 		analytics.logEvent("exercise_go_back", { trigger });
 	}, [audio]);
 
-	let resultsDefaultButton =
+	const resultsDefaultButton =
 		localStorage.getItem("resultsDefaultButton") || "typeNext";
 	let defaultButton: HTMLButtonElement | null = null;
 

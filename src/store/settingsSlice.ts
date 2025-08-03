@@ -80,7 +80,6 @@ export const selectRepeat = (state: RootState) => state[sliceName].repeat;
 
 export const selectReciter = (state: RootState) => state[sliceName].reciter;
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { [sliceName]: settingsSlice.reducer };
 
 export const changeReciter =
@@ -93,7 +92,7 @@ export const changeReciter =
         dispatch(setReciter(reciter));
         localStorage.setItem("reciter", reciter);
 
-        let updated_reciters = ListReciters("ayaAudio").filter(
+        const updated_reciters = ListReciters("ayaAudio").filter(
             (r: string) => r !== reciter
         );
 

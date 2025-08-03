@@ -1,11 +1,11 @@
-/* eslint-disable no-extend-native */
+ 
 import { IntlShape } from "react-intl";
 import { getPagePartNumber, sura_info } from "@/services/qData";
 
 export const num2string = (num: number, length = 3) => {
-    let ret = num.toString();
-    let zeros = length - ret.length;
-    let padding = zeros > 0 ? new Array(zeros + 1).join("0") : "";
+    const ret = num.toString();
+    const zeros = length - ret.length;
+    const padding = zeros > 0 ? new Array(zeros + 1).join("0") : "";
     return padding + ret;
 };
 
@@ -18,8 +18,8 @@ export const dateKey = (dt: Date) => {
 
 export const downloadImage = async (url: string) => {
     return new Promise<string>((resolve, reject) => {
-        let img = document.createElement("img");
-        img.onload = (e) => {
+        const img = document.createElement("img");
+        img.onload = (_e) => {
             resolve(url);
         };
         img.onerror = reject;
@@ -40,7 +40,7 @@ export const downloadPageImage = async (pageIndex: number) => {
 };
 
 export const pageFromPath = (path: string) => {
-    let matchPage = path.match(/\/page\/([0-9]+)/i);
+    const matchPage = path.match(/\/page\/([0-9]+)/i);
     if (matchPage) {
         return matchPage[1];
     }
@@ -49,8 +49,8 @@ export const pageFromPath = (path: string) => {
 };
 
 export const partFromPath = (path: string) => {
-    let page = pageFromPath(path);
-    let part = getPagePartNumber(Number(page));
+    const page = pageFromPath(path);
+    const part = getPagePartNumber(Number(page));
     return part;
 };
 
@@ -72,10 +72,10 @@ export const selectTopCommand = () => {
     // }, 50);
 };
 export const highlightSearch = (query: string, text: string, ntext: string) => {
-    let words = text.trim().split(" "); //phrase words
-    let nwords = ntext.split(" "); //normalized phrase words
-    let qwords = query.split(" "); //normalized query words
-    let hwords: number[] = []; //highlighted words indices
+    const words = text.trim().split(" "); //phrase words
+    const nwords = ntext.split(" "); //normalized phrase words
+    const qwords = query.split(" "); //normalized query words
+    const hwords: number[] = []; //highlighted words indices
 
     for (let n = 0; n <= nwords.length - qwords.length; n++) {
         let found = true;
@@ -101,7 +101,7 @@ export const highlightSearch = (query: string, text: string, ntext: string) => {
         n += qwords.length - 1;
     }
 
-    let ret = words.reduce((result, word, index) => {
+    const ret = words.reduce((result, word, index) => {
         if (hwords.includes(index)) {
             return `${result} <span class="hiword">${word}</span>`;
         }
@@ -121,17 +121,19 @@ export const normalizeText = (t: string) => {
             .replace(/[ئي]/g, "ى");
 
         ret = ret.replace(new RegExp("\\p{M}", "gu"), ""); //Not supported by some browsers
-    } catch (e) {}
+    } catch (e) {
+        console.error("Error normalizing text:", e, t);
+    }
     return ret;
 };
 
 export const copy2Clipboard = (t: string) => {
     navigator.clipboard.writeText(t).then(
-        (p) => {
+        (_p) => {
             console.log(`${t} is successfully copied to clipboard`);
         },
-        (e) => {
-            console.log(e.message);
+        (_e) => {
+            console.log(_e.message);
         }
     );
 };
@@ -162,8 +164,8 @@ Array.prototype.findLastIndex = function (cb) {
 
 export const getCurrentPageNumber = (location: Location | undefined) => {
     const { pathname } = location || window.location;
-    let match = pathname.match(/page\/(.+)/);
-    let pageNumber = match ? match[1] : undefined;
+    const match = pathname.match(/page\/(.+)/);
+    const pageNumber = match ? match[1] : undefined;
     return Number(pageNumber);
 };
 
@@ -211,7 +213,7 @@ export const getStorageItem = (key: string, defaultValue: any = false) => {
                 try {
                     return JSON.parse(val);
                 } catch (e) {
-                    console.error("invalid json", val);
+                    console.error("invalid json", e, val);
                 }
         }
     }

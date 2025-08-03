@@ -36,7 +36,11 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
     const contextPopup = useContextPopup();
 
     const onNavigate = () => {
-        onFinish ? onFinish() : contextPopup.close();
+        if (onFinish) {
+            onFinish();
+        } else {
+            contextPopup.close();
+        }
     };
 
     useEffect(() => {

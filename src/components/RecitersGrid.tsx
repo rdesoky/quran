@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import ReciterName from "@/components/AudioPlayer/ReciterName";
 import { useAudio } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import { ListReciters } from "@/services/audioData";
@@ -10,7 +9,8 @@ import {
     selectPlayingAya,
 } from "@/store/playerSlice";
 import { changeReciter, selectReciter } from "@/store/settingsSlice";
-import ReciterName from "@/components/AudioPlayer/ReciterName";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type RecitersGridProps = {
     trigger?: string;
@@ -41,7 +41,9 @@ export default function RecitersGrid({ trigger, onClick }: RecitersGridProps) {
     const appWidth = useSelector(selectAppWidth);
 
     useEffect(() => {
-        bodyRef.current && setListWidth(bodyRef.current.clientWidth);
+        if (bodyRef.current) {
+            setListWidth(bodyRef.current.clientWidth);
+        }
     }, [appWidth]);
 
     useEffect(() => {

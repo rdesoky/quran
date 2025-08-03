@@ -96,7 +96,9 @@ const VerseLayout = ({
     };
 
     const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-        setHoverVerse(Number((e.target as HTMLElement).getAttribute("aya-id")));
+        setHoverVerse(
+            Number((e.target as HTMLElement).getAttribute("data-aya-id"))
+        );
     };
 
     const onMouseLeave = () => {
@@ -106,7 +108,7 @@ const VerseLayout = ({
     const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
         const { target } = e;
         //Extend selection
-        // const aya_id = Number(target.getAttribute("aya-id"));
+        // const aya_id = Number(target.getAttribute("dataaya-id"));
         onClickVerse({
             target,
             shiftKey: true,
@@ -136,7 +138,9 @@ const VerseLayout = ({
 
     const onClickVerse = (e: React.MouseEvent<HTMLDivElement>) => {
         const { shiftKey, ctrlKey, target } = e;
-        const aya_id = Number((target as HTMLElement).getAttribute("aya-id"));
+        const aya_id = Number(
+            (target as HTMLElement).getAttribute("data-aya-id")
+        );
         //set selectStart|selectEnd|maskStart
         // if (maskStart !== -1) {
         //     if (maskStart > aya_id) {
@@ -160,7 +164,7 @@ const VerseLayout = ({
                     target: e.target,
                     content: <VerseContextButtons />,
                 });
-                typeof e.stopPropagation === "function" && e.stopPropagation(); //prevent browser context menu
+                e.stopPropagation?.(); //prevent browser context menu
             } else {
                 dispatch(gotoAya(history, aya_id, { sel: true }));
                 // app.selectAya(aya_id);
@@ -171,7 +175,7 @@ const VerseLayout = ({
 
     const ayaClass = (aya_id: number) => {
         let className = "";
-        let selected = isSelected(aya_id);
+        const selected = isSelected(aya_id);
 
         if (selected) {
             className = "Selected";
@@ -190,14 +194,14 @@ const VerseLayout = ({
 
     const verseHead = ({
         aya_id,
-        sura,
-        aya,
+        // sura,
+        // aya,
         sline,
         spos,
         eline,
         epos,
     }: VerseInfo) => {
-        let aClass = ayaClass(aya_id);
+        const aClass = ayaClass(aya_id);
 
         return (
             <div
@@ -205,7 +209,7 @@ const VerseLayout = ({
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 onContextMenu={onContextMenu}
-                aya-id={aya_id}
+                data-aya-id={aya_id}
                 // sura={sura}
                 // aya={aya}
                 // sline={sline}
@@ -228,22 +232,22 @@ const VerseLayout = ({
 
     const verseTail = ({
         aya_id,
-        sura,
-        aya,
+        // sura,
+        // aya,
         sline,
-        spos,
+        // spos,
         eline,
         epos,
     }: VerseInfo) => {
         if (Number(eline) - Number(sline) > 0) {
-            let aClass = ayaClass(aya_id);
+            const aClass = ayaClass(aya_id);
             return (
                 <div
                     onClick={onClickVerse}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     onContextMenu={onContextMenu}
-                    aya-id={aya_id}
+                    data-aya-id={aya_id}
                     // sura={sura}
                     // aya={aya}
                     // sline={sline}
@@ -265,16 +269,16 @@ const VerseLayout = ({
 
     const verseBody = ({
         aya_id,
-        sura,
-        aya,
+        // sura,
+        // aya,
         sline,
-        spos,
+        // spos,
         eline,
-        epos,
-    }: VerseInfo) => {
+    }: // epos,
+    VerseInfo) => {
         if (Number(eline) - Number(sline) > 1) {
-            let aClass = ayaClass(aya_id);
-            let lines = [];
+            const aClass = ayaClass(aya_id);
+            const lines = [];
 
             for (let i = Number(sline) + 1; i < Number(eline); i++) {
                 lines.push(i);
@@ -288,7 +292,7 @@ const VerseLayout = ({
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         onContextMenu={onContextMenu}
-                        aya-id={aya_id}
+                        data-aya-id={aya_id}
                         // sura={sura}
                         // aya={aya}
                         // sline={sline}
@@ -331,7 +335,7 @@ const VerseLayout = ({
             return;
         }
 
-        const fullPageMask = (pageIndex: number) => {
+        const fullPageMask = (_pageIndex: number) => {
             return (
                 <div
                     className="Mask MaskBody"
@@ -348,10 +352,12 @@ const VerseLayout = ({
         };
 
         if (maskStartPage === pageIndex) {
-            let maskStartInfo = versesInfo.find((v) => v.aya_id === maskStart);
+            const maskStartInfo = versesInfo.find(
+                (v) => v.aya_id === maskStart
+            );
             if (maskStartInfo) {
                 const { sline, spos } = maskStartInfo;
-                let right = (Number(spos) * lineWidth) / 1000;
+                const right = (Number(spos) * lineWidth) / 1000;
                 let closeBtnRight = right - lineHeight / 2;
                 if (closeBtnRight < 0) {
                     closeBtnRight = 0;

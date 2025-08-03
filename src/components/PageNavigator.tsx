@@ -27,12 +27,12 @@ export const PageNavigator: React.FC<PageNavigatorProps> = ({
 
     const stopPropagation = (e: MouseEvent) => e.stopPropagation();
 
-    const gotoNextPage = (e: MouseEvent) => {
+    const gotoNextPage = (_e: MouseEvent) => {
         dispatch(gotoPage(history, pageIndex + 1));
         analytics.logEvent("nav_next_page", { trigger });
     };
 
-    const gotoPrevPage = (e: MouseEvent) => {
+    const gotoPrevPage = (_e: MouseEvent) => {
         dispatch(gotoPage(history, pageIndex - 1));
         analytics.logEvent("nav_prev_page", { trigger });
     };

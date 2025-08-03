@@ -61,7 +61,7 @@ export const ayaID = (sura: number | string, aya: number | string) => {
 export const ayaIdInfo = (aya_id: number) => {
     let id = 0;
     for (let s = 0; s < sura_info.length; s++) {
-        let ac = sura_info[s].ac;
+        const ac = sura_info[s].ac;
         if (id + ac > aya_id) {
             return { sura: s, aya: aya_id - id, ac };
         }
@@ -89,7 +89,7 @@ export const ayaIdPage = (aya_id: number) => {
     if (aya_id >= TOTAL_VERSES) {
         return TOTAL_PAGES; //beyond last page
     }
-    let { sura, aya } = ayaIdInfo(aya_id);
+    const { sura, aya } = ayaIdInfo(aya_id);
     return getPageIndex(sura, aya);
 };
 
@@ -133,7 +133,7 @@ export const getPageFirstAyaId = (pageIndex: number) => {
     if (pageIndex >= TOTAL_PAGES) {
         return TOTAL_VERSES; //beyond last page
     }
-    let { s: sura, a: aya } = pagesInfo[pageIndex];
+    const { s: sura, a: aya } = pagesInfo[pageIndex];
     return ayaID(sura - 1, aya - 1);
 };
 
@@ -144,7 +144,7 @@ export const getPageLastAyaId = (pageIndex: number) => {
     if (pageIndex === TOTAL_PAGES - 1) {
         return TOTAL_VERSES - 1;
     }
-    let { s: sura, a: aya } = pagesInfo[pageIndex + 1];
+    const { s: sura, a: aya } = pagesInfo[pageIndex + 1];
     return ayaID(sura - 1, aya - 1) - 1;
 };
 
@@ -227,10 +227,10 @@ export const getPageSuras = (pageIndex: number) => {
     if (pageIndex + 1 === pagesInfo.length) {
         return [111, 112, 113]; //last page special case
     }
-    let firstSura = pagesInfo[pageIndex].s - 1;
-    let suraList = [firstSura];
-    let nextPageInfo = pagesInfo[pageIndex + 1];
-    let lastSura = nextPageInfo.s - (nextPageInfo.a === 1 ? 2 : 1);
+    const firstSura = pagesInfo[pageIndex].s - 1;
+    const suraList = [firstSura];
+    const nextPageInfo = pagesInfo[pageIndex + 1];
+    const lastSura = nextPageInfo.s - (nextPageInfo.a === 1 ? 2 : 1);
     for (let s = firstSura + 1; s <= lastSura; s++) {
         suraList.push(s);
     }
