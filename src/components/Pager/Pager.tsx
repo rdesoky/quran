@@ -551,7 +551,12 @@ export default function Pager() {
 
     return (
         <>
-            <div className="PagerHeader" style={{ width: pagerWidth }}>
+            <div
+                className="PagerHeader"
+                style={{
+                    width: pagerWidth,
+                }}
+            >
                 <PageHeader order={0} />
                 {shownPages.length > 1 && <PageHeader order={1} />}
                 {showZoom && (

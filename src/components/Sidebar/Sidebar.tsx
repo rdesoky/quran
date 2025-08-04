@@ -56,7 +56,7 @@ function Sidebar() {
                         .appendWord("expanded", isShowMenu)
                         .appendWord("HiddenScroller", !isShowMenu)}
                     // style={{ bottom: isNarrow ? 25 : 50 }}
-                    style={{ bottom: 50 }}
+                    // style={{ bottom: 50 }}
                 >
                     <div id="SidebarButtons">
                         <div className="SidebarSection">

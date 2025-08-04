@@ -31,7 +31,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({ activity }) => {
         return null;
     }
 
-    const chartWidth = popupWidth;
+    const chartWidth = popupWidth - 16; // 16px for padding
     return (
         <>
             <String id={`${activity}_daily_graph`} />
@@ -40,7 +40,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({ activity }) => {
                 height={240}
                 data={data}
                 margin={{
-                    top: 5,
+                    top: 15,
                     right: 0,
                     left: 0,
                     bottom: 5,
