@@ -215,10 +215,22 @@ export default function useCommands() {
                 dispatch(showPopup(command));
                 break;
             case "NextPage":
-                dispatch(gotoPage(history, activePage + 1, { sel: true }));
+                dispatch(
+                    gotoPage(
+                        history,
+                        activePage + 1
+                        // { sel: true }
+                    )
+                );
                 return;
             case "PrevPage":
-                dispatch(gotoPage(history, activePage - 1, { sel: true }));
+                dispatch(
+                    gotoPage(
+                        history,
+                        activePage - 1
+                        // { sel: true }
+                    )
+                );
                 return;
             case "Tafseer":
                 dispatch(gotoAya(history));
