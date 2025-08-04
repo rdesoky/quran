@@ -78,7 +78,7 @@ export const ContextPopup = () => {
                     maxHeight:
                         (isBelow
                             ? appHeight - targetRect.bottom
-                            : targetRect.top) - 55,
+                            : targetRect.top) - 75,
                 }}
             >
                 {header && <div className="ContextHeader">{header}</div>}

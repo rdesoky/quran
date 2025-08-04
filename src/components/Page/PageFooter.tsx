@@ -80,12 +80,14 @@ const PageFooter: React.FC<PageFooterProps> = ({
 				style={{ maxWidth: pagerWidth - (isNarrow ? 50 : 0) }}
 			> */}
             <div className="HeaderFooterSection">
-                <button
-                    className="NavButton NavBackward"
-                    onClick={gotoPrevPage}
-                >
-                    <Icon icon={faAngleRight} />
-                </button>
+                {!isNarrow && (
+                    <button
+                        className="NavButton NavBackward"
+                        onClick={gotoPrevPage}
+                    >
+                        <Icon icon={faAngleRight} />
+                    </button>
+                )}
                 <button
                     onClick={showPageContextPopup}
                     className="IconButton"
@@ -96,13 +98,18 @@ const PageFooter: React.FC<PageFooterProps> = ({
                     // style={{ minWidth: 25 }}
                 >
                     <FormattedMessage
-                        id={isNarrow ? "num" : "pg_num"}
+                        id={"pg_num"}
                         values={{ num: pageIndex + 1 }}
                     />
                 </button>
-                <button onClick={gotoNextPage} className="NavButton NavForward">
-                    <Icon icon={faAngleLeft} />
-                </button>
+                {!isNarrow && (
+                    <button
+                        onClick={gotoNextPage}
+                        className="NavButton NavForward"
+                    >
+                        <Icon icon={faAngleLeft} />
+                    </button>
+                )}
             </div>
         </div>
     );

@@ -39,24 +39,38 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	}
 }
 
-.trans-start {
-	.ModalContent {
-		opacity: 0;
-		top: -20px;
-	}
-}
+// .trans-start {
+// 	.ModalContent {
+// 		opacity: 0;
+// 		top: -20px;
+// 	}
+// }
 
 .ModalContent {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;//default height
+
+	
 	pointer-events: all;
 	position: absolute;
 	right: 0;
 	// padding: 0 15px 0 15px;
 	box-shadow: 0 0px 15px 0px rgba(17, 17, 17, 0.35);
 	background-color: $popupBgColor;
-
+	
+	#TafseerPopup &, #GotoPopup &, #HelpPopup &, #ProfilePopup & {
+		height: auto;
+	}
 	#ExercisePopup & {
 		background-color: $exerciseBgColor;
 	}
+
+	.trans-start & {
+		opacity: 0;
+		top: -20px;
+}
+
 
 	color: white;
 	box-sizing: border-box;
@@ -541,6 +555,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	.Wrong {
 		color: $wrongTextColor;
 	}
+
 }
 
 .TafseerView {
@@ -563,9 +578,9 @@ $selectionBgColorDark: rgb(38, 93, 138);
 .TypingConsole {
 	direction: rtl;
 	padding: 10px;
-	min-height: 21px;
+	min-height: 26px;
 	border: solid 1px #444;
-	margin: 5px auto;
+	margin: 6px;
 	font-size: 24px;
 	line-height: 26px;
 	overflow: auto;

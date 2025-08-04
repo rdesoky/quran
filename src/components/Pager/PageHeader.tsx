@@ -64,7 +64,7 @@ export function PageHeader({ order }: PageHeaderProps) {
         if (activePage !== pageIndex) {
             dispatch(gotoPage(history, pageIndex));
         }
-        runCommand("Indices", "page_header");
+        runCommand("Commands", "page_header");
     };
 
     const showSuraContextPopup = (e: React.MouseEvent) => {
