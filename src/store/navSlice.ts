@@ -200,7 +200,9 @@ export const offsetPage =
 			const pageIndex = selectActivePage(getState());
 			if (pageIndex !== undefined) {
 				const nextPageIndex = pageIndex + offset;
-				dispatch(gotoPage(history, nextPageIndex, { sel: true }));
+				dispatch(gotoPage(history, nextPageIndex
+					// , { sel: true }
+				));
 			}
 		};
 
