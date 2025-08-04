@@ -116,7 +116,7 @@ export function PageHeader({ order }: PageHeaderProps) {
                 pageIndex === activePage
             )}
             style={{
-                height: PAGE_HEADER_HEIGHT,
+                // height: PAGE_HEADER_HEIGHT,
                 boxSizing: "border-box",
             }}
             onClick={onClickHeader}

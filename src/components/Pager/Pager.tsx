@@ -561,7 +561,7 @@ export default function Pager() {
                             position: "absolute",
                             left: 0,
                             top: 0,
-                            scale: "0.75",
+                            // scale: "0.75",
                         }}
                     />
                 )}
@@ -644,7 +644,7 @@ export default function Pager() {
                 )}
                 <div
                     className="HeaderFooterSection"
-                    style={{ position: "fixed", bottom: 1, margin: "auto" }}
+                    style={{ position: "fixed", bottom: 4, margin: "auto" }}
                 >
                     <button
                         className="NavButton NavBackward"
