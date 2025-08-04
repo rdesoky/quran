@@ -14,7 +14,11 @@ import {
     deleteBookmark,
     selectIsBookmarked,
 } from "@/store/dbSlice";
-import { selectPagesCount, toggleZoom } from "@/store/layoutSlice";
+import {
+    selectActivePage,
+    selectPagesCount,
+    toggleZoom,
+} from "@/store/layoutSlice";
 import {
     gotoAya,
     gotoPage,
@@ -46,6 +50,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "./useHistory";
 
 export default function useCommands() {
+    const activePage = useSelector(selectActivePage);
     const audio = useAudio();
     const msgBox = useMessageBox();
     const contextPopup = useContextPopup();
@@ -209,6 +214,12 @@ export default function useCommands() {
                 dispatch(startMask(history));
                 dispatch(showPopup(command));
                 break;
+            case "NextPage":
+                dispatch(gotoPage(history, activePage + 1, { sel: true }));
+                return;
+            case "PrevPage":
+                dispatch(gotoPage(history, activePage - 1, { sel: true }));
+                return;
             case "Tafseer":
                 dispatch(gotoAya(history));
             // eslint-disable-next-line no-fallthrough

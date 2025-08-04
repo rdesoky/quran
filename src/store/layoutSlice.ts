@@ -14,8 +14,8 @@ export const ViewCapacity = {
 
 export const PAGE_ASPECT = 11 / 16;
 export const SIDE_BAR_WIDTH = 50;
-export const PAGE_HEADER_HEIGHT = 25; //height of the header area, used to calculate pager height
-export const PAGE_FOOTER_HEIGHT = 25;
+export const PAGE_HEADER_HEIGHT = 50; //height of the header area, used to calculate pager height
+export const PAGE_FOOTER_HEIGHT = 50;
 
 export const DisplayMode = {};
 
