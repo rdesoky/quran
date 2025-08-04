@@ -372,7 +372,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	background-color: #333;
 	border-radius: 3px;
 	// margin: 0 2px;
-	height: 23px;
+	// height: 23px;
+	height: 42px;
 
 	>* {
 		height: 100%;
@@ -381,6 +382,9 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	.ReciterIcon {
 		width: 16px;
 		height: 16px;
+	}
+	button{
+		min-width: 42px;
 	}
 }
 

@@ -55,7 +55,8 @@ function Sidebar() {
                         .appendWord("narrow", isNarrow)
                         .appendWord("expanded", isShowMenu)
                         .appendWord("HiddenScroller", !isShowMenu)}
-                    style={{ bottom: isNarrow ? 25 : 50 }}
+                    // style={{ bottom: isNarrow ? 25 : 50 }}
+                    style={{ bottom: 50 }}
                 >
                     <div id="SidebarButtons">
                         <div className="SidebarSection">
@@ -87,7 +88,7 @@ function Sidebar() {
                         position: "absolute",
                         left: 0,
                         bottom: 0,
-                        height: isNarrow ? 25 : 50,
+                        // height: isNarrow ? 25 : 50,
                     }}
                 >
                     {/* {showZoom && <CommandButton
@@ -103,7 +104,7 @@ function Sidebar() {
                         command="Commands"
                         trigger="side_bar"
                         updateChecker={true}
-                        style={{ height: isNarrow ? 25 : 50 }}
+                        // style={{ height: isNarrow ? 25 : 50 }}
                     />
                 </div>
             </div>
