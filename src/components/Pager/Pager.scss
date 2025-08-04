@@ -3,8 +3,8 @@
 	position: fixed;
 	display: flex;
 	align-items: flex-start;
-	top: 25px; //1px;
-	bottom: 25px;
+	top: 50px; //1px;
+	bottom: 50px;
 	right: 0;
 
 	.fit_page &,
@@ -84,7 +84,7 @@
 .PagerFooter {
 	position: absolute;
 	right: 0;
-	height: 25px;
+	height: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
