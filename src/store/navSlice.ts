@@ -173,7 +173,7 @@ export const gotoPage =
 			const selectPageAya = () => {
 				if (select) {
 					const verse = getPageFirstAyaId(pageIndex);
-					dispatch(setActivePageIndex(pageIndex));
+					// dispatch(setActivePageIndex(pageIndex));
 					dispatch(selectAya(verse));
 				}
 			};
@@ -183,6 +183,8 @@ export const gotoPage =
 				return;
 			}
 			if (pageIndex < TOTAL_PAGES && pageIndex >= 0) {
+				dispatch(setActivePageIndex(pageIndex));
+
 				const targetPath = `${import.meta.env.BASE_URL}page/${pageIndex + 1}`;
 				if (replace) {
 					history.replace(targetPath);
