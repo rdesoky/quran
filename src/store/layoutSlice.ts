@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, GetState, RootState } from "@/store/config";
 import { selectPopup } from "@/store/uiSlice";
+import { FOOTER_HEIGHT, HEADER_HEIGHT, NAVBAR_WIDTH } from "@/constanta";
 
 export const sliceName = "layout";
 
@@ -13,9 +14,9 @@ export const ViewCapacity = {
 };
 
 export const PAGE_ASPECT = 11 / 16;
-export const SIDE_BAR_WIDTH = 50;
-export const PAGE_HEADER_HEIGHT = 50; //height of the header area, used to calculate pager height
-export const PAGE_FOOTER_HEIGHT = 50;
+// export const SIDE_BAR_WIDTH = 50;
+// export const PAGE_HEADER_HEIGHT = 50; //height of the header area, used to calculate pager height
+// export const PAGE_FOOTER_HEIGHT = 50;
 
 export const DisplayMode = {};
 
@@ -31,7 +32,7 @@ const initialState = {
 	activePageIndex: -1,
 	viewAspect: 0, //aspect ratio of the view
 	viewAspect2: 0, //aspect ratio of the view without side bar
-	pagerHeight: 600 - PAGE_FOOTER_HEIGHT, //height of the pager area
+	pagerHeight: 600 - FOOTER_HEIGHT, //height of the pager area
 	isCompact: false, //is the layout compact (one page compact)
 };
 
@@ -41,8 +42,8 @@ const slice = createSlice({
 	reducers: {
 		onResize: (slice, { payload: { width, height } }) => {
 			let zoomLevels = 0;
-			const viewWidth = width - SIDE_BAR_WIDTH;
-			const viewHeight = height - PAGE_FOOTER_HEIGHT;
+			const viewWidth = width - NAVBAR_WIDTH;
+			const viewHeight = height - FOOTER_HEIGHT;
 			const viewAspect = viewWidth / viewHeight;
 			const viewAspect2 = (viewWidth - 300) / viewHeight;
 			slice.viewAspect = viewAspect;
@@ -53,9 +54,9 @@ const slice = createSlice({
 			} else if (viewAspect >= PAGE_ASPECT * 2) {
 				slice.viewCapacity = ViewCapacity.twoPages;
 				zoomLevels = 2;
-			// } else if (viewAspect >= PAGE_ASPECT * 2) {
-			// 	slice.viewCapacity = ViewCapacity.twoPages;
-			// 	zoomLevels = 1;
+				// } else if (viewAspect >= PAGE_ASPECT * 2) {
+				// 	slice.viewCapacity = ViewCapacity.twoPages;
+				// 	zoomLevels = 1;
 			} else if (viewAspect2 > PAGE_ASPECT) {
 				slice.viewCapacity = ViewCapacity.onePagePlus;
 				zoomLevels = 1;
@@ -71,7 +72,7 @@ const slice = createSlice({
 			// slice.viewAspect = Math.floor((100 * width) / height) / 100;
 			slice.appWidth = width;
 			slice.appHeight = height;
-			slice.pagerHeight = height - PAGE_FOOTER_HEIGHT;
+			slice.pagerHeight = height - FOOTER_HEIGHT;
 		},
 		setActivePageIndex: (slice, action) => {
 			slice.activePageIndex = action.payload;
@@ -130,7 +131,7 @@ export const selectActiveSide = (state: RootState) => {
 	return pagesCount === 1 ? 0 : activePageIndex % 2;
 };
 export const selectPagerHeight = (state: RootState) =>
-	state[sliceName].appHeight - PAGE_FOOTER_HEIGHT - PAGE_HEADER_HEIGHT;
+	state[sliceName].appHeight - FOOTER_HEIGHT - HEADER_HEIGHT;
 
 export const selectPagerWidth = (state: RootState) => {
 	const viewWidth = selectViewWidth(state);
@@ -206,7 +207,7 @@ export const selectViewWidth = (state: RootState) => {
 	if (viewCapacity === ViewCapacity.onePageCompact) {
 		return appWidth;
 	}
-	return appWidth - SIDE_BAR_WIDTH;
+	return appWidth - NAVBAR_WIDTH;
 };
 
 export const selectPopupLeft = (state: RootState) => {

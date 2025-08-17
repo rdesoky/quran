@@ -24,6 +24,7 @@ import PartsPie from "../PartsPie";
 import { SuraContextHeader } from "../SuraContextHeader";
 import { SuraList } from "../SuraList";
 import SuraName from "../SuraName";
+import { HEADER_HEIGHT } from "@/constanta";
 
 type PageHeaderProps = {
 	order: 0 | 1; // 0 for right page, 1 for left page
@@ -125,6 +126,7 @@ export function PageHeader({ order }: PageHeaderProps) {
 			>
 				{isNarrow ? null : <FormattedMessage id={"part"} />}
 				<CircleProgress
+					sqSize={HEADER_HEIGHT - 5}
 					target={TOTAL_PAGES}
 					progress={pageIndex + 1}
 					display={partIndex + 1}
