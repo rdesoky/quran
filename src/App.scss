@@ -1,23 +1,6 @@
-$appBgColor: #222;
-$appBgColorDk: #111;
-$appHeaderBgColor: #282c34;
+// @use "vars" as *;
+@import "vars";
 
-$goodHifzBg: rgba(0, 128, 0, 0.15);
-$goodHifzText: greenyellow;
-
-$weakHifzBg: rgba(177, 0, 0, 0.15);
-$weekHifzText: #ff8c8c;
-
-$fairHifzBg: rgba(189, 145, 0, 0.2);
-$fairHifzText: #ffd900;
-$chartHeight: 35px;
-$hifzRowHeight: 72px;
-
-$PageThumbColor: rgba(170, 170, 170, 0.25);
-
-// *:focus {
-//     // outline: solid 2px rgb(61, 145, 255);
-// }
 #root {
 	background-color: $appBgColor;
 }
@@ -313,18 +296,18 @@ hr {
 	font-size: 25px !important;
 	// height: 50px !important;
 	// min-height: 40px;
-	min-width: 50px;
-	height: 50px;
+	min-width: $navbarWidth;
+	height: $navbarWidth;
 	padding: 0;
 	pointer-events: fill;
 
 	span {
 		svg {
-			width: 50px;
+			width: $navbarWidth
 		}
 
 		img {
-			width: 40px;
+			width: calc(40px - $navbarWidth);
 		}
 	}
 
@@ -560,8 +543,8 @@ hr {
 }
 
 .UserImage {
-	width: 50px;
-	height: 50px;
+	width: $navbarWidth;
+	height: $navbarWidth;
 	border-radius: 25px;
 	margin: 10px;
 
