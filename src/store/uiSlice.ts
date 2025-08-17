@@ -14,6 +14,7 @@ const sliceName = "ui";
 const initSidebarCommands: CommandType[] = [
 	// "AudioPlayer",
 	// "Zoom",
+	"Settings",
 	"Profile",
 	"Indices",
 	"Search",
@@ -26,7 +27,6 @@ const initSidebarCommands: CommandType[] = [
 	"Copy",
 	"Share",
 	"Help",
-	"Settings",
 ];
 
 const initialState = {
