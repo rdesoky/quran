@@ -1,11 +1,4 @@
-$wrongTextColor: #f33;
-$correctTextColor: greenyellow;
-$popupBgColor: #111111e6;
-$exerciseBgColor: #111111f2;
-
-//TODO: duplicate with Page.scss
-$selectionBgColor: #c8ccf0;
-$selectionBgColorDark: rgb(38, 93, 138);
+@use "@/vars" as *;
 
 .ModalOverlay {
 	position: fixed;
