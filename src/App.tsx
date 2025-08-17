@@ -18,6 +18,7 @@ import { IntlProvider } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { ContextPopup } from "@/components/ContextPopup";
+import { selectMaskOn } from "./store/navSlice";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -45,6 +46,7 @@ analytics.setUserProps({ web_user: "yes" });
 const App: React.FC = () => {
 	//Handles componentDidMount/unmount, props changes
 	const isNarrow = useSelector(selectIsNarrow);
+	const maskOn = useSelector(selectMaskOn);
 	const [localeMessages, setLocaleMessages] = useState();
 	const [windowSize, setWindowSize] = useState({
 		width: window.innerWidth,
@@ -95,7 +97,10 @@ const App: React.FC = () => {
 	return (
 		<IntlProvider locale={lang} messages={localeMessages}>
 			<RefsProvider>
-				<div className={`App ${theme}Theme ${zoomClass}`.appendWord("narrow", isNarrow)}>
+				<div className={
+					`App ${theme}Theme`.appendWord(zoomClass)
+						.appendWord("narrow", isNarrow)
+						.appendWord("maskOn", maskOn)}>
 					<BrowserRouter>
 						<Routes>
 							<Route
