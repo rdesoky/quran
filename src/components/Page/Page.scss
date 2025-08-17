@@ -107,10 +107,10 @@
 				.Mask {
 					position: absolute;
 					pointer-events: fill;
-					background-color: #999998fa;
+					background-color: $maskBackground;
 
 					.DarkTheme & {
-						background-color: #666;
+						background-color: $maskBackgroundDark;
 					}
 				}
 
@@ -309,6 +309,15 @@
 		&:hover {
 			color: white !important;
 		}
+	}
+
+	.maskOn & {
+		color: #fff;
+		background-color: $maskedVerseBackground;
+	}
+
+	.maskOn.DarkTheme & {
+		background-color: $maskedVerseBackgroundDark;
 	}
 }
 
