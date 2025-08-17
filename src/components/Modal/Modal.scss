@@ -49,19 +49,24 @@ $selectionBgColorDark: rgb(38, 93, 138);
 .ModalContent {
 	display: flex;
 	flex-direction: column;
-	height: 100vh;//default height
+	height: calc(100vh - 50px); //default height
+	max-height: calc(100vh - 50px);
 
-	
+
 	pointer-events: all;
 	position: absolute;
 	right: 0;
 	// padding: 0 15px 0 15px;
 	box-shadow: 0 0px 15px 0px rgba(17, 17, 17, 0.35);
 	background-color: $popupBgColor;
-	
-	#TafseerPopup &, #GotoPopup &, #HelpPopup &, #ProfilePopup & {
+
+	#TafseerPopup &,
+	#GotoPopup &,
+	#HelpPopup &,
+	#ProfilePopup & {
 		height: auto;
 	}
+
 	#ExercisePopup & {
 		background-color: $exerciseBgColor;
 	}
@@ -69,12 +74,12 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	.trans-start & {
 		opacity: 0;
 		top: -20px;
-}
+	}
 
 
 	color: white;
 	box-sizing: border-box;
-	max-height: 100%;
+	// max-height: 100%;
 
 	[lang="ar"] & {
 		direction: rtl;
@@ -433,6 +438,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
 			text-overflow: ellipsis;
 			padding: 9px;
 			box-sizing: border-box;
+			height: 50px;
 		}
 
 		.ButtonsBar {
@@ -525,12 +531,16 @@ $selectionBgColorDark: rgb(38, 93, 138);
 		}
 	}
 
+	.TypingConsole {
+		height: 50px;
+	}
+
 	#AKeyboard {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		background-color: #111;
+		// position: fixed;
+		// bottom: 0;
+		// left: 0;
+		// right: 0;
+		// background-color: #111;
 		z-index: 2;
 		margin: 0;
 	}
@@ -585,6 +595,7 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	line-height: 26px;
 	overflow: auto;
 	position: relative;
+	height: calc(100vh - 250px); // subtract keyboard and header height
 
 	&.empty {
 		color: #666;
