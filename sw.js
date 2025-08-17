@@ -1,7 +1,7 @@
-//Thu Jul 31 2025 04:17:56 GMT-0700 (Pacific Daylight Time)
-/* eslint-disable no-restricted-globals */
+//Sun Aug 17 2025 15:39:53 GMT-0700 (Pacific Daylight Time)
 
-const appVersion = 28;
+
+const appVersion = 29;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
@@ -20,7 +20,7 @@ const deleteOldCaches = async () => {
 const addResourcesToCache = async () => {
 	const appManifest = await fetch("app-manifest.json").then((res) =>
 		res.json()
-	).catch(()=>{
+	).catch(() => {
 		console.error("Failed to fetch app-manifest.json");
 		return {};
 	});
