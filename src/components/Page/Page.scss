@@ -370,10 +370,11 @@ $selectionBgColorDark: rgb(38, 93, 138);
 	display: flex;
 	white-space: nowrap;
 	background-color: #333;
-	border-radius: 3px;
+	border-radius: 5px;
 	// margin: 0 2px;
 	// height: 23px;
 	height: 42px;
+	// border: solid 1px #666;
 
 	>* {
 		height: 100%;
@@ -383,8 +384,10 @@ $selectionBgColorDark: rgb(38, 93, 138);
 		width: 16px;
 		height: 16px;
 	}
-	button{
+
+	button {
 		min-width: 42px;
+		border-radius: 0;
 	}
 }
 
