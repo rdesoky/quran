@@ -50,7 +50,7 @@ export const PageContextButtons = ({ page }: PageContextButtonsProps) => {
 				/>
 			)}
 			<CommandButton {...{ trigger, command: "Goto" }} />
-			{isNarrow && <CommandButton command="NextPage" trigger={trigger} />}
+			{/* {isNarrow && <CommandButton command="NextPage" trigger={trigger} />} */}
 		</div>
 	);
 };

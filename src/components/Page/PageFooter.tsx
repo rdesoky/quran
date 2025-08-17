@@ -100,14 +100,14 @@ const PageFooter: React.FC<PageFooterProps> = ({
 						values={{ num: pageIndex + 1 }}
 					/>
 				</button>
-				{!isNarrow && (
-					<button
-						onClick={gotoNextPage}
-						className="NavButton NavForward"
-					>
-						<Icon icon={faAngleLeft} />
-					</button>
-				)}
+				{/* {!isNarrow && ( */}
+				<button
+					onClick={gotoNextPage}
+					className="NavButton NavForward"
+				>
+					<Icon icon={faAngleLeft} />
+				</button>
+				{/* )} */}
 			</div>
 		</div>
 	);
