@@ -559,17 +559,26 @@ export default function Pager() {
 			>
 				<PageHeader order={0} />
 				{shownPages.length > 1 && <PageHeader order={1} />}
-				{showZoom && (
-					<CommandButton
-						command={zoomIn ? "Zoom_In" : "Zoom_Out"}
-						style={{
-							position: "absolute",
-							left: 0,
-							top: 0,
-							// scale: "0.75",
-						}}
-					/>
-				)}
+				<div
+					style={{
+						position: "absolute",
+						display: "flex",
+						left: 0,
+						top: 0,
+						// scale: "0.75",
+					}}
+				>
+					{isNarrow && <>
+						<CommandButton command="Search" />
+						<CommandButton command="Indices" />
+					</>
+					}
+					{showZoom && (
+						<CommandButton
+							command={zoomIn ? "Zoom_In" : "Zoom_Out"}
+						/>
+					)}
+				</div>
 			</div>
 			<DDrop
 				maxShift={200}

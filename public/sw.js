@@ -1,6 +1,6 @@
-/* eslint-disable no-restricted-globals */
 
-const appVersion = 28;
+
+const appVersion = 29;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
@@ -19,7 +19,7 @@ const deleteOldCaches = async () => {
 const addResourcesToCache = async () => {
 	const appManifest = await fetch("app-manifest.json").then((res) =>
 		res.json()
-	).catch(()=>{
+	).catch(() => {
 		console.error("Failed to fetch app-manifest.json");
 		return {};
 	});
