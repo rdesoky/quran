@@ -1,10 +1,12 @@
+@import "@/vars";
+
 .Pager {
 	direction: rtl;
 	position: fixed;
 	display: flex;
 	align-items: flex-start;
-	top: 50px; //1px;
-	bottom: 50px;
+	top: $headerHeight; //1px;
+	bottom: $footerHeight;
 	right: 0;
 
 	.fit_page &,
@@ -46,12 +48,12 @@
 		z-index: 1;
 
 		.narrow & {
-			left: 50px;
+			left: $navbarWidth;
 		}
 
 		.NavButton {
 			pointer-events: fill;
-			width: 50px;
+			width: $headerButtonWidth;
 			font-size: 22px;
 			opacity: 0.5;
 			text-align: center;
@@ -75,7 +77,7 @@
 .Pager {
 	&.narrow {
 		.HeaderNavbar {
-			left: 50px;
+			left: $navbarWidth;
 		}
 	}
 }
@@ -84,7 +86,6 @@
 .PagerFooter {
 	position: absolute;
 	right: 0;
-	height: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -106,12 +107,31 @@
 	box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.35);
 	top: 0;
 	bottom: auto;
+	height: $headerHeight;
 }
 
 .PagerFooter {
+	height: $footerHeight;
 	top: auto;
 	bottom: 0;
 	text-align: center;
 	justify-content: center;
 	box-shadow: 0px -4px 11px 0px rgba(0, 0, 0, 0.35);
+}
+
+.HeaderCommands {
+	position: absolute;
+	display: flex;
+	left: 0;
+	top: 0;
+	// scale: 0.75; //HEADER_HEIGHT/NAVBAR_WIDTH
+	height: $headerHeight;
+
+	.CommandButton {
+		height: 100%;
+
+		svg {
+			height: calc($headerHeight - 6px);
+		}
+	}
 }

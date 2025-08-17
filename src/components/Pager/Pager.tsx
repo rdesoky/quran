@@ -80,6 +80,7 @@ import { CommandButton } from "../CommandButton";
 import Icon from "../Icon";
 import { VerseContextButtons } from "../VerseContextButtons";
 import { PageHeader } from "./PageHeader";
+import { HEADER_HEIGHT, NAVBAR_WIDTH } from "@/constanta";
 
 export default function Pager() {
 	const pagesCount = useSelector(selectPagesCount);
@@ -560,13 +561,7 @@ export default function Pager() {
 				<PageHeader order={0} />
 				{shownPages.length > 1 && <PageHeader order={1} />}
 				<div
-					style={{
-						position: "absolute",
-						display: "flex",
-						left: 0,
-						top: 0,
-						// scale: "0.75",
-					}}
+					className="HeaderCommands"
 				>
 					{isNarrow && <>
 						<CommandButton command="Search" />
@@ -658,7 +653,6 @@ export default function Pager() {
 				)}
 				<div
 					className="HeaderFooterSection"
-					style={{ position: "absolute", bottom: 4, left: isNarrow ? 55 : 5 }}
 				>
 					<button
 						className="NavButton NavBackward"
