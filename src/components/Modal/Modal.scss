@@ -49,8 +49,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
 .ModalContent {
 	display: flex;
 	flex-direction: column;
-	height: calc(100vh - 50px); //default height
-	max-height: calc(100vh - 50px);
+	height: calc(100% - 50px); //default height
+	max-height: calc(100% - 50px);
 
 
 	pointer-events: all;
@@ -422,8 +422,8 @@ $selectionBgColorDark: rgb(38, 93, 138);
 
 		// white-space: normal;
 		.VerseText {
-			font-size: 16px;
-			line-height: 16px;
+			// font-size: 16px;
+			// line-height: 16px;
 		}
 	}
 }

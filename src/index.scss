@@ -32,7 +32,8 @@ code {
 .card {
 	background: #444;
 	border-radius: 10px;
-	padding: 5px;
+	padding: 10px;
+	border: solid 1px #777;
 }
 
 button {
@@ -41,4 +42,6 @@ button {
 	align-items: center;
 	justify-content: center;
 	min-width: 25px;
+	border-radius: 5px;
+	padding: 5px;
 }
