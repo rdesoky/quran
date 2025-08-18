@@ -236,6 +236,7 @@ export const gotoPart =
 		dispatch(gotoAya(history, ayaId, { sel: true }));
 	};
 
+//A thunk returning the new selected aya
 export const offsetSelection =
 	(offset: number) => (dispatch: AppDispatch, getState: GetState) => {
 		const selectStart = selectStartSelection(getState());
