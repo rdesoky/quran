@@ -6,6 +6,7 @@ import { gotoAya, selectMaskOn, showMask } from "@/store/navSlice";
 import { CommandButton } from "@/components/CommandButton";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { AudioRange } from "@/store/settingsSlice";
+import { useContextPopup } from "@/RefsProvider";
 
 type SuraContextButtonsProps = {
 	sura: number; // The Sura number for which the buttons are displayed
@@ -17,6 +18,7 @@ export const SuraContextButtons = ({ sura }: SuraContextButtonsProps) => {
 	const history = useHistory();
 	const trigger = "sura_context";
 	const isMaskOn = useSelector(selectMaskOn);
+	const contextPopup = useContextPopup();
 
 	return (
 		<div className="IconsBar">
@@ -40,6 +42,7 @@ export const SuraContextButtons = ({ sura }: SuraContextButtonsProps) => {
 								gotoAya(history, ayaID(sura, 0), { sel: true })
 							);
 							dispatch(showMask());
+							contextPopup.close();
 						},
 					}}
 				/>

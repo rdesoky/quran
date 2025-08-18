@@ -1,5 +1,6 @@
 import { CommandButton } from "@/components/CommandButton";
 import { useHistory } from "@/hooks/useHistory";
+import { useContextPopup } from "@/RefsProvider";
 import { getPageFirstAyaId } from "@/services/qData";
 import { selectIsNarrow } from "@/store/layoutSlice";
 import { gotoAya, selectMaskOn, showMask } from "@/store/navSlice";
@@ -17,6 +18,7 @@ export const PageContextButtons = ({ page }: PageContextButtonsProps) => {
 	const isMaskOn = useSelector(selectMaskOn);
 	const history = useHistory();
 	const isNarrow = useSelector(selectIsNarrow);
+	const contextPopup = useContextPopup();
 
 	const trigger = "page_context";
 
@@ -45,6 +47,7 @@ export const PageContextButtons = ({ page }: PageContextButtonsProps) => {
 								})
 							);
 							dispatch(showMask());
+							contextPopup.close();
 						},
 					}}
 				/>
