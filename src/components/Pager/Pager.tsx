@@ -34,6 +34,7 @@ import {
 	hideMask,
 	offsetPage,
 	offsetSelection,
+	selectAya,
 	selectMaskShift,
 	selectMaskStart,
 	selectSelectedText,
@@ -98,7 +99,7 @@ export default function Pager() {
 	const msgBox = useMessageBox();
 	const selectedText = useSelector(selectSelectedText);
 	const maskShift = useSelector(selectMaskShift);
-	const params = useParams<{ page: string }>();
+	const params = useParams<{ page: string; }>();
 	const shownPages = useSelector(selectShownPages);
 	const activePage = useSelector(selectActivePage);
 	const location = useLocation();
@@ -250,29 +251,38 @@ export default function Pager() {
 		[dispatch, history, selectStart]
 	);
 
+	//TODO: convert to a thunk ( passing history hook )
 	const incrementMask = useCallback(() => {
 		const incrementedMask = maskStart + 1;
+
 		if (incrementedMask >= TOTAL_VERSES) {
 			dispatch(hideMask());
 			return;
 		}
+
 		const incrementedMaskPage = ayaIdPage(incrementedMask);
-		if (activePage === incrementedMaskPage) {
-			dispatch(gotoAya(history, dispatch(offsetSelection(1))));
-			return;
-		} else {
-			const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
-			if (maskStart === pageFirstAya) {
-				dispatch(
-					gotoPage(history, incrementedMaskPage, {
-						sel: true,
-					})
-				);
-				return; //mask head page is not visible
+		// const pageFirstAya = getPageFirstAyaId(incrementedMaskPage);
+		const maskPage = ayaIdPage(maskStart);
+
+		if (activePage === maskPage) {
+			// mask still in the same page
+			dispatch(offsetSelection(1));//move the selection
+			// dispatch(gotoAya(history, nextAya));//
+		} else if (maskStart === getPageFirstAyaId(maskPage)) {
+			// mask moved the start of the next page
+			// move the mask, don't flip the page
+			// To give the user a chance to see he unmasked aya
+			if (shownPages.includes(incrementedMaskPage)) {
+				dispatch(offsetSelection(1));//move the selection
 			}
+			dispatch(gotoPage(history, incrementedMaskPage));
+		} else {
+			// mask head is on a different page
+			// set mask head at the start of the first visible page
+			const firstVisiblePage = shownPages[0];
+			dispatch(selectAya(getPageFirstAyaId(firstVisiblePage)));
 		}
-		dispatch(setSelectStart(dispatch(offsetSelection(1))));
-	}, [activePage, dispatch, history, maskStart]);
+	}, [activePage, dispatch, history, maskStart, shownPages]);
 
 	const decrementMask = useCallback(() => {
 		if (maskStart > 0) {
@@ -336,154 +346,154 @@ export default function Pager() {
 			e.stopPropagation();
 
 			switch (e.code) {
-				case "Slash":
-					if (canShowPopup && !vEditorOn) {
-						dispatch(showPopup("Help"));
-					}
-					break;
+			case "Slash":
+				if (canShowPopup && !vEditorOn) {
+					dispatch(showPopup("Help"));
+				}
+				break;
 
-				case "KeyU":
-					if (canShowPopup && !vEditorOn) {
-						dispatch(showPopup("Profile"));
+			case "KeyU":
+				if (canShowPopup && !vEditorOn) {
+					dispatch(showPopup("Profile"));
+				}
+				break;
+			case "KeyC":
+				if (!vEditorOn) {
+					copy2Clipboard(selectedText);
+					dispatch(showToast({ id: "text_copied" }));
+					//     // app.pushRecentCommand("Copy");
+				}
+				break;
+			case "KeyS":
+			case "KeyR":
+				if (!vEditorOn) {
+					msgBox.set({
+						title: (
+							<Message id="play" values={keyValues("r")} />
+						),
+						content: (
+							<PlayPrompt
+								{...{
+									trigger: "keyboard",
+									showReciters: false,
+								}}
+							/>
+						),
+					});
+				}
+				break;
+			case "KeyP":
+				if (!vEditorOn) {
+					if (audioState === AudioState.playing) {
+						audio.pause();
+					} else {
+						audio.resume();
 					}
-					break;
-				case "KeyC":
-					if (!vEditorOn) {
-						copy2Clipboard(selectedText);
-						dispatch(showToast({ id: "text_copied" }));
-						//     // app.pushRecentCommand("Copy");
-					}
-					break;
-				case "KeyS":
-				case "KeyR":
-					if (!vEditorOn) {
-						msgBox.set({
-							title: (
-								<Message id="play" values={keyValues("r")} />
-							),
-							content: (
-								<PlayPrompt
-									{...{
-										trigger: "keyboard",
-										showReciters: false,
-									}}
-								/>
-							),
-						});
-					}
-					break;
-				case "KeyP":
-					if (!vEditorOn) {
-						if (audioState === AudioState.playing) {
-							audio.pause();
-						} else {
-							audio.resume();
-						}
-					}
-					break;
-				case "KeyZ":
-					if (!vEditorOn) {
-						dispatch(toggleZoom());
-					}
-					break;
-				case "Escape":
-					if (contextPopup.info) {
-						contextPopup.close();
-					} else if (msgBox.getMessages().length > 0) {
-						msgBox.pop();
-					} else if (activePopup !== null) {
-						dispatch(closePopup());
-					} else if (expandedMenu) {
-						dispatch(showMenu(false));
-						// app.setExpandedMenu(false);
-					} else if (maskStart !== -1) {
-						// app.hideMask();
-						dispatch(hideMask());
-					}
-					break;
-				case "KeyI":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Indices"));
-					}
-					break;
-				case "KeyG":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Goto"));
-					}
-					break;
-				case "KeyX":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Exercise"));
-					}
-					break;
-				case "KeyB":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Bookmarks"));
-					}
-					break;
-				case "KeyO":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Settings"));
-					}
-					break;
-				case "KeyF":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Search"));
-					}
-					break;
-				case "KeyA":
-					if (!popup && !vEditorOn) {
-						dispatch(toggleMenu());
-					}
-					break;
-				case "KeyH":
-					if (!vEditorOn) {
-						msgBox.set({
-							title: <Message id="update_hifz" />,
-							content: <AddHifz />,
-						});
-						dispatch(closePopupIfBlocking());
-					}
-					break;
-				case "KeyT":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Tafseer"));
-					}
-					break;
-				case "KeyM":
-					if (!vEditorOn) {
-						dispatch(startMask(history));
-						// app.setMaskStart();
-					}
-					break;
-				case "ArrowDown":
-					onArrowKey(e.shiftKey, "down");
-					break;
-				case "ArrowUp":
-					onArrowKey(e.shiftKey, "up");
-					break;
-				case "ArrowLeft":
-					analytics.setTrigger("left_key");
+				}
+				break;
+			case "KeyZ":
+				if (!vEditorOn) {
+					dispatch(toggleZoom());
+				}
+				break;
+			case "Escape":
+				if (contextPopup.info) {
+					contextPopup.close();
+				} else if (msgBox.getMessages().length > 0) {
+					msgBox.pop();
+				} else if (activePopup !== null) {
+					dispatch(closePopup());
+				} else if (expandedMenu) {
+					dispatch(showMenu(false));
+					// app.setExpandedMenu(false);
+				} else if (maskStart !== -1) {
+					// app.hideMask();
+					dispatch(hideMask());
+				}
+				break;
+			case "KeyI":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Indices"));
+				}
+				break;
+			case "KeyG":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Goto"));
+				}
+				break;
+			case "KeyX":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Exercise"));
+				}
+				break;
+			case "KeyB":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Bookmarks"));
+				}
+				break;
+			case "KeyO":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Settings"));
+				}
+				break;
+			case "KeyF":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Search"));
+				}
+				break;
+			case "KeyA":
+				if (!popup && !vEditorOn) {
+					dispatch(toggleMenu());
+				}
+				break;
+			case "KeyH":
+				if (!vEditorOn) {
+					msgBox.set({
+						title: <Message id="update_hifz" />,
+						content: <AddHifz />,
+					});
+					dispatch(closePopupIfBlocking());
+				}
+				break;
+			case "KeyT":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Tafseer"));
+				}
+				break;
+			case "KeyM":
+				if (!vEditorOn) {
+					dispatch(startMask(history));
+					// app.setMaskStart();
+				}
+				break;
+			case "ArrowDown":
+				onArrowKey(e.shiftKey, "down");
+				break;
+			case "ArrowUp":
+				onArrowKey(e.shiftKey, "up");
+				break;
+			case "ArrowLeft":
+				analytics.setTrigger("left_key");
+				pageDown();
+				break;
+			case "PageDown":
+				if (!isTextInput) {
+					analytics.setTrigger("page_down_key");
 					pageDown();
-					break;
-				case "PageDown":
-					if (!isTextInput) {
-						analytics.setTrigger("page_down_key");
-						pageDown();
-					}
-					break;
-				case "ArrowRight":
-					analytics.setTrigger("right_key");
+				}
+				break;
+			case "ArrowRight":
+				analytics.setTrigger("right_key");
+				pageUp();
+				break;
+			case "PageUp":
+				if (!isTextInput) {
+					analytics.setTrigger("page_up_key");
 					pageUp();
-					break;
-				case "PageUp":
-					if (!isTextInput) {
-						analytics.setTrigger("page_up_key");
-						pageUp();
-					}
-					break;
-				default:
-					return;
+				}
+				break;
+			default:
+				return;
 			}
 			if (!isTextInput) {
 				e.preventDefault();
@@ -578,7 +588,7 @@ export default function Pager() {
 			<DDrop
 				maxShift={200}
 				dropShift={50}
-				onDrop={({ dX }: { dX: number; dY: number }) => {
+				onDrop={({ dX }: { dX: number; dY: number; }) => {
 					if (dX > 50) {
 						analytics.setTrigger("dragging");
 						pageDown();
@@ -589,7 +599,7 @@ export default function Pager() {
 					}
 				}}
 			>
-				{({ dX }: { dX: number; dY: number }) => {
+				{({ dX }: { dX: number; dY: number; }) => {
 					//Shrink the width using the scaling
 					// const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
 					// const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
