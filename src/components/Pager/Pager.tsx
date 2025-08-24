@@ -340,9 +340,9 @@ export default function Pager() {
 
 			const canShowPopup = activePopup === null && isTextInput === false;
 
-			if (modalPopup || msgBox.getMessages().length > 0) {
-				return;
-			}
+			// if (modalPopup || msgBox.getMessages().length > 0) {
+			// 	return;
+			// }
 			e.stopPropagation();
 
 			switch (e.code) {
@@ -601,13 +601,18 @@ export default function Pager() {
 			>
 				{({ dX }: { dX: number; dY: number; }) => {
 					//Shrink the width using the scaling
+					// const ratio = Math.abs(dX) / pageWidth;
+
 					// const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
 					// const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
 					// const shiftX = dX * accel;
-					const scaleX = (pageWidth - Math.abs(dX)) / pageWidth; // * accel;
+					const accel = 1;// Math.cos(angle); //slowing down the scaling when the drag is large
+					// const angle = (90 * Math.min(Math.abs(dX), pageWidth)) / pageWidth;
+					//
+					const scaleX = (pageWidth - Math.abs(dX)) / pageWidth * accel;
 					// const angle = 90 * scaleX;
 					// const accel = Math.cos(angle2Radians(angle));
-					const shiftX = dX * scaleX; //accel;
+					const shiftX = dX;// * scaleX; //* accel;
 					// (accel * (pageWidth - Math.abs(dX))) / pageWidth;
 					// console.log(
 					//     `dX:${dX}, Sh:${shiftX} Sc:${scaleX} Wd:${pageWidth}`
@@ -622,7 +627,7 @@ export default function Pager() {
 					return (
 						<div
 							ref={pagerRef}
-							className={"Pager" + (isNarrow ? " narrow" : "")}
+							className={"Pager".appendWord("narrow", isNarrow)}
 							onWheel={handleWheel}
 							style={{
 								width: pagerWidth,
