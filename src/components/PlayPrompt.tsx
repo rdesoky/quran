@@ -62,24 +62,24 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 
 	useEffect(() => {
 		switch (trigger) {
-			case "page_context":
-				setSelectedScope(AudioRange.page);
-				break;
-			case "page_header":
-			case "surah_context":
-				setSelectedScope(AudioRange.sura);
-				break;
-			case "bookmarks_title":
-			case "tafseer_title":
-			case "player_buttons":
-			case "verse_context":
-				setSelectedScope(AudioRange.selection);
-				break;
-			case "commands_title":
-			case "side_bar":
-			case "settings_title":
-			default:
-				setSelectedScope(AudioRange.continuous);
+		case "page_context":
+			setSelectedScope(AudioRange.page);
+			break;
+		case "page_header":
+		case "surah_context":
+			setSelectedScope(AudioRange.sura);
+			break;
+		case "bookmarks_title":
+		case "tafseer_title":
+		case "player_buttons":
+		case "verse_context":
+			setSelectedScope(AudioRange.selection);
+			break;
+		case "commands_title":
+		case "side_bar":
+		case "settings_title":
+		default:
+			setSelectedScope(AudioRange.continuous);
 		}
 	}, [trigger]);
 
@@ -112,14 +112,14 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 	const onPlay = useCallback(() => {
 		let aya = selection.start;
 		switch (selectedScope) {
-			case AudioRange.page:
-				aya = getPageFirstAyaId(pageIndex);
-				break;
-			case AudioRange.sura:
-				aya = ayaID(ayaInfo.sura, 0);
-				break;
-			default:
-				break;
+		case AudioRange.page:
+			aya = getPageFirstAyaId(pageIndex);
+			break;
+		case AudioRange.sura:
+			aya = ayaID(ayaInfo.sura, 0);
+			break;
+		default:
+			break;
 		}
 		analytics.logEvent("play_audio", {
 			trigger,
@@ -142,23 +142,23 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 				return;
 			}
 			switch (e.code) {
-				case "Backspace":
-					if (_showReciters) {
-						setShowReciters(false);
-						e.stopPropagation();
-					}
-					break;
-				case "KeyR":
-					onPlay();
-					break;
-				case "KeyP":
-					onPause();
-					break;
-				case "KeyS":
-					onStop();
-					break;
-				default:
-					break;
+			case "Backspace":
+				if (_showReciters) {
+					setShowReciters(false);
+					e.stopPropagation();
+				}
+				break;
+			case "KeyR":
+				onPlay();
+				break;
+			case "KeyP":
+				onPause();
+				break;
+			case "KeyS":
+				onStop();
+				break;
+			default:
+				break;
 			}
 		},
 		[_showReciters, onPause, onPlay, onStop]
@@ -355,7 +355,6 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 				</tbody>
 			</table>
 			<div className="PlayPrompt">
-				<PlayerCountDown />
 
 				<PlayerButtons
 					{...{
@@ -366,6 +365,7 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 						onStop,
 					}}
 				/>
+				<PlayerCountDown />
 			</div>
 		</div>
 	);
