@@ -32,8 +32,7 @@ const initialState = {
 	activePageIndex: -1,
 	viewAspect: 0, //aspect ratio of the view
 	viewAspect2: 0, //aspect ratio of the view without side bar
-	pagerHeight: 600 - FOOTER_HEIGHT, //height of the pager area
-	isCompact: false, //is the layout compact (one page compact)
+	pagerHeight: 600 - FOOTER_HEIGHT - HEADER_HEIGHT, //height of the pager area
 };
 
 const slice = createSlice({
@@ -43,7 +42,7 @@ const slice = createSlice({
 		onResize: (slice, { payload: { width, height } }) => {
 			let zoomLevels = 0;
 			const viewWidth = width - NAVBAR_WIDTH;
-			const viewHeight = height - FOOTER_HEIGHT;
+			const viewHeight = height - FOOTER_HEIGHT - HEADER_HEIGHT;
 			const viewAspect = viewWidth / viewHeight;
 			const viewAspect2 = (viewWidth - 300) / viewHeight;
 			slice.viewAspect = viewAspect;
@@ -72,7 +71,7 @@ const slice = createSlice({
 			// slice.viewAspect = Math.floor((100 * width) / height) / 100;
 			slice.appWidth = width;
 			slice.appHeight = height;
-			slice.pagerHeight = height - FOOTER_HEIGHT;
+			slice.pagerHeight = height - FOOTER_HEIGHT - HEADER_HEIGHT;
 		},
 		setActivePageIndex: (slice, action) => {
 			slice.activePageIndex = action.payload;
@@ -106,7 +105,7 @@ export const selectIsNarrow = (state: RootState) => {
 	const viewCapacity = selectViewCapacity(state);
 	return viewCapacity === ViewCapacity.onePageCompact;
 };
-export const selectIsCompact = (state: RootState) => state[sliceName].isCompact;
+
 export const selectAppWidth = (state: RootState) => state[sliceName].appWidth;
 export const selectAppHeight = (state: RootState) => state[sliceName].appHeight;
 
