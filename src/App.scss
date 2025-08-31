@@ -104,7 +104,7 @@ button,
 	padding: 5px 0px;
 	flex-grow: 1;
 	min-height: 25px;
-	gap: 3px;
+	gap: 6px;
 
 	button,
 	.CommandButton {
@@ -240,10 +240,10 @@ hr {
 		}
 	}
 
-	button {
-		min-height: 25px;
-		line-height: 14px;
-	}
+	// button {
+	// 	min-height: 25px;
+	// 	line-height: 14px;
+	// }
 }
 
 .VerseText {

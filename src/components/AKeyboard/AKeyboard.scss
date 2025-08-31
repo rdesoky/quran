@@ -1,9 +1,12 @@
+@use "@/vars" as *;
+
 #AKeyboard {
-	position: fixed;
-	bottom: 0;
+	position: absolute;
+	bottom: -$footerHeight;
 	left: 0;
 	right: 0;
-	background-color: rgba(1, 1, 1, 0.8);
+	padding: 0 6px;
+	background-color: rgba(1, 1, 1);
 	// margin: 0 0 12px 0;
 
 	.KeysRow {
