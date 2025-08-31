@@ -1,6 +1,4 @@
-
-
-const appVersion = 30;
+const appVersion = 31;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
@@ -17,12 +15,12 @@ const deleteOldCaches = async () => {
 };
 
 const addResourcesToCache = async () => {
-	const appManifest = await fetch("app-manifest.json").then((res) =>
-		res.json()
-	).catch(() => {
-		console.error("Failed to fetch app-manifest.json");
-		return {};
-	});
+	const appManifest = await fetch("app-manifest.json")
+		.then((res) => res.json())
+		.catch(() => {
+			console.error("Failed to fetch app-manifest.json");
+			return {};
+		});
 
 	const appFiles = Object.values(appManifest.files).filter(
 		(file) => !file.includes(".map")
@@ -46,12 +44,10 @@ const putInCache = async (request, response) => {
 		request.method !== "GET" ||
 		response.status !== 200 ||
 		!assetRoots.some((cacheBase) => request.url.startsWith(cacheBase))
-	)
-	{
+	) {
 		return;
 	}
-	if (cacheExcludes.some((exclude) => request.url.includes(exclude)))
-	{
+	if (cacheExcludes.some((exclude) => request.url.includes(exclude))) {
 		return;
 	}
 	const assetCache = await caches.open(assetsCacheId);
@@ -61,17 +57,14 @@ const putInCache = async (request, response) => {
 const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
 	// First try to get the resource from the cache
 	const responseFromCache = await caches.match(request);
-	if (responseFromCache && responseFromCache.status === 200)
-	{
+	if (responseFromCache && responseFromCache.status === 200) {
 		return responseFromCache;
 	}
 
 	// Next try to use the preloaded response, if it's there
-	if (preloadResponsePromise)
-	{
+	if (preloadResponsePromise) {
 		const preloadResponse = await preloadResponsePromise;
-		if (preloadResponse)
-		{
+		if (preloadResponse) {
 			console.info("using preload response", preloadResponse);
 			putInCache(request, preloadResponse.clone());
 			return preloadResponse;
@@ -79,19 +72,16 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
 	}
 
 	// Next try to get the resource from the network
-	try
-	{
+	try {
 		const responseFromNetwork = await fetch(request);
 		// response may be used only once
 		// we need to save clone to put one copy in cache
 		// and serve second one
 		putInCache(request, responseFromNetwork.clone());
 		return responseFromNetwork;
-	} catch (error)
-	{
+	} catch (_e) {
 		const fallbackResponse = await caches.match(fallbackUrl);
-		if (fallbackResponse)
-		{
+		if (fallbackResponse) {
 			return fallbackResponse;
 		}
 		// when even the fallback response is not available,
@@ -105,8 +95,7 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
 };
 
 const enableNavigationPreload = async () => {
-	if (self.registration.navigationPreload)
-	{
+	if (self.registration.navigationPreload) {
 		// Enable navigation preloads!
 		await self.registration.navigationPreload.enable();
 	}

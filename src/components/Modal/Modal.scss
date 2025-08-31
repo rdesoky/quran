@@ -121,9 +121,9 @@
 			// padding: 0 3px;
 			gap: 3px;
 		}
-		.TypingConsole{
-			border:none;
-			border-inline-end: solid 1px #444;
+
+		.TypingConsole {
+			border-width: 0 1px;
 		}
 
 		flex-wrap: nowrap;
@@ -431,6 +431,8 @@
 
 #SearchPopup {
 	.Title {
+		padding-inline-start: 0;
+
 		.TypingConsole {
 			margin: 0;
 			flex-grow: 1;
@@ -469,9 +471,10 @@
 
 #IndicesPopup,
 #FavoritesPopup {
-	.TypingConsole{
+	.TypingConsole {
 		flex-basis: 0;
 	}
+
 	.Title {
 		//align-items: stretch;
 		justify-items: center;
@@ -736,13 +739,14 @@
 
 	[lang="ar"] & {
 		// float: left;
-		transform: scaleX(-1);//toggle
+		transform: scaleX(-1); //toggle
 		// margin: 0 0 0 5px;
 	}
 
 	&.active {
 		background-color: #444;
-		&:hover{
+
+		&:hover {
 			background-color: #666;
 		}
 	}
