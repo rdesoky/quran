@@ -13,7 +13,7 @@ import {
     TOTAL_PARTS,
     TOTAL_SURAS,
 } from "@/services/qData";
-import { selectAppHeight } from "@/store/layoutSlice";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import {
     gotoAya,
     gotoPage,
@@ -23,11 +23,13 @@ import {
 } from "@/store/navSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
 import PartsPie from "@/components/PartsPie";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 
 const GotoPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const selectStart = useSelector(selectStartSelection);
+    const isNarrow = useSelector(selectIsNarrow);
 
     // const [isOpen, setIsOpen] = useState(true);
     const appHeight = useSelector(selectAppHeight);
@@ -133,6 +135,7 @@ const GotoPage = () => {
         <>
             <div className="Title">
                 <String id="goto" />
+                {isNarrow ? <PlayerButtons trigger="tafseer_title" /> : null}
             </div>
             <div className="PopupBody" ref={bodyRef}>
                 <div className="FieldRow">

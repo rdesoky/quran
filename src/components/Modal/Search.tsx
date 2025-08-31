@@ -484,7 +484,8 @@ export default function Search() {
                         <span
                             className="ParaId Chapter"
                             style={{
-                                marginLeft: lang === "ar" ? 20 : 10,
+                                marginInlineEnd: 30, // roam for the editor (X) button
+                                marginInlineStart: 10,
                                 fontSize: ".8em",
                             }}
                         >

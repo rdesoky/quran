@@ -3,15 +3,17 @@ import Login from "@/components/Login";
 import { UserImage } from "@/components/UserImage";
 import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import { selectUser, signOut } from "@/store/dbSlice";
-import { selectAppHeight } from "@/store/layoutSlice";
+import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import { PlayerButtons } from "../AudioPlayer/PlayerButtons";
 
 const User = () => {
     const appHeight = useSelector(selectAppHeight);
     const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const isNarrow = useSelector(selectIsNarrow);
 
     const onSignOut = () => {
         dispatch(signOut());
@@ -21,6 +23,7 @@ const User = () => {
         <>
             <div className="Title">
                 <String id="profile" />
+                {isNarrow ? <PlayerButtons trigger="tafseer_title" /> : null}
             </div>
             <div className="PopupBody" ref={bodyRef}>
                 <div className="HCentered">
