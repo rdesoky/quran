@@ -86,7 +86,7 @@ export default [
 			// "no-console": "warn",
 			"no-debugger": "warn",
 			"no-var": "error",
-			"prefer-const": "error",
+			"prefer-const": "warn",
 			"no-unused-expressions": "error",
 			eqeqeq: ["error", "always"],
 			curly: ["error", "all"],
