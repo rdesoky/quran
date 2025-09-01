@@ -34,6 +34,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type PageProps = {
+	hide: boolean;
 	order: 0 | 1; //0 for right page, 1 for left page
 	scaleX: number;
 	shiftX: number;
@@ -42,7 +43,7 @@ type PageProps = {
 
 // type VerseInfo = Omit<PageVerse, "epos"> & { epos: number; aya_id: number };
 
-const Page = ({ order, scaleX, shiftX, incrementMask }: PageProps) => {
+const Page = ({ hide, order, scaleX, shiftX, incrementMask }: PageProps) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [versesInfo, setVersesInfo] = useState<VerseInfo[]>([]);
 	const pagesCount = useSelector(selectPagesCount);
@@ -169,7 +170,7 @@ const Page = ({ order, scaleX, shiftX, incrementMask }: PageProps) => {
 							<img
 								style={{
 									margin: `0 ${pageMargin}px`,
-									width: pageWidth - 2 * pageMargin,
+									width: hide ? 0 : pageWidth - 2 * pageMargin,
 									height: pageHeight,
 								}}
 								src={

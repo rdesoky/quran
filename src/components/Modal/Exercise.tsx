@@ -77,7 +77,9 @@ const Exercise = () => {
 	const [missingWords, setMissingWords] = useState(0);
 	const verseList = quranText;
 	const normVerseList = quranNormalizedText;
-	const [quickMode, setQuickMode] = useState(0);
+	const [quickMode, setQuickMode] = useState(() => {
+		return Number(localStorage.getItem("quickMode")) || 0;
+	});
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const audio = useAudio();
@@ -86,6 +88,10 @@ const Exercise = () => {
 	const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
 	const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 220, currStep);
 	const cursorRef = useRef<HTMLDivElement | null>(null);
+	const saveQuickMode = (quickMode: number) => {
+		setQuickMode(quickMode);
+		localStorage.setItem("quickMode", quickMode.toString());
+	};
 
 	const setCurrStep = (step: StepId) => {
 		setCurrentStep(step);
@@ -199,7 +205,7 @@ const Exercise = () => {
 	const showTypingSettings = () => {
 		msgBox.set({
 			title: <String id="typing_settings" />,
-			content: <ExerciseTypingOptions {...{ quickMode, setQuickMode }} />,
+			content: <ExerciseTypingOptions {...{ quickMode, saveQuickMode }} />,
 		});
 	};
 
@@ -362,11 +368,11 @@ const Exercise = () => {
 	const renderIntro = () => {
 		return (
 			<div className="PopupBody" ref={bodyRef}>
-				<VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
-				<VerseText copy={true} bookmark={true} verse={verse} />
-				<div className="FootNote">
+				<div className="HeadNote">
 					<String id="exercise_intro" />
 				</div>
+				<VerseInfo trigger="exercise_intro" onMoveNext={onMoveNext} />
+				<VerseText copy={true} bookmark={true} verse={verse} />
 				<hr />
 				<TafseerView
 					verse={verse}
@@ -376,6 +382,8 @@ const Exercise = () => {
 					onMoveNext={onMoveNext}
 					trigger={trigger}
 				/>
+				<hr />
+				<ExerciseTypingOptions {...{ quickMode, saveQuickMode, modal: false }} />
 				<hr />
 				<div>
 					<String id="random_exercise" />
@@ -683,9 +691,8 @@ const Exercise = () => {
 					trigger={trigger}
 				/>
 				<hr />
-				<div>
-					<String id="random_exercise" />
-				</div>
+				<ExerciseTypingOptions {...{ quickMode, saveQuickMode, modal: false }} />
+				<hr />
 				<ExerciseSettings />
 				<hr />
 				<ActivityChart activity="chars" />
@@ -724,7 +731,7 @@ const Exercise = () => {
 			return new Array(missingWords + 1)
 				.join("0")
 				.split("")
-				.map((x, index) => (
+				.map((_x, index) => (
 					<span key={index} className="Wrong">
 						{" ? "}
 					</span>
@@ -814,11 +821,11 @@ const Exercise = () => {
 		return (
 			// !isNarrowLayout &&
 			<div className="PopupBody" ref={bodyRef}>
-				<VerseInfo trigger="exercise_reciting" verse={verse} />
-				<VerseText verse={verse} />
-				<div className="FootNote">
+				<div className="HeadNote">
 					<String id="exercise_intro" />
 				</div>
+				<VerseInfo trigger="exercise_reciting" verse={verse} />
+				<VerseText verse={verse} />
 				<hr />
 				<TafseerView
 					verse={verse}

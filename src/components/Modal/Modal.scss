@@ -574,6 +574,12 @@
 
 }
 
+#ExerciseTypingOptions {
+	.RadioGroup {
+		padding-inline-start: 10%;
+	}
+}
+
 .TafseerView {
 	white-space: normal;
 	direction: rtl;
@@ -588,6 +594,7 @@
 	//     }
 	.TafseerText {
 		// clear: both;
+		font-size: 20px;
 	}
 }
 
@@ -601,7 +608,7 @@
 	line-height: 32px;
 	overflow: auto;
 	position: relative;
-	height: calc(100vh - 250px); // subtract keyboard and header height
+	height: calc(100vh - 255px); // subtract keyboard and header height
 
 	&.empty {
 		color: #666;
