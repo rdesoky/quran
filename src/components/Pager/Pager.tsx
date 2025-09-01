@@ -542,6 +542,8 @@ export default function Pager() {
 		});
 	};
 
+	const [dropped, setDropped] = useState(false);
+
 	return (
 		<>
 			<div
@@ -573,11 +575,14 @@ export default function Pager() {
 				onDrop={({ dX }: { dX: number; dY: number; }) => {
 					if (dX > 50) {
 						analytics.setTrigger("dragging");
-						pageDown();
+						setDropped(true);
+						setTimeout(() => { setDropped(false); pageDown(); }, 1);
+						// pageDown();
 					}
 					if (dX < -50) {
 						analytics.setTrigger("dragging");
-						pageUp();
+						setDropped(true);
+						setTimeout(() => { setDropped(false); pageUp(); }, 1);
 					}
 				}}
 			>
@@ -616,12 +621,14 @@ export default function Pager() {
 							}}
 						>
 							<Page
+								hide={dropped}
 								order={0}
 								scaleX={firstPageScaleX}
 								shiftX={firstPageShiftX}
 								incrementMask={incrementMask}
 							/>
 							<Page
+								hide={dropped}
 								order={1}
 								scaleX={secondPageScaleX}
 								shiftX={secondPageShiftX}
