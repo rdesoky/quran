@@ -1,6 +1,6 @@
-const appVersion = 34;
+const appVersion = 35;
 const appCacheId = `app.v${appVersion}`;
-const assetsVersion = 2;
+const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
 
 const assetRoots = [location.origin /*, "https://www.everyayah.com/data"*/];

@@ -88,7 +88,7 @@
 	.PlayPrompt & {
 		display: flex;
 		justify-content: space-around;
-		gap: 8px;
+		gap: 6px;
 
 		.CommandButton {
 			padding: 5px;
@@ -137,8 +137,10 @@
 .PlayPrompt {
 	display: flex;
 	margin-top: 5px;
+	padding-top: 5px;
 	align-items: center;
 	gap: 6px;
+	border-top: solid 1px #666;
 
 	.PlayerButtons {
 		flex-grow: 1;
@@ -148,5 +150,12 @@
 		svg {
 			width: 25px;
 		}
+	}
+
+}
+
+#PlayPrompt {
+	td:first-child {
+		border-inline-end: solid 1px #666;
 	}
 }
