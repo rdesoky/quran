@@ -1,8 +1,8 @@
 import {
-    faCopy,
-    faIndent,
-    faSearch,
-    faTimes,
+	faCopy,
+	faIndent,
+	faSearch,
+	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
@@ -11,9 +11,9 @@ import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "@/services/analytics";
 import { arSuraNames, ayaIdInfo, verseLocation } from "@/services/qData";
 import {
-    copy2Clipboard,
-    highlightSearch,
-    normalizeText,
+	copy2Clipboard,
+	highlightSearch,
+	normalizeText,
 } from "@/services/utils";
 import { selectAppHeight, selectPopupWidth } from "@/store/layoutSlice";
 import { gotoAya, gotoSura, hideMask } from "@/store/navSlice";
@@ -26,507 +26,508 @@ import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
 import Icon from "../Icon";
 
 type ResultItem = {
-    aya: number;
-    text: string;
-    ntext: string;
+	aya: number;
+	text: string;
+	ntext: string;
 };
 
 type GroupItem = { aya: number; text: string; ntext: string; ayaNum: number };
 
 type ResultGroup = {
-    sura: number;
-    verses: GroupItem[];
+	sura: number;
+	verses: GroupItem[];
 };
 
 export default function Search() {
-    const popupWidth = useSelector(selectPopupWidth);
-    const input = useRef<HTMLInputElement>(null);
-    const [searchTerm, setSearchTerm] = useState(
-        localStorage.getItem("LastSearch") || ""
-    );
-    const [searchHistory, setSearchHistory] = useState<string[]>(
-        JSON.parse(localStorage.getItem("SearchHistory") || "[]")
-    );
-    const [results, setResults] = useState<ResultItem[]>([]);
-    const [pages, setPages] = useState(1);
-    const [keyboard, setKeyboard] = useState(false);
-    const [expandedGroup, setExpandedGroup] = useState(0);
-    const [treeView, setTreeView] = useState(
-        localStorage.getItem("searchTreeView") === "1"
-    );
-    const appHeight = useSelector(selectAppHeight);
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const lang = useSelector(selectLang);
-    const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm); // substract 8px for the bottom padding
+	const popupWidth = useSelector(selectPopupWidth);
+	const input = useRef<HTMLInputElement>(null);
+	const [searchTerm, setSearchTerm] = useState(
+		localStorage.getItem("LastSearch") || ""
+	);
+	const [searchHistory, setSearchHistory] = useState<string[]>(
+		JSON.parse(localStorage.getItem("SearchHistory") || "[]")
+	);
+	const [results, setResults] = useState<ResultItem[]>([]);
+	const [pages, setPages] = useState(1);
+	const [keyboard, setKeyboard] = useState(false);
+	const [expandedGroup, setExpandedGroup] = useState(0);
+	const [treeView, setTreeView] = useState(
+		localStorage.getItem("searchTreeView") === "1"
+	);
+	const appHeight = useSelector(selectAppHeight);
+	const dispatch = useDispatch();
+	const history = useHistory();
+	const lang = useSelector(selectLang);
+	const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm); // substract 8px for the bottom padding
 
-    const resultsDiv = resultsRef.current;
+	const resultsDiv = resultsRef.current;
 
-    const toggleTreeView = () => {
-        analytics.logEvent("search_toggle_view", {
-            view_mode: treeView ? "list" : "tree",
-        });
-        localStorage.setItem("searchTreeView", !treeView ? "1" : "0");
-        setTreeView(!treeView);
-    };
+	const toggleTreeView = () => {
+		analytics.logEvent("search_toggle_view", {
+			view_mode: treeView ? "list" : "tree",
+		});
+		localStorage.setItem("searchTreeView", !treeView ? "1" : "0");
+		setTreeView(!treeView);
+	};
 
-    const showKeyboard = () => {
-        setKeyboard(true);
-    };
-    const hideKeyboard = () => {
-        setKeyboard(false);
-    };
+	const showKeyboard = () => {
+		setKeyboard(true);
+	};
+	const hideKeyboard = () => {
+		setKeyboard(false);
+	};
 
-    const doSearch = useCallback((searchTerm: string) => {
-        let sResults: ResultItem[] = [];
-        const normSearchTerm = normalizeText(searchTerm);
+	const doSearch = useCallback((searchTerm: string) => {
+		let sResults: ResultItem[] = [];
+		const normSearchTerm = normalizeText(searchTerm);
 
-        if (normSearchTerm.length > 0) {
-            localStorage.setItem("LastSearch", searchTerm);
-        }
+		if (normSearchTerm.length > 0) {
+			localStorage.setItem("LastSearch", searchTerm);
+		}
 
-        const verseList = quranText;
-        if (verseList.length > 0 && normSearchTerm.length > 2) {
-            sResults = quranNormalizedText.reduce((results, ntext, aya) => {
-                if (ntext.includes(normSearchTerm)) {
-                    results.push({
-                        aya,
-                        text: verseList[aya],
-                        ntext: ntext,
-                    });
-                }
-                return results;
-            }, [] as ResultItem[]);
-        }
-        setResults(sResults);
-    }, []);
+		const verseList = quranText;
+		if (verseList.length > 0 && normSearchTerm.length > 2) {
+			sResults = quranNormalizedText.reduce((results, ntext, aya) => {
+				if (ntext.includes(normSearchTerm)) {
+					results.push({
+						aya,
+						text: verseList[aya],
+						ntext: ntext,
+					});
+				}
+				return results;
+			}, [] as ResultItem[]);
+		}
+		setResults(sResults);
+	}, []);
 
-    useEffect(() => {
-        analytics.setTrigger("search_ui");
-        const textInput = input.current;
-        if (!textInput) {
-            return;
-        }
-        setTimeout(function () {
-            textInput.focus();
-            // textInput.select();
-        }, 100);
-        doSearch(searchTerm);
-        // textInput.addEventListener("blur", hideKeyboard);
-        textInput.addEventListener("focus", showKeyboard);
-        return () => {
-            // textInput.removeEventListener("blur", hideKeyboard);
-            textInput.removeEventListener("focus", showKeyboard);
-        };
-    }, [doSearch, searchTerm]);
+	useEffect(() => {
+		analytics.setTrigger("search_ui");
+		const textInput = input.current;
+		if (!textInput) {
+			return;
+		}
+		setTimeout(function () {
+			textInput.focus();
+			// textInput.select();
+		}, 100);
+		doSearch(searchTerm);
+		// textInput.addEventListener("blur", hideKeyboard);
+		textInput.addEventListener("focus", showKeyboard);
+		return () => {
+			// textInput.removeEventListener("blur", hideKeyboard);
+			textInput.removeEventListener("focus", showKeyboard);
+		};
+	}, [doSearch, searchTerm]);
 
-    const addToSearchHistory = () => {
-        const filteredHistory = searchHistory.filter((s) => s !== searchTerm);
-        if (filteredHistory.length === searchHistory.length) {
-            // a new search has been added
-            analytics.logEvent("search_text", {
-                search_term: searchTerm,
-                search_type: "new",
-            });
-        }
+	const addToSearchHistory = () => {
+		const filteredHistory = searchHistory.filter((s) => s !== searchTerm);
+		if (filteredHistory.length === searchHistory.length) {
+			// a new search has been added
+			analytics.logEvent("search_text", {
+				search_term: searchTerm,
+				search_type: "new",
+			});
+		}
 
-        //push the search to the top of the history
-        let history = [searchTerm, ...filteredHistory];
-        history = history.slice(0, 10); //keep last 10 items
-        localStorage.setItem("SearchHistory", JSON.stringify(history));
-        setSearchHistory(history);
-    };
+		//push the search to the top of the history
+		let history = [searchTerm, ...filteredHistory];
+		history = history.slice(0, 10); //keep last 10 items
+		localStorage.setItem("SearchHistory", JSON.stringify(history));
+		setSearchHistory(history);
+	};
 
-    //TODO: duplicate code with QIndex
-    const onClickSura = (e: React.MouseEvent) => {
-        const target = e.currentTarget;
-        dispatch(hideMask());
-        setKeyboard(false);
-        const index = Number(target.getAttribute("data-sura"));
-        // app.gotoSura(index);
-        dispatch(gotoSura(history, index));
-        dispatch(closePopupIfBlocking());
-    };
+	//TODO: duplicate code with QIndex
+	const onClickSura = (e: React.MouseEvent) => {
+		const target = e.currentTarget;
+		dispatch(hideMask());
+		setKeyboard(false);
+		const index = Number(target.getAttribute("data-sura"));
+		// app.gotoSura(index);
+		dispatch(gotoSura(history, index));
+		dispatch(closePopupIfBlocking());
+	};
 
-    const onClickAya = (e: React.MouseEvent) => {
-        const aya = e.currentTarget.getAttribute("data-aya");
+	const onClickAya = (e: React.MouseEvent) => {
+		const aya = e.currentTarget.getAttribute("data-aya");
 
-        analytics.logEvent("click_search_result", {
-            ...verseLocation(Number(aya)),
-        });
+		analytics.logEvent("click_search_result", {
+			...verseLocation(Number(aya)),
+		});
 
-        dispatch(closePopupIfBlocking());
-        setKeyboard(false);
-        dispatch(gotoAya(history, Number(aya), { sel: true }));
-        addToSearchHistory();
-        e.preventDefault();
-    };
+		dispatch(closePopupIfBlocking());
+		setKeyboard(false);
+		dispatch(gotoAya(history, Number(aya), { sel: true }));
+		addToSearchHistory();
+		e.preventDefault();
+	};
 
-    const renderMore = () => {
-        if (results.length > pages * 20) {
-            return (
-                <button
-                    className="MoreResults"
-                    onClick={(_e) => setPages(pages + 1)}
-                >
-                    <String id="more" />
-                    ...
-                </button>
-            );
-        }
-    };
+	const renderMore = () => {
+		if (results.length > pages * 20) {
+			return (
+				<button
+					className="MoreResults"
+					onClick={(_e) => setPages(pages + 1)}
+				>
+					<String id="more" />
+					...
+				</button>
+			);
+		}
+	};
 
-    const toggleGroup = (e: React.MouseEvent) => {
-        const currentTarget = e.currentTarget;
-        const groupId = Number(currentTarget.getAttribute("data-group-index"));
-        if (!isNaN(groupId)) {
-            setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
-            setTimeout(() => {
-                currentTarget?.scrollIntoView?.({
-                    behavior: "smooth",
-                    block: "start",
-                    inline: "nearest",
-                });
-            }, 300);
-        }
-    };
+	const toggleGroup = (e: React.MouseEvent) => {
+		const currentTarget = e.currentTarget;
+		const groupId = Number(currentTarget.getAttribute("data-group-index"));
+		if (!isNaN(groupId)) {
+			setExpandedGroup(groupId === expandedGroup ? -1 : groupId);
+			setTimeout(() => {
+				currentTarget?.scrollIntoView?.({
+					behavior: "smooth",
+					block: "start",
+					inline: "nearest",
+				});
+			}, 300);
+		}
+	};
 
-    // const onResultKeyDown = e => {
-    // 	if (e.key === "Enter") {
-    // 		gotoAya(e);
-    // 	}
-    // };
+	// const onResultKeyDown = e => {
+	// 	if (e.key === "Enter") {
+	// 		gotoAya(e);
+	// 	}
+	// };
 
-    const nSearchTerm = normalizeText(searchTerm);
+	const nSearchTerm = normalizeText(searchTerm);
 
-    const renderSuras = () => {
-        if (nSearchTerm.length < 1) {
-            return null;
-        }
+	const renderSuras = () => {
+		if (nSearchTerm.length < 1) {
+			return null;
+		}
 
-        const nSuraNames = normalizeText(arSuraNames.join(",")).split(",");
+		const nSuraNames = normalizeText(arSuraNames.join(",")).split(",");
 
-        return (
-            <ul
-                id="MatchedSuraNames"
-                className="SpreadSheet"
-                style={{
-                    columnCount: Math.floor((popupWidth - 50) / 120), //-50px margin
-                }}
-            >
-                {arSuraNames
-                    .map((suraName, index) => {
-                        return { name: suraName, index: index };
-                    })
-                    .filter(
-                        (suraInfo) =>
-                            nSuraNames[suraInfo.index].match(
-                                new RegExp(nSearchTerm, "i")
-                            ) !== null
-                        // nSuraNames[suraInfo.index].indexOf(
-                        //     nSearchTerm
-                        // ) !== -1
-                    )
-                    .map((suraInfo) => {
-                        return (
-                            <li key={suraInfo.index}>
-                                <button
-                                    className="VerseLink"
-                                    onClick={onClickSura}
-                                    data-sura={suraInfo.index}
-                                >
-                                    {suraInfo.index + 1 + ". " + suraInfo.name}
-                                </button>
-                            </li>
-                        );
-                    })}
-            </ul>
-        );
-    };
+		return (
+			<ul
+				id="MatchedSuraNames"
+				className="SpreadSheet"
+				style={{
+					columnCount: Math.floor((popupWidth - 50) / 120), //-50px margin
+				}}
+			>
+				{arSuraNames
+					.map((suraName, index) => {
+						return { name: suraName, index: index };
+					})
+					.filter(
+						(suraInfo) =>
+							nSuraNames[suraInfo.index].match(
+								new RegExp(nSearchTerm, "i")
+							) !== null
+						// nSuraNames[suraInfo.index].indexOf(
+						//     nSearchTerm
+						// ) !== -1
+					)
+					.map((suraInfo) => {
+						return (
+							<li key={suraInfo.index}>
+								<button
+									className="VerseLink"
+									onClick={onClickSura}
+									data-sura={suraInfo.index}
+								>
+									{suraInfo.index + 1 + ". " + suraInfo.name}
+								</button>
+							</li>
+						);
+					})}
+			</ul>
+		);
+	};
 
-    const copyVerse = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const { currentTarget } = e;
-        const verse = Number(currentTarget.getAttribute("data-verse"));
-        const verseInfo = ayaIdInfo(verse);
-        const text = quranText?.[verse];
-        copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
-        dispatch(showToast({ id: "text_copied" }));
-        e.stopPropagation();
+	const copyVerse = (e: React.MouseEvent<HTMLButtonElement>) => {
+		const { currentTarget } = e;
+		const verse = Number(currentTarget.getAttribute("data-verse"));
+		const verseInfo = ayaIdInfo(verse);
+		const text = quranText?.[verse];
+		copy2Clipboard(`${text} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`);
+		dispatch(showToast({ id: "text_copied" }));
+		e.stopPropagation();
 
-        analytics.logEvent("copy_text", {
-            ...verseLocation(verse),
-            verses_count: 1,
-            trigger: "search_results",
-        });
-    };
+		analytics.logEvent("copy_text", {
+			...verseLocation(verse),
+			verses_count: 1,
+			trigger: "search_results",
+		});
+	};
 
-    const renderResultsTree = () => {
-        const groups = results.reduce((groups, ayaInfo, _index) => {
-            const { sura, aya } = ayaIdInfo(ayaInfo.aya);
-            const group = groups.find((g) => g.sura === sura);
-            const ayaInfoEx = { ...ayaInfo, ayaNum: aya + 1 };
-            if (group) {
-                group.verses.push(ayaInfoEx);
-            } else {
-                groups.push({ sura, verses: [ayaInfoEx] });
-            }
-            return groups;
-        }, [] as ResultGroup[]);
+	const renderResultsTree = () => {
+		const groups = results.reduce((groups, ayaInfo, _index) => {
+			const { sura, aya } = ayaIdInfo(ayaInfo.aya);
+			const group = groups.find((g) => g.sura === sura);
+			const ayaInfoEx = { ...ayaInfo, ayaNum: aya + 1 };
+			if (group) {
+				group.verses.push(ayaInfoEx);
+			} else {
+				groups.push({ sura, verses: [ayaInfoEx] });
+			}
+			return groups;
+		}, [] as ResultGroup[]);
 
-        return (
-            <div
-                className="ResultsList"
-                onMouseDown={hideKeyboard}
-                ref={resultsRef}
-            >
-                {groups.map(({ sura, verses }, i) => {
-                    const expanded = expandedGroup === i;
+		return (
+			<div
+				className="ResultsList"
+				onMouseDown={hideKeyboard}
+				ref={resultsRef}
+			>
+				{groups.map(({ sura, verses }, i) => {
+					const expanded = expandedGroup === i;
 
-                    return (
-                        <div
-                            key={i}
-                            className={"ResultsGroup".appendWord(
-                                "Expanded",
-                                expanded
-                            )}
-                        >
-                            <button
-                                className="ResultsGroupHeader"
-                                data-group-index={i}
-                                onClick={toggleGroup}
-                                tabIndex={0}
-                            >
-                                <span className="ParaId Chapter">
-                                    {verses.length}
-                                </span>
-                                {sura + 1}.<SuraName index={sura} />
-                            </button>
-                            {!expanded ? null : (
-                                <div className="ResultsGroupList">
-                                    {verses.map(
-                                        ({
-                                            aya,
-                                            ayaNum,
-                                            text: ayaText,
-                                            ntext: normalizedAyaText,
-                                        }) => (
-                                            <button
-                                                key={aya}
-                                                className="ResultItem"
-                                                onClick={onClickAya}
-                                                tabIndex={0}
-                                                data-aya={aya}
-                                            >
-                                                <span className="ParaId Verse">
-                                                    {ayaNum}
-                                                </span>
-                                                <span
-                                                    className="ResultText link"
-                                                    dangerouslySetInnerHTML={highlightSearch(
-                                                        nSearchTerm,
-                                                        ayaText,
-                                                        normalizedAyaText
-                                                    )}
-                                                />
-                                                <Icon
-                                                    onClick={copyVerse}
-                                                    icon={faCopy}
-                                                    data-verse={aya}
-                                                />
-                                            </button>
-                                        )
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
+					return (
+						<div
+							key={i}
+							className={"ResultsGroup".appendWord(
+								"Expanded",
+								expanded
+							)}
+						>
+							<button
+								className="ResultsGroupHeader"
+								data-group-index={i}
+								onClick={toggleGroup}
+								tabIndex={0}
+							>
+								<span className="ParaId Chapter">
+									{verses.length}
+								</span>
+								{sura + 1}.<SuraName index={sura} />
+							</button>
+							{!expanded ? null : (
+								<div className="ResultsGroupList">
+									{verses.map(
+										({
+											aya,
+											ayaNum,
+											text: ayaText,
+											ntext: normalizedAyaText,
+										}) => (
+											<button
+												key={aya}
+												className="ResultItem"
+												onClick={onClickAya}
+												tabIndex={0}
+												data-aya={aya}
+											>
+												<span className="ParaId Verse">
+													{ayaNum}
+												</span>
+												<span
+													className="ResultText link"
+													dangerouslySetInnerHTML={highlightSearch(
+														nSearchTerm,
+														ayaText,
+														normalizedAyaText
+													)}
+												/>
+												<Icon
+													onClick={copyVerse}
+													icon={faCopy}
+													data-verse={aya}
+												/>
+											</button>
+										)
+									)}
+								</div>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		);
+	};
 
-    const renderResults = () => {
-        // if (!results.length) {
-        // 	return;
-        // }
-        const page = results.slice(0, pages * 20);
-        return (
-            <div
-                className="ResultsList"
-                onMouseDown={hideKeyboard}
-                ref={resultsRef}
-            >
-                {page.map(
-                    ({ aya, text: ayaText, ntext: normalizedAyaText }, _i) => {
-                        const ayaInfo = ayaIdInfo(aya);
-                        return (
-                            <button
-                                key={aya}
-                                onClick={onClickAya}
-                                data-aya={aya}
-                                className="ResultItem"
-                                tabIndex={0}
-                            >
-                                <span className="ResultInfo">
-                                    {ayaInfo.sura + 1}.
-                                    <SuraName index={ayaInfo.sura} /> (
-                                    {ayaInfo.aya + 1})
-                                </span>
-                                <span
-                                    className="ResultText link"
-                                    dangerouslySetInnerHTML={highlightSearch(
-                                        nSearchTerm,
-                                        ayaText,
-                                        normalizedAyaText
-                                    )}
-                                />
-                                <Icon
-                                    onClick={copyVerse}
-                                    icon={faCopy}
-                                    verse={aya}
-                                />
-                            </button>
-                        );
-                    }
-                )}
-                {renderMore()}
-            </div>
-        );
-    };
+	const renderResults = () => {
+		// if (!results.length) {
+		// 	return;
+		// }
+		const page = results.slice(0, pages * 20);
+		return (
+			<div
+				className="ResultsList"
+				onMouseDown={hideKeyboard}
+				ref={resultsRef}
+			>
+				{page.map(
+					({ aya, text: ayaText, ntext: normalizedAyaText }, _i) => {
+						const ayaInfo = ayaIdInfo(aya);
+						return (
+							<button
+								key={aya}
+								onClick={onClickAya}
+								data-aya={aya}
+								className="ResultItem"
+								tabIndex={0}
+							>
+								<span className="ResultInfo">
+									{ayaInfo.sura + 1}.
+									<SuraName index={ayaInfo.sura} /> (
+									{ayaInfo.aya + 1})
+								</span>
+								<span
+									className="ResultText link"
+									dangerouslySetInnerHTML={highlightSearch(
+										nSearchTerm,
+										ayaText,
+										normalizedAyaText
+									)}
+								/>
+								<Icon
+									onClick={copyVerse}
+									icon={faCopy}
+									verse={aya}
+								/>
+							</button>
+						);
+					}
+				)}
+				{renderMore()}
+			</div>
+		);
+	};
 
-    const onHistoryButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const searchTerm = e.currentTarget.textContent ?? "";
-        setKeyboard(false);
-        setSearchTerm(searchTerm);
-        doSearch(searchTerm);
-        analytics.logEvent("search_text", {
-            search_term: searchTerm,
-            search_type: "history",
-        });
-    };
+	const onHistoryButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		const searchTerm = e.currentTarget.textContent ?? "";
+		setKeyboard(false);
+		setSearchTerm(searchTerm);
+		doSearch(searchTerm);
+		analytics.logEvent("search_text", {
+			search_term: searchTerm,
+			search_type: "history",
+		});
+	};
 
-    useEffect(() => {
-        doSearch(searchTerm);
-        setExpandedGroup(0); //to select first group on new search
-    }, [doSearch, searchTerm]);
+	useEffect(() => {
+		doSearch(searchTerm);
+		setExpandedGroup(0); //to select first group on new search
+	}, [doSearch, searchTerm]);
 
-    const onSubmitSearch = () => {
-        const firstResult = resultsDiv?.querySelector(
-            ".ResultItem"
-        ) as HTMLButtonElement;
-        if (firstResult) {
-            //Make sure there is at least one result
-            firstResult.focus();
-            addToSearchHistory();
-        }
-        setKeyboard(false);
-    };
+	const onSubmitSearch = () => {
+		const firstResult = resultsDiv?.querySelector(
+			".ResultItem"
+		) as HTMLButtonElement;
+		if (firstResult) {
+			//Make sure there is at least one result
+			firstResult.focus();
+			addToSearchHistory();
+		}
+		setKeyboard(false);
+	};
 
-    const renderKeyboard = () => {
-        if (keyboard) {
-            return (
-                <div
-                    className="KeyboardFrame"
-                    onTouchStart={(e) => {
-                        e.stopPropagation();
-                    }}
-                    onMouseDown={(e) => {
-                        e.stopPropagation();
-                    }}
-                >
-                    <AKeyboard
-                        initText={searchTerm}
-                        onUpdateText={setSearchTerm}
-                        onCancel={hideKeyboard}
-                        onEnter={onSubmitSearch}
-                    />
-                </div>
-            );
-        }
-    };
+	const renderKeyboard = () => {
+		if (keyboard) {
+			return (
+				<div
+					className="KeyboardFrame"
+					onTouchStart={(e) => {
+						e.stopPropagation();
+					}}
+					onMouseDown={(e) => {
+						e.stopPropagation();
+					}}
+				>
+					<AKeyboard
+						initText={searchTerm}
+						onUpdateText={setSearchTerm}
+						onCancel={hideKeyboard}
+						onEnter={onSubmitSearch}
+					/>
+				</div>
+			);
+		}
+	};
 
-    const renderCursor = () => {
-        return <span className="TypingCursor"></span>;
-    };
+	const renderCursor = () => {
+		return <span className="TypingCursor"></span>;
+	};
 
-    const clearSearch = (e: React.MouseEvent) => {
-        setSearchTerm("");
-        e.stopPropagation();
-    };
+	const clearSearch = (e: React.MouseEvent) => {
+		setSearchTerm("");
+		e.stopPropagation();
+	};
 
-    const renderTypedText = () => {
-        if (!searchTerm) {
-            return <String id="search_prompt" />;
-        }
-        return (
-            <>
-                {searchTerm}
-                {renderCursor()}
-                <div className="ClearButton" onClick={clearSearch}>
-                    <Icon icon={faTimes} />
-                </div>
-            </>
-        );
-    };
+	const renderTypedText = () => {
+		if (!searchTerm) {
+			return <String id="search_prompt" />;
+		}
+		return (
+			<>
+				{searchTerm}
+				{renderCursor()}
+				<div className="ClearButton" onClick={clearSearch}>
+					<Icon icon={faTimes} />
+				</div>
+			</>
+		);
+	};
 
-    return (
-        <>
-            <div className="Title">
-                <div
-                    ref={input}
-                    className={
-                        "TypingConsole" + (!searchTerm.length ? " empty" : "")
-                    }
-                    tabIndex={0}
-                    onClick={showKeyboard}
-                >
-                    {results.length ? (
-                        <span
-                            className="ParaId Chapter"
-                            style={{
-                                marginInlineEnd: 30, // roam for the editor (X) button
-                                marginInlineStart: 10,
-                                fontSize: ".8em",
-                            }}
-                        >
-                            {results.length}
-                        </span>
-                    ) : null}
-                    {renderTypedText()}
-                </div>
-                <button className="CommandButton" onClick={onSubmitSearch}>
-                    <Icon icon={faSearch} />
-                </button>
-                {results.length ? (
-                    <button
-                        id="SearchViewToggler"
-                        className={"TreeToggler".appendWord("active", treeView)}
-                        onClick={toggleTreeView}
-                    >
-                        <Icon icon={faIndent} />
-                    </button>
-                ) : null}
-            </div>
-            {searchTerm.length === 0 && (
-                <div id="SearchHistory">
-                    {searchHistory.map((s, i) => {
-                        return (
-                            <button key={i} onClick={onHistoryButtonClick}>
-                                {s}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
+	return (
+		<>
+			<div className="Title">
+				<div
+					ref={input}
+					className={
+						"TypingConsole" + (!searchTerm.length ? " empty" : "")
+					}
+					tabIndex={0}
+					onClick={showKeyboard}
+				>
+					{results.length ? (
+						<span
+							className="ParaId Chapter"
+							style={{
+								marginLeft: 30, // roam for the editor (X) button
+								marginRight: 10,
+								fontSize: ".8em",
+								float: "left"
+							}}
+						>
+							{results.length}
+						</span>
+					) : null}
+					{renderTypedText()}
+				</div>
+				<button className="CommandButton" onClick={onSubmitSearch}>
+					<Icon icon={faSearch} />
+				</button>
+				{results.length ? (
+					<button
+						id="SearchViewToggler"
+						className={"TreeToggler".appendWord("active", treeView)}
+						onClick={toggleTreeView}
+					>
+						<Icon icon={faIndent} />
+					</button>
+				) : null}
+			</div>
+			{searchTerm.length === 0 && (
+				<div id="SearchHistory">
+					{searchHistory.map((s, i) => {
+						return (
+							<button key={i} onClick={onHistoryButtonClick}>
+								{s}
+							</button>
+						);
+					})}
+				</div>
+			)}
 
-            <div
-                className="PopupBody"
-                onTouchStart={hideKeyboard}
-                onMouseDown={hideKeyboard}
-                // ref={bodyRef}
-                style={{ marginTop: 0 }}
-            >
-                {/* <div className="ResultsInfo">
+			<div
+				className="PopupBody"
+				onTouchStart={hideKeyboard}
+				onMouseDown={hideKeyboard}
+				// ref={bodyRef}
+				style={{ marginTop: 0 }}
+			>
+				{/* <div className="ResultsInfo">
                     {results.length ? (
                         <button
                             id="SearchViewToggler"
@@ -556,10 +557,10 @@ export default function Search() {
                         }}
                     </String>
                 </div> */}
-                {renderSuras()}
-                {treeView ? renderResultsTree() : renderResults()}
-                {renderKeyboard()}
-            </div>
-        </>
-    );
+				{renderSuras()}
+				{treeView ? renderResultsTree() : renderResults()}
+				{renderKeyboard()}
+			</div>
+		</>
+	);
 }

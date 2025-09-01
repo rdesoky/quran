@@ -383,6 +383,8 @@ hr {
 	}
 
 	.ActionsBar {
+		direction: rtl;
+
 		button {
 			background-color: #444;
 			border-radius: 5px;
@@ -411,7 +413,7 @@ hr {
 		button {
 			height: 100%;
 			min-width: $chartHeight;
-			margin: 0 1px;
+			margin: 0;
 			justify-content: center;
 		}
 	}

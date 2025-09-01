@@ -1,15 +1,12 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectMaskOn } from "@/store/navSlice";
+import { CommandButton } from "@/components/CommandButton";
 import { AudioState, selectAudioState } from "@/store/playerSlice";
 import { AudioRange } from "@/store/settingsSlice";
 import { selectPopup } from "@/store/uiSlice";
-import { CommandButton } from "@/components/CommandButton";
+import { useSelector } from "react-redux";
 
 export const VerseContextButtons = () => {
 	const audioState = useSelector(selectAudioState);
 	const popup = useSelector(selectPopup);
-	const isMaskOn = useSelector(selectMaskOn);
 	const trigger = "verse_context";
 
 	return (
@@ -28,9 +25,7 @@ export const VerseContextButtons = () => {
 			{popup !== "Tafseer" ? (
 				<CommandButton trigger="verse_context" command="Tafseer" />
 			) : null}
-			{!isMaskOn && (
-				<CommandButton trigger="verse_context" command="Mask" />
-			)}
+			<CommandButton trigger="verse_context" command="Mask" />
 			<CommandButton trigger="verse_context" command="update_hifz" />
 			<CommandButton trigger="verse_context" command="Copy" />
 			<CommandButton trigger="verse_context" command="Bookmark" />

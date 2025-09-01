@@ -35,23 +35,21 @@ export const PageContextButtons = ({ page }: PageContextButtonsProps) => {
 				}}
 			/>
 			<CommandButton {...{ trigger, command: "update_hifz" }} />
-			{!isMaskOn && (
-				<CommandButton
-					{...{
-						trigger,
-						command: "Mask",
-						onClick: () => {
-							dispatch(
-								gotoAya(history, getPageFirstAyaId(page), {
-									sel: true,
-								})
-							);
-							dispatch(showMask());
-							contextPopup.close();
-						},
-					}}
-				/>
-			)}
+			<CommandButton
+				{...{
+					trigger,
+					command: "Mask",
+					onClick: isMaskOn ? undefined : () => {
+						dispatch(
+							gotoAya(history, getPageFirstAyaId(page), {
+								sel: true,
+							})
+						);
+						dispatch(showMask());
+						contextPopup.close();
+					},
+				}}
+			/>
 			<CommandButton {...{ trigger, command: "Goto" }} />
 			{/* {isNarrow && <CommandButton command="NextPage" trigger={trigger} />} */}
 		</div>

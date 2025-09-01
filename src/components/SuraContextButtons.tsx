@@ -32,21 +32,19 @@ export const SuraContextButtons = ({ sura }: SuraContextButtonsProps) => {
 				}}
 			/>
 			<CommandButton {...{ trigger, command: "update_hifz" }} />
-			{!isMaskOn && (
-				<CommandButton
-					{...{
-						trigger,
-						command: "Mask",
-						onClick: () => {
-							dispatch(
-								gotoAya(history, ayaID(sura, 0), { sel: true })
-							);
-							dispatch(showMask());
-							contextPopup.close();
-						},
-					}}
-				/>
-			)}
+			<CommandButton
+				{...{
+					trigger,
+					command: "Mask",
+					onClick: isMaskOn ? undefined : () => {
+						dispatch(
+							gotoAya(history, ayaID(sura, 0), { sel: true })
+						);
+						dispatch(showMask());
+						contextPopup.close();
+					},
+				}}
+			/>
 			<CommandButton {...{ trigger, command: "Goto" }} />
 		</div>
 	);
