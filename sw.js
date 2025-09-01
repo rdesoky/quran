@@ -1,5 +1,5 @@
-//Sun Aug 31 2025 15:27:56 GMT-0700 (Pacific Daylight Time)
-const appVersion = 31;
+//Mon Sep 01 2025 09:01:48 GMT-0700 (Pacific Daylight Time)
+const appVersion = 32;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
