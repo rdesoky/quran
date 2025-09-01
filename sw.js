@@ -1,7 +1,7 @@
-//Mon Sep 01 2025 10:39:01 GMT-0700 (Pacific Daylight Time)
+//Mon Sep 01 2025 11:11:31 GMT-0700 (Pacific Daylight Time)
 const appVersion = 34;
 const appCacheId = `app.v${appVersion}`;
-const assetsVersion = 1;
+const assetsVersion = 2;
 const assetsCacheId = `assets.v${assetsVersion}`;
 
 const assetRoots = [location.origin /*, "https://www.everyayah.com/data"*/];
