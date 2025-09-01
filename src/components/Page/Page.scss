@@ -324,7 +324,7 @@
 
 .LeftPage {
 	.AnimatePage {
-		animation: LeftPageOpener 0.8s;
+		animation: LeftPageOpener 0.6s;
 	}
 
 	.PageImageFrame {
@@ -335,7 +335,7 @@
 
 .RightPage {
 	.AnimatePage {
-		animation: RightPageOpener 0.8s;
+		animation: RightPageOpener 0.6s;
 	}
 
 	.PageImageFrame {
@@ -346,11 +346,13 @@
 
 @keyframes RightPageOpener {
 	from {
+		opacity: .3;
 		transform: scaleX(0.85);
 		transform-origin: top left;
 	}
 
 	to {
+		opacity: 1;
 		transform: scaleX(1);
 		transform-origin: top left;
 	}
@@ -358,12 +360,14 @@
 
 @keyframes LeftPageOpener {
 	from {
+		opacity: .3;
 		// transform: translateX(100%);
 		transform: scaleX(0.85);
 		transform-origin: top right;
 	}
 
 	to {
+		opacity: 1;
 		// transform: translateX(0);
 		transform: scaleX(1);
 		transform-origin: top right;
