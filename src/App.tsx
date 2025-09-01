@@ -12,6 +12,7 @@ import { analytics } from "@/services/analytics";
 import { onResize, selectIsNarrow, selectZoomClass } from "@/store/layoutSlice";
 import { selectLang, selectTheme } from "@/store/settingsSlice";
 import useInitApp from "@/useInitApp";
+import useWakeLock from "@/hooks/useWakeLock";
 import firebase from "firebase";
 import { useDeferredValue, useEffect, useState } from "react";
 import { IntlProvider } from "react-intl";
@@ -56,6 +57,17 @@ const App: React.FC = () => {
 	// const app_size = useSelector(selectAppSize);
 	const zoomClass = useSelector(selectZoomClass);
 	useInitApp();
+
+	// Keep screen awake while using the app
+	useWakeLock({
+		enabled: true,
+		onAcquired: () => {
+			console.log('Screen will stay awake while using Quran Hafiz');
+		},
+		onError: (error) => {
+			console.warn('Wake lock not available:', error.message);
+		}
+	});
 
 	// const themeContext = useContext(ThemeContext);
 	// const lang = themeContext.lang;

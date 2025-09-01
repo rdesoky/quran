@@ -27,19 +27,3 @@ registerSW({
 	},
 });
 
-(async function () {
-	if ("wakeLock" in navigator) {
-		try {
-			const wakeLock = await navigator.wakeLock.request("screen");
-			// WakeLock is now active
-			console.log("Wake Lock is active:", wakeLock);
-			wakeLock.addEventListener("release", () => {
-				console.log("Wake Lock was released");
-			});
-		} catch (e: unknown) {
-			// Handle denied or failed request
-			const err = e as Error;
-			console.error(`${err.name}, ${err.message}`);
-		}
-	}
-})();
