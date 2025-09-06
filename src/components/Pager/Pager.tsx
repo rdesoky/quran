@@ -186,6 +186,9 @@ export default function Pager() {
 	}, [pagesCount, activePage]);
 
 	const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+		if (zoom) {
+			return;//only handle wheel in full page view
+		}
 		const viewRef = pagerRef.current;
 		const LINE_HEIGHT = 12;
 		//Check if page next or prev to active page is in the view
@@ -343,154 +346,154 @@ export default function Pager() {
 			e.stopPropagation();
 
 			switch (e.code) {
-				case "Slash":
-					if (canShowPopup && !vEditorOn) {
-						dispatch(showPopup("Help"));
-					}
-					break;
+			case "Slash":
+				if (canShowPopup && !vEditorOn) {
+					dispatch(showPopup("Help"));
+				}
+				break;
 
-				case "KeyU":
-					if (canShowPopup && !vEditorOn) {
-						dispatch(showPopup("Profile"));
+			case "KeyU":
+				if (canShowPopup && !vEditorOn) {
+					dispatch(showPopup("Profile"));
+				}
+				break;
+			case "KeyC":
+				if (!vEditorOn) {
+					copy2Clipboard(selectedText);
+					dispatch(showToast({ id: "text_copied" }));
+					//     // app.pushRecentCommand("Copy");
+				}
+				break;
+			case "KeyS"://TODO: handle "s" only if audio is playing
+			case "KeyR":
+				if (!vEditorOn) {
+					msgBox.set({
+						title: (
+							<Message id="play" values={keyValues("r")} />
+						),
+						content: (
+							<PlayPrompt
+								{...{
+									trigger: "keyboard",
+									showReciters: false,
+								}}
+							/>
+						),
+					});
+				}
+				break;
+			case "KeyP":
+				if (!vEditorOn) {
+					if (audioState === AudioState.playing) {
+						audio.pause();
+					} else {
+						audio.resume();
 					}
-					break;
-				case "KeyC":
-					if (!vEditorOn) {
-						copy2Clipboard(selectedText);
-						dispatch(showToast({ id: "text_copied" }));
-						//     // app.pushRecentCommand("Copy");
-					}
-					break;
-				case "KeyS":
-				case "KeyR":
-					if (!vEditorOn) {
-						msgBox.set({
-							title: (
-								<Message id="play" values={keyValues("r")} />
-							),
-							content: (
-								<PlayPrompt
-									{...{
-										trigger: "keyboard",
-										showReciters: false,
-									}}
-								/>
-							),
-						});
-					}
-					break;
-				case "KeyP":
-					if (!vEditorOn) {
-						if (audioState === AudioState.playing) {
-							audio.pause();
-						} else {
-							audio.resume();
-						}
-					}
-					break;
-				case "KeyZ":
-					if (!vEditorOn) {
-						dispatch(toggleZoom());
-					}
-					break;
-				case "Escape":
-					if (contextPopup.info) {
-						contextPopup.close();
-					} else if (msgBox.getMessages().length > 0) {
-						msgBox.pop();
-					} else if (activePopup !== null) {
-						dispatch(closePopup());
-					} else if (expandedMenu) {
-						dispatch(showMenu(false));
-						// app.setExpandedMenu(false);
-					} else if (maskStart !== -1) {
-						// app.hideMask();
-						dispatch(hideMask());
-					}
-					break;
-				case "KeyI":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Indices"));
-					}
-					break;
-				case "KeyG":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Goto"));
-					}
-					break;
-				case "KeyX":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Exercise"));
-					}
-					break;
-				case "KeyB":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Bookmarks"));
-					}
-					break;
-				case "KeyO":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Settings"));
-					}
-					break;
-				case "KeyF":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Search"));
-					}
-					break;
-				case "KeyA":
-					if (!popup && !vEditorOn) {
-						dispatch(toggleMenu());
-					}
-					break;
-				case "KeyH":
-					if (!vEditorOn) {
-						msgBox.set({
-							title: <Message id="update_hifz" />,
-							content: <AddHifz />,
-						});
-						dispatch(closePopupIfBlocking());
-					}
-					break;
-				case "KeyT":
-					if (!vEditorOn && canShowPopup) {
-						dispatch(showPopup("Tafseer"));
-					}
-					break;
-				case "KeyM":
-					if (!vEditorOn) {
-						dispatch(startMask(history));
-						// app.setMaskStart();
-					}
-					break;
-				case "ArrowDown":
-					onArrowKey(e.shiftKey, "down");
-					break;
-				case "ArrowUp":
-					onArrowKey(e.shiftKey, "up");
-					break;
-				case "ArrowLeft":
-					analytics.setTrigger("left_key");
+				}
+				break;
+			case "KeyZ":
+				if (!vEditorOn) {
+					dispatch(toggleZoom());
+				}
+				break;
+			case "Escape":
+				if (contextPopup.info) {
+					contextPopup.close();
+				} else if (msgBox.getMessages().length > 0) {
+					msgBox.pop();
+				} else if (activePopup !== null) {
+					dispatch(closePopup());
+				} else if (expandedMenu) {
+					dispatch(showMenu(false));
+					// app.setExpandedMenu(false);
+				} else if (maskStart !== -1) {
+					// app.hideMask();
+					dispatch(hideMask());
+				}
+				break;
+			case "KeyI":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Indices"));
+				}
+				break;
+			case "KeyG":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Goto"));
+				}
+				break;
+			case "KeyX":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Exercise"));
+				}
+				break;
+			case "KeyB":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Bookmarks"));
+				}
+				break;
+			case "KeyO":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Settings"));
+				}
+				break;
+			case "KeyF":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Search"));
+				}
+				break;
+			case "KeyA":
+				if (!popup && !vEditorOn) {
+					dispatch(toggleMenu());
+				}
+				break;
+			case "KeyH":
+				if (!vEditorOn) {
+					msgBox.set({
+						title: <Message id="update_hifz" />,
+						content: <AddHifz />,
+					});
+					dispatch(closePopupIfBlocking());
+				}
+				break;
+			case "KeyT":
+				if (!vEditorOn && canShowPopup) {
+					dispatch(showPopup("Tafseer"));
+				}
+				break;
+			case "KeyM":
+				if (!vEditorOn) {
+					dispatch(startMask(history));
+					// app.setMaskStart();
+				}
+				break;
+			case "ArrowDown":
+				onArrowKey(e.shiftKey, "down");
+				break;
+			case "ArrowUp":
+				onArrowKey(e.shiftKey, "up");
+				break;
+			case "ArrowLeft":
+				analytics.setTrigger("left_key");
+				pageDown();
+				break;
+			case "PageDown":
+				if (!isTextInput) {
+					analytics.setTrigger("page_down_key");
 					pageDown();
-					break;
-				case "PageDown":
-					if (!isTextInput) {
-						analytics.setTrigger("page_down_key");
-						pageDown();
-					}
-					break;
-				case "ArrowRight":
-					analytics.setTrigger("right_key");
+				}
+				break;
+			case "ArrowRight":
+				analytics.setTrigger("right_key");
+				pageUp();
+				break;
+			case "PageUp":
+				if (!isTextInput) {
+					analytics.setTrigger("page_up_key");
 					pageUp();
-					break;
-				case "PageUp":
-					if (!isTextInput) {
-						analytics.setTrigger("page_up_key");
-						pageUp();
-					}
-					break;
-				default:
-					return;
+				}
+				break;
+			default:
+				return;
 			}
 			if (!isTextInput) {
 				e.preventDefault();
