@@ -68,6 +68,16 @@ const Settings = () => {
 						<select onChange={updateLang} value={lang}>
 							<option value="ar">عربي</option>
 							<option value="en">English</option>
+							<option value="fr">Français</option>
+							<option value="tr">Türkçe</option>
+							<option value="id">Bahasa Indonesia</option>
+							<option value="ms">Bahasa Melayu</option>
+							<option value="fa">فارسی</option>
+							<option value="ur">اردو</option>
+							<option value="de">Deutsch</option>
+							<option value="it">Italiano</option>
+							<option value="nl">Nederlands</option>
+							<option value="es">Español</option>
 						</select>
 					</label>
 				</div>
