@@ -1,24 +1,25 @@
 import { useContext, useState } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { AppRefs } from "@/RefsProvider";
+import { TestMode } from "@/components/types";
 
 type ExerciseTypingOptionsProps = {
-	saveQuickMode: (mode: number) => void;
-	quickMode: number;
+	saveTestMode: (mode: TestMode) => void;
+	testMode: TestMode;
 	modal?: boolean;
 };
 
 export default function ExerciseTypingOptions({
-	saveQuickMode,
-	quickMode,
+	saveTestMode,
+	testMode,
 	modal = true,
 }: ExerciseTypingOptionsProps) {
-	const [option, setOption] = useState(quickMode);
+	const [option, setOption] = useState(testMode);
 	const msgBox = useContext(AppRefs).get("msgBox");
 
-	const onUpdateQuickMode = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setOption(Number(e.target.value));
-		saveQuickMode(Number(e.target.value));
+	const onUpdateTestMode = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setOption(Number(e.target.value) as TestMode);
+		saveTestMode(Number(e.target.value) as TestMode);
 	};
 
 	const onClose = () => {
@@ -39,7 +40,7 @@ export default function ExerciseTypingOptions({
 							name="quickMode"
 							value={0}
 							checked={option === 0}
-							onChange={onUpdateQuickMode}
+							onChange={onUpdateTestMode}
 						/>
 						<span>
 							<String id="quick_mode_0" />
@@ -53,7 +54,7 @@ export default function ExerciseTypingOptions({
 							name="quickMode"
 							value={1}
 							checked={option === 1}
-							onChange={onUpdateQuickMode}
+							onChange={onUpdateTestMode}
 						/>
 						<span>
 							<String id="quick_mode_1" />
@@ -67,7 +68,7 @@ export default function ExerciseTypingOptions({
 							name="quickMode"
 							value={2}
 							checked={option === 2}
-							onChange={onUpdateQuickMode}
+							onChange={onUpdateTestMode}
 						/>
 						<span>
 							<String id="quick_mode_2" />
