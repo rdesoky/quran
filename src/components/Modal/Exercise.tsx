@@ -46,6 +46,7 @@ import { ExerciseSettings } from "@/components/ExerciseSettings";
 import ExerciseTypingOptions from "@/components/ExerciseTypingOptions";
 import Icon from "@/components/Icon";
 import PlayerCountDown from "@/components/PlayerCountDown";
+import { TestMode } from "@/components/types";
 
 const Step = {
 	unknown: "unknown",
@@ -54,6 +55,8 @@ const Step = {
 	typing: "typing",
 	results: "results",
 };
+
+const PARTIAL_WORDS_COUNT = 3;
 
 type StepId = string;
 
@@ -77,8 +80,8 @@ const Exercise = () => {
 	const [missingWords, setMissingWords] = useState(0);
 	const verseList = quranText;
 	const normVerseList = quranNormalizedText;
-	const [quickMode, setQuickMode] = useState(() => {
-		return Number(localStorage.getItem("quickMode")) || 0;
+	const [testMode, setTestMode] = useState<TestMode>(() => {
+		return Number(localStorage.getItem("testMode")) || TestMode.reviewOnFinish;
 	});
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -88,9 +91,9 @@ const Exercise = () => {
 	const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
 	const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 220, currStep);
 	const cursorRef = useRef<HTMLDivElement | null>(null);
-	const saveQuickMode = (quickMode: number) => {
-		setQuickMode(quickMode);
-		localStorage.setItem("quickMode", quickMode.toString());
+	const saveTestMode = (testMode: TestMode) => {
+		setTestMode(testMode);
+		localStorage.setItem("testMode", testMode.toString());
 	};
 
 	const setCurrStep = (step: StepId) => {
@@ -122,25 +125,25 @@ const Exercise = () => {
 		const text = quranText?.[new_verse];
 		const length = text.length;
 		switch (parseInt(exerciseLevel)) {
-			case 0:
-				if (!length.between(1, 50)) {
-					return false;
-				}
-				break;
-			case 1:
-				if (!length.between(51, 150)) {
-					return false;
-				}
-				break;
-			case 2:
-				if (!length.between(151, 300)) {
-					return false;
-				}
-				break;
-			default:
-				if (!(length > 200)) {
-					return false;
-				}
+		case 0:
+			if (!length.between(1, 50)) {
+				return false;
+			}
+			break;
+		case 1:
+			if (!length.between(51, 150)) {
+				return false;
+			}
+			break;
+		case 2:
+			if (!length.between(151, 300)) {
+				return false;
+			}
+			break;
+		default:
+			if (!(length > 200)) {
+				return false;
+			}
 		}
 		//Length is good, check memorized
 		if (exerciseMemorized === false) {
@@ -205,7 +208,7 @@ const Exercise = () => {
 	const showTypingSettings = () => {
 		msgBox.set({
 			title: <String id="typing_settings" />,
-			content: <ExerciseTypingOptions {...{ quickMode, saveQuickMode }} />,
+			content: <ExerciseTypingOptions {...{ testMode, saveTestMode }} />,
 		});
 	};
 
@@ -213,10 +216,10 @@ const Exercise = () => {
 		audio.stop();
 		setCurrentStep((currStep: StepId) => {
 			switch (currStep) {
-				case Step.reciting:
-					return Step.typing;
-				default:
-					return Step.intro;
+			case Step.reciting:
+				return Step.typing;
+			default:
+				return Step.intro;
 			}
 		});
 		analytics.logEvent("exercise_go_back", { trigger });
@@ -276,25 +279,25 @@ const Exercise = () => {
 			defaultButton.focus();
 		}
 		switch (currStep) {
-			case Step.typing:
-				dispatch(setModalPopup(true)); //block outside selection
-				dispatch(setMaskShift(0)); //hide selected aya
-				typingConsoleRef.current?.focus();
-				break;
-			case Step.reciting:
-				dispatch(setModalPopup(true)); //block outside selection
-				dispatch(setMaskShift(1)); //show selected aya
-				break;
-			case Step.results:
-				//if correct answer, save number of verse letters in Firebase
-				dispatch(setMaskShift(1)); //show selected aya
-				dispatch(setModalPopup(false));
-				break;
-			case Step.intro:
-				dispatch(setMaskShift(1));
-			// eslint-disable-next-line no-fallthrough
-			default:
-				dispatch(setModalPopup(false)); //allow selecting outside
+		case Step.typing:
+			dispatch(setModalPopup(true)); //block outside selection
+			dispatch(setMaskShift(0)); //hide selected aya
+			typingConsoleRef.current?.focus();
+			break;
+		case Step.reciting:
+			dispatch(setModalPopup(true)); //block outside selection
+			dispatch(setMaskShift(1)); //show selected aya
+			break;
+		case Step.results:
+			//if correct answer, save number of verse letters in Firebase
+			dispatch(setMaskShift(1)); //show selected aya
+			dispatch(setModalPopup(false));
+			break;
+		case Step.intro:
+			dispatch(setMaskShift(1));
+		// eslint-disable-next-line no-fallthrough
+		default:
+			dispatch(setModalPopup(false)); //allow selecting outside
 		}
 	}, [currStep, defaultButton, dispatch, typingConsoleRef]);
 
@@ -302,15 +305,15 @@ const Exercise = () => {
 	useEffect(() => {
 		setCurrentStep((currStep) => {
 			switch (audioState) {
-				case AudioState.stopped:
-					if (currStep === Step.reciting) {
-						return Step.typing;
-					}
-					break;
-				case AudioState.playing:
-				case AudioState.buffering:
-					return Step.reciting;
-				default:
+			case AudioState.stopped:
+				if (currStep === Step.reciting) {
+					return Step.typing;
+				}
+				break;
+			case AudioState.playing:
+			case AudioState.buffering:
+				return Step.reciting;
+			default:
 			}
 			return currStep; //no change
 		});
@@ -344,19 +347,19 @@ const Exercise = () => {
 
 	const renderTitle = () => {
 		switch (currStep) {
-			case Step.intro:
-				return renderIntroTitle();
+		case Step.intro:
+			return renderIntroTitle();
 
-			case Step.typing:
-				return renderTypingTitle();
+		case Step.typing:
+			return renderTypingTitle();
 
-			case Step.results:
-				return renderResultsTitle();
+		case Step.results:
+			return renderResultsTitle();
 
-			case Step.reciting:
-				return renderRecitingTitle();
-			default:
-				break;
+		case Step.reciting:
+			return renderRecitingTitle();
+		default:
+			break;
 		}
 	};
 
@@ -383,7 +386,7 @@ const Exercise = () => {
 					trigger={trigger}
 				/>
 				<hr />
-				<ExerciseTypingOptions {...{ quickMode, saveQuickMode, modal: false }} />
+				<ExerciseTypingOptions {...{ testMode, saveTestMode, modal: false }} />
 				<hr />
 				<div>
 					<String id="random_exercise" />
@@ -460,7 +463,7 @@ const Exercise = () => {
 		setMissingWords(0);
 		if (testAnswer(text)) {
 			setTimeout(() => {
-				if (quickMode > 0) {
+				if (testMode !== TestMode.reviewOnFinish) {
 					dispatch(showToast({ id: "success_write_next" }));
 					typeNextVerse();
 					return;
@@ -483,6 +486,7 @@ const Exercise = () => {
 		const normAnswerText = normalizeText(answerText).trim();
 		const correctWords = normVerse.split(/\s+/);
 		if (!answerText.trim().length) {
+			//nothing yet written
 			setMissingWords(correctWords.length);
 			return false;
 		}
@@ -500,6 +504,7 @@ const Exercise = () => {
 				break;
 			}
 		}
+
 		if (wrongWord === -1 && answerWords.length > correctWords.length) {
 			//wrote extra words
 			wrongWord = correctWords.length;
@@ -508,7 +513,11 @@ const Exercise = () => {
 		setWrongWord(wrongWord);
 		const missingWordsCount = correctWords.length - answerWords.length;
 		setMissingWords(missingWordsCount >= 0 ? missingWordsCount : 0);
-		if (quickMode === 2 && wrongWord === -1 && answerWords.length >= 3) {
+		if (testMode === TestMode.nextOnPartialFinish
+			&& wrongWord === -1
+			&& answerWords.length >= PARTIAL_WORDS_COUNT
+			&& answerText[answerText.length - 1] === " " // make sure user finished the word ( by space )
+		) {
 			const typed_chars = dispatch(logTypedVerse(verse, 3));
 			analytics.logEvent("exercise_quick_success", {
 				...verseLocation(verse),
@@ -666,8 +675,10 @@ const Exercise = () => {
 	};
 
 	const isCorrect = () => wrongWord === -1 && missingWords === 0;
-	const isTypingCorrect = () =>
-		wrongWord === -1 || wrongWord === writtenText.split(/\s+/).length - 1;
+	const isTypingCorrect = () => {
+		//return true if the wrong word doesn't have a space after it
+		return wrongWord === -1 || wrongWord === writtenText.split(/\s+/).length - 1;
+	};
 
 	const renderSuccessResultsReport = () => {
 		return (
@@ -691,7 +702,7 @@ const Exercise = () => {
 					trigger={trigger}
 				/>
 				<hr />
-				<ExerciseTypingOptions {...{ quickMode, saveQuickMode, modal: false }} />
+				<ExerciseTypingOptions {...{ testMode, saveTestMode, modal: false }} />
 				<hr />
 				<ExerciseSettings />
 				<hr />
@@ -751,9 +762,9 @@ const Exercise = () => {
 									: "Wrong"
 							}
 						>
-							{word}{" "}
+							{word}
 						</span>
-					))}
+					)).join(" ")}
 					{renderMissingWords()}
 				</h3>
 				{isCorrect() ? (
@@ -841,16 +852,16 @@ const Exercise = () => {
 
 	const renderContent = () => {
 		switch (currStep) {
-			case Step.intro:
-				return renderIntro();
-			case Step.reciting:
-				return renderReciting();
-			case Step.typing:
-				return renderTypingConsole();
-			case Step.results:
-				return renderResults();
-			default:
-				break;
+		case Step.intro:
+			return renderIntro();
+		case Step.reciting:
+			return renderReciting();
+		case Step.typing:
+			return renderTypingConsole();
+		case Step.results:
+			return renderResults();
+		default:
+			break;
 		}
 	};
 
