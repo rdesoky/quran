@@ -762,9 +762,9 @@ const Exercise = () => {
 									: "Wrong"
 							}
 						>
-							{word}
+							{word}{" "}
 						</span>
-					)).join(" ")}
+					))}
 					{renderMissingWords()}
 				</h3>
 				{isCorrect() ? (
