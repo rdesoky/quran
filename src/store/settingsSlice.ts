@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ListReciters } from "@/services/audioData";
 import { getStorageItem } from "@/services/utils";
 import { AppDispatch, GetState, RootState } from "@/store/config";
+import { TestMode } from "@/components/types";
 
 const sliceName = "settings";
 
@@ -15,6 +16,7 @@ const initialState = {
 		(getStorageItem("reciter", ListReciters()[0]) as ReciterID) || null,
 	theme: getStorageItem("theme", "Dark"),
 	lang: getStorageItem("lang", "ar"),
+	testMode: getStorageItem("testMode", TestMode.reviewOnFinish) as TestMode,
 };
 
 const settingsSlice = createSlice({
@@ -49,6 +51,9 @@ const settingsSlice = createSlice({
 		setFollowPlayer: (slice, { payload: followPlayer }) => {
 			slice.followPlayer = followPlayer;
 		},
+		setTestMode: (slice, { payload: testMode }) => {
+			slice.testMode = testMode;
+		}
 	},
 });
 
@@ -61,8 +66,16 @@ export const {
 	setReciter,
 	setRepeat,
 	setFollowPlayer,
+	setTestMode,
 } = settingsSlice.actions;
 
+export const saveTestMode = (testMode: TestMode) =>
+	(dispatch: AppDispatch) => {
+		dispatch(setTestMode(testMode));
+		localStorage.setItem("testMode", testMode.toString());
+	};
+export const selectTestMode = (state: RootState) =>
+	state[sliceName].testMode;
 export const selectExerciseLevel = (state: RootState) =>
 	state[sliceName].exerciseLevel;
 export const selectExerciseMemorized = (state: RootState) =>

@@ -34,9 +34,11 @@ import {
 } from "@/store/playerSlice";
 import {
 	AudioRange,
+	saveTestMode,
 	selectExerciseLevel,
 	selectExerciseMemorized,
 	selectRandomAutoRecite,
+	selectTestMode,
 } from "@/store/settingsSlice";
 import { setModalPopup, showToast } from "@/store/uiSlice";
 import { faKeyboard } from "@fortawesome/free-regular-svg-icons";
@@ -80,9 +82,7 @@ const Exercise = () => {
 	const [missingWords, setMissingWords] = useState(0);
 	const verseList = quranText;
 	const normVerseList = quranNormalizedText;
-	const [testMode, setTestMode] = useState<TestMode>(() => {
-		return Number(localStorage.getItem("testMode")) || TestMode.reviewOnFinish;
-	});
+	const testMode = useSelector(selectTestMode);
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const audio = useAudio();
@@ -91,10 +91,6 @@ const Exercise = () => {
 	const bodyRef = useSnapHeightToBottomOf(appHeight - 15, currStep);
 	const typingConsoleRef = useSnapHeightToBottomOf(appHeight - 220, currStep);
 	const cursorRef = useRef<HTMLDivElement | null>(null);
-	const saveTestMode = (testMode: TestMode) => {
-		setTestMode(testMode);
-		localStorage.setItem("testMode", testMode.toString());
-	};
 
 	const setCurrStep = (step: StepId) => {
 		setCurrentStep(step);
@@ -164,6 +160,8 @@ const Exercise = () => {
 	};
 
 	const gotoRandomVerse = () => {
+		dispatch(saveTestMode(TestMode.reviewOnFinish));//force review on completion in random mode
+
 		audio.stop();
 		let new_verse;
 		do {
@@ -208,7 +206,7 @@ const Exercise = () => {
 	const showTypingSettings = () => {
 		msgBox.set({
 			title: <String id="typing_settings" />,
-			content: <ExerciseTypingOptions {...{ testMode, saveTestMode }} />,
+			content: <ExerciseTypingOptions />,
 		});
 	};
 
