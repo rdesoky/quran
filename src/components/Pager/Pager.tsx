@@ -267,14 +267,16 @@ export default function Pager() {
 		if (activePage === maskPage) {
 			// mask still in the same page
 			dispatch(offsetSelection(1));//move the selection
-			// dispatch(gotoAya(history, nextAya));//
-		} else if (maskStart === getPageFirstAyaId(maskPage)) {
-			// mask moved the start of the next page
+			//if mask moved the start of the next page
 			// move the mask, don't flip the page
-			// To give the user a chance to see he unmasked aya
-			if (shownPages.includes(incrementedMaskPage)) {
+			// To give the user a chance to see the unmasked aya
+		} else if (maskStart === getPageFirstAyaId(maskPage)) {
+			//mask is at the start of the page
+			if (zoom === 0 && shownPages.includes(incrementedMaskPage)) {
+				//increment the mask only if its head is visible
 				dispatch(offsetSelection(1));//move the selection
 			}
+			//flip the page to show the mask head
 			dispatch(gotoPage(history, incrementedMaskPage));
 		} else {
 			// mask head is on a different page
@@ -282,7 +284,7 @@ export default function Pager() {
 			const firstVisiblePage = shownPages[0];
 			dispatch(selectAya(getPageFirstAyaId(firstVisiblePage)));
 		}
-	}, [activePage, dispatch, history, maskStart, shownPages]);
+	}, [activePage, dispatch, history, maskStart, shownPages, zoom]);
 
 	const decrementMask = useCallback(() => {
 		if (maskStart > 0) {

@@ -1,25 +1,24 @@
-import { useContext, useState } from "react";
-import { FormattedMessage as String } from "react-intl";
 import { AppRefs } from "@/RefsProvider";
 import { TestMode } from "@/components/types";
+import { saveTestMode, selectTestMode } from "@/store/settingsSlice";
+import { useContext } from "react";
+import { FormattedMessage as String } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 
 type ExerciseTypingOptionsProps = {
-	saveTestMode: (mode: TestMode) => void;
-	testMode: TestMode;
 	modal?: boolean;
 };
 
 export default function ExerciseTypingOptions({
-	saveTestMode,
-	testMode,
 	modal = true,
 }: ExerciseTypingOptionsProps) {
-	const [option, setOption] = useState(testMode);
+	// const [option, setOption] = useState(testMode);
 	const msgBox = useContext(AppRefs).get("msgBox");
+	const dispatch = useDispatch();
+	const testMode = useSelector(selectTestMode);
 
 	const onUpdateTestMode = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setOption(Number(e.target.value) as TestMode);
-		saveTestMode(Number(e.target.value) as TestMode);
+		dispatch(saveTestMode(Number(e.target.value) as TestMode));
 	};
 
 	const onClose = () => {
@@ -38,8 +37,8 @@ export default function ExerciseTypingOptions({
 						<input
 							type="radio"
 							name="quickMode"
-							value={0}
-							checked={option === 0}
+							value={TestMode.reviewOnFinish}
+							checked={testMode === TestMode.reviewOnFinish}
 							onChange={onUpdateTestMode}
 						/>
 						<span>
@@ -52,8 +51,8 @@ export default function ExerciseTypingOptions({
 						<input
 							type="radio"
 							name="quickMode"
-							value={1}
-							checked={option === 1}
+							value={TestMode.nextOnFinish}
+							checked={testMode === TestMode.nextOnFinish}
 							onChange={onUpdateTestMode}
 						/>
 						<span>
@@ -66,8 +65,8 @@ export default function ExerciseTypingOptions({
 						<input
 							type="radio"
 							name="quickMode"
-							value={2}
-							checked={option === 2}
+							value={TestMode.nextOnPartialFinish}
+							checked={testMode === TestMode.nextOnPartialFinish}
 							onChange={onUpdateTestMode}
 						/>
 						<span>
