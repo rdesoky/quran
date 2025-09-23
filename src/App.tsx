@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { ContextPopup } from "@/components/ContextPopup";
 import { selectMaskOn } from "./store/navSlice";
+import { useCheckForUpdate } from "./hooks/useCheckForUpdate";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -57,6 +58,7 @@ const App: React.FC = () => {
 	// const app_size = useSelector(selectAppSize);
 	const zoomClass = useSelector(selectZoomClass);
 	useInitApp();
+	useCheckForUpdate(10); //check for updates every 10 minutes
 
 	// Keep screen awake while using the app
 	useWakeLock({
