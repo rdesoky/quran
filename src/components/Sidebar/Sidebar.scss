@@ -1,3 +1,5 @@
+@use "@/vars" as *;
+
 #SidebarBlocker {
 	position: fixed;
 	top: 0;
@@ -147,5 +149,23 @@
 
 	button:disabled & {
 		filter: grayscale(100%);
+	}
+}
+
+.sidebar-scroll-btn {
+	position: fixed;
+	left: 0;
+	width: $navbarWidth;
+	height: $headerHeight;
+	border-radius: 0;
+	background-color: $appHeaderBgColor;
+
+	&#SidebarUpBtn {
+		z-index: 1;
+		top: 0;
+	}
+
+	&#SidebarDownBtn {
+		bottom: $footerHeight;
 	}
 }
