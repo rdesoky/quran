@@ -79,7 +79,7 @@ export const BookmarkListItem: React.FC<BookmarkListItemProps> = ({
 	};
 
 	const onRemoveBookmark = () => {
-		msgBox.push({
+		msgBox?.push({
 			title: <Message id="are_you_sure" />,
 			content: <Message id="delete_bookmark" />,
 			onYes: () => {
@@ -98,7 +98,7 @@ export const BookmarkListItem: React.FC<BookmarkListItemProps> = ({
 			dispatch(hideMask());
 		}
 		dispatch(gotoPage(history, ayaIdPage(verse)));
-		audio.play(verse);
+		audio?.play(verse);
 		dispatch(closePopupIfBlocking());
 
 		analytics.logEvent("play_audio", {
@@ -116,7 +116,7 @@ export const BookmarkListItem: React.FC<BookmarkListItemProps> = ({
 	}
 
 	const download = (e: React.MouseEvent<HTMLAnchorElement>) => {
-		msgBox.set({
+		msgBox?.set({
 			title: <Message id="download_verse_audio" />,
 			content: <Message id="download_guide" />,
 		});

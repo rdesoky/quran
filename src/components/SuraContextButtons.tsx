@@ -41,7 +41,7 @@ export const SuraContextButtons = ({ sura }: SuraContextButtonsProps) => {
 							gotoAya(history, ayaID(sura, 0), { sel: true })
 						);
 						dispatch(showMask());
-						contextPopup.close();
+						contextPopup?.close();
 					},
 				}}
 			/>

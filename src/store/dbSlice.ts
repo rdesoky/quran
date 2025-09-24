@@ -26,7 +26,7 @@ const slice = createSlice({
 		},
 		setBookmarks: (
 			slice,
-			{ payload: { bookmarks } }: { payload: { bookmarks: Bookmark[] } }
+			{ payload: { bookmarks } }: { payload: { bookmarks: Bookmark[]; }; }
 		) => {
 			slice.bookmarks = bookmarks;
 		},
@@ -34,7 +34,7 @@ const slice = createSlice({
 			slice,
 			{
 				payload: { hifzRanges },
-			}: { payload: { hifzRanges: HifzRange[] } }
+			}: { payload: { hifzRanges: HifzRange[]; }; }
 		) => {
 			slice.hifzRanges = hifzRanges;
 		},
@@ -112,7 +112,7 @@ export const deleteBookmark =
 
 export const logTypedVerse =
 	(verseId: number, words: number = 0) =>
-		(dispatch: AppDispatch, getState: GetState) => {
+		(_dispatch: AppDispatch, getState: GetState) => {
 			const state = getState();
 			const { user } = state[sliceName];
 			if (!user) {
@@ -137,8 +137,8 @@ export const logTypedVerse =
 		};
 
 export const setRangeRevised =
-	(range: { id: string; pages: number }) =>
-		(dispatch: AppDispatch, getState: GetState) => {
+	(range: { id: string; pages: number; }) =>
+		(_dispatch: AppDispatch, getState: GetState) => {
 			const state = getState();
 			const { user } = state[sliceName];
 			if (!user) {
@@ -187,7 +187,7 @@ const includesRanges = (
 
 export const addHifzRange =
 	(startPage: number, sura: number, pages: number, overwrite = false) =>
-		(dispatch: AppDispatch, getState: GetState) => {
+		(_dispatch: AppDispatch, getState: GetState) => {
 			const { user, hifzRanges } = getState()[sliceName];
 			if (!user) {
 				return false;
@@ -284,7 +284,7 @@ export const addHifzRange =
 		};
 
 export const deleteHifzRange =
-	(range: HifzRange) => (dispatch: AppDispatch, getState: GetState) => {
+	(range: HifzRange) => (_dispatch: AppDispatch, getState: GetState) => {
 		const { user } = getState()[sliceName];
 		if (!user) {
 			return;

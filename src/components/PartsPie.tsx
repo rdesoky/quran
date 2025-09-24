@@ -39,7 +39,7 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
 		if (onFinish) {
 			onFinish();
 		} else {
-			contextPopup.close();
+			contextPopup?.close();
 		}
 	};
 
@@ -183,7 +183,7 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
 						</path>
 					);
 				})}
-				{partHezbs.map((i, index) => {
+				{partHezbs.map((_i, index) => {
 					const hezbAngel = 270.0 / 8;
 					const { dx: dxHezbNum, dy: dyHezbNum } = rotatePoint(
 						hezbRadius,
@@ -195,9 +195,9 @@ export default function PartsPie({ size, onFinish }: PartsPieProps) {
 							<path
 								key={`path.${index}`}
 								className={`hezbQuarterPie ${selectedHezb.absIndex ===
-										index + activePartIndex * 8
-										? "selected"
-										: ""
+									index + activePartIndex * 8
+									? "selected"
+									: ""
 									}`}
 								d={describeArc({
 									x: cx,

@@ -140,7 +140,7 @@ export const selectUpdateAvailable = (state: RootState) =>
 export const selectSuraNames = (state: RootState) => state[sliceName].suraNames;
 
 export const showPopup =
-	(popup: string, params?: Record<string, any>) =>
+	(popup: string, params?: Record<string, unknown>) =>
 		(dispatch: AppDispatch, getState: GetState) => {
 			const state = getState();
 			const currentPopup = selectPopup(state);

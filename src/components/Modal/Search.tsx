@@ -17,7 +17,6 @@ import {
 } from "@/services/utils";
 import { selectAppHeight, selectPopupWidth } from "@/store/layoutSlice";
 import { gotoAya, gotoSura, hideMask } from "@/store/navSlice";
-import { selectLang } from "@/store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
 import AKeyboard from "@/components/AKeyboard/AKeyboard";
 import SuraName from "@/components/SuraName";
@@ -31,7 +30,7 @@ type ResultItem = {
 	ntext: string;
 };
 
-type GroupItem = { aya: number; text: string; ntext: string; ayaNum: number };
+type GroupItem = { aya: number; text: string; ntext: string; ayaNum: number; };
 
 type ResultGroup = {
 	sura: number;
@@ -57,7 +56,7 @@ export default function Search() {
 	const appHeight = useSelector(selectAppHeight);
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const lang = useSelector(selectLang);
+	// const lang = useSelector(selectLang);
 	const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm); // substract 8px for the bottom padding
 
 	const resultsDiv = resultsRef.current;

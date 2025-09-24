@@ -62,24 +62,24 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 
 	useEffect(() => {
 		switch (trigger) {
-			case "page_context":
-				setSelectedScope(AudioRange.page);
-				break;
-			case "page_header":
-			case "surah_context":
-				setSelectedScope(AudioRange.sura);
-				break;
-			case "bookmarks_title":
-			case "tafseer_title":
-			case "player_buttons":
-			case "verse_context":
-				setSelectedScope(AudioRange.selection);
-				break;
-			case "commands_title":
-			case "side_bar":
-			case "settings_title":
-			default:
-				setSelectedScope(AudioRange.continuous);
+		case "page_context":
+			setSelectedScope(AudioRange.page);
+			break;
+		case "page_header":
+		case "surah_context":
+			setSelectedScope(AudioRange.sura);
+			break;
+		case "bookmarks_title":
+		case "tafseer_title":
+		case "player_buttons":
+		case "verse_context":
+			setSelectedScope(AudioRange.selection);
+			break;
+		case "commands_title":
+		case "side_bar":
+		case "settings_title":
+		default:
+			setSelectedScope(AudioRange.continuous);
 		}
 	}, [trigger]);
 
@@ -94,9 +94,9 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 			trigger,
 		});
 		if (audioState === AudioState.playing) {
-			audio.pause();
+			audio?.pause();
 		} else {
-			audio.resume();
+			audio?.resume();
 		}
 	}, [audio, audioState, playingAya, reciter, trigger]);
 
@@ -106,26 +106,26 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 			reciter,
 			trigger,
 		});
-		audio.stop();
+		audio?.stop();
 	}, [audio, playingAya, reciter, trigger]);
 
 	const onPlay = useCallback(() => {
 		let aya = selection.start;
 		switch (selectedScope) {
-			case AudioRange.page:
-				aya = getPageFirstAyaId(pageIndex);
-				break;
-			case AudioRange.sura:
-				aya = ayaID(ayaInfo.sura, 0);
-				break;
-			default:
-				break;
+		case AudioRange.page:
+			aya = getPageFirstAyaId(pageIndex);
+			break;
+		case AudioRange.sura:
+			aya = ayaID(ayaInfo.sura, 0);
+			break;
+		default:
+			break;
 		}
 		analytics.logEvent("play_audio", {
 			trigger,
 			...verseLocation(aya),
 		});
-		audio.play(aya, selectedScope);
+		audio?.play(aya, selectedScope);
 	}, [
 		audio,
 		ayaInfo.sura,
@@ -142,23 +142,23 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 				return;
 			}
 			switch (e.code) {
-				case "Backspace":
-					if (_showReciters) {
-						setShowReciters(false);
-						e.stopPropagation();
-					}
-					break;
-				case "KeyR":
-					onPlay();
-					break;
-				case "KeyP":
-					onPause();
-					break;
-				case "KeyS":
-					onStop();
-					break;
-				default:
-					break;
+			case "Backspace":
+				if (_showReciters) {
+					setShowReciters(false);
+					e.stopPropagation();
+				}
+				break;
+			case "KeyR":
+				onPlay();
+				break;
+			case "KeyP":
+				onPause();
+				break;
+			case "KeyS":
+				onStop();
+				break;
+			default:
+				break;
 			}
 		},
 		[_showReciters, onPause, onPlay, onStop]
@@ -180,7 +180,7 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 	}: {
 		strId: string;
 		value: number;
-		strValues?: Record<string, any>;
+		strValues?: Record<string, string | number | undefined>;
 	}) => (
 		<div key={value}>
 			<label>
@@ -297,7 +297,7 @@ export default function PlayPrompt({ trigger, showReciters }: PlayPromptProps) {
 		return (
 			<div
 				id="PlayPrompt"
-				style={{ height: 220, overflowY: "overlay" } as any}
+				style={{ height: 220 }}
 			>
 				<RecitersGrid
 					onClick={() => {

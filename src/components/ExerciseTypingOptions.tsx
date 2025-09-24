@@ -1,7 +1,6 @@
-import { AppRefs } from "@/RefsProvider";
+import { useMessageBox } from "@/RefsProvider";
 import { TestMode } from "@/components/types";
 import { saveTestMode, selectTestMode } from "@/store/settingsSlice";
-import { useContext } from "react";
 import { FormattedMessage as String } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,7 +12,7 @@ export default function ExerciseTypingOptions({
 	modal = true,
 }: ExerciseTypingOptionsProps) {
 	// const [option, setOption] = useState(testMode);
-	const msgBox = useContext(AppRefs).get("msgBox");
+	const msgBox = useMessageBox();
 	const dispatch = useDispatch();
 	const testMode = useSelector(selectTestMode);
 
@@ -22,7 +21,7 @@ export default function ExerciseTypingOptions({
 	};
 
 	const onClose = () => {
-		msgBox.pop();
+		msgBox?.pop();
 	};
 
 	return (

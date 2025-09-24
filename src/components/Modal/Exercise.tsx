@@ -162,7 +162,7 @@ const Exercise = () => {
 	const gotoRandomVerse = () => {
 		dispatch(saveTestMode(TestMode.reviewOnFinish));//force review on completion in random mode
 
-		audio.stop();
+		audio?.stop();
 		let new_verse;
 		do {
 			new_verse = Math.floor(Math.random() * verseList.length);
@@ -170,7 +170,7 @@ const Exercise = () => {
 		dispatch(gotoAya(history, new_verse));
 
 		if (randomAutoRecite) {
-			audio.play(new_verse, AudioRange.exercise);
+			audio?.play(new_verse, AudioRange.exercise);
 		}
 
 		analytics.logEvent("get_random_verse", {
@@ -180,7 +180,7 @@ const Exercise = () => {
 	};
 
 	const startReciting = () => {
-		audio.play(verse, AudioRange.exercise);
+		audio?.play(verse, AudioRange.exercise);
 		analytics.logEvent("exercise_play_audio", {
 			trigger,
 		});
@@ -193,25 +193,25 @@ const Exercise = () => {
 	};
 
 	const startAnswer = useCallback(() => {
-		audio.stop();
+		audio?.stop();
 		setCurrStep(Step.typing);
 	}, [audio]);
 
 	const showIntro = useCallback(() => {
-		audio.stop();
+		audio?.stop();
 		setCurrStep(Step.intro);
 		analytics.logEvent("exercise_go_back", { trigger });
 	}, [audio]);
 
 	const showTypingSettings = () => {
-		msgBox.set({
+		msgBox?.set({
 			title: <String id="typing_settings" />,
 			content: <ExerciseTypingOptions />,
 		});
 	};
 
 	const goBack = useCallback(() => {
-		audio.stop();
+		audio?.stop();
 		setCurrentStep((currStep: StepId) => {
 			switch (currStep) {
 			case Step.reciting:
@@ -228,7 +228,7 @@ const Exercise = () => {
 	let defaultButton: HTMLButtonElement | null = null;
 
 	const onCancel = useCallback(() => {
-		if (msgBox.getMessages().length > 0) {
+		if (msgBox?.getMessages()?.length) {
 			msgBox.pop();
 			return;
 		}
@@ -325,7 +325,7 @@ const Exercise = () => {
 	const reciteNextVerse = () => {
 		localStorage.setItem("resultsDefaultButton", "reciteNext");
 		moveToNextVerse();
-		audio.play(verse + 1, AudioRange.exercise);
+		audio?.play(verse + 1, AudioRange.exercise);
 		analytics.logEvent("recite_next_verse", { trigger });
 		// app.setMaskStart(verse + 2, true);
 	};

@@ -6,7 +6,7 @@ import { selectHifzRanges } from "@/store/dbSlice";
 import { HifzRange as HifzRangeComponent } from "@/components/HifzRange";
 
 interface HifzRangesProps {
-    filter?: any;
+    filter?: string;
     trigger?: string;
 }
 
