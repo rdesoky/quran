@@ -155,7 +155,7 @@
 .sidebar-scroll-btn {
 	position: fixed;
 	left: 0;
-	width: $navbarWidth;
+	max-width: $navbarWidth;
 	height: $headerHeight;
 	border-radius: 0;
 	background-color: $appHeaderBgColor;
