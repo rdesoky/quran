@@ -1,5 +1,5 @@
-//Wed Sep 24 2025 15:57:04 GMT+0300 (Eastern European Summer Time)
-const appVersion = 41;
+//Wed Sep 24 2025 16:27:58 GMT+0300 (Eastern European Summer Time)
+const appVersion = 42;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
