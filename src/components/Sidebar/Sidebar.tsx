@@ -54,15 +54,6 @@ function Sidebar() {
       }}
     >
       <div id="SidebarBorder" className={isNarrow ? "narrow" : ""}>
-        {!isNarrow && enableUp && !menuExpanded && (
-          <button
-            id="SidebarUpBtn"
-            className="sidebar-scroll-btn"
-            onClick={() => scrollUp()}
-          >
-            <Icon icon={faAngleDoubleUp} />
-          </button>
-        )}
         <div
           id="Sidebar"
           ref={sidebarRef}
@@ -70,9 +61,16 @@ function Sidebar() {
             .appendWord("narrow", isNarrow)
             .appendWord("expanded", isShowMenu)
             .appendWord("HiddenScroller", !isShowMenu)}
-          // style={{ bottom: isNarrow ? 25 : 50 }}
-          // style={{ bottom: 50 }}
         >
+          {enableUp && !menuExpanded && (
+            <button
+              id="SidebarUpBtn"
+              className="sidebar-scroll-btn"
+              onClick={() => scrollUp()}
+            >
+              <Icon icon={faAngleDoubleUp} />
+            </button>
+          )}
           <div id="SidebarButtons">
             <div className="SidebarSection">
               <PlayerButtons
@@ -95,16 +93,16 @@ function Sidebar() {
                 />
               ))}
           </div>
+          {enableDown && !menuExpanded && (
+            <button
+              id="SidebarDownBtn"
+              className="sidebar-scroll-btn"
+              onClick={() => scrollDown()}
+            >
+              <Icon icon={faAngleDoubleDown} />
+            </button>
+          )}
         </div>
-        {!isNarrow && !enableDown && !menuExpanded && (
-          <button
-            id="SidebarDownBtn"
-            className="sidebar-scroll-btn"
-            onClick={() => scrollDown()}
-          >
-            <Icon icon={faAngleDoubleDown} />
-          </button>
-        )}
         <div
           style={{
             position: "absolute",
