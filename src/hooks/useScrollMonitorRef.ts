@@ -22,7 +22,7 @@ export const useScrollMonitorRef = <T extends HTMLElement>() => {
   useEffect(() => {
     const measureOverflow = () => {
       if (ref.current) {
-        const {
+        let {
           scrollHeight,
           scrollLeft,
           scrollTop,
@@ -30,8 +30,18 @@ export const useScrollMonitorRef = <T extends HTMLElement>() => {
           clientHeight,
           clientWidth,
         } = ref.current;
+
+        // use ceil to avoid float precision issues
+        scrollTop = Math.ceil(scrollTop);
+        scrollLeft = Math.ceil(scrollLeft);
+        scrollHeight = Math.ceil(scrollHeight);
+        clientHeight = Math.ceil(clientHeight);
+        scrollWidth = Math.ceil(scrollWidth);
+        clientWidth = Math.ceil(clientWidth);
+
         const overflowY = scrollHeight > clientHeight;
         const overflowX = scrollWidth > clientWidth;
+
         setEnableUp(overflowY && scrollTop > 0);
         setEnableDown(overflowY && scrollTop + clientHeight < scrollHeight);
         setEnableRight(overflowX && scrollLeft + clientWidth < scrollWidth);
