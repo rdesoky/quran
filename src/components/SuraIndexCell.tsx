@@ -73,7 +73,7 @@ export const SuraIndexCell = ({
 		if (suraRanges.length) {
 			dispatch(closePopupIfBlocking());
 			dispatch(gotoSura(history, suraIndex));
-			msgBox.set({
+			msgBox?.set({
 				title: <Message id="update_hifz" />,
 				content: <AddHifz />,
 			});
@@ -105,7 +105,7 @@ export const SuraIndexCell = ({
 	const onClickPlay = () => {
 		// audio.stop();
 		onClickSura();
-		audio.play(ayaID(suraIndex, 0), AudioRange.sura);
+		audio?.play(ayaID(suraIndex, 0), AudioRange.sura);
 		analytics.logEvent("play_audio", {
 			trigger,
 			...verseLocation(ayaID(suraIndex, 0)),

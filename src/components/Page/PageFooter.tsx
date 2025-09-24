@@ -38,7 +38,7 @@ const PageFooter: React.FC<PageFooterProps> = ({
 		e.stopPropagation();
 		const { target } = e;
 		analytics.logEvent("show_page_context", { trigger });
-		contextPopup.show({
+		contextPopup?.show({
 			target,
 			content: <PageContextButtons page={pageIndex} />,
 		});

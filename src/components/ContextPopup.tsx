@@ -57,7 +57,7 @@ export const ContextPopup = () => {
 		return null;
 	}
 	const { target, content, header, footer } = contextPopup; //app.getContextPopup();
-	const targetRect = target.getBoundingClientRect();
+	const targetRect = (target as HTMLElement).getBoundingClientRect();
 	if (!targetRect.width) {
 		return null;
 	}

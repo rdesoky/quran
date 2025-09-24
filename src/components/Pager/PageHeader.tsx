@@ -72,7 +72,7 @@ export function PageHeader({ order }: PageHeaderProps) {
 		analytics.logEvent("show_chapter_context", {
 			trigger,
 		});
-		contextPopup.show({
+		contextPopup?.show({
 			target,
 			header: <SuraContextHeader sura={suraIndex} />,
 			content: (
@@ -90,7 +90,7 @@ export function PageHeader({ order }: PageHeaderProps) {
 		const { currentTarget: target } = e;
 		e.stopPropagation();
 		analytics.logEvent("show_part_context", { trigger });
-		contextPopup.show({
+		contextPopup?.show({
 			target,
 			content: <PartsPie size={280} />, //<PartsList part={partIndex} />,
 		});

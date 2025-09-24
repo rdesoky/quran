@@ -46,7 +46,7 @@ export const PageContextButtons = ({ page }: PageContextButtonsProps) => {
 							})
 						);
 						dispatch(showMask());
-						contextPopup.close();
+						contextPopup?.close();
 					},
 				}}
 			/>

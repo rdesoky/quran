@@ -369,7 +369,7 @@ export default function Pager() {
 			case "KeyS"://TODO: handle "s" only if audio is playing
 			case "KeyR":
 				if (!vEditorOn) {
-					msgBox.set({
+					msgBox?.set({
 						title: (
 							<Message id="play" values={keyValues("r")} />
 						),
@@ -387,9 +387,9 @@ export default function Pager() {
 			case "KeyP":
 				if (!vEditorOn) {
 					if (audioState === AudioState.playing) {
-						audio.pause();
+						audio?.pause();
 					} else {
-						audio.resume();
+						audio?.resume();
 					}
 				}
 				break;
@@ -399,9 +399,9 @@ export default function Pager() {
 				}
 				break;
 			case "Escape":
-				if (contextPopup.info) {
+				if (contextPopup?.info) {
 					contextPopup.close();
-				} else if (msgBox.getMessages().length > 0) {
+				} else if (msgBox?.getMessages().length) {
 					msgBox.pop();
 				} else if (activePopup !== null) {
 					dispatch(closePopup());
@@ -450,7 +450,7 @@ export default function Pager() {
 				break;
 			case "KeyH":
 				if (!vEditorOn) {
-					msgBox.set({
+					msgBox?.set({
 						title: <Message id="update_hifz" />,
 						content: <AddHifz />,
 					});
@@ -541,7 +541,7 @@ export default function Pager() {
 
 	const showVerseContextPopup = ({ target }: React.MouseEvent) => {
 		analytics.logEvent("show_verse_context", { trigger });
-		contextPopup.show({
+		contextPopup?.show({
 			target,
 			content: <VerseContextButtons />,
 		});

@@ -1,9 +1,10 @@
 type Msg = {
-    type: "info" | "error" | "warning" | "success";
-    title?: string;
-    content: string;
+    type?: "info" | "error" | "warning" | "success";
+    title?: ReactNode;
+    content: ReactNode;
     key?: number;
     onClose?: () => void;
+    onYes?: () => void;
 };
 
 type NewRange = {

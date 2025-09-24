@@ -6,13 +6,17 @@ import { selectPageHeight } from "@/store/layoutSlice";
 type HifzSegmentProps = {
     sura: number;
     page: number;
-    versesInfo: any[];
+    versesInfo: VerseInfo[];
 };
 
-export const HifzSegment = ({ sura, page, versesInfo }: HifzSegmentProps) => {
+export const HifzSegment: React.FC<HifzSegmentProps> = ({
+    sura,
+    page,
+    versesInfo,
+}) => {
     const pageHeight = useSelector(selectPageHeight);
     const hifzRanges = useSelector(selectHifzRanges);
-    const suraVerses = versesInfo.filter((i) => i.sura - 1 === sura);
+    const suraVerses = versesInfo.filter((i) => Number(i.sura) - 1 === sura);
     if (suraVerses.length === 0) {
         return "";
     }

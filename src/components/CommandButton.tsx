@@ -58,13 +58,13 @@ export const CommandButton = ({
 				/>
 			);
 			switch (command) {
-				case "Profile":
-					if (user && !user.isAnonymous) {
-						label = user.displayName + " (u)";
-					}
-					break;
-				default:
-					break;
+			case "Profile":
+				if (user && !user.isAnonymous) {
+					label = user.displayName + " (u)";
+				}
+				break;
+			default:
+				break;
 			}
 			return <span className="CommandLabel">{label}</span>;
 		}
@@ -74,7 +74,7 @@ export const CommandButton = ({
 		e.stopPropagation();
 		if (updateChecker && updateAvailable) {
 			dispatch(setUpdateAvailable(false));
-			msgBox.push({
+			msgBox?.push({
 				title: <Message id="update_available_title" />,
 				content: <Message id="update_available" />,
 				onYes: () => {
@@ -90,12 +90,12 @@ export const CommandButton = ({
 			runCommand(command, trigger);
 		}
 		switch (command) {
-			case "Commands":
-			case "Stop":
-				e.stopPropagation();
-				break;
-			default:
-				break;
+		case "Commands":
+		case "Stop":
+			e.stopPropagation();
+			break;
+		default:
+			break;
 		}
 	};
 

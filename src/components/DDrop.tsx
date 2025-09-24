@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 type DDropProps = {
-	children: (props: { dX: number; dY: number }) => React.ReactNode;
-	onDrop: (props: { dX: number; dY: number }) => void;
+	children: (props: { dX: number; dY: number; }) => React.ReactNode;
+	onDrop: (props: { dX: number; dY: number; }) => void;
 	minShift?: number; // shift before drag is triggered
 	dropShift?: number; // shift before drop is triggered
 	maxShift?: number; // shift before drop is triggered
@@ -93,7 +93,7 @@ const DDrop = ({
 	const onTouchEnd = useCallback(
 		(e: React.TouchEvent) => {
 			// console.log(`~~onTouchEnd`);
-			checkDrop(e as any);
+			checkDrop(e as unknown as React.PointerEvent);
 		},
 		[checkDrop]
 	);
@@ -120,7 +120,7 @@ const DDrop = ({
 	const onTouchMove = useCallback(
 		(e: React.TouchEvent) => {
 			const { clientX, clientY } = e.targetTouches[0]; //read first finger positions only
-			const { currentTarget, pointerId } = e as any;
+			const { currentTarget, pointerId } = e as unknown as React.PointerEvent;
 			// console.log(`~~onTouchMove`);
 			onPointerMove({
 				clientX,
