@@ -54,7 +54,7 @@ function Sidebar() {
       }}
     >
       <div id="SidebarBorder" className={isNarrow ? "narrow" : ""}>
-        {enableUp && !menuExpanded && (
+        {!isNarrow && enableUp && !menuExpanded && (
           <button
             id="SidebarUpBtn"
             className="sidebar-scroll-btn"
@@ -96,7 +96,7 @@ function Sidebar() {
               ))}
           </div>
         </div>
-        {enableDown && !menuExpanded && (
+        {!isNarrow && !enableDown && !menuExpanded && (
           <button
             id="SidebarDownBtn"
             className="sidebar-scroll-btn"
