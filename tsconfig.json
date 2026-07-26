@@ -17,9 +17,9 @@
         "jsx": "react-jsx",
         "declaration": true,
         "outDir": "./dist",
-        "baseUrl": "./src",
+        "rootDir": "src",
         "paths": {
-            "@/*": ["*"]
+            "@/*": ["./src/*"]
         },
         "typeRoots": ["./node_modules/@types", "./src/@types"]
     },

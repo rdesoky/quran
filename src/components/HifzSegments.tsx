@@ -6,7 +6,7 @@ import { HifzSegment } from "@/components/HifzSegment";
 
 type HifzSegmentsProps = {
 	page: number;
-	versesInfo: unknown[];
+	versesInfo: VerseInfo[];
 };
 
 export const HifzSegments = ({ page, versesInfo }: HifzSegmentsProps) => {
