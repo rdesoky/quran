@@ -1,12 +1,6 @@
-import {
-	faBrain,
-	faEllipsisH,
-	faHeart,
-	faPlayCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
-import { FormattedMessage as Message, useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
+import { AddHifz } from "@/components/AddHifz";
+import Icon from "@/components/Icon";
+import { SuraHifzChart } from "@/components/SuraHifzChart";
 import { useHistory } from "@/hooks/useHistory";
 import useSuraName from "@/hooks/useSuraName";
 import { useAudio, useMessageBox } from "@/RefsProvider";
@@ -21,9 +15,14 @@ import { addHifzRange, selectSuraRanges } from "@/store/dbSlice";
 import { gotoSura, hideMask, selectStartSelection } from "@/store/navSlice";
 import { AudioRange } from "@/store/settingsSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
-import { AddHifz } from "@/components/AddHifz";
-import { SuraHifzChart } from "@/components/SuraHifzChart";
-import Icon from "@/components/Icon";
+import {
+	faBrain,
+	faEllipsisH,
+	faPlayCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import { FormattedMessage as Message, useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 
 type SuraIndexCellProps = {
 	sura: number;
@@ -86,11 +85,7 @@ export const SuraIndexCell = ({
 			const startPage = suraInfo.sp - 1;
 			const pagesCount = suraInfo.ep - suraInfo.sp + 1;
 			dispatch(
-				addHifzRange(
-					startPage,
-					suraIndex,
-					suraInfo.ep - suraInfo.sp + 1
-				)
+				addHifzRange(startPage, suraIndex, suraInfo.ep - suraInfo.sp + 1),
 			);
 			analytics.logEvent("add_hifz", {
 				trigger,

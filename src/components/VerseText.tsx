@@ -1,5 +1,7 @@
-import { quranText } from "@/data/quran";
+import Icon from "@/components/Icon";
 import { VerseInfo } from "@/components/VerseInfo";
+import { quranText } from "@/data/quran";
+import useCommands from "@/hooks/useCommands";
 import { analytics } from "@/services/analytics";
 import { ayaIdInfo, verseLocation } from "@/services/qData";
 import { copy2Clipboard } from "@/services/utils";
@@ -10,15 +12,10 @@ import {
 } from "@/store/dbSlice";
 import { selectStartSelection } from "@/store/navSlice";
 import { showToast } from "@/store/uiSlice";
-import {
-	faCommentDots,
-	faBookmark as farBookmark,
-} from "@fortawesome/free-regular-svg-icons";
+import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Icon from "@/components/Icon";
-import useCommands from "@/hooks/useCommands";
 import { CommandButton } from "./CommandButton";
 
 type VerseTextProps = {
