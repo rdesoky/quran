@@ -300,6 +300,15 @@ export const signOut = () => (_dispatch: AppDispatch, _getState: GetState) => {
 	return firebase.auth().signOut();
 };
 
+export const saveAiAgent =
+	(agent: string) => (_dispatch: AppDispatch, getState: GetState) => {
+		const { user } = getState()[sliceName];
+		if (!user) {
+			return;
+		}
+		userRef(user).child("settings/aiAgent").set(agent);
+	};
+
 //utilities
 export const dbRef = () => {
 	return firebase.app().database().ref();

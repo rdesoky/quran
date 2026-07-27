@@ -9,6 +9,7 @@ import {
     setUser,
 } from "@/store/dbSlice";
 import { onResize } from "@/store/layoutSlice";
+import { setAiAgent } from "@/store/settingsSlice";
 
 export default function useInitApp() {
     const dispatch = useDispatch();
@@ -141,10 +142,20 @@ export default function useInitApp() {
                 );
             });
 
+        const offAiAgentUpdate = userRef
+            .child(`settings/aiAgent`)
+            ?.on("value", (snapshot) => {
+                if (!snapshot || !snapshot.val()) {
+                    return;
+                }
+                dispatch(setAiAgent(snapshot.val()));
+            });
+
         return () => {
             offBookmarksUpdate?.(null);
             offHifzUpdate?.(null);
             offActivityUpdate?.(null);
+            offAiAgentUpdate?.(null);
         };
     }, [dispatch, user]);
 }

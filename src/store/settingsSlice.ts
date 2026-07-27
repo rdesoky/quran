@@ -12,11 +12,11 @@ const initialState = {
 	randomAutoRecite: getStorageItem("randomAutoRecite", false),
 	followPlayer: getStorageItem("followPlayer", false),
 	repeat: getStorageItem("repeat", false),
-	reciter:
-		(getStorageItem("reciter", ListReciters()[0]) as ReciterID) || null,
+	reciter: (getStorageItem("reciter", ListReciters()[0]) as ReciterID) || null,
 	theme: getStorageItem("theme", "Dark"),
 	lang: getStorageItem("lang", "ar"),
 	testMode: getStorageItem("testMode", TestMode.reviewOnFinish) as TestMode,
+	aiAgent: getStorageItem("aiAgent", "Perplexity"),
 };
 
 const settingsSlice = createSlice({
@@ -53,6 +53,9 @@ const settingsSlice = createSlice({
 		},
 		setTestMode: (slice, { payload: testMode }) => {
 			slice.testMode = testMode;
+		},
+		setAiAgent: (slice, { payload: aiAgent }) => {
+			slice.aiAgent = aiAgent;
 		}
 	},
 });
@@ -67,6 +70,7 @@ export const {
 	setRepeat,
 	setFollowPlayer,
 	setTestMode,
+	setAiAgent,
 } = settingsSlice.actions;
 
 export const saveTestMode = (testMode: TestMode) =>
@@ -92,6 +96,8 @@ export const selectTheme = (state: RootState) => state[sliceName].theme;
 export const selectRepeat = (state: RootState) => state[sliceName].repeat;
 
 export const selectReciter = (state: RootState) => state[sliceName].reciter;
+
+export const selectAiAgent = (state: RootState) => state[sliceName].aiAgent;
 
 export default { [sliceName]: settingsSlice.reducer };
 

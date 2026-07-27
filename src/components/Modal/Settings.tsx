@@ -8,11 +8,14 @@ import { analytics } from "@/services/analytics";
 import { selectAppHeight, selectIsNarrow } from "@/store/layoutSlice";
 import { selectPlayingAya } from "@/store/playerSlice";
 import {
+	selectAiAgent,
 	selectLang,
 	selectTheme,
+	setAiAgent,
 	setLang,
 	setTheme,
 } from "@/store/settingsSlice";
+import { saveAiAgent } from "@/store/dbSlice";
 import { selectPopup } from "@/store/uiSlice";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
@@ -23,6 +26,7 @@ import Switch from "react-switch";
 const Settings = () => {
 	const lang = useSelector(selectLang);
 	const theme = useSelector(selectTheme);
+	const aiAgent = useSelector(selectAiAgent);
 	const dispatch = useDispatch();
 	const appHeight = useSelector(selectAppHeight);
 	const bodyRef = useSnapHeightToBottomOf(appHeight - 15);
@@ -44,6 +48,15 @@ const Settings = () => {
 		const lang = currentTarget.value;
 		dispatch(setLang(lang));
 		analytics.logEvent("set_lang", { lang, trigger: popup });
+	};
+
+	const updateAiAgent = ({
+		currentTarget,
+	}: React.ChangeEvent<HTMLSelectElement>) => {
+		const agent = currentTarget.value;
+		dispatch(setAiAgent(agent));
+		dispatch(saveAiAgent(agent));
+		analytics.logEvent("set_ai_agent", { agent, trigger: popup });
 	};
 
 	return (
@@ -82,20 +95,32 @@ const Settings = () => {
 					</label>
 				</div>
 				<hr />
-				<div className="OptionRow">
-					<label>
-						<span>
-							<Message id="dark_mode" />
-						</span>
-						<Switch
-							height={22}
-							width={42}
-							onChange={onUpdateTheme}
-							checked={theme === "Dark"}
-						/>
-					</label>
-				</div>
-				{/* <ExerciseSettings />
+			<div className="OptionRow">
+				<label>
+					<span>
+						<Message id="dark_mode" />
+					</span>
+					<Switch
+						height={22}
+						width={42}
+						onChange={onUpdateTheme}
+						checked={theme === "Dark"}
+					/>
+				</label>
+			</div>
+			<div className="OptionRow">
+				<label>
+					<span>
+						<Message id="ai_agent" />
+					</span>
+					<select onChange={updateAiAgent} value={aiAgent}>
+						<option value="Claude">Claude</option>
+						<option value="Perplexity">Perplexity</option>
+						<option value="ChatGPT">ChatGPT</option>
+					</select>
+				</label>
+			</div>
+			{/* <ExerciseSettings />
                 <hr /> */}
 				<hr />
 				<div>
