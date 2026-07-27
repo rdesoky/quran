@@ -124,17 +124,25 @@ export default function useCommands() {
 			break;
 		case "AudioPlayer":
 		case "Stop":
-			// analytics.logEvent("stop_audio", {
-			//     ...verseLocation(playingAya),
-			//     reciter,
-			//     trigger,
-			// });
-			// audio.stop(true);
 			msgBox?.set({
 				title: <Message id="play" values={keyValues("r")} />,
 				content: <PlayPrompt trigger={trigger} />,
 			});
 			break;
+		case "ResearchWithAI": {
+			const loc = verseLocation(selectStart);
+			const prompt = intl.formatMessage(
+				{ id: "researchwithai_prompt" },
+				{
+					text: selectedText,
+					chapter: loc.chapter,
+					verse: loc.verse,
+				}
+			);
+			const url = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+			window.open(url, "_blank");
+			break;
+		}
 		case "Downloading":
 			analytics.logEvent("retry_stuck_audio", {
 				...verseLocation(playingAya),

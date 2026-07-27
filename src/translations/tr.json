@@ -147,6 +147,8 @@
 	"exercise_intro": "Ayet metnini yazarak gözden geçirin veya ezberleyin",
 	"success_write_next": "Başarıyla eşleşti! - sonraki ayeti yazın",
 	"text_copied": "Metin panoya kopyalandı",
+	"researchwithai": "AI ile Araştır",
+	"researchwithai_prompt": "Lütfen aşağıdaki Kuran ayetini açıklayın:\n\n{text}\n\nKonum: Sure {chapter}, Ayet {verse}",
 	"are_you_sure": "Emin misiniz?",
 	"yes": "Evet",
 	"no": "Hayır",

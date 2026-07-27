@@ -147,6 +147,8 @@
 	"exercise_intro": "Rivedi o memorizza digitando il testo dei versetti",
 	"success_write_next": "Corrispondenza riuscita! - digita il prossimo versetto",
 	"text_copied": "Testo copiato negli appunti",
+	"researchwithai": "Ricerca con IA",
+	"researchwithai_prompt": "Per favore spiega il seguente versetto del Corano:\n\n{text}\n\nPosizione: Sura {chapter}, Versetto {verse}",
 	"are_you_sure": "Sei sicuro?",
 	"yes": "Sì",
 	"no": "No",

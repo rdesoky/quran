@@ -18,12 +18,13 @@ import {
 	faPlayCircle,
 	faQuestion,
 	faQuran,
+	faCommentDots,
 	faSearch,
 	faSearchMinus,
 	faSearchPlus,
 	faShareSquare,
 	faStopCircle,
-	faUserCircle
+	faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
@@ -71,6 +72,7 @@ export const CommandIcons = {
 	Pause: faPauseCircle,
 	Resume: faPauseCircle,
 	Stop: faStopCircle,
+	ResearchWithAI: faCommentDots,
 	Zoom_In: faSearchPlus,
 	Zoom_Out: faSearchMinus,
 	NextPage: faAngleLeft,
