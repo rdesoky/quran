@@ -1,4 +1,5 @@
 import {
+	faBrain,
 	faEllipsisH,
 	faHeart,
 	faPlayCircle,
@@ -171,7 +172,7 @@ export const SuraIndexCell = ({
 									id: "update_hifz",
 								})}
 							>
-								<Icon icon={faHeart} />
+								<Icon icon={faBrain} />
 							</button>
 							{/* <button sura={sura} onClick={reviewSura}>
 															<Icon icon={faEyeSlash} />
