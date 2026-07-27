@@ -25,6 +25,7 @@ import {
 	faShareSquare,
 	faStopCircle,
 	faUserCircle,
+	faBrain,
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
@@ -54,8 +55,8 @@ export const CommandIcons = {
 	Settings: faCog,
 	Profile: faUserCircle,
 	Theme: faAdjust,
-	Favorites: faHeart,
-	update_hifz: faHeart,
+	Favorites: faBrain,
+	update_hifz: faBrain,
 	Help: faQuestion,
 	Mask: faEyeSlash,
 	MaskOn: farEyeSlash,

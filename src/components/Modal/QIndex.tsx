@@ -1,20 +1,20 @@
+import AKeyboard from "@/components/AKeyboard/AKeyboard";
+import { BookmarksList } from "@/components/BookmarksList";
+import { HifzRanges } from "@/components/HifzRanges";
+import Icon from "@/components/Icon";
+import { SuraList } from "@/components/SuraList";
+import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
+import { selectAppHeight } from "@/store/layoutSlice";
+import { selectLang } from "@/store/settingsSlice";
 import {
 	faBookmark,
-	faHeart,
+	faBrain,
 	faListAlt,
 	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { FormattedMessage as Message } from "react-intl";
 import { useSelector } from "react-redux";
-import useSnapHeightToBottomOf from "@/hooks/useSnapHeightToBottomOff";
-import { selectAppHeight } from "@/store/layoutSlice";
-import { selectLang } from "@/store/settingsSlice";
-import AKeyboard from "@/components/AKeyboard/AKeyboard";
-import { BookmarksList } from "@/components/BookmarksList";
-import { HifzRanges } from "@/components/HifzRanges";
-import Icon from "@/components/Icon";
-import { SuraList } from "@/components/SuraList";
 
 type QIndexProps = {
 	simple?: boolean;
@@ -24,11 +24,11 @@ export default function QIndex({ simple }: QIndexProps) {
 	const lang = useSelector(selectLang);
 	const [keyboard, setKeyboard] = useState(false);
 	const [activeTab, setActiveTab] = useState(
-		localStorage.getItem("activeTab") || "index"
+		localStorage.getItem("activeTab") || "index",
 	);
 	const [filter, setFilter] = useState("");
 	const appHeight = useSelector(selectAppHeight);
-	const bodyRef = useSnapHeightToBottomOf(appHeight - 15);//no longer used
+	const bodyRef = useSnapHeightToBottomOf(appHeight - 15); //no longer used
 
 	const selectTab = (tabId: string) => {
 		localStorage.setItem("activeTab", tabId);
@@ -79,7 +79,7 @@ export default function QIndex({ simple }: QIndexProps) {
 						onClick={(_e) => selectTab("index")}
 						className={"CommandButton".appendWord(
 							"active",
-							activeTab === "index"
+							activeTab === "index",
 						)}
 					>
 						<Icon icon={faListAlt} />
@@ -91,10 +91,10 @@ export default function QIndex({ simple }: QIndexProps) {
 						onClick={(_e) => selectTab("hifz")}
 						className={"CommandButton".appendWord(
 							"active",
-							activeTab === "hifz"
+							activeTab === "hifz",
 						)}
 					>
-						<Icon icon={faHeart} />
+						<Icon icon={faBrain} />
 						<span>
 							<Message id="favorites" />
 						</span>
@@ -103,7 +103,7 @@ export default function QIndex({ simple }: QIndexProps) {
 						onClick={(_e) => selectTab("bookmarks")}
 						className={"CommandButton".appendWord(
 							"active",
-							activeTab === "bookmarks"
+							activeTab === "bookmarks",
 						)}
 					>
 						<Icon icon={faBookmark} />
@@ -151,10 +151,7 @@ export default function QIndex({ simple }: QIndexProps) {
 				) : activeTab === "hifz" ? (
 					<HifzRanges filter={filter} trigger="indices_hifz" />
 				) : (
-					<BookmarksList
-						filter={filter}
-						trigger="indices_bookmarks"
-					/>
+					<BookmarksList filter={filter} trigger="indices_bookmarks" />
 				)}
 			</div>
 		</>
