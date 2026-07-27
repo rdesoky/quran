@@ -25,10 +25,10 @@ export const VerseContextButtons = () => {
 			{popup !== "Tafseer" ? (
 				<CommandButton trigger="verse_context" command="Tafseer" />
 			) : null}
+			<CommandButton trigger="verse_context" command="ResearchWithAI" />
 			<CommandButton trigger="verse_context" command="Mask" />
 			{/* <CommandButton trigger="verse_context" command="update_hifz" /> */}
 			<CommandButton trigger="verse_context" command="Copy" />
-			<CommandButton trigger="verse_context" command="ResearchWithAI" />
 			<CommandButton trigger="verse_context" command="Bookmark" />
 		</div>
 	);

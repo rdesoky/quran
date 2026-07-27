@@ -22,6 +22,7 @@ const initSidebarCommands: CommandType[] = [
 	"Mask",
 	"update_hifz",
 	"Tafseer",
+	// "ResearchWithAI",
 	"Bookmarks",
 	"Goto",
 	"Copy",
