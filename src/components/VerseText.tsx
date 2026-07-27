@@ -10,11 +10,16 @@ import {
 } from "@/store/dbSlice";
 import { selectStartSelection } from "@/store/navSlice";
 import { showToast } from "@/store/uiSlice";
-import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
+import {
+	faCommentDots,
+	faBookmark as farBookmark,
+} from "@fortawesome/free-regular-svg-icons";
 import { faBookmark, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Icon from "@/components/Icon";
+import useCommands from "@/hooks/useCommands";
+import { CommandButton } from "./CommandButton";
 
 type VerseTextProps = {
 	verse?: number;
@@ -38,6 +43,7 @@ export const VerseText = ({
 	const selectStart = useSelector(selectStartSelection);
 	const aya_id = verse ?? selectStart;
 	const isBookmarked = useSelector(selectIsBookmarked(aya_id));
+	const { runCommand } = useCommands();
 
 	const updateText = (verseIndex: number) => {
 		setText(quranText?.[verseIndex]);
@@ -85,9 +91,19 @@ export const VerseText = ({
 			) : null}
 			{text}
 			{copy ? (
-				<button onClick={copyVerse}>
-					<Icon icon={faCopy} />
-				</button>
+				<>
+					<button onClick={copyVerse}>
+						<Icon icon={faCopy} />
+					</button>
+					<CommandButton trigger={"verse_context"} command="ResearchWithAI" />
+					{/* <button
+						onClick={() => {
+							runCommand("ResearchWithAI", trigger);
+						}}
+					>
+						<Icon icon={faCommentDots} />
+					</button> */}
+				</>
 			) : null}
 		</div>
 	);

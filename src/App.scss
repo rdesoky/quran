@@ -48,14 +48,15 @@
 button,
 .LinkButton {
 	// font-family: Arial;
-	transition: background-color 0.3s, top 0.5s;
+	transition:
+			background-color 0.3s,
+			top 0.5s;
 	border: none;
 	border-width: 0;
 	background-color: transparent;
 	color: #ddd;
 	pointer-events: all;
 	text-align: center;
-
 
 	.actions & {
 		text-align: center !important;
@@ -302,7 +303,7 @@ hr {
 
 	span {
 		svg {
-			width: $navbarWidth
+			width: $navbarWidth;
 		}
 
 		img {
@@ -320,6 +321,17 @@ hr {
 
 	&.selected {
 		background-color: #444;
+	}
+	.VerseText & {
+		display: inline-block;
+		height: auto;
+		min-width: 25px;
+		font-size: initial !important;
+		padding: 5px;
+
+		svg {
+			width: 16px;
+		}
 	}
 }
 
@@ -363,7 +375,7 @@ hr {
 		margin-bottom: 0;
 	}
 
-	>.HifzRangeBody {
+								>.HifzRangeBody {
 		padding: 0 !important;
 		border-radius: 4px;
 		width: 100%;
@@ -376,7 +388,7 @@ hr {
 			background-color: #111 !important;
 		}
 
-		>div {
+																>div {
 			line-height: $chartHeight;
 			margin: 0 5px;
 		}
@@ -522,7 +534,6 @@ hr {
 }
 
 .UserIcon {
-
 	// width: 50px;
 	// height: 50px;
 	// // font-size: 30px !important;
@@ -751,7 +762,7 @@ hr {
 		display: flex;
 		flex-direction: column;
 		padding: 5px;
-		overflow:auto;
+																overflow: auto;
 
 		.ContextHeader {
 			// padding: 5px;
@@ -1050,7 +1061,7 @@ hr {
 		// stroke-width: 70px !important;
 	}
 
-	&+.piePartNumber {
+								&+.piePartNumber {
 		font-size: 12px;
 		// fill: white;
 		pointer-events: none;
