@@ -35,7 +35,7 @@ import {
 	selectAudioState,
 	selectPlayingAya,
 } from "@/store/playerSlice";
-import { AudioRange, selectReciter } from "@/store/settingsSlice";
+import { AudioRange, selectAiAgent, selectReciter } from "@/store/settingsSlice";
 import {
 	closePopup,
 	hideMenu,
@@ -70,6 +70,7 @@ export default function useCommands() {
 	const pagesCount = useSelector(selectPagesCount);
 	const popup = useSelector(selectPopup);
 	const selectedRange = useSelector(selectSelectedRange);
+	const aiAgent = useSelector(selectAiAgent);
 
 	const toggleBookmark = () => {
 		if (isBookmarked) {
@@ -87,6 +88,12 @@ export default function useCommands() {
 
 	const runCommand = (command: string, trigger?: string) => {
 		selectTopCommand();
+
+		const AI_AGENT_URLS: Record<string, string> = {
+			ChatGPT: "https://chatgpt.com/?q=",
+			Claude: "https://claude.ai/new?q=",
+			Perplexity: "https://www.perplexity.ai/?q=",
+		};
 
 		switch (command) {
 		case "Commands":
@@ -139,7 +146,8 @@ export default function useCommands() {
 					verse: loc.verse,
 				}
 			);
-			const url = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+			const baseUrl = AI_AGENT_URLS[aiAgent] || AI_AGENT_URLS.ChatGPT;
+			const url = `${baseUrl}${encodeURIComponent(prompt)}`;
 			window.open(url, "_blank");
 			break;
 		}
