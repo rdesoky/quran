@@ -147,6 +147,8 @@
 	"exercise_intro": "Revise or memorize by typing verses text",
 	"success_write_next": "Matched successfully! - type next verse",
 	"text_copied": "Text copied to clipboard",
+	"researchwithai": "Research with AI",
+	"researchwithai_prompt": "Please explain the following Quranic verse:\n\n{text}\n\nLocation: Surah {chapter}, Verse {verse}",
 	"are_you_sure": "Are you sure?",
 	"yes": "Yes",
 	"no": "No",

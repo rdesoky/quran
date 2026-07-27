@@ -147,6 +147,8 @@
 	"exercise_intro": "Herzien of memoriseren door het typen van verzen tekst",
 	"success_write_next": "Met succes gematcht! - typ het volgende vers",
 	"text_copied": "Tekst gekopieerd naar klembord",
+	"researchwithai": "Onderzoek met AI",
+	"researchwithai_prompt": "Gelieve de volgende Koranverzen te verklaren:\n\n{text}\n\nLocatie: Soera {chapter}, Vers {verse}",
 	"are_you_sure": "Weet je het zeker?",
 	"yes": "Ja",
 	"no": "Nee",

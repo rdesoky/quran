@@ -147,6 +147,8 @@
 	"exercise_intro": "راجع او تدرب على الحفظ بكتابة آيات من ذاكرتك",
 	"success_write_next": "الاية مطابقة - اكتب الاية التالية",
 	"text_copied": "تم نسخ النص في الحافظة",
+	"researchwithai": "بحث بالذكاء الاصطناعي",
+	"researchwithai_prompt": "يرجى شرح الآية القرآنية التالية:\n\n{text}\n\nالموقع: سورة {chapter}, آية {verse}",
 	"are_you_sure": "هل انت متأكد؟",
 	"yes": "نعم",
 	"no": "لا",

@@ -147,6 +147,8 @@
 	"exercise_intro": "Revisar o memorizar escribiendo el texto de los versículos",
 	"success_write_next": "¡Coincidencia exitosa! - escribe el siguiente versículo",
 	"text_copied": "Texto copiado al portapapeles",
+	"researchwithai": "Investigar con IA",
+	"researchwithai_prompt": "Por favor, explique el siguiente versículo del Corán:\n\n{text}\n\nUbicación: Sura {chapter}, Versículo {verse}",
 	"are_you_sure": "¿Estás seguro?",
 	"yes": "Sí",
 	"no": "No",

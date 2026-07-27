@@ -147,6 +147,8 @@
 	"exercise_intro": "با تایپ متن آیات, مرور یا حفظ کنید",
 	"success_write_next": "با موفقیت مطابقت داده شد! - آیه بعدی را تایپ کنید",
 	"text_copied": "متن در کلیپ بورد کپی شد",
+	"researchwithai": "تحقیق با هوش مصنوعی",
+	"researchwithai_prompt": "لطفاً این آیه قرآنی را توضیح دهید:\n\n{text}\n\nمکان: سوره {chapter}, آیه {verse}",
 	"are_you_sure": "آیا مطمئن هستید؟",
 	"yes": "بله",
 	"no": "خیر",

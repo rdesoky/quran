@@ -147,6 +147,8 @@
 	"exercise_intro": "Ulangi atau hafalkan dengan mengetik teks ayat",
 	"success_write_next": "Cocok berhasil! - ketik ayat berikutnya",
 	"text_copied": "Teks disalin ke papan klip",
+	"researchwithai": "Riset dengan AI",
+	"researchwithai_prompt": "Mohon jelaskan ayat Al-Qur'an berikut:\n\n{text}\n\nLokasi: Surah {chapter}, Ayat {verse}",
 	"are_you_sure": "Apakah Anda yakin?",
 	"yes": "Ya",
 	"no": "Tidak",

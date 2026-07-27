@@ -147,6 +147,8 @@
 	"exercise_intro": "Réviser ou mémoriser en tapant le texte des versets",
 	"success_write_next": "Correspondance réussie! - tapez le verset suivant",
 	"text_copied": "Texte copié dans le presse-papiers",
+	"researchwithai": "Recherche avec l'IA",
+	"researchwithai_prompt": "Veuillez expliquer le verset coranique suivant:\n\n{text}\n\nEmplacement: Sourate {chapter}, Verset {verse}",
 	"are_you_sure": "Êtes-vous sûr?",
 	"yes": "Oui",
 	"no": "Non",

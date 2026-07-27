@@ -147,6 +147,8 @@
 	"exercise_intro": "Überarbeiten oder Auswendiglernen durch Eingabe des Verstextes",
 	"success_write_next": "Erfolgreich übereingestimmt! - nächsten Vers eingeben",
 	"text_copied": "Text in die Zwischenablage kopiert",
+	"researchwithai": "Mit KI recherchieren",
+	"researchwithai_prompt": "Bitte erkläre den folgenden Koranvers:\n\n{text}\n\nOrt: Sure {chapter}, Vers {verse}",
 	"are_you_sure": "Sind Sie sicher?",
 	"yes": "Ja",
 	"no": "Nein",
