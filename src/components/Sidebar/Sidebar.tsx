@@ -40,78 +40,78 @@ function Sidebar() {
   }, [popup]);
 
   return (
-    <div
-      id="SidebarBlocker"
-      style={{
-        pointerEvents: isShowMenu ? "fill" : "none",
-        zIndex: menuExpanded ? 4 : 3,
-      }}
-      onClick={(_e) => {
-        //hide menu upon clicking outside of it
-        if (menuExpanded) {
-          dispatch(hideMenu());
-        }
-      }}
-    >
-      <div id="SidebarBorder" className={isNarrow ? "narrow" : ""}>
-        <div
-          id="Sidebar"
-          ref={sidebarRef}
-          className={"Sidebar SidebarSection"
-            .appendWord("narrow", isNarrow)
-            .appendWord("expanded", isShowMenu)
-            .appendWord("HiddenScroller", !isShowMenu)}
-        >
-          {enableUp && !menuExpanded && (
-            <button
-              id="SidebarUpBtn"
-              className="sidebar-scroll-btn"
-              onClick={() => scrollUp()}
-            >
-              <Icon icon={faAngleDoubleUp} />
-            </button>
-          )}
-          <div id="SidebarButtons">
-            <div className="SidebarSection">
-              <PlayerButtons
-                trigger="side_bar"
-                showLabels={isShowMenu}
-                showReciter={true}
-              />
-            </div>
-            {recentCommands
-              .filter((c) => {
-                return c !== null;
-              })
-              .map((command, _index) => (
-                <CommandButton
-                  command={command}
-                  trigger="side_bar"
-                  key={command}
-                  className={popup === command ? "selected" : ""}
-                  showLabel={isShowMenu}
-                />
-              ))}
-          </div>
-          {enableDown && !menuExpanded && (
-            <button
-              id="SidebarDownBtn"
-              className="sidebar-scroll-btn"
-              onClick={() => scrollDown()}
-            >
-              <Icon icon={faAngleDoubleDown} />
-            </button>
-          )}
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            // height: isNarrow ? 25 : 50,
-          }}
-        >
-          {/* {showZoom && <CommandButton
+		<div
+			id="SidebarBlocker"
+			style={{
+				pointerEvents: isShowMenu ? "fill" : "none",
+				zIndex: menuExpanded ? 4 : 3,
+			}}
+			onClick={(_e) => {
+				//hide menu upon clicking outside of it
+				if (menuExpanded) {
+					dispatch(hideMenu());
+				}
+			}}
+		>
+			<div id="SidebarBorder" className={isNarrow ? "narrow" : ""}>
+				<div
+					id="Sidebar"
+					ref={sidebarRef}
+					className={"Sidebar SidebarSection"
+						.appendWord("narrow", isNarrow)
+						.appendWord("expanded", isShowMenu)
+						.appendWord("HiddenScroller", !isShowMenu)}
+				>
+					{!isNarrow && enableUp && !menuExpanded && (
+						<button
+							id="SidebarUpBtn"
+							className="sidebar-scroll-btn"
+							onClick={() => scrollUp()}
+						>
+							<Icon icon={faAngleDoubleUp} />
+						</button>
+					)}
+					<div id="SidebarButtons">
+						<div className="SidebarSection">
+							<PlayerButtons
+								trigger="side_bar"
+								showLabels={isShowMenu}
+								showReciter={true}
+							/>
+						</div>
+						{recentCommands
+							.filter((c) => {
+								return c !== null;
+							})
+							.map((command, _index) => (
+								<CommandButton
+									command={command}
+									trigger="side_bar"
+									key={command}
+									className={popup === command ? "selected" : ""}
+									showLabel={isShowMenu}
+								/>
+							))}
+					</div>
+					{!isNarrow && enableDown && !menuExpanded && (
+						<button
+							id="SidebarDownBtn"
+							className="sidebar-scroll-btn"
+							onClick={() => scrollDown()}
+						>
+							<Icon icon={faAngleDoubleDown} />
+						</button>
+					)}
+				</div>
+				<div
+					style={{
+						position: "absolute",
+						left: 0,
+						bottom: 0,
+						// height: isNarrow ? 25 : 50,
+					}}
+				>
+					{/* {showZoom && <CommandButton
 						id="SideMenuExpander"
 						command="Zoom"
 						trigger="side_bar"
@@ -119,17 +119,17 @@ function Sidebar() {
 						style={{ height: 50 }}
 					/>} */}
 
-          <CommandButton
-            id="SideMenuExpander"
-            command="Commands"
-            trigger="side_bar"
-            updateChecker={true}
-            // style={{ height: isNarrow ? 25 : 50 }}
-          />
-        </div>
-      </div>
-    </div>
-  );
+					<CommandButton
+						id="SideMenuExpander"
+						command="Commands"
+						trigger="side_bar"
+						updateChecker={true}
+						// style={{ height: isNarrow ? 25 : 50 }}
+					/>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default Sidebar;

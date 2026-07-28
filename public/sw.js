@@ -1,4 +1,4 @@
-const appVersion = 45;
+const appVersion = 46;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
