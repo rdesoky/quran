@@ -95,33 +95,34 @@ const Settings = () => {
 					</label>
 				</div>
 				<hr />
-			<div className="OptionRow">
-				<label>
-					<span>
-						<Message id="dark_mode" />
-					</span>
-					<Switch
-						height={22}
-						width={42}
-						onChange={onUpdateTheme}
-						checked={theme === "Dark"}
-					/>
-				</label>
-			</div>
-			<div className="OptionRow">
-				<label>
-					<span>
-						<Message id="ai_agent" />
-					</span>
-					<select onChange={updateAiAgent} value={aiAgent}>
-						<option value="AskUser"><Message id="ask_user" /></option>
-						<option value="Claude">Claude</option>
-						<option value="Perplexity">Perplexity</option>
-						<option value="ChatGPT">ChatGPT</option>
-					</select>
-				</label>
-			</div>
-			{/* <ExerciseSettings />
+				<div className="OptionRow">
+					<label>
+						<span>
+							<Message id="dark_mode" />
+						</span>
+						<Switch
+							height={22}
+							width={42}
+							onChange={onUpdateTheme}
+							checked={theme === "Dark"}
+						/>
+					</label>
+				</div>
+				<div className="OptionRow">
+					<label>
+						<span>
+							<Message id="ai_agent" />
+						</span>
+						<select onChange={updateAiAgent} value={aiAgent}>
+							<option value="AskUser"><Message id="ask_user" /></option>
+							<option value="Claude">Claude</option>
+							<option value="Perplexity">Perplexity</option>
+							<option value="ChatGPT">ChatGPT</option>
+							{/* <option value="Meta">Meta</option> */}
+						</select>
+					</label>
+				</div>
+				{/* <ExerciseSettings />
                 <hr /> */}
 				<hr />
 				<div>
