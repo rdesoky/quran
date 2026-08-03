@@ -7,9 +7,10 @@ import { TestMode } from "@/components/types";
 const sliceName = "settings";
 
 export const AI_AGENT_URLS: Record<string, string> = {
+	Google: "https://google.com/search?udm=50&q=",
 	Perplexity: "https://www.perplexity.ai/?q=",
-	Claude: "https://claude.ai/new?q=",
 	ChatGPT: "https://chatgpt.com/?q=",
+	Claude: "https://claude.ai/new?q=",
 	// Meta: "https://www.meta.ai/?q=",
 };
 
