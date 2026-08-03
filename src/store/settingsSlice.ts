@@ -6,6 +6,12 @@ import { TestMode } from "@/components/types";
 
 const sliceName = "settings";
 
+export const AI_AGENT_URLS: Record<string, string> = {
+	ChatGPT: "https://chatgpt.com/?q=",
+	Claude: "https://claude.ai/new?q=",
+	Perplexity: "https://www.perplexity.ai/?q=",
+};
+
 const initialState = {
 	exerciseLevel: getStorageItem("exerciseLevel", 0),
 	exerciseMemorized: getStorageItem("exerciseMemorized", false),
@@ -16,7 +22,7 @@ const initialState = {
 	theme: getStorageItem("theme", "Dark"),
 	lang: getStorageItem("lang", "ar"),
 	testMode: getStorageItem("testMode", TestMode.reviewOnFinish) as TestMode,
-	aiAgent: getStorageItem("aiAgent", "Perplexity"),
+	aiAgent: getStorageItem("aiAgent", "AskUser"),
 };
 
 const settingsSlice = createSlice({

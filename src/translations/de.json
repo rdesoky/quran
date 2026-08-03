@@ -166,6 +166,8 @@
 	"credits": "Audio importiert von: {link}",
 	"dark_mode": "Dunkler Modus",
 	"ai_agent": "KI-Agent",
+	"ask_user": "Frag mich",
+	"choose_ai_agent": "KI-Agent wählen",
 	"delete_bookmark": "Lesezeichen löschen",
 	"download_guide": "Zum Herunterladen rechts klicken oder lange drücken und 'Speichern unter...' auswählen",
 	"download_verse_audio": "Audio-Datei herunterladen",

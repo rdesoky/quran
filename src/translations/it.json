@@ -166,6 +166,8 @@
 	"credits": "Audio importato da: {link}",
 	"dark_mode": "Modalità scura",
 	"ai_agent": "Agente AI",
+	"ask_user": "Chiedimi",
+	"choose_ai_agent": "Scegli l'agente AI",
 	"delete_bookmark": "Elimina segnalibro",
 	"download_guide": "Per scaricare, fai clic destro o tieni premuto il pulsante e seleziona 'Salva con nome...'",
 	"download_verse_audio": "Scarica file audio",
