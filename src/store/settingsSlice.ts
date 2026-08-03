@@ -10,6 +10,7 @@ export const AI_AGENT_URLS: Record<string, string> = {
 	Perplexity: "https://www.perplexity.ai/?q=",
 	Claude: "https://claude.ai/new?q=",
 	ChatGPT: "https://chatgpt.com/?q=",
+	// Meta: "https://www.meta.ai/?q=",
 };
 
 const initialState = {
