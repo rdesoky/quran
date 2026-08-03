@@ -2,6 +2,7 @@ import PerplexityLogo from "@/assets/svg/perplexity.svg?react";
 import ClaudeLogo from "@/assets/svg/claude.svg?react";
 import ChatGptLogo from "@/assets/svg/chatgpt.svg?react";
 import MetaLogo from "@/assets/svg/metaai.svg?react";
+import GoogleLogo from "@/assets/svg/google.svg?react";
 import { AI_AGENT_URLS } from "@/store/settingsSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
 import { analytics } from "@/services/analytics";
@@ -16,16 +17,18 @@ type AgentLogoProps = {
 
 const AgentLogo = ({ agent }: AgentLogoProps) => {
 	switch (agent) {
-	case "Perplexity":
-		return <PerplexityLogo width={24} height={24} />;
-	case "Claude":
-		return <ClaudeLogo width={24} height={24} />;
-	case "ChatGPT":
-		return <ChatGptLogo width={24} height={24} />;
-	case "Meta":
-		return <MetaLogo width={24} height={24} />;
-	default:
-		return <ChatGptLogo width={24} height={24} />;
+		case "Perplexity":
+			return <PerplexityLogo width={24} height={24} />;
+		case "Claude":
+			return <ClaudeLogo width={24} height={24} />;
+		case "ChatGPT":
+			return <ChatGptLogo width={24} height={24} />;
+		case "Google":
+			return <GoogleLogo width={24} height={24} />;
+		case "Meta":
+			return <MetaLogo width={24} height={24} />;
+		default:
+			return <ChatGptLogo width={24} height={24} />;
 	}
 };
 
