@@ -114,6 +114,7 @@ const Settings = () => {
 						<Message id="ai_agent" />
 					</span>
 					<select onChange={updateAiAgent} value={aiAgent}>
+						<option value="AskUser"><Message id="ask_user" /></option>
 						<option value="Claude">Claude</option>
 						<option value="Perplexity">Perplexity</option>
 						<option value="ChatGPT">ChatGPT</option>

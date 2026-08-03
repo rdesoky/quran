@@ -8,6 +8,7 @@ import Help from "@/components/Modal/Help";
 import Hifz from "@/components/Modal/Hifz";
 import Modal from "@/components/Modal/Modal";
 import Play from "@/components/Modal/Play";
+import AIChoose from "@/components/Modal/AIChoose";
 import QIndex from "@/components/Modal/QIndex";
 import Search from "@/components/Modal/Search";
 import Settings from "@/components/Modal/Settings";
@@ -33,6 +34,7 @@ export const PopupsMap = {
 	Help,
 	Settings,
 	Tafseer,
+	AIChoose,
 	AudioPlayer: Settings,
 	Favorites,
 	Profile: User,
