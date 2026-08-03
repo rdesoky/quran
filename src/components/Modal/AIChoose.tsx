@@ -4,12 +4,10 @@ import ChatGptLogo from "@/assets/svg/chatgpt.svg?react";
 import { AI_AGENT_URLS } from "@/store/settingsSlice";
 import { closePopupIfBlocking } from "@/store/uiSlice";
 import { analytics } from "@/services/analytics";
-import { FormattedMessage as Message } from "react-intl";
-import { useDispatch } from "react-redux";
-
-type AIChooseProps = {
-	prompt?: string;
-};
+import { buildAIPrompt } from "@/services/utils";
+import { selectSelectedText, selectStartSelection } from "@/store/navSlice";
+import { FormattedMessage as Message, useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 
 type AgentLogoProps = {
 	agent: string;
@@ -28,10 +26,14 @@ const AgentLogo = ({ agent }: AgentLogoProps) => {
 	}
 };
 
-const AIChoose = ({ prompt = "" }: AIChooseProps) => {
+const AIChoose = () => {
 	const dispatch = useDispatch();
+	const intl = useIntl();
+	const selectStart = useSelector(selectStartSelection);
+	const selectedText = useSelector(selectSelectedText);
 
 	const onSelect = (agent: string) => {
+		const prompt = buildAIPrompt(intl, selectedText, selectStart);
 		const baseUrl = AI_AGENT_URLS[agent] || AI_AGENT_URLS.ChatGPT;
 		const url = `${baseUrl}${encodeURIComponent(prompt)}`;
 		window.open(url, "_blank");

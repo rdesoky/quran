@@ -1,6 +1,6 @@
 
 import { IntlShape } from "react-intl";
-import { getPagePartNumber, sura_info } from "@/services/qData";
+import { getPagePartNumber, sura_info, verseLocation } from "@/services/qData";
 
 export const num2string = (num: number, length = 3) => {
 	const ret = num.toString();
@@ -184,6 +184,18 @@ export const lesserOf = (...numbers: number[]) => {
 export const getSuraName = (intl: IntlShape, index: number) => {
 	const suraNames = intl.formatMessage({ id: "sura_names" }).split(",");
 	return suraNames?.[index];
+};
+
+export const buildAIPrompt = (intl: IntlShape, text: string, ayaId: number) => {
+	const loc = verseLocation(ayaId);
+	return intl.formatMessage(
+		{ id: "researchwithai_prompt" },
+		{
+			text,
+			chapter: loc.chapter,
+			verse: loc.verse,
+		}
+	);
 };
 
 export const checkActiveInput = () => {

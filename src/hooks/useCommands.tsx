@@ -4,6 +4,7 @@ import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
 import { ayaIdPage, verseLocation } from "@/services/qData";
 import {
+	buildAIPrompt,
 	copy2Clipboard,
 	keyValues,
 	requestFullScreen,
@@ -131,20 +132,12 @@ export default function useCommands() {
 			});
 			break;
 		case "ResearchWithAI": {
-			const loc = verseLocation(selectStart);
-			const prompt = intl.formatMessage(
-				{ id: "researchwithai_prompt" },
-				{
-					text: selectedText,
-					chapter: loc.chapter,
-					verse: loc.verse,
-				}
-			);
 			if (aiAgent === "AskUser") {
-				dispatch(showPopup("AIChoose", { prompt }));
+				dispatch(showPopup("AIChoose"));
 				break;
 			}
 			const baseUrl = AI_AGENT_URLS[aiAgent] || AI_AGENT_URLS.ChatGPT;
+			const prompt = buildAIPrompt(intl, selectedText, selectStart);
 			const url = `${baseUrl}${encodeURIComponent(prompt)}`;
 			window.open(url, "_blank");
 			break;
