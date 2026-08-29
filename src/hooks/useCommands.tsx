@@ -1,4 +1,5 @@
 import { AddHifz } from "@/components/AddHifz";
+import AIChoose from "@/components/Modal/AIChoose";
 import PlayPrompt from "@/components/PlayPrompt";
 import { useAudio, useContextPopup, useMessageBox } from "@/RefsProvider";
 import { analytics } from "@/services/analytics";
@@ -132,14 +133,22 @@ export default function useCommands() {
 			});
 			break;
 		case "ResearchWithAI": {
+			const openAIAgent = (agent: string) => {
+				const baseUrl = AI_AGENT_URLS[agent] || AI_AGENT_URLS.ChatGPT;
+				const prompt = buildAIPrompt(intl, selectedText, selectStart);
+				const url = `${baseUrl}${encodeURIComponent(prompt)}`;
+				window.open(url, "_blank");
+				analytics.logEvent("researchwithai", { agent });
+				msgBox?.pop();
+			};
 			if (aiAgent === "AskUser") {
-				dispatch(showPopup("AIChoose"));
+				msgBox?.set({
+					title: <Message id="choose_ai_agent" />,
+					content: <AIChoose onSelect={openAIAgent} />,
+				});
 				break;
 			}
-			const baseUrl = AI_AGENT_URLS[aiAgent] || AI_AGENT_URLS.ChatGPT;
-			const prompt = buildAIPrompt(intl, selectedText, selectStart);
-			const url = `${baseUrl}${encodeURIComponent(prompt)}`;
-			window.open(url, "_blank");
+			openAIAgent(aiAgent);
 			break;
 		}
 		case "Downloading":
