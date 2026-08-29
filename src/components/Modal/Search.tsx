@@ -1,23 +1,32 @@
 import {
+	faCommentDots,
 	faCopy,
 	faIndent,
 	faSearch,
 	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FormattedMessage as String } from "react-intl";
+import {
+	FormattedMessage as String,
+	FormattedMessage as Message,
+	useIntl,
+} from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "@/services/analytics";
 import { arSuraNames, ayaIdInfo, verseLocation } from "@/services/qData";
+import { buildAIPrompt } from "@/services/utils";
 import {
 	copy2Clipboard,
 	highlightSearch,
 	normalizeText,
 } from "@/services/utils";
 import { selectAppHeight, selectPopupWidth } from "@/store/layoutSlice";
+import { AI_AGENT_URLS, selectAiAgent } from "@/store/settingsSlice";
 import { gotoAya, gotoSura, hideMask } from "@/store/navSlice";
 import { closePopupIfBlocking, showToast } from "@/store/uiSlice";
+import AIChoose from "@/components/Modal/AIChoose";
+import { useMessageBox } from "@/RefsProvider";
 import AKeyboard from "@/components/AKeyboard/AKeyboard";
 import SuraName from "@/components/SuraName";
 import { quranNormalizedText, quranText } from "@/data/quran";
@@ -56,6 +65,9 @@ export default function Search() {
 	const appHeight = useSelector(selectAppHeight);
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const msgBox = useMessageBox();
+	const intl = useIntl();
+	const aiAgent = useSelector(selectAiAgent);
 	// const lang = useSelector(selectLang);
 	const resultsRef = useSnapHeightToBottomOf(appHeight - 8, searchTerm); // substract 8px for the bottom padding
 
@@ -259,6 +271,34 @@ export default function Search() {
 		});
 	};
 
+	const researchVerseWithAI = (e: React.MouseEvent<HTMLButtonElement>) => {
+		const verse = Number(e.currentTarget.getAttribute("data-verse"));
+		const verseInfo = ayaIdInfo(verse);
+		const text = `${quranText?.[verse]} (${verseInfo.sura + 1}:${verseInfo.aya + 1})`;
+
+		const openAIAgent = (agent: string) => {
+			const baseUrl = AI_AGENT_URLS[agent] || AI_AGENT_URLS.ChatGPT;
+			const prompt = buildAIPrompt(intl, text, verse);
+			window.open(`${baseUrl}${encodeURIComponent(prompt)}`, "_blank");
+			analytics.logEvent("researchwithai", {
+				agent,
+				...verseLocation(verse),
+				trigger: "search_results",
+			});
+			msgBox?.pop();
+		};
+
+		if (aiAgent === "AskUser") {
+			msgBox?.set({
+				title: <Message id="choose_ai_agent" />,
+				content: <AIChoose onSelect={openAIAgent} />,
+			});
+		} else {
+			openAIAgent(aiAgent);
+		}
+		e.stopPropagation();
+	};
+
 	const renderResultsTree = () => {
 		const groups = results.reduce((groups, ayaInfo, _index) => {
 			const { sura, aya } = ayaIdInfo(ayaInfo.aya);
@@ -328,6 +368,11 @@ export default function Search() {
 													)}
 												/>
 												<Icon
+													onClick={researchVerseWithAI}
+													icon={faCommentDots}
+													data-verse={aya}
+												/>
+												<Icon
 													onClick={copyVerse}
 													icon={faCopy}
 													data-verse={aya}
@@ -378,6 +423,11 @@ export default function Search() {
 										ayaText,
 										normalizedAyaText
 									)}
+								/>
+								<Icon
+									onClick={researchVerseWithAI}
+									icon={faCommentDots}
+									data-verse={aya}
 								/>
 								<Icon
 									onClick={copyVerse}
