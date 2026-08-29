@@ -32,13 +32,21 @@ const AgentLogo = ({ agent }: AgentLogoProps) => {
 	}
 };
 
-const AIChoose = () => {
+type AIChooseProps = {
+	onSelect?: (agent: string) => void;
+};
+
+const AIChoose = ({ onSelect }: AIChooseProps) => {
 	const dispatch = useDispatch();
 	const intl = useIntl();
 	const selectStart = useSelector(selectStartSelection);
 	const selectedText = useSelector(selectSelectedText);
 
-	const onSelect = (agent: string) => {
+	const onSelectAgent = (agent: string) => {
+		if (onSelect) {
+			onSelect(agent);
+			return;
+		}
 		const prompt = buildAIPrompt(intl, selectedText, selectStart);
 		const baseUrl = AI_AGENT_URLS[agent] || AI_AGENT_URLS.ChatGPT;
 		const url = `${baseUrl}${encodeURIComponent(prompt)}`;
@@ -49,15 +57,17 @@ const AIChoose = () => {
 
 	return (
 		<>
-			<div className="Title">
-				<Message id="choose_ai_agent" />
-			</div>
+			{!onSelect && (
+				<div className="Title">
+					<Message id="choose_ai_agent" />
+				</div>
+			)}
 			<div className="PopupBody">
 				<div className="CommandsList">
 					{Object.keys(AI_AGENT_URLS).map((agent) => (
 						<button
 							key={agent}
-							onClick={() => onSelect(agent)}
+							onClick={() => onSelectAgent(agent)}
 						>
 							<AgentLogo agent={agent} />
 							{agent}
