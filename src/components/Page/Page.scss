@@ -330,6 +330,9 @@
 	.PageImageFrame {
 		border-left: solid 1px silver;
 		box-shadow: -3px 0px 3px 0px rgba(0, 0, 0, 0.15);
+		// The spine of a left page is its right edge: fold towards it so the
+		// page never leaves its own frame while being dragged.
+		transform-origin: right center;
 	}
 }
 
@@ -341,6 +344,8 @@
 	.PageImageFrame {
 		border-right: solid 1px silver;
 		box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.15);
+		// The spine of a right page is its left edge.
+		transform-origin: left center;
 	}
 }
 

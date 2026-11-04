@@ -592,29 +592,20 @@ export default function Pager() {
 				}}
 			>
 				{({ dX }: { dX: number; dY: number; }) => {
-					//Shrink the width using the scaling
-					// const ratio = Math.abs(dX) / pageWidth;
-
-					// const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
-					// const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
-					// const shiftX = dX * accel;
-					const accel = 1;// Math.cos(angle); //slowing down the scaling when the drag is large
-					// const angle = (90 * Math.min(Math.abs(dX), pageWidth)) / pageWidth;
-					//
-					const scaleX = (pageWidth - Math.abs(dX)) / pageWidth * accel;
-					// const angle = 90 * scaleX;
-					// const accel = Math.cos(angle2Radians(angle));
-					const shiftX = dX;// * scaleX; //* accel;
-					// (accel * (pageWidth - Math.abs(dX))) / pageWidth;
-					// console.log(
-					//     `dX:${dX}, Sh:${shiftX} Sc:${scaleX} Wd:${pageWidth}`
-					// );
-					const firstPageShiftX =
-						pagesCount === 1 ? shiftX : shiftX < 0 ? shiftX : 0;
-					const firstPageScaleX =
-						pagesCount === 1 ? scaleX : shiftX < 0 ? scaleX : 1;
-					const secondPageShiftX = shiftX > 0 ? shiftX : 0;
-					const secondPageScaleX = shiftX > 0 ? scaleX : 1;
+					const isSinglePage = pagesCount === 1;
+					// With one page there is no facing page to fold against, so
+					// pan the page with the finger: dragging left goes back,
+					// dragging right goes forward. With two pages the dragged
+					// page folds towards its spine instead (the transform-origin
+					// in Page.scss keeps it inside its own frame).
+					const shiftX = isSinglePage
+						? Math.max(-pageWidth, Math.min(pageWidth, dX))
+						: 0;
+					const scaleX = isSinglePage
+						? 1
+						: Math.max(0, (pageWidth - Math.abs(dX)) / pageWidth);
+					const firstPageScaleX = dX < 0 ? scaleX : 1;
+					const secondPageScaleX = dX > 0 ? scaleX : 1;
 
 					return (
 						<div
@@ -629,14 +620,14 @@ export default function Pager() {
 								hide={dropped}
 								order={0}
 								scaleX={firstPageScaleX}
-								shiftX={firstPageShiftX}
+								shiftX={shiftX}
 								incrementMask={incrementMask}
 							/>
 							<Page
 								hide={dropped}
 								order={1}
 								scaleX={secondPageScaleX}
-								shiftX={secondPageShiftX}
+								shiftX={0}
 								incrementMask={incrementMask}
 							/>
 						</div>
