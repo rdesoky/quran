@@ -1,0 +1,52 @@
+name: Build and deploy
+
+# Deploy whenever a pull request is merged into master (the merge commit is
+# pushed to master). Can also be run manually from the Actions tab.
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+# gh-pages pushes the built site to the gh-pages branch, so the workflow
+# token needs write access to the repository contents.
+permissions:
+  contents: write
+
+# Never let two deployments race; keep the newest one.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy to gh-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Type check
+        run: yarn tsc_check
+
+      - name: Build
+        run: yarn build
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Publish to gh-pages
+        run: yarn gh-pages -d build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -151,11 +151,9 @@ const Page = ({ hide, order, scaleX, shiftX, incrementMask }: PageProps) => {
 					<div
 						className={"PageImageFrame".appendWord("AnimatePage")}
 						style={{
-							transform: `translateX(${shiftX || 0}px) scaleX(${scaleX || 1
-								})`,
+							transform: `translateX(${shiftX}px) scaleX(${scaleX})`,
 							height: pageHeight,
 							width: pageWidth,
-							// transform: `translateX(${shiftX || 0}px) scaleX(1)`,
 						}}
 					>
 						<HifzSegments
