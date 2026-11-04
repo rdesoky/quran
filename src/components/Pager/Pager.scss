@@ -8,6 +8,9 @@
 	top: $headerHeight; //1px;
 	bottom: $footerHeight;
 	right: 0;
+	// Clip drag transforms to the reading area so a panned page never
+	// covers the app chrome (header, footer, navbar).
+	overflow: hidden;
 
 	.fit_page &,
 	.fit_two_pages & {
