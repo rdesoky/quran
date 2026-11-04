@@ -1,0 +1,20 @@
+# Netlify configuration for deploy previews and production deploys.
+
+[build]
+  command = "yarn build"
+  # Vite is configured with outDir: "build" (not the Vite default "dist").
+  publish = "build"
+
+[build.environment]
+  # The repo contains yarn.lock, pnpm-lock.yaml and package-lock.json. Yarn is
+  # the maintained lockfile (the package scripts call yarn), so pin it instead
+  # of letting Netlify pick a different package manager.
+  NETLIFY_USE_YARN = "true"
+  NODE_VERSION = "22"
+
+# Single page app: BrowserRouter handles the routes client side, so serve the
+# app shell for any path that is not a real file.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
