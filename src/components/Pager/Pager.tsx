@@ -52,7 +52,7 @@ import {
 	showMenu,
 	showPopup,
 	showToast,
-	toggleMenu
+	toggleMenu,
 } from "@/store/uiSlice";
 import React, {
 	useCallback,
@@ -82,6 +82,7 @@ import { VerseContextButtons } from "../VerseContextButtons";
 import { PageHeader } from "./PageHeader";
 
 export default function Pager() {
+	// Pager state selectors and refs
 	const pagesCount = useSelector(selectPagesCount);
 	const pageWidth = useSelector(selectPageWidth);
 	const pagerWidth = useSelector(selectPagerWidth);
@@ -96,7 +97,7 @@ export default function Pager() {
 	const msgBox = useMessageBox();
 	const selectedText = useSelector(selectSelectedText);
 	const maskShift = useSelector(selectMaskShift);
-	const params = useParams<{ page: string; }>();
+	const params = useParams<{ page: string }>();
 	const shownPages = useSelector(selectShownPages);
 	const activePage = useSelector(selectActivePage);
 	const location = useLocation();
@@ -106,10 +107,7 @@ export default function Pager() {
 	const intl = useIntl();
 	const audio = useAudio();
 	const audioState = useSelector(selectAudioState);
-	const selectedAyaInfo = useMemo(
-		() => ayaIdInfo(selectStart),
-		[selectStart]
-	);
+	const selectedAyaInfo = useMemo(() => ayaIdInfo(selectStart), [selectStart]);
 	const zoomLevels = useSelector(selectZoomLevels);
 	const showZoom = zoomLevels > 0;
 	const zoom = useSelector(selectZoom);
@@ -123,8 +121,8 @@ export default function Pager() {
 				setSelectedAya(
 					!isNaN(savedActiveAya)
 						? savedActiveAya
-						: getPageFirstAyaId(activePage)
-				)
+						: getPageFirstAyaId(activePage),
+				),
 			);
 			setLoading(false);
 		}
@@ -147,6 +145,7 @@ export default function Pager() {
 		analytics.setCurrentScreen(location.pathname);
 	}, [location]);
 
+	// Page navigation: scroll to previous / next page blocks
 	const pageUp = useCallback(
 		(bottom = false) => {
 			let count = pagesCount;
@@ -160,9 +159,10 @@ export default function Pager() {
 				top: bottom ? viewRef?.scrollHeight - viewRef?.clientHeight : 0,
 			});
 		},
-		[dispatch, history, activePage, pagesCount]
+		[dispatch, history, activePage, pagesCount],
 	);
 
+	// Scroll down to next page block; reset scroll to top
 	const pageDown = useCallback(() => {
 		// let count = activePopup && !isWide ? 1 : pagesCount;
 		let count = pagesCount;
@@ -178,16 +178,17 @@ export default function Pager() {
 	useEffect(() => {
 		//cache next pages
 		if (pagesCount === 1) {
-			downloadPageImage(activePage + 1).catch((_e) => { });
+			downloadPageImage(activePage + 1).catch((_e) => {});
 		} else {
-			downloadPageImage(activePage + 2).catch((_e) => { });
-			downloadPageImage(activePage + 3).catch((_e) => { });
+			downloadPageImage(activePage + 2).catch((_e) => {});
+			downloadPageImage(activePage + 3).catch((_e) => {});
 		}
 	}, [pagesCount, activePage]);
 
+	// Wheel handling for paginated scroll in non-zoom view
 	const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
 		if (zoom) {
-			return;//only handle wheel in full page view
+			return; //only handle wheel in full page view
 		}
 		const viewRef = pagerRef.current;
 		const LINE_HEIGHT = 12;
@@ -220,7 +221,7 @@ export default function Pager() {
 					viewRef.scrollTo?.({
 						top: viewRef.scrollHeight - viewRef.clientHeight,
 						behavior: "smooth",
-					})
+					}),
 				);
 				if (shownPages.includes(activePage - 1)) {
 					dispatch(setActivePageIndex(activePage - 1));
@@ -232,6 +233,7 @@ export default function Pager() {
 		}
 	};
 
+	// Offset selection by verse; supports shift-extend
 	const onOffsetSelection = useCallback(
 		(shiftKey: boolean, offset: number) => {
 			let selectedAyaId;
@@ -248,10 +250,11 @@ export default function Pager() {
 			// }
 			dispatch(gotoPage(history, ayaIdPage(selectedAyaId)));
 		},
-		[dispatch, history, selectStart]
+		[dispatch, history, selectStart],
 	);
 
-	//TODO: convert to a thunk ( passing history hook )
+	// Increment mask (memorization aid) across pages
+	// TODO: convert to a thunk ( passing history hook )
 	const incrementMask = useCallback(() => {
 		const incrementedMask = maskStart + 1;
 
@@ -266,7 +269,7 @@ export default function Pager() {
 
 		if (activePage === maskPage) {
 			// mask still in the same page
-			dispatch(offsetSelection(1));//move the selection
+			dispatch(offsetSelection(1)); //move the selection
 			//if mask moved the start of the next page
 			// move the mask, don't flip the page
 			// To give the user a chance to see the unmasked aya
@@ -274,7 +277,7 @@ export default function Pager() {
 			//mask is at the start of the page
 			if (zoom === 0 && shownPages.includes(incrementedMaskPage)) {
 				//increment the mask only if its head is visible
-				dispatch(offsetSelection(1));//move the selection
+				dispatch(offsetSelection(1)); //move the selection
 			}
 			//flip the page to show the mask head
 			dispatch(gotoPage(history, incrementedMaskPage));
@@ -286,6 +289,7 @@ export default function Pager() {
 		}
 	}, [activePage, dispatch, history, maskStart, shownPages, zoom]);
 
+	// Decrement mask; scroll to bottom when page changes
 	const decrementMask = useCallback(() => {
 		if (maskStart > 0) {
 			const maskPage = ayaIdPage(maskStart - 1);
@@ -305,6 +309,7 @@ export default function Pager() {
 		dispatch(setSelectStart(dispatch(offsetSelection(-1)))); //soft selection
 	}, [dispatch, history, maskStart, shownPages]);
 
+	// Arrow key navigation for verse selection / mask
 	const onArrowKey = useCallback(
 		(shiftKey: boolean, direction: "up" | "down") => {
 			const { isTextInput } = checkActiveInput();
@@ -329,16 +334,16 @@ export default function Pager() {
 				}
 			}
 		},
-		[decrementMask, incrementMask, maskShift, maskStart, onOffsetSelection]
+		[decrementMask, incrementMask, maskShift, maskStart, onOffsetSelection],
 	);
 
+	// Global keyboard shortcuts for commands, navigation, and popups
 	const handleKeyDown = useCallback(
 		(e: KeyboardEvent) => {
 			const { isTextInput } = checkActiveInput();
 
 			const vEditorOn =
-				activePopup &&
-				["Search", "Indices", "Exercise"].includes(activePopup);
+				activePopup && ["Search", "Indices", "Exercise"].includes(activePopup);
 
 			const canShowPopup = activePopup === null && isTextInput === false;
 
@@ -348,161 +353,173 @@ export default function Pager() {
 			e.stopPropagation();
 
 			switch (e.code) {
-			case "Slash":
-				if (canShowPopup && !vEditorOn) {
-					dispatch(showPopup("Help"));
-				}
-				break;
-
-			case "KeyU":
-				if (canShowPopup && !vEditorOn) {
-					dispatch(showPopup("Profile"));
-				}
-				break;
-			case "KeyC":
-				if (!vEditorOn) {
-					copy2Clipboard(selectedText);
-					dispatch(showToast({ id: "text_copied" }));
-					//     // app.pushRecentCommand("Copy");
-				}
-				break;
-			case "KeyS"://TODO: handle "s" only if audio is playing
-			case "KeyR":
-				if (!vEditorOn) {
-					msgBox?.set({
-						title: (
-							<Message id="play" values={keyValues("r")} />
-						),
-						content: (
-							<PlayPrompt
-								{...{
-									trigger: "keyboard",
-									showReciters: false,
-								}}
-							/>
-						),
-					});
-				}
-				break;
-			case "KeyP":
-				if (!vEditorOn) {
-					if (audioState === AudioState.playing) {
-						audio?.pause();
-					} else {
-						audio?.resume();
+				case "Slash":
+					if (canShowPopup && !vEditorOn) {
+						dispatch(showPopup("Help"));
 					}
-				}
-				break;
-			case "KeyZ":
-				if (!vEditorOn) {
-					dispatch(toggleZoom());
-				}
-				break;
-			case "Escape":
-				if (contextPopup?.info) {
-					contextPopup.close();
-				} else if (msgBox?.getMessages().length) {
-					msgBox.pop();
-				} else if (activePopup !== null) {
-					dispatch(closePopup());
-				} else if (expandedMenu) {
-					dispatch(showMenu(false));
-					// app.setExpandedMenu(false);
-				} else if (maskStart !== -1) {
-					// app.hideMask();
-					dispatch(hideMask());
-				}
-				break;
-			case "KeyI":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Indices"));
-				}
-				break;
-			case "KeyG":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Goto"));
-				}
-				break;
-			case "KeyX":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Exercise"));
-				}
-				break;
-			case "KeyB":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Bookmarks"));
-				}
-				break;
-			case "KeyO":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Settings"));
-				}
-				break;
-			case "KeyF":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Search"));
-				}
-				break;
-			case "KeyA":
-				if (!popup && !vEditorOn) {
-					dispatch(toggleMenu());
-				}
-				break;
-			case "KeyH":
-				if (!vEditorOn) {
-					msgBox?.set({
-						title: <Message id="update_hifz" />,
-						content: <AddHifz />,
-					});
-					dispatch(closePopupIfBlocking());
-				}
-				break;
-			case "KeyT":
-				if (!vEditorOn && canShowPopup) {
-					dispatch(showPopup("Tafseer"));
-				}
-				break;
-			case "KeyM":
-				if (!vEditorOn) {
-					dispatch(startMask(history));
-					// app.setMaskStart();
-				}
-				break;
-			case "ArrowDown":
-				onArrowKey(e.shiftKey, "down");
-				break;
-			case "ArrowUp":
-				onArrowKey(e.shiftKey, "up");
-				break;
-			case "ArrowLeft":
-				analytics.setTrigger("left_key");
-				pageDown();
-				break;
-			case "PageDown":
-				if (!isTextInput) {
-					analytics.setTrigger("page_down_key");
+					break;
+
+				case "KeyU":
+					if (canShowPopup && !vEditorOn) {
+						dispatch(showPopup("Profile"));
+					}
+					break;
+				case "KeyC":
+					if (!vEditorOn) {
+						copy2Clipboard(selectedText);
+						dispatch(showToast({ id: "text_copied" }));
+						//     // app.pushRecentCommand("Copy");
+					}
+					break;
+				case "KeyS": //TODO: handle "s" only if audio is playing
+				case "KeyR":
+					if (!vEditorOn) {
+						msgBox?.set({
+							title: <Message id="play" values={keyValues("r")} />,
+							content: (
+								<PlayPrompt
+									{...{
+										trigger: "keyboard",
+										showReciters: false,
+									}}
+								/>
+							),
+						});
+					}
+					break;
+				case "KeyP":
+					if (!vEditorOn) {
+						if (audioState === AudioState.playing) {
+							audio?.pause();
+						} else {
+							audio?.resume();
+						}
+					}
+					break;
+				case "KeyZ":
+					if (!vEditorOn) {
+						dispatch(toggleZoom());
+					}
+					break;
+				case "Escape":
+					if (contextPopup?.info) {
+						contextPopup.close();
+					} else if (msgBox?.getMessages().length) {
+						msgBox.pop();
+					} else if (activePopup !== null) {
+						dispatch(closePopup());
+					} else if (expandedMenu) {
+						dispatch(showMenu(false));
+						// app.setExpandedMenu(false);
+					} else if (maskStart !== -1) {
+						// app.hideMask();
+						dispatch(hideMask());
+					}
+					break;
+				case "KeyI":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Indices"));
+					}
+					break;
+				case "KeyG":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Goto"));
+					}
+					break;
+				case "KeyX":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Exercise"));
+					}
+					break;
+				case "KeyB":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Bookmarks"));
+					}
+					break;
+				case "KeyO":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Settings"));
+					}
+					break;
+				case "KeyF":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Search"));
+					}
+					break;
+				case "KeyA":
+					if (!popup && !vEditorOn) {
+						dispatch(toggleMenu());
+					}
+					break;
+				case "KeyH":
+					if (!vEditorOn) {
+						msgBox?.set({
+							title: <Message id="update_hifz" />,
+							content: <AddHifz />,
+						});
+						dispatch(closePopupIfBlocking());
+					}
+					break;
+				case "KeyT":
+					if (!vEditorOn && canShowPopup) {
+						dispatch(showPopup("Tafseer"));
+					}
+					break;
+				case "KeyM":
+					if (!vEditorOn) {
+						dispatch(startMask(history));
+						// app.setMaskStart();
+					}
+					break;
+				case "ArrowDown":
+					onArrowKey(e.shiftKey, "down");
+					break;
+				case "ArrowUp":
+					onArrowKey(e.shiftKey, "up");
+					break;
+				case "ArrowLeft":
+					analytics.setTrigger("left_key");
 					pageDown();
-				}
-				break;
-			case "ArrowRight":
-				analytics.setTrigger("right_key");
-				pageUp();
-				break;
-			case "PageUp":
-				if (!isTextInput) {
-					analytics.setTrigger("page_up_key");
+					break;
+				case "PageDown":
+					if (!isTextInput) {
+						analytics.setTrigger("page_down_key");
+						pageDown();
+					}
+					break;
+				case "ArrowRight":
+					analytics.setTrigger("right_key");
 					pageUp();
-				}
-				break;
-			default:
-				return;
+					break;
+				case "PageUp":
+					if (!isTextInput) {
+						analytics.setTrigger("page_up_key");
+						pageUp();
+					}
+					break;
+				default:
+					return;
 			}
 			if (!isTextInput) {
 				e.preventDefault();
 			}
 		},
-		[activePopup, selectedText, dispatch, audio, audioState, contextPopup,
-			expandedMenu, maskStart, popup, msgBox, onArrowKey, pageDown, pageUp, history]
+		[
+			activePopup,
+			selectedText,
+			dispatch,
+			audio,
+			audioState,
+			contextPopup,
+			expandedMenu,
+			maskStart,
+			popup,
+			msgBox,
+			onArrowKey,
+			pageDown,
+			pageUp,
+			history,
+		],
 	);
 
 	useEffect(() => {
@@ -524,9 +541,11 @@ export default function Pager() {
 	// 	[selectedAyaInfo]
 	// );
 
+	// Verse context buttons for footer selection display
 	const suraNames = useSelector(selectSuraNames);
 	const trigger = "page_footer";
 
+	// Footer click handlers for verse navigation
 	const onClickNext = (e: React.MouseEvent) => {
 		onArrowKey?.(e.shiftKey, "down");
 		analytics.logEvent("nav_next_verse", { trigger });
@@ -539,6 +558,7 @@ export default function Pager() {
 		e.stopPropagation();
 	};
 
+	// Show verse context popup on footer click
 	const showVerseContextPopup = ({ target }: React.MouseEvent) => {
 		analytics.logEvent("show_verse_context", { trigger });
 		contextPopup?.show({
@@ -547,6 +567,7 @@ export default function Pager() {
 		});
 	};
 
+	// Main render: header, draggable page area, and footer navigation
 	const [dropped, setDropped] = useState(false);
 
 	return (
@@ -559,52 +580,55 @@ export default function Pager() {
 			>
 				<PageHeader order={0} />
 				{shownPages.length > 1 && <PageHeader order={1} />}
-				<div
-					className="HeaderCommands"
-				>
-					{isNarrow && <>
-						<CommandButton command="Search" />
-						<CommandButton command="Indices" />
-					</>
-					}
+				<div className="HeaderCommands">
+					{isNarrow && (
+						<>
+							<CommandButton command="Search" />
+							<CommandButton command="Indices" />
+						</>
+					)}
 					{showZoom && (
-						<CommandButton
-							command={zoomIn ? "Zoom_In" : "Zoom_Out"}
-						/>
+						<CommandButton command={zoomIn ? "Zoom_In" : "Zoom_Out"} />
 					)}
 				</div>
 			</div>
 			<DDrop
 				maxShift={200}
 				dropShift={50}
-				onDrop={({ dX }: { dX: number; dY: number; }) => {
+				onDrop={({ dX }: { dX: number; dY: number }) => {
 					if (dX > 50) {
 						analytics.setTrigger("dragging");
 						setDropped(true);
-						setTimeout(() => { setDropped(false); pageDown(); }, 1);
+						setTimeout(() => {
+							setDropped(false);
+							pageDown();
+						}, 1);
 						// pageDown();
 					}
 					if (dX < -50) {
 						analytics.setTrigger("dragging");
 						setDropped(true);
-						setTimeout(() => { setDropped(false); pageUp(); }, 1);
+						setTimeout(() => {
+							setDropped(false);
+							pageUp();
+						}, 1);
 					}
 				}}
 			>
-				{({ dX }: { dX: number; dY: number; }) => {
+				{({ dX }: { dX: number; dY: number }) => {
 					//Shrink the width using the scaling
 					// const ratio = Math.abs(dX) / pageWidth;
 
 					// const angle = (90 * (pageWidth - Math.abs(dX))) / pageWidth;
 					// const scaleX = 1 - accel; //(pageWidth - Math.abs(dX)) / pageWidth; // * accel;
 					// const shiftX = dX * accel;
-					const accel = 1;// Math.cos(angle); //slowing down the scaling when the drag is large
+					const accel = 1; // Math.cos(angle); //slowing down the scaling when the drag is large
 					// const angle = (90 * Math.min(Math.abs(dX), pageWidth)) / pageWidth;
 					//
-					const scaleX = (pageWidth - Math.abs(dX)) / pageWidth * accel;
+					const scaleX = ((pageWidth - Math.abs(dX)) / pageWidth) * accel;
 					// const angle = 90 * scaleX;
 					// const accel = Math.cos(angle2Radians(angle));
-					const shiftX = dX;// * scaleX; //* accel;
+					const shiftX = dX; // * scaleX; //* accel;
 					// (accel * (pageWidth - Math.abs(dX))) / pageWidth;
 					// console.log(
 					//     `dX:${dX}, Sh:${shiftX} Sc:${scaleX} Wd:${pageWidth}`
@@ -660,13 +684,8 @@ export default function Pager() {
 						onPageDown={pageDown}
 					/>
 				)}
-				<div
-					className="HeaderFooterSection"
-				>
-					<button
-						className="NavButton NavBackward"
-						onClick={onClickPrevious}
-					>
+				<div className="HeaderFooterSection">
+					<button className="NavButton NavBackward" onClick={onClickPrevious}>
 						<Icon icon={faAngleUp} />
 					</button>
 					<button
@@ -685,10 +704,7 @@ export default function Pager() {
 							}}
 						/>
 					</button>
-					<button
-						onClick={onClickNext}
-						className="NavButton NavForward"
-					>
+					<button onClick={onClickNext} className="NavButton NavForward">
 						<Icon icon={faAngleDown} />
 					</button>
 				</div>
