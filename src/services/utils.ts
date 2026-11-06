@@ -221,24 +221,59 @@ type CommandKeyEvent = KeyboardEvent & { commandKeyHandled?: boolean };
 
 const COMMAND_KEY_DUPLICATE_MS = 150;
 const COMMAND_KEY_REPEAT_MS = 1000;
+const COMMAND_KEY_MAX_HOLD_MS = 2000;
 
 let lastCommandKey: { code: string; time: number } | null = null;
+let heldCommandKey: string | null = null;
+let heldCommandKeyTimer: ReturnType<typeof setTimeout> | undefined;
+let keyUpListenerAttached = false;
+
+const onCommandKeyUp = (e: KeyboardEvent) => {
+	if (e.code !== heldCommandKey) {
+		return;
+	}
+	heldCommandKey = null;
+	if (heldCommandKeyTimer) {
+		clearTimeout(heldCommandKeyTimer);
+		heldCommandKeyTimer = undefined;
+	}
+};
+
+const watchCommandKeyRelease = () => {
+	if (keyUpListenerAttached) {
+		return;
+	}
+	keyUpListenerAttached = true;
+	document.addEventListener("keyup", onCommandKeyUp, true);
+};
 
 export const markCommandKey = (e: KeyboardEvent) => {
 	(e as CommandKeyEvent).commandKeyHandled = true;
 	lastCommandKey = { code: e.code, time: performance.now() };
+	heldCommandKey = e.code;
+	watchCommandKeyRelease();
+	if (heldCommandKeyTimer) {
+		clearTimeout(heldCommandKeyTimer);
+	}
+	// Fallback in case the keyup is missed (e.g. the window loses focus)
+	heldCommandKeyTimer = setTimeout(() => {
+		heldCommandKey = null;
+		heldCommandKeyTimer = undefined;
+	}, COMMAND_KEY_MAX_HOLD_MS);
 };
 
 export const isCommandKey = (e: KeyboardEvent) => {
 	if ((e as CommandKeyEvent).commandKeyHandled) {
 		return true;
 	}
+	if (heldCommandKey === e.code) {
+		return true; // the shortcut key is still held down
+	}
 	if (!lastCommandKey || lastCommandKey.code !== e.code) {
 		return false;
 	}
 	const elapsed = performance.now() - lastCommandKey.time;
-	// Ignore auto-repeat of the shortcut while the key is held, and any
-	// duplicate keydown belonging to the same press.
+	// Ignore any duplicate keydown belonging to the same press.
 	return elapsed < (e.repeat ? COMMAND_KEY_REPEAT_MS : COMMAND_KEY_DUPLICATE_MS);
 };
 
