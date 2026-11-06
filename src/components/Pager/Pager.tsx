@@ -336,6 +336,8 @@ export default function Pager() {
 		(e: KeyboardEvent) => {
 			const { isTextInput } = checkActiveInput();
 
+			const isSearchActive = activePopup === "Search";
+
 			const vEditorOn =
 				activePopup &&
 				["Search", "Indices", "Exercise"].includes(activePopup);
@@ -346,6 +348,12 @@ export default function Pager() {
 			// 	return;
 			// }
 			e.stopPropagation();
+
+			// While the search panel is open, its own input handling owns the
+			// keyboard. Only Escape (to close the panel) is handled here.
+			if (isSearchActive && e.code !== "Escape") {
+				return;
+			}
 
 			switch (e.code) {
 			case "Slash":
