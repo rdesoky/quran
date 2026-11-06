@@ -28,3 +28,6 @@ debug.log
 .idea/
 /dist/*
 *.tsbuildinfo
+
+**/*.omp.json
+.qwen/*
