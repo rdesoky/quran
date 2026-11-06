@@ -15,8 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "@/hooks/useHistory";
 import { analytics } from "@/services/analytics";
 import { arSuraNames, ayaIdInfo, verseLocation } from "@/services/qData";
-import { buildAIPrompt } from "@/services/utils";
 import {
+	buildAIPrompt,
 	copy2Clipboard,
 	highlightSearch,
 	normalizeText,
@@ -90,10 +90,13 @@ export default function Search() {
 
 	const doSearch = useCallback((searchTerm: string) => {
 		let sResults: ResultItem[] = [];
-		const normSearchTerm = normalizeText(searchTerm);
+		const normSearchTerm = normalizeText(searchTerm).trim();
 
 		if (normSearchTerm.length > 0) {
 			localStorage.setItem("LastSearch", searchTerm);
+		} else {
+			// don't restore a stale term after the console is cleared
+			localStorage.removeItem("LastSearch");
 		}
 
 		const verseList = quranText;
