@@ -14,6 +14,7 @@ import {
 	copy2Clipboard,
 	downloadPageImage,
 	keyValues,
+	markCommandKey,
 } from "@/services/utils";
 import {
 	selectActivePage,
@@ -336,6 +337,8 @@ export default function Pager() {
 		(e: KeyboardEvent) => {
 			const { isTextInput } = checkActiveInput();
 
+			const isSearchActive = activePopup === "Search";
+
 			const vEditorOn =
 				activePopup &&
 				["Search", "Indices", "Exercise"].includes(activePopup);
@@ -346,6 +349,12 @@ export default function Pager() {
 			// 	return;
 			// }
 			e.stopPropagation();
+
+			// While the search panel is open, its own input handling owns the
+			// keyboard. Only Escape (to close the panel) is handled here.
+			if (isSearchActive && e.code !== "Escape") {
+				return;
+			}
 
 			switch (e.code) {
 			case "Slash":
@@ -415,6 +424,7 @@ export default function Pager() {
 				break;
 			case "KeyI":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Indices"));
 				}
 				break;
@@ -425,6 +435,7 @@ export default function Pager() {
 				break;
 			case "KeyX":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Exercise"));
 				}
 				break;
@@ -440,6 +451,7 @@ export default function Pager() {
 				break;
 			case "KeyF":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Search"));
 				}
 				break;

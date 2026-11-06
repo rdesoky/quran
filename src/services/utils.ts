@@ -215,6 +215,33 @@ export const checkActiveInput = () => {
 	return { isInput, isTextInput };
 };
 
+// Keys that open a popup must not leak into a typing console (AKeyboard) that
+// mounts while the same physical key press is still being handled.
+type CommandKeyEvent = KeyboardEvent & { commandKeyHandled?: boolean };
+
+const COMMAND_KEY_DUPLICATE_MS = 150;
+const COMMAND_KEY_REPEAT_MS = 1000;
+
+let lastCommandKey: { code: string; time: number } | null = null;
+
+export const markCommandKey = (e: KeyboardEvent) => {
+	(e as CommandKeyEvent).commandKeyHandled = true;
+	lastCommandKey = { code: e.code, time: performance.now() };
+};
+
+export const isCommandKey = (e: KeyboardEvent) => {
+	if ((e as CommandKeyEvent).commandKeyHandled) {
+		return true;
+	}
+	if (!lastCommandKey || lastCommandKey.code !== e.code) {
+		return false;
+	}
+	const elapsed = performance.now() - lastCommandKey.time;
+	// Ignore auto-repeat of the shortcut while the key is held, and any
+	// duplicate keydown belonging to the same press.
+	return elapsed < (e.repeat ? COMMAND_KEY_REPEAT_MS : COMMAND_KEY_DUPLICATE_MS);
+};
+
 export const getStorageItem = (key: string, defaultValue: unknown = false) => {
 	const val = localStorage.getItem(key);
 	if (val !== null) {
