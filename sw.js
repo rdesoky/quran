@@ -1,5 +1,5 @@
-//Fri Nov 06 2026 19:29:25 GMT+0000 (Coordinated Universal Time)
-const appVersion = 51;
+//Fri Nov 06 2026 20:33:35 GMT+0000 (Coordinated Universal Time)
+const appVersion = 53;
 const appCacheId = `app.v${appVersion}`;
 const assetsVersion = 1;
 const assetsCacheId = `assets.v${assetsVersion}`;
