@@ -14,6 +14,7 @@ import {
 	copy2Clipboard,
 	downloadPageImage,
 	keyValues,
+	markCommandKey,
 } from "@/services/utils";
 import {
 	selectActivePage,
@@ -423,6 +424,7 @@ export default function Pager() {
 				break;
 			case "KeyI":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Indices"));
 				}
 				break;
@@ -433,6 +435,7 @@ export default function Pager() {
 				break;
 			case "KeyX":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Exercise"));
 				}
 				break;
@@ -448,6 +451,7 @@ export default function Pager() {
 				break;
 			case "KeyF":
 				if (!vEditorOn && canShowPopup) {
+					markCommandKey(e);
 					dispatch(showPopup("Search"));
 				}
 				break;
