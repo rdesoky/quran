@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useMessageBox } from "@/RefsProvider";
 import "@/components/AKeyboard/AKeyboard.scss";
 import Icon from "@/components/Icon";
+import { isCommandKey } from "@/services/utils";
 
 const keyMap = {
 	//first
@@ -141,7 +142,10 @@ const AKeyboard = ({
 			if (msgBox?.getMessages().length) {
 				return; //a message box is active
 			}
-			const { ctrlKey } = e;
+			if (isCommandKey(e)) {
+				return; //the key was used to open the console/popup
+			}
+			const { ctrlKey, metaKey } = e;
 			const code = e.code as KeyMapKey;
 			const target = e.target as HTMLElement;
 			setTypedChar(code);
@@ -196,6 +200,12 @@ const AKeyboard = ({
 					break;
 				}
 			// eslint-disable-next-line no-fallthrough
+			case "KeyV":
+				// Paste is handled by the "paste" event listener below.
+				if (ctrlKey || metaKey) {
+					return;
+				}
+			// eslint-disable-next-line no-fallthrough
 			default:
 				if (
 					keyMap[code][langIndex] &&
@@ -219,6 +229,33 @@ const AKeyboard = ({
 			document.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [text, onEnter, handleKeyDown]);
+
+	const handlePaste = useCallback(
+		(e: ClipboardEvent) => {
+			if (msgBox?.getMessages().length) {
+				return; //a message box is active
+			}
+			const pasted = e.clipboardData?.getData("text");
+			if (!pasted) {
+				return;
+			}
+			e.preventDefault();
+			//the console renders a single line, so collapse line breaks
+			const normalized = pasted.replace(/\s+/g, " ").trim();
+			if (!normalized) {
+				return;
+			}
+			updateText(text ? `${text} ${normalized}` : normalized);
+		},
+		[msgBox, text, updateText]
+	);
+
+	useEffect(() => {
+		document.addEventListener("paste", handlePaste);
+		return () => {
+			document.removeEventListener("paste", handlePaste);
+		};
+	}, [handlePaste]);
 
 	useEffect(() => {
 		setText(initText);
